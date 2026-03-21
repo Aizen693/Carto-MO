@@ -1,0 +1,1293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>2023-2026</name>
+    <Style id="icon-1899-006064-normal">
+      <IconStyle>
+        <color>ff646000</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-006064-highlight">
+      <IconStyle>
+        <color>ff646000</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-006064">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-006064-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-006064-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-01579B-normal">
+      <IconStyle>
+        <color>ff9b5701</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-01579B-highlight">
+      <IconStyle>
+        <color>ff9b5701</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-01579B">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-01579B-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-01579B-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-097138-normal">
+      <IconStyle>
+        <color>ff387109</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-097138-highlight">
+      <IconStyle>
+        <color>ff387109</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-097138">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-097138-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-097138-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-1A237E-normal">
+      <IconStyle>
+        <color>ff7e231a</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-1A237E-highlight">
+      <IconStyle>
+        <color>ff7e231a</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-1A237E">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-1A237E-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-1A237E-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-4E342E-normal">
+      <IconStyle>
+        <color>ff2e344e</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-4E342E-highlight">
+      <IconStyle>
+        <color>ff2e344e</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-4E342E">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-4E342E-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-4E342E-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-673AB7-normal">
+      <IconStyle>
+        <color>ffb73a67</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-673AB7-highlight">
+      <IconStyle>
+        <color>ffb73a67</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-673AB7">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-673AB7-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-673AB7-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-817717-normal">
+      <IconStyle>
+        <color>ff177781</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-817717-highlight">
+      <IconStyle>
+        <color>ff177781</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-817717">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-817717-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-817717-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-880E4F-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-880E4F-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-880E4F">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-880E4F-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-880E4F-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-A52714-normal">
+      <IconStyle>
+        <color>ff1427a5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-A52714-highlight">
+      <IconStyle>
+        <color>ff1427a5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-A52714">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-A52714-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-A52714-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-F9A825-normal">
+      <IconStyle>
+        <color>ff25a8f9</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-F9A825-highlight">
+      <IconStyle>
+        <color>ff25a8f9</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-F9A825">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-F9A825-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-F9A825-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-FF5252-normal">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-FF5252-highlight">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-FF5252">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-FF5252-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-FF5252-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Hezbollah<br>Date: 08/10/2023<br>Pays: Gaza<br>GPS: 33.4°N, 35.5°E<br>Evenement: Début soutien Gaza Ligne bleue<br>Détail: Roquettes Kornet antichars, mortiers ; cumul 30 civils israéliens tués, milliers blessés ; Liban ~600 morts (HZB/civils).]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Hezbollah</value>
+        </Data>
+        <Data name="Date">
+          <value>08/10/2023</value>
+        </Data>
+        <Data name="Pays">
+          <value>Gaza</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.4°N, 35.5°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Début soutien Gaza Ligne bleue</value>
+        </Data>
+        <Data name="Détail">
+          <value>Roquettes Kornet antichars, mortiers ; cumul 30 civils israéliens tués, milliers blessés ; Liban ~600 morts (HZB/civils).</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          35.5,33.4,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Houthis<br>Date: 19/10/2023<br>Pays: Israel <br>GPS: 29.56°N, 34.95°E<br>Evenement:  1er missile Israël Eilat<br>Détail: 3 cruise missiles + drones interceptés USS Carney ; 0 morts ; début « blocage Gaza ».]]></description>
+      <styleUrl>#icon-1899-4E342E</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Houthis</value>
+        </Data>
+        <Data name="Date">
+          <value>19/10/2023</value>
+        </Data>
+        <Data name="Pays">
+          <value>Israel </value>
+        </Data>
+        <Data name="GPS">
+          <value>29.56°N, 34.95°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value> 1er missile Israël Eilat</value>
+        </Data>
+        <Data name="Détail">
+          <value>3 cruise missiles + drones interceptés USS Carney ; 0 morts ; début « blocage Gaza ».</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          34.95,29.56,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Houthis<br>Date: 03/12/2023<br>Pays: Bab El Mandeb <br>GPS: 12.5°N, 43.5°E<br>Evenement: MV Unity Explorer Bab Mandeb <br>Détail: Anti-ship ballistic missiles (ASBM) ; 0 morts ; 1er navire commercial touché, déclenche coalition US-UK.]]></description>
+      <styleUrl>#icon-1899-4E342E</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Houthis</value>
+        </Data>
+        <Data name="Date">
+          <value>03/12/2023</value>
+        </Data>
+        <Data name="Pays">
+          <value>Bab El Mandeb </value>
+        </Data>
+        <Data name="GPS">
+          <value>12.5°N, 43.5°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>MV Unity Explorer Bab Mandeb </value>
+        </Data>
+        <Data name="Détail">
+          <value>Anti-ship ballistic missiles (ASBM) ; 0 morts ; 1er navire commercial touché, déclenche coalition US-UK.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.5,12.5,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Harakat Hezbollah al-Nujaba<br>Date: 11/2023<br>Pays: Irak<br>GPS: 36.24°N, 43.96°E<br>Evenement: Drone Erbil <br>Détail: 1er drone US coalition ; 0 morts ; réponse Gaza.]]></description>
+      <styleUrl>#icon-1899-097138</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Harakat Hezbollah al-Nujaba</value>
+        </Data>
+        <Data name="Date">
+          <value>11/2023</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.24°N, 43.96°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Drone Erbil </value>
+        </Data>
+        <Data name="Détail">
+          <value>1er drone US coalition ; 0 morts ; réponse Gaza.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.96,36.24,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Hezbollah <br>Date: 27/07/2024<br>Pays: Israel <br>GPS: 33.27°N, 35.77°E<br>Evenement: Majdal Shams Golan<br>Détail: Roquette frappe terrain foot Druzes ; 12 enfants tués, 40 blessés ; HZB nie, Israël accuse.​]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Hezbollah </value>
+        </Data>
+        <Data name="Date">
+          <value>27/07/2024</value>
+        </Data>
+        <Data name="Pays">
+          <value>Israel </value>
+        </Data>
+        <Data name="GPS">
+          <value>33.27°N, 35.77°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Majdal Shams Golan</value>
+        </Data>
+        <Data name="Détail">
+          <value>Roquette frappe terrain foot Druzes ; 12 enfants tués, 40 blessés ; HZB nie, Israël accuse.​</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          35.77,33.27,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Hezbollah<br>Date: 27/09/2024<br>Pays: Liban <br>GPS: 33.85°N, 35.50°E<br>Evenement: Assassinat Nasrallah<br>Détail: Pas attaque HZB, mais IDF frappe QG souterrain ; Nasrallah + hauts gradés tués ; déclenche riposte massive HZB.]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Hezbollah</value>
+        </Data>
+        <Data name="Date">
+          <value>27/09/2024</value>
+        </Data>
+        <Data name="Pays">
+          <value>Liban </value>
+        </Data>
+        <Data name="GPS">
+          <value>33.85°N, 35.50°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Assassinat Nasrallah</value>
+        </Data>
+        <Data name="Détail">
+          <value>Pas attaque HZB, mais IDF frappe QG souterrain ; Nasrallah + hauts gradés tués ; déclenche riposte massive HZB.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          35.5,33.85,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Harakat Hezbollah al-Nujaba<br>Date: 08/01/24<br>Pays: Israel <br>GPS: 29.56°N, 34.95°E<br>Evenement:  Drone Eilat<br>Détail: Riposte Gaza ; intercepté ; 0 morts.]]></description>
+      <styleUrl>#icon-1899-097138</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Harakat Hezbollah al-Nujaba</value>
+        </Data>
+        <Data name="Date">
+          <value>08/01/24</value>
+        </Data>
+        <Data name="Pays">
+          <value>Israel </value>
+        </Data>
+        <Data name="GPS">
+          <value>29.56°N, 34.95°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value> Drone Eilat</value>
+        </Data>
+        <Data name="Détail">
+          <value>Riposte Gaza ; intercepté ; 0 morts.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          34.95,29.56,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Asaib Ahl al-Haq <br>Date: 2024<br>Pays: Irak<br>GPS: 36.24°N, 43.96°E<br>Evenement: Roquettes Erbil<br>Détail: Attaques coalition US ; bilan non précisé.]]></description>
+      <styleUrl>#icon-1899-A52714</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Asaib Ahl al-Haq </value>
+        </Data>
+        <Data name="Date">
+          <value>2024</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.24°N, 43.96°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Roquettes Erbil</value>
+        </Data>
+        <Data name="Détail">
+          <value>Attaques coalition US ; bilan non précisé.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.96,36.24,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Harakat Hezbollah al-Nujaba<br>Date: 17/01/2024<br>Pays: Israel <br>GPS: 29.56°N, 34.95°E<br>Evenement: Drone Eilat<br>Détail: Riposte Gaza ; intercepté ; 0 morts]]></description>
+      <styleUrl>#icon-1899-097138</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Harakat Hezbollah al-Nujaba</value>
+        </Data>
+        <Data name="Date">
+          <value>17/01/2024</value>
+        </Data>
+        <Data name="Pays">
+          <value>Israel </value>
+        </Data>
+        <Data name="GPS">
+          <value>29.56°N, 34.95°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Drone Eilat</value>
+        </Data>
+        <Data name="Détail">
+          <value>Riposte Gaza ; intercepté ; 0 morts</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          34.95,29.56,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: PMF / Hashd al-Shaabi<br>Date: 20/01/2024<br>Pays: Jordanie <br>GPS: 32.30°N, 38.30°E<br>Evenement: Drone Tour 22 Jordanie<br>Détail: Kataib Hezbollah ; 3 US soldats tués, 47 blessés ; 1re mort US depuis 2020 ; Biden riposte 85 sites Irak/Syrie.]]></description>
+      <styleUrl>#icon-1899-01579B</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>PMF / Hashd al-Shaabi</value>
+        </Data>
+        <Data name="Date">
+          <value>20/01/2024</value>
+        </Data>
+        <Data name="Pays">
+          <value>Jordanie </value>
+        </Data>
+        <Data name="GPS">
+          <value>32.30°N, 38.30°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Drone Tour 22 Jordanie</value>
+        </Data>
+        <Data name="Détail">
+          <value>Kataib Hezbollah ; 3 US soldats tués, 47 blessés ; 1re mort US depuis 2020 ; Biden riposte 85 sites Irak/Syrie.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          38.3,32.3,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: PMF / Hashd al-Shaabi<br>Date: 27/08/2025<br>Pays: Irak<br>GPS: 33.31°N, 44.37°E<br>Evenement: Siège ministère Agriculture Bagdad<br>Détail: 2 brigades PMF envahissent ; 1 mort fusillade police ; tensions internes.]]></description>
+      <styleUrl>#icon-1899-01579B</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>PMF / Hashd al-Shaabi</value>
+        </Data>
+        <Data name="Date">
+          <value>27/08/2025</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.31°N, 44.37°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Siège ministère Agriculture Bagdad</value>
+        </Data>
+        <Data name="Détail">
+          <value>2 brigades PMF envahissent ; 1 mort fusillade police ; tensions internes.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.37,33.31,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Basij<br>Date: 28/12/25<br>Pays: Iran <br>GPS: 35.69° N, 51.42°E<br>Evenement: Début soulèvement Téhéran/Isfahan<br>Détail: Basij/IRGC fusillades live feu ; 12 000 morts civils (Iran International), 7 000 confirmés HRANA ; massacres hôpitaux, Rasht 392 morts.]]></description>
+      <styleUrl>#icon-1899-817717</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Basij</value>
+        </Data>
+        <Data name="Date">
+          <value>28/12/25</value>
+        </Data>
+        <Data name="Pays">
+          <value>Iran </value>
+        </Data>
+        <Data name="GPS">
+          <value>35.69° N, 51.42°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Début soulèvement Téhéran/Isfahan</value>
+        </Data>
+        <Data name="Détail">
+          <value>Basij/IRGC fusillades live feu ; 12 000 morts civils (Iran International), 7 000 confirmés HRANA ; massacres hôpitaux, Rasht 392 morts.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          51.42,35.69,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Houthis <br>Date: 28/02/2026<br>Pays: Bab El Mandeb <br>GPS: 12.58°N, 43.40°E<br>Evenement: Attaques massives Bab Mandeb <br>Détail: Missiles balistiques + drones swarm vs 10 navires ; 4 morts marins, 2 pétroliers coulés ; US/UK riposte Hodeida (200 morts Houthi).]]></description>
+      <styleUrl>#icon-1899-4E342E</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Houthis </value>
+        </Data>
+        <Data name="Date">
+          <value>28/02/2026</value>
+        </Data>
+        <Data name="Pays">
+          <value>Bab El Mandeb </value>
+        </Data>
+        <Data name="GPS">
+          <value>12.58°N, 43.40°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaques massives Bab Mandeb </value>
+        </Data>
+        <Data name="Détail">
+          <value>Missiles balistiques + drones swarm vs 10 navires ; 4 morts marins, 2 pétroliers coulés ; US/UK riposte Hodeida (200 morts Houthi).</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.4,12.58,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Hezbollah <br>Date: 02/03/2026<br>Pays: Israel <br>GPS: 32.67°N, 35.20°E<br>Evenement: Missiles Ramat David<br>Détail: Missiles balistiques + drones post‑assassinat Guide suprême ; IDF riposte raids ]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Hezbollah </value>
+        </Data>
+        <Data name="Date">
+          <value>02/03/2026</value>
+        </Data>
+        <Data name="Pays">
+          <value>Israel </value>
+        </Data>
+        <Data name="GPS">
+          <value>32.67°N, 35.20°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Missiles Ramat David</value>
+        </Data>
+        <Data name="Détail">
+          <value>Missiles balistiques + drones post‑assassinat Guide suprême ; IDF riposte raids </value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          35.2,32.67,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Harakat Kataib Hezbollah <br>Date: 03/03/2026<br>Pays: Irak <br>GPS: 33.00°N, 42.00°E<br>Evenement: Bases US Anbar<br>Détail: Drones swarm post‑Iran ; 2 US tués ; riposte US Soleimani 2.]]></description>
+      <styleUrl>#icon-1899-F9A825</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Harakat Kataib Hezbollah </value>
+        </Data>
+        <Data name="Date">
+          <value>03/03/2026</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak </value>
+        </Data>
+        <Data name="GPS">
+          <value>33.00°N, 42.00°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bases US Anbar</value>
+        </Data>
+        <Data name="Détail">
+          <value>Drones swarm post‑Iran ; 2 US tués ; riposte US Soleimani 2.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          42,33,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Harakat Kataib Hezbollah <br>Date: 04/03<br>Pays: Irak <br>GPS: 32.67°N, 35.20°E<br>Evenement: Drones Ramat David<br>Détail: Post-Iran ; coordination KH/PMF ; 1 drone touche hangar ; riposte IDF Deir ez-Zor.]]></description>
+      <styleUrl>#icon-1899-F9A825</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Harakat Kataib Hezbollah </value>
+        </Data>
+        <Data name="Date">
+          <value>04/03</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak </value>
+        </Data>
+        <Data name="GPS">
+          <value>32.67°N, 35.20°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Drones Ramat David</value>
+        </Data>
+        <Data name="Détail">
+          <value>Post-Iran ; coordination KH/PMF ; 1 drone touche hangar ; riposte IDF Deir ez-Zor.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          35.2,32.67,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Basij <br>Date: 08/01/2026<br>Pays: Iran <br>GPS: 35.69° N, 51.42°E<br>Evenement: Blackout internet + exécutions.<br>Détail: Basij exécutions secrètes déguisées suicides ; 32 000 morts total estimés.]]></description>
+      <styleUrl>#icon-1899-817717</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Basij </value>
+        </Data>
+        <Data name="Date">
+          <value>08/01/2026</value>
+        </Data>
+        <Data name="Pays">
+          <value>Iran </value>
+        </Data>
+        <Data name="GPS">
+          <value>35.69° N, 51.42°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Blackout internet + exécutions.</value>
+        </Data>
+        <Data name="Détail">
+          <value>Basij exécutions secrètes déguisées suicides ; 32 000 morts total estimés.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          51.42,35.69,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: IRGC Ground Forces<br>Date: 03/2026<br>Pays: Iran <br>GPS: 35.69° N, 51.42°E<br>Evenement:  Défense Téhéran<br>Détail: IRGC Ground vs invasion (hypothétique) ; 10 000 morts estimés combats urbains.]]></description>
+      <styleUrl>#icon-1899-1A237E</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>IRGC Ground Forces</value>
+        </Data>
+        <Data name="Date">
+          <value>03/2026</value>
+        </Data>
+        <Data name="Pays">
+          <value>Iran </value>
+        </Data>
+        <Data name="GPS">
+          <value>35.69° N, 51.42°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value> Défense Téhéran</value>
+        </Data>
+        <Data name="Détail">
+          <value>IRGC Ground vs invasion (hypothétique) ; 10 000 morts estimés combats urbains.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          51.42,35.69,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Fatemiyoun Brigade<br>Date: 02/2026<br>Pays: Syrie <br>GPS: 35.33°N, 40.15°E<br>Evenement: Deir ez-Zor<br>Détail: US strikes Fatemiyoun (4 morts confirmés) ; riposte drones US bases.]]></description>
+      <styleUrl>#icon-1899-006064</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Fatemiyoun Brigade</value>
+        </Data>
+        <Data name="Date">
+          <value>02/2026</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie </value>
+        </Data>
+        <Data name="GPS">
+          <value>35.33°N, 40.15°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Deir ez-Zor</value>
+        </Data>
+        <Data name="Détail">
+          <value>US strikes Fatemiyoun (4 morts confirmés) ; riposte drones US bases.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.15,35.33,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Zainebiyoun Brigade<br>Date: 01/2026<br>Pays: Irak <br>GPS: 33.31°N, 44.37°E <br>Evenement: Irak post‑Syrie<br>Détail: Retrait Syrie ; ~2 500 restants Irak ; drones US bases.]]></description>
+      <styleUrl>#icon-1899-673AB7</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Zainebiyoun Brigade</value>
+        </Data>
+        <Data name="Date">
+          <value>01/2026</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak </value>
+        </Data>
+        <Data name="GPS">
+          <value>33.31°N, 44.37°E </value>
+        </Data>
+        <Data name="Evenement">
+          <value>Irak post‑Syrie</value>
+        </Data>
+        <Data name="Détail">
+          <value>Retrait Syrie ; ~2 500 restants Irak ; drones US bases.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.37,33.31,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Daesh<br>Date: 2023<br>Pays: Syrie<br>GPS: 35.25°N, 38.78°E<br>Evenement: Attaques de Al-Soukhna désert (Est Palmyre)<br>Détail: Embuscades convois régime ; 53 civils/soldats tués truffles (fév. 2023) ; missiles vs Liwa al-Quds]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Daesh</value>
+        </Data>
+        <Data name="Date">
+          <value>2023</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.25°N, 38.78°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaques de Al-Soukhna désert (Est Palmyre)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Embuscades convois régime ; 53 civils/soldats tués truffles (fév. 2023) ; missiles vs Liwa al-Quds</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          38.78,35.25,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Daesh<br>Date: 2023-2024<br>Pays: Syrie<br>GPS: 35.48°N, 40.10°E<br>Evenement: Battaille d'Al-Buseya<br>Détail: Routes minées convois ; 60 incidents (ISW) ; maillage cellules mobiles villages isolés ; 50 FDS tués estimés]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Daesh</value>
+        </Data>
+        <Data name="Date">
+          <value>2023-2024</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.48°N, 40.10°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Battaille d'Al-Buseya]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Routes minées convois ; 60 incidents (ISW) ; maillage cellules mobiles villages isolés ; 50 FDS tués estimés</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.1,35.48,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Daesh<br>Date: 2023-2024<br>Pays: Syrie<br>GPS: 32.55, 38.45<br>Evenement: Combats de Tulul al-Safa (sud Sweida)<br>Détail: Guérilla : Postes avancés régime perdus ; 58 attaques Homs/Badiya (245 morts) ; uniformes syriens pour infiltrations.]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Daesh</value>
+        </Data>
+        <Data name="Date">
+          <value>2023-2024</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>32.55, 38.45</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Combats de Tulul al-Safa (sud Sweida)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Guérilla : Postes avancés régime perdus ; 58 attaques Homs/Badiya (245 morts) ; uniformes syriens pour infiltrations.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          38.45,32.55,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Daesh<br>Date: 2024<br>Pays: Syrie<br>GPS: 34.45°N, 40.95°E<br>Evenement: Attaques Al-Boukamal axes (frontière Irak)<br>Détail: Destruction milices Fatemiyoun ; sanctuaire mobile vs frappes russes ; 102 attaques Homs (324 morts)]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Daesh</value>
+        </Data>
+        <Data name="Date">
+          <value>2024</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.45°N, 40.95°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaques Al-Boukamal axes (frontière Irak)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Destruction milices Fatemiyoun ; sanctuaire mobile vs frappes russes ; 102 attaques Homs (324 morts)</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.95,34.45,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Daesh<br>Date: Fin 2024<br>Pays: Syrie<br>GPS: 34.55°N, 38.30°E<br>Evenement: Massacres Palmyre<br>Détail: 54 soldats régime fuient HTS (déc. 2024) ; routes minées ; passage Syrie-Irak maintenu]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Daesh</value>
+        </Data>
+        <Data name="Date">
+          <value>Fin 2024</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.55°N, 38.30°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Massacres Palmyre</value>
+        </Data>
+        <Data name="Détail">
+          <value>54 soldats régime fuient HTS (déc. 2024) ; routes minées ; passage Syrie-Irak maintenu</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          38.3,34.55,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Daesh<br>Date: 2024-2025<br>Pays: Syrie<br>GPS: 35.45°N, 40.65°E<br>Evenement: Attaque des Champs Omar périphérie <br>Détail: Embuscades : Attaques quasi-mensuelles vs forces arabes ; déplacements ruraux ; 90+ attaques recensées 2024-25 ; usure chronique.]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Daesh</value>
+        </Data>
+        <Data name="Date">
+          <value>2024-2025</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.45°N, 40.65°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaque des Champs Omar périphérie </value>
+        </Data>
+        <Data name="Détail">
+          <value>Embuscades : Attaques quasi-mensuelles vs forces arabes ; déplacements ruraux ; 90+ attaques recensées 2024-25 ; usure chronique.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.65,35.45,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name/>
+      <description><![CDATA[unnamed (1): <br>Nom acteurs: Daesh<br>Date: 2024-2025<br>Pays: Irak<br>GPS: 34.60°N, 44.70°E<br>Evenement: Attaques à Buhriz/Muqdadiyah<br>Détail: Intensification : Contre convois ; pression Peshmerga ; 10+ opérations aériennes/mois]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Nom acteurs">
+          <value>Daesh</value>
+        </Data>
+        <Data name="Date">
+          <value>2024-2025</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.60°N, 44.70°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaques à Buhriz/Muqdadiyah</value>
+        </Data>
+        <Data name="Détail">
+          <value>Intensification : Contre convois ; pression Peshmerga ; 10+ opérations aériennes/mois</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.7,34.6,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

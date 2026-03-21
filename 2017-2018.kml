@@ -1,0 +1,1321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>2017-2018</name>
+    <Style id="icon-1899-006064-normal">
+      <IconStyle>
+        <color>ff646000</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-006064-highlight">
+      <IconStyle>
+        <color>ff646000</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-006064">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-006064-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-006064-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-0288D1-normal">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-0288D1-highlight">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-0288D1">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0288D1-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0288D1-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-673AB7-normal">
+      <IconStyle>
+        <color>ffb73a67</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-673AB7-highlight">
+      <IconStyle>
+        <color>ffb73a67</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-673AB7">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-673AB7-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-673AB7-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-7CB342-normal">
+      <IconStyle>
+        <color>ff42b37c</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-7CB342-highlight">
+      <IconStyle>
+        <color>ff42b37c</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-7CB342">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-7CB342-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-7CB342-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-817717-normal">
+      <IconStyle>
+        <color>ff177781</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-817717-highlight">
+      <IconStyle>
+        <color>ff177781</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-817717">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-817717-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-817717-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-AFB42B-normal">
+      <IconStyle>
+        <color>ff2bb4af</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-AFB42B-highlight">
+      <IconStyle>
+        <color>ff2bb4af</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-AFB42B">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-AFB42B-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-AFB42B-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-F57C00-normal">
+      <IconStyle>
+        <color>ff007cf5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-F57C00-highlight">
+      <IconStyle>
+        <color>ff007cf5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-F57C00">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-F57C00-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-F57C00-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-FF5252-normal">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-FF5252-highlight">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-FF5252">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-FF5252-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-FF5252-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>Basij</name>
+      <description><![CDATA[unnamed (1): <br>Date: 12/2017<br>Pays: Iran <br>GPS: 36.30°N, 59.61°E<br>Evenement: Mashhad<br>Détail: Basij réprime 300 villes ; 25 morts ; 3 700 arrêtés.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-817717</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>12/2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Iran </value>
+        </Data>
+        <Data name="GPS">
+          <value>36.30°N, 59.61°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Mashhad</value>
+        </Data>
+        <Data name="Détail">
+          <value>Basij réprime 300 villes ; 25 morts ; 3 700 arrêtés.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          59.61,36.3,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Fatemiyoun Brigade</name>
+      <description><![CDATA[unnamed (1): <br>Date: 05/2017<br>Pays: Irak<br>GPS: 35.33°N, 40.15°E<br>Evenement: Deir ez-Zor<br>Détail: Fatemiyoun vs IS siège ; Mohammad Hosseini (intel chief) tué mine ; couloir Irak.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-006064</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>05/2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.33°N, 40.15°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Deir ez-Zor</value>
+        </Data>
+        <Data name="Détail">
+          <value>Fatemiyoun vs IS siège ; Mohammad Hosseini (intel chief) tué mine ; couloir Irak.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.15,35.33,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Fatemiyoun Brigade</name>
+      <description><![CDATA[unnamed (1): <br>Date: 08/2017<br>Pays: Irak<br>GPS: 34.45°N, 40.93°E<br>Evenement: Al-Boukamal<br>Détail: Fatemiyoun ouvre frontière Irak ; Anwar Yawri commandant tué ; 200 Fatemiyoun morts total 2017.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-006064</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>08/2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.45°N, 40.93°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Al-Boukamal</value>
+        </Data>
+        <Data name="Détail">
+          <value>Fatemiyoun ouvre frontière Irak ; Anwar Yawri commandant tué ; 200 Fatemiyoun morts total 2017.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.93,34.45,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Fatemiyoun Brigade</name>
+      <description><![CDATA[unnamed (1): <br>Date: 2018<br>Pays: Syrie <br>GPS: 35.13°N, 36.75°E<br>Evenement:  Hama nord<br>Détail: Contre offensives HTS ; ~700 Fatemiyoun tués cumul Daraa/Alep/Palmira.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-006064</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2018</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie </value>
+        </Data>
+        <Data name="GPS">
+          <value>35.13°N, 36.75°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value> Hama nord</value>
+        </Data>
+        <Data name="Détail">
+          <value>Contre offensives HTS ; ~700 Fatemiyoun tués cumul Daraa/Alep/Palmira.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          36.75,35.13,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Zainebiyoun Brigade</name>
+      <description><![CDATA[unnamed (1): <br>Date: 07/02/2018<br>Pays: Syrie<br>GPS: 35.65°N, 40.50°E<br>Evenement: Khasham Deir ez-Zor<br>Détail: Zainebiyoun + Wagner vs US SDF ; 100+ morts Zainebiyoun/Wagner ; US arty massacre.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-673AB7</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>07/02/2018</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.65°N, 40.50°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Khasham Deir ez-Zor</value>
+        </Data>
+        <Data name="Détail">
+          <value>Zainebiyoun + Wagner vs US SDF ; 100+ morts Zainebiyoun/Wagner ; US arty massacre.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.5,35.65,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: janvier 2017<br>Pays: Irak<br>GPS: 36.33°N, 43.14°E<br>Evenement: Destruction quartier Karama (Mossoul Est)<br>Détail: Tunnels IED ; élimination cadres Amniyat ; jonction divisions irakiennes.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>janvier 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.33°N, 43.14°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Destruction quartier Karama (Mossoul Est)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Tunnels IED ; élimination cadres Amniyat ; jonction divisions irakiennes.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.14,36.33,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: Mars-Juillet 2017<br>Pays: Irak<br>GPS: 36.35°N, 43.13°E<br>Evenement: Destruction vieux Mossoul par Daesh (Ouest)<br>Détail: 80-90% quartiers rasés (artillerie, airstrikes 29 000 munitions) ; mosquée al-Nuri (21 juin 2017, piège Daesh) ; 10 000 civils morts estim<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>Mars-Juillet 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.35°N, 43.13°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Destruction vieux Mossoul par Daesh (Ouest)</value>
+        </Data>
+        <Data name="Détail">
+          <value>80-90% quartiers rasés (artillerie, airstrikes 29 000 munitions) ; mosquée al-Nuri (21 juin 2017, piège Daesh) ; 10 000 civils morts estim</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.13,36.35,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 21 juin 2017<br>Pays: Irak<br>GPS: 36.34°N, 43.15°E<br>Evenement: Destruction de la Mosquée Al-Nuri (Mossoul)<br>Détail: Explosifs Daesh ; symbole califat effondré ; dernière poche CTS<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>21 juin 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.34°N, 43.15°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Destruction de la Mosquée Al-Nuri (Mossoul)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Explosifs Daesh ; symbole califat effondré ; dernière poche CTS</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.15,36.34,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: Juin-Octobre 2017<br>Pays: Syrie<br>GPS: 35.95°N, 39.01°E<br>Evenement: Destruction de Raqqa<br>Détail: 80% ville détruite (70% frappes coalition) ; stade/hôpital repris 17 oct. ; 1900 civils tués (Amnesty)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>Juin-Octobre 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 39.01°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Destruction de Raqqa</value>
+        </Data>
+        <Data name="Détail">
+          <value>80% ville détruite (70% frappes coalition) ; stade/hôpital repris 17 oct. ; 1900 civils tués (Amnesty)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.01,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 17 octobre 2017<br>Pays: Syrie<br>GPS: 35.95°N, 39.00°E<br>Evenement: Destruction de l'hopital de Raqqa<br>Détail: Dernier bastion ; 22 étrangers tués, 25 rendus ; fin Raqqa.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>17 octobre 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 39.00°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Destruction de l'hopital de Raqqa]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Dernier bastion ; 22 étrangers tués, 25 rendus ; fin Raqqa.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Armées Irakiennes + Peshmergas vs. Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 16 Octobre 2016- juillet 2017<br>Pays: Irak<br>GPS: 36.34°N, 43.13°E<br>Evenement: Bataille pour la reprise de Mossoul<br>Détail: Forces : 90 000 irakiens/Peshmergas vs 12 000 Daesh ; 29 000 munitions coalition.<br>Dommages : 40 000 bâtiments ; 10 000 civils morts estimés<br>Conséquences : Fin bastion irakien ; repli désert syrien<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-7CB342</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>16 Octobre 2016- juillet 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.34°N, 43.13°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille pour la reprise de Mossoul</value>
+        </Data>
+        <Data name="Détail">
+          <value>Forces : 90 000 irakiens/Peshmergas vs 12 000 Daesh ; 29 000 munitions coalition.
+Dommages : 40 000 bâtiments ; 10 000 civils morts estimés
+Conséquences : Fin bastion irakien ; repli désert syrien</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.13,36.34,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Armées Irakiennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 17 oct. 2016<br>Pays: Irak<br>GPS: 36.23°N, 43.17°E<br>Evenement: Bataille de Bartella (Est Mossoul)<br>Détail: Peshmergas avancent 11 km, 9 villages pris ; 20 villages totaux en 24h ; 52 frappes coalition ; 12 VBIED Daesh.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-AFB42B</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>17 oct. 2016</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.23°N, 43.17°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille de Bartella (Est Mossoul)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Peshmergas avancent 11 km, 9 villages pris ; 20 villages totaux en 24h ; 52 frappes coalition ; 12 VBIED Daesh.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.17,36.23,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Armées Irakiennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 1er-4 Nov. 2016<br>Pays: Irak<br>GPS: 36.33°N, 43.14°E<br>Evenement: Bataille de Gogjali/al-Karama (Est ville)<br>Détail: Division d'or pénètre 8 quartiers (Aden, Quds...) ; prêche Baghdadi (2 nov.) ; progression lente tunnels/IED<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-AFB42B</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>1er-4 Nov. 2016</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.33°N, 43.14°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille de Gogjali/al-Karama (Est ville)</value>
+        </Data>
+        <Data name="Détail">
+          <value><![CDATA[Division d'or pénètre 8 quartiers (Aden, Quds...) ; prêche Baghdadi (2 nov.) ; progression lente tunnels/IED]]></value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.14,36.33,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Armées Irakiennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 27 dec. 2016<br>Pays: Irak<br>GPS: 36.34°N, 43.13°E<br>Evenement: Bataille du Pont al-Atiq (Tigre)<br>Détail: Coalition bombarde dernier pont ; VBIED Daesh stoppés ; 11 quartiers est pris (17 janv., incl. Grande mosquée)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-AFB42B</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>27 dec. 2016</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.34°N, 43.13°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille du Pont al-Atiq (Tigre)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Coalition bombarde dernier pont ; VBIED Daesh stoppés ; 11 quartiers est pris (17 janv., incl. Grande mosquée)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.13,36.34,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Armées Irakiennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 17 fev.-7mars 2017<br>Pays: Irak<br>GPS: 36.28°N, 43.10°E<br>Evenement: Bataille pour l'Aéroport Ghozlani (Sud Ouest)<br>Détail: Force rapide + 9e division ; prison Badouch reprise (7 mars) ; route Tall Afar coupée (12 mars)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-AFB42B</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>17 fev.-7mars 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.28°N, 43.10°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Bataille pour l'Aéroport Ghozlani (Sud Ouest)]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Force rapide + 9e division ; prison Badouch reprise (7 mars) ; route Tall Afar coupée (12 mars)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.1,36.28,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Coalition</name>
+      <description><![CDATA[unnamed (1): <br>Date: 6 juin-17 oct.2017<br>Pays: Syrie<br>GPS: 35.95°N, 39.01°E<br>Evenement: Bataille pour reprendre Raqqa<br>Détail: "Forces : 15 000 FDS vs 4000 Daesh ; >11 000 frappes coalition.<br>Dommages : 80% ville détruite ; 1900 civils tués (Amnesty/Airwars).<br>Conséquences : ""Capitale"" syrienne perdue ; Daesh vers Deir ez-Zor."<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-F57C00</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>6 juin-17 oct.2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 39.01°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille pour reprendre Raqqa</value>
+        </Data>
+        <Data name="Détail">
+          <value><![CDATA["Forces : 15 000 FDS vs 4000 Daesh ; >11 000 frappes coalition.
+Dommages : 80% ville détruite ; 1900 civils tués (Amnesty/Airwars).
+Conséquences : ""Capitale"" syrienne perdue ; Daesh vers Deir ez-Zor."]]></value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.01,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Forces Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 6 juin 2017<br>Pays: Syrie<br>GPS: 35.97°N, 39.03°E<br>Evenement: Bataille de Mechleb (Est Raqqa)<br>Détail: FDS (Forces d'élite syriennes) pénètrent premier ; base Division 17 au nord attaquée ; "Grande Bataille" lancée ; frappes coalition préliminaires<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>6 juin 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.97°N, 39.03°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille de Mechleb (Est Raqqa)</value>
+        </Data>
+        <Data name="Détail">
+          <value><![CDATA[FDS (Forces d'élite syriennes) pénètrent premier ; base Division 17 au nord attaquée ; "Grande Bataille" lancée ; frappes coalition préliminaires]]></value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.03,35.97,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Forces Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 10-11 juin 2017<br>Pays: Syrie<br>GPS: 35.96°N, 39.02°E<br>Evenement: Bataille de Al-Roumaniya/al-Sabahiya (Sud Est)<br>Détail: Quartiers conquis ; combats intenses vs snipers Daesh ; 50% al-Sabahiya pris.​<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>10-11 juin 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.96°N, 39.02°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille de Al-Roumaniya/al-Sabahiya (Sud Est)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Quartiers conquis ; combats intenses vs snipers Daesh ; 50% al-Sabahiya pris.​</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.02,35.96,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Armées Irakiennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 21 juin 2017<br>Pays: Irak<br>GPS: 36.34°N, 43.15°E<br>Evenement: Bataille pour Mosquée al-Nuri<br>Détail: Explosifs Daesh ; symbole califat détruit ; combats finaux CTS ; victoire 10 juillet<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-AFB42B</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>21 juin 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.34°N, 43.15°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille pour Mosquée al-Nuri</value>
+        </Data>
+        <Data name="Détail">
+          <value>Explosifs Daesh ; symbole califat détruit ; combats finaux CTS ; victoire 10 juillet</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.15,36.34,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Forces Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 29 juin-2 juillet 2017<br>Pays: Syrie<br>GPS: 35.95°N, 39.01°E<br>Evenement: Bataille d'Al-Senaa (centre)<br>Détail: Dernière route sud coupée ; contre-attaque Daesh (VBIED, drones) reprend 6 positions ; FDS récupèrent 70% ; 40 morts FDS/Daesh<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>29 juin-2 juillet 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 39.01°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Bataille d'Al-Senaa (centre)]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Dernière route sud coupée ; contre-attaque Daesh (VBIED, drones) reprend 6 positions ; FDS récupèrent 70% ; 40 morts FDS/Daesh</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.01,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Forces Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 6-10 aout 2017<br>Pays: Syrie<br>GPS: 35.94°N, 39.00°E<br>Evenement: Bataille du vieux Raqqa (veille ville)<br>Détail: Jonction fronts : 55% ville contrôlée ; accès Euphrate coupé ; contre-attaques Daesh échouent (12-14 août)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>6-10 aout 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.94°N, 39.00°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille du vieux Raqqa (veille ville)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Jonction fronts : 55% ville contrôlée ; accès Euphrate coupé ; contre-attaques Daesh échouent (12-14 août)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39,35.94,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 12-14 aout 2017<br>Pays: Syrie<br>GPS: 35.94°N, 39.00°E<br>Evenement: Contre attaque Daesh<br>Détail: Echec<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>12-14 aout 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.94°N, 39.00°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Contre attaque Daesh</value>
+        </Data>
+        <Data name="Détail">
+          <value>Echec</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39,35.94,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Forces Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 17 octobre 2017<br>Pays: Syrie<br>GPS: 35.95°N, 39.00°E<br>Evenement: Bataille pour le Stade et hopital (centre)<br>Détail: Dernière poche prise ; 22 étrangers Daesh tués, 25 rendus ; accord évacuation combattants (4000 civils libérés)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>17 octobre 2017</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 39.00°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille pour le Stade et hopital (centre)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Dernière poche prise ; 22 étrangers Daesh tués, 25 rendus ; accord évacuation combattants (4000 civils libérés)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Forces Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: Janv.Fev. 2018<br>Pays: Syrie<br>GPS: 35.35°N, 40.75°E<br>Evenement: Bataille de Al-Soussa<br>Détail: FDS assiègent ; combats intenses tunnels/mines ; prise 29 janv. après semaines ; 17 Daesh tués (8 fév. vidéo femmes combattantes)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>Janv.Fev. 2018</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.35°N, 40.75°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille de Al-Soussa</value>
+        </Data>
+        <Data name="Détail">
+          <value>FDS assiègent ; combats intenses tunnels/mines ; prise 29 janv. après semaines ; 17 Daesh tués (8 fév. vidéo femmes combattantes)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.75,35.35,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Forces Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 12 Fev. 2018<br>Pays: Syrie<br>GPS: 35.37°N, 40.77°E<br>Evenement: Bataille d'Al-Bahra<br>Détail: FDS avancent ; résistance VBIED/snipers ; village clé sud Hajine<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>12 Fev. 2018</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.37°N, 40.77°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Bataille d'Al-Bahra]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>FDS avancent ; résistance VBIED/snipers ; village clé sud Hajine</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.77,35.37,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Forces Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: sept.-oct. 2018<br>Pays: Syrie<br>GPS: 35.37°N, 40.80°E<br>Evenement: Bataille d'Hajine<br>Détail: Siege Fortifications Daesh ; 30 FDS tués embuscade (14 sept.) ; tempête sable aide EIIL ; reprise partielle oct. (17 morts FDS)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>sept.-oct. 2018</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.37°N, 40.80°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Bataille d'Hajine]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Siege Fortifications Daesh ; 30 FDS tués embuscade (14 sept.) ; tempête sable aide EIIL ; reprise partielle oct. (17 morts FDS)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.8,35.37,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Forces Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 20-15 sept. 2018<br>Pays: Syrie<br>GPS: 35.33°N, 40.85°E<br>Evenement: Bataille d'Al-Chaafa/al-Baghouz Fouqani <br>Détail: FDS prennent pont Boukamal ; al-Shajalah (25 sept.) ; contre-attaque EIIL Mozan (1 oct.)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>20-15 sept. 2018</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.33°N, 40.85°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Bataille d'Al-Chaafa/al-Baghouz Fouqani ]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>FDS prennent pont Boukamal ; al-Shajalah (25 sept.) ; contre-attaque EIIL Mozan (1 oct.)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.85,35.33,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Forces Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): <br>Date: 24 oct. 2018<br>Pays: Syrie<br>GPS: 35.36°N, 40.82°E<br>Evenement: Bataille d'Al-Marashidah/As-Susah<br>Détail: Libération : 2 villages repris ; fin gains EIIL oct. ; 11 000 civils fuient (nov.-déc.)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>24 oct. 2018</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.36°N, 40.82°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Bataille d'Al-Marashidah/As-Susah]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Libération : 2 villages repris ; fin gains EIIL oct. ; 11 000 civils fuient (nov.-déc.)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.82,35.36,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: fin 2016/début 2017<br>mars 2017<br><br>Pays: Syrie<br>GPS: 36.34°N, 43.15°E<br>34.45°N, 40.95°E<br>35.00°N, 39.00°E<br>35.95°N, 36.35°E<br>Evenement: Fuite d'Abou Bakr al-Baghdadi<br>Détail: Départ : Raqqa centre<br>Fuite : Al-Baaj/Boukamal<br>Arrivée : Désert syrien/Badiya, été 2017 ; <br>Idlib Barisha, nuit 26-27oct. 2019 (mort raid US)<br>Sources: ]]></description>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>fin 2016/début 2017
+mars 2017
+</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.34°N, 43.15°E
+34.45°N, 40.95°E
+35.00°N, 39.00°E
+35.95°N, 36.35°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Fuite d'Abou Bakr al-Baghdadi]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Départ : Raqqa centre
+Fuite : Al-Baaj/Boukamal
+Arrivée : Désert syrien/Badiya, été 2017 ; 
+Idlib Barisha, nuit 26-27oct. 2019 (mort raid US)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: Oct.2017- 29 avril 2019<br>Pays: Syrie<br>GPS: 35.95°N, 39.01°E<br>35.37°N, 40.80°E<br>35.30°N, 40.70°E<br>Evenement: Fuite d'Abou al-Hussein al-Husseini al-Qurashi (successeur 2019)<br>Détail: Départ : Raqqa centre, oct. 2017.<br>Fuite : Vallée Euphrate/Hajine, déc. 2017-fév. 2018.<br>Arrivée : Désert Deir ez-Zor, 2019 (mort confirmée 29 avril 2023 Nord-Ouest Syrie)<br>Raid Delta Force (8 hélicos MH-60 Black Hawk) ; <br>Sources: ]]></description>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>Oct.2017- 29 avril 2019</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 39.01°E
+35.37°N, 40.80°E
+35.30°N, 40.70°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Fuite d'Abou al-Hussein al-Husseini al-Qurashi (successeur 2019)]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Départ : Raqqa centre, oct. 2017.
+Fuite : Vallée Euphrate/Hajine, déc. 2017-fév. 2018.
+Arrivée : Désert Deir ez-Zor, 2019 (mort confirmée 29 avril 2023 Nord-Ouest Syrie)
+Raid Delta Force (8 hélicos MH-60 Black Hawk) ; </value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 17 oct. 2017<br>Mars 2019<br>Pays: Syrie<br>GPS: 35.95°N, 39.00°E<br>35.33°N, 40.85°E<br>35.28°N, 40.88°E<br>Evenement: Fuite d'Abou Moussa al-Madina (émir Raqqa)<br>Détail: Départ : Stade Raqqa, 17 oct. 2017.<br>Fuite : Al-Chaafa/Baghouz, oct.-nov. 2018.<br>Arrivée : Poche Baghuz, mars 2019 (tué FDS)..<br>Sources: ]]></description>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>17 oct. 2017
+Mars 2019</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 39.00°E
+35.33°N, 40.85°E
+35.28°N, 40.88°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Fuite d'Abou Moussa al-Madina (émir Raqqa)]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Départ : Stade Raqqa, 17 oct. 2017.
+Fuite : Al-Chaafa/Baghouz, oct.-nov. 2018.
+Arrivée : Poche Baghuz, mars 2019 (tué FDS)..</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+  </Document>
+</kml>
