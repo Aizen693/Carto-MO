@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fluctuations du monde arabe — 2005 à 2026</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: #0a0c10; color: #eee; height: 100vh; display: flex; flex-direction: column; }
+#header { background: rgba(10,12,16,0.97); border-bottom: 1px solid #1e2430; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 10; }
+#header h1 { font-size: 13px; font-weight: 600; color: #fff; }
+#header p { font-size: 11px; color: #6b7280; margin-top: 2px; }
+#period-badge { background: linear-gradient(135deg, #7b61ff, #00e5ff); border-radius: 20px; padding: 6px 18px; font-size: 12px; font-weight: 700; color: #fff; min-width: 110px; text-align: center; }
+#map { flex: 1; width: 100%; }
+#controls { background: rgba(10,12,16,0.97); border-top: 1px solid #1e2430; padding: 10px 20px 12px; flex-shrink: 0; z-index: 10; }
+#period-buttons { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+.period-btn { background: #181c24; border: 1px solid #2a3040; border-radius: 6px; color: #9ca3af; font-size: 11px; font-weight: 600; padding: 5px 10px; cursor: pointer; transition: all 0.2s; }
+.period-btn:hover { border-color: #7b61ff; color: #fff; }
+.period-btn.active { background: linear-gradient(135deg, #7b61ff44, #00e5ff22); border-color: #7b61ff; color: #fff; }
+#bottom-bar { display: flex; align-items: center; gap: 12px; }
+#bottom-bar span { font-size: 11px; color: #6b7280; white-space: nowrap; font-weight: 600; }
+#timeline-slider { flex: 1; -webkit-appearance: none; height: 4px; border-radius: 2px; background: linear-gradient(90deg, #7b61ff, #00e5ff); outline: none; cursor: pointer; }
+#timeline-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 3px solid #7b61ff; cursor: pointer; }
+#btn-all { background: #181c24; border: 1px solid #2a3040; border-radius: 6px; color: #9ca3af; font-size: 11px; font-weight: 600; padding: 5px 12px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+#btn-all:hover { border-color: #00e5ff; color: #00e5ff; }
+#btn-all.active { border-color: #00e5ff; color: #00e5ff; background: rgba(0,229,255,0.1); }
+#style-toggle { position: absolute; top: 70px; right: 50px; z-index: 5; display: flex; flex-direction: column; gap: 6px; }
+.style-btn { background: rgba(10,12,16,0.9); border: 1px solid #2a3040; border-radius: 8px; color: #9ca3af; font-size: 11px; font-weight: 600; padding: 7px 12px; cursor: pointer; transition: all 0.2s; text-align: center; white-space: nowrap; }
+.style-btn:hover { border-color: #7b61ff; color: #fff; }
+.style-btn.active { border-color: #00e5ff; color: #00e5ff; }
+#legend { position: absolute; top: 70px; left: 16px; background: rgba(10,12,16,0.92); border: 1px solid #1e2430; border-radius: 10px; padding: 12px 14px; z-index: 5; min-width: 200px; max-height: 70vh; overflow-y: auto; }
+#legend h3 { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #6b7280; margin-bottom: 10px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #d1d5db; margin-bottom: 5px; line-height: 1.3; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.3); }
+#loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10,12,16,0.95); border: 1px solid #2a3040; border-radius: 12px; padding: 20px 32px; text-align: center; z-index: 20; font-size: 13px; color: #9ca3af; }
+.mapboxgl-popup-content { background: #111318 !important; color: #eee !important; border: 1px solid #2a3040 !important; border-radius: 8px !important; padding: 12px 16px !important; font-size: 12px !important; max-width: 240px !important; }
+.mapboxgl-popup-tip { display: none !important; }
+.popup-period { font-size: 10px; color: #7b61ff; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.popup-actor { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px; font-weight: 600; }
+.popup-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div id="header">
+  <div>
+    <h1>🌍 Fluctuations du monde arabe sunnite-chiite</h1>
+    <p>Cartographie géopolitique 2005–2026 · 10 périodes</p>
+  </div>
+  <div id="period-badge">Aucune période</div>
+</div>
+<div id="map">
+  <div id="loader">Chargement des données...</div>
+</div>
+<div id="legend">
+  <h3>Légende</h3>
+  <div id="legend-items"><div style="font-size:11px;color:#6b7280">Sélectionne une période</div></div>
+</div>
+<div id="style-toggle">
+  <button class="style-btn active" onclick="setStyle('standard')" id="btn-standard">🏙️ Standard 3D</button>
+  <button class="style-btn" onclick="setStyle('satellite')" id="btn-satellite">🛰️ Satellite</button>
+  <button class="style-btn" onclick="setStyle('dark')" id="btn-dark">🌑 Sombre</button>
+</div>
+<div id="controls">
+  <div id="period-buttons"></div>
+  <div id="bottom-bar">
+    <span>2005</span>
+    <input type="range" id="timeline-slider" min="0" max="9" value="0" step="1">
+    <span>2026</span>
+    <button id="btn-all" onclick="toggleAll()">Tout afficher</button>
+  </div>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+
+const ACTOR_COLORS = {
+  'Hezbollah': '#e63946',
+  'Asaib Ahl al-Haq': '#ff6b35',
+  'IRGC-Qods Force': '#c1121f',
+  'Kataib Hezbollah': '#ff4d6d',
+  'IRGC-Qods Force+Basij': '#9d0208',
+  'Basij': '#dc2f02',
+  'Kataib Sayyid al-Shuhada': '#f48c06',
+  'Harakat Hezbollah al-Nujaba': '#e85d04',
+  'Fatemiyoun Brigade': '#faa307',
+  'PMF / Hashd al-Shaabi': '#ffba08',
+  'IRGC Ground Forces': '#ae2012',
+  'Zainebiyoun Brigade': '#bb3e03',
+  'Houthis': '#7b2d8b',
+  'PMF / Hashd al-Shaabi+Kataib Hezbollah': '#e76f51',
+  'Daesh': '#333333',
+  'Coalition Internationale': '#1d7ed8',
+  'Peshmergas': '#f4d35e',
+  'Daes+Armées Irakiennes': '#555555',
+  'Armées Irakiennes': '#2d6a4f',
+  'Armées Irakiennes + Peshmergas vs. Daesh': '#40916c',
+  'USA, Force Delta': '#0077b6',
+  'Forces Démocratiques Syriennes': '#48cae4',
+};
+const DEFAULT_COLOR = '#aaaaaa';
+
+const PERIODS = [
+  { label: '2005-2006', file: '2005-2006.kml' },
+  { label: '2007-2008', file: '2007-2008.kml' },
+  { label: '2009-2010', file: '2009-2010.kml' },
+  { label: '2011-2012', file: '2011-2012.kml' },
+  { label: '2013-2014', file: '2013-2014.kml' },
+  { label: '2015-2016', file: '2015-2016.kml' },
+  { label: '2017-2018', file: '2017-2018.kml' },
+  { label: '2019-2020', file: '2019-2020.kml' },
+  { label: '2021-2022', file: '2021-2022.kml' },
+  { label: '2023-2026', file: '2023-2026.kml' },
+];
+
+const STYLES = {
+  standard: 'mapbox://styles/mapbox/standard',
+  satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+  dark: 'mapbox://styles/mapbox/dark-v11',
+};
+
+let activePeriods = new Set();
+let mapReady = false;
+let showAll = false;
+const loadedData = {};
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: STYLES.standard,
+  center: [43.0, 30.0],
+  zoom: 4.5,
+  pitch: 60,
+  bearing: -20,
+  maxPitch: 85,
+  antialias: true,
+});
+
+map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
+map.addControl(new mapboxgl.ScaleControl({ maxWidth: 120, unit: 'metric' }), 'bottom-right');
+map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+
+const btnContainer = document.getElementById('period-buttons');
+PERIODS.forEach((p, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'period-btn';
+  btn.textContent = p.label;
+  btn.id = 'pbtn-' + i;
+  btn.onclick = () => togglePeriod(i);
+  btnContainer.appendChild(btn);
+});
+
+document.getElementById('timeline-slider').addEventListener('input', function() {
+  togglePeriod(parseInt(this.value));
+});
+
+function togglePeriod(index) {
+  if (showAll) { showAll = false; document.getElementById('btn-all').classList.remove('active'); }
+  if (activePeriods.has(index)) {
+    activePeriods.delete(index);
+    document.getElementById('pbtn-' + index).classList.remove('active');
+  } else {
+    activePeriods.add(index);
+    document.getElementById('pbtn-' + index).classList.add('active');
+    document.getElementById('timeline-slider').value = index;
+  }
+  updateBadge();
+  if (mapReady) renderAll();
+}
+
+function toggleAll() {
+  showAll = !showAll;
+  document.getElementById('btn-all').classList.toggle('active', showAll);
+  activePeriods = showAll ? new Set(PERIODS.map((_, i) => i)) : new Set();
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.toggle('active', showAll));
+  updateBadge();
+  if (mapReady) renderAll();
+}
+
+function updateBadge() {
+  const badge = document.getElementById('period-badge');
+  if (activePeriods.size === 0) badge.textContent = 'Aucune période';
+  else if (activePeriods.size === PERIODS.length) badge.textContent = 'Toutes les périodes';
+  else if (activePeriods.size === 1) badge.textContent = PERIODS[[...activePeriods][0]].label;
+  else badge.textContent = activePeriods.size + ' périodes';
+}
+
+function getActorColor(name) {
+  if (!name) return DEFAULT_COLOR;
+  if (ACTOR_COLORS[name]) return ACTOR_COLORS[name];
+  for (const [actor, color] of Object.entries(ACTOR_COLORS)) {
+    if (name.toLowerCase().includes(actor.toLowerCase()) || actor.toLowerCase().includes(name.toLowerCase())) return color;
+  }
+  return DEFAULT_COLOR;
+}
+
+function createCircle(center, radiusKm, steps) {
+  const coords = [];
+  for (let i = 0; i < steps; i++) {
+    const angle = (i / steps) * 2 * Math.PI;
+    const dx = radiusKm / 111.32;
+    const dy = radiusKm / (111.32 * Math.cos(center[1] * Math.PI / 180));
+    coords.push([center[0] + dy * Math.cos(angle), center[1] + dx * Math.sin(angle)]);
+  }
+  coords.push(coords[0]);
+  return coords;
+}
+
+function pointsToCircles(features, radiusKm) {
+  return features
+    .filter(f => f.geometry && f.geometry.type === 'Point')
+    .map(f => ({
+      type: 'Feature',
+      properties: { ...f.properties },
+      geometry: { type: 'Polygon', coordinates: [createCircle(f.geometry.coordinates, radiusKm, 32)] }
+    }));
+}
+
+async function loadKML(index) {
+  if (loadedData[index]) return loadedData[index];
+  try {
+    const res = await fetch('./' + PERIODS[index].file);
+    if (!res.ok) throw new Error('404');
+    const text = await res.text();
+    const dom = new DOMParser().parseFromString(text, 'text/xml');
+    const geo = toGeoJSON.kml(dom);
+    geo.features = geo.features.map(f => {
+      f.properties = f.properties || {};
+      f.properties._period = PERIODS[index].label;
+      f.properties._color = getActorColor(f.properties.name || '');
+      if (f.geometry && f.geometry.type === 'Point') {
+        f.geometry.coordinates = [f.geometry.coordinates[0], f.geometry.coordinates[1]];
+      }
+      return f;
+    });
+    loadedData[index] = geo;
+    return geo;
+  } catch(e) { console.warn('KML non charge:', PERIODS[index].file); return null; }
+}
+
+async function renderAll() {
+  ['kml-cylinders', 'kml-cylinders-top', 'kml-points-labels', 'kml-lines', 'kml-fill', 'kml-fill-outline'].forEach(id => {
+    if (map.getLayer(id)) map.removeLayer(id);
+  });
+  ['kml-current', 'kml-circles'].forEach(id => {
+    if (map.getSource(id)) map.removeSource(id);
+  });
+
+  if (activePeriods.size === 0) { updateLegend({}); return; }
+
+  const allFeatures = [];
+  for (const index of activePeriods) {
+    const geo = await loadKML(index);
+    if (geo && geo.features) allFeatures.push(...geo.features);
+  }
+  if (allFeatures.length === 0) return;
+
+  const merged = { type: 'FeatureCollection', features: allFeatures };
+  map.addSource('kml-current', { type: 'geojson', data: merged });
+
+  // Cylindres 3D
+  const circleFeatures = pointsToCircles(allFeatures, 2.5);
+  map.addSource('kml-circles', { type: 'FeatureCollection', features: circleFeatures });
+  map.addSource('kml-circles', { type: 'geojson', data: { type: 'FeatureCollection', features: circleFeatures } });
+
+  map.addLayer({
+    id: 'kml-cylinders', type: 'fill-extrusion', source: 'kml-circles',
+    paint: {
+      'fill-extrusion-color': ['get', '_color'],
+      'fill-extrusion-height': 15000,
+      'fill-extrusion-base': 0,
+      'fill-extrusion-opacity': 0.85,
+    }
+  });
+
+  map.addLayer({
+    id: 'kml-cylinders-top', type: 'fill-extrusion', source: 'kml-circles',
+    paint: {
+      'fill-extrusion-color': ['get', '_color'],
+      'fill-extrusion-height': 16000,
+      'fill-extrusion-base': 15000,
+      'fill-extrusion-opacity': 1,
+    }
+  });
+
+  map.addLayer({
+    id: 'kml-points-labels', type: 'symbol', source: 'kml-current',
+    filter: ['==', ['geometry-type'], 'Point'],
+    layout: {
+      'text-field': ['get', 'name'],
+      'text-size': 11,
+      'text-offset': [0, 1.2],
+      'text-anchor': 'top',
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
+      'text-optional': true,
+    },
+    paint: { 'text-color': '#ffffff', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 2 }
+  });
+
+  map.addLayer({
+    id: 'kml-lines', type: 'line', source: 'kml-current',
+    filter: ['==', ['geometry-type'], 'LineString'],
+    paint: { 'line-color': ['get', '_color'], 'line-width': 2.5, 'line-opacity': 0.85 }
+  });
+
+  map.addLayer({
+    id: 'kml-fill', type: 'fill', source: 'kml-current',
+    filter: ['==', ['geometry-type'], 'Polygon'],
+    paint: { 'fill-color': ['get', '_color'], 'fill-opacity': 0.35 }
+  });
+
+  map.addLayer({
+    id: 'kml-fill-outline', type: 'line', source: 'kml-current',
+    filter: ['==', ['geometry-type'], 'Polygon'],
+    paint: { 'line-color': ['get', '_color'], 'line-width': 1.5 }
+  });
+
+  map.on('click', 'kml-cylinders', (e) => {
+    const p = e.features[0].properties;
+    const color = p._color || DEFAULT_COLOR;
+    new mapboxgl.Popup({ closeButton: true, maxWidth: '260px' })
+      .setLngLat(e.lngLat)
+      .setHTML('<div class="popup-period">' + (p._period||'') + '</div><div class="popup-actor"><div class="popup-dot" style="background:' + color + '"></div>' + (p.name||'Point') + '</div>' + (p.description ? '<div style="margin-top:6px;color:#9ca3af;font-size:11px">' + p.description + '</div>' : ''))
+      .addTo(map);
+  });
+  map.on('mouseenter', 'kml-cylinders', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave', 'kml-cylinders', () => map.getCanvas().style.cursor = '');
+
+  const actorsVisible = {};
+  allFeatures.forEach(f => {
+    const name = (f.properties && f.properties.name) || 'Inconnu';
+    const color = (f.properties && f.properties._color) || DEFAULT_COLOR;
+    if (!actorsVisible[name]) actorsVisible[name] = color;
+  });
+  updateLegend(actorsVisible);
+}
+
+function updateLegend(actors) {
+  const container = document.getElementById('legend-items');
+  container.innerHTML = '';
+  if (Object.keys(actors).length === 0) {
+    container.innerHTML = '<div style="font-size:11px;color:#6b7280">Sélectionne une période</div>';
+    return;
+  }
+  Object.entries(actors).sort((a,b) => a[0].localeCompare(b[0])).forEach(([name, color]) => {
+    const div = document.createElement('div');
+    div.className = 'legend-item';
+    div.innerHTML = '<div class="legend-dot" style="background:' + color + '"></div><span>' + name + '</span>';
+    container.appendChild(div);
+  });
+}
+
+function setStyle(styleName) {
+  document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + styleName).classList.add('active');
+  mapReady = false;
+  map.setStyle(STYLES[styleName]);
+  map.once('style.load', () => { setupMapLayers(); mapReady = true; renderAll(); });
+}
+
+function setupMapLayers() {
+  if (!map.getSource('mapbox-dem')) {
+    map.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
+  }
+  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+  if (!map.getLayer('sky')) {
+    map.addLayer({ id: 'sky', type: 'sky', paint: { 'sky-type': 'atmosphere', 'sky-atmosphere-sun': [0.0, 45.0], 'sky-atmosphere-sun-intensity': 15 } });
+  }
+  if (map.getSource('composite') && !map.getLayer('3d-buildings')) {
+    map.addLayer({
+      id: '3d-buildings', source: 'composite', 'source-layer': 'building',
+      filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 12,
+      paint: {
+        'fill-extrusion-color': ['interpolate', ['linear'], ['get', 'height'], 0, '#c9b99a', 50, '#8a7a60', 150, '#504030'],
+        'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 12, 0, 15, ['get', 'height']],
+        'fill-extrusion-base': ['get', 'min_height'],
+        'fill-extrusion-opacity': 0.9,
+      }
+    });
+  }
+}
+
+map.on('load', async () => {
+  setupMapLayers();
+  mapReady = true;
+  document.getElementById('loader').style.display = 'none';
+  for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
+});
+
+map.on('error', (e) => console.warn('Mapbox error:', e));
+</script>
+</body>
+</html>
