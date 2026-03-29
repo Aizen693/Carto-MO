@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>2011-2012</name>
+    <Style id="icon-1899-880E4F-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-880E4F-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-880E4F">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-880E4F-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-880E4F-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-E65100-normal">
+      <IconStyle>
+        <color>ff0051e6</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-E65100-highlight">
+      <IconStyle>
+        <color>ff0051e6</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-E65100">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-E65100-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-E65100-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>Hezbollah</name>
+      <description><![CDATA[Chiites: <br>Date: 2012<br>Pays: Syrie<br>GPS: 34°51'N 36°58'E<br>Evenement: Prise de villages région de Qousseir<br>Détail: Combattants du Hezbollah franchissent la frontière libano-syrienne et prennent le contrôle de plus de huit villages stratégiques ; soutien direct à l’armée syrienne contre l’opposition.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="Chiites">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2012</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value><![CDATA[34°51'N 36°58'E]]></value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise de villages région de Qousseir</value>
+        </Data>
+        <Data name="Détail">
+          <value>Combattants du Hezbollah franchissent la frontière libano-syrienne et prennent le contrôle de plus de huit villages stratégiques ; soutien direct à l’armée syrienne contre l’opposition.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          36.9666666666667,34.85,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>IRGC-Qods Force</name>
+      <description><![CDATA[Chiites: <br>Date: 2012<br>Pays: Syrie <br>GPS: 34.00°N, 36.55°E<br>Evenement: Conflit<br>Détail: Qods + Hezbollah vs rebelles ; Soleimani sur terrain ; couloir Damas‑Liban.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-E65100</styleUrl>
+      <ExtendedData>
+        <Data name="Chiites">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2012</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie </value>
+        </Data>
+        <Data name="GPS">
+          <value>34.00°N, 36.55°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Conflit</value>
+        </Data>
+        <Data name="Détail">
+          <value>Qods + Hezbollah vs rebelles ; Soleimani sur terrain ; couloir Damas‑Liban.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          36.55,34,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hezbollah</name>
+      <description><![CDATA[Chiites: <br>Date: 04/04/2012<br>Pays: Syrie<br>GPS: 34.51°N, 36.58°E<br>Evenement: offensive de Qousseir<br>Détail: 6 rebelles syriens, 3 miliciens libanais sont tués<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="Chiites">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>04/04/2012</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.51°N, 36.58°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>offensive de Qousseir</value>
+        </Data>
+        <Data name="Détail">
+          <value>6 rebelles syriens, 3 miliciens libanais sont tués</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          36.58,34.51,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

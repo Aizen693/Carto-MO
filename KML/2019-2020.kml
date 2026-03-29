@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>2019-2020</name>
+    <Style id="icon-1899-0288D1-normal">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-0288D1-highlight">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-0288D1">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0288D1-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0288D1-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-0F9D58-normal">
+      <IconStyle>
+        <color>ff589d0f</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-0F9D58-highlight">
+      <IconStyle>
+        <color>ff589d0f</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-0F9D58">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0F9D58-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0F9D58-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-4E342E-normal">
+      <IconStyle>
+        <color>ff2e344e</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-4E342E-highlight">
+      <IconStyle>
+        <color>ff2e344e</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-4E342E">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-4E342E-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-4E342E-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-673AB7-normal">
+      <IconStyle>
+        <color>ffb73a67</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-673AB7-highlight">
+      <IconStyle>
+        <color>ffb73a67</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-673AB7">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-673AB7-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-673AB7-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-A52714-normal">
+      <IconStyle>
+        <color>ff1427a5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-A52714-highlight">
+      <IconStyle>
+        <color>ff1427a5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-A52714">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-A52714-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-A52714-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-C2185B-normal">
+      <IconStyle>
+        <color>ff5b18c2</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-C2185B-highlight">
+      <IconStyle>
+        <color>ff5b18c2</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-C2185B">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-C2185B-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-C2185B-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-E65100-normal">
+      <IconStyle>
+        <color>ff0051e6</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-E65100-highlight">
+      <IconStyle>
+        <color>ff0051e6</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-E65100">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-E65100-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-E65100-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-FF5252-normal">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-FF5252-highlight">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-FF5252">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-FF5252-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-FF5252-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>Houthis</name>
+      <description><![CDATA[unnamed (1): Chiites<br>Date: 14/09/2019<br>Pays: Arabie-Saoudite <br>GPS: 25.93°N, 49.66°E<br>Evenement:  Abqaiq Aramco<br>Détail: 18 drones SAMAD-3 + 7 missiles cruise iraniens ; 0 morts, 50% production Aramco offline 2 semaines ; Houthi revendiquent, monde accuse Iran.]]></description>
+      <styleUrl>#icon-1899-4E342E</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value>Chiites</value>
+        </Data>
+        <Data name="Date">
+          <value>14/09/2019</value>
+        </Data>
+        <Data name="Pays">
+          <value>Arabie-Saoudite </value>
+        </Data>
+        <Data name="GPS">
+          <value>25.93°N, 49.66°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value> Abqaiq Aramco</value>
+        </Data>
+        <Data name="Détail">
+          <value>18 drones SAMAD-3 + 7 missiles cruise iraniens ; 0 morts, 50% production Aramco offline 2 semaines ; Houthi revendiquent, monde accuse Iran.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          49.66,25.93,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>PMF / Hashd al-Shaabi+Kataib Hezbollah</name>
+      <description><![CDATA[unnamed (1): <br>Date: 08/01/2020<br>Pays: Irak<br>GPS: 33.25°N, 44.42°E<br>Evenement: Missiles K1 base Bagdad<br>Détail: Kataib Hezbollah ; 110 soldats US blessés TBI ; riposte US Soleimani Qassem Soleimani tué Bagdad aéroport.]]></description>
+      <styleUrl>#icon-1899-C2185B</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>08/01/2020</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.25°N, 44.42°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Missiles K1 base Bagdad</value>
+        </Data>
+        <Data name="Détail">
+          <value>Kataib Hezbollah ; 110 soldats US blessés TBI ; riposte US Soleimani Qassem Soleimani tué Bagdad aéroport.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.42,33.25,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Asaib Ahl al-Haq</name>
+      <description><![CDATA[unnamed (1): <br>Date: 21/12/2020<br>Pays: Irak<br>GPS: 33.31°N, 44.37°E<br>Evenement: Roquettes ambassade US Bagdad<br>Détail: 8 roquettes ; dégâts matériels ; AAH revendique.]]></description>
+      <styleUrl>#icon-1899-A52714</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>21/12/2020</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.31°N, 44.37°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Roquettes ambassade US Bagdad</value>
+        </Data>
+        <Data name="Détail">
+          <value>8 roquettes ; dégâts matériels ; AAH revendique.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.37,33.31,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>IRGC-Qods Force </name>
+      <description><![CDATA[unnamed (1): <br>Date: 03/01/2020<br>Pays: Irak<br>GPS: 33.31°N, 44.37°E<br>Evenement: Assassinat Soleimani aéroport Bagdad<br>Détail: Riposte K1 KH (Qods) ; 110 US blessés ; Soleimani tué drone US.]]></description>
+      <styleUrl>#icon-1899-E65100</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>03/01/2020</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.31°N, 44.37°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Assassinat Soleimani aéroport Bagdad</value>
+        </Data>
+        <Data name="Détail">
+          <value>Riposte K1 KH (Qods) ; 110 US blessés ; Soleimani tué drone US.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.37,33.31,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Zainebiyoun Brigade</name>
+      <description><![CDATA[unnamed (1): <br>Date: 02/2020<br>Pays: Syrie<br>GPS: 35.93°N, 36.63°E<br>Evenement: Opération Spring Shield Idlib<br>Détail: Zainebiyoun vs Turcs HTS ; lourdes pertes ; retrait partiel.]]></description>
+      <styleUrl>#icon-1899-673AB7</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>02/2020</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.93°N, 36.63°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Opération Spring Shield Idlib</value>
+        </Data>
+        <Data name="Détail">
+          <value>Zainebiyoun vs Turcs HTS ; lourdes pertes ; retrait partiel.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          36.63,35.93,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Force Démocratiques Syriennes</name>
+      <description><![CDATA[unnamed (1): Sunites<br>Date: 23 mars 2019<br>Pays: Syrie<br>GPS: 35.28°N, 40.88°E<br>Evenement: Chute de Baghuz<br>Détail: Effondrement : fin administrations visibles (tribunaux, hisba) ; 12 000 rendus/capturés]]></description>
+      <styleUrl>#icon-1899-0288D1</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value>Sunites</value>
+        </Data>
+        <Data name="Date">
+          <value>23 mars 2019</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.28°N, 40.88°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Chute de Baghuz</value>
+        </Data>
+        <Data name="Détail">
+          <value>Effondrement : fin administrations visibles (tribunaux, hisba) ; 12 000 rendus/capturés</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.88,35.28,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 2019-2026<br>Pays: Syrie<br>GPS: 35.00°N, 39.00°E<br>Evenement: Insurrection Badiya syrienne <br>Détail: Cellules tunnels/IED vs FDS ; 7 explosions Rakka (août 2019) ; commandement central caché]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2019-2026</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.00°N, 39.00°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Insurrection Badiya syrienne </value>
+        </Data>
+        <Data name="Détail">
+          <value>Cellules tunnels/IED vs FDS ; 7 explosions Rakka (août 2019) ; commandement central caché</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39,35,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 2019<br>Pays: Irak<br>GPS: 33.50°N, 42.50°E<br>Evenement: Embuscades Anbar désert <br>Détail: Embuscades Peshmergas ; 14-18 000 combattants actifs (Pentagone) ; soutien tribal sunnite]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2019</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.50°N, 42.50°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Embuscades Anbar désert </value>
+        </Data>
+        <Data name="Détail">
+          <value>Embuscades Peshmergas ; 14-18 000 combattants actifs (Pentagone) ; soutien tribal sunnite</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          42.5,33.5,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 17 juillet 2019<br>Pays: Irak<br>GPS: 35.45°N, 40.65°E<br>Evenement: Attaque de Champs Al-Omar<br>Détail: Plus grande attaque post-Baghuz ; FDS repoussent après quelques heures ; bilan inconnu]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>17 juillet 2019</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.45°N, 40.65°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaque de Champs Al-Omar</value>
+        </Data>
+        <Data name="Détail">
+          <value>Plus grande attaque post-Baghuz ; FDS repoussent après quelques heures ; bilan inconnu</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.65,35.45,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 2020-2025<br>Pays: Nord Irak<br>GPS: 35.25°N, 43.25°E<br>Evenement: Embuscade Makhmour/Hamrin<br>Détail: Attaques quasi-hebdo vs irakiens ; 500+ djihadistes actifs désert (2024)]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2020-2025</value>
+        </Data>
+        <Data name="Pays">
+          <value>Nord Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.25°N, 43.25°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Embuscade Makhmour/Hamrin</value>
+        </Data>
+        <Data name="Détail">
+          <value>Attaques quasi-hebdo vs irakiens ; 500+ djihadistes actifs désert (2024)</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.25,35.25,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>USA, Force Delta</name>
+      <description><![CDATA[unnamed (1): <br>Date: 29 avril 2019<br>Pays: Syrie<br>GPS: 35.95°N, 36.35°E<br>Evenement: Attaque du Refuge Abu Bark Al-Bagdadi<br>Détail: Complexe refuge (avant explosion)<br>Coordonnées : montagne Idlib<br>Assaut : 14 membres Daesh tués (dont Baghdadi) ; traque 2 ans via indicateur défecteur ; renseignement kurde/irakien ; pas de tirs alliés<br>Baghdadi fuit tunnel, active gilet explosif tuant 2 enfants ; chien Conan blessé ; ADN confirme identité.]]></description>
+      <styleUrl>#icon-1899-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>29 avril 2019</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 36.35°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaque du Refuge Abu Bark Al-Bagdadi</value>
+        </Data>
+        <Data name="Détail">
+          <value>Complexe refuge (avant explosion)
+Coordonnées : montagne Idlib
+Assaut : 14 membres Daesh tués (dont Baghdadi) ; traque 2 ans via indicateur défecteur ; renseignement kurde/irakien ; pas de tirs alliés
+Baghdadi fuit tunnel, active gilet explosif tuant 2 enfants ; chien Conan blessé ; ADN confirme identité.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          36.35,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

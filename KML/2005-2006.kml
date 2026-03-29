@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>2005-2006</name>
+    <Style id="icon-1899-880E4F-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-880E4F-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-880E4F">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-880E4F-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-880E4F-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-A52714-normal">
+      <IconStyle>
+        <color>ff1427a5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-A52714-highlight">
+      <IconStyle>
+        <color>ff1427a5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-A52714">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-A52714-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-A52714-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>Hezbollah </name>
+      <description><![CDATA[Date: 12/07/2006<br>Pays: Liban<br>GPS: 33.42°N, 35.63°E<br>Evenement: Raid commando Shebaa Farms<br>Détail: 3 jeeps HZB attaquent patrouille IDF ; 8 soldats tués, 2 Eldad Regev et Ehud Goldwasser capturés (libérés 2008).<br><br>Sources: <br>Chiites: ]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="Date">
+          <value>12/07/2006</value>
+        </Data>
+        <Data name="Pays">
+          <value>Liban</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.42°N, 35.63°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Raid commando Shebaa Farms</value>
+        </Data>
+        <Data name="Détail">
+          <value>3 jeeps HZB attaquent patrouille IDF ; 8 soldats tués, 2 Eldad Regev et Ehud Goldwasser capturés (libérés 2008).
+</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+        <Data name="Chiites">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          35.63,33.42,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hezbollah </name>
+      <description><![CDATA[Date: 13/07/2006<br>Pays: Israel <br>GPS: 32.81°N, 34.99°E<br>Evenement: 1re roquette sur Haïfa<br>Détail: 8 civils tués, 17 blessés ; 1re frappe civile majeure depuis 1982.​<br>Sources: <br>Chiites: ]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="Date">
+          <value>13/07/2006</value>
+        </Data>
+        <Data name="Pays">
+          <value>Israel </value>
+        </Data>
+        <Data name="GPS">
+          <value>32.81°N, 34.99°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>1re roquette sur Haïfa</value>
+        </Data>
+        <Data name="Détail">
+          <value>8 civils tués, 17 blessés ; 1re frappe civile majeure depuis 1982.​</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+        <Data name="Chiites">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          34.99,32.81,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hezbollah </name>
+      <description><![CDATA[Date: 16/07/2006<br>Pays: Liban<br>GPS: 33.20°N, 35.43°E<br>Evenement: Bataille Bint Jbeil<br>Détail: Combat urbain 20 soldats IDF vs HZB ; 5 IDF tués, 13 blessés ; HZB revendique 20 IDF morts.​<br>Sources: <br>Chiites: ]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="Date">
+          <value>16/07/2006</value>
+        </Data>
+        <Data name="Pays">
+          <value>Liban</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.20°N, 35.43°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille Bint Jbeil</value>
+        </Data>
+        <Data name="Détail">
+          <value>Combat urbain 20 soldats IDF vs HZB ; 5 IDF tués, 13 blessés ; HZB revendique 20 IDF morts.​</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+        <Data name="Chiites">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          35.43,33.2,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hezbollah </name>
+      <description><![CDATA[Date: 27/07/2006<br>Pays: Israel <br>GPS: 32.81°N, 34.99°E<br>Evenement: Gare Haïfa <br>Détail: Roquette cluster M-107 ; 8 civils tués, 80 blessés ; 1er usage cluster par HZB.<br>Sources: <br>Chiites: ]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="Date">
+          <value>27/07/2006</value>
+        </Data>
+        <Data name="Pays">
+          <value>Israel </value>
+        </Data>
+        <Data name="GPS">
+          <value>32.81°N, 34.99°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Gare Haïfa </value>
+        </Data>
+        <Data name="Détail">
+          <value>Roquette cluster M-107 ; 8 civils tués, 80 blessés ; 1er usage cluster par HZB.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+        <Data name="Chiites">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          34.99,32.81,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Asaib Ahl al-Haq </name>
+      <description><![CDATA[Date: 06/05/2006<br>Pays: Irak<br>GPS: 30.51°N, 47.81°E<br>Evenement: Basra Lynx helicopter<br>Détail: MANPADS abat hélico britannique ; 5 soldats UK tués ; 1er abatage aérien AAH.<br>Sources: <br>Chiites: ]]></description>
+      <styleUrl>#icon-1899-A52714</styleUrl>
+      <ExtendedData>
+        <Data name="Date">
+          <value>06/05/2006</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>30.51°N, 47.81°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Basra Lynx helicopter</value>
+        </Data>
+        <Data name="Détail">
+          <value>MANPADS abat hélico britannique ; 5 soldats UK tués ; 1er abatage aérien AAH.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+        <Data name="Chiites">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          47.81,30.51,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

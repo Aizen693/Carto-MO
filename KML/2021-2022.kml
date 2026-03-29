@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>2021-2022</name>
+    <Style id="icon-1899-558B2F-normal">
+      <IconStyle>
+        <color>ff2f8b55</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-558B2F-highlight">
+      <IconStyle>
+        <color>ff2f8b55</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-558B2F">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-558B2F-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-558B2F-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-817717-normal">
+      <IconStyle>
+        <color>ff177781</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-817717-highlight">
+      <IconStyle>
+        <color>ff177781</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-817717">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-817717-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-817717-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-C2185B-normal">
+      <IconStyle>
+        <color>ff5b18c2</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-C2185B-highlight">
+      <IconStyle>
+        <color>ff5b18c2</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-C2185B">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-C2185B-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-C2185B-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-FF5252-normal">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-FF5252-highlight">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-FF5252">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-FF5252-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-FF5252-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>PMF / Hashd al-Shaabi+Kataib Hezbollah</name>
+      <description><![CDATA[unnamed (1): Chiites<br>Date: 04/02/2021<br>Pays: Irak<br>GPS: 36.24°N, 43.96°E<br>Evenement: Drone Erbil aéroport <br>Détail: PMF drones US coalition ; 1 civil kurde tué ; 1er drone PMF réussi.]]></description>
+      <styleUrl>#icon-1899-C2185B</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value>Chiites</value>
+        </Data>
+        <Data name="Date">
+          <value>04/02/2021</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.24°N, 43.96°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Drone Erbil aéroport </value>
+        </Data>
+        <Data name="Détail">
+          <value>PMF drones US coalition ; 1 civil kurde tué ; 1er drone PMF réussi.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.96,36.24,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kataib Sayyid al-Shuhada</name>
+      <description><![CDATA[unnamed (1): <br>Date: 15/02/2021<br>Pays: Irak<br>GPS: 36.24°N, 43.96°E<br>Evenement:  Roquettes Erbil aéroport <br>Détail: 1 civil coalition tué, 6 blessés ; Peshmerga arrête recruteur KSS.]]></description>
+      <styleUrl>#icon-1899-558B2F</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>15/02/2021</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.24°N, 43.96°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value> Roquettes Erbil aéroport </value>
+        </Data>
+        <Data name="Détail">
+          <value>1 civil coalition tué, 6 blessés ; Peshmerga arrête recruteur KSS.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.96,36.24,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Basij</name>
+      <description><![CDATA[unnamed (1): <br>Date: 21/09/2022<br>Pays: Iran <br>GPS: 35.69° N, 51.42°E<br>Evenement: Mahsa Amini morte garde morale Téhéran.<br>Détail: Basij + police mœurs ; manifestations 100+ villes ; 500+ morts (HRANA), 22 000 arrêtés ; 68 enfants tués.]]></description>
+      <styleUrl>#icon-1899-817717</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>21/09/2022</value>
+        </Data>
+        <Data name="Pays">
+          <value>Iran </value>
+        </Data>
+        <Data name="GPS">
+          <value>35.69° N, 51.42°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Mahsa Amini morte garde morale Téhéran.</value>
+        </Data>
+        <Data name="Détail">
+          <value>Basij + police mœurs ; manifestations 100+ villes ; 500+ morts (HRANA), 22 000 arrêtés ; 68 enfants tués.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          51.42,35.69,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): Sunites<br>Date: 2021-2022<br>Pays: Syrie<br>GPS: 35.52°N, 40.12°E<br>Evenement: bataille d'Al-Busayrah<br>Détail: Attaques : Embuscades FDS patrouilles ; IED axes agricoles ; 15 incidents recensés SOHR ; villages abandonnés refuges cellules]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value>Sunites</value>
+        </Data>
+        <Data name="Date">
+          <value>2021-2022</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.52°N, 40.12°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[bataille d'Al-Busayrah]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Attaques : Embuscades FDS patrouilles ; IED axes agricoles ; 15 incidents recensés SOHR ; villages abandonnés refuges cellules</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.12,35.52,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: juillet 2021<br>Pays: Syrie<br>GPS: 35.45°N, 40.65°E<br>Evenement: Attaque Champ pétrolier Al-Umar (Deir Ez-Zor<br>Détail: Cellules Daesh attaquent postes FDS/Asayish ; tirs sur gardes, admin, convois ouvriers ; 24-48h combats ; coalition frappe appui]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>juillet 2021</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.45°N, 40.65°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaque Champ pétrolier Al-Umar (Deir Ez-Zor</value>
+        </Data>
+        <Data name="Détail">
+          <value>Cellules Daesh attaquent postes FDS/Asayish ; tirs sur gardes, admin, convois ouvriers ; 24-48h combats ; coalition frappe appui</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.65,35.45,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: juillet 2021<br>Pays: Syrie<br>GPS: 35.45°N, 40.67°E<br>Evenement: Attaque Postes de garde (est) Al-Umar (Début Attaque)<br>Détail: Infiltration nuit ; fusillades coordonnées ; perturbation production ; FDS contre-attaque rapide]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>juillet 2021</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.45°N, 40.67°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaque Postes de garde (est) Al-Umar (Début Attaque)</value>
+        </Data>
+        <Data name="Détail">
+          <value>Infiltration nuit ; fusillades coordonnées ; perturbation production ; FDS contre-attaque rapide</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.67,35.45,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: juillet 2021<br>Pays: Syrie<br>GPS: 35.44°N, 40.64°E<br>Evenement: Attaque Zone Administrative<br>Détail: Cibles : Bureaux FDS ; ouvriers visés ; démonstration mobilité cellules désert.]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>juillet 2021</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.44°N, 40.64°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaque Zone Administrative</value>
+        </Data>
+        <Data name="Détail">
+          <value>Cibles : Bureaux FDS ; ouvriers visés ; démonstration mobilité cellules désert.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.64,35.44,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 21 janv. 2022<br>Pays: Irak<br>GPS: 34.50°N, 45.20°E<br>Evenement: Massacre d'Al-Azim (nord Baqubah).<br>Détail: Raid caserne armée irakienne ; 11 soldats tués sommeil ; ISIL revendique Telegram]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>21 janv. 2022</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.50°N, 45.20°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Massacre d'Al-Azim (nord Baqubah).]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Raid caserne armée irakienne ; 11 soldats tués sommeil ; ISIL revendique Telegram</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          45.2,34.5,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 2022-2023<br>Pays: Irak<br>GPS: 34.80°N, 44.50°E<br>Evenement: Combats d'Harmin (vallées boisées)<br>Détail: Guérilla : Embuscades nocturnes PMF/police ; IED routes commerciales ; caches/tunnels détruits ratissages.]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2022-2023</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.80°N, 44.50°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Combats d'Harmin (vallées boisées)]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Guérilla : Embuscades nocturnes PMF/police ; IED routes commerciales ; caches/tunnels détruits ratissages.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.5,34.8,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 2022-2023<br>Pays: Irak<br>GPS: 34.90°N, 45.10°E<br>Evenement: Attaque de la ballade de Ruz<br>Détail: Attaques : Postes police visés ; 4 PMF tués Qara-Tappa (20 avril 2023) ; opérations irakiennes 3 directions]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2022-2023</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.90°N, 45.10°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaque de la ballade de Ruz</value>
+        </Data>
+        <Data name="Détail">
+          <value>Attaques : Postes police visés ; 4 PMF tués Qara-Tappa (20 avril 2023) ; opérations irakiennes 3 directions</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          45.1,34.9,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date:  2022-2023<br>Pays: Syrie<br>GPS: 35.50°N, 40.15°E<br>Evenement: Assassinats d'Al-Sour (Euphrate Moyen)<br>Détail: Assassinats : Cibles officiers Asayish ; drones coalition ratent mobiles ; 40+ attaques, érosion moral FDS locales]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value> 2022-2023</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.50°N, 40.15°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Assassinats d'Al-Sour (Euphrate Moyen)]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Assassinats : Cibles officiers Asayish ; drones coalition ratent mobiles ; 40+ attaques, érosion moral FDS locales</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.15,35.5,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 2022-2025<br>Pays: Syrie<br>GPS: 35.33°N, 40.12°E<br>Evenement: Campagne de Deir Ez Zor<br>Détail: Total : 150-200 attaques (SOHR/ONU 2023-25) ; 200+ victimes FDS/locaux.<br>Tactiques : Unités 5-15 hommes nuit ; soutien tribal logistique ; drones reco coalition inefficaces mobiles.<br>Conséquences : Menace durable Euphrate ; FDS sous pression ; guerre usure sans fin territoriale.]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2022-2025</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.33°N, 40.12°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Campagne de Deir Ez Zor</value>
+        </Data>
+        <Data name="Détail">
+          <value>Total : 150-200 attaques (SOHR/ONU 2023-25) ; 200+ victimes FDS/locaux.
+Tactiques : Unités 5-15 hommes nuit ; soutien tribal logistique ; drones reco coalition inefficaces mobiles.
+Conséquences : Menace durable Euphrate ; FDS sous pression ; guerre usure sans fin territoriale.</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.12,35.33,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 2022-2025<br>Pays: Irak<br>GPS: 33.77°N, 45.14°E<br>Evenement: Offensive de Diyala (2022‑2025, Irak)<br><br>Détail: Attaques : 150+ recensées (CTC Sentinel) ; 50+ militaires/PMF tués.<br>Réponse : Ratissages irakiens/PMF ; tunnels Hamrin détruits ; zones grises Bagdad-Iran réactivées.<br>Conséquences : Résilience logistique Daesh ; durcissement sécuritaire capitale ; menace chronique]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2022-2025</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.77°N, 45.14°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Offensive de Diyala (2022‑2025, Irak)
+</value>
+        </Data>
+        <Data name="Détail">
+          <value>Attaques : 150+ recensées (CTC Sentinel) ; 50+ militaires/PMF tués.
+Réponse : Ratissages irakiens/PMF ; tunnels Hamrin détruits ; zones grises Bagdad-Iran réactivées.
+Conséquences : Résilience logistique Daesh ; durcissement sécuritaire capitale ; menace chronique</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          45.14,33.77,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

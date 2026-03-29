@@ -1,0 +1,1790 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>2013-2014</name>
+    <Style id="icon-1899-006064-normal">
+      <IconStyle>
+        <color>ff646000</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-006064-highlight">
+      <IconStyle>
+        <color>ff646000</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-006064">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-006064-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-006064-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-01579B-normal">
+      <IconStyle>
+        <color>ff9b5701</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-01579B-highlight">
+      <IconStyle>
+        <color>ff9b5701</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-01579B">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-01579B-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-01579B-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-097138-normal">
+      <IconStyle>
+        <color>ff387109</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-097138-highlight">
+      <IconStyle>
+        <color>ff387109</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-097138">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-097138-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-097138-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-558B2F-normal">
+      <IconStyle>
+        <color>ff2f8b55</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-558B2F-highlight">
+      <IconStyle>
+        <color>ff2f8b55</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-558B2F">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-558B2F-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-558B2F-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-880E4F-normal">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-880E4F-highlight">
+      <IconStyle>
+        <color>ff4f0e88</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-880E4F">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-880E4F-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-880E4F-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-A52714-normal">
+      <IconStyle>
+        <color>ff1427a5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-A52714-highlight">
+      <IconStyle>
+        <color>ff1427a5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-A52714">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-A52714-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-A52714-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-F57C00-normal">
+      <IconStyle>
+        <color>ff007cf5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-F57C00-highlight">
+      <IconStyle>
+        <color>ff007cf5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-F57C00">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-F57C00-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-F57C00-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-FBC02D-normal">
+      <IconStyle>
+        <color>ff2dc0fb</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-FBC02D-highlight">
+      <IconStyle>
+        <color>ff2dc0fb</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-FBC02D">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-FBC02D-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-FBC02D-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-FF5252-normal">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-FF5252-highlight">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-FF5252">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-FF5252-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-FF5252-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>Hezbollah</name>
+      <description><![CDATA[unnamed (1): <br>Date: 26/05/2013<br>Pays: Syrie<br>GPS: 33.89°N, 35.50°E<br>Evenement: Roquettes sur Beyrouth et Hermel<br>Détail: Deux roquettes frappent un site à Beyrouth (5 blessés) et deux autres touchent Hermel ; l’opposition syrienne revendique l’attaque en représailles à l’intervention du Hezbollah.<br><br>Sources: ]]></description>
+      <styleUrl>#icon-1899-880E4F</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>26/05/2013</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.89°N, 35.50°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Roquettes sur Beyrouth et Hermel</value>
+        </Data>
+        <Data name="Détail">
+          <value>Deux roquettes frappent un site à Beyrouth (5 blessés) et deux autres touchent Hermel ; l’opposition syrienne revendique l’attaque en représailles à l’intervention du Hezbollah.
+</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          35.5,33.89,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kataib Sayyid al-Shuhada</name>
+      <description><![CDATA[unnamed (1): <br>Date: 21/08/2013<br>Pays: Syrie <br>GPS: 33.52°N, 36.35°E<br>Evenement:  Ghouta Est Damas <br>Détail: KSS encercle zone sarin (allégué) ; 350-1 429 morts chimiques (rebelles) ; rôle logistique pro‑Assad.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-558B2F</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>21/08/2013</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie </value>
+        </Data>
+        <Data name="GPS">
+          <value>33.52°N, 36.35°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value> Ghouta Est Damas </value>
+        </Data>
+        <Data name="Détail">
+          <value>KSS encercle zone sarin (allégué) ; 350-1 429 morts chimiques (rebelles) ; rôle logistique pro‑Assad.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          36.35,33.52,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Harakat Hezbollah al-Nujaba</name>
+      <description><![CDATA[unnamed (1): <br>Date: 01/07/2014<br>Pays: Syrie <br>GPS: 34.00°N, 36.55°E<br>Evenement: Création officielle Qalamoun Syrie<br>Détail: Akram al-Kaabi (ex- Asaib) lance HHN ; 1 000 combattants vs rebelles sunnites ; 1re annonce publique.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-097138</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>01/07/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie </value>
+        </Data>
+        <Data name="GPS">
+          <value>34.00°N, 36.55°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Création officielle Qalamoun Syrie</value>
+        </Data>
+        <Data name="Détail">
+          <value>Akram al-Kaabi (ex- Asaib) lance HHN ; 1 000 combattants vs rebelles sunnites ; 1re annonce publique.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          36.55,34,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Asaib Ahl al-Haq</name>
+      <description><![CDATA[unnamed (1): <br>Date: 03/2014<br>Pays: Irak <br>GPS: 33.8°N, 44.8°E<br>Evenement: Massacre Bouhriz Diyala<br>Détail: 23 civils sunnites tués ; vengeance Daesh.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-A52714</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>03/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak </value>
+        </Data>
+        <Data name="GPS">
+          <value>33.8°N, 44.8°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Massacre Bouhriz Diyala</value>
+        </Data>
+        <Data name="Détail">
+          <value>23 civils sunnites tués ; vengeance Daesh.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.8,33.8,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Fatemiyoun Brigade
+</name>
+      <description><![CDATA[unnamed (1): <br>Date: 07/2014<br>Pays: Syrie <br>GPS: 33.47°N, 36.35°E<br>Evenement: Sayyida Zaynab Damas sud<br>Détail: 1re bataille Fatemiyoun (500 Afghans) vs FSA/IS ; 50 morts Fatemiyoun ; mission « protéger Zaynab ».<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-006064</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>07/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie </value>
+        </Data>
+        <Data name="GPS">
+          <value>33.47°N, 36.35°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Sayyida Zaynab Damas sud</value>
+        </Data>
+        <Data name="Détail">
+          <value>1re bataille Fatemiyoun (500 Afghans) vs FSA/IS ; 50 morts Fatemiyoun ; mission « protéger Zaynab ».</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          36.35,33.47,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>PMF / Hashd al-Shaabi</name>
+      <description><![CDATA[unnamed (1): <br>Date: 26/07/2014<br>Pays: Irak<br>GPS: 32.05°N, 44.01°E<br>Evenement: Fatwa Sistani Bagdad<br>Détail: Mobilisation populaire anti‑Daesh ; 1 500 volontaires jour 1 ; hubs Najaf (31.99°N, 44.35°E), Bassora (30.51°N, 47.81°E).<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-01579B</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>26/07/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>32.05°N, 44.01°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Fatwa Sistani Bagdad</value>
+        </Data>
+        <Data name="Détail">
+          <value>Mobilisation populaire anti‑Daesh ; 1 500 volontaires jour 1 ; hubs Najaf (31.99°N, 44.35°E), Bassora (30.51°N, 47.81°E).</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.01,32.05,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Asaib Ahl al-Haq</name>
+      <description><![CDATA[unnamed (1): <br>Date: 08/2014<br>Pays: Irak <br>GPS: 32.5°N, 44.5°E<br>Evenement: Babil province<br>Détail: 50 sunnites exécutés ; HRW documente.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-A52714</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak </value>
+        </Data>
+        <Data name="GPS">
+          <value>32.5°N, 44.5°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Babil province</value>
+        </Data>
+        <Data name="Détail">
+          <value>50 sunnites exécutés ; HRW documente.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.5,32.5,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Harakat Hezbollah al-Nujaba</name>
+      <description><![CDATA[unnamed (1): <br>Date: 08/2014<br>Pays: Irak<br>GPS: 36.32°N, 41.87°E<br>Evenement: Sinjar<br>Détail: Sauvetage Yézidis Daesh ; 300 combattants HHN ; 100 Daesh tués.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-097138</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.32°N, 41.87°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Sinjar</value>
+        </Data>
+        <Data name="Détail">
+          <value>Sauvetage Yézidis Daesh ; 300 combattants HHN ; 100 Daesh tués.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          41.87,36.32,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Harakat Hezbollah al-Nujaba</name>
+      <description><![CDATA[unnamed (1): <br>Date: 22/08/2014<br>Pays: Irak<br>GPS: 34.0°N, 45.5°E<br>Evenement: Mosquée Diyala<br>Détail: 68 civils sunnites massacrés ; pic vengeance Daesh.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-097138</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>22/08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.0°N, 45.5°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Mosquée Diyala</value>
+        </Data>
+        <Data name="Détail">
+          <value>68 civils sunnites massacrés ; pic vengeance Daesh.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          45.5,34,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): Sunites<br>Date: mai 2013<br>Pays: Syrie<br>GPS: 35.95°N, 39.01° E<br>Evenement: Prise de Racca par Daesh<br>Détail: 39 morts : 10 rebelles (Daesh), 17 civils ;  face à 17e Division de l'Armée Syrienne, 300 soldats capturés par rebelles et 39 morts. Centres renseignements, gouverneur (Hassan Jalili), chef Ba'ath (Suleiman Suleiman) capturés. <br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value>Sunites</value>
+        </Data>
+        <Data name="Date">
+          <value>mai 2013</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 39.01° E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise de Racca par Daesh</value>
+        </Data>
+        <Data name="Détail">
+          <value><![CDATA[39 morts : 10 rebelles (Daesh), 17 civils ;  face à 17e Division de l'Armée Syrienne, 300 soldats capturés par rebelles et 39 morts. Centres renseignements, gouverneur (Hassan Jalili), chef Ba'ath (Suleiman Suleiman) capturés. ]]></value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.01,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: Courant 2013<br>Pays: Syrie<br>GPS: 35.95°N, 38.75°E<br>Evenement: Camp de fromation de Racca de Daesh<br>Détail: Arrivée recrues Europe/Maghreb ; formation armes légères/IED ; affrontements ASL ; consolidation contrôle EIIL post-prise Raqqa janvier.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>Courant 2013</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 38.75°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Camp de fromation de Racca de Daesh</value>
+        </Data>
+        <Data name="Détail">
+          <value>Arrivée recrues Europe/Maghreb ; formation armes légères/IED ; affrontements ASL ; consolidation contrôle EIIL post-prise Raqqa janvier.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          38.75,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 04-05/2013<br>Pays: Syrie<br>GPS: 35.95°N, 38.75°E<br>Evenement: Affrontements à Tabqa<br>Détail: Affrontements Ahrar al-Sham ; Daesh rallie tribus locales ; prise bâtiments admin ; 20+ morts rebelles.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>04-05/2013</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 38.75°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Affrontements à Tabqa</value>
+        </Data>
+        <Data name="Détail">
+          <value>Affrontements Ahrar al-Sham ; Daesh rallie tribus locales ; prise bâtiments admin ; 20+ morts rebelles.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          38.75,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 05/2013<br>Pays: Syrie<br>GPS: 35.85°N, 39.25°E<br>Evenement: Prise de Shabiya al-Qusayr<br>Détail: Prise village ; 15 rebelles tués ; Daesh impose charia.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>05/2013</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.85°N, 39.25°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise de Shabiya al-Qusayr</value>
+        </Data>
+        <Data name="Détail">
+          <value>Prise village ; 15 rebelles tués ; Daesh impose charia.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.25,35.85,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: juillet 2014<br>Pays: Syrie<br>GPS: 35.33°N,40.15°E<br>Evenement: Prise de Deir Ez-Zor par Daesh <br>Détail: 600 morts au total dans le gouvernorat depuis fin 2013-début 2014, dont 241 djihadistes Daesh et 354 rebelles islamistes ;  Bâtiments repris : QG rebelle, ponts, bâtiments publics. Zones contrôlées : Centre-ville, est syrien (vers Deir ez-Zor).<br>Suites : administration islamique imposée ; enlèvements (journalistes, Paolo Dall'Oglio).<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>juillet 2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.33°N,40.15°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise de Deir Ez-Zor par Daesh </value>
+        </Data>
+        <Data name="Détail">
+          <value><![CDATA[600 morts au total dans le gouvernorat depuis fin 2013-début 2014, dont 241 djihadistes Daesh et 354 rebelles islamistes ;  Bâtiments repris : QG rebelle, ponts, bâtiments publics. Zones contrôlées : Centre-ville, est syrien (vers Deir ez-Zor).
+Suites : administration islamique imposée ; enlèvements (journalistes, Paolo Dall'Oglio).]]></value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.15,35.33,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: Eté 2013<br>Pays: Syrie<br>GPS: 35.75°N, 39.70°E<br>Evenement: Bataille de Markadah<br>Détail: Bataille vs ASL ; Daesh victorieux ; 25 morts estimés ; hub logistique.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>Eté 2013</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.75°N, 39.70°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille de Markadah</value>
+        </Data>
+        <Data name="Détail">
+          <value>Bataille vs ASL ; Daesh victorieux ; 25 morts estimés ; hub logistique.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.7,35.75,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: Fin 2013<br>Pays: Syrie<br>GPS: 34.45°N, 40.95°E<br>Evenement: Camp de fromation Deir Ez-Zor de Daesh<br>Détail: Camps préparatoires fin 2013 ; flux Caucase/Asie centrale ; endoctrinement ; logistique armes Turquie-Irak ; raids rebelles repoussés.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>Fin 2013</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.45°N, 40.95°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Camp de fromation Deir Ez-Zor de Daesh</value>
+        </Data>
+        <Data name="Détail">
+          <value>Camps préparatoires fin 2013 ; flux Caucase/Asie centrale ; endoctrinement ; logistique armes Turquie-Irak ; raids rebelles repoussés.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.95,34.45,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 2013<br>Pays: Syrie<br>GPS: 35.65°N, 39.85°E<br>Evenement: Camp de fromation de Raqqa-Deir de Daesh<br>Détail: Formation intensive été 2013 ; émirs irakiens instructeurs ; centaines recrues formées ; développement réseau transfrontalier ; escarmouches loyalistes sporadiques.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>2013</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.65°N, 39.85°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Camp de fromation de Raqqa-Deir de Daesh</value>
+        </Data>
+        <Data name="Détail">
+          <value>Formation intensive été 2013 ; émirs irakiens instructeurs ; centaines recrues formées ; développement réseau transfrontalier ; escarmouches loyalistes sporadiques.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.85,35.65,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: Fin 2013<br>Pays: Syrie<br>GPS: 36.53°N, 37.95°E<br>Evenement: Affrontement Daesh-Rebelles à Manbij<br>Détail: Prise progressive ; Daesh contrôle police religieuse fin 2013 ; 12 exécutions publiques (rivaux, "espions").<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>Fin 2013</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.53°N, 37.95°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Affrontement Daesh-Rebelles à Manbij</value>
+        </Data>
+        <Data name="Détail">
+          <value><![CDATA[Prise progressive ; Daesh contrôle police religieuse fin 2013 ; 12 exécutions publiques (rivaux, "espions").]]></value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          37.95,36.53,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 6 juin 2014<br>Pays: Irak<br>GPS: 36.35°N, 43.12°E<br>Evenement: Attaques sur Mossoul<br>Détail: Attaques sur un convoi pick-ups EIIL ; combats vs 2e division irakienne ; les quartiers tombent rapidement<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>6 juin 2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.35°N, 43.12°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaques sur Mossoul</value>
+        </Data>
+        <Data name="Détail">
+          <value>Attaques sur un convoi pick-ups EIIL ; combats vs 2e division irakienne ; les quartiers tombent rapidement</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.12,36.35,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 09-10/06/2014<br>Pays: Irak<br>GPS: 36.33°N, 43.13°E<br>Evenement: Prise de l'aéroport internationnal de Moussoul<br>Détail: Effondrement armée (30 000 hommes fuient) ; banques pillées (500M USD) ; chars/Hummers saisis.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>09-10/06/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.33°N, 43.13°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Prise de l'aéroport internationnal de Moussoul]]></value>
+        </Data>
+        <Data name="Détail">
+          <value>Effondrement armée (30 000 hommes fuient) ; banques pillées (500M USD) ; chars/Hummers saisis.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.13,36.33,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 10/06/2014<br>Pays: Irak<br>GPS: 36.25°N, 43.05°E<br>Evenement: Prise de la prison Badouch de Mossoul<br>Détail: Assaut, libération 1000 prisonniers EIIL ; massacre 670 chiites (ONU).<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>10/06/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.25°N, 43.05°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise de la prison Badouch de Mossoul</value>
+        </Data>
+        <Data name="Détail">
+          <value>Assaut, libération 1000 prisonniers EIIL ; massacre 670 chiites (ONU).</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.05,36.25,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 10/06/2014<br>Pays: Irak<br>GPS: 36.28°N, 43.10°E<br>Evenement: Attaque de la base Ghizlani<br>Détail: 200 prisonniers libérés ; armes lourdes capturées.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>10/06/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.28°N, 43.10°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Attaque de la base Ghizlani</value>
+        </Data>
+        <Data name="Détail">
+          <value>200 prisonniers libérés ; armes lourdes capturées.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.1,36.28,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 04-10/06/2014<br>Pays: Irak<br>GPS: 36.36°N, 43.15°E<br>Evenement: Prise de Moussoul<br>Détail: Forces impliquées, EIIL : 1300-1500 combattants (Abou Abdel Rahman al-Bilaoui tué, remplacé al-Tourkmani), Irak : 60 000 (2 divisions, police) ; désertions massives. <br>Pertes vérifiées : EIIL : ~100 morts (OSDH/rapports), Irak : >500 soldats/policiers ; civils blessés raids aériens.<br>Butin Daesh : 3000 Humvees, 50 tanks, artillerie.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>04-10/06/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.36°N, 43.15°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise de Moussoul</value>
+        </Data>
+        <Data name="Détail">
+          <value><![CDATA[Forces impliquées, EIIL : 1300-1500 combattants (Abou Abdel Rahman al-Bilaoui tué, remplacé al-Tourkmani), Irak : 60 000 (2 divisions, police) ; désertions massives. 
+Pertes vérifiées : EIIL : ~100 morts (OSDH/rapports), Irak : >500 soldats/policiers ; civils blessés raids aériens.
+Butin Daesh : 3000 Humvees, 50 tanks, artillerie.]]></value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.15,36.36,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 29/06/2014<br>Pays: Syrie-Irak<br>GPS: 35.95°N, 39.01°E<br>Evenement: Proclamation du Califat<br>Détail: Communiqué audio EIIL → "État islamique" ; al-Baghdadi nommé calife Ibrahim ; rétablissement califat (fin 1924)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>29/06/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie-Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 39.01°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Proclamation du Califat</value>
+        </Data>
+        <Data name="Détail">
+          <value><![CDATA[Communiqué audio EIIL → "État islamique" ; al-Baghdadi nommé calife Ibrahim ; rétablissement califat (fin 1924)]]></value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.01,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 05/07/2014<br>Pays: Irak<br>GPS: 36.34°N, 43.15°E<br>Evenement: Prêche d'Abou Bakr al-Baghdadi à la Mosquée al-Nouri de Mossoul<br>Détail: Prêche d'Abou Bakr al-Baghdadi (première apparition publique) ; appel à l'obéissance des musulmans mondiaux ; diffusion vidéo/audio.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>05/07/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.34°N, 43.15°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value><![CDATA[Prêche d'Abou Bakr al-Baghdadi à la Mosquée al-Nouri de Mossoul]]></value>
+        </Data>
+        <Data name="Détail">
+          <value><![CDATA[Prêche d'Abou Bakr al-Baghdadi (première apparition publique) ; appel à l'obéissance des musulmans mondiaux ; diffusion vidéo/audio.]]></value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.15,36.34,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 03/08/2014<br>Pays: Irak<br>GPS: 36.25° N, 41.80° E<br>Evenement: Prise de Siba Cheikh Khedir<br>Détail: 250 hommes clan tués ; 7 fosses communes ; femmes/enfants fuient.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>03/08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.25° N, 41.80° E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise de Siba Cheikh Khedir</value>
+        </Data>
+        <Data name="Détail">
+          <value>250 hommes clan tués ; 7 fosses communes ; femmes/enfants fuient.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          41.8,36.25,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 03/08/2014<br>Pays: Irak<br>GPS: 36.32°N, 41.87°E<br>Evenement: Prise de Sinjar ville<br>Détail: Capture de Sinjar par EIIL ; exécutions résistants ; destruction mosquée Sayyidah Zaynab ; demande conversion ou mort.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>03/08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.32°N, 41.87°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise de Sinjar ville</value>
+        </Data>
+        <Data name="Détail">
+          <value>Capture de Sinjar par EIIL ; exécutions résistants ; destruction mosquée Sayyidah Zaynab ; demande conversion ou mort.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          41.87,36.32,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 03-10/08/2014<br>Pays: Irak<br>GPS: 36.32° N, 41.86° E<br>Evenement: Prise de la Montagne Sinjar<br>Détail: 50 000 réfugiés encerclés ; 70 enfants morts soif ; frappes US début 8 août brisent EIIL.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>03-10/08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.32° N, 41.86° E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise de la Montagne Sinjar</value>
+        </Data>
+        <Data name="Détail">
+          <value>50 000 réfugiés encerclés ; 70 enfants morts soif ; frappes US début 8 août brisent EIIL.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          41.86,36.32,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Coalition Internationale</name>
+      <description><![CDATA[unnamed (1): <br>Date: 08/08/2014<br>Pays: Irak<br>GPS: 36.19°N, 44.01°E<br>Evenement: Frappes de la Coalition Internationale à Erbil<br>Détail: F-18 Super Hornet bombes laser-guided (500 lb) sur pièce artillerie remorquée ; convois mobiles de Daesh bombardés (véhicules, artillerie) ; ~50 combattants tués<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-F57C00</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>08/08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.19°N, 44.01°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Frappes de la Coalition Internationale à Erbil</value>
+        </Data>
+        <Data name="Détail">
+          <value>F-18 Super Hornet bombes laser-guided (500 lb) sur pièce artillerie remorquée ; convois mobiles de Daesh bombardés (véhicules, artillerie) ; ~50 combattants tués</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          44.01,36.19,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Coalition Internationale</name>
+      <description><![CDATA[unnamed (1): <br>Date: 8 août 2014<br>Pays: Irak<br>GPS: 36.32°N, 41.86°E<br>Evenement: Frappes de la Coalition Internationale Mont Sinjar<br>Détail: Frappes sur les positions de Daesh encerclant les réfugiés Yazidis ; destruction artillerie, véhicules ; milliers civils évacués. Appui évacuation 50 000 réfugiés ; drones Predator impliqués.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-F57C00</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>8 août 2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.32°N, 41.86°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Frappes de la Coalition Internationale Mont Sinjar</value>
+        </Data>
+        <Data name="Détail">
+          <value>Frappes sur les positions de Daesh encerclant les réfugiés Yazidis ; destruction artillerie, véhicules ; milliers civils évacués. Appui évacuation 50 000 réfugiés ; drones Predator impliqués.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          41.86,36.32,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 03/08/2014<br>Pays: Irak<br>GPS: 36.13°N, 42.00°E<br>Evenement: Prise de Zummar par Daesh contre Peshmergas<br>Détail: Prise initiale Daesh (3 août)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>03/08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.13°N, 42.00°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise de Zummar par Daesh contre Peshmergas</value>
+        </Data>
+        <Data name="Détail">
+          <value>Prise initiale Daesh (3 août)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          42,36.13,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 15/08/2014<br>Pays: Irak<br>GPS: 36.07° N, 41.85° E<br>Evenement: Prise du village de Kocho<br>Détail: 400 hommes exécutés (fusillades) ; 1000 femmes/enfants enlevés ; refus conversion<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>15/08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.07° N, 41.85° E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Prise du village de Kocho</value>
+        </Data>
+        <Data name="Détail">
+          <value>400 hommes exécutés (fusillades) ; 1000 femmes/enfants enlevés ; refus conversion</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          41.85,36.07,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 03-15/08/2014<br>Pays: Irak<br>GPS: 36.32°N, 41.88°E<br>Evenement: Massacres Sinjar<br>Détail: Bilans vérifiés (OHCHR/ONU), Morts : 5000 Yazidis hommes (août) ; total 10 000 (KRG), Enlèvements : 7000 femmes/enfants (esclavage sexuel, enfants soldats), Fosses : 15 sites, ex. 123 corps (28 nov 2014) ; 70 femmes (14 nov).<br>Conséquences immédiates : Génocide reconnu (ONU 2016), Frappes coalition 8 août ; corridor YPG/PKK 14 août sauve 120 000, Peshmerga fuient (3 août) ; YPG/YBS prennent relais.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>03-15/08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.32°N, 41.88°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Massacres Sinjar</value>
+        </Data>
+        <Data name="Détail">
+          <value>Bilans vérifiés (OHCHR/ONU), Morts : 5000 Yazidis hommes (août) ; total 10 000 (KRG), Enlèvements : 7000 femmes/enfants (esclavage sexuel, enfants soldats), Fosses : 15 sites, ex. 123 corps (28 nov 2014) ; 70 femmes (14 nov).
+Conséquences immédiates : Génocide reconnu (ONU 2016), Frappes coalition 8 août ; corridor YPG/PKK 14 août sauve 120 000, Peshmerga fuient (3 août) ; YPG/YBS prennent relais.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          41.88,36.32,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Coalition Internationale</name>
+      <description><![CDATA[unnamed (1): <br>Date: 15-16 août 2014<br>Pays: Irak<br>GPS: 36.37°N, 43.15°E<br>Evenement: Frappes de la Coalition Internationale sur Barrage de Mossoul<br>Détail: Frappes sur le barrage de Mossoul sur des unitésde Daesh contrôlant le site ; frappes US/Koweït ; stabilisation front peshmergas.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-F57C00</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>15-16 août 2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.37°N, 43.15°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Frappes de la Coalition Internationale sur Barrage de Mossoul</value>
+        </Data>
+        <Data name="Détail">
+          <value>Frappes sur le barrage de Mossoul sur des unitésde Daesh contrôlant le site ; frappes US/Koweït ; stabilisation front peshmergas.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.15,36.37,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Coalition Internationale</name>
+      <description><![CDATA[unnamed (1): <br>Date: 10/08/2014<br>Pays: Irak<br>GPS:  36.13°N, 42.00°E<br>Evenement: Frappes de la Coalition Int. sur Zumar<br>Détail: Bombardements convois de mobiles Daesh ; donnant un appui aux forces kurdes locales<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-F57C00</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>10/08/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value> 36.13°N, 42.00°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Frappes de la Coalition Int. sur Zumar</value>
+        </Data>
+        <Data name="Détail">
+          <value>Bombardements convois de mobiles Daesh ; donnant un appui aux forces kurdes locales</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          42,36.13,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Coalition Internationale</name>
+      <description><![CDATA[unnamed (1): <br>Date: Fin aout 2014<br>Pays: Irak<br>GPS: 34.14°N, 41.25°E<br>Evenement: Frappes de la coalition à Hadita<br>Détail: Cibles : Dépôts armes, centres commandement ; érosion capacités lourdes Daesh.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-F57C00</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>Fin aout 2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.14°N, 41.25°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Frappes de la coalition à Hadita</value>
+        </Data>
+        <Data name="Détail">
+          <value>Cibles : Dépôts armes, centres commandement ; érosion capacités lourdes Daesh.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          41.25,34.14,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Coalition Internationale</name>
+      <description><![CDATA[unnamed (1): <br>Date: 23/09/2014<br>Pays: Syrie<br>GPS: 35.95°N, 39.01°E<br>Evenement: Frappes de la Coalition Internationale sur Raqqa<br>Détail: Frappes sur Raqqa : Dépôts armes, centres commandement ; 50+ Daesh tués (premières coalition).<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-F57C00</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>23/09/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.95°N, 39.01°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Frappes de la Coalition Internationale sur Raqqa</value>
+        </Data>
+        <Data name="Détail">
+          <value>Frappes sur Raqqa : Dépôts armes, centres commandement ; 50+ Daesh tués (premières coalition).</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          39.01,35.95,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Coalition Internationale</name>
+      <description><![CDATA[unnamed (1): <br>Date: Fin septembre 2014<br>Pays: Syrie<br>GPS: 35.33°N, 40.15°E<br>Evenement: Frappes de la Coalition Internationale<br>Détail: Frappes sur Deir Ez-Zor, cibles : Colonnes logistiques Daesh ; appui Kobani (YPG)<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-F57C00</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>Fin septembre 2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Syrie</value>
+        </Data>
+        <Data name="GPS">
+          <value>35.33°N, 40.15°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Frappes de la Coalition Internationale</value>
+        </Data>
+        <Data name="Détail">
+          <value>Frappes sur Deir Ez-Zor, cibles : Colonnes logistiques Daesh ; appui Kobani (YPG)</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          40.15,35.33,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 30/09/2014<br>Pays: Irak<br>GPS: 36.42°N, 42.00°E<br>Evenement: Reprise de  Rabia <br>Détail: Reprise par les Peshmergas jour 1 offensive ; appui coalition<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>30/09/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.42°N, 42.00°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Reprise de  Rabia </value>
+        </Data>
+        <Data name="Détail">
+          <value>Reprise par les Peshmergas jour 1 offensive ; appui coalition</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          42,36.42,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Peshmergas</name>
+      <description><![CDATA[unnamed (1): <br>Date: 25/10/2014<br>Pays: Irak<br>GPS: 36.13°N, 42.00°E<br>Evenement: Reprise de Zummar par Peshmergas contre Daesh<br>Détail: Peshmergas reprennent 25 oct. après 1 semaine combats.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FBC02D</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>25/10/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>36.13°N, 42.00°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Reprise de Zummar par Peshmergas contre Daesh</value>
+        </Data>
+        <Data name="Détail">
+          <value>Peshmergas reprennent 25 oct. après 1 semaine combats.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          42,36.13,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 29/10/2014<br>Pays: Irak<br>GPS: 33.65°N, 42.83°E<br>Evenement: Masarcre Albu Nimr à Hit<br>Détail: Massacres : 40 tribus exécutés place centrale<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>29/10/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.65°N, 42.83°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Masarcre Albu Nimr à Hit</value>
+        </Data>
+        <Data name="Détail">
+          <value>Massacres : 40 tribus exécutés place centrale</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          42.83,33.65,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 10/2014-2015<br>Pays: Irak<br>GPS: 34.92°N, 43.47°E<br>Evenement: Bataille pour la raffinerie de Baïji<br>Détail: Pertes : Centaines djihadistes (ex. 60 le 7 avril 2015) ; dégâts raffinerie (3 dépôts incendiés mai).<br>Frappes coalition : 13 airstrikes mai (VBIED, mortiers, bâtiments détruits).<br>Conséquences : Stabilisation énergie Irak ; Daesh perd capacité offensive nord.<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>10/2014-2015</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.92°N, 43.47°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Bataille pour la raffinerie de Baïji</value>
+        </Data>
+        <Data name="Détail">
+          <value>Pertes : Centaines djihadistes (ex. 60 le 7 avril 2015) ; dégâts raffinerie (3 dépôts incendiés mai).
+Frappes coalition : 13 airstrikes mai (VBIED, mortiers, bâtiments détruits).
+Conséquences : Stabilisation énergie Irak ; Daesh perd capacité offensive nord.</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.47,34.92,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 10/2014<br>Pays: Irak<br>GPS: 34.92°N, 43.47°E<br>Evenement: Entrée première dans la raffinerie de Baïji<br>Détail: Siège Daesh reserré ; infiltration kamikazes ; combats irakiens repoussent assaut initial ; 40 djihadistes tués (Irak).<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>10/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>34.92°N, 43.47°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Entrée première dans la raffinerie de Baïji</value>
+        </Data>
+        <Data name="Détail">
+          <value>Siège Daesh reserré ; infiltration kamikazes ; combats irakiens repoussent assaut initial ; 40 djihadistes tués (Irak).</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          43.47,34.92,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Daesh</name>
+      <description><![CDATA[unnamed (1): <br>Date: 30/10/2014<br>Pays: Irak<br>GPS: 33.65°N, 42.83°E<br>Evenement: Masarcre Albu Nimr à Hit<br>Détail: 75 fusillés ; fosses Albu Ali al-Jasim<br>Sources: ]]></description>
+      <styleUrl>#icon-1899-FF5252</styleUrl>
+      <ExtendedData>
+        <Data name="unnamed (1)">
+          <value/>
+        </Data>
+        <Data name="Date">
+          <value>30/10/2014</value>
+        </Data>
+        <Data name="Pays">
+          <value>Irak</value>
+        </Data>
+        <Data name="GPS">
+          <value>33.65°N, 42.83°E</value>
+        </Data>
+        <Data name="Evenement">
+          <value>Masarcre Albu Nimr à Hit</value>
+        </Data>
+        <Data name="Détail">
+          <value>75 fusillés ; fosses Albu Ali al-Jasim</value>
+        </Data>
+        <Data name="Sources">
+          <value/>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          42.83,33.65,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>
