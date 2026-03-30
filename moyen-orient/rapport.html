@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algor Int — Rapport analytique MO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #111214;
+  --bg1: #161819;
+  --bg2: #1b1d1f;
+  --bg3: #212326;
+  --ln: rgba(255,255,255,0.07);
+  --ln1: rgba(255,255,255,0.12);
+  --tx: #c8cdd6;
+  --tx1: #727a87;
+  --tx2: #3e444e;
+  --txh: #e8ecf2;
+  --ac: #c49a3c;
+  --ach: #e0b452;
+  --acd: rgba(196,154,60,0.09);
+  --acb: rgba(196,154,60,0.20);
+  --bc: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --b: 'Barlow', system-ui, sans-serif;
+  --m: 'JetBrains Mono', 'Courier New', monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-family: var(--m); background: var(--bg); color: var(--tx); -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; }
+
+/* ── HEADER ── */
+#header {
+  height: 44px;
+  background: var(--bg1);
+  border-bottom: 1px solid var(--ln);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+#header h1 {
+  font-family: var(--bc);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txh);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.hdr-sep { width: 1px; height: 20px; background: var(--ln); }
+.hdr-tag {
+  font-family: var(--m);
+  font-size: 9px;
+  color: var(--ac);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.hdr-spacer { flex: 1; }
+.hdr-back {
+  font-family: var(--m);
+  font-size: 9px;
+  color: var(--tx1);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hdr-back:hover { color: var(--ac); }
+
+/* ── MAIN ── */
+#main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* ── HERO ── */
+.hero-label {
+  font-family: var(--m);
+  font-size: 9px;
+  color: var(--ac);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.hero-title {
+  font-family: var(--bc);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--txh);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.hero-sub {
+  font-family: var(--b);
+  font-size: 13px;
+  color: var(--tx1);
+  line-height: 1.6;
+  max-width: 600px;
+  margin-bottom: 40px;
+}
+
+/* ── METRICS ── */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 48px;
+}
+.metric-card {
+  background: var(--bg1);
+  border: 1px solid var(--ln);
+  padding: 18px 20px;
+}
+.metric-label {
+  font-family: var(--m);
+  font-size: 8px;
+  color: var(--tx2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.metric-value {
+  font-family: var(--bc);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--txh);
+}
+.metric-value small {
+  font-size: 12px;
+  color: var(--tx1);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* ── SECTIONS ── */
+.section {
+  margin-bottom: 48px;
+}
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.section-num {
+  font-family: var(--m);
+  font-size: 9px;
+  color: var(--ac);
+  letter-spacing: 0.15em;
+}
+.section-title {
+  font-family: var(--bc);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--txh);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.section-desc {
+  font-family: var(--b);
+  font-size: 11px;
+  color: var(--tx1);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* ── CHART CONTAINERS ── */
+.chart-box {
+  background: var(--bg1);
+  border: 1px solid var(--ln);
+  padding: 24px;
+  position: relative;
+}
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 320px;
+}
+.chart-wrap-sm {
+  position: relative;
+  width: 100%;
+  height: 260px;
+}
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--m);
+  font-size: 8px;
+  color: var(--tx1);
+}
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+}
+
+/* ── TWO COL ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── LOCKED SECTION ── */
+.locked-section {
+  background: var(--bg1);
+  border: 1px solid var(--acb);
+  padding: 48px 40px;
+  text-align: center;
+  position: relative;
+  margin-top: 48px;
+}
+.locked-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--ac), transparent);
+}
+.lock-icon {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--acb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+.lock-icon svg { stroke: var(--ac); }
+.locked-title {
+  font-family: var(--bc);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--txh);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+.locked-desc {
+  font-family: var(--b);
+  font-size: 12px;
+  color: var(--tx1);
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto 24px;
+}
+.locked-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.locked-tag {
+  font-family: var(--m);
+  font-size: 8px;
+  color: var(--ac);
+  background: var(--acd);
+  border: 1px solid var(--acb);
+  padding: 4px 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.locked-cta {
+  display: inline-block;
+  font-family: var(--bc);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--ac);
+  padding: 10px 32px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.locked-cta:hover { background: var(--ach); }
+
+/* ── FOOTER ── */
+#footer {
+  border-top: 1px solid var(--ln);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--m);
+  font-size: 7px;
+  color: var(--tx2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1>Algor Int</h1>
+  <div class="hdr-sep"></div>
+  <span class="hdr-tag">Rapport analytique</span>
+  <div class="hdr-spacer"></div>
+  <a class="hdr-back" href="./index.html">&larr; Retour carte</a>
+</div>
+
+<div id="main">
+
+  <div class="hero-label">Moyen-Orient · 2005–2026</div>
+  <div class="hero-title">Analyse des acteurs et tendances</div>
+  <div class="hero-sub">Rapport de synthese base sur 173 evenements recenses couvrant 22 acteurs chiites, sunnites et etatiques sur 10 periodes. Donnees issues des sources OSINT Algor Int.</div>
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric-card">
+      <div class="metric-label">Evenements recenses</div>
+      <div class="metric-value">173</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Pic d'activite</div>
+      <div class="metric-value">2013–14</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Acteurs identifies</div>
+      <div class="metric-value">22</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Periodes couvertes</div>
+      <div class="metric-value">10</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 : COURBES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Activite par acteur dans le temps</span>
+    </div>
+    <div class="section-desc">Evolution du nombre d'evenements par acteur sur les 10 periodes. Le pic 2013-2014 coincide avec l'expansion de Daesh et la mobilisation des milices chiites.</div>
+    <div class="legend" id="legend-1"></div>
+    <div class="chart-box">
+      <div class="chart-wrap"><canvas id="chart-lines"></canvas></div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 : BARRES + DONUT -->
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <div class="section-header">
+          <span class="section-num">02</span>
+          <span class="section-title">Volume par periode</span>
+        </div>
+        <div class="section-desc">Repartition empilee montrant la contribution de chaque acteur au volume total d'evenements par periode.</div>
+        <div class="chart-box">
+          <div class="chart-wrap-sm"><canvas id="chart-stack"></canvas></div>
+        </div>
+      </div>
+      <div>
+        <div class="section-header">
+          <span class="section-num">03</span>
+          <span class="section-title">Poids global des acteurs</span>
+        </div>
+        <div class="section-desc">Part relative de chaque acteur dans le total des evenements recenses entre 2005 et 2026.</div>
+        <div class="chart-box">
+          <div class="chart-wrap-sm"><canvas id="chart-donut"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCKED SECTION -->
+  <div class="locked-section">
+    <div class="lock-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="0"/>
+        <path d="M7 11V7a5 5 0 0110 0v4"/>
+      </svg>
+    </div>
+    <div class="locked-title">Rapports detailles disponibles</div>
+    <div class="locked-desc">Les graphiques ci-dessus representent un apercu des capacites d'analyse Algor Int. Les rapports complets incluent des donnees detaillees, des analyses croisees et des projections operationnelles.</div>
+    <div class="locked-list">
+      <span class="locked-tag">Fiches acteurs detaillees</span>
+      <span class="locked-tag">Analyse reseaux</span>
+      <span class="locked-tag">Heatmaps temporelles</span>
+      <span class="locked-tag">Projections menaces</span>
+      <span class="locked-tag">Rapports PDF personnalises</span>
+      <span class="locked-tag">Flux temps reel</span>
+    </div>
+    <a class="locked-cta" href="mailto:contact@algor-int.com">Contacter Algor Int</a>
+  </div>
+
+</div>
+
+<div id="footer">Algor Int · Rapport analytique · Moyen-Orient · Usage restreint</div>
+
+<script>
+const periods = ['2005-06','2007-08','2009-10','2011-12','2013-14','2015-16','2017-18','2019-20','2021-22','2023-26'];
+
+const actorData = {
+  'Hezbollah':        { data: [4,0,0,3,1,1,1,0,0,1], color: '#e63946' },
+  'Kataib Hezbollah': { data: [0,2,0,0,0,0,0,1,1,1], color: '#c1121f' },
+  'IRGC / Qods':      { data: [0,1,1,1,0,1,1,1,1,1], color: '#7b2d8b' },
+  'Asaib Ahl al-Haq': { data: [1,1,0,0,2,0,0,0,0,0], color: '#ff6b35' },
+  'PMF / Hashd':      { data: [0,0,0,0,1,1,1,0,0,0], color: '#d4a017' },
+  'Houthis':          { data: [0,0,0,0,0,1,1,1,1,1], color: '#1b998b' },
+  'Daesh':            { data: [0,0,0,0,8,2,0,0,0,0], color: '#2d6a4f' },
+  'Nujaba':           { data: [0,0,0,0,3,0,0,0,0,0], color: '#4895ef' },
+  'Fatemiyoun':       { data: [0,0,0,0,1,0,0,0,0,0], color: '#a855f7' },
+  'Kataib Sayyid':    { data: [0,0,0,0,1,0,0,0,0,0], color: '#e07a5f' },
+};
+
+const gridColor = 'rgba(255,255,255,0.06)';
+const tickColor = 'rgba(255,255,255,0.4)';
+
+// Build legend
+const leg1 = document.getElementById('legend-1');
+Object.entries(actorData).forEach(([name, o]) => {
+  const d = document.createElement('div');
+  d.className = 'legend-item';
+  d.innerHTML = '<div class="legend-dot" style="background:'+o.color+'"></div>' + name;
+  leg1.appendChild(d);
+});
+
+// Chart 1: Lines
+const lineDs = Object.entries(actorData).map(([name, o]) => ({
+  label: name, data: o.data, borderColor: o.color, backgroundColor: o.color+'22',
+  borderWidth: 2, pointRadius: 3, pointHoverRadius: 6, tension: 0.3, fill: false,
+}));
+
+new Chart(document.getElementById('chart-lines'), {
+  type: 'line',
+  data: { labels: periods, datasets: lineDs },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 10, family: "'JetBrains Mono'" }, maxRotation: 45, autoSkip: false } },
+      y: { grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 10, family: "'JetBrains Mono'" }, stepSize: 2 }, beginAtZero: true },
+    },
+    interaction: { mode: 'index', intersect: false },
+  }
+});
+
+// Chart 2: Stacked bars
+const stackDs = Object.entries(actorData).map(([name, o]) => ({
+  label: name, data: o.data, backgroundColor: o.color+'cc', borderColor: o.color, borderWidth: 0.5,
+}));
+
+new Chart(document.getElementById('chart-stack'), {
+  type: 'bar',
+  data: { labels: periods, datasets: stackDs },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { stacked: true, grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 9, family: "'JetBrains Mono'" }, maxRotation: 45, autoSkip: false } },
+      y: { stacked: true, grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 9, family: "'JetBrains Mono'" }, stepSize: 5 }, beginAtZero: true },
+    },
+  }
+});
+
+// Chart 3: Donut
+const totals = {};
+Object.entries(actorData).forEach(([n, o]) => { totals[n] = o.data.reduce((a, b) => a + b, 0); });
+const pieLabels = Object.keys(totals).filter(k => totals[k] > 0);
+const pieValues = pieLabels.map(k => totals[k]);
+const pieColors = pieLabels.map(k => actorData[k].color);
+
+new Chart(document.getElementById('chart-donut'), {
+  type: 'doughnut',
+  data: {
+    labels: pieLabels,
+    datasets: [{ data: pieValues, backgroundColor: pieColors, borderColor: '#111214', borderWidth: 2 }],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+    },
+  }
+});
+</script>
+</body>
+</html>
