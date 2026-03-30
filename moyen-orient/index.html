@@ -233,7 +233,7 @@ html, body {
 #legend-body.collapsed { max-height: 0; padding: 0; overflow: hidden; }
 .legend-group { padding: 0 10px; }
 .legend-group-title {
-  font: 600 7px/1 var(--bc); letter-spacing: 0.14em; text-transform: uppercase;
+  font: 600 10px/1 var(--bc); letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--tx2); padding: 5px 0 3px;
   border-top: 1px solid var(--bg3); margin-top: 2px;
 }
@@ -247,7 +247,7 @@ html, body {
 .legend-item:hover { color: var(--txh); }
 .legend-item.filtered-out { opacity: 0.1; }
 .legend-item.active-filter { color: var(--ach); }
-.legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
 /* ── CHART TIROIR ─────────────────────────────────────────── */
 #chart-drawer { position: absolute; bottom: 130px; right: 0; z-index: 6; display: flex; align-items: center; }
@@ -260,7 +260,7 @@ html, body {
   display: flex; flex-direction: column; align-items: center; gap: 5px;
 }
 #chart-tab:hover { color: var(--tx1); }
-#chart-tab-count { font: 500 9px/1 var(--m); color: var(--ach); writing-mode: vertical-rl; }
+#chart-tab-count { font: 500 12px/1 var(--m); color: var(--ach); writing-mode: vertical-rl; }
 #chart-panel {
   background: rgba(17,18,20,0.98);
   border: 1px solid var(--ln); border-right: none; border-top: 1px solid var(--ac);
@@ -276,10 +276,10 @@ html, body {
 .chart-count { font: 400 9px/1 var(--m); color: var(--ach); }
 #chart-body { padding: 7px 10px 10px; overflow-y: auto; flex: 1; }
 .bar-row { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
-.bar-label { font: 300 8px/1 var(--b); color: var(--tx1); width: 80px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-label { font: 300 11px/1 var(--b); color: var(--tx1); width: 80px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bar-track { flex: 1; background: var(--bg3); height: 2px; overflow: hidden; }
 .bar-fill { height: 100%; transition: width .4s ease; }
-.bar-num { font: 400 8px/1 var(--m); color: var(--tx2); width: 16px; text-align: right; flex-shrink: 0; }
+.bar-num { font: 400 11px/1 var(--m); color: var(--tx2); width: 16px; text-align: right; flex-shrink: 0; }
 
 /* ── STYLE TOGGLE FLOTTANT ────────────────────────────────── */
 #style-toggle { position: absolute; bottom: 106px; right: 14px; z-index: 5; display: flex; border: 1px solid var(--ln); background: rgba(17,18,20,0.95); }
@@ -457,14 +457,14 @@ html, body {
   padding: 22px 24px; max-width: 420px; width: 90%; position: relative;
 }
 #tutorial-box h2 { font: 700 14px/1.2 var(--bc); color: var(--txh); margin-bottom: 3px; letter-spacing: 0.05em; text-transform: uppercase; }
-#tutorial-box .subtitle { font: 400 8px/1 var(--m); color: var(--tx2); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.12em; }
+#tutorial-box .subtitle { font: 400 11px/1 var(--m); color: var(--tx2); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.12em; }
 .tuto-step { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 7px; padding: 7px 9px; background: var(--bg); border: 1px solid var(--ln); border-left: 2px solid var(--acb); }
 .tuto-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
-.tuto-title { font: 600 8px/1 var(--bc); color: var(--txh); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.1em; }
-.tuto-desc  { font: 300 9px/1.5 var(--b); color: var(--tx1); }
-#tutorial-close { width: 100%; margin-top: 14px; background: var(--acd); border: 1px solid var(--acb); color: var(--ach); font: 600 8px/1 var(--bc); padding: 9px; cursor: pointer; transition: all .1s; letter-spacing: 0.18em; text-transform: uppercase; }
+.tuto-title { font: 600 11px/1 var(--bc); color: var(--txh); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.1em; }
+.tuto-desc  { font: 300 12px/1.5 var(--b); color: var(--tx1); }
+#tutorial-close { width: 100%; margin-top: 14px; background: var(--acd); border: 1px solid var(--acb); color: var(--ach); font: 600 11px/1 var(--bc); padding: 9px; cursor: pointer; transition: all .1s; letter-spacing: 0.18em; text-transform: uppercase; }
 #tutorial-close:hover { background: rgba(196,154,60,0.14); }
-#tutorial-skip { position: absolute; top: 10px; right: 12px; background: none; border: none; color: var(--tx2); font: 400 7px/1 var(--m); cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; }
+#tutorial-skip { position: absolute; top: 10px; right: 12px; background: none; border: none; color: var(--tx2); font: 400 10px/1 var(--m); cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; }
 #tutorial-skip:hover { color: var(--tx1); }
 
 /* ── LOADER ───────────────────────────────────────────────── */
