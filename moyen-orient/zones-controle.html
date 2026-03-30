@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algor Int — Zones de contrôle MO · Animation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #111214;
+  --bg1: #161819;
+  --bg2: #1b1d1f;
+  --bg3: #212326;
+  --ln: rgba(255,255,255,0.07);
+  --tx: #c8cdd6;
+  --tx1: #727a87;
+  --tx2: #3e444e;
+  --txh: #e8ecf2;
+  --ac: #c49a3c;
+  --ach: #e0b452;
+  --bc: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --b: 'Barlow', system-ui, sans-serif;
+  --m: 'JetBrains Mono', 'Courier New', monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  font-family: var(--m);
+  background: var(--bg);
+  color: var(--tx);
+  height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── LAYOUT ── */
+#app {
+  display: grid;
+  grid-template-rows: 42px 1fr 56px;
+  height: 100vh;
+}
+
+/* ── HEADER ── */
+#header {
+  background: var(--bg1);
+  border-bottom: 1px solid var(--ln);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 14px;
+}
+#header h1 {
+  font-family: var(--bc);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txh);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+#header .sep {
+  width: 1px;
+  height: 18px;
+  background: var(--ln);
+}
+#header .tag {
+  font-family: var(--m);
+  font-size: 9px;
+  color: var(--ac);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── MAP AREA ── */
+#map-area {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+#map-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── LEGEND ── */
+#legend {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(22,24,25,0.92);
+  border: 1px solid var(--ln);
+  padding: 12px 16px;
+  max-width: 220px;
+  backdrop-filter: blur(8px);
+}
+#legend h3 {
+  font-family: var(--bc);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--txh);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-label {
+  font-family: var(--m);
+  font-size: 8px;
+  color: var(--tx1);
+  letter-spacing: 0.04em;
+}
+
+/* ── PERIOD INFO ── */
+#period-info {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(22,24,25,0.92);
+  border: 1px solid var(--ln);
+  padding: 14px 18px;
+  backdrop-filter: blur(8px);
+}
+#period-info .period-label {
+  font-family: var(--m);
+  font-size: 8px;
+  color: var(--ac);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+#period-info .period-title {
+  font-family: var(--bc);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--txh);
+  letter-spacing: 0.03em;
+}
+#period-info .period-events {
+  font-family: var(--m);
+  font-size: 9px;
+  color: var(--tx1);
+  margin-top: 4px;
+}
+
+/* ── TIMELINE ── */
+#timeline {
+  background: var(--bg1);
+  border-top: 1px solid var(--ln);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 8px;
+}
+
+#play-btn {
+  width: 32px;
+  height: 32px;
+  background: var(--bg3);
+  border: 1px solid var(--ln);
+  color: var(--ac);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+#play-btn:hover {
+  background: var(--bg2);
+  border-color: var(--ac);
+}
+
+#timeline-track {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 100%;
+}
+
+.tl-period {
+  flex: 1;
+  height: 28px;
+  background: var(--bg3);
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--m);
+  font-size: 8px;
+  color: var(--tx2);
+  letter-spacing: 0.06em;
+  transition: all 0.2s;
+  position: relative;
+}
+.tl-period:hover {
+  background: var(--bg2);
+  color: var(--tx1);
+}
+.tl-period.active {
+  border-color: var(--ac);
+  color: var(--ac);
+  background: rgba(196,154,60,0.08);
+}
+.tl-period.passed {
+  background: rgba(196,154,60,0.04);
+  color: var(--tx1);
+}
+
+#speed-label {
+  font-family: var(--m);
+  font-size: 8px;
+  color: var(--tx2);
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* ── ZONE ANIMATIONS ── */
+.zone-circle {
+  transition: r 0.8s ease-out, opacity 0.8s ease-out, fill-opacity 0.8s ease-out;
+}
+.zone-circle.hidden {
+  r: 0;
+  opacity: 0;
+}
+
+.event-dot {
+  transition: r 0.4s ease-out, opacity 0.5s ease-out;
+}
+.event-dot.hidden {
+  r: 0;
+  opacity: 0;
+}
+
+/* pulse animation for active events */
+@keyframes pulse {
+  0% { stroke-opacity: 0.8; stroke-width: 2; }
+  100% { stroke-opacity: 0; stroke-width: 8; }
+}
+.pulse-ring {
+  animation: pulse 1.5s ease-out infinite;
+  fill: none;
+}
+
+/* ── TOOLTIP ── */
+#tooltip {
+  position: absolute;
+  display: none;
+  background: rgba(22,24,25,0.95);
+  border: 1px solid var(--ac);
+  padding: 10px 14px;
+  max-width: 280px;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+#tooltip .tt-actor {
+  font-family: var(--bc);
+  font-size: 12px;
+  color: var(--ac);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+#tooltip .tt-event {
+  font-family: var(--b);
+  font-size: 10px;
+  color: var(--txh);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+#tooltip .tt-date {
+  font-family: var(--m);
+  font-size: 8px;
+  color: var(--tx1);
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<div id="header">
+  <h1>Algor Int</h1>
+  <div class="sep"></div>
+  <span class="tag">Zones de controle · Moyen-Orient · 2005–2026</span>
+</div>
+
+<div id="map-area">
+  <svg id="map-svg" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <radialGradient id="glow-chiite" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#e63946" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#e63946" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="glow-sunnite" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#2d6a4f" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#2d6a4f" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="glow-irgc" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#7b2d8b" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#7b2d8b" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="glow-proxy" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ff6b35" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#ff6b35" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="blur-zone">
+        <feGaussianBlur stdDeviation="6"/>
+      </filter>
+    </defs>
+
+    <!-- SIMPLIFIED MO GEOGRAPHY -->
+    <g id="geo" opacity="0.2">
+      <!-- Mediterranean -->
+      <path d="M50,80 Q120,60 180,100 L180,300 Q140,320 80,280 Z" fill="#1d7ed8" opacity="0.15"/>
+      <!-- Turkey -->
+      <path d="M180,80 Q350,50 500,70 Q550,60 600,80 L580,140 Q500,160 400,150 Q300,155 200,140 Z" fill="#3e444e" opacity="0.2" stroke="#3e444e" stroke-width="0.5"/>
+      <!-- Syria -->
+      <path d="M200,140 Q300,155 400,150 L420,250 Q350,280 250,270 L200,200 Z" fill="#3e444e" opacity="0.15" stroke="#3e444e" stroke-width="0.5"/>
+      <!-- Iraq -->
+      <path d="M420,150 Q500,160 580,140 L650,200 Q680,300 650,400 L550,420 Q480,380 440,300 L420,250 Z" fill="#3e444e" opacity="0.15" stroke="#3e444e" stroke-width="0.5"/>
+      <!-- Iran -->
+      <path d="M650,100 Q800,80 950,120 L980,300 Q950,400 880,450 L700,420 Q660,350 650,200 Z" fill="#3e444e" opacity="0.15" stroke="#3e444e" stroke-width="0.5"/>
+      <!-- Saudi Arabia -->
+      <path d="M300,350 Q450,340 550,420 L650,400 L700,420 Q720,500 680,580 Q550,620 400,580 Q320,520 300,420 Z" fill="#3e444e" opacity="0.1" stroke="#3e444e" stroke-width="0.5"/>
+      <!-- Lebanon -->
+      <path d="M200,180 L230,170 L240,220 L210,230 Z" fill="#3e444e" opacity="0.2" stroke="#3e444e" stroke-width="0.5"/>
+      <!-- Israel -->
+      <path d="M210,230 L240,220 L250,300 L220,310 Z" fill="#3e444e" opacity="0.2" stroke="#3e444e" stroke-width="0.5"/>
+      <!-- Yemen -->
+      <path d="M500,560 Q600,540 700,560 Q720,600 680,630 Q580,650 500,620 Z" fill="#3e444e" opacity="0.1" stroke="#3e444e" stroke-width="0.5"/>
+      <!-- Gulf -->
+      <path d="M650,300 Q700,350 700,420 L680,420 Q670,360 640,310 Z" fill="#1d7ed8" opacity="0.1"/>
+      <!-- Red Sea -->
+      <path d="M250,300 Q280,400 300,500 Q310,550 300,600 L260,600 Q270,500 240,400 Q230,350 230,300 Z" fill="#1d7ed8" opacity="0.08"/>
+
+      <!-- Country labels -->
+      <text x="350" y="110" font-family="var(--m)" font-size="9" fill="#3e444e" opacity="0.6" text-anchor="middle">TURQUIE</text>
+      <text x="310" y="220" font-family="var(--m)" font-size="9" fill="#3e444e" opacity="0.6" text-anchor="middle">SYRIE</text>
+      <text x="530" y="290" font-family="var(--m)" font-size="9" fill="#3e444e" opacity="0.6" text-anchor="middle">IRAK</text>
+      <text x="800" y="260" font-family="var(--m)" font-size="9" fill="#3e444e" opacity="0.6" text-anchor="middle">IRAN</text>
+      <text x="215" y="205" font-family="var(--m)" font-size="7" fill="#3e444e" opacity="0.5" text-anchor="middle">LIBAN</text>
+      <text x="235" y="275" font-family="var(--m)" font-size="7" fill="#3e444e" opacity="0.5" text-anchor="middle">ISRAEL</text>
+      <text x="500" y="480" font-family="var(--m)" font-size="9" fill="#3e444e" opacity="0.5" text-anchor="middle">ARABIE SAOUDITE</text>
+      <text x="600" y="590" font-family="var(--m)" font-size="8" fill="#3e444e" opacity="0.5" text-anchor="middle">YEMEN</text>
+    </g>
+
+    <!-- ZONE LAYERS (blurred influence) -->
+    <g id="zones-layer" filter="url(#blur-zone)"></g>
+
+    <!-- EVENT DOTS -->
+    <g id="events-layer"></g>
+
+    <!-- PULSE RINGS -->
+    <g id="pulse-layer"></g>
+  </svg>
+
+  <div id="period-info">
+    <div class="period-label">Periode active</div>
+    <div class="period-title" id="period-title-text">2005–2006</div>
+    <div class="period-events" id="period-events-text">6 evenements</div>
+  </div>
+
+  <div id="legend">
+    <h3>Acteurs</h3>
+    <div class="legend-item"><div class="legend-dot" style="background:#e63946"></div><span class="legend-label">Hezbollah</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#c1121f"></div><span class="legend-label">Kataib Hezbollah</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7b2d8b"></div><span class="legend-label">IRGC / Qods Force</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ff6b35"></div><span class="legend-label">Asaib Ahl al-Haq</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#d4a017"></div><span class="legend-label">PMF / Hashd</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1b998b"></div><span class="legend-label">Houthis / Ansarallah</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2d6a4f"></div><span class="legend-label">Daesh (sunnite)</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#4895ef"></div><span class="legend-label">Harakat al-Nujaba</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div><span class="legend-label">Fatemiyoun</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e07a5f"></div><span class="legend-label">Kataib Sayyid</span></div>
+  </div>
+
+  <div id="tooltip">
+    <div class="tt-actor"></div>
+    <div class="tt-event"></div>
+    <div class="tt-date"></div>
+  </div>
+</div>
+
+<div id="timeline">
+  <div id="play-btn">&#9654;</div>
+  <div id="timeline-track"></div>
+  <div id="speed-label">3s</div>
+</div>
+
+</div>
+
+<script>
+// ── ACTOR COLORS (from your COLORS map) ──
+const ACTOR_COLORS = {
+  'Hezbollah': '#e63946',
+  'Kataib Hezbollah': '#c1121f',
+  'IRGC-Qods Force': '#7b2d8b',
+  'IRGC-Qods Force+Basij': '#7b2d8b',
+  'Basij': '#9b59b6',
+  'Asaib Ahl al-Haq': '#ff6b35',
+  'PMF / Hashd al-Shaabi': '#d4a017',
+  'Houthis / Ansarallah': '#1b998b',
+  'Daesh': '#2d6a4f',
+  'Harakat Hezbollah al-Nujaba': '#4895ef',
+  'Fatemiyoun Brigade': '#a855f7',
+  'Kataib Sayyid al-Shuhada': '#e07a5f',
+};
+
+function getColor(actor) {
+  for (const [key, color] of Object.entries(ACTOR_COLORS)) {
+    if (actor.includes(key) || key.includes(actor)) return color;
+  }
+  return '#c49a3c';
+}
+
+// ── GPS → SVG coordinate mapping ──
+// Map bounds: lat 12-42°N, lon 30-60°E → SVG viewBox 0-1200 x 0-700
+function gpsToSvg(lat, lon) {
+  const x = ((lon - 30) / 30) * 1200;
+  const y = ((42 - lat) / 30) * 700;
+  return { x: Math.max(20, Math.min(1180, x)), y: Math.max(20, Math.min(680, y)) };
+}
+
+// ── EVENT DATA (extracted from your KML files) ──
+const PERIODS = [
+  {
+    id: '2005-2006', label: '2005–2006', events: [
+      { actor: 'Hezbollah', lat: 33.42, lon: 35.63, date: '12/07/2006', event: 'Raid commando Shebaa Farms', detail: '3 jeeps HZB attaquent patrouille IDF' },
+      { actor: 'Hezbollah', lat: 32.81, lon: 34.99, date: '13/07/2006', event: '1re roquette sur Haifa', detail: '8 civils tues, 17 blesses' },
+      { actor: 'Hezbollah', lat: 33.20, lon: 35.43, date: '16/07/2006', event: 'Bataille Bint Jbeil', detail: 'Combat urbain 20 soldats IDF vs HZB' },
+      { actor: 'Hezbollah', lat: 32.81, lon: 34.99, date: '27/07/2006', event: 'Gare Haifa', detail: 'Roquette cluster M-107, 8 civils tues' },
+      { actor: 'Asaib Ahl al-Haq', lat: 30.51, lon: 47.81, date: '06/05/2006', event: 'Basra Lynx helicopter', detail: 'MANPADS abat helico britannique, 5 UK tues' },
+    ]
+  },
+  {
+    id: '2007-2008', label: '2007–2008', events: [
+      { actor: 'Asaib Ahl al-Haq', lat: 32.61, lon: 44.08, date: '20/01/2007', event: 'Raid Karbala Provincial HQ', detail: 'AAH infiltres en uniformes US, 5 enleves et executes' },
+      { actor: 'IRGC-Qods Force', lat: 33.31, lon: 44.37, date: '2007-2011', event: 'EFPs vs US convoys Bagdad', detail: '~500 morts US via proxies KH/AAH' },
+      { actor: 'Kataib Hezbollah', lat: 32.61, lon: 44.42, date: '10/05/2007', event: 'Karbala EFPs', detail: '5 soldats US tues, 1er usage massif KH' },
+      { actor: 'Kataib Hezbollah', lat: 33.35, lon: 44.50, date: '27/02/2008', event: 'Bagdad Est IED', detail: '3 soldats US tues, video YouTube' },
+    ]
+  },
+  {
+    id: '2009-2010', label: '2009–2010', events: [
+      { actor: 'IRGC-Qods Force+Basij', lat: 35.69, lon: 51.42, date: '13/06/2009', event: 'Mouvement Vert Teheran', detail: 'IRGC + Basij charge 3M manifestants, 72 morts' },
+      { actor: 'Basij', lat: 35.68, lon: 51.42, date: '09/09/2009', event: 'Vendredi sanglant Teheran', detail: 'Basij charge foule, 36 morts' },
+    ]
+  },
+  {
+    id: '2011-2012', label: '2011–2012', events: [
+      { actor: 'Hezbollah', lat: 34.85, lon: 36.97, date: '2012', event: 'Prise villages region Qousseir', detail: 'HZB franchit frontiere libano-syrienne' },
+      { actor: 'IRGC-Qods Force', lat: 34.00, lon: 36.55, date: '2012', event: 'Qods + Hezbollah vs rebelles', detail: 'Soleimani sur terrain, couloir Damas-Liban' },
+      { actor: 'Hezbollah', lat: 34.51, lon: 36.58, date: '04/04/2012', event: 'Offensive Qousseir', detail: '6 rebelles syriens, 3 miliciens tues' },
+    ]
+  },
+  {
+    id: '2013-2014', label: '2013–2014', events: [
+      { actor: 'Hezbollah', lat: 33.89, lon: 35.50, date: '26/05/2013', event: 'Roquettes Beyrouth-Hermel', detail: '5 blesses, represailles opposition syrienne' },
+      { actor: 'Kataib Sayyid al-Shuhada', lat: 33.52, lon: 36.35, date: '21/08/2013', event: 'Ghouta Est Damas', detail: '350-1429 morts chimiques' },
+      { actor: 'Harakat Hezbollah al-Nujaba', lat: 34.00, lon: 36.55, date: '01/07/2014', event: 'Creation HHN Qalamoun', detail: '1000 combattants vs rebelles sunnites' },
+      { actor: 'Asaib Ahl al-Haq', lat: 33.8, lon: 44.8, date: '03/2014', event: 'Massacre Bouhriz Diyala', detail: '23 civils sunnites tues' },
+      { actor: 'Fatemiyoun Brigade', lat: 33.47, lon: 36.35, date: '07/2014', event: 'Sayyida Zaynab Damas', detail: '500 Afghans vs FSA/IS, 50 morts' },
+      { actor: 'PMF / Hashd al-Shaabi', lat: 32.05, lon: 44.01, date: '26/07/2014', event: 'Fatwa Sistani Bagdad', detail: '1500 volontaires jour 1' },
+      { actor: 'Daesh', lat: 35.95, lon: 39.01, date: 'mai 2013', event: 'Prise de Raqqa', detail: '39 morts, 300 soldats captures' },
+      { actor: 'Daesh', lat: 35.33, lon: 40.15, date: 'juil 2014', event: 'Prise de Deir Ez-Zor', detail: '600 morts, administration islamique' },
+      { actor: 'Daesh', lat: 35.95, lon: 38.75, date: '2013', event: 'Camp formation Raqqa', detail: 'Recrues Europe/Maghreb' },
+      { actor: 'Harakat Hezbollah al-Nujaba', lat: 36.32, lon: 41.87, date: '08/2014', event: 'Sinjar sauvetage Yezidis', detail: '300 HHN, 100 Daesh tues' },
+    ]
+  },
+  {
+    id: '2015-2016', label: '2015–2016', events: [
+      { actor: 'Hezbollah', lat: 33.51, lon: 35.37, date: '2015', event: 'Qalamoun offensive', detail: 'Nettoyage frontalier Liban-Syrie' },
+      { actor: 'IRGC-Qods Force', lat: 35.47, lon: 44.36, date: '2015', event: 'Tikrit offensive', detail: 'Soleimani commande PMF + IRGC' },
+      { actor: 'Houthis / Ansarallah', lat: 15.35, lon: 44.21, date: '2015', event: 'Prise de Sanaa', detail: 'Houthis controlent capitale Yemen' },
+      { actor: 'Daesh', lat: 36.34, lon: 43.13, date: '2015', event: 'Mossoul sous controle', detail: 'Capitale du califat en Irak' },
+      { actor: 'PMF / Hashd al-Shaabi', lat: 34.47, lon: 43.49, date: '2016', event: 'Bataille de Fallujah', detail: 'Liberation vs Daesh' },
+    ]
+  },
+  {
+    id: '2017-2018', label: '2017–2018', events: [
+      { actor: 'PMF / Hashd al-Shaabi', lat: 36.34, lon: 43.13, date: '07/2017', event: 'Liberation Mossoul', detail: 'Fin du califat territorial Irak' },
+      { actor: 'Hezbollah', lat: 34.80, lon: 36.70, date: '2017', event: 'Qalamoun final', detail: 'Dernier bastion rebelle frontiere' },
+      { actor: 'IRGC-Qods Force', lat: 34.80, lon: 40.00, date: '2018', event: 'Corridor terrestre Iran-Liban', detail: 'Route strategique via Irak-Syrie' },
+      { actor: 'Houthis / Ansarallah', lat: 14.80, lon: 42.95, date: '2018', event: 'Bataille Hodeidah', detail: 'Port strategique Yemen' },
+    ]
+  },
+  {
+    id: '2019-2020', label: '2019–2020', events: [
+      { actor: 'IRGC-Qods Force', lat: 33.31, lon: 44.37, date: '03/01/2020', event: 'Assassination Soleimani', detail: 'Frappe drone US Bagdad' },
+      { actor: 'Kataib Hezbollah', lat: 33.26, lon: 44.23, date: '27/12/2019', event: 'Attaque base K1 Kirkuk', detail: 'Roquettes vs base US' },
+      { actor: 'Houthis / Ansarallah', lat: 24.47, lon: 39.61, date: '14/09/2019', event: 'Attaque Aramco', detail: 'Drones vs installations petrolieres' },
+    ]
+  },
+  {
+    id: '2021-2022', label: '2021–2022', events: [
+      { actor: 'Kataib Hezbollah', lat: 33.31, lon: 44.37, date: '2021', event: 'Drones vs bases US Irak', detail: 'Escalade milices pro-Iran' },
+      { actor: 'Houthis / Ansarallah', lat: 24.47, lon: 39.61, date: '2022', event: 'Frappes Arabie Saoudite', detail: 'Missiles balistiques recurrents' },
+      { actor: 'IRGC-Qods Force', lat: 32.66, lon: 51.68, date: '2022', event: 'Repression Mahsa Amini', detail: 'IRGC vs protestations Iran' },
+    ]
+  },
+  {
+    id: '2023-2026', label: '2023–2026', events: [
+      { actor: 'Hezbollah', lat: 33.10, lon: 35.20, date: '08/10/2023', event: 'Front nord Israel', detail: 'Frappes quotidiennes post-7 octobre' },
+      { actor: 'Houthis / Ansarallah', lat: 13.00, lon: 43.50, date: '11/2023', event: 'Blocus Mer Rouge', detail: 'Attaques navires commerciaux Bab el-Mandeb' },
+      { actor: 'Kataib Hezbollah', lat: 34.55, lon: 40.00, date: '2024', event: 'Frappes bases US Syrie-Irak', detail: 'Escalade post-Gaza' },
+      { actor: 'IRGC-Qods Force', lat: 32.00, lon: 51.00, date: '04/2024', event: 'Frappes directes Iran→Israel', detail: '300+ drones et missiles' },
+    ]
+  }
+];
+
+// ── BUILD TIMELINE ──
+const track = document.getElementById('timeline-track');
+PERIODS.forEach((p, i) => {
+  const el = document.createElement('div');
+  el.className = 'tl-period' + (i === 0 ? ' active' : '');
+  el.textContent = p.label;
+  el.dataset.index = i;
+  el.addEventListener('click', () => goToPeriod(i));
+  track.appendChild(el);
+});
+
+// ── STATE ──
+let currentPeriod = 0;
+let playing = false;
+let playInterval = null;
+const SPEED = 3000;
+
+// ── SVG REFS ──
+const zonesLayer = document.getElementById('zones-layer');
+const eventsLayer = document.getElementById('events-layer');
+const pulseLayer = document.getElementById('pulse-layer');
+const tooltip = document.getElementById('tooltip');
+
+// ── RENDER ──
+function renderPeriod(index, animate = true) {
+  currentPeriod = index;
+  const period = PERIODS[index];
+
+  // Update info
+  document.getElementById('period-title-text').textContent = period.label;
+  document.getElementById('period-events-text').textContent = period.events.length + ' evenements';
+
+  // Update timeline
+  document.querySelectorAll('.tl-period').forEach((el, i) => {
+    el.classList.remove('active', 'passed');
+    if (i === index) el.classList.add('active');
+    else if (i < index) el.classList.add('passed');
+  });
+
+  // Clear layers
+  zonesLayer.innerHTML = '';
+  eventsLayer.innerHTML = '';
+  pulseLayer.innerHTML = '';
+
+  // Collect all events up to current period for zones
+  const allEvents = [];
+  for (let i = 0; i <= index; i++) {
+    PERIODS[i].events.forEach(ev => {
+      allEvents.push({ ...ev, current: i === index, periodIdx: i });
+    });
+  }
+
+  // Draw influence zones (large blurred circles for actors with multiple events)
+  const actorPositions = {};
+  allEvents.forEach(ev => {
+    if (!actorPositions[ev.actor]) actorPositions[ev.actor] = [];
+    actorPositions[ev.actor].push(ev);
+  });
+
+  Object.entries(actorPositions).forEach(([actor, events]) => {
+    if (events.length < 1) return;
+    // Compute centroid
+    let cx = 0, cy = 0;
+    events.forEach(ev => {
+      const pos = gpsToSvg(ev.lat, ev.lon);
+      cx += pos.x;
+      cy += pos.y;
+    });
+    cx /= events.length;
+    cy /= events.length;
+
+    // Radius based on spread + count
+    let maxDist = 0;
+    events.forEach(ev => {
+      const pos = gpsToSvg(ev.lat, ev.lon);
+      const d = Math.sqrt((pos.x - cx) ** 2 + (pos.y - cy) ** 2);
+      if (d > maxDist) maxDist = d;
+    });
+    const radius = Math.max(30, maxDist * 0.6 + events.length * 8);
+
+    const color = getColor(actor);
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', cx);
+    circle.setAttribute('cy', cy);
+    circle.setAttribute('fill', color);
+    circle.setAttribute('fill-opacity', '0.12');
+    circle.setAttribute('stroke', 'none');
+    circle.classList.add('zone-circle');
+
+    if (animate) {
+      circle.setAttribute('r', '0');
+      circle.classList.add('hidden');
+      zonesLayer.appendChild(circle);
+      requestAnimationFrame(() => {
+        circle.classList.remove('hidden');
+        circle.setAttribute('r', radius);
+      });
+    } else {
+      circle.setAttribute('r', radius);
+      zonesLayer.appendChild(circle);
+    }
+  });
+
+  // Draw event dots
+  allEvents.forEach((ev, i) => {
+    const pos = gpsToSvg(ev.lat, ev.lon);
+    const color = getColor(ev.actor);
+    const isCurrent = ev.current;
+
+    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    dot.setAttribute('cx', pos.x);
+    dot.setAttribute('cy', pos.y);
+    dot.setAttribute('fill', color);
+    dot.setAttribute('fill-opacity', isCurrent ? '0.9' : '0.3');
+    dot.setAttribute('stroke', isCurrent ? color : 'none');
+    dot.setAttribute('stroke-width', isCurrent ? '1.5' : '0');
+    dot.setAttribute('stroke-opacity', '0.5');
+    dot.classList.add('event-dot');
+    dot.style.cursor = 'pointer';
+
+    if (animate && isCurrent) {
+      dot.setAttribute('r', '0');
+      dot.classList.add('hidden');
+      eventsLayer.appendChild(dot);
+      setTimeout(() => {
+        dot.classList.remove('hidden');
+        dot.setAttribute('r', isCurrent ? 5 : 3);
+      }, i * 80);
+    } else {
+      dot.setAttribute('r', isCurrent ? 5 : 3);
+      eventsLayer.appendChild(dot);
+    }
+
+    // Pulse for current events
+    if (isCurrent) {
+      const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      pulse.setAttribute('cx', pos.x);
+      pulse.setAttribute('cy', pos.y);
+      pulse.setAttribute('r', '5');
+      pulse.setAttribute('stroke', color);
+      pulse.classList.add('pulse-ring');
+      pulseLayer.appendChild(pulse);
+    }
+
+    // Tooltip
+    dot.addEventListener('mouseenter', (e) => {
+      tooltip.style.display = 'block';
+      tooltip.querySelector('.tt-actor').textContent = ev.actor;
+      tooltip.querySelector('.tt-event').textContent = ev.event + (ev.detail ? ' — ' + ev.detail : '');
+      tooltip.querySelector('.tt-date').textContent = ev.date;
+    });
+    dot.addEventListener('mousemove', (e) => {
+      const rect = document.getElementById('map-area').getBoundingClientRect();
+      let tx = e.clientX - rect.left + 12;
+      let ty = e.clientY - rect.top - 10;
+      if (tx + 280 > rect.width) tx = e.clientX - rect.left - 290;
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top = ty + 'px';
+    });
+    dot.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+    });
+  });
+}
+
+function goToPeriod(index) {
+  if (index < 0 || index >= PERIODS.length) {
+    if (playing) stopPlay();
+    return;
+  }
+  renderPeriod(index);
+}
+
+function nextPeriod() {
+  if (currentPeriod < PERIODS.length - 1) {
+    goToPeriod(currentPeriod + 1);
+  } else {
+    stopPlay();
+  }
+}
+
+// ── PLAY / PAUSE ──
+const playBtn = document.getElementById('play-btn');
+
+function startPlay() {
+  playing = true;
+  playBtn.innerHTML = '&#9646;&#9646;';
+  if (currentPeriod >= PERIODS.length - 1) goToPeriod(0);
+  playInterval = setInterval(nextPeriod, SPEED);
+}
+
+function stopPlay() {
+  playing = false;
+  playBtn.innerHTML = '&#9654;';
+  clearInterval(playInterval);
+}
+
+playBtn.addEventListener('click', () => {
+  if (playing) stopPlay();
+  else startPlay();
+});
+
+// ── INIT ──
+renderPeriod(0, false);
+</script>
+</body>
+</html>
