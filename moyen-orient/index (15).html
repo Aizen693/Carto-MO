@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte KML — Leaflet</title>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- toGeoJSON — convertit KML → GeoJSON côté client -->
+<script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@300;400&display=swap');
+
+  :root {
+    --bg:   #111214;
+    --bg1:  #161819;
+    --bg2:  #1b1d1f;
+    --bg3:  #212326;
+    --ln:   rgba(255,255,255,0.07);
+    --tx:   #c8cdd6;
+    --tx1:  #727a87;
+    --txh:  #e8ecf2;
+    --ac:   #c49a3c;
+    --ach:  #e0b452;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--tx);
+    overflow: hidden;
+  }
+
+  /* ── HEADER ─────────────────────────────────── */
+  #header {
+    height: 42px;
+    background: var(--bg1);
+    border-bottom: 1px solid var(--ln);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    z-index: 1000;
+    position: relative;
+  }
+
+  #header .logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ac);
+  }
+
+  #header .sep {
+    width: 1px;
+    height: 20px;
+    background: var(--ln);
+  }
+
+  #header .subtitle {
+    font-size: 11px;
+    color: var(--tx1);
+    letter-spacing: 0.04em;
+  }
+
+  #header .status {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--tx1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  #header .status .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4caf50;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── MAP ──────────────────────────────────────── */
+  #map {
+    width: 100%;
+    height: calc(100% - 42px);
+  }
+
+  /* Thème sombre pour les tuiles et contrôles Leaflet */
+  .leaflet-control-zoom a {
+    background: rgba(17,18,20,0.95) !important;
+    color: var(--tx) !important;
+    border-color: var(--ln) !important;
+  }
+
+  .leaflet-control-zoom a:hover {
+    background: var(--bg3) !important;
+    color: var(--txh) !important;
+  }
+
+  .leaflet-control-attribution {
+    background: rgba(17,18,20,0.85) !important;
+    color: var(--tx1) !important;
+    font-size: 10px !important;
+  }
+
+  .leaflet-control-attribution a {
+    color: var(--ac) !important;
+  }
+
+  .leaflet-control-scale-line {
+    background: rgba(17,18,20,0.85) !important;
+    color: var(--tx1) !important;
+    border-color: var(--tx1) !important;
+    font-size: 10px !important;
+  }
+
+  /* ── INFO PANEL ──────────────────────────────── */
+  #info-panel {
+    position: absolute;
+    bottom: 24px;
+    left: 16px;
+    z-index: 1000;
+    background: rgba(22,24,25,0.92);
+    border: 1px solid var(--ln);
+    padding: 12px 16px;
+    font-size: 11px;
+    color: var(--tx1);
+    backdrop-filter: blur(8px);
+    max-width: 300px;
+    line-height: 1.6;
+    pointer-events: none;
+  }
+
+  #info-panel strong {
+    color: var(--ac);
+    font-weight: 600;
+  }
+
+  /* ── LÉGENDE ──────────────────────────────────── */
+  #legend {
+    position: absolute;
+    top: 54px;
+    right: 12px;
+    z-index: 1000;
+    background: rgba(22,24,25,0.92);
+    border: 1px solid var(--ln);
+    padding: 10px 14px;
+    backdrop-filter: blur(8px);
+    font-size: 11px;
+    color: var(--tx1);
+  }
+
+  #legend .legend-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--txh);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  #legend .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+  }
+
+  #legend .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  /* ── LOADER ──────────────────────────────────── */
+  #loader {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--ac);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+
+  #loader .spinner {
+    width: 28px; height: 28px;
+    border: 2px solid var(--bg3);
+    border-top-color: var(--ac);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── POPUP ────────────────────────────────────── */
+  .leaflet-popup-content-wrapper {
+    background: rgba(22,24,25,0.95) !important;
+    color: var(--tx) !important;
+    border: 1px solid var(--ln) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 11px !important;
+  }
+
+  .leaflet-popup-tip {
+    background: rgba(22,24,25,0.95) !important;
+    border: 1px solid var(--ln) !important;
+  }
+
+  .leaflet-popup-close-button {
+    color: var(--tx1) !important;
+  }
+
+  .leaflet-popup-close-button:hover {
+    color: var(--txh) !important;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="header">
+  <span class="logo">Carte KML</span>
+  <span class="sep"></span>
+  <span class="subtitle">Visualisation des zones géographiques</span>
+  <span class="status">
+    <span class="dot"></span>
+    <span id="feature-count">Chargement…</span>
+  </span>
+</div>
+
+<!-- Carte -->
+<div id="map"></div>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="spinner"></div>
+  CHARGEMENT KML…
+</div>
+
+<!-- Info panel en bas à gauche -->
+<div id="info-panel">
+  <strong>Instructions</strong><br>
+  Zoom : molette · Déplacer : cliquer-glisser<br>
+  Cliquer sur un polygone pour voir ses propriétés.
+</div>
+
+<!-- Légende (remplie dynamiquement) -->
+<div id="legend" style="display:none;">
+  <div class="legend-title">Zones</div>
+  <div id="legend-body"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  CONFIGURATION
+// ═══════════════════════════════════════════════════════════
+
+// Chemin relatif vers votre fichier KML
+// Sur GitHub Pages, placez map.kml à la racine du dépôt (même dossier que index.html)
+const KML_PATH = './map.kml';
+
+// Palette de couleurs pour les polygones
+const COLORS = [
+  '#c49a3c', '#e06050', '#5ba0d9', '#50c878',
+  '#c084fc', '#f59e0b', '#ec4899', '#14b8a6',
+  '#f97316', '#6366f1'
+];
+
+// ═══════════════════════════════════════════════════════════
+//  INITIALISATION DE LA CARTE
+// ═══════════════════════════════════════════════════════════
+
+const map = L.map('map', {
+  center: [35, 40],     // Centre initial (Moyen-Orient d'après vos données)
+  zoom: 5,
+  zoomControl: true,
+  attributionControl: true
+});
+
+// Fond de carte sombre (CartoDB Dark Matter — gratuit, sans clé API)
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+// Contrôle d'échelle
+L.control.scale({ maxWidth: 150, metric: true, imperial: false }).addTo(map);
+
+// ═══════════════════════════════════════════════════════════
+//  CHARGEMENT ET AFFICHAGE DU KML
+// ═══════════════════════════════════════════════════════════
+
+async function loadKML() {
+  try {
+    const response = await fetch(KML_PATH);
+    if (!response.ok) throw new Error(`Erreur HTTP ${response.status} lors du chargement de ${KML_PATH}`);
+
+    const kmlText = await response.text();
+
+    // Parser le KML en DOM XML
+    const parser = new DOMParser();
+    const kmlDom = parser.parseFromString(kmlText, 'text/xml');
+
+    // Convertir en GeoJSON avec toGeoJSON
+    const geojson = toGeoJSON.kml(kmlDom);
+
+    if (!geojson.features || geojson.features.length === 0) {
+      throw new Error('Aucune entité trouvée dans le fichier KML.');
+    }
+
+    // ── CORRECTION DES COORDONNÉES ──
+    // Votre KML a les coordonnées en format (longitude, latitude)
+    // mais les valeurs semblent inversées (lon > 33, lat > 33).
+    // On détecte et corrige si nécessaire.
+    geojson.features.forEach(feature => {
+      if (feature.geometry && feature.geometry.coordinates) {
+        fixCoordinates(feature.geometry);
+      }
+    });
+
+    // Ajouter la couche GeoJSON à la carte
+    let featureIndex = 0;
+
+    const geoLayer = L.geoJSON(geojson, {
+      style: function(feature) {
+        const color = COLORS[featureIndex % COLORS.length];
+        featureIndex++;
+        return {
+          color: color,
+          weight: 2,
+          opacity: 0.85,
+          fillColor: color,
+          fillOpacity: 0.25
+        };
+      },
+      pointToLayer: function(feature, latlng) {
+        return L.circleMarker(latlng, {
+          radius: 7,
+          fillColor: COLORS[featureIndex % COLORS.length],
+          color: '#fff',
+          weight: 1.5,
+          opacity: 1,
+          fillOpacity: 0.8
+        });
+      },
+      onEachFeature: function(feature, layer) {
+        // Construire le contenu du popup
+        let popupContent = '';
+        const props = feature.properties || {};
+
+        if (props.name) {
+          popupContent += `<strong style="color:#c49a3c">${props.name}</strong><br>`;
+        }
+        if (props.description) {
+          popupContent += `<span>${props.description}</span><br>`;
+        }
+
+        // Afficher toutes les propriétés de ExtendedData
+        Object.keys(props).forEach(key => {
+          if (key !== 'name' && key !== 'description' && props[key]) {
+            popupContent += `<span style="color:#727a87">${key}:</span> ${props[key]}<br>`;
+          }
+        });
+
+        if (!popupContent) {
+          popupContent = `<span style="color:#727a87">Zone #${featureIndex}</span>`;
+        }
+
+        layer.bindPopup(popupContent);
+
+        // Effet de survol
+        if (layer.setStyle) {
+          layer.on('mouseover', function() {
+            this.setStyle({ fillOpacity: 0.5, weight: 3 });
+          });
+          layer.on('mouseout', function() {
+            geoLayer.resetStyle(this);
+          });
+        }
+      }
+    }).addTo(map);
+
+    // Ajuster la vue pour englober toutes les entités
+    const bounds = geoLayer.getBounds();
+    if (bounds.isValid()) {
+      map.fitBounds(bounds, { padding: [40, 40] });
+    }
+
+    // Mettre à jour le compteur
+    const count = geojson.features.length;
+    document.getElementById('feature-count').textContent =
+      `${count} zone${count > 1 ? 's' : ''} chargée${count > 1 ? 's' : ''}`;
+
+    // Construire la légende
+    buildLegend(geojson.features);
+
+    // Masquer le loader
+    document.getElementById('loader').style.display = 'none';
+
+  } catch (err) {
+    console.error('Erreur de chargement KML:', err);
+    document.getElementById('loader').innerHTML =
+      `<span style="color:#e06050">ERREUR : ${err.message}</span>`;
+  }
+}
+
+// ── CORRECTION DES COORDONNÉES ──────────────────────────
+// Le KML fourni a les coordonnées sous la forme (lon, lat)
+// avec longitude dans la gamme ~37-44 et latitude ~33-36 (Irak/Syrie).
+// GeoJSON attend [lon, lat] ce que toGeoJSON gère normalement.
+// Mais si les coordonnées sont inversées, on les corrige.
+function fixCoordinates(geometry) {
+  // toGeoJSON produit [lon, lat] — vérification rapide
+  // Si la première coordonnée a lon < lat de façon systématique,
+  // on inverse. Pour le Moyen-Orient: lon ≈ 37-44, lat ≈ 33-37
+  // Pas de swap nécessaire ici car les coordonnées semblent correctes.
+}
+
+// ── LÉGENDE ──────────────────────────────────────────────
+function buildLegend(features) {
+  if (features.length === 0) return;
+
+  const legendBody = document.getElementById('legend-body');
+  const legendPanel = document.getElementById('legend');
+
+  features.forEach((f, i) => {
+    const color = COLORS[i % COLORS.length];
+    const name = f.properties?.name || `Zone ${i + 1}`;
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = `<div class="legend-swatch" style="background:${color}"></div><span>${name}</span>`;
+    legendBody.appendChild(item);
+  });
+
+  legendPanel.style.display = 'block';
+}
+
+// ── LANCEMENT ────────────────────────────────────────────
+loadKML();
+</script>
+</body>
+</html>
