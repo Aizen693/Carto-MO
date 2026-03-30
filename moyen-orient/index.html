@@ -1225,7 +1225,6 @@ function setupPopupsAndTooltip(m){
       const p=e.features[0].properties;
       const popup = new mapboxgl.Popup({closeButton:true,maxWidth:'310px',className:'algor-popup'})
         .setLngLat(e.lngLat).setHTML(makePopupHTML(p)).addTo(m);
-      popup.getElement()?.querySelector('.mapboxgl-popup-close-button')?.addEventListener('click',()=>popup.remove());
     });
     m.on('mouseenter',layerId,()=>m.getCanvas().style.cursor='pointer');
     m.on('mouseleave',layerId,()=>m.getCanvas().style.cursor='');
@@ -1341,7 +1340,6 @@ searchInput.addEventListener('input', function(){
       setTimeout(() => {
         const sp = new mapboxgl.Popup({ closeButton: true, maxWidth: '310px', className: 'algor-popup' })
           .setLngLat(coords).setHTML(makePopupHTML(f.properties)).addTo(map);
-        sp.getElement()?.querySelector('.mapboxgl-popup-close-button')?.addEventListener('click',()=>sp.remove());
       }, 1300);
     };
     searchResults.appendChild(div);
