@@ -856,11 +856,11 @@ function makePopupHTML(p){
 
 const PITCH_THRESHOLD=20;
 const PERIODS=[
-  {label:'2005-2006',file:'2005-2006.kml'},{label:'2007-2008',file:'2007-2008.kml'},
-  {label:'2009-2010',file:'2009-2010.kml'},{label:'2011-2012',file:'2011-2012.kml'},
-  {label:'2013-2014',file:'2013-2014.kml'},{label:'2015-2016',file:'2015-2016.kml'},
-  {label:'2017-2018',file:'2017-2018.kml'},{label:'2019-2020',file:'2019-2020.kml'},
-  {label:'2021-2022',file:'2021-2022.kml'},{label:'2023-2026',file:'2023-2026.kml'},
+  {label:'2005-2006',file:'2005-2006.geojson',kml:'2005-2006.kml'},{label:'2007-2008',file:'2007-2008.geojson',kml:'2007-2008.kml'},
+  {label:'2009-2010',file:'2009-2010.geojson',kml:'2009-2010.kml'},{label:'2011-2012',file:'2011-2012.geojson',kml:'2011-2012.kml'},
+  {label:'2013-2014',file:'2013-2014.geojson',kml:'2013-2014.kml'},{label:'2015-2016',file:'2015-2016.geojson',kml:'2015-2016.kml'},
+  {label:'2017-2018',file:'2017-2018.geojson',kml:'2017-2018.kml'},{label:'2019-2020',file:'2019-2020.geojson',kml:'2019-2020.kml'},
+  {label:'2021-2022',file:'2021-2022.geojson',kml:'2021-2022.kml'},{label:'2023-2026',file:'2023-2026.geojson',kml:'2023-2026.kml'},
 ];
 const STYLES={standard:'mapbox://styles/mapbox/standard',satellite:'mapbox://styles/mapbox/satellite-streets-v12',dark:'mapbox://styles/mapbox/dark-v11',fleuve:'mapbox://styles/mapbox/outdoors-v12'};
 
@@ -1127,16 +1127,27 @@ function applyFilter(){
 async function loadKML(index){
   if(loadedData[index]) return loadedData[index];
   try{
-    const res=await fetch('./'+PERIODS[index].file);
-    if(!res.ok) throw new Error('404');
-    const text=await res.text();
-    const dom=new DOMParser().parseFromString(text,'text/xml');
-    const descMap={};
-    dom.querySelectorAll('Placemark').forEach((pm,i)=>{
-      const de=pm.querySelector('description');
-      if(de){const raw=de.textContent||''; descMap[i]=raw.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'').trim()||null;}
-    });
-    const geo=toGeoJSON.kml(dom);
+    // Try GeoJSON first (faster), fallback to KML
+    let geo, descMap={};
+    const geoRes=await fetch('./'+PERIODS[index].file).catch(()=>null);
+    if(geoRes&&geoRes.ok&&PERIODS[index].file.endsWith('.geojson')){
+      geo=await geoRes.json();
+      geo.features.forEach((f,i)=>{
+        const d=f.properties.description||'';
+        descMap[i]=d.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'').trim()||null;
+      });
+    } else {
+      const kmlFile=PERIODS[index].kml||PERIODS[index].file;
+      const res=await fetch('./'+kmlFile);
+      if(!res.ok) throw new Error('404');
+      const text=await res.text();
+      const dom=new DOMParser().parseFromString(text,'text/xml');
+      dom.querySelectorAll('Placemark').forEach((pm,i)=>{
+        const de=pm.querySelector('description');
+        if(de){const raw=de.textContent||''; descMap[i]=raw.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'').trim()||null;}
+      });
+      geo=toGeoJSON.kml(dom);
+    }
     const cleaned=[];
     geo.features.forEach((f,i)=>{
       f.properties=f.properties||{};
