@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Armée malienne (FAMA)",
+        "description": "Date: 06/03/2026\nPays: Mali\nÉvénement: 7 mauritaniens tués dans la zone d'Ehl Elkori\nDétail: Incident frontalier impliquant les FAMa près de la frontière mauritanienne, déclenchant une crise diplomatique. 7 victimes"
+      },
+      "geometry": { "type": "Point", "coordinates": [-10.57, 15.03] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Armée malienne (FAMA)",
+        "description": "Date: 06/03/2026\nPays: Mali\nÉvénement: Opération FAMa zone Yélimané\nDétail: Intervention militaire malienne dans une zone frontalière sensible avec la Mauritanie"
+      },
+      "geometry": { "type": "Point", "coordinates": [-10.22, 15.23] }
+    }
+  ]
+}

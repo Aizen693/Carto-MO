@@ -1,0 +1,37 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "JNIM",
+        "description": "Date: 05/01/2026\nPays: Niger\nÉvénement: Prise de 2 postes militaires à Torodi\nDétail: Attaque coordonnée du JNIM contre des positions des forces armées nigériennes dans la région de Tillabéri"
+      },
+      "geometry": { "type": "Point", "coordinates": [1.5, 13.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "JNIM",
+        "description": "Date: 06/01/2026\nPays: Mali\nÉvénement: Attaque de la mine d'or de Morila\nDétail: Raid du JNIM contre un site minier industriel dans la région de Sikasso, sud du Mali"
+      },
+      "geometry": { "type": "Point", "coordinates": [-8.18, 11.32] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ISGS",
+        "description": "Date: 06/01/2026\nPays: Niger\nÉvénement: Attaque à la frontière du Burkina Faso\nDétail: Incursion de l'État islamique au Grand Sahara dans la zone des trois frontières, région de Tillabéri"
+      },
+      "geometry": { "type": "Point", "coordinates": [1.45, 13.52] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "JNIM",
+        "description": "Date: 15/01/2026\nPays: Mali\nÉvénement: Enlèvements sur des sites industriels dans l'ouest\nDétail: Série de kidnappings ciblant des travailleurs sur des sites miniers et industriels de l'ouest du Mali"
+      },
+      "geometry": { "type": "Point", "coordinates": [-9.5, 13.1] }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "JNIM",
+        "description": "Date: 09/02/2026\nPays: Mali\nÉvénement: Assassinats de chauffeurs dans le cadre du blocus\nDétail: Poursuite de la stratégie d'asphyxie économique du JNIM sur les axes routiers de l'ouest malien"
+      },
+      "geometry": { "type": "Point", "coordinates": [-11.44, 12.65] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ISGS",
+        "description": "Date: 07/02/2026\nPays: Niger\nÉvénement: Attaque contre l'aéroport de Niamey\nDétail: Opération audacieuse de l'État islamique au Grand Sahara visant une infrastructure stratégique de la capitale nigérienne"
+      },
+      "geometry": { "type": "Point", "coordinates": [2.11, 13.51] }
+    }
+  ]
+}

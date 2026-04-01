@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "JNIM",
+        "description": "Date: 20/02/2026\nPays: Burkina Faso\nÉvénement: Attaque du poste de Tandjari\nDétail: Offensive du JNIM contre une position des forces armées burkinabè dans la région de l'Est"
+      },
+      "geometry": { "type": "Point", "coordinates": [0.86, 11.17] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "JNIM",
+        "description": "Date: 18/02/2026\nPays: Mali\nÉvénement: Embuscade sur l'axe Anéfis-Aguelhoc\nDétail: Action dans le nord du Mali, région de Kidal, zone de forte présence du JNIM depuis le retrait de la MINUSMA"
+      },
+      "geometry": { "type": "Point", "coordinates": [1.73, 18.73] }
+    }
+  ]
+}

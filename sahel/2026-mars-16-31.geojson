@@ -1,0 +1,45 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Armée malienne (FAMA)",
+        "description": "Date: 20/03/2026\nPays: Mali\nÉvénement: Le Mali accuse la Mauritanie — camp de M'Berra\nDétail: Bamako accuse Nouakchott d'héberger des groupes armés dans le camp de M'Berra (309 000 réfugiés). Escalade diplomatique majeure"
+      },
+      "geometry": { "type": "Point", "coordinates": [-5.28, 14.87] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Armée mauritanienne",
+        "description": "Date: 21/03/2026\nPays: Mauritanie\nÉvénement: Désescalade diplomatique Mali-Mauritanie\nDétail: Nouakchott appelle au calme après les accusations maliennes, les deux pays prônent l'apaisement"
+      },
+      "geometry": { "type": "Point", "coordinates": [-10.22, 15.04] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ISGS",
+        "description": "Date: 26/03/2026\nPays: Niger\nÉvénement: 8 policiers tués à Tillabéri\nDétail: Attaque meurtrière de l'État islamique au Grand Sahara contre les forces de sécurité nigériennes. 8 tués"
+      },
+      "geometry": { "type": "Point", "coordinates": [1.56, 13.54] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Armée malienne (FAMA)",
+        "description": "Date: 28/03/2026\nPays: Mali\nÉvénement: 5 victimes mauritaniennes à Yélimané\nDétail: Nouvel incident frontalier impliquant les FAMa, aggravant les tensions Mali-Mauritanie. 5 victimes"
+      },
+      "geometry": { "type": "Point", "coordinates": [-10.28, 15.23] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "JNIM",
+        "description": "Date: 28/03/2026\nPays: Mali\nÉvénement: Incursion zone Gogui — frontière mauritanienne\nDétail: Le JNIM étend ses opérations vers la frontière ouest, menaçant la Mauritanie"
+      },
+      "geometry": { "type": "Point", "coordinates": [-10.85, 15.11] }
+    }
+  ]
+}

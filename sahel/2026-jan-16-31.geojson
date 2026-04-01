@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Armée malienne (FAMA)",
+        "description": "Date: 23/01/2026\nPays: Mali\nÉvénement: Exécution de 3 civils peuls à Kobou\nDétail: Exactions des FAMa contre des populations civiles dans le cercle de Douentza, centre du Mali. 3 victimes"
+      },
+      "geometry": { "type": "Point", "coordinates": [-2.95, 14.98] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "JNIM",
+        "description": "Date: 29/01/2026\nPays: Mali\nÉvénement: Embuscade contre un convoi de citernes axe Diboli-Kayes\nDétail: Attaque dans le cadre du blocus imposé par le JNIM sur l'ouest du Mali depuis septembre 2025"
+      },
+      "geometry": { "type": "Point", "coordinates": [-11.4, 14.45] }
+    }
+  ]
+}
