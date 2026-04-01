@@ -459,8 +459,15 @@ html, body {
       </div>
     </a>
   </div>
+  <div class="hdr-cell">
+    <span class="hdr-cell-label">Période</span>
+    <span id="period-badge">Aucune période</span>
+  </div>
+  <div class="hdr-cell">
+    <span id="event-counter"></span>
+  </div>
+  <div class="hdr-spacer"></div>
   <div class="hdr-controls">
-    <div id="event-counter"></div>
     <button id="btn-heatmap" class="hbtn" onclick="toggleHeatmap()">HEATMAP</button>
     <button id="btn-export"  class="hbtn" onclick="exportMap()">PNG</button>
     <div id="style-toggle-header">
@@ -941,8 +948,9 @@ function toggleAll() {
 }
 function updateBadge() {
   const b = document.getElementById('period-badge');
+  if (!b) return;
   if (!activePeriods.size) b.textContent = 'Aucune période';
-  else if (activePeriods.size === PERIODS.length) b.textContent = 'Toutes · 2012–2026';
+  else if (activePeriods.size === PERIODS.length) b.textContent = 'Toutes · Jan–Mars 2026';
   else if (activePeriods.size === 1) b.textContent = PERIODS[[...activePeriods][0]].label;
   else b.textContent = activePeriods.size + ' périodes';
 }
@@ -1126,12 +1134,17 @@ function setStyle(s) {
 }
 
 function setupMapLayersOn(m) {
-  if (!m.getSource('mapbox-dem')) m.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
-  m.setTerrain({ source: 'mapbox-dem', exaggeration: 1.2 }); // exaggeration réduite pour le Sahel (relief peu marqué)
-  if (!m.getLayer('sky')) m.addLayer({ id: 'sky', type: 'sky', paint: { 'sky-type': 'atmosphere', 'sky-atmosphere-sun': [220, 8], 'sky-atmosphere-sun-intensity': 14, 'sky-atmosphere-color': 'rgba(30,100,220,1.0)', 'sky-atmosphere-halo-color': 'rgba(255,140,40,0.9)', 'sky-opacity': ['interpolate', ['linear'], ['zoom'], 0, 0, 4, 0.4, 7, 1.0] } });
-  // Lumière chaude adaptée au désert sahélien
-  m.setLight({ anchor: 'map', color: '#ffd580', intensity: 0.8, position: [1.5, 200, 10] });
-  if (m.getSource('composite') && !m.getLayer('3d-buildings')) m.addLayer({ id: '3d-buildings', source: 'composite', 'source-layer': 'building', filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 10, paint: { 'fill-extrusion-color': ['interpolate', ['linear'], ['get', 'height'], 0, '#d4c5a9', 30, '#b8a88a', 80, '#a09070', 200, '#6a5a48'], 'fill-extrusion-height': ['get', 'height'], 'fill-extrusion-base': ['get', 'min_height'], 'fill-extrusion-opacity': ['interpolate', ['linear'], ['zoom'], 10, 0.4, 12, 0.9], 'fill-extrusion-ambient-occlusion-intensity': 0.5, 'fill-extrusion-ambient-occlusion-radius': 4 } });
+  try {
+    if (!m.getSource('mapbox-dem')) m.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
+    m.setTerrain({ source: 'mapbox-dem', exaggeration: 1.2 });
+  } catch (e) { console.warn('Terrain non supporté:', e); }
+  try {
+    if (!m.getLayer('sky')) m.addLayer({ id: 'sky', type: 'sky', paint: { 'sky-type': 'atmosphere', 'sky-atmosphere-sun': [220, 8], 'sky-atmosphere-sun-intensity': 14, 'sky-atmosphere-color': 'rgba(30,100,220,1.0)', 'sky-atmosphere-halo-color': 'rgba(255,140,40,0.9)', 'sky-opacity': ['interpolate', ['linear'], ['zoom'], 0, 0, 4, 0.4, 7, 1.0] } });
+  } catch (e) { console.warn('Sky non supporté:', e); }
+  try { m.setLight({ anchor: 'map', color: '#ffd580', intensity: 0.8, position: [1.5, 200, 10] }); } catch (e) {}
+  try {
+    if (m.getSource('composite') && !m.getLayer('3d-buildings')) m.addLayer({ id: '3d-buildings', source: 'composite', 'source-layer': 'building', filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 10, paint: { 'fill-extrusion-color': ['interpolate', ['linear'], ['get', 'height'], 0, '#d4c5a9', 30, '#b8a88a', 80, '#a09070', 200, '#6a5a48'], 'fill-extrusion-height': ['get', 'height'], 'fill-extrusion-base': ['get', 'min_height'], 'fill-extrusion-opacity': ['interpolate', ['linear'], ['zoom'], 10, 0.4, 12, 0.9], 'fill-extrusion-ambient-occlusion-intensity': 0.5, 'fill-extrusion-ambient-occlusion-radius': 4 } });
+  } catch (e) {}
 }
 
 // ── RECHERCHE ────────────────────────────────────────────────────────
@@ -1282,6 +1295,8 @@ map.on('load', async () => {
   updateSliderLabel(0);
   // Préchargement en arrière-plan
   for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
+  // Auto-sélection première période
+  togglePeriod(0);
 });
 map.on('error', (e) => console.warn('Mapbox error:', e));
 </script>
