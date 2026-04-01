@@ -671,6 +671,7 @@ html, body {
       <button class="style-btn active" onclick="setStyle('standard')" id="btn-standard">Standard</button>
       <button class="style-btn" onclick="setStyle('satellite')" id="btn-satellite">Satellite</button>
       <button class="style-btn" onclick="setStyle('dark')" id="btn-dark">Sombre</button>
+      <button class="style-btn" onclick="setStyle('fleuve')" id="btn-fleuve">Fleuve</button>
     </div>
     <button class="float-btn" id="btn-compare" onclick="toggleComparePanel()">COMPARER</button>
     <a href="./rapport.html" class="float-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px;color:#c49a3c;border-color:rgba(196,154,60,0.3);background:rgba(196,154,60,0.08)">RAPPORTS</a>
@@ -861,7 +862,7 @@ const PERIODS=[
   {label:'2017-2018',file:'2017-2018.kml'},{label:'2019-2020',file:'2019-2020.kml'},
   {label:'2021-2022',file:'2021-2022.kml'},{label:'2023-2026',file:'2023-2026.kml'},
 ];
-const STYLES={standard:'mapbox://styles/mapbox/standard',satellite:'mapbox://styles/mapbox/satellite-streets-v12',dark:'mapbox://styles/mapbox/dark-v11'};
+const STYLES={standard:'mapbox://styles/mapbox/standard',satellite:'mapbox://styles/mapbox/satellite-streets-v12',dark:'mapbox://styles/mapbox/dark-v11',fleuve:'mapbox://styles/mapbox/outdoors-v12'};
 
 let activePeriods=new Set(), activeFilter=null, mapReady=false;
 let showAll=false, is3DMode=false, isPlaying=false, playInterval=null;
