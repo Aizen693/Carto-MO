@@ -724,13 +724,12 @@ const PITCH_THRESHOLD = 20;
 
 // Périodes adaptées au Sahel (2012–2026)
 const PERIODS = [
-  { label: '2012-2013', file: '2012-2013.kml' },
-  { label: '2014-2015', file: '2014-2015.kml' },
-  { label: '2016-2017', file: '2016-2017.kml' },
-  { label: '2018-2019', file: '2018-2019.kml' },
-  { label: '2020-2021', file: '2020-2021.kml' },
-  { label: '2022-2023', file: '2022-2023.kml' },
-  { label: '2024-2026', file: '2024-2026.kml' },
+  { label: 'Jan 01-15', file: '2026-jan-01-15.geojson' },
+  { label: 'Jan 16-31', file: '2026-jan-16-31.geojson' },
+  { label: 'Fev 01-14', file: '2026-fev-01-14.geojson' },
+  { label: 'Fev 15-28', file: '2026-fev-15-28.geojson' },
+  { label: 'Mars 01-15', file: '2026-mars-01-15.geojson' },
+  { label: 'Mars 16-31', file: '2026-mars-16-31.geojson' },
 ];
 
 const STYLES = {
@@ -967,16 +966,24 @@ function applyFilter() {
 async function loadKML(index) {
   if (loadedData[index]) return loadedData[index];
   try {
+    let geo, descMap = {};
     const res = await fetch('./' + PERIODS[index].file);
     if (!res.ok) throw new Error('404');
-    const text = await res.text();
-    const dom = new DOMParser().parseFromString(text, 'text/xml');
-    const descMap = {};
-    dom.querySelectorAll('Placemark').forEach((pm, i) => {
-      const de = pm.querySelector('description');
-      if (de) { const raw = de.textContent || ''; descMap[i] = raw.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').trim() || null; }
-    });
-    const geo = toGeoJSON.kml(dom);
+    if (PERIODS[index].file.endsWith('.geojson')) {
+      geo = await res.json();
+      geo.features.forEach((f, i) => {
+        const d = f.properties.description || '';
+        descMap[i] = d.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').trim() || null;
+      });
+    } else {
+      const text = await res.text();
+      const dom = new DOMParser().parseFromString(text, 'text/xml');
+      dom.querySelectorAll('Placemark').forEach((pm, i) => {
+        const de = pm.querySelector('description');
+        if (de) { const raw = de.textContent || ''; descMap[i] = raw.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').trim() || null; }
+      });
+      geo = toGeoJSON.kml(dom);
+    }
     const cleaned = [];
     geo.features.forEach((f, i) => {
       f.properties = f.properties || {};
