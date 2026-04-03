@@ -189,13 +189,6 @@
 
 </div>
 
-<script>console.log('[boot] inline script OK');</script>
-<script type="module" src="admin.js"></script>
-<script type="module">
-  // Diagnostic: si admin.js ne charge pas, on le verra ici
-  import('./supabase-config.js')
-    .then(() => console.log('[boot] supabase-config OK'))
-    .catch(e => console.error('[boot] supabase-config FAIL:', e));
-</script>
+<script type="module" src="admin.js?v=20260403b"></script>
 </body>
 </html>
