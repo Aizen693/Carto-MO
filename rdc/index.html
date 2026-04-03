@@ -84,16 +84,7 @@
   <div class="hdr-cell">
     <span id="event-counter"></span>
   </div>
-  <div class="hdr-controls">
-    <button id="btn-heatmap" class="hbtn" onclick="toggleHeatmap()">HEATMAP</button>
-    <button id="btn-export"  class="hbtn" onclick="exportMap()">PNG</button>
-    <div id="style-toggle-header">
-      <button class="style-btn active" onclick="setStyle('standard')"  id="btn-standard">Standard</button>
-      <button class="style-btn"        onclick="setStyle('satellite')" id="btn-satellite">Satellite</button>
-      <button class="style-btn"        onclick="setStyle('dark')"      id="btn-dark">Sombre</button>
-    </div>
-    <button class="float-btn" id="btn-compare" onclick="toggleComparePanel()">COMPARER</button>
-  </div>
+  <div class="hdr-controls"></div>
 </div>
 
 <div id="progress-bar" class="zone-gated"><div id="progress-fill"></div></div>
@@ -155,9 +146,17 @@
       <span class="sb-section-arrow open">&#x25B2;</span>
     </div>
     <div class="sb-section-body">
-      <div class="sb-tool-row" onclick="toggleChart()"><span class="sb-tool-icon">&#x25A4;</span> Statistiques</div>
+      <div class="sb-tool-row" onclick="toggleHeatmap();toggleSidebar()"><span class="sb-tool-icon">&#x25D1;</span> Heatmap</div>
+      <div class="sb-tool-row" onclick="toggleComparePanel();toggleSidebar()"><span class="sb-tool-icon">&#x25EB;</span> Comparer</div>
       <div class="sb-tool-row" onclick="document.getElementById('search-input').focus();toggleSidebar()"><span class="sb-tool-icon">&#x2315;</span> Rechercher</div>
+      <div class="sb-tool-row" onclick="exportMap();toggleSidebar()"><span class="sb-tool-icon">&#x25A3;</span> Export PNG</div>
     </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Evenements <span id="sb-chart-count" style="color:var(--ac);margin-left:4px">—</span></span>
+      <span class="sb-section-arrow">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body collapsed" id="sb-chart-body"></div>
   </div>
 </div>
 

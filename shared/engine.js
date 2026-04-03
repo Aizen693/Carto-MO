@@ -133,27 +133,43 @@ function centerMap() {
 
 let chartOpen = false;
 function toggleChart() {
-  chartOpen = !chartOpen;
-  document.getElementById('chart-panel').classList.toggle('open', chartOpen);
+  // Legacy — keep for backward compat but no-op now (stats are in sidebar)
 }
 
 function updateChart(features) {
   const counts = {};
   features.forEach(f => { const n = f.properties.name; if (!n) return; counts[n] = (counts[n] || 0) + 1; });
   const total = features.filter(f => f.geometry && f.geometry.type === 'Point').length;
-  document.getElementById('chart-total').textContent = total + ' pts';
-  document.getElementById('chart-tab-count').textContent = total;
   animateCounter(total);
+  // Update old drawer elements if they exist
+  const ct = document.getElementById('chart-total'); if (ct) ct.textContent = total + ' pts';
+  const ctc = document.getElementById('chart-tab-count'); if (ctc) ctc.textContent = total;
+  // Update sidebar stats
+  const sbCount = document.getElementById('sb-chart-count'); if (sbCount) sbCount.textContent = total;
   const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
   const max = sorted.length ? sorted[0][1] : 1;
+  // Render into sidebar chart body
+  const sbBody = document.getElementById('sb-chart-body');
+  if (sbBody) {
+    sbBody.innerHTML = '';
+    sorted.forEach(([name, count]) => {
+      const color = getColor(name), pct = (count / max * 100).toFixed(0);
+      const row = document.createElement('div'); row.className = 'bar-row';
+      row.innerHTML = `<span class="bar-label" title="${name}">${name}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="bar-num">${count}</span>`;
+      sbBody.appendChild(row);
+    });
+  }
+  // Also render in old body for backward compat
   const body = document.getElementById('chart-body');
-  body.innerHTML = '';
-  sorted.forEach(([name, count]) => {
-    const color = getColor(name), pct = (count / max * 100).toFixed(0);
-    const row = document.createElement('div'); row.className = 'bar-row';
-    row.innerHTML = `<span class="bar-label" title="${name}">${name}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="bar-num">${count}</span>`;
-    body.appendChild(row);
-  });
+  if (body) {
+    body.innerHTML = '';
+    sorted.forEach(([name, count]) => {
+      const color = getColor(name), pct = (count / max * 100).toFixed(0);
+      const row = document.createElement('div'); row.className = 'bar-row';
+      row.innerHTML = `<span class="bar-label" title="${name}">${name}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="bar-num">${count}</span>`;
+      body.appendChild(row);
+    });
+  }
 }
 
 // ── COMPARAISON ──────────────────────────────────────────────────────
