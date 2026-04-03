@@ -6,6 +6,9 @@ import { getUsers, updateUserRole } from './firestore.js';
 import { requireRole } from './auth.js';
 import { supabase } from '../supabase-config.js';
 
+const SUPABASE_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
+
 export async function renderUserList(container) {
   if (!requireRole('admin')) {
     container.innerHTML = '<div class="log-empty">Acces reserve aux administrateurs</div>';
@@ -120,29 +123,40 @@ function showAddUserForm(container) {
     }
 
     try {
-      // Sauvegarder la session admin avant signUp
-      // car signUp connecte automatiquement le nouvel utilisateur
+      // Sauvegarder la session admin
       const { data: { session: adminSession } } = await supabase.auth.getSession();
+      const adminToken = adminSession.access_token;
 
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { display_name: name, role } }
+      // 1. Creer le user via signUp (fetch direct pour eviter le switch de session)
+      const signUpRes = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password, data: { display_name: name, role } })
       });
 
-      if (error) throw error;
+      const signUpData = await signUpRes.json();
+      if (!signUpRes.ok) throw new Error(signUpData.msg || 'Erreur creation utilisateur');
 
-      // Restaurer la session admin immediatement
-      if (adminSession) {
-        await supabase.auth.setSession({
-          access_token: adminSession.access_token,
-          refresh_token: adminSession.refresh_token
-        });
-      }
+      const newUserId = signUpData.id || signUpData.user?.id;
+      if (!newUserId) throw new Error('Utilisateur cree mais ID manquant');
 
-      // Mettre a jour le role si different de viewer
-      if (data.user && role !== 'viewer') {
-        await updateUserRole(data.user.id, role);
+      // 2. Creer le profil (avec le token admin)
+      const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${adminToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: newUserId, email, display_name: name, role })
+      });
+
+      if (!profileRes.ok) {
+        const profileErr = await profileRes.json();
+        throw new Error(profileErr.message || 'Erreur creation profil');
       }
 
       form.remove();
