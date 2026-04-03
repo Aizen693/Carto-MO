@@ -11,6 +11,7 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <link rel="stylesheet" href="admin.css">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -100,6 +101,40 @@
           <div class="io-section">
             <div class="io-label">Exporter les points de la zone</div>
             <button id="btn-export" class="admin-btn admin-btn-full">Exporter GeoJSON</button>
+          </div>
+
+          <div class="io-divider"></div>
+
+          <!-- PUITS SAHEL -->
+          <div class="io-section">
+            <div class="io-label" style="display:flex;align-items:center;justify-content:space-between">
+              Calques Puits — Sahel
+              <span id="puits-count" class="panel-count">0</span>
+            </div>
+            <div class="puits-toolbar">
+              <label class="puits-check-all"><input type="checkbox" id="puits-select-all"> Tout</label>
+              <button id="btn-puits-delete" class="admin-btn admin-btn-sm admin-btn-danger" disabled>Supprimer</button>
+              <input type="file" id="puits-import-file" accept=".geojson,.json,.xlsx,.xls,.csv" style="display:none">
+              <button id="btn-puits-import" class="admin-btn admin-btn-sm">Importer</button>
+              <button id="btn-puits-export" class="admin-btn admin-btn-sm">Exporter</button>
+            </div>
+            <div id="puits-search-wrap">
+              <input type="text" id="puits-search" class="admin-input" placeholder="Filtrer par nom ou region...">
+            </div>
+            <div id="puits-table-wrap">
+              <table id="puits-table">
+                <thead>
+                  <tr>
+                    <th class="puits-th-check"></th>
+                    <th>Nom</th>
+                    <th>Region</th>
+                    <th>Coordonnees</th>
+                  </tr>
+                </thead>
+                <tbody id="puits-tbody"></tbody>
+              </table>
+            </div>
+            <div id="puits-empty" style="display:none">Aucun puits charge. Importez un fichier.</div>
           </div>
         </div>
       </div>

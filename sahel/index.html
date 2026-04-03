@@ -31,6 +31,7 @@
     <span id="event-counter"></span>
   </div>
   <div class="hdr-controls">
+    <button id="btn-puits" class="hbtn" onclick="togglePuits()">PUITS</button>
     <button id="btn-heatmap" class="hbtn" onclick="toggleHeatmap()">HEATMAP</button>
     <button id="btn-export"  class="hbtn" onclick="exportMap()">PNG</button>
     <div id="style-toggle-header">
@@ -192,6 +193,140 @@ const ZONE_CONFIG = {
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
 <script src="../shared/engine.js"></script>
+
+<!-- SAHEL-SPECIFIC: Calque puits -->
+<script>
+(function() {
+  let puitsVisible = false;
+  let puitsData = null;
+
+  fetch('./puits-mali.geojson')
+    .then(r => r.json())
+    .then(d => { puitsData = d; })
+    .catch(() => console.warn('Puits data not loaded'));
+
+  function addPuitsLayers() {
+    if (!puitsData || map.getSource('puits-src')) return;
+    map.addSource('puits-src', { type: 'geojson', data: puitsData, cluster: true, clusterMaxZoom: 9, clusterRadius: 40 });
+    // Cluster circles
+    map.addLayer({
+      id: 'puits-clusters', type: 'circle', source: 'puits-src',
+      filter: ['has', 'point_count'],
+      paint: {
+        'circle-radius': ['interpolate', ['linear'], ['get', 'point_count'], 2, 6, 20, 12, 100, 18],
+        'circle-color': '#0288d1',
+        'circle-opacity': 0.7,
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#4fc3f7',
+        'circle-stroke-opacity': 0.5
+      },
+      layout: { visibility: puitsVisible ? 'visible' : 'none' }
+    });
+    // Cluster count labels
+    map.addLayer({
+      id: 'puits-cluster-count', type: 'symbol', source: 'puits-src',
+      filter: ['has', 'point_count'],
+      layout: {
+        'text-field': '{point_count_abbreviated}',
+        'text-size': 9,
+        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
+        visibility: puitsVisible ? 'visible' : 'none'
+      },
+      paint: { 'text-color': '#e1f5fe' }
+    });
+    // Individual points (unclustered)
+    map.addLayer({
+      id: 'puits-circles', type: 'circle', source: 'puits-src',
+      filter: ['!', ['has', 'point_count']],
+      paint: {
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 1.5, 7, 2.5, 10, 4],
+        'circle-color': '#4fc3f7',
+        'circle-opacity': 0.75,
+        'circle-stroke-width': 0.5,
+        'circle-stroke-color': '#0288d1',
+        'circle-stroke-opacity': 0.7
+      },
+      layout: { visibility: puitsVisible ? 'visible' : 'none' }
+    });
+    map.addLayer({
+      id: 'puits-labels', type: 'symbol', source: 'puits-src',
+      filter: ['!', ['has', 'point_count']],
+      layout: {
+        'text-field': ['get', 'nom'],
+        'text-size': 8,
+        'text-offset': [0, 1.1],
+        'text-anchor': 'top',
+        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
+        visibility: puitsVisible ? 'visible' : 'none'
+      },
+      paint: { 'text-color': '#b3e5fc', 'text-halo-color': 'rgba(0,0,0,0.7)', 'text-halo-width': 1 },
+      minzoom: 9
+    });
+    // Zoom into cluster on click
+    map.on('click', 'puits-clusters', function(e) {
+      const features = map.queryRenderedFeatures(e.point, { layers: ['puits-clusters'] });
+      const clusterId = features[0].properties.cluster_id;
+      map.getSource('puits-src').getClusterExpansionZoom(clusterId, function(err, zoom) {
+        if (err) return;
+        map.easeTo({ center: features[0].geometry.coordinates, zoom: zoom });
+      });
+    });
+    map.on('mouseenter', 'puits-clusters', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'puits-clusters', () => { map.getCanvas().style.cursor = ''; });
+
+    // Popup on click
+    map.on('click', 'puits-circles', function(e) {
+      const p = e.features[0].properties;
+      new mapboxgl.Popup({ className: 'mapboxgl-popup', maxWidth: '260px' })
+        .setLngLat(e.lngLat)
+        .setHTML(
+          '<div class="popup-header"><div class="popup-dot-bar" style="background:#4fc3f7"></div><div class="popup-actor">' + (p.nom || 'Puits') + '</div></div>' +
+          '<div class="popup-body">' +
+          '<div class="popup-row"><span class="popup-key">Région</span><span class="popup-val">' + (p.region || '—') + '</span></div>' +
+          '<div class="popup-row"><span class="popup-key">Source</span><span class="popup-val" style="font-size:9px;opacity:0.7">' + (p.source || '—') + '</span></div>' +
+          '</div>'
+        )
+        .addTo(map);
+    });
+    map.on('mouseenter', 'puits-circles', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'puits-circles', () => { map.getCanvas().style.cursor = ''; });
+  }
+
+  window.togglePuits = function() {
+    puitsVisible = !puitsVisible;
+    const btn = document.getElementById('btn-puits');
+    if (btn) {
+      btn.classList.toggle('active', puitsVisible);
+    }
+    if (!map.getSource('puits-src')) {
+      addPuitsLayers();
+      return;
+    }
+    const vis = puitsVisible ? 'visible' : 'none';
+    ['puits-clusters', 'puits-cluster-count', 'puits-circles', 'puits-labels'].forEach(id => {
+      if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', vis);
+    });
+  };
+
+  // Pre-load layers (hidden by default) — handle map already loaded
+  function tryAdd() {
+    if (!puitsData) { setTimeout(tryAdd, 200); return; }
+    if (!map.isStyleLoaded()) { map.once('style.load', tryAdd); return; }
+    addPuitsLayers();
+  }
+  if (map.loaded()) tryAdd();
+  else map.on('load', tryAdd);
+
+  // Re-add on style change
+  const _origSetStyle = setStyle;
+  setStyle = function(s) {
+    _origSetStyle(s);
+    map.once('style.load', function() {
+      if (puitsData && !map.getSource('puits-src')) addPuitsLayers();
+    });
+  };
+})();
+</script>
 
 <!-- TUTORIEL -->
 <div id="tutorial-overlay">

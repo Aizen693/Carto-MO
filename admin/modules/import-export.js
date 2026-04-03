@@ -74,3 +74,113 @@ export async function exportGeoJSON(zone) {
 
   await logActivity(zone, 'export', null, `Export GeoJSON : ${features.length} points`);
 }
+
+// ── PUITS MANAGER ───────────────────────────────────────
+
+let puitsFeatures = [];
+let puitsFilteredIndices = null; // null = show all
+
+export function getPuitsFeatures() { return puitsFeatures; }
+
+export async function loadPuitsGeoJSON() {
+  try {
+    const res = await fetch('../sahel/puits-mali.geojson');
+    if (!res.ok) throw new Error('Fichier introuvable');
+    const data = await res.json();
+    puitsFeatures = data.features || [];
+    return puitsFeatures;
+  } catch (e) {
+    console.warn('Puits GeoJSON not loaded:', e);
+    puitsFeatures = [];
+    return puitsFeatures;
+  }
+}
+
+export function renderPuitsTable(container, filter) {
+  const tbody = container;
+  tbody.innerHTML = '';
+  const empty = document.getElementById('puits-empty');
+  const count = document.getElementById('puits-count');
+
+  const term = (filter || '').toLowerCase().trim();
+  puitsFilteredIndices = [];
+
+  puitsFeatures.forEach((f, i) => {
+    const p = f.properties || {};
+    const nom = p.nom || p.Nom || p.name || '';
+    const region = p.region || p.Région || '';
+    if (term && !nom.toLowerCase().includes(term) && !region.toLowerCase().includes(term)) return;
+
+    puitsFilteredIndices.push(i);
+    const coords = f.geometry?.coordinates;
+    const coordStr = coords ? `${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}` : '—';
+
+    const tr = document.createElement('tr');
+    tr.dataset.index = i;
+    tr.innerHTML = `<td><input type="checkbox" class="puits-cb" data-index="${i}"></td><td>${nom}</td><td>${region}</td><td>${coordStr}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  if (empty) empty.style.display = puitsFeatures.length === 0 ? '' : 'none';
+  if (count) count.textContent = puitsFeatures.length;
+}
+
+export function deleteSelectedPuits() {
+  const checked = document.querySelectorAll('.puits-cb:checked');
+  if (!checked.length) return 0;
+  const indices = [...checked].map(cb => parseInt(cb.dataset.index)).sort((a, b) => b - a);
+  indices.forEach(i => puitsFeatures.splice(i, 1));
+  return indices.length;
+}
+
+export function exportPuitsGeoJSON() {
+  const geojson = { type: 'FeatureCollection', features: puitsFeatures };
+  const blob = new Blob([JSON.stringify(geojson, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `puits-sahel-${new Date().toISOString().slice(0, 10)}.geojson`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+export async function importPuitsFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+
+  if (ext === 'geojson' || ext === 'json') {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    const features = data.features || [];
+    puitsFeatures.push(...features);
+    return features.length;
+  }
+
+  if (ext === 'xlsx' || ext === 'xls' || ext === 'csv') {
+    const buf = await file.arrayBuffer();
+    const wb = XLSX.read(buf, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws);
+    let added = 0;
+    for (const row of rows) {
+      const gps = row['Coordonnées GPS'] || row['Coordonnees GPS'] || row['GPS'] || '';
+      const parts = String(gps).split(',');
+      if (parts.length < 2) continue;
+      const lat = parseFloat(parts[0].trim());
+      const lng = parseFloat(parts[1].trim());
+      if (isNaN(lat) || isNaN(lng)) continue;
+      puitsFeatures.push({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [lng, lat] },
+        properties: {
+          nom: row['Nom'] || row['nom'] || '',
+          region: row['Région'] || row['Region'] || row['region'] || '',
+          source: row['Source'] || row['source'] || ''
+        }
+      });
+      added++;
+    }
+    return added;
+  }
+
+  throw new Error('Format non supporte. Utilisez .geojson, .xlsx ou .csv');
+}
