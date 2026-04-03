@@ -5,26 +5,44 @@
 import { supabase } from '../supabase-config.js';
 
 let currentUser = null;
-let _settingUp = false;   // guard against concurrent profile fetches
+let _lastUid = null;       // avoid re-fetching profile for same user
 
 export function getCurrentUser() { return currentUser; }
 
-async function _setupUser(session, onLogin, onLogout) {
-  if (_settingUp) return;          // skip if already running
-  _settingUp = true;
-  try {
+export function initAuth(onLogin, onLogout) {
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    console.log('[auth] event:', event, 'user:', session?.user?.email ?? 'none');
+
+    if (!session?.user) {
+      currentUser = null;
+      _lastUid = null;
+      onLogout();
+      return;
+    }
+
+    // Already set up for this user — skip duplicate events
+    if (_lastUid === session.user.id && currentUser) {
+      return;
+    }
+
     const { data, error } = await supabase
       .from('profiles')
       .select('display_name, role')
       .eq('id', session.user.id)
       .single();
 
-    if (error || !data) {
-      await supabase.auth.signOut();
-      onLogout('Compte non autorise. Contactez un administrateur.');
+    if (error) {
+      console.error('[auth] profiles query failed:', error.message, '| status:', error.code);
+      // Don't signOut — could be a transient error (expired token being refreshed)
+      // Only block if this is a fresh login attempt (SIGNED_IN)
+      if (event === 'SIGNED_IN') {
+        await supabase.auth.signOut();
+        onLogout('Compte non autorise. Contactez un administrateur.');
+      }
       return;
     }
 
+    _lastUid = session.user.id;
     currentUser = {
       uid: session.user.id,
       email: session.user.email,
@@ -33,32 +51,6 @@ async function _setupUser(session, onLogin, onLogout) {
     };
 
     onLogin(currentUser);
-  } finally {
-    _settingUp = false;
-  }
-}
-
-export function initAuth(onLogin, onLogout) {
-  // 1. Restore existing session (handles token refresh properly)
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    if (session?.user) {
-      _setupUser(session, onLogin, onLogout);
-    } else {
-      onLogout();
-    }
-  });
-
-  // 2. Listen for future auth changes (login, logout, token refresh)
-  supabase.auth.onAuthStateChange(async (event, session) => {
-    // Skip INITIAL_SESSION — already handled by getSession() above
-    if (event === 'INITIAL_SESSION') return;
-
-    if (session?.user) {
-      await _setupUser(session, onLogin, onLogout);
-    } else {
-      currentUser = null;
-      onLogout();
-    }
   });
 }
 
