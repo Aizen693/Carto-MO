@@ -1,74 +1,110 @@
 /**
- * firestore.js — CRUD Firestore (points, zones, activity log, users)
+ * firestore.js — CRUD Supabase (points, zones, activity log, users)
+ * Note: le nom du fichier est conserve pour compatibilite des imports
  */
 
-import { db } from '../firebase-config.js';
-import {
-  collection, doc, addDoc, getDoc, getDocs, updateDoc, setDoc,
-  query, where, orderBy, limit as fbLimit, serverTimestamp, deleteDoc
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { supabase } from '../supabase-config.js';
 import { getCurrentUser } from './auth.js';
 
 // ── Points ──────────────────────────────────────────────
 
 export async function getPoints(zone) {
-  const q = query(
-    collection(db, 'points'),
-    where('zone', '==', zone),
-    where('deleted', '==', false),
-    orderBy('createdAt', 'desc')
-  );
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const { data, error } = await supabase
+    .from('points')
+    .select('*')
+    .eq('zone', zone)
+    .eq('deleted', false)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return (data || []).map(formatPoint);
 }
 
 export async function createPoint(zone, data) {
   const user = getCurrentUser();
-  const docData = {
+  const row = {
     zone,
     coordinates: data.coordinates,
     name: data.name,
     description: data.description,
     period: data.period,
-    _color: data._color || '#888888',
-    _casualties: data._casualties || 0,
-    createdBy: user.uid,
-    createdAt: serverTimestamp(),
-    updatedBy: user.uid,
-    updatedAt: serverTimestamp(),
+    color: data._color || '#888888',
+    casualties: data._casualties || 0,
+    created_by: user.uid,
+    updated_by: user.uid,
     deleted: false
   };
-  const ref = await addDoc(collection(db, 'points'), docData);
-  await logActivity(zone, 'create', ref.id, `Point "${data.name}" cree`);
-  return ref.id;
+
+  const { data: inserted, error } = await supabase
+    .from('points')
+    .insert(row)
+    .select()
+    .single();
+
+  if (error) throw error;
+  await logActivity(zone, 'create', inserted.id, `Point "${data.name}" cree`);
+  return inserted.id;
 }
 
 export async function updatePoint(pointId, data) {
   const user = getCurrentUser();
-  const update = { ...data, updatedBy: user.uid, updatedAt: serverTimestamp() };
-  await updateDoc(doc(db, 'points', pointId), update);
+  const update = {
+    updated_by: user.uid,
+    updated_at: new Date().toISOString()
+  };
+  if (data.coordinates) update.coordinates = data.coordinates;
+  if (data.name) update.name = data.name;
+  if (data.description !== undefined) update.description = data.description;
+  if (data.period) update.period = data.period;
+  if (data._color) update.color = data._color;
+  if (data._casualties !== undefined) update.casualties = data._casualties;
+  if (data.zone) update.zone = data.zone;
+
+  const { error } = await supabase
+    .from('points')
+    .update(update)
+    .eq('id', pointId);
+
+  if (error) throw error;
   await logActivity(data.zone || '', 'update', pointId, `Point "${data.name || ''}" modifie`);
 }
 
 export async function softDeletePoint(pointId, zone, name) {
   const user = getCurrentUser();
-  await updateDoc(doc(db, 'points', pointId), {
-    deleted: true,
-    updatedBy: user.uid,
-    updatedAt: serverTimestamp()
-  });
+  const { error } = await supabase
+    .from('points')
+    .update({ deleted: true, updated_by: user.uid, updated_at: new Date().toISOString() })
+    .eq('id', pointId);
+
+  if (error) throw error;
   await logActivity(zone, 'delete', pointId, `Point "${name}" supprime`);
 }
 
 // ── Zone config (actor overrides) ───────────────────────
 
 export async function getZoneConfig(zone) {
-  const snap = await getDoc(doc(db, 'zones', zone));
-  return snap.exists() ? snap.data() : null;
+  const { data, error } = await supabase
+    .from('zone_configs')
+    .select('*')
+    .eq('zone', zone)
+    .single();
+
+  if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows
+  return data || null;
 }
 
-export async function updateZoneConfig(zone, data) {
-  await setDoc(doc(db, 'zones', zone), data, { merge: true });
+export async function updateZoneConfig(zone, configData) {
+  const { data: existing } = await supabase
+    .from('zone_configs')
+    .select('id')
+    .eq('zone', zone)
+    .single();
+
+  if (existing) {
+    await supabase.from('zone_configs').update(configData).eq('zone', zone);
+  } else {
+    await supabase.from('zone_configs').insert({ zone, ...configData });
+  }
 }
 
 // ── Activity log ────────────────────────────────────────
@@ -76,46 +112,99 @@ export async function updateZoneConfig(zone, data) {
 export async function logActivity(zone, action, pointId, details) {
   const user = getCurrentUser();
   if (!user) return;
-  await addDoc(collection(db, 'activityLog'), {
+  await supabase.from('activity_log').insert({
     zone,
     action,
-    pointId: pointId || null,
-    userId: user.uid,
-    userEmail: user.email,
-    details,
-    timestamp: serverTimestamp()
+    point_id: pointId || null,
+    user_id: user.uid,
+    user_email: user.email,
+    details
   });
 }
 
 export async function getActivityLog(zone, max = 50) {
-  const constraints = [orderBy('timestamp', 'desc'), fbLimit(max)];
-  if (zone !== 'all') constraints.unshift(where('zone', '==', zone));
-  const q = query(collection(db, 'activityLog'), ...constraints);
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  let q = supabase
+    .from('activity_log')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(max);
+
+  if (zone !== 'all') q = q.eq('zone', zone);
+
+  const { data, error } = await q;
+  if (error) throw error;
+  return (data || []).map(d => ({
+    id: d.id,
+    zone: d.zone,
+    action: d.action,
+    pointId: d.point_id,
+    userId: d.user_id,
+    userEmail: d.user_email,
+    details: d.details,
+    timestamp: { toDate: () => new Date(d.created_at) }
+  }));
 }
 
 // ── Users ───────────────────────────────────────────────
 
 export async function getUsers() {
-  const snap = await getDocs(collection(db, 'users'));
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return (data || []).map(d => ({
+    id: d.id,
+    email: d.email,
+    displayName: d.display_name,
+    role: d.role,
+    lastLogin: d.last_login ? { toDate: () => new Date(d.last_login) } : null,
+    createdAt: d.created_at
+  }));
 }
 
 export async function createUser(uid, data) {
-  await setDoc(doc(db, 'users', uid), {
+  await supabase.from('profiles').insert({
+    id: uid,
     email: data.email,
-    displayName: data.displayName || '',
-    role: data.role || 'viewer',
-    createdAt: serverTimestamp(),
-    lastLogin: null
+    display_name: data.displayName || '',
+    role: data.role || 'viewer'
   });
 }
 
 export async function updateUserRole(uid, role) {
-  await updateDoc(doc(db, 'users', uid), { role });
+  const { error } = await supabase
+    .from('profiles')
+    .update({ role })
+    .eq('id', uid);
+  if (error) throw error;
 }
 
 export async function deleteUser(uid) {
-  await deleteDoc(doc(db, 'users', uid));
+  const { error } = await supabase
+    .from('profiles')
+    .delete()
+    .eq('id', uid);
+  if (error) throw error;
+}
+
+// ── Helpers ─────────────────────────────────────────────
+
+function formatPoint(d) {
+  return {
+    id: d.id,
+    zone: d.zone,
+    coordinates: d.coordinates,
+    name: d.name,
+    description: d.description,
+    period: d.period,
+    _color: d.color,
+    _casualties: d.casualties,
+    createdBy: d.created_by,
+    createdAt: d.created_at,
+    updatedBy: d.updated_by,
+    updatedAt: d.updated_at,
+    deleted: d.deleted
+  };
 }

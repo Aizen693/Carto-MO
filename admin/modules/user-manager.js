@@ -2,12 +2,9 @@
  * user-manager.js — Gestion des utilisateurs (admin only)
  */
 
-import { getUsers, createUser, updateUserRole, deleteUser } from './firestore.js';
+import { getUsers, updateUserRole } from './firestore.js';
 import { requireRole } from './auth.js';
-import { auth } from '../firebase-config.js';
-import {
-  createUserWithEmailAndPassword
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { supabase } from '../supabase-config.js';
 
 export async function renderUserList(container) {
   if (!requireRole('admin')) {
@@ -83,7 +80,7 @@ function showAddUserForm(container) {
   form.innerHTML = `
     <input type="email" id="new-user-email" placeholder="Email" class="admin-input">
     <input type="text" id="new-user-name" placeholder="Nom (optionnel)" class="admin-input">
-    <input type="password" id="new-user-password" placeholder="Mot de passe" class="admin-input">
+    <input type="password" id="new-user-password" placeholder="Mot de passe (min 6 car.)" class="admin-input">
     <select id="new-user-role" class="admin-input">
       <option value="viewer">Viewer</option>
       <option value="editor">Editor</option>
@@ -94,6 +91,10 @@ function showAddUserForm(container) {
       <button id="btn-cancel-user" class="admin-btn admin-btn-ghost">Annuler</button>
     </div>
     <div id="add-user-error" class="form-error" style="display:none"></div>
+    <div class="add-user-note" style="font:300 8px/1.3 var(--b);color:var(--tx2);margin-top:4px">
+      Note : les utilisateurs sont crees via Supabase Auth.<br>
+      Pour ajouter des utilisateurs en masse, utilisez le dashboard Supabase.
+    </div>
   `;
 
   const listEl = document.getElementById('users-list');
@@ -112,10 +113,30 @@ function showAddUserForm(container) {
       errEl.style.display = 'block';
       return;
     }
+    if (password.length < 6) {
+      errEl.textContent = 'Le mot de passe doit faire au moins 6 caracteres';
+      errEl.style.display = 'block';
+      return;
+    }
 
     try {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      await createUser(cred.user.uid, { email, displayName: name, role });
+      // Creer l'utilisateur via Supabase Auth admin API
+      // Note: ceci necessite la service_role key cote serveur.
+      // Cote client, on utilise signUp qui cree aussi le user auth.
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { display_name: name, role } }
+      });
+
+      if (error) throw error;
+
+      // Le trigger SQL cree automatiquement le profil dans profiles
+      // On met a jour le role si different de viewer
+      if (data.user && role !== 'viewer') {
+        await updateUserRole(data.user.id, role);
+      }
+
       form.remove();
       renderUserList(container);
     } catch (e) {
