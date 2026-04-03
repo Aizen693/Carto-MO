@@ -414,23 +414,25 @@ async function renderAll() {
       const fsGeo = await window.loadFirestorePoints(ZONE_ID);
       if (fsGeo && fsGeo.features && fsGeo.features.length > 0) {
         const filtered = fsGeo.features.filter(f => activeLabels.has(f.properties._period));
-        // Normalize names and apply zone colors
-        filtered.forEach(f => {
-          const name = normalizeName(f.properties.name);
-          if (name) {
-            f.properties.name = name;
-            f.properties._color = getColor(name);
-          }
-        });
-        allFeatures.push(...filtered);
-        usedSupabase = true;
+        if (filtered.length > 0) {
+          // Normalize names and apply zone colors
+          filtered.forEach(f => {
+            const name = normalizeName(f.properties.name);
+            if (name) {
+              f.properties.name = name;
+              f.properties._color = getColor(name);
+            }
+          });
+          allFeatures.push(...filtered);
+          usedSupabase = true;
 
-        // Populate loadedData cache for search/compare compatibility
-        for (const index of activePeriods) {
-          const label = PERIODS[index].label;
-          const periodFeatures = filtered.filter(f => f.properties._period === label);
-          if (periodFeatures.length) {
-            loadedData[index] = { type: 'FeatureCollection', features: periodFeatures };
+          // Populate loadedData cache for search/compare compatibility
+          for (const index of activePeriods) {
+            const label = PERIODS[index].label;
+            const periodFeatures = filtered.filter(f => f.properties._period === label);
+            if (periodFeatures.length) {
+              loadedData[index] = { type: 'FeatureCollection', features: periodFeatures };
+            }
           }
         }
       }
