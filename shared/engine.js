@@ -257,8 +257,26 @@ function jumpTo(index) {
 let legendOpen = true;
 function toggleLegend() {
   legendOpen = !legendOpen;
-  document.getElementById('legend-body').classList.toggle('collapsed', !legendOpen);
-  document.getElementById('legend-toggle').classList.toggle('open', legendOpen);
+  const body = document.getElementById('legend-body');
+  const toggle = document.getElementById('legend-toggle');
+  if (body) body.classList.toggle('collapsed', !legendOpen);
+  if (toggle) toggle.classList.toggle('open', legendOpen);
+}
+
+// ── SIDEBAR ─────────────────────────────────────────────────────────
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  if (!sb) return;
+  const open = sb.classList.toggle('open');
+  if (ov) ov.classList.toggle('open', open);
+}
+function toggleSbSection(header) {
+  const arrow = header.querySelector('.sb-section-arrow');
+  const body = header.nextElementSibling;
+  if (!body) return;
+  const open = arrow.classList.toggle('open');
+  body.classList.toggle('collapsed', !open);
 }
 
 map.on('pitch', () => {
@@ -504,7 +522,11 @@ function updateLegend(actors) {
 
 function setStyle(s) {
   document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('btn-' + s).classList.add('active');
+  document.querySelectorAll('.sb-style-btn').forEach(b => b.classList.remove('active'));
+  const hdrBtn = document.getElementById('btn-' + s);
+  const sbBtn = document.getElementById('sb-' + s);
+  if (hdrBtn) hdrBtn.classList.add('active');
+  if (sbBtn) sbBtn.classList.add('active');
   mapReady = false; map.setStyle(STYLES[s]);
   map.once('style.load', () => { setupMapLayersOn(map); mapReady = true; renderAll(); });
 }

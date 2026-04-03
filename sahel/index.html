@@ -68,6 +68,7 @@
 
 <div id="header" class="zone-gated">
   <div id="header-left">
+    <button id="btn-sidebar" onclick="toggleSidebar()"><span class="hamburger">&#9776;</span> Menu</button>
     <a href="../index.html" title="Retour à la sélection" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
       <img src="algor_int_logo.jpg" alt="Algor Int" style="height:19px;opacity:0.7;">
       <div>
@@ -84,7 +85,6 @@
     <span id="event-counter"></span>
   </div>
   <div class="hdr-controls">
-    <button id="btn-puits" class="hbtn" onclick="togglePuits()">PUITS</button>
     <button id="btn-heatmap" class="hbtn" onclick="toggleHeatmap()">HEATMAP</button>
     <button id="btn-export"  class="hbtn" onclick="exportMap()">PNG</button>
     <div id="style-toggle-header">
@@ -125,13 +125,43 @@
   Recentrer Sahel
 </div>
 
-<div id="legend" class="zone-gated"
-  <div id="legend-header" onclick="toggleLegend()">
-    <div id="legend-title">Acteurs</div>
-    <div id="legend-toggle" class="open">▲</div>
-  </div>
-  <div id="legend-body">
-    <div id="legend-items"><div style="font-size:11px;color:#6b7280;padding:4px 14px">Sélectionne une période</div></div>
+<div id="sidebar-overlay" class="zone-gated" onclick="toggleSidebar()"></div>
+<div id="sidebar" class="zone-gated">
+  <button id="sidebar-close" onclick="toggleSidebar()">&times;</button>
+  <div class="sb-sections">
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Legende</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body" id="sidebar-legend-body">
+      <div id="legend-items"><div style="font-size:11px;color:#6b7280;padding:4px 14px">Selectionne une periode</div></div>
+    </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Calques</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body">
+      <div class="sb-layer-row">
+        <span>Puits / Wells</span>
+        <div class="sb-toggle" id="sb-toggle-puits" onclick="togglePuits()"></div>
+      </div>
+      <div style="padding:6px 12px 2px"><div style="font:600 7px/1 var(--bc);letter-spacing:0.12em;text-transform:uppercase;color:var(--tx2);margin-bottom:6px">Style carte</div></div>
+      <div class="sb-style-row">
+        <button class="sb-style-btn active" onclick="setStyle('standard')" id="sb-standard">Standard</button>
+        <button class="sb-style-btn" onclick="setStyle('satellite')" id="sb-satellite">Satellite</button>
+        <button class="sb-style-btn" onclick="setStyle('dark')" id="sb-dark">Sombre</button>
+      </div>
+    </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Outils</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body">
+      <div class="sb-tool-row" onclick="toggleChart()"><span class="sb-tool-icon">&#x25A4;</span> Statistiques</div>
+      <div class="sb-tool-row" onclick="document.getElementById('search-input').focus();toggleSidebar()"><span class="sb-tool-icon">&#x2315;</span> Rechercher</div>
+    </div>
   </div>
 </div>
 
@@ -347,10 +377,8 @@ const ZONE_CONFIG = {
 
   window.togglePuits = function() {
     puitsVisible = !puitsVisible;
-    const btn = document.getElementById('btn-puits');
-    if (btn) {
-      btn.classList.toggle('active', puitsVisible);
-    }
+    const sbToggle = document.getElementById('sb-toggle-puits');
+    if (sbToggle) sbToggle.classList.toggle('on', puitsVisible);
     if (!map.getSource('puits-src')) {
       addPuitsLayers();
       return;
