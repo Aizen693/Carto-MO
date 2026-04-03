@@ -444,6 +444,8 @@ const gated = document.querySelectorAll('.zone-gated');
 function unlock() {
   overlay.style.display = 'none';
   gated.forEach(el => el.classList.remove('zone-gated'));
+  // Mapbox needs to recalculate size after container becomes visible
+  setTimeout(() => { if (window.map) map.resize(); }, 100);
 }
 
 initZoneAuth(
