@@ -120,9 +120,10 @@ function showAddUserForm(container) {
     }
 
     try {
-      // Creer l'utilisateur via Supabase Auth admin API
-      // Note: ceci necessite la service_role key cote serveur.
-      // Cote client, on utilise signUp qui cree aussi le user auth.
+      // Sauvegarder la session admin avant signUp
+      // car signUp connecte automatiquement le nouvel utilisateur
+      const { data: { session: adminSession } } = await supabase.auth.getSession();
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -131,8 +132,15 @@ function showAddUserForm(container) {
 
       if (error) throw error;
 
-      // Le trigger SQL cree automatiquement le profil dans profiles
-      // On met a jour le role si different de viewer
+      // Restaurer la session admin immediatement
+      if (adminSession) {
+        await supabase.auth.setSession({
+          access_token: adminSession.access_token,
+          refresh_token: adminSession.refresh_token
+        });
+      }
+
+      // Mettre a jour le role si different de viewer
       if (data.user && role !== 'viewer') {
         await updateUserRole(data.user.id, role);
       }
