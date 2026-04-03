@@ -11,8 +11,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // Meme config que admin/supabase-config.js
-const SUPABASE_URL  = 'VOTRE_URL';
-const SUPABASE_KEY  = 'VOTRE_ANON_KEY';
+const SUPABASE_URL  = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
+const SUPABASE_KEY  = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
 
 let supabase;
 try {
