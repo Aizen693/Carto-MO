@@ -12,11 +12,19 @@ const ADMIN_SOURCE = 'admin-points';
 const ADMIN_LAYER_DOTS = 'admin-dots';
 const ADMIN_LAYER_GLOW = 'admin-glow';
 const ADMIN_LAYER_SELECTED = 'admin-selected';
+const STATIC_SOURCE = 'static-points';
+const STATIC_LAYER_DOTS = 'static-dots';
+const STATIC_LAYER_GLOW = 'static-glow';
 
 export function getMap() { return editorMap; }
 
+let mapReadyResolve = null;
+let mapReadyPromise = null;
+
 export function initEditorMap(container, zoneConfig) {
   if (editorMap) { editorMap.remove(); editorMap = null; }
+
+  mapReadyPromise = new Promise(r => { mapReadyResolve = r; });
 
   mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
@@ -36,12 +44,21 @@ export function initEditorMap(container, zoneConfig) {
     addAdminSource();
     addAdminLayers();
     setupInteractions();
+    mapReadyResolve();
   });
 
   return editorMap;
 }
 
+export function whenReady() {
+  return mapReadyPromise || Promise.resolve();
+}
+
 function addAdminSource() {
+  editorMap.addSource(STATIC_SOURCE, {
+    type: 'geojson',
+    data: { type: 'FeatureCollection', features: [] }
+  });
   editorMap.addSource(ADMIN_SOURCE, {
     type: 'geojson',
     data: { type: 'FeatureCollection', features: [] }
@@ -49,6 +66,32 @@ function addAdminSource() {
 }
 
 function addAdminLayers() {
+  // Static file points (underneath admin points)
+  editorMap.addLayer({
+    id: STATIC_LAYER_GLOW,
+    type: 'circle',
+    source: STATIC_SOURCE,
+    paint: {
+      'circle-radius': 10,
+      'circle-color': ['get', '_color'],
+      'circle-opacity': 0.12,
+      'circle-blur': 0.6
+    }
+  });
+  editorMap.addLayer({
+    id: STATIC_LAYER_DOTS,
+    type: 'circle',
+    source: STATIC_SOURCE,
+    paint: {
+      'circle-radius': 5,
+      'circle-color': ['get', '_color'],
+      'circle-stroke-color': 'rgba(255,255,255,0.3)',
+      'circle-stroke-width': 1,
+      'circle-opacity': 0.8
+    }
+  });
+
+  // Admin (Supabase) points on top
   editorMap.addLayer({
     id: ADMIN_LAYER_GLOW,
     type: 'circle',
@@ -110,10 +153,25 @@ function setupInteractions() {
   editorMap.on('mouseleave', ADMIN_LAYER_DOTS, () => {
     editorMap.getCanvas().style.cursor = 'crosshair';
   });
+
+  // Tooltip for static file points
+  const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'static-popup' });
+  editorMap.on('mouseenter', STATIC_LAYER_DOTS, (e) => {
+    editorMap.getCanvas().style.cursor = 'pointer';
+    const f = e.features[0];
+    const name = f.properties.name || '';
+    const period = f.properties._period || '';
+    popup.setLngLat(e.lngLat).setHTML(`<strong>${name}</strong><br><span style="opacity:0.6">${period}</span>`).addTo(editorMap);
+  });
+  editorMap.on('mouseleave', STATIC_LAYER_DOTS, () => {
+    editorMap.getCanvas().style.cursor = 'crosshair';
+    popup.remove();
+  });
 }
 
-export function renderAdminPoints(points) {
+export async function renderAdminPoints(points) {
   adminPointsData = points;
+  if (mapReadyPromise) await mapReadyPromise;
   const features = points.map(p => ({
     type: 'Feature',
     geometry: { type: 'Point', coordinates: p.coordinates },
@@ -154,6 +212,12 @@ export function switchZone(zoneConfig) {
     bearing: zoneConfig.MAP_BEARING || 0,
     duration: 1500
   });
+}
+
+export async function renderStaticPoints(features) {
+  if (mapReadyPromise) await mapReadyPromise;
+  const src = editorMap.getSource(STATIC_SOURCE);
+  if (src) src.setData({ type: 'FeatureCollection', features });
 }
 
 export function destroy() {

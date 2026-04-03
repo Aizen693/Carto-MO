@@ -9,7 +9,7 @@ import { initAuth, login, logout, getCurrentUser, requireRole } from './modules/
 import { getPoints } from './modules/firestore.js';
 import { logActivity } from './modules/firestore.js';
 import {
-  initEditorMap, renderAdminPoints, onMapClick, onPointClick,
+  initEditorMap, whenReady, renderAdminPoints, renderStaticPoints, onMapClick, onPointClick,
   flyToPoint, selectPoint, switchZone, destroy as destroyMap
 } from './modules/map-editor.js';
 import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js';
@@ -41,11 +41,18 @@ const ZONE_CONFIGS = {
       'Al-Qaeda':'#ccaa00','PKK':'#b5a300','PFLP':'#9c8b00','Hamas':'#d4a017','Jihad Islamique':'#c9a227'
     },
     PERIODS: [
-      { label: '2005-2006' }, { label: '2007-2008' }, { label: '2009-2010' },
-      { label: '2011-2012' }, { label: '2013-2014' }, { label: '2015-2016' },
-      { label: '2017-2018' }, { label: '2019-2020' }, { label: '2021-2022' },
-      { label: '2023-2026' }
+      { label: '2005-2006', file: '2005-2006.geojson' },
+      { label: '2007-2008', file: '2007-2008.geojson' },
+      { label: '2009-2010', file: '2009-2010.geojson' },
+      { label: '2011-2012', file: '2011-2012.geojson' },
+      { label: '2013-2014', file: '2013-2014.geojson' },
+      { label: '2015-2016', file: '2015-2016.geojson' },
+      { label: '2017-2018', file: '2017-2018.geojson' },
+      { label: '2019-2020', file: '2019-2020.geojson' },
+      { label: '2021-2022', file: '2021-2022.geojson' },
+      { label: '2023-2026', file: '2023-2026.geojson' }
     ],
+    DATA_PATH: '../moyen-orient/',
     STYLES: { standard: 'mapbox://styles/mapbox/standard', satellite: 'mapbox://styles/mapbox/satellite-streets-v12', dark: 'mapbox://styles/mapbox/dark-v11' },
     MAP_CENTER: [43, 30], MAP_ZOOM: 4.5, MAP_BEARING: 0
   },
@@ -69,10 +76,14 @@ const ZONE_CONFIGS = {
       'MNLA':'#7b68ee','CMA':'#6a5acd','Plateforme':'#483d8b','HCUA':'#9370db','MAA':'#8a6bb1','CMFPR':'#7a5c9e'
     },
     PERIODS: [
-      { label: 'Jan 01-15' }, { label: 'Jan 16-31' },
-      { label: 'Fev 01-14' }, { label: 'Fev 15-28' },
-      { label: 'Mars 01-15' }, { label: 'Mars 16-31' }
+      { label: 'Jan 01-15', file: '2026-jan-01-15.geojson' },
+      { label: 'Jan 16-31', file: '2026-jan-16-31.geojson' },
+      { label: 'Fev 01-14', file: '2026-fev-01-14.geojson' },
+      { label: 'Fev 15-28', file: '2026-fev-15-28.geojson' },
+      { label: 'Mars 01-15', file: '2026-mars-01-15.geojson' },
+      { label: 'Mars 16-31', file: '2026-mars-16-31.geojson' }
     ],
+    DATA_PATH: '../sahel/',
     STYLES: { standard: 'mapbox://styles/mapbox/standard', satellite: 'mapbox://styles/mapbox/satellite-streets-v12', dark: 'mapbox://styles/mapbox/dark-v11' },
     MAP_CENTER: [1.5, 15.5], MAP_ZOOM: 4.8, MAP_BEARING: -10
   },
@@ -93,6 +104,7 @@ const ZONE_CONFIGS = {
       { label: '2023' }, { label: '2024-S1' }, { label: '2024-S2' },
       { label: '2025-S1' }, { label: '2025-S2' }, { label: '2026' }
     ],
+    DATA_PATH: '../rdc/',
     STYLES: { standard: 'mapbox://styles/mapbox/standard', satellite: 'mapbox://styles/mapbox/satellite-streets-v12', dark: 'mapbox://styles/mapbox/dark-v11' },
     MAP_CENTER: [28.5, -1.5], MAP_ZOOM: 6, MAP_BEARING: 0
   }
@@ -158,7 +170,7 @@ document.getElementById('btn-logout').addEventListener('click', logout);
 
 // ── App setup ───────────────────────────────────────────
 
-function setupApp() {
+async function setupApp() {
   const config = ZONE_CONFIGS[currentZone];
   initEditorMap('admin-map', config);
   initForm(currentZone, config, refreshPoints);
@@ -178,7 +190,11 @@ function setupApp() {
   setupImportExport();
   setupPuitsManager();
   setupMapCoords();
+
+  // Wait for map to be fully loaded before rendering points
+  await whenReady();
   refreshPoints();
+  loadStaticFiles();
 }
 
 // ── Sidebar tabs ────────────────────────────────────────
@@ -220,6 +236,7 @@ function setupZoneSelect() {
     updateFormZone(currentZone, config);
     updateActorZone(currentZone, config);
     refreshPoints();
+    loadStaticFiles();
   });
 }
 
@@ -340,6 +357,49 @@ function setupMapCoords() {
       });
     }
   }, 500);
+}
+
+// ── Load static GeoJSON/KML files (same data as public map) ────
+
+async function loadStaticFiles() {
+  const config = ZONE_CONFIGS[currentZone];
+  if (!config.DATA_PATH) return;
+
+  const allFeatures = [];
+  for (const period of config.PERIODS) {
+    if (!period.file) continue;
+    try {
+      const res = await fetch(config.DATA_PATH + period.file);
+      if (!res.ok) continue;
+      let geo;
+      if (period.file.endsWith('.geojson')) {
+        geo = await res.json();
+      } else {
+        const text = await res.text();
+        const dom = new DOMParser().parseFromString(text, 'text/xml');
+        geo = toGeoJSON.kml(dom);
+      }
+      if (geo && geo.features) {
+        geo.features.forEach(f => {
+          if (!f.geometry || !f.properties) return;
+          const name = f.properties.name || '';
+          f.properties._period = period.label;
+          f.properties._color = config.ACTOR_COLORS[name] || '#888888';
+          if (f.geometry.type === 'Point') {
+            f.geometry.coordinates = [f.geometry.coordinates[0], f.geometry.coordinates[1]];
+          }
+          allFeatures.push(f);
+        });
+      }
+    } catch (e) {
+      console.warn('Static file skipped:', period.file, e.message);
+    }
+  }
+
+  const pointFeatures = allFeatures.filter(f => f.geometry && f.geometry.type === 'Point');
+  renderStaticPoints(pointFeatures);
+  document.getElementById('points-count').textContent =
+    points.length + ' admin / ' + pointFeatures.length + ' fichiers';
 }
 
 // ── Refresh functions ───────────────────────────────────
