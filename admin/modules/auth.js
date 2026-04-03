@@ -1,63 +1,75 @@
 /**
  * auth.js — Authentification Supabase (email/password) + gestion des roles
+ *
+ * IMPORTANT : ne PAS appeler supabase.from() a l'interieur de
+ * onAuthStateChange — ca deadlock car le SDK attend getSession()
+ * qui est bloque par le callback auth en cours.
+ * On utilise fetch() direct avec le token de la session.
  */
 
 import { supabase } from '../supabase-config.js';
 
+const SUPABASE_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
+
 let currentUser = null;
-let _busy = false;         // prevent concurrent profile fetches
 
 export function getCurrentUser() { return currentUser; }
 
+async function fetchProfile(userId, accessToken) {
+  const url = `${SUPABASE_URL}/rest/v1/profiles?select=display_name,role&id=eq.${userId}`;
+  const res = await fetch(url, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${accessToken}`,
+      'Accept': 'application/vnd.pgrst.object+json'
+    }
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+
 export function initAuth(onLogin, onLogout) {
-  supabase.auth.onAuthStateChange(async (event, session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
     console.log('[auth] event:', event, 'user:', session?.user?.email ?? 'none');
 
     if (!session?.user) {
       currentUser = null;
-      _busy = false;
       onLogout();
       return;
     }
 
-    // Already logged in as this user — skip
+    // Already logged in as this user — skip duplicates
     if (currentUser?.uid === session.user.id) return;
-    // Another callback is already fetching the profile — skip
-    if (_busy) return;
-    _busy = true;
 
-    try {
-      console.log('[auth] fetching profile for', session.user.id);
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('display_name, role')
-        .eq('id', session.user.id)
-        .single();
+    // Fetch profile OUTSIDE the callback stack via setTimeout
+    // to avoid deadlocking on getSession()
+    const uid = session.user.id;
+    const email = session.user.email;
+    const token = session.access_token;
 
-      console.log('[auth] profile result:', { data, error: error?.message });
+    fetchProfile(uid, token).then(profile => {
+      console.log('[auth] profile:', profile);
 
-      if (error || !data) {
+      if (!profile) {
         if (event === 'SIGNED_IN') {
-          await supabase.auth.signOut();
+          supabase.auth.signOut();
           onLogout('Compte non autorise. Contactez un administrateur.');
         }
         return;
       }
 
       currentUser = {
-        uid: session.user.id,
-        email: session.user.email,
-        displayName: data.display_name,
-        role: data.role
+        uid,
+        email,
+        displayName: profile.display_name,
+        role: profile.role
       };
 
-      console.log('[auth] calling onLogin');
       onLogin(currentUser);
-    } catch (e) {
-      console.error('[auth] unexpected error:', e);
-    } finally {
-      _busy = false;
-    }
+    }).catch(e => {
+      console.error('[auth] profile fetch error:', e);
+    });
   });
 }
 
