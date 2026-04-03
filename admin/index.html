@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algor Int — Admin</title>
+<link rel="icon" type="image/jpeg" href="../favicon.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ═══ LOGIN OVERLAY ═══ -->
+<div id="login-overlay">
+  <div id="login-box">
+    <div class="login-brand">
+      <img src="../favicon.jpg" alt="" style="height:22px;opacity:0.6">
+      <div>
+        <div class="login-title">Algor Int</div>
+        <div class="login-sub">Administration cartographique</div>
+      </div>
+    </div>
+    <div id="login-error" style="display:none"></div>
+    <input type="email" id="login-email" placeholder="Email" class="admin-input" autocomplete="email">
+    <input type="password" id="login-password" placeholder="Mot de passe" class="admin-input" autocomplete="current-password">
+    <button id="login-btn" class="admin-btn admin-btn-full">Connexion</button>
+  </div>
+</div>
+
+<!-- ═══ MAIN APP ═══ -->
+<div id="app" style="display:none">
+
+  <!-- HEADER -->
+  <div id="admin-header">
+    <div class="admin-header-left">
+      <a href="../index.html" class="admin-logo-link">
+        <img src="../favicon.jpg" alt="" style="height:18px;opacity:0.6">
+        <span class="admin-header-title">Admin</span>
+      </a>
+    </div>
+    <div class="admin-header-cell">
+      <span class="admin-header-label">Zone</span>
+      <select id="zone-select" class="admin-select">
+        <option value="moyen-orient">Moyen-Orient</option>
+        <option value="sahel">Sahel</option>
+        <option value="rdc">RDC</option>
+      </select>
+    </div>
+    <div class="admin-header-spacer"></div>
+    <div class="admin-header-cell">
+      <span id="user-badge" class="user-badge"></span>
+      <span id="role-badge" class="role-badge"></span>
+    </div>
+    <div class="admin-header-cell">
+      <button id="btn-logout" class="admin-header-btn">Deconnexion</button>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div id="admin-body">
+
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+      <nav id="sidebar-nav">
+        <button class="sidebar-tab active" data-tab="points">Points</button>
+        <button class="sidebar-tab" data-tab="actors">Acteurs</button>
+        <button class="sidebar-tab" data-tab="io">Import / Export</button>
+        <button class="sidebar-tab" data-tab="logs">Logs</button>
+        <button class="sidebar-tab" data-tab="users">Utilisateurs</button>
+      </nav>
+
+      <!-- Tab: Points -->
+      <div class="sidebar-panel active" id="panel-points">
+        <div class="panel-header">
+          <span>Points admin</span>
+          <span id="points-count" class="panel-count">0</span>
+        </div>
+        <div id="points-list" class="panel-scroll"></div>
+      </div>
+
+      <!-- Tab: Actors -->
+      <div class="sidebar-panel" id="panel-actors">
+        <div class="panel-header"><span>Acteurs & couleurs</span></div>
+        <div id="actors-list" class="panel-scroll"></div>
+      </div>
+
+      <!-- Tab: Import/Export -->
+      <div class="sidebar-panel" id="panel-io">
+        <div class="panel-header"><span>Import / Export</span></div>
+        <div class="panel-content">
+          <div class="io-section">
+            <div class="io-label">Importer un fichier GeoJSON</div>
+            <input type="file" id="import-file" accept=".geojson,.json" class="admin-input-file">
+            <button id="btn-import" class="admin-btn admin-btn-full">Importer</button>
+          </div>
+          <div class="io-section">
+            <div class="io-label">Exporter les points de la zone</div>
+            <button id="btn-export" class="admin-btn admin-btn-full">Exporter GeoJSON</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Logs -->
+      <div class="sidebar-panel" id="panel-logs">
+        <div class="panel-header">
+          <span>Journal d'activite</span>
+          <select id="log-zone-filter" class="admin-select admin-select-sm">
+            <option value="all">Toutes zones</option>
+            <option value="moyen-orient">Moyen-Orient</option>
+            <option value="sahel">Sahel</option>
+            <option value="rdc">RDC</option>
+          </select>
+        </div>
+        <div id="logs-list" class="panel-scroll"></div>
+      </div>
+
+      <!-- Tab: Users -->
+      <div class="sidebar-panel" id="panel-users">
+        <div id="users-container" class="panel-scroll"></div>
+      </div>
+    </div>
+
+    <!-- MAP -->
+    <div id="admin-map-wrap">
+      <div id="admin-map"></div>
+      <div id="map-crosshair">+</div>
+      <div id="map-coords"></div>
+    </div>
+  </div>
+
+  <!-- POINT DRAWER (bottom) -->
+  <div id="point-drawer">
+    <div class="drawer-header">
+      <span id="drawer-title">Nouveau point</span>
+      <button id="form-cancel" class="drawer-close">X</button>
+    </div>
+    <div id="form-error" class="form-error" style="display:none"></div>
+    <div class="drawer-body">
+      <div class="drawer-row">
+        <div class="drawer-field">
+          <label>Acteur</label>
+          <select id="field-actor" class="admin-input"></select>
+        </div>
+        <div class="drawer-field">
+          <label>Periode</label>
+          <select id="field-period" class="admin-input"></select>
+        </div>
+        <div class="drawer-field drawer-field-sm">
+          <label>Lng</label>
+          <input type="number" id="field-lng" step="0.00001" class="admin-input">
+        </div>
+        <div class="drawer-field drawer-field-sm">
+          <label>Lat</label>
+          <input type="number" id="field-lat" step="0.00001" class="admin-input">
+        </div>
+        <div class="drawer-field drawer-field-sm">
+          <label>Victimes</label>
+          <input type="number" id="field-casualties" value="0" min="0" class="admin-input">
+        </div>
+      </div>
+      <div class="drawer-row">
+        <div class="drawer-field">
+          <label>Date</label>
+          <input type="text" id="field-date" placeholder="ex: 15/01/2026" class="admin-input">
+        </div>
+        <div class="drawer-field">
+          <label>Pays</label>
+          <input type="text" id="field-country" placeholder="ex: Mali" class="admin-input">
+        </div>
+        <div class="drawer-field">
+          <label>Evenement</label>
+          <input type="text" id="field-event" placeholder="ex: Attaque" class="admin-input">
+        </div>
+        <div class="drawer-field drawer-field-lg">
+          <label>Detail</label>
+          <input type="text" id="field-detail" placeholder="Description libre" class="admin-input">
+        </div>
+      </div>
+      <div class="drawer-actions">
+        <button id="form-save" class="admin-btn">Sauvegarder</button>
+        <button id="form-delete" class="admin-btn admin-btn-danger" style="display:none">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="admin.js"></script>
+</body>
+</html>

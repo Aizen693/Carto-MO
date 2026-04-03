@@ -11,7 +11,7 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
 // ── DESTRUCTURATION ZONE_CONFIG ──────────────────────────────────────
-const { OTAN_DATA, ACTOR_GROUPS, ACTOR_COLORS, PERIODS, STYLES, MAP_ZONES } = ZONE_CONFIG;
+const { OTAN_DATA, ACTOR_GROUPS, ACTOR_COLORS, PERIODS, STYLES, MAP_ZONES, ZONE_ID } = ZONE_CONFIG;
 
 function getColor(n) { return ACTOR_COLORS[n] || '#888888'; }
 function normalizeName(raw) { return ZONE_CONFIG.normalizeName(raw); }
@@ -371,6 +371,17 @@ async function renderAll() {
   if (!activePeriods.size) { updateLegend({}); updateChart([]); return; }
   const allFeatures = [];
   for (const index of activePeriods) { const geo = await loadKML(index); if (geo && geo.features) allFeatures.push(...geo.features); }
+  // ── Merge Firestore admin points (si firebase-loader est charge) ──
+  if (window.loadFirestorePoints && ZONE_ID) {
+    try {
+      const fsGeo = await window.loadFirestorePoints(ZONE_ID);
+      if (fsGeo && fsGeo.features) {
+        const activeLabels = new Set([...activePeriods].map(i => PERIODS[i].label));
+        const filtered = fsGeo.features.filter(f => activeLabels.has(f.properties._period));
+        allFeatures.push(...filtered);
+      }
+    } catch (e) { console.warn('Firestore merge skipped:', e.message); }
+  }
   if (!allFeatures.length) return;
   map.addSource('kml-current', { type: 'geojson', data: { type: 'FeatureCollection', features: allFeatures } });
   map.addSource('kml-circles', { type: 'geojson', data: { type: 'FeatureCollection', features: pointsToCircles(allFeatures, 40) } });
