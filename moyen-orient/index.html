@@ -130,6 +130,7 @@
 <!-- ZONE CONFIG -->
 <script>
 const ZONE_CONFIG = {
+  ZONE_ID: 'moyen-orient',
   OTAN_DATA: {},
   ACTOR_GROUPS: {
     'Milices chiites': ['Hezbollah','Asaib Ahl al-Haq','IRGC-Qods Force','IRGC-Qods Force+Basij','Kataib Hezbollah','Basij','Kataib Sayyid al-Shuhada','Harakat Hezbollah al-Nujaba','Fatemiyoun Brigade','Zainebiyoun Brigade','PMF / Hashd al-Shaabi','PMF / Hashd al-Shaabi+Kataib Hezbollah','IRGC Ground Forces','Houthis'],
@@ -195,6 +196,7 @@ const ZONE_CONFIG = {
 fetch("./otan-data.json").then(r => r.json()).then(d => { ZONE_CONFIG.OTAN_DATA = d; Object.assign(OTAN_DATA, d); }).catch(() => console.warn("OTAN data not loaded"));
 fetch("./map-zones.json").then(r => r.json()).then(d => { ZONE_CONFIG.MAP_ZONES = d; }).catch(() => console.warn("MAP_ZONES data not loaded"));
 </script>
+<script type="module" src="../shared/firebase-loader.js"></script>
 <script src="../shared/engine.js"></script>
 
 <!-- MO-SPECIFIC: Daesh territory zones + auto-toggle -->

@@ -1,0 +1,330 @@
+/**
+ * admin.js — Orchestrateur principal du panneau admin
+ *
+ * Gere l'etat d'authentification, le routage sidebar,
+ * le changement de zone et la coordination des modules.
+ */
+
+import { initAuth, login, logout, getCurrentUser, requireRole } from './modules/auth.js';
+import { getPoints } from './modules/firestore.js';
+import { logActivity } from './modules/firestore.js';
+import {
+  initEditorMap, renderAdminPoints, onMapClick, onPointClick,
+  flyToPoint, selectPoint, switchZone, destroy as destroyMap
+} from './modules/map-editor.js';
+import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js';
+import { init as initActors, renderActorList, updateZone as updateActorZone } from './modules/actor-manager.js';
+import { importGeoJSON, exportGeoJSON } from './modules/import-export.js';
+import { renderActivityLog } from './modules/activity-log.js';
+import { renderUserList } from './modules/user-manager.js';
+
+// ── Zone configs (mirrored from each zone's index.html) ─────────────
+
+const ZONE_CONFIGS = {
+  'moyen-orient': {
+    ACTOR_GROUPS: {
+      'Milices chiites': ['Hezbollah','Asaib Ahl al-Haq','IRGC-Qods Force','Kataib Hezbollah','Basij','Kataib Sayyid al-Shuhada','Harakat Hezbollah al-Nujaba','Fatemiyoun Brigade','Zainebiyoun Brigade','PMF / Hashd al-Shaabi','IRGC Ground Forces','Houthis'],
+      'Groupes sunnites': ['Daesh','Jabhat al-Nusra','Ahrar al-Sham','Jaysh al-Islam','HTS','Hayat Tahrir al-Sham','Jund al-Aqsa'],
+      'Forces etatiques': ['SAA','IDF','TSK','Coalition USA','Coalition arabe','Armee irakienne','Peshmerga','SDF / FDS','YPG / YPJ'],
+      'Autres': ['Al-Qaeda','PKK','PFLP','Hamas','Jihad Islamique']
+    },
+    ACTOR_COLORS: {
+      'Hezbollah':'#e63946','Asaib Ahl al-Haq':'#c1121f','IRGC-Qods Force':'#9d0208','Kataib Hezbollah':'#dc2f02',
+      'Basij':'#e85d04','Kataib Sayyid al-Shuhada':'#f48c06','Harakat Hezbollah al-Nujaba':'#ff4d6d',
+      'Fatemiyoun Brigade':'#ff6b35','Zainebiyoun Brigade':'#faa307','PMF / Hashd al-Shaabi':'#d00000',
+      'IRGC Ground Forces':'#6a040f','Houthis':'#370617',
+      'Daesh':'#7b2d8b','Jabhat al-Nusra':'#6d023a','Ahrar al-Sham':'#9b2c9b','Jaysh al-Islam':'#4a0e4e',
+      'HTS':'#5a189a','Hayat Tahrir al-Sham':'#5a189a','Jund al-Aqsa':'#3c096c',
+      'SAA':'#1d7ed8','IDF':'#0077b6','TSK':'#48cae4','Coalition USA':'#2d6a4f',
+      'Coalition arabe':'#40916c','Armee irakienne':'#0096c7','Peshmerga':'#52b788',
+      'SDF / FDS':'#74c69d','YPG / YPJ':'#95d5b2',
+      'Al-Qaeda':'#ccaa00','PKK':'#b5a300','PFLP':'#9c8b00','Hamas':'#d4a017','Jihad Islamique':'#c9a227'
+    },
+    PERIODS: [
+      { label: '2005-2006' }, { label: '2007-2008' }, { label: '2009-2010' },
+      { label: '2011-2012' }, { label: '2013-2014' }, { label: '2015-2016' },
+      { label: '2017-2018' }, { label: '2019-2020' }, { label: '2021-2022' },
+      { label: '2023-2026' }
+    ],
+    STYLES: { standard: 'mapbox://styles/mapbox/standard', satellite: 'mapbox://styles/mapbox/satellite-streets-v12', dark: 'mapbox://styles/mapbox/dark-v11' },
+    MAP_CENTER: [43, 30], MAP_ZOOM: 4.5, MAP_BEARING: 0
+  },
+  'sahel': {
+    ACTOR_GROUPS: {
+      'Groupes jihadistes': ['JNIM','GSIM','AQMI','Ansar Dine','MUJAO','Al-Mourabitoun','Katiba Macina','Katiba Serma','Ansarul Islam','ISWAP','ISGS','Boko Haram'],
+      'Forces etatiques & coalitions': ['Armee malienne (FAMA)','Armee burkinabe (ANA)','Armee nigerienne (FAN)','Armee tchadienne (ANT)','Force Barkhane','G5 Sahel','MINUSMA','Wagner / Africa Corps'],
+      'Milices & groupes armes': ['GATIA','MSA','Dan Nan Ambassagou','VDP / Dozos','Milices Koglweogo','Milices Peules'],
+      'Mouvements politico-militaires': ['MNLA','CMA','Plateforme','HCUA','MAA','CMFPR']
+    },
+    ACTOR_COLORS: {
+      'JNIM':'#e63946','GSIM':'#c1121f','AQMI':'#9d0208','Ansar Dine':'#dc2f02',
+      'MUJAO':'#e85d04','Al-Mourabitoun':'#f48c06','Katiba Macina':'#ff4d6d',
+      'Katiba Serma':'#ff6b35','Ansarul Islam':'#faa307','ISWAP':'#6d023a',
+      'ISGS':'#7b2d8b','Boko Haram':'#4a0e4e',
+      'Armee malienne (FAMA)':'#1d7ed8','Armee burkinabe (ANA)':'#0077b6',
+      'Armee nigerienne (FAN)':'#0096c7','Armee tchadienne (ANT)':'#48cae4',
+      'Force Barkhane':'#2d6a4f','G5 Sahel':'#52b788','MINUSMA':'#74c69d','Wagner / Africa Corps':'#6c757d',
+      'GATIA':'#ccaa00','MSA':'#b5a300','Dan Nan Ambassagou':'#d4a017',
+      'VDP / Dozos':'#c9a227','Milices Koglweogo':'#a07800','Milices Peules':'#8b6914',
+      'MNLA':'#7b68ee','CMA':'#6a5acd','Plateforme':'#483d8b','HCUA':'#9370db','MAA':'#8a6bb1','CMFPR':'#7a5c9e'
+    },
+    PERIODS: [
+      { label: 'Jan 01-15' }, { label: 'Jan 16-31' },
+      { label: 'Fev 01-14' }, { label: 'Fev 15-28' },
+      { label: 'Mars 01-15' }, { label: 'Mars 16-31' }
+    ],
+    STYLES: { standard: 'mapbox://styles/mapbox/standard', satellite: 'mapbox://styles/mapbox/satellite-streets-v12', dark: 'mapbox://styles/mapbox/dark-v11' },
+    MAP_CENTER: [1.5, 15.5], MAP_ZOOM: 4.8, MAP_BEARING: -10
+  },
+  'rdc': {
+    ACTOR_GROUPS: {
+      'Groupes armes': ['M23','ADF / MTM','CODECO','FDLR','Mai-Mai','Nyatura','NDC-R','APCLS','Twirwaneho'],
+      'Forces etatiques': ['FARDC','MONUSCO','Force EAC','SADC / SAMIDRC','Armee ougandaise (UPDF)','Armee rwandaise (RDF)','Armee burundaise (FDNB)'],
+      'Milices locales': ['Wazalendo','Raia Mutomboki','Mai-Mai Yakutumba','FPIC','FRPI']
+    },
+    ACTOR_COLORS: {
+      'M23':'#e63946','ADF / MTM':'#9d0208','CODECO':'#dc2f02','FDLR':'#c1121f',
+      'Mai-Mai':'#e85d04','Nyatura':'#f48c06','NDC-R':'#ff4d6d','APCLS':'#ff6b35','Twirwaneho':'#faa307',
+      'FARDC':'#1d7ed8','MONUSCO':'#74c69d','Force EAC':'#52b788','SADC / SAMIDRC':'#40916c',
+      'Armee ougandaise (UPDF)':'#0096c7','Armee rwandaise (RDF)':'#48cae4','Armee burundaise (FDNB)':'#90e0ef',
+      'Wazalendo':'#ccaa00','Raia Mutomboki':'#b5a300','Mai-Mai Yakutumba':'#d4a017','FPIC':'#c9a227','FRPI':'#a07800'
+    },
+    PERIODS: [
+      { label: '2023' }, { label: '2024-S1' }, { label: '2024-S2' },
+      { label: '2025-S1' }, { label: '2025-S2' }, { label: '2026' }
+    ],
+    STYLES: { standard: 'mapbox://styles/mapbox/standard', satellite: 'mapbox://styles/mapbox/satellite-streets-v12', dark: 'mapbox://styles/mapbox/dark-v11' },
+    MAP_CENTER: [28.5, -1.5], MAP_ZOOM: 6, MAP_BEARING: 0
+  }
+};
+
+// ── State ───────────────────────────────────────────────
+
+let currentZone = 'moyen-orient';
+let points = [];
+
+// ── Init ────────────────────────────────────────────────
+
+initAuth(onLogin, onLogout);
+
+function onLogin(user) {
+  document.getElementById('login-overlay').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('user-badge').textContent = user.email;
+  document.getElementById('role-badge').textContent = user.role;
+
+  logActivity('', 'login', null, `Connexion de ${user.email}`);
+  setupApp();
+}
+
+function onLogout(errorMsg) {
+  document.getElementById('login-overlay').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  if (errorMsg) {
+    const el = document.getElementById('login-error');
+    el.textContent = errorMsg;
+    el.style.display = 'block';
+  }
+}
+
+// ── Login form ──────────────────────────────────────────
+
+document.getElementById('login-btn').addEventListener('click', doLogin);
+document.getElementById('login-password').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+
+  if (!email || !password) {
+    errEl.textContent = 'Email et mot de passe requis';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    await login(email, password);
+  } catch (e) {
+    errEl.textContent = 'Identifiants invalides';
+    errEl.style.display = 'block';
+  }
+}
+
+document.getElementById('btn-logout').addEventListener('click', logout);
+
+// ── App setup ───────────────────────────────────────────
+
+function setupApp() {
+  const config = ZONE_CONFIGS[currentZone];
+  initEditorMap('admin-map', config);
+  initForm(currentZone, config, refreshPoints);
+  initActors(currentZone, config);
+
+  onMapClick((lngLat) => {
+    if (requireRole('editor')) openCreateForm(lngLat);
+  });
+
+  onPointClick((pointId) => {
+    const p = points.find(pt => pt.id === pointId);
+    if (p) openEditForm(p);
+  });
+
+  setupSidebarTabs();
+  setupZoneSelect();
+  setupImportExport();
+  setupMapCoords();
+  refreshPoints();
+}
+
+// ── Sidebar tabs ────────────────────────────────────────
+
+function setupSidebarTabs() {
+  document.querySelectorAll('.sidebar-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(`panel-${tab.dataset.tab}`).classList.add('active');
+
+      if (tab.dataset.tab === 'actors') {
+        renderActorList(document.getElementById('actors-list'));
+      } else if (tab.dataset.tab === 'logs') {
+        refreshLogs();
+      } else if (tab.dataset.tab === 'users') {
+        renderUserList(document.getElementById('users-container'));
+      }
+    });
+  });
+
+  // Hide users tab for non-admins
+  if (!requireRole('admin')) {
+    const usersTab = document.querySelector('[data-tab="users"]');
+    if (usersTab) usersTab.style.display = 'none';
+  }
+}
+
+// ── Zone select ─────────────────────────────────────────
+
+function setupZoneSelect() {
+  const select = document.getElementById('zone-select');
+  select.value = currentZone;
+  select.addEventListener('change', (e) => {
+    currentZone = e.target.value;
+    const config = ZONE_CONFIGS[currentZone];
+    switchZone(config);
+    updateFormZone(currentZone, config);
+    updateActorZone(currentZone, config);
+    refreshPoints();
+  });
+}
+
+// ── Import/Export ────────────────────────────────────────
+
+function setupImportExport() {
+  document.getElementById('btn-import').addEventListener('click', async () => {
+    const fileInput = document.getElementById('import-file');
+    if (!fileInput.files.length) { alert('Selectionnez un fichier GeoJSON'); return; }
+    if (!requireRole('editor')) { alert('Permission insuffisante'); return; }
+    try {
+      const count = await importGeoJSON(fileInput.files[0], currentZone, ZONE_CONFIGS[currentZone]);
+      alert(`${count} points importes avec succes`);
+      fileInput.value = '';
+      refreshPoints();
+    } catch (e) {
+      alert('Erreur import: ' + e.message);
+    }
+  });
+
+  document.getElementById('btn-export').addEventListener('click', async () => {
+    try {
+      await exportGeoJSON(currentZone);
+    } catch (e) {
+      alert('Erreur export: ' + e.message);
+    }
+  });
+}
+
+// ── Map coordinates display ─────────────────────────────
+
+function setupMapCoords() {
+  // Updated on mousemove in map-editor after map loads
+  const coordsEl = document.getElementById('map-coords');
+  const checkMap = setInterval(() => {
+    const { getMap } = { getMap: () => document.getElementById('admin-map')?._mapInstance };
+    // We'll use a simpler approach: listen to the map container
+    const mapEl = document.getElementById('admin-map');
+    if (mapEl && mapEl.querySelector('canvas')) {
+      clearInterval(checkMap);
+      mapEl.addEventListener('mousemove', (e) => {
+        const rect = mapEl.getBoundingClientRect();
+        // Use mapbox map instance if available via import
+        import('./modules/map-editor.js').then(mod => {
+          const m = mod.getMap();
+          if (m) {
+            const lngLat = m.unproject([e.clientX - rect.left, e.clientY - rect.top]);
+            coordsEl.textContent = `${lngLat.lng.toFixed(4)}, ${lngLat.lat.toFixed(4)}`;
+          }
+        });
+      });
+    }
+  }, 500);
+}
+
+// ── Refresh functions ───────────────────────────────────
+
+async function refreshPoints() {
+  try {
+    points = await getPoints(currentZone);
+    renderAdminPoints(points);
+    renderPointsList(points);
+    document.getElementById('points-count').textContent = points.length;
+  } catch (e) {
+    console.error('Erreur chargement points:', e);
+  }
+}
+
+function renderPointsList(pts) {
+  const container = document.getElementById('points-list');
+  container.innerHTML = '';
+
+  if (!pts.length) {
+    container.innerHTML = '<div style="font:400 9px/1.4 var(--m);color:var(--tx2);padding:12px;text-align:center">Aucun point admin pour cette zone.<br>Cliquez sur la carte pour ajouter.</div>';
+    return;
+  }
+
+  pts.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'point-row';
+    row.dataset.id = p.id;
+
+    const desc = p.description?.split('\n')[0] || '';
+    row.innerHTML = `
+      <span class="point-dot" style="background:${p._color || '#888'}"></span>
+      <div class="point-info">
+        <div class="point-name">${p.name || 'Sans nom'}</div>
+        <div class="point-meta">${p.period || ''} ${desc ? '— ' + desc : ''}</div>
+      </div>
+    `;
+
+    row.addEventListener('click', () => {
+      document.querySelectorAll('.point-row').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+      selectPoint(p.id);
+      flyToPoint(p.coordinates);
+      openEditForm(p);
+    });
+
+    container.appendChild(row);
+  });
+}
+
+function refreshLogs() {
+  const zone = document.getElementById('log-zone-filter').value;
+  renderActivityLog(document.getElementById('logs-list'), zone);
+}
+
+document.getElementById('log-zone-filter').addEventListener('change', refreshLogs);
