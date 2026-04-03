@@ -192,17 +192,18 @@ html, body {
 }
 
 /* Badge WIP */
+.badge-wip, .badge-live {
+  position: absolute; top: 10px; left: 10px; z-index: 2;
+  font-family: var(--m); font-size: 8px; font-weight: 500;
+  padding: 4px 10px; letter-spacing: 0.12em; text-transform: uppercase;
+}
 .badge-wip {
-  position: absolute; top: 10px; right: 10px;
-  font-family: var(--m); font-size: 13px; color: var(--ac);
-  background: var(--acd); border: 1px solid var(--acb);
-  padding: 2px 7px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ac);
+  background: rgba(17,18,20,0.85); border: 1px solid var(--acb);
 }
 .badge-live {
-  position: absolute; top: 10px; right: 10px;
-  font-family: var(--m); font-size: 13px; color: #4daa70;
-  background: rgba(45,106,79,0.1); border: 1px solid rgba(45,106,79,0.25);
-  padding: 2px 7px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: #42a5f5;
+  background: rgba(17,18,20,0.85); border: 1px solid rgba(66,165,245,0.35);
 }
 
 /* Footer */
@@ -240,7 +241,7 @@ html, body {
 
     <!-- MOYEN-ORIENT -->
     <a class="zone-card" href="./moyen-orient/index.html">
-      <div class="badge-live" style="background:rgba(30,136,229,0.12);color:#42a5f5;border-color:rgba(66,165,245,0.3)">Acces libre</div>
+      <div class="badge-live">Acces libre</div>
       <div class="zone-map-preview">
         <svg class="mini-map" viewBox="0 0 280 140" width="280" height="140" xmlns="http://www.w3.org/2000/svg">
           <line x1="0" y1="35" x2="280" y2="35" stroke="#c49a3c" stroke-width="0.15" opacity="0.2"/>
@@ -307,7 +308,7 @@ html, body {
 
     <!-- SAHEL -->
     <a class="zone-card" href="./sahel/index.html">
-      <div class="badge-wip" style="background:rgba(196,154,60,0.1);color:#c49a3c;border-color:rgba(196,154,60,0.25)">Sur abonnement</div>
+      <div class="badge-wip">Sur abonnement</div>
       <div class="zone-map-preview">
         <svg class="mini-map" viewBox="0 0 280 140" width="280" height="140" xmlns="http://www.w3.org/2000/svg">
           <line x1="0" y1="35" x2="280" y2="35" stroke="#c49a3c" stroke-width="0.15" opacity="0.2"/>
