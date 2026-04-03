@@ -369,19 +369,48 @@ async function renderAll() {
   if (map.getSource('kml-circles')) map.removeSource('kml-circles');
   if (map.getSource('kml-current')) map.removeSource('kml-current');
   if (!activePeriods.size) { updateLegend({}); updateChart([]); return; }
+
+  const activeLabels = new Set([...activePeriods].map(i => PERIODS[i].label));
   const allFeatures = [];
-  for (const index of activePeriods) { const geo = await loadKML(index); if (geo && geo.features) allFeatures.push(...geo.features); }
-  // ── Merge Firestore admin points (si firebase-loader est charge) ──
+  let usedSupabase = false;
+
+  // ── Supabase d'abord (source principale) ──
   if (window.loadFirestorePoints && ZONE_ID) {
     try {
       const fsGeo = await window.loadFirestorePoints(ZONE_ID);
-      if (fsGeo && fsGeo.features) {
-        const activeLabels = new Set([...activePeriods].map(i => PERIODS[i].label));
+      if (fsGeo && fsGeo.features && fsGeo.features.length > 0) {
         const filtered = fsGeo.features.filter(f => activeLabels.has(f.properties._period));
+        // Normalize names and apply zone colors
+        filtered.forEach(f => {
+          const name = normalizeName(f.properties.name);
+          if (name) {
+            f.properties.name = name;
+            f.properties._color = getColor(name);
+          }
+        });
         allFeatures.push(...filtered);
+        usedSupabase = true;
+
+        // Populate loadedData cache for search/compare compatibility
+        for (const index of activePeriods) {
+          const label = PERIODS[index].label;
+          const periodFeatures = filtered.filter(f => f.properties._period === label);
+          if (periodFeatures.length) {
+            loadedData[index] = { type: 'FeatureCollection', features: periodFeatures };
+          }
+        }
       }
-    } catch (e) { console.warn('Firestore merge skipped:', e.message); }
+    } catch (e) { console.warn('Supabase load failed, falling back to files:', e.message); }
   }
+
+  // ── Fallback sur fichiers statiques si Supabase n'a rien retourne ──
+  if (!usedSupabase) {
+    for (const index of activePeriods) {
+      const geo = await loadKML(index);
+      if (geo && geo.features) allFeatures.push(...geo.features);
+    }
+  }
+
   if (!allFeatures.length) return;
   map.addSource('kml-current', { type: 'geojson', data: { type: 'FeatureCollection', features: allFeatures } });
   map.addSource('kml-circles', { type: 'geojson', data: { type: 'FeatureCollection', features: pointsToCircles(allFeatures, 40) } });
@@ -438,7 +467,8 @@ function setupPopupsAndTooltip(m) {
 }
 
 async function renderOnMap(m, periodIndex) {
-  const geo = await loadKML(periodIndex);
+  // Try loadedData first (populated from Supabase), then fallback to static file
+  let geo = loadedData[periodIndex] || await loadKML(periodIndex);
   if (!geo || !geo.features) return;
   const srcId = 'kml-cmp-pts', srcCId = 'kml-cmp-circles';
   ['kml-pulse', 'kml-dots-glow', 'kml-dots', 'kml-cylinders', 'kml-cylinders-top', 'kml-points-labels', 'kml-lines', 'kml-fill', 'kml-fill-outline'].forEach(id => { if (m.getLayer(id)) m.removeLayer(id); });

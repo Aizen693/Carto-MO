@@ -46,6 +46,30 @@ export async function createPoint(zone, data) {
   return inserted.id;
 }
 
+export async function bulkCreatePoints(zone, pointsArray) {
+  const user = getCurrentUser();
+  const rows = pointsArray.map(data => ({
+    zone,
+    coordinates: data.coordinates,
+    name: data.name,
+    description: data.description,
+    period: data.period,
+    color: data._color || '#888888',
+    casualties: data._casualties || 0,
+    created_by: user.uid,
+    updated_by: user.uid,
+    deleted: false
+  }));
+
+  const { data: inserted, error } = await supabase
+    .from('points')
+    .insert(rows)
+    .select('id');
+
+  if (error) throw error;
+  return (inserted || []).length;
+}
+
 export async function updatePoint(pointId, data) {
   const user = getCurrentUser();
   const update = {

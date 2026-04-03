@@ -2,7 +2,7 @@
  * import-export.js — Import/export GeoJSON
  */
 
-import { createPoint, getPoints, logActivity } from './firestore.js';
+import { createPoint, bulkCreatePoints, getPoints, logActivity } from './firestore.js';
 import { getCurrentUser } from './auth.js';
 
 export async function importGeoJSON(file, zone, zoneConfig) {
@@ -46,6 +46,104 @@ export async function importGeoJSON(file, zone, zoneConfig) {
     reader.onerror = () => reject(new Error('Erreur lecture fichier'));
     reader.readAsText(file);
   });
+}
+
+/**
+ * Import all static GeoJSON/KML files for a zone into Supabase.
+ * Parses descriptions to extract actor name, assigns correct colors.
+ * Returns { total, perPeriod: [{label, count}], skipped }
+ */
+export async function importStaticFiles(zone, zoneConfig, onProgress) {
+  const normalize = zoneConfig.normalizeName || (n => n ? n.trim() : null);
+  const dataPath = zoneConfig.DATA_PATH;
+  if (!dataPath) throw new Error('Pas de DATA_PATH configure pour cette zone');
+
+  // Get existing points to check duplicates
+  const existing = await getPoints(zone);
+  const existingSet = new Set(existing.map(p =>
+    `${p.period}|${p.name}|${p.coordinates[0].toFixed(4)}|${p.coordinates[1].toFixed(4)}`
+  ));
+
+  let total = 0, skipped = 0;
+  const perPeriod = [];
+  const periods = zoneConfig.PERIODS.filter(p => p.file);
+
+  for (let pi = 0; pi < periods.length; pi++) {
+    const period = periods[pi];
+    if (onProgress) onProgress(pi + 1, periods.length, period.label);
+
+    try {
+      const res = await fetch(dataPath + period.file);
+      if (!res.ok) { perPeriod.push({ label: period.label, count: 0 }); continue; }
+
+      let geo;
+      if (period.file.endsWith('.geojson')) {
+        geo = await res.json();
+      } else {
+        const text = await res.text();
+        const dom = new DOMParser().parseFromString(text, 'text/xml');
+        geo = toGeoJSON.kml(dom);
+      }
+      if (!geo || !geo.features) { perPeriod.push({ label: period.label, count: 0 }); continue; }
+
+      const batch = [];
+      for (const f of geo.features) {
+        if (!f.geometry || f.geometry.type !== 'Point') continue;
+
+        const rawDesc = (f.properties?.description || '')
+          .replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').trim();
+
+        // Extract actor name: from name property or from description
+        let actorName = normalize(f.properties?.name);
+        if (!actorName && rawDesc) {
+          const m = rawDesc.match(/Nom acteurs?\s*:\s*(.+)/i);
+          if (m) actorName = normalize(m[1].trim());
+        }
+        if (!actorName) { skipped++; continue; }
+
+        const coords = [f.geometry.coordinates[0], f.geometry.coordinates[1]];
+
+        // Duplicate check
+        const key = `${period.label}|${actorName}|${coords[0].toFixed(4)}|${coords[1].toFixed(4)}`;
+        if (existingSet.has(key)) { skipped++; continue; }
+        existingSet.add(key);
+
+        // Extract casualties from description
+        let casualties = 0;
+        const cm = rawDesc.match(/([0-9][0-9 ]*)\s*(?:tués?|morts?|victimes?|blessés?|hommes)/gi);
+        if (cm) {
+          const vals = cm.map(n => parseInt(n.replace(/\s/g, ''))).filter(n => !isNaN(n) && n > 0);
+          if (vals.length) casualties = Math.max(...vals);
+        }
+
+        batch.push({
+          coordinates: coords,
+          name: actorName,
+          description: rawDesc,
+          period: period.label,
+          _color: zoneConfig.ACTOR_COLORS[actorName] || '#888888',
+          _casualties: casualties
+        });
+      }
+
+      // Bulk insert by batches of 50
+      let periodCount = 0;
+      for (let i = 0; i < batch.length; i += 50) {
+        const chunk = batch.slice(i, i + 50);
+        const inserted = await bulkCreatePoints(zone, chunk);
+        periodCount += inserted;
+      }
+      total += periodCount;
+      perPeriod.push({ label: period.label, count: periodCount });
+
+    } catch (e) {
+      console.warn('Import skip:', period.file, e.message);
+      perPeriod.push({ label: period.label, count: 0 });
+    }
+  }
+
+  await logActivity(zone, 'import', null, `Import fichiers statiques : ${total} points importes`);
+  return { total, perPeriod, skipped };
 }
 
 export async function exportGeoJSON(zone) {

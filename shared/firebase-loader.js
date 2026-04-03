@@ -21,9 +21,9 @@ try {
   console.warn('Supabase loader: init skipped', e.message);
 }
 
-// Cache local (5 min TTL)
+// Cache local (30s TTL — les modifications admin apparaissent rapidement)
 const cache = {};
-const CACHE_TTL = 5 * 60 * 1000;
+const CACHE_TTL = 30 * 1000;
 
 async function loadFirestorePoints(zone) {
   if (!supabase) return { type: 'FeatureCollection', features: [] };

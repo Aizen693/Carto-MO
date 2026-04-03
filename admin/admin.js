@@ -14,7 +14,7 @@ import {
 } from './modules/map-editor.js';
 import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js';
 import { init as initActors, renderActorList, updateZone as updateActorZone } from './modules/actor-manager.js';
-import { importGeoJSON, exportGeoJSON, loadPuitsGeoJSON, renderPuitsTable, deleteSelectedPuits, exportPuitsGeoJSON, importPuitsFile } from './modules/import-export.js';
+import { importGeoJSON, importStaticFiles, exportGeoJSON, loadPuitsGeoJSON, renderPuitsTable, deleteSelectedPuits, exportPuitsGeoJSON, importPuitsFile } from './modules/import-export.js';
 import { renderActivityLog } from './modules/activity-log.js';
 import { renderUserList } from './modules/user-manager.js';
 
@@ -288,6 +288,31 @@ function setupImportExport() {
       alert('Erreur export: ' + e.message);
     }
   });
+
+  // Batch import static files into Supabase
+  const batchBtn = document.getElementById('btn-batch-import');
+  if (batchBtn) {
+    batchBtn.addEventListener('click', async () => {
+      if (!requireRole('admin')) { alert('Reservé aux administrateurs'); return; }
+      const config = ZONE_CONFIGS[currentZone];
+      if (!config.DATA_PATH) { alert('Pas de fichiers statiques pour cette zone'); return; }
+      if (!confirm(`Importer tous les fichiers statiques de la zone "${currentZone}" dans Supabase ?\nLes doublons seront ignores.`)) return;
+
+      batchBtn.disabled = true;
+      const statusEl = document.getElementById('batch-import-status');
+      try {
+        const result = await importStaticFiles(currentZone, config, (current, total, label) => {
+          if (statusEl) statusEl.textContent = `Periode ${current}/${total} : ${label}...`;
+        });
+        if (statusEl) statusEl.textContent = '';
+        alert(`Import termine !\n${result.total} points importes, ${result.skipped} ignores (doublons/sans nom).\n\n${result.perPeriod.map(p => `${p.label}: ${p.count}`).join('\n')}`);
+        refreshPoints();
+      } catch (e) {
+        alert('Erreur import batch: ' + e.message);
+      }
+      batchBtn.disabled = false;
+    });
+  }
 }
 
 // ── Puits manager ───────────────────────────────────────
