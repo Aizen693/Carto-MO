@@ -5,7 +5,7 @@
 import { supabase } from '../supabase-config.js';
 
 let currentUser = null;
-let _lastUid = null;       // avoid re-fetching profile for same user
+let _busy = false;         // prevent concurrent profile fetches
 
 export function getCurrentUser() { return currentUser; }
 
@@ -15,42 +15,49 @@ export function initAuth(onLogin, onLogout) {
 
     if (!session?.user) {
       currentUser = null;
-      _lastUid = null;
+      _busy = false;
       onLogout();
       return;
     }
 
-    // Already set up for this user — skip duplicate events
-    if (_lastUid === session.user.id && currentUser) {
-      return;
-    }
+    // Already logged in as this user — skip
+    if (currentUser?.uid === session.user.id) return;
+    // Another callback is already fetching the profile — skip
+    if (_busy) return;
+    _busy = true;
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('display_name, role')
-      .eq('id', session.user.id)
-      .single();
+    try {
+      console.log('[auth] fetching profile for', session.user.id);
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('display_name, role')
+        .eq('id', session.user.id)
+        .single();
 
-    if (error) {
-      console.error('[auth] profiles query failed:', error.message, '| status:', error.code);
-      // Don't signOut — could be a transient error (expired token being refreshed)
-      // Only block if this is a fresh login attempt (SIGNED_IN)
-      if (event === 'SIGNED_IN') {
-        await supabase.auth.signOut();
-        onLogout('Compte non autorise. Contactez un administrateur.');
+      console.log('[auth] profile result:', { data, error: error?.message });
+
+      if (error || !data) {
+        if (event === 'SIGNED_IN') {
+          await supabase.auth.signOut();
+          onLogout('Compte non autorise. Contactez un administrateur.');
+        }
+        return;
       }
-      return;
+
+      currentUser = {
+        uid: session.user.id,
+        email: session.user.email,
+        displayName: data.display_name,
+        role: data.role
+      };
+
+      console.log('[auth] calling onLogin');
+      onLogin(currentUser);
+    } catch (e) {
+      console.error('[auth] unexpected error:', e);
+    } finally {
+      _busy = false;
     }
-
-    _lastUid = session.user.id;
-    currentUser = {
-      uid: session.user.id,
-      email: session.user.email,
-      displayName: data.display_name,
-      role: data.role
-    };
-
-    onLogin(currentUser);
   });
 }
 
