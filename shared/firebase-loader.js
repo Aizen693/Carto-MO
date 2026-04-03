@@ -8,7 +8,7 @@
  *   <script type="module" src="../shared/firebase-loader.js"></script>
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
 // Meme config que admin/supabase-config.js
 const SUPABASE_URL  = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';

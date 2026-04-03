@@ -5,7 +5,7 @@
  * Supabase Dashboard > Project Settings > API
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
 const SUPABASE_URL  = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
 const SUPABASE_KEY  = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
