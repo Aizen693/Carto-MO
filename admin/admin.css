@@ -650,6 +650,11 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
 .mapboxgl-ctrl button:hover .mapboxgl-ctrl-icon { filter: invert(0.58) !important; }
 .mapboxgl-ctrl-attrib { display: none !important; }
 
+/* Popups static points */
+.algor-popup .mapboxgl-popup-content { background: rgba(17,18,20,0.96); border: 1px solid rgba(255,255,255,0.08); border-radius: 0; padding: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+.algor-popup .mapboxgl-popup-tip { border-top-color: rgba(17,18,20,0.96); }
+.algor-popup .mapboxgl-popup-close-button { color: var(--tx2); font-size: 14px; padding: 2px 6px; }
+
 /* ═══ SCROLLBAR ═══ */
 
 ::-webkit-scrollbar { width: 3px; }

@@ -2,6 +2,22 @@
  * map-editor.js — Carte Mapbox editeur avec click-to-add et selection de points
  */
 
+function parseStaticDesc(raw) {
+  if (!raw) return null;
+  const r = {};
+  raw.split('\n').forEach(l => {
+    const m = l.match(/^([^:]+):\s*(.+)$/);
+    if (m) {
+      const k = m[1].trim().toLowerCase(), v = m[2].trim();
+      if (k === 'date') r.date = v;
+      else if (k === 'pays') r.pays = v;
+      else if (k === 'evenement' || k === 'événement') r.event = v;
+      else if (k === 'détail' || k === 'detail') r.detail = v;
+    }
+  });
+  return Object.keys(r).length ? r : null;
+}
+
 let editorMap = null;
 let adminPointsData = [];
 let onMapClickCb = null;
@@ -154,18 +170,28 @@ function setupInteractions() {
     editorMap.getCanvas().style.cursor = 'crosshair';
   });
 
-  // Tooltip for static file points
-  const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'static-popup' });
-  editorMap.on('mouseenter', STATIC_LAYER_DOTS, (e) => {
+  // Click popup for static file points (like public map but smaller)
+  editorMap.on('click', STATIC_LAYER_DOTS, (e) => {
+    if (!e.features.length) return;
+    const f = e.features[0].properties;
+    const color = f._color || '#888';
+    const desc = f._desc && f._desc !== 'null' ? parseStaticDesc(f._desc) : null;
+    let body = '';
+    if (desc) {
+      if (desc.date)   body += `<div style="display:flex;gap:6px;margin-bottom:3px"><span style="font:500 7px/1 var(--m);color:var(--ach);min-width:42px;text-transform:uppercase;letter-spacing:0.1em;padding-top:1px">Date</span><span style="font:500 9px/1.4 var(--m);color:#fff">${desc.date}</span></div>`;
+      if (desc.pays)   body += `<div style="display:flex;gap:6px;margin-bottom:3px"><span style="font:500 7px/1 var(--m);color:var(--ach);min-width:42px;text-transform:uppercase;letter-spacing:0.1em;padding-top:1px">Pays</span><span style="font:400 9px/1.4 var(--m);color:#fff">${desc.pays}</span></div>`;
+      if (desc.event)  body += `<div style="display:flex;gap:6px;margin-bottom:3px"><span style="font:500 7px/1 var(--m);color:var(--ach);min-width:42px;text-transform:uppercase;letter-spacing:0.1em;padding-top:1px">Event</span><span style="font:500 9px/1.4 var(--m);color:#fff">${desc.event}</span></div>`;
+      if (desc.detail) body += `<div style="display:flex;gap:6px;margin-bottom:3px"><span style="font:500 7px/1 var(--m);color:var(--ach);min-width:42px;text-transform:uppercase;letter-spacing:0.1em;padding-top:1px">Detail</span><span style="font:400 9px/1.4 var(--m);color:#ddd">${desc.detail}</span></div>`;
+    }
+    const html = `<div style="display:flex;align-items:stretch;border-bottom:1px solid rgba(255,255,255,0.08)"><div style="width:3px;background:${color}"></div><div style="font:600 10px/1.2 var(--bc);color:#fff;flex:1;letter-spacing:0.04em;text-transform:uppercase;padding:6px 8px">${f.name || 'Point'}</div><div style="font:400 7px/1 var(--m);color:var(--ach);border-left:1px solid rgba(255,255,255,0.08);padding:0 6px;display:flex;align-items:center">${f._period || ''}</div></div>${body ? `<div style="padding:6px 8px 8px">${body}</div>` : ''}`;
+    new mapboxgl.Popup({ closeButton: true, maxWidth: '260px', className: 'algor-popup' })
+      .setLngLat(e.lngLat).setHTML(html).addTo(editorMap);
+  });
+  editorMap.on('mouseenter', STATIC_LAYER_DOTS, () => {
     editorMap.getCanvas().style.cursor = 'pointer';
-    const f = e.features[0];
-    const name = f.properties.name || '';
-    const period = f.properties._period || '';
-    popup.setLngLat(e.lngLat).setHTML(`<strong>${name}</strong><br><span style="opacity:0.6">${period}</span>`).addTo(editorMap);
   });
   editorMap.on('mouseleave', STATIC_LAYER_DOTS, () => {
     editorMap.getCanvas().style.cursor = 'crosshair';
-    popup.remove();
   });
 }
 

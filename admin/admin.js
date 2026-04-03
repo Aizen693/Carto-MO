@@ -29,16 +29,40 @@ const ZONE_CONFIGS = {
       'Autres': ['Al-Qaeda','PKK','PFLP','Hamas','Jihad Islamique']
     },
     ACTOR_COLORS: {
-      'Hezbollah':'#e63946','Asaib Ahl al-Haq':'#c1121f','IRGC-Qods Force':'#9d0208','Kataib Hezbollah':'#dc2f02',
-      'Basij':'#e85d04','Kataib Sayyid al-Shuhada':'#f48c06','Harakat Hezbollah al-Nujaba':'#ff4d6d',
-      'Fatemiyoun Brigade':'#ff6b35','Zainebiyoun Brigade':'#faa307','PMF / Hashd al-Shaabi':'#d00000',
-      'IRGC Ground Forces':'#6a040f','Houthis':'#370617',
-      'Daesh':'#7b2d8b','Jabhat al-Nusra':'#6d023a','Ahrar al-Sham':'#9b2c9b','Jaysh al-Islam':'#4a0e4e',
+      'Hezbollah':'#e63946','Asaib Ahl al-Haq':'#ff6b35','IRGC-Qods Force':'#c1121f',
+      'IRGC-Qods Force+Basij':'#9d0208','Kataib Hezbollah':'#ff4d6d','Basij':'#dc2f02',
+      'Kataib Sayyid al-Shuhada':'#f48c06','Harakat Hezbollah al-Nujaba':'#e85d04',
+      'Fatemiyoun Brigade':'#faa307','PMF / Hashd al-Shaabi':'#ffba08',
+      'PMF / Hashd al-Shaabi+Kataib Hezbollah':'#e76f51','IRGC Ground Forces':'#ae2012',
+      'Zainebiyoun Brigade':'#bb3e03','Houthis':'#7b2d8b','Daesh':'#555555',
+      'Daesh + Armées Irakiennes':'#777777','Coalition Internationale':'#1d7ed8',
+      'USA, Force Delta':'#0077b6','Peshmergas':'#ccaa00','Armées Irakiennes':'#2d6a4f',
+      'Armées Irakiennes + Peshmergas vs. Daesh':'#40916c','Forces Démocratiques Syriennes':'#48cae4',
+      'Harakat Kataib Hezbollah':'#ff4d6d',
+      'Jabhat al-Nusra':'#6d023a','Ahrar al-Sham':'#9b2c9b','Jaysh al-Islam':'#4a0e4e',
       'HTS':'#5a189a','Hayat Tahrir al-Sham':'#5a189a','Jund al-Aqsa':'#3c096c',
-      'SAA':'#1d7ed8','IDF':'#0077b6','TSK':'#48cae4','Coalition USA':'#2d6a4f',
-      'Coalition arabe':'#40916c','Armee irakienne':'#0096c7','Peshmerga':'#52b788',
+      'SAA':'#1d7ed8','IDF':'#0077b6','TSK':'#48cae4',
       'SDF / FDS':'#74c69d','YPG / YPJ':'#95d5b2',
       'Al-Qaeda':'#ccaa00','PKK':'#b5a300','PFLP':'#9c8b00','Hamas':'#d4a017','Jihad Islamique':'#c9a227'
+    },
+    normalizeName: function(raw) {
+      if (!raw) return null;
+      const n = raw.trim();
+      if (!n || /^\d{4}-\d{4}$/.test(n)) return null;
+      const M = {
+        'Asaib Ahl al-Haq ':'Asaib Ahl al-Haq','Basij ':'Basij',
+        'Coalition':'Coalition Internationale','Coalition Int.':'Coalition Internationale',
+        'Daesh-Armées Irakiennes':'Daesh + Armées Irakiennes',
+        'Force Démocratiques Syriennes':'Forces Démocratiques Syriennes',
+        'Hezbollah ':'Hezbollah','IRGC-Qods':'IRGC-Qods Force',
+        'IRGC-Qods Force ':'IRGC-Qods Force','IRGC-Qods Force+Basij ':'IRGC-Qods Force+Basij',
+        'Kataib Hezbollah ':'Kataib Hezbollah',
+        'PMF / Hashd al-Shaabi ':'PMF / Hashd al-Shaabi',
+        ' PMF / Hashd al-Shaabi':'PMF / Hashd al-Shaabi',
+        'Houthis ':'Houthis','Harakat Hezbollah al-Nujaba ':'Harakat Hezbollah al-Nujaba',
+        'Harakat Kataib Hezbollah ':'Harakat Kataib Hezbollah'
+      };
+      return M[n] !== undefined ? M[n] : n;
     },
     PERIODS: [
       { label: '2005-2006', file: '2005-2006.geojson' },
@@ -365,7 +389,9 @@ async function loadStaticFiles() {
   const config = ZONE_CONFIGS[currentZone];
   if (!config.DATA_PATH) return;
 
+  const normalize = config.normalizeName || (n => n ? n.trim() : null);
   const allFeatures = [];
+
   for (const period of config.PERIODS) {
     if (!period.file) continue;
     try {
@@ -382,9 +408,23 @@ async function loadStaticFiles() {
       if (geo && geo.features) {
         geo.features.forEach(f => {
           if (!f.geometry || !f.properties) return;
-          const name = f.properties.name || '';
+
+          // Parse description to extract structured fields
+          const rawDesc = (f.properties.description || '').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').trim();
+          let actorName = normalize(f.properties.name);
+
+          // Extract actor name from description if name is empty
+          if (!actorName && rawDesc) {
+            const m = rawDesc.match(/Nom acteurs?\s*:\s*(.+)/i);
+            if (m) actorName = normalize(m[1].trim());
+          }
+          if (!actorName) return;
+
+          f.properties.name = actorName;
           f.properties._period = period.label;
-          f.properties._color = config.ACTOR_COLORS[name] || '#888888';
+          f.properties._color = config.ACTOR_COLORS[actorName] || '#888888';
+          f.properties._desc = rawDesc || null;
+
           if (f.geometry.type === 'Point') {
             f.geometry.coordinates = [f.geometry.coordinates[0], f.geometry.coordinates[1]];
           }
