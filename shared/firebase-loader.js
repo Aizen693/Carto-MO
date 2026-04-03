@@ -1,78 +1,64 @@
 /**
- * firebase-loader.js — Chargeur Firestore read-only pour les cartes publiques
+ * firebase-loader.js — Chargeur Supabase read-only pour les cartes publiques
  *
- * Charge les points admin depuis Firestore et les rend disponibles
+ * Charge les points admin depuis Supabase et les rend disponibles
  * au moteur engine.js via window.loadFirestorePoints(zone).
  *
  * Inclus dans chaque page de zone avec :
  *   <script type="module" src="../shared/firebase-loader.js"></script>
  */
 
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import {
-  getFirestore, collection, query, where, getDocs
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// Meme config que admin/firebase-config.js
-const firebaseConfig = {
-  apiKey:            'VOTRE_API_KEY',
-  authDomain:        'VOTRE_PROJECT.firebaseapp.com',
-  projectId:         'VOTRE_PROJECT_ID',
-  storageBucket:     'VOTRE_PROJECT.appspot.com',
-  messagingSenderId: '000000000000',
-  appId:             '1:000000000000:web:xxxxxxxxxxxxxx'
-};
+// Meme config que admin/supabase-config.js
+const SUPABASE_URL  = 'VOTRE_URL';
+const SUPABASE_KEY  = 'VOTRE_ANON_KEY';
 
-let app, db;
+let supabase;
 try {
-  app = initializeApp(firebaseConfig, 'public-reader');
-  db = getFirestore(app);
+  supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 } catch (e) {
-  // Firebase deja initialise ou config manquante
-  console.warn('Firebase loader: init skipped', e.message);
+  console.warn('Supabase loader: init skipped', e.message);
 }
 
-// Cache local pour eviter des requetes repetees
+// Cache local (5 min TTL)
 const cache = {};
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL = 5 * 60 * 1000;
 
 async function loadFirestorePoints(zone) {
-  if (!db) return { type: 'FeatureCollection', features: [] };
+  if (!supabase) return { type: 'FeatureCollection', features: [] };
 
-  // Verifier le cache
   const cached = cache[zone];
   if (cached && Date.now() - cached.ts < CACHE_TTL) return cached.data;
 
   try {
-    const q = query(
-      collection(db, 'points'),
-      where('zone', '==', zone),
-      where('deleted', '==', false)
-    );
-    const snap = await getDocs(q);
+    const { data, error } = await supabase
+      .from('points')
+      .select('*')
+      .eq('zone', zone)
+      .eq('deleted', false);
 
-    const features = snap.docs.map(doc => {
-      const d = doc.data();
-      return {
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: d.coordinates },
-        properties: {
-          name: d.name || '',
-          description: d.description || '',
-          _period: d.period || '',
-          _color: d._color || '#888888',
-          _casualties: d._casualties || 0,
-          _desc: d.description || '',
-          _source: 'firestore'
-        }
-      };
-    });
+    if (error) throw error;
+
+    const features = (data || []).map(d => ({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: d.coordinates },
+      properties: {
+        name: d.name || '',
+        description: d.description || '',
+        _period: d.period || '',
+        _color: d.color || '#888888',
+        _casualties: d.casualties || 0,
+        _desc: d.description || '',
+        _source: 'supabase'
+      }
+    }));
 
     const result = { type: 'FeatureCollection', features };
     cache[zone] = { data: result, ts: Date.now() };
     return result;
   } catch (e) {
-    console.warn('Firebase loader: erreur chargement points', e.message);
+    console.warn('Supabase loader: erreur chargement points', e.message);
     return { type: 'FeatureCollection', features: [] };
   }
 }

@@ -1,33 +1,35 @@
 /**
- * auth.js — Authentification Firebase (email/password) + gestion des roles
+ * auth.js — Authentification Supabase (email/password) + gestion des roles
  */
 
-import { auth, db } from '../firebase-config.js';
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import {
-  doc, getDoc, updateDoc, serverTimestamp
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { supabase } from '../supabase-config.js';
 
 let currentUser = null;
 
 export function getCurrentUser() { return currentUser; }
 
 export function initAuth(onLogin, onLogout) {
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const snap = await getDoc(doc(db, 'users', user.uid));
-      if (!snap.exists()) {
-        await signOut(auth);
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    if (session?.user) {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('display_name, role')
+        .eq('id', session.user.id)
+        .single();
+
+      if (error || !data) {
+        await supabase.auth.signOut();
         onLogout('Compte non autorise. Contactez un administrateur.');
         return;
       }
-      const data = snap.data();
-      currentUser = { uid: user.uid, email: user.email, ...data };
-      await updateDoc(doc(db, 'users', user.uid), { lastLogin: serverTimestamp() });
+
+      currentUser = {
+        uid: session.user.id,
+        email: session.user.email,
+        displayName: data.display_name,
+        role: data.role
+      };
+
       onLogin(currentUser);
     } else {
       currentUser = null;
@@ -37,12 +39,13 @@ export function initAuth(onLogin, onLogout) {
 }
 
 export async function login(email, password) {
-  return signInWithEmailAndPassword(auth, email, password);
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) throw error;
 }
 
 export async function logout() {
   currentUser = null;
-  return signOut(auth);
+  await supabase.auth.signOut();
 }
 
 export function requireRole(minRole) {
