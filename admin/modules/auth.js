@@ -5,32 +5,56 @@
 import { supabase } from '../supabase-config.js';
 
 let currentUser = null;
+let _settingUp = false;   // guard against concurrent profile fetches
 
 export function getCurrentUser() { return currentUser; }
 
+async function _setupUser(session, onLogin, onLogout) {
+  if (_settingUp) return;          // skip if already running
+  _settingUp = true;
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('display_name, role')
+      .eq('id', session.user.id)
+      .single();
+
+    if (error || !data) {
+      await supabase.auth.signOut();
+      onLogout('Compte non autorise. Contactez un administrateur.');
+      return;
+    }
+
+    currentUser = {
+      uid: session.user.id,
+      email: session.user.email,
+      displayName: data.display_name,
+      role: data.role
+    };
+
+    onLogin(currentUser);
+  } finally {
+    _settingUp = false;
+  }
+}
+
 export function initAuth(onLogin, onLogout) {
-  supabase.auth.onAuthStateChange(async (event, session) => {
+  // 1. Restore existing session (handles token refresh properly)
+  supabase.auth.getSession().then(({ data: { session } }) => {
     if (session?.user) {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('display_name, role')
-        .eq('id', session.user.id)
-        .single();
+      _setupUser(session, onLogin, onLogout);
+    } else {
+      onLogout();
+    }
+  });
 
-      if (error || !data) {
-        await supabase.auth.signOut();
-        onLogout('Compte non autorise. Contactez un administrateur.');
-        return;
-      }
+  // 2. Listen for future auth changes (login, logout, token refresh)
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    // Skip INITIAL_SESSION — already handled by getSession() above
+    if (event === 'INITIAL_SESSION') return;
 
-      currentUser = {
-        uid: session.user.id,
-        email: session.user.email,
-        displayName: data.display_name,
-        role: data.role
-      };
-
-      onLogin(currentUser);
+    if (session?.user) {
+      await _setupUser(session, onLogin, onLogout);
     } else {
       currentUser = null;
       onLogout();
