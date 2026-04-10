@@ -417,8 +417,8 @@ const ZONE_CONFIG = {
     id: 'ethnies',
     file: 'ethnies.geojson',
     layers: [
-      { id: 'ethnies-fill', type: 'fill', paint: { 'fill-color': '#e07c5a', 'fill-opacity': 0.1 } },
-      { id: 'ethnies-outline', type: 'line', paint: { 'line-color': '#e07c5a', 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 0.8, 8, 1.2, 12, 1.8], 'line-opacity': 0.4 } }
+      { id: 'ethnies-fill', type: 'fill', paint: { 'fill-color': ['match', ['get', 'name'], 'Bambara', '#c49a3c', 'Peul / Fulani', '#e07c5a', 'Dogon', '#8d6e63', 'Songhai', '#7986cb', 'Touareg', '#90a4ae', 'Mossi', '#66bb6a', 'Haoussa', '#ef9a9a', 'Zarma / Djerma', '#4db6ac', 'Senoufo', '#a1887f', 'Soninke / Sarakole', '#ce93d8', 'Bobo', '#ffb74d', '#888888'], 'fill-opacity': 0.08 } },
+      { id: 'ethnies-outline', type: 'line', paint: { 'line-color': ['match', ['get', 'name'], 'Bambara', '#c49a3c', 'Peul / Fulani', '#e07c5a', 'Dogon', '#8d6e63', 'Songhai', '#7986cb', 'Touareg', '#90a4ae', 'Mossi', '#66bb6a', 'Haoussa', '#ef9a9a', 'Zarma / Djerma', '#4db6ac', 'Senoufo', '#a1887f', 'Soninke / Sarakole', '#ce93d8', 'Bobo', '#ffb74d', '#888888'], 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 0.6, 8, 1, 12, 1.5], 'line-opacity': 0.35, 'line-dasharray': [4, 2] } }
     ]
   });
 
@@ -427,9 +427,9 @@ const ZONE_CONFIG = {
     id: 'forces',
     file: 'forces.geojson',
     layers: [
-      { id: 'forces-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#e63946', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
-      { id: 'forces-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#e63946', 'circle-stroke-opacity': 0.35 } },
-      { id: 'forces-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#e63946', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
+      { id: 'forces-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': ['match', ['get', 'force'], 'FAMA', '#1d7ed8', 'FAMA / Wagner', '#6c757d', 'FAN', '#0096c7', 'ANA', '#0077b6', 'VDP', '#ccaa00', 'Dan Nan Ambassagou', '#d4a017', 'ANT', '#48cae4', '#e63946'], 'circle-opacity': 0.07, 'circle-blur': 1.2 } },
+      { id: 'forces-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': ['match', ['get', 'force'], 'FAMA', '#1d7ed8', 'FAMA / Wagner', '#6c757d', 'FAN', '#0096c7', 'ANA', '#0077b6', 'VDP', '#ccaa00', 'Dan Nan Ambassagou', '#d4a017', 'ANT', '#48cae4', '#e63946'], 'circle-stroke-opacity': 0.35 } },
+      { id: 'forces-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 8, 4, 12, 6], 'circle-color': ['match', ['get', 'force'], 'FAMA', '#1d7ed8', 'FAMA / Wagner', '#6c757d', 'FAN', '#0096c7', 'ANA', '#0077b6', 'VDP', '#ccaa00', 'Dan Nan Ambassagou', '#d4a017', 'ANT', '#48cae4', '#e63946'], 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
     ]
   });
 
@@ -449,9 +449,9 @@ const ZONE_CONFIG = {
     id: 'population',
     file: 'population.geojson',
     layers: [
-      { id: 'population-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#ab47bc', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
-      { id: 'population-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#ab47bc', 'circle-stroke-opacity': 0.35 } },
-      { id: 'population-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#ab47bc', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
+      { id: 'population-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 8, 100000, 12, 500000, 18, 2000000, 28], 8, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 14, 100000, 20, 500000, 28, 2000000, 40]], 'circle-color': '#e040fb', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
+      { id: 'population-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 4, 100000, 6, 500000, 9, 2000000, 14], 8, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 7, 100000, 10, 500000, 14, 2000000, 22]], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#e040fb', 'circle-stroke-opacity': 0.3 } },
+      { id: 'population-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 2, 100000, 3, 500000, 4.5, 2000000, 7], 8, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 3.5, 100000, 5, 500000, 7, 2000000, 11]], 'circle-color': '#e040fb', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
     ]
   });
 
@@ -462,8 +462,7 @@ const ZONE_CONFIG = {
     layers: [
       { id: 'mines-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 10, 8, 16, 12, 22], 'circle-color': '#d4a017', 'circle-opacity': 0.08, 'circle-blur': 1.2 } },
       { id: 'mines-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 5, 8, 8, 12, 12], 'circle-color': 'transparent', 'circle-stroke-width': 1, 'circle-stroke-color': '#d4a017', 'circle-stroke-opacity': 0.4 } },
-      { id: 'mines-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 8, 4, 12, 6], 'circle-color': '#d4a017', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#1a1a1a' } },
-      { id: 'mines-labels', type: 'symbol', minzoom: 7, paint: { 'text-color': '#d4a017', 'text-halo-color': 'rgba(10,10,10,0.95)', 'text-halo-width': 1.5, 'text-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1] }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 7, 8, 12, 11], 'text-offset': [0, 1.4], 'text-anchor': 'top', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-optional': true, 'text-allow-overlap': false } }
+      { id: 'mines-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 8, 4, 12, 6], 'circle-color': '#d4a017', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#1a1a1a' } }
     ]
   });
 
@@ -472,10 +471,10 @@ const ZONE_CONFIG = {
     id: 'infrastructures',
     file: 'infrastructures.geojson',
     layers: [
-      { id: 'infra-lines', type: 'line', paint: { 'line-color': '#78909c', 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.2, 8, 2, 12, 3], 'line-opacity': 0.5, 'line-dasharray': [3, 2] } },
-      { id: 'infra-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#78909c', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
-      { id: 'infra-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#78909c', 'circle-stroke-opacity': 0.35 } },
-      { id: 'infra-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#78909c', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
+      { id: 'infra-lines', type: 'line', paint: { 'line-color': ['match', ['get', 'type'], 'Route coupee', '#ef5350', 'Route a risque', '#ff9800', 'Voie ferree', '#78909c', '#546e7a'], 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1, 8, 1.8, 12, 2.5], 'line-opacity': 0.45, 'line-dasharray': ['match', ['get', 'type'], 'Voie ferree', ['literal', [1, 2]], ['literal', [4, 2]]] } },
+      { id: 'infra-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#546e7a', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
+      { id: 'infra-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#546e7a', 'circle-stroke-opacity': 0.35 } },
+      { id: 'infra-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#546e7a', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
     ]
   });
 
@@ -484,9 +483,9 @@ const ZONE_CONFIG = {
     id: 'evenements',
     file: 'evenements.geojson',
     layers: [
-      { id: 'events-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#ff5252', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
-      { id: 'events-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#ff5252', 'circle-stroke-opacity': 0.35 } },
-      { id: 'events-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#ff5252', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
+      { id: 'events-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': ['match', ['get', 'type'], 'Attaque', '#ff1744', 'Embuscades', '#ff1744', 'Incursion', '#ff1744', 'Siege', '#d50000', 'Incident frontalier', '#ff6d00', 'Crise diplomatique', '#ff6d00', 'Economique', '#ffd740', 'Geopolitique', '#7c4dff', '#ff5252'], 'circle-opacity': 0.07, 'circle-blur': 1.2 } },
+      { id: 'events-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': ['match', ['get', 'type'], 'Attaque', '#ff1744', 'Embuscades', '#ff1744', 'Incursion', '#ff1744', 'Siege', '#d50000', 'Incident frontalier', '#ff6d00', 'Crise diplomatique', '#ff6d00', 'Economique', '#ffd740', 'Geopolitique', '#7c4dff', '#ff5252'], 'circle-stroke-opacity': 0.35 } },
+      { id: 'events-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 8, 4, 12, 6], 'circle-color': ['match', ['get', 'type'], 'Attaque', '#ff1744', 'Embuscades', '#ff1744', 'Incursion', '#ff1744', 'Siege', '#d50000', 'Incident frontalier', '#ff6d00', 'Crise diplomatique', '#ff6d00', 'Economique', '#ffd740', 'Geopolitique', '#7c4dff', '#ff5252'], 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
     ]
   });
 
@@ -495,8 +494,9 @@ const ZONE_CONFIG = {
     id: 'flux',
     file: 'flux.geojson',
     layers: [
-      { id: 'flux-lines', type: 'line', paint: { 'line-color': '#ff9800', 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.2, 8, 2, 12, 3], 'line-dasharray': [4, 3], 'line-opacity': 0.5 } },
-      { id: 'flux-arrows', type: 'symbol', paint: {}, layout: { 'symbol-placement': 'line', 'symbol-spacing': 80, 'text-field': '\u25B6', 'text-size': 10, 'text-color': '#ff9800', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+      { id: 'flux-glow', type: 'line', paint: { 'line-color': ['match', ['get', 'type'], 'Narcotrafic', '#ff1744', 'Trafic d\'armes', '#ff6d00', 'Migration irreguliere', '#29b6f6', 'Contrebande or', '#ffd740', 'Contrebande', '#e040fb', 'Trafic medicaments', '#e040fb', '#ff9800'], 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 6, 8, 10, 12, 16], 'line-opacity': 0.04, 'line-blur': 3 } },
+      { id: 'flux-lines', type: 'line', paint: { 'line-color': ['match', ['get', 'type'], 'Narcotrafic', '#ff1744', 'Trafic d\'armes', '#ff6d00', 'Migration irreguliere', '#29b6f6', 'Contrebande or', '#ffd740', 'Contrebande', '#e040fb', 'Trafic medicaments', '#e040fb', '#ff9800'], 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1, 8, 1.8, 12, 2.5], 'line-dasharray': [6, 3], 'line-opacity': 0.55 } },
+      { id: 'flux-arrows', type: 'symbol', paint: { 'text-color': ['match', ['get', 'type'], 'Narcotrafic', '#ff1744', 'Trafic d\'armes', '#ff6d00', 'Migration irreguliere', '#29b6f6', 'Contrebande or', '#ffd740', 'Contrebande', '#e040fb', 'Trafic medicaments', '#e040fb', '#ff9800'] }, layout: { 'symbol-placement': 'line', 'symbol-spacing': 100, 'text-field': '\u25B6', 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 11, 12, 14], 'text-rotation-alignment': 'map', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
     ]
   });
 
