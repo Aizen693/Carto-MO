@@ -1,1 +1,65 @@
-{ "type": "FeatureCollection", "features": [] }
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-8.0, 12.65], [-5.5, 13.5], [-3.0, 14.5], [-0.05, 16.27]] },
+      "properties": { "name": "RN6 Bamako - Gao", "description": "Route nationale strategique reliant Bamako a Gao via Mopti. Axe logistique principal FAMA. Embuscades frequentes.", "type": "Route strategique", "sources": "OpenStreetMap|https://www.openstreetmap.org ACLED|https://acleddata.com" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-8.0, 12.65], [-5.3, 11.3], [-4.3, 10.5]] },
+      "properties": { "name": "Axe Bamako - Sikasso - Frontiere CI", "description": "Corridor commercial sud Mali vers Cote d'Ivoire. Route d'approvisionnement vitale.", "type": "Corridor commercial", "sources": "Banque Mondiale|https://www.worldbank.org/en/country/mali" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-1.52, 12.37], [-0.85, 12.58], [-1.05, 14.04]] },
+      "properties": { "name": "Axe Ouaga - Kaya - Djibo", "description": "Route coupee par le JNIM. Ravitaillement de Djibo impossible par voie terrestre depuis 2022.", "type": "Route coupee", "sources": "ICG|https://www.crisisgroup.org/africa/sahel/burkina-faso MSF|https://www.msf.org/burkina-faso" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[2.11, 13.51], [7.99, 16.97]] },
+      "properties": { "name": "RN25 Niamey - Agadez", "description": "Route transsaharienne. Axe strategique pour les flux migratoires et le commerce vers la Libye.", "type": "Route strategique", "sources": "OIM|https://www.iom.int/countries/niger OpenStreetMap|https://www.openstreetmap.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-7.95, 12.53] },
+      "properties": { "name": "Aeroport Bamako-Senou", "description": "Principal aeroport international du Mali. Hub logistique FAMA et Africa Corps.", "type": "Aeroport", "sources": "IATA|https://www.iata.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [2.18, 13.48] },
+      "properties": { "name": "Aeroport Niamey-Diori Hamani", "description": "Aeroport international du Niger. Ancienne base logistique francaise.", "type": "Aeroport", "sources": "IATA|https://www.iata.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-1.51, 12.35] },
+      "properties": { "name": "Aeroport Ouagadougou", "description": "Aeroport international Thomas Sankara. Hub regional Afrique de l'Ouest.", "type": "Aeroport", "sources": "IATA|https://www.iata.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [7.99, 16.97] },
+      "properties": { "name": "Aeroport Agadez (Base 201)", "description": "Aeroport et ancienne base de drones US. Infrastructure strategique pour le nord Niger.", "type": "Aeroport / Base", "sources": "Reuters|https://www.reuters.com/world/africa AP|https://apnews.com" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-8.0, 12.65], [-11.4, 14.45], [-11.88, 16.25]] },
+      "properties": { "name": "Axe Bamako - Kayes - Dakar (chemin de fer)", "description": "Ancienne ligne ferroviaire Bamako-Dakar. Partiellement operationnelle. Projet de rehabilitation.", "type": "Voie ferree", "sources": "Banque Mondiale|https://www.worldbank.org/en/country/mali" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-1.52, 12.37], [0.22, 12.06], [1.62, 12.29]] },
+      "properties": { "name": "RN4 Ouaga - Fada - Frontiere Niger", "description": "Route nationale est Burkina Faso. Zone a haut risque d'embuscades et IED.", "type": "Route a risque", "sources": "ACLED|https://acleddata.com" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-0.05, 16.27] },
+      "properties": { "name": "Pont de Wabaria (Gao)", "description": "Pont strategique sur le Niger a Gao. Infrastructure critique pour l'approvisionnement du nord.", "type": "Pont strategique", "sources": "OpenStreetMap|https://www.openstreetmap.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-3.0, 14.5], [-2.43, 13.25], [-1.05, 14.04]] },
+      "properties": { "name": "Axe Mopti - Dori (transfrontalier)", "description": "Corridor transfrontalier Mali-Burkina. Zone d'operations JNIM. Trafic et mouvements de population.", "type": "Route transfrontaliere", "sources": "ACLED|https://acleddata.com ICG|https://www.crisisgroup.org/africa/sahel" }
+    }
+  ]
+}

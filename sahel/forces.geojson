@@ -1,1 +1,85 @@
-{ "type": "FeatureCollection", "features": [] }
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-8.0, 12.65] },
+      "properties": { "name": "FAMA - Kati (QG)", "description": "Quartier general des Forces Armees Maliennes. Garnison principale, siege du pouvoir militaire.", "type": "Base militaire", "force": "FAMA", "sources": "IISS|https://www.iiss.org/publications/the-military-balance RFI|https://www.rfi.fr/fr/afrique" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-3.0, 14.5] },
+      "properties": { "name": "FAMA - Severare (Mopti)", "description": "Base operationnelle avancee, hub militaire pour la region centre du Mali.", "type": "Base militaire", "force": "FAMA", "sources": "RFI|https://www.rfi.fr/fr/afrique France 24|https://www.france24.com/fr/afrique" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-0.05, 16.27] },
+      "properties": { "name": "FAMA + Africa Corps - Gao", "description": "Base strategique nord Mali. Presence confirmee de mercenaires Africa Corps (ex-Wagner) en appui aux FAMA.", "type": "Base conjointe", "force": "FAMA / Wagner", "sources": "ACLED|https://acleddata.com Le Monde|https://www.lemonde.fr/afrique" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-3.01, 16.73] },
+      "properties": { "name": "FAMA + Africa Corps - Tombouctou", "description": "Ancienne base MINUSMA transferee 2023. Detachement Africa Corps pour operations nord.", "type": "Base conjointe", "force": "FAMA / Wagner", "sources": "Reuters|https://www.reuters.com/world/africa Le Monde|https://www.lemonde.fr/afrique" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [1.68, 18.1] },
+      "properties": { "name": "FAMA - Kidal", "description": "Reprise en novembre 2023 apres retrait CMA. Symbole de souverainete malienne sur le nord.", "type": "Garnison", "force": "FAMA", "sources": "AFP|https://www.france24.com/fr/afrique RFI|https://www.rfi.fr/fr/afrique" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-5.27, 13.57] },
+      "properties": { "name": "FAMA - Nara", "description": "Garnison frontiere mauritanienne. Zone de tensions bilaterales Mali-Mauritanie.", "type": "Garnison", "force": "FAMA", "sources": "Sahel Intelligence|https://sahel-intelligence.com RFI|https://www.rfi.fr/fr/afrique" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [2.11, 13.51] },
+      "properties": { "name": "FAN - Niamey (QG)", "description": "QG Forces Armees Nigeriennes. Rapprochement avec Russie depuis le coup d'Etat juillet 2023.", "type": "QG", "force": "FAN", "sources": "Reuters|https://www.reuters.com/world/africa ICG|https://www.crisisgroup.org/africa/sahel" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [1.47, 14.21] },
+      "properties": { "name": "FAN - Tillaberi", "description": "Zone operationnelle prioritaire. Region la plus meurtriere du Niger, frontaliere Mali-Burkina.", "type": "Zone operations", "force": "FAN", "sources": "ACLED|https://acleddata.com ICG|https://www.crisisgroup.org/africa/sahel" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [7.99, 16.97] },
+      "properties": { "name": "Base aerienne 201 - Agadez", "description": "Ancienne base de drones americaine. Transferee aux FAN en aout 2024 apres retrait US.", "type": "Base aerienne", "force": "FAN", "sources": "Reuters|https://www.reuters.com/world/africa AP|https://apnews.com" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [13.12, 13.63] },
+      "properties": { "name": "FAN - Diffa", "description": "Base operationnelle face a Boko Haram / ISWAP. Region du lac Tchad.", "type": "Base militaire", "force": "FAN", "sources": "ICG|https://www.crisisgroup.org/africa/west-africa/niger AFP|https://www.france24.com/fr/afrique" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-1.52, 12.37] },
+      "properties": { "name": "ANA - Ouagadougou (QG)", "description": "QG Armee Nationale du Burkina Faso. Junte du capitaine Traore au pouvoir depuis septembre 2022.", "type": "QG", "force": "ANA", "sources": "IISS|https://www.iiss.org AFP|https://www.france24.com/fr/afrique" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-1.05, 14.04] },
+      "properties": { "name": "ANA - Djibo (assiegee)", "description": "Garnison assiegee par le JNIM depuis 2022. Ravitaillement aerien uniquement. Crise humanitaire.", "type": "Garnison assiegee", "force": "ANA", "sources": "ICG|https://www.crisisgroup.org/africa/sahel/burkina-faso HRW|https://www.hrw.org/africa/burkina-faso" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-2.43, 13.25] },
+      "properties": { "name": "ANA - Dori", "description": "Base operationnelle Sahel burkinabe. Zone sous forte pression jihadiste JNIM/ISGS.", "type": "Base militaire", "force": "ANA", "sources": "ACLED|https://acleddata.com RFI|https://www.rfi.fr/fr/afrique" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [0.22, 12.06] },
+      "properties": { "name": "VDP - Zone Est (Fada N'Gourma)", "description": "Volontaires pour la Defense de la Patrie. Milices pro-gouvernementales burkinabe, formation acceleree.", "type": "Milice", "force": "VDP", "sources": "HRW|https://www.hrw.org/africa/burkina-faso ICG|https://www.crisisgroup.org/africa/sahel/burkina-faso" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-3.45, 14.07] },
+      "properties": { "name": "Dan Nan Ambassagou - Pays Dogon", "description": "Milice d'autodefense dogon. Active dans la region de Bandiagara/Mopti contre groupes peuls armes.", "type": "Milice", "force": "Dan Nan Ambassagou", "sources": "ICG|https://www.crisisgroup.org/africa/sahel/mali HRW|https://www.hrw.org/africa/mali" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.04, 12.11] },
+      "properties": { "name": "ANT - N'Djamena (QG)", "description": "QG Armee Nationale Tchadienne. Force regionale cle, intervient au Sahel et bassin du lac Tchad.", "type": "QG", "force": "ANT", "sources": "IISS|https://www.iiss.org ICG|https://www.crisisgroup.org/africa/central-africa/chad" }
+    }
+  ]
+}

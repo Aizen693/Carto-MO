@@ -1,1 +1,45 @@
-{ "type": "FeatureCollection", "features": [] }
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-3.0, 22.0], [-0.5, 18.5], [0.0, 16.3], [1.5, 13.5]] },
+      "properties": { "name": "Cocaine Atlantique -> Sahel", "description": "Route principale de la cocaine. Transit depuis les cotes ouest-africaines (Guinee-Bissau, Guinee) via le nord Mali vers la Libye et l'Europe.", "type": "Narcotrafic", "substance": "Cocaine", "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html ICG|https://www.crisisgroup.org/africa/sahel" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[13.0, 32.0], [12.0, 26.0], [8.0, 17.0], [2.0, 13.5]] },
+      "properties": { "name": "Armes Libye -> Sahel", "description": "Flux d'armes depuis les depots libyens post-Kadhafi. Alimente les groupes armes du Sahel depuis 2011.", "type": "Trafic d'armes", "substance": "Armes legeres", "sources": "UNOCA|https://www.un.org/en/ga/search/view_doc.asp SIPRI|https://www.sipri.org/databases" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[7.99, 16.97], [9.0, 19.0], [12.0, 24.0], [13.0, 28.0]] },
+      "properties": { "name": "Migrants Niger -> Libye", "description": "Route migratoire principale Agadez-Libye. Hub de transit a Agadez. Milliers de migrants par mois.", "type": "Migration irreguliere", "substance": "Personnes", "sources": "OIM|https://www.iom.int/countries/niger UNHCR|https://data.unhcr.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-11.5, 12.9], [-8.0, 14.0], [-5.0, 15.5], [-3.0, 16.7]] },
+      "properties": { "name": "Or artisanal Mali -> Export", "description": "Contrebande d'or artisanal depuis les sites d'orpaillage du sud Mali vers Bamako et les EAU. Milliards de dollars non declares.", "type": "Contrebande or", "substance": "Or", "sources": "OCDE|https://www.oecd.org/en/topics/sub-issues/responsible-mineral-supply-chains.html Reuters|https://www.reuters.com/world/africa" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-17.0, 14.7], [-12.0, 13.0], [-8.0, 12.6], [-3.0, 14.5]] },
+      "properties": { "name": "Cannabis Afrique Ouest -> Sahel", "description": "Trafic de cannabis depuis la cote ouest-africaine vers l'interieur du Sahel. Finance des groupes armes locaux.", "type": "Narcotrafic", "substance": "Cannabis", "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html GIABA|https://www.giaba.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[15.0, 12.1], [13.0, 13.5], [8.0, 17.0], [3.0, 20.0]] },
+      "properties": { "name": "Trafic armes lac Tchad -> nord", "description": "Flux d'armes depuis le bassin du lac Tchad (Boko Haram/ISWAP) vers le nord Niger et sud Libye.", "type": "Trafic d'armes", "substance": "Armes", "sources": "Conflict Armament Research|https://www.conflictarm.com SIPRI|https://www.sipri.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-1.5, 12.4], [-1.0, 14.0], [0.0, 16.3], [1.0, 18.5]] },
+      "properties": { "name": "Tramadol / medicaments contrefaits", "description": "Route du tramadol et medicaments contrefaits. Du Ghana/Nigeria vers le Sahel via Burkina Faso.", "type": "Trafic medicaments", "substance": "Tramadol", "sources": "UNODC|https://www.unodc.org INCB|https://www.incb.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-1.5, 6.0], [-1.5, 9.0], [-1.5, 12.4], [0.0, 14.5]] },
+      "properties": { "name": "Carburant Ghana -> Burkina", "description": "Contrebande de carburant subventionne depuis le Ghana vers le Burkina Faso. Economie parallele importante.", "type": "Contrebande", "substance": "Carburant", "sources": "ICG|https://www.crisisgroup.org/africa/west-africa Reuters|https://www.reuters.com/world/africa" }
+    }
+  ]
+}

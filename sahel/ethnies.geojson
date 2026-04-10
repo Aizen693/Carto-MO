@@ -1,1 +1,60 @@
-{ "type": "FeatureCollection", "features": [] }
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[-8.5, 12.0], [-6.0, 12.0], [-6.0, 13.5], [-8.5, 13.5], [-8.5, 12.0]]] },
+      "properties": { "name": "Bambara", "description": "Groupe ethnique majoritaire du Mali (env. 35%). Concentres dans la region de Bamako, Segou, Koulikoro. Langue vehiculaire du Mali.", "population": "6 millions", "sources": "Ethnologue|https://www.ethnologue.com/language/bam CIA Factbook|https://www.cia.gov/the-world-factbook/countries/mali" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[-6.0, 13.5], [-2.0, 13.5], [-2.0, 15.5], [-6.0, 15.5], [-6.0, 13.5]]] },
+      "properties": { "name": "Peul / Fulani", "description": "Peuple semi-nomade reparti dans tout le Sahel. Au centre du conflit communautaire au Mali (region Mopti). Accusations de liens avec le JNIM (Katiba Macina).", "population": "4 millions (Mali)", "sources": "ICG|https://www.crisisgroup.org/africa/sahel/mali HRW|https://www.hrw.org/africa/mali" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[-4.0, 13.8], [-2.5, 13.8], [-2.5, 15.0], [-4.0, 15.0], [-4.0, 13.8]]] },
+      "properties": { "name": "Dogon", "description": "Peuple des falaises de Bandiagara. Victimes et auteurs de violences intercommunautaires avec les Peuls. Milice Dan Nan Ambassagou.", "population": "800 000", "sources": "UNESCO|https://whc.unesco.org/fr/list/516 ICG|https://www.crisisgroup.org/africa/sahel/mali" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[-2.0, 15.5], [2.0, 15.5], [2.0, 18.0], [-2.0, 18.0], [-2.0, 15.5]]] },
+      "properties": { "name": "Songhai", "description": "Peuple du fleuve Niger. Concentres autour de Gao et Tombouctou. Heritiers de l'Empire Songhai.", "population": "1.5 million", "sources": "Ethnologue|https://www.ethnologue.com/language/ses CIA Factbook|https://www.cia.gov/the-world-factbook/countries/mali" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[0.0, 17.5], [4.0, 17.5], [4.0, 22.0], [0.0, 22.0], [0.0, 17.5]]] },
+      "properties": { "name": "Touareg", "description": "Peuple nomade du Sahara. Rebellions recurrentes (2012, CMA). Kidal historiquement centre politique touareg. Dispersion post-reprise FAMA 2023.", "population": "1.5 million (Sahel)", "sources": "ICG|https://www.crisisgroup.org/africa/sahel/mali Ethnologue|https://www.ethnologue.com/language/taq" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[-3.0, 11.0], [-1.0, 11.0], [-1.0, 13.0], [-3.0, 13.0], [-3.0, 11.0]]] },
+      "properties": { "name": "Mossi", "description": "Ethnie majoritaire du Burkina Faso (env. 50%). Concentres dans le plateau central autour de Ouagadougou.", "population": "11 millions", "sources": "Ethnologue|https://www.ethnologue.com/language/mos CIA Factbook|https://www.cia.gov/the-world-factbook/countries/burkina-faso" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[2.0, 12.0], [5.0, 12.0], [5.0, 14.5], [2.0, 14.5], [2.0, 12.0]]] },
+      "properties": { "name": "Haoussa", "description": "Plus grand groupe ethnique d'Afrique de l'Ouest. Dominants au sud Niger et nord Nigeria. Commerce et agriculture.", "population": "12 millions (Niger)", "sources": "Ethnologue|https://www.ethnologue.com/language/hau CIA Factbook|https://www.cia.gov/the-world-factbook/countries/niger" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[5.0, 13.0], [14.0, 13.0], [14.0, 14.5], [5.0, 14.5], [5.0, 13.0]]] },
+      "properties": { "name": "Zarma / Djerma", "description": "Deuxieme ethnie du Niger. Concentres dans l'ouest (Niamey, Dosso, Tillaberi). Apparentes aux Songhai.", "population": "4 millions", "sources": "Ethnologue|https://www.ethnologue.com/language/dje CIA Factbook|https://www.cia.gov/the-world-factbook/countries/niger" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[-6.0, 10.5], [-4.0, 10.5], [-4.0, 12.0], [-6.0, 12.0], [-6.0, 10.5]]] },
+      "properties": { "name": "Senoufo", "description": "Peuple du sud Mali et nord Cote d'Ivoire (region Sikasso). Agriculture et traditions initiatiques.", "population": "2.5 millions", "sources": "Ethnologue|https://www.ethnologue.com/language/sef" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[-12.0, 13.0], [-9.0, 13.0], [-9.0, 15.5], [-12.0, 15.5], [-12.0, 13.0]]] },
+      "properties": { "name": "Soninke / Sarakole", "description": "Peuple de la region de Kayes (Mali). Grande diaspora. Heritiers de l'Empire du Ghana.", "population": "2 millions", "sources": "Ethnologue|https://www.ethnologue.com/language/snk" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Polygon", "coordinates": [[[-4.0, 11.5], [-2.0, 11.5], [-2.0, 13.0], [-4.0, 13.0], [-4.0, 11.5]]] },
+      "properties": { "name": "Bobo", "description": "Peuple de l'ouest Burkina Faso (region Bobo-Dioulasso). Agriculteurs, masques traditionnels.", "population": "1 million", "sources": "Ethnologue|https://www.ethnologue.com/language/bbo" }
+    }
+  ]
+}

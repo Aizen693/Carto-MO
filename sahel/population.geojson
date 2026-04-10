@@ -1,1 +1,60 @@
-{ "type": "FeatureCollection", "features": [] }
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-7.62, 15.23] },
+      "properties": { "name": "Camp M'Bera (Mauritanie)", "description": "Plus grand camp de refugies maliens. 309 000 refugies (2026). Tensions Mali-Mauritanie a propos du camp.", "personnes": "309000", "type": "Camp refugies", "sources": "UNHCR|https://data.unhcr.org/en/situations/malisituation RFI|https://www.rfi.fr/fr/afrique" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [2.11, 13.51] },
+      "properties": { "name": "Deplaces internes - Niamey", "description": "Afflux de deplaces vers la capitale nigerienne depuis Tillaberi et frontieres Mali/Burkina.", "personnes": "85000", "type": "IDPs", "sources": "OCHA|https://www.unocha.org/niger UNHCR|https://data.unhcr.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-1.52, 12.37] },
+      "properties": { "name": "Deplaces internes - Ouagadougou", "description": "2 millions de deplaces internes au Burkina Faso (2026). Plus grande crise de deplacement en Afrique de l'Ouest.", "personnes": "2000000", "type": "IDPs", "sources": "OCHA|https://www.unocha.org/burkina-faso UNHCR|https://data.unhcr.org/en/situations/burkinafaso" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-1.05, 14.04] },
+      "properties": { "name": "Djibo - Population bloquee", "description": "Ville assiegee par le JNIM. 300 000 civils pieges, acces humanitaire quasi inexistant.", "personnes": "300000", "type": "Siege", "sources": "MSF|https://www.msf.org/burkina-faso HRW|https://www.hrw.org/africa/burkina-faso" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-3.0, 14.5] },
+      "properties": { "name": "Deplaces - Region Mopti", "description": "Epicentre du conflit centre-Mali. Flux massifs de deplaces fuyant violences intercommunautaires et jihadistes.", "personnes": "450000", "type": "IDPs", "sources": "OCHA|https://www.unocha.org/mali UNHCR|https://data.unhcr.org/en/situations/malisituation" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [0.35, 14.72] },
+      "properties": { "name": "Refugies - Tillaberi (Niger)", "description": "Region frontaliere accueillant des refugies maliens et burkinabe. Zone d'operations JNIM/ISGS.", "personnes": "120000", "type": "Refugies", "sources": "UNHCR|https://data.unhcr.org/en/situations/malisituation OCHA|https://www.unocha.org/niger" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-0.85, 12.58] },
+      "properties": { "name": "Deplaces - Kaya (Centre-Nord)", "description": "Ville du Centre-Nord burkinabe submergee par l'afflux de deplaces. Population doublee.", "personnes": "200000", "type": "IDPs", "sources": "OCHA|https://www.unocha.org/burkina-faso MSF|https://www.msf.org/burkina-faso" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-2.43, 13.25] },
+      "properties": { "name": "Deplaces - Dori (Sahel BF)", "description": "Region Sahel du Burkina. Deplaces massifs, insecurite alimentaire critique.", "personnes": "175000", "type": "IDPs", "sources": "WFP|https://www.wfp.org/countries/burkina-faso OCHA|https://www.unocha.org/burkina-faso" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [0.05, 16.27] },
+      "properties": { "name": "Deplaces - Gao (Mali nord)", "description": "Deplaces des combats dans le nord Mali. Population en transit vers le sud.", "personnes": "95000", "type": "IDPs", "sources": "OCHA|https://www.unocha.org/mali UNHCR|https://data.unhcr.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-5.28, 10.32] },
+      "properties": { "name": "Refugies maliens - Cote d'Ivoire", "description": "Refugies maliens dans le nord de la Cote d'Ivoire (region Savanes).", "personnes": "25000", "type": "Refugies", "sources": "UNHCR|https://data.unhcr.org/en/situations/malisituation" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-7.0, 15.3] },
+      "properties": { "name": "Flux - Frontiere Mali-Mauritanie", "description": "Corridor de fuite des civils maliens vers la Mauritanie. Intensifie depuis tensions 2026.", "type": "Flux", "sources": "UNHCR|https://data.unhcr.org Sahel Intelligence|https://sahel-intelligence.com" }
+    }
+  ]
+}
