@@ -159,7 +159,25 @@
             <div class="io-block-desc">Fichiers overlay affiches sur la carte publique. Importez un GeoJSON pour remplir ou remplacer un calque.</div>
             <div id="calques-list"></div>
             <div id="calques-empty" class="io-status">Aucun calque defini pour cette zone.</div>
-            <input type="file" id="calque-import-file" accept=".geojson,.json" style="display:none">
+            <input type="file" id="calque-import-file" accept=".geojson,.json,.csv" style="display:none">
+          </div>
+
+          <div class="io-divider"></div>
+
+          <!-- ── SECTION 5 : CONVERTISSEUR ── -->
+          <div class="io-block" id="converter-section">
+            <div class="io-block-header">
+              <span class="io-block-num">05</span>
+              <span class="io-block-title">Convertisseur vers GeoJSON</span>
+            </div>
+            <div class="io-block-desc">Collez un tableau HTML ou CSV ci-dessous. Le convertisseur detecte automatiquement les colonnes lat/lng si presentes.</div>
+            <textarea id="converter-input" rows="8" placeholder="Collez ici votre tableau HTML (<table>...</table>) ou des donnees CSV..." style="width:100%;background:#1a1c20;color:#ccc;border:1px solid #333;border-radius:4px;padding:8px;font-family:monospace;font-size:12px;resize:vertical;margin-bottom:8px;"></textarea>
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+              <button id="btn-convert" class="admin-btn admin-btn-full">Convertir en GeoJSON</button>
+              <button id="btn-convert-download" class="admin-btn admin-btn-full" style="display:none;">Telecharger .geojson</button>
+            </div>
+            <div id="converter-status" class="io-status"></div>
+            <textarea id="converter-output" rows="6" readonly style="display:none;width:100%;background:#111;color:#0f0;border:1px solid #333;border-radius:4px;padding:8px;font-family:monospace;font-size:11px;resize:vertical;margin-top:6px;"></textarea>
           </div>
 
         </div>
@@ -250,6 +268,6 @@
 
 </div>
 
-<script type="module" src="admin.js?v=20260410a"></script>
+<script type="module" src="admin.js?v=20260410d"></script>
 </body>
 </html>

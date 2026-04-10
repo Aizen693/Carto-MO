@@ -228,6 +228,7 @@ async function setupApp() {
   setupZoneSelect();
   setupImportExport();
   setupCalquesManager();
+  setupConverter();
   setupMapCoords();
 
   // Wait for map to be fully loaded before rendering points
@@ -413,10 +414,48 @@ function setupCalquesManager() {
 
     try {
       const text = await fileInput.files[0].text();
-      const data = JSON.parse(text);
+      let data = JSON.parse(text);
+
+      // ── Auto-convert JSON array (table export) to GeoJSON ──
+      if (Array.isArray(data)) {
+        const features = [];
+        for (const row of data) {
+          // Skip empty rows and header rows
+          const vals = Object.values(row).map(v => (v || '').toString().trim());
+          const hasContent = vals.some(v => v.length > 0 && v !== 'Date / période');
+          if (!hasContent) continue;
+
+          // Try to extract coordinates from known fields
+          const keys = Object.keys(row);
+          let lng = null, lat = null;
+          for (const k of keys) {
+            const v = (row[k] || '').toString().trim().toLowerCase();
+            if (/^-?\d+\.?\d*$/.test(v)) {
+              const n = parseFloat(v);
+              if (lng === null && n >= -180 && n <= 180) lng = n;
+              else if (lat === null && n >= -90 && n <= 90) lat = n;
+            }
+          }
+
+          // Build properties from all non-empty fields
+          const props = {};
+          for (const k of keys) {
+            const v = (row[k] || '').toString().trim();
+            if (v) props[k] = v;
+          }
+
+          // If no coordinates, create feature at [0,0] — user can fix later
+          features.push({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [lng || 0, lat || 0] },
+            properties: props
+          });
+        }
+        data = { type: 'FeatureCollection', features };
+      }
 
       if (!data.type || !data.features) {
-        throw new Error('Format invalide — FeatureCollection attendu');
+        throw new Error('Format invalide — FeatureCollection ou JSON array attendu');
       }
 
       // Write to the target file via download (user saves to correct location)
@@ -512,6 +551,141 @@ async function refreshCalquesList() {
       calqueImportTarget = btn.dataset.calqueId;
       document.getElementById('calque-import-file').click();
     });
+  });
+}
+
+// ── Convertisseur HTML/CSV → GeoJSON ────────────────────
+
+function setupConverter() {
+  const btnConvert = document.getElementById('btn-convert');
+  const btnDownload = document.getElementById('btn-convert-download');
+  const statusEl = document.getElementById('converter-status');
+  const inputEl = document.getElementById('converter-input');
+  const outputEl = document.getElementById('converter-output');
+  if (!btnConvert) return;
+
+  let lastGeoJSON = null;
+
+  btnConvert.addEventListener('click', () => {
+    try {
+      const raw = inputEl.value.trim();
+      if (!raw) throw new Error('Collez du contenu a convertir');
+
+      let rows = [];
+
+      // ── Detect HTML table ──
+      if (raw.includes('<table') || raw.includes('<tr')) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(`<div>${raw}</div>`, 'text/html');
+        const table = doc.querySelector('table');
+        if (!table) throw new Error('Aucun <table> detecte dans le HTML');
+
+        const trs = table.querySelectorAll('tr');
+        if (trs.length < 2) throw new Error('Le tableau doit avoir au moins un en-tete et une ligne');
+
+        // Extract headers from first row
+        const headers = [];
+        trs[0].querySelectorAll('th, td').forEach(cell => {
+          headers.push(cell.textContent.trim());
+        });
+
+        // Extract data rows
+        for (let i = 1; i < trs.length; i++) {
+          const cells = trs[i].querySelectorAll('td, th');
+          const row = {};
+          cells.forEach((cell, j) => {
+            if (headers[j]) row[headers[j]] = cell.textContent.trim();
+          });
+          rows.push(row);
+        }
+
+      // ── Detect CSV ──
+      } else if (raw.includes(',') || raw.includes(';') || raw.includes('\t')) {
+        const sep = raw.includes('\t') ? '\t' : raw.includes(';') ? ';' : ',';
+        const lines = raw.split('\n').filter(l => l.trim());
+        if (lines.length < 2) throw new Error('CSV: au moins un en-tete + une ligne');
+
+        const headers = lines[0].split(sep).map(h => h.trim().replace(/^"|"$/g, ''));
+        for (let i = 1; i < lines.length; i++) {
+          const vals = lines[i].split(sep).map(v => v.trim().replace(/^"|"$/g, ''));
+          const row = {};
+          headers.forEach((h, j) => { if (h) row[h] = vals[j] || ''; });
+          rows.push(row);
+        }
+
+      // ── Try JSON ──
+      } else {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) rows = parsed;
+        else throw new Error('Format non reconnu — collez un tableau HTML, du CSV ou un JSON array');
+      }
+
+      if (!rows.length) throw new Error('Aucune donnee extraite');
+
+      // ── Detect lat/lng columns ──
+      const allKeys = Object.keys(rows[0]);
+      const latAliases = ['lat', 'latitude', 'y', 'lat.', 'Latitude', 'LAT'];
+      const lngAliases = ['lng', 'lon', 'longitude', 'long', 'x', 'Longitude', 'LNG', 'LON'];
+      let latCol = allKeys.find(k => latAliases.includes(k.toLowerCase().trim()));
+      let lngCol = allKeys.find(k => lngAliases.includes(k.toLowerCase().trim()));
+
+      // ── Build GeoJSON ──
+      const features = [];
+      for (const row of rows) {
+        const vals = Object.values(row).filter(v => v && v.toString().trim());
+        if (!vals.length) continue;
+
+        let lat = latCol ? parseFloat(row[latCol]) : 0;
+        let lng = lngCol ? parseFloat(row[lngCol]) : 0;
+        if (isNaN(lat)) lat = 0;
+        if (isNaN(lng)) lng = 0;
+
+        const props = {};
+        for (const [k, v] of Object.entries(row)) {
+          if (k === latCol || k === lngCol) continue;
+          const s = (v || '').toString().trim();
+          if (s) props[k] = s;
+        }
+        // Use first text field as "name" if no name prop
+        if (!props.name && !props.Name && !props.nom && !props.Nom) {
+          const firstKey = Object.keys(props)[0];
+          if (firstKey) props.name = props[firstKey];
+        }
+
+        features.push({
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: [lng, lat] },
+          properties: props
+        });
+      }
+
+      lastGeoJSON = { type: 'FeatureCollection', features };
+      const json = JSON.stringify(lastGeoJSON, null, 2);
+      outputEl.value = json;
+      outputEl.style.display = 'block';
+      btnDownload.style.display = 'inline-block';
+
+      const hasCoords = latCol && lngCol;
+      statusEl.textContent = `${features.length} features converties.${hasCoords ? '' : ' Coordonnees a [0,0] — ajoutez des colonnes lat/lng dans vos donnees source.'}`;
+      statusEl.className = 'io-status io-status-ok';
+
+    } catch (e) {
+      statusEl.textContent = 'Erreur : ' + e.message;
+      statusEl.className = 'io-status io-status-err';
+      outputEl.style.display = 'none';
+      btnDownload.style.display = 'none';
+    }
+  });
+
+  btnDownload.addEventListener('click', () => {
+    if (!lastGeoJSON) return;
+    const blob = new Blob([JSON.stringify(lastGeoJSON, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'converted.geojson';
+    a.click();
+    URL.revokeObjectURL(url);
   });
 }
 

@@ -184,7 +184,7 @@ function addAdminLayers() {
         12, ['interpolate', ['linear'], ['get', '_casualties'], 0, 7, 10, 8, 100, 9.5, 500, 11, 1000, 13, 10000, 16]
       ],
       'circle-color': ['get', '_color'],
-      'circle-stroke-color': '#c49a3c',
+      'circle-stroke-color': '#ffffff',
       'circle-stroke-width': 1.5,
       'circle-opacity': 1
     }
@@ -198,8 +198,8 @@ function addAdminLayers() {
     paint: {
       'circle-radius': 10,
       'circle-color': 'transparent',
-      'circle-stroke-color': '#e0b452',
-      'circle-stroke-width': 2.5
+      'circle-stroke-color': '#ffffff',
+      'circle-stroke-width': 2
     }
   });
 

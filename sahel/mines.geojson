@@ -1,1 +1,201 @@
-{ "type": "FeatureCollection", "features": [] }
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-11.47, 12.87] },
+      "properties": {
+        "name": "Loulo - Gounkoto",
+        "categorie": "Mines Legales",
+        "region": "Kayes",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "Barrick Mining",
+        "pays_societe": "Canada",
+        "remarques": "site ferme entre janvier 2025 et le 18 decembre 2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-11.39, 13.08] },
+      "properties": {
+        "name": "Fekola",
+        "categorie": "Mines Legales",
+        "region": "Kayes",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "B2Gold",
+        "pays_societe": "Canada",
+        "remarques": "2e plus grande mine d'or du Mali"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-11.35, 13.12] },
+      "properties": {
+        "name": "Fekola Regional",
+        "categorie": "Mines Legales",
+        "region": "Kayes",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "B2Gold",
+        "pays_societe": "Canada",
+        "remarques": "Nouveau depot rattache au complexe Fekola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-5.68, 11.46] },
+      "properties": {
+        "name": "Syama",
+        "categorie": "Mines Legales",
+        "region": "Sikasso",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "Resolute Mining",
+        "pays_societe": "Australie",
+        "remarques": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-5.72, 11.38] },
+      "properties": {
+        "name": "Tabakoroni",
+        "categorie": "Mines Legales",
+        "region": "Sikasso",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "Resolute Mining",
+        "pays_societe": "Australie",
+        "remarques": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-11.76, 13.60] },
+      "properties": {
+        "name": "Sadiola",
+        "categorie": "Mines Legales",
+        "region": "Kayes",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "Allied Gold",
+        "pays_societe": "Canada",
+        "remarques": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-11.70, 13.55] },
+      "properties": {
+        "name": "Korali-Sud",
+        "categorie": "Mines Legales",
+        "region": "Kayes",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "Allied Gold",
+        "pays_societe": "Canada",
+        "remarques": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-8.15, 11.18] },
+      "properties": {
+        "name": "Yanfolila",
+        "categorie": "Mines Legales",
+        "region": "Sikasso",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "Hummingbird Resources",
+        "pays_societe": "Royaume-Uni",
+        "remarques": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-5.93, 12.07] },
+      "properties": {
+        "name": "Morila",
+        "categorie": "Mines Legales",
+        "region": "Sikasso",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "Morila SA / SOREM / Flagship",
+        "pays_societe": "Mali / Etats-Unis",
+        "remarques": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-6.03, 12.56] },
+      "properties": {
+        "name": "Nampala",
+        "categorie": "Mines Legales",
+        "region": "Sikasso",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "Robex Resources",
+        "pays_societe": "Canada",
+        "remarques": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-8.25, 12.30] },
+      "properties": {
+        "name": "Kobada",
+        "categorie": "Mines Legales",
+        "region": "Koulikoro",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "Toubani Resources",
+        "pays_societe": "Australie",
+        "remarques": "Projet"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-6.00, 12.50] },
+      "properties": {
+        "name": "Nampala Sud",
+        "categorie": "Mines Legales",
+        "region": "Sikasso",
+        "type_exploitation": "Industrielle",
+        "statut": "Legale",
+        "societe": "Robex Resources",
+        "pays_societe": "Canada",
+        "remarques": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-7.05, 12.15] },
+      "properties": {
+        "name": "Kodieran / Faboula",
+        "categorie": "Mines Legales",
+        "region": "Sikasso / Koulikoro",
+        "type_exploitation": "Industrielle ou projet avance",
+        "statut": "Legale",
+        "societe": "Exploitants varies",
+        "pays_societe": "Divers",
+        "remarques": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-8.35, 11.58] },
+      "properties": {
+        "name": "Kalana",
+        "categorie": "Mines Fermees",
+        "region": "Sikasso",
+        "type_exploitation": "Industrielle",
+        "statut": "Fermee",
+        "societe": "Endeavour Mining",
+        "pays_societe": "Royaume-Uni",
+        "remarques": "Mine fermee, projet historique"
+      }
+    }
+  ]
+}
