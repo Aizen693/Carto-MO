@@ -439,9 +439,9 @@ const ZONE_CONFIG = {
     id: 'points-eau',
     file: 'points-eau.geojson',
     layers: [
-      { id: 'points-eau-glow', type: 'circle', paint: { 'circle-radius': 8, 'circle-color': '#29b6f6', 'circle-opacity': 0.18, 'circle-blur': 0.8 } },
-      { id: 'points-eau-dots', type: 'circle', paint: { 'circle-radius': 4, 'circle-color': '#29b6f6', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
-      { id: 'points-eau-labels', type: 'symbol', paint: { 'text-color': '#29b6f6', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+      { id: 'points-eau-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#29b6f6', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
+      { id: 'points-eau-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#29b6f6', 'circle-stroke-opacity': 0.35 } },
+      { id: 'points-eau-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#29b6f6', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
     ]
   });
 
