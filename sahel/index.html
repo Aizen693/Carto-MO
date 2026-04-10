@@ -45,6 +45,15 @@
   padding:6px 0;margin-bottom:6px;
 }
 .zone-gated { display:none !important; }
+.sb-cat-label {
+  padding:8px 12px 3px;
+  font:600 7px/1 var(--bc,sans-serif);
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--tx2,#3e444e);
+  border-top:1px solid var(--ln,rgba(255,255,255,0.07));
+}
+.sb-cat-label:first-child { border-top:none; }
 </style>
 </head>
 <body>
@@ -133,11 +142,47 @@
       <span class="sb-section-arrow open">&#x25B2;</span>
     </div>
     <div class="sb-section-body">
+      <div class="sb-cat-label">Terrain &amp; Ressources</div>
       <div class="sb-layer-row">
         <span>Puits / Wells</span>
         <div class="sb-toggle" id="sb-toggle-puits" onclick="togglePuits()"></div>
       </div>
-      <div style="padding:6px 12px 2px"><div style="font:600 7px/1 var(--bc);letter-spacing:0.12em;text-transform:uppercase;color:var(--tx2);margin-bottom:6px">Style carte</div></div>
+      <div class="sb-layer-row">
+        <span>Ressources minieres</span>
+        <div class="sb-toggle" id="sb-toggle-mines" onclick="toggleLayer('mines')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>Infrastructures &amp; axes</span>
+        <div class="sb-toggle" id="sb-toggle-infrastructures" onclick="toggleLayer('infrastructures')"></div>
+      </div>
+
+      <div class="sb-cat-label">Populations</div>
+      <div class="sb-layer-row">
+        <span>Ethnies &amp; sous-groupes</span>
+        <div class="sb-toggle" id="sb-toggle-ethnies" onclick="toggleLayer('ethnies')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>Population &amp; mobilites</span>
+        <div class="sb-toggle" id="sb-toggle-population" onclick="toggleLayer('population')"></div>
+      </div>
+
+      <div class="sb-cat-label">Securite</div>
+      <div class="sb-layer-row">
+        <span>Forces en presence</span>
+        <div class="sb-toggle" id="sb-toggle-forces" onclick="toggleLayer('forces')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>Evenements securitaires</span>
+        <div class="sb-toggle" id="sb-toggle-evenements" onclick="toggleLayer('evenements')"></div>
+      </div>
+
+      <div class="sb-cat-label">Flux</div>
+      <div class="sb-layer-row">
+        <span>Flux &amp; trafics</span>
+        <div class="sb-toggle" id="sb-toggle-flux" onclick="toggleLayer('flux')"></div>
+      </div>
+
+      <div class="sb-cat-label">Style carte</div>
       <div class="sb-style-row">
         <button class="sb-style-btn active" onclick="setStyle('standard')" id="sb-standard">Standard</button>
         <button class="sb-style-btn" onclick="setStyle('satellite')" id="sb-satellite">Satellite</button>
@@ -390,6 +435,145 @@ const ZONE_CONFIG = {
     _origSetStyle(s);
     map.once('style.load', function() {
       if (puitsData && !map.getSource('puits-src')) addPuitsLayers();
+    });
+  };
+})();
+
+/* ── FACTORY CALQUES SUPERPOSABLES ── */
+(function() {
+  const layerRegistry = {};
+
+  function createLayerToggle(cfg) {
+    let data = null;
+    let visible = false;
+    const srcId = cfg.id + '-src';
+
+    fetch('./' + cfg.file)
+      .then(r => r.json())
+      .then(d => { if (d && d.features && d.features.length) data = d; })
+      .catch(() => {});
+
+    function addLayers() {
+      if (!data || map.getSource(srcId)) return;
+      map.addSource(srcId, { type: 'geojson', data: data });
+      cfg.layers.forEach(function(l) {
+        map.addLayer({
+          id: l.id,
+          type: l.type,
+          source: srcId,
+          paint: l.paint,
+          layout: Object.assign({ visibility: visible ? 'visible' : 'none' }, l.layout || {})
+        });
+      });
+    }
+
+    function toggle() {
+      visible = !visible;
+      var el = document.getElementById('sb-toggle-' + cfg.id);
+      if (el) el.classList.toggle('on', visible);
+      if (!data) return;
+      if (!map.getSource(srcId)) { addLayers(); return; }
+      var vis = visible ? 'visible' : 'none';
+      cfg.layers.forEach(function(l) {
+        if (map.getLayer(l.id)) map.setLayoutProperty(l.id, 'visibility', vis);
+      });
+    }
+
+    layerRegistry[cfg.id] = { addLayers: addLayers, getData: function() { return data; }, getSrcId: function() { return srcId; } };
+    window.toggleLayer = window.toggleLayer || function(id) { layerRegistry[id] && layerRegistry[id].toggle && layerRegistry[id].toggle(); };
+    layerRegistry[cfg.id].toggle = toggle;
+  }
+
+  // Expose toggleLayer globally
+  window.toggleLayer = function(id) {
+    if (layerRegistry[id] && layerRegistry[id].toggle) layerRegistry[id].toggle();
+  };
+
+  /* ── CALQUE : Ethnies & sous-groupes ── */
+  createLayerToggle({
+    id: 'ethnies',
+    file: 'ethnies.geojson',
+    layers: [
+      { id: 'ethnies-fill', type: 'fill', paint: { 'fill-color': '#e07c5a', 'fill-opacity': 0.18 } },
+      { id: 'ethnies-outline', type: 'line', paint: { 'line-color': '#e07c5a', 'line-width': 1.2, 'line-opacity': 0.6 } },
+      { id: 'ethnies-labels', type: 'symbol', paint: { 'text-color': '#e07c5a', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 10, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+    ]
+  });
+
+  /* ── CALQUE : Forces en presence ── */
+  createLayerToggle({
+    id: 'forces',
+    file: 'forces.geojson',
+    layers: [
+      { id: 'forces-glow', type: 'circle', paint: { 'circle-radius': 7, 'circle-color': '#e63946', 'circle-opacity': 0.2, 'circle-blur': 0.8 } },
+      { id: 'forces-dots', type: 'circle', paint: { 'circle-radius': 4, 'circle-color': '#e63946', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
+      { id: 'forces-labels', type: 'symbol', paint: { 'text-color': '#e63946', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+    ]
+  });
+
+  /* ── CALQUE : Population & mobilites ── */
+  createLayerToggle({
+    id: 'population',
+    file: 'population.geojson',
+    layers: [
+      { id: 'population-lines', type: 'line', paint: { 'line-color': '#ab47bc', 'line-width': 2, 'line-dasharray': [2, 2], 'line-opacity': 0.7 } },
+      { id: 'population-dots', type: 'circle', paint: { 'circle-radius': 5, 'circle-color': '#ab47bc', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
+      { id: 'population-labels', type: 'symbol', paint: { 'text-color': '#ab47bc', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+    ]
+  });
+
+  /* ── CALQUE : Ressources minieres ── */
+  createLayerToggle({
+    id: 'mines',
+    file: 'mines.geojson',
+    layers: [
+      { id: 'mines-glow', type: 'circle', paint: { 'circle-radius': 8, 'circle-color': '#ffd700', 'circle-opacity': 0.15, 'circle-blur': 0.8 } },
+      { id: 'mines-dots', type: 'circle', paint: { 'circle-radius': 4, 'circle-color': '#ffd700', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
+      { id: 'mines-labels', type: 'symbol', paint: { 'text-color': '#ffd700', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+    ]
+  });
+
+  /* ── CALQUE : Infrastructures & axes ── */
+  createLayerToggle({
+    id: 'infrastructures',
+    file: 'infrastructures.geojson',
+    layers: [
+      { id: 'infra-lines', type: 'line', paint: { 'line-color': '#78909c', 'line-width': 1.8, 'line-opacity': 0.7 } },
+      { id: 'infra-labels', type: 'symbol', paint: { 'text-color': '#78909c', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'symbol-placement': 'line', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+    ]
+  });
+
+  /* ── CALQUE : Evenements securitaires ── */
+  createLayerToggle({
+    id: 'evenements',
+    file: 'evenements.geojson',
+    layers: [
+      { id: 'events-pulse', type: 'circle', paint: { 'circle-radius': 10, 'circle-color': '#ff5252', 'circle-opacity': 0.12, 'circle-blur': 1 } },
+      { id: 'events-dots', type: 'circle', paint: { 'circle-radius': 4, 'circle-color': '#ff5252', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
+      { id: 'events-labels', type: 'symbol', paint: { 'text-color': '#ff5252', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+    ]
+  });
+
+  /* ── CALQUE : Flux & trafics ── */
+  createLayerToggle({
+    id: 'flux',
+    file: 'flux.geojson',
+    layers: [
+      { id: 'flux-lines', type: 'line', paint: { 'line-color': '#ff9800', 'line-width': 2.2, 'line-dasharray': [4, 3], 'line-opacity': 0.75 } },
+      { id: 'flux-arrows', type: 'symbol', paint: {}, layout: { 'symbol-placement': 'line', 'symbol-spacing': 80, 'text-field': '\u25B6', 'text-size': 10, 'text-color': '#ff9800', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } },
+      { id: 'flux-labels', type: 'symbol', paint: { 'text-color': '#ff9800', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'symbol-placement': 'line', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+    ]
+  });
+
+  // Re-add all layers on style change
+  var _prevSetStyle = setStyle;
+  setStyle = function(s) {
+    _prevSetStyle(s);
+    map.once('style.load', function() {
+      Object.keys(layerRegistry).forEach(function(id) {
+        var entry = layerRegistry[id];
+        if (entry.getData() && !map.getSource(entry.getSrcId())) entry.addLayers();
+      });
     });
   };
 })();
