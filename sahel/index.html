@@ -354,7 +354,7 @@ const ZONE_CONFIG = {
     let visible = false;
     const srcId = cfg.id + '-src';
 
-    fetch('./' + cfg.file)
+    fetch('./' + cfg.file + '?v=' + Date.now())
       .then(r => r.json())
       .then(d => { if (d && d.features && d.features.length) data = d; })
       .catch(() => {});
