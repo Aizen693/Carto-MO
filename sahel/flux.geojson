@@ -3,43 +3,83 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-3.0, 22.0], [-0.5, 18.5], [0.0, 16.3], [1.5, 13.5]] },
-      "properties": { "name": "Cocaine Atlantique -> Sahel", "description": "Route principale de la cocaine. Transit depuis les cotes ouest-africaines (Guinee-Bissau, Guinee) via le nord Mali vers la Libye et l'Europe.", "type": "Narcotrafic", "substance": "Cocaine", "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html ICG|https://www.crisisgroup.org/africa/sahel" }
+      "geometry": { "type": "LineString", "coordinates": [[-16.02, 12.2], [-15.4, 12.8], [-14.5, 13.5], [-13.5, 14.0], [-12.0, 14.5], [-11.0, 15.0], [-9.5, 15.5], [-8.0, 14.0], [-7.6, 12.65]] },
+      "properties": { "name": "Guinee-Bissau > Bamako", "description": "Route principale de la cocaine depuis la Guinee-Bissau, plateforme de redistribution majeure, vers Bamako via Kayes.", "type": "Narcotrafic", "rank": "main", "detail": "La Guinee-Bissau est le hub majeur d'entree de la cocaine sud-americaine en Afrique. Saisies recurrentes de multi-tonnes. Transit par la region de Kayes puis Bamako.", "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html GI-TOC|https://globalinitiative.net" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[13.0, 32.0], [12.0, 26.0], [8.0, 17.0], [2.0, 13.5]] },
-      "properties": { "name": "Armes Libye -> Sahel", "description": "Flux d'armes depuis les depots libyens post-Kadhafi. Alimente les groupes armes du Sahel depuis 2011.", "type": "Trafic d'armes", "substance": "Armes legeres", "sources": "UNOCA|https://www.un.org/en/ga/search/view_doc.asp SIPRI|https://www.sipri.org/databases" }
+      "geometry": { "type": "LineString", "coordinates": [[-7.6, 12.65], [-5.5, 13.5], [-3.0, 14.5], [-0.05, 16.27]] },
+      "properties": { "name": "Bamako > Mopti > Gao", "description": "Axe central de transit Bamako-Mopti-Gao. Colonne vertebrale du narcotrafic au Mali via la RN6.", "type": "Narcotrafic", "rank": "main", "detail": "La RN6 est l'axe logistique principal. Drogue stockee dans des entrepots a Gao avant redistribution vers le nord (Kidal, Taoudenit) ou l'est.", "sources": "ICG|https://www.crisisgroup.org/africa/sahel GI-TOC|https://globalinitiative.net" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[7.99, 16.97], [9.0, 19.0], [12.0, 24.0], [13.0, 28.0]] },
-      "properties": { "name": "Migrants Niger -> Libye", "description": "Route migratoire principale Agadez-Libye. Hub de transit a Agadez. Milliers de migrants par mois.", "type": "Migration irreguliere", "substance": "Personnes", "sources": "OIM|https://www.iom.int/countries/niger UNHCR|https://data.unhcr.org" }
+      "geometry": { "type": "LineString", "coordinates": [[-0.05, 16.27], [1.0, 16.5], [1.68, 18.1], [1.0, 20.0], [0.0, 22.5]] },
+      "properties": { "name": "Gao > Kidal > Taoudenit", "description": "Route nord depuis Gao via Kidal et Taoudenit vers le sud algerien et la Libye. Zone desertique, pas de controle.", "type": "Narcotrafic", "rank": "main", "detail": "Convois de 4x4 charges de cocaine transitent par Kidal, zone historique des trafiquants touareg, vers Taoudenit et les frontieres algeriennes. Zone hors controle etatique.", "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html ICG|https://www.crisisgroup.org/africa/sahel" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-11.5, 12.9], [-8.0, 14.0], [-5.0, 15.5], [-3.0, 16.7]] },
-      "properties": { "name": "Or artisanal Mali -> Export", "description": "Contrebande d'or artisanal depuis les sites d'orpaillage du sud Mali vers Bamako et les EAU. Milliards de dollars non declares.", "type": "Contrebande or", "substance": "Or", "sources": "OCDE|https://www.oecd.org/en/topics/sub-issues/responsible-mineral-supply-chains.html Reuters|https://www.reuters.com/world/africa" }
+      "geometry": { "type": "LineString", "coordinates": [[-0.05, 16.27], [2.5, 17.0], [5.0, 18.0], [8.0, 20.0], [12.0, 24.0], [14.0, 28.0]] },
+      "properties": { "name": "Gao > Agadez > Libye", "description": "Route est depuis Gao via le Niger (Agadez) vers la Libye. Convergence narcotrafic et trafic d'armes.", "type": "Narcotrafic", "rank": "main", "detail": "Route de transit passant par Menaka, puis Agadez (Niger). Cocaine et cannabis achemines vers les marches libyens et mediterraneens.", "sources": "GI-TOC|https://globalinitiative.net UNODC|https://www.unodc.org" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-17.0, 14.7], [-12.0, 13.0], [-8.0, 12.6], [-3.0, 14.5]] },
-      "properties": { "name": "Cannabis Afrique Ouest -> Sahel", "description": "Trafic de cannabis depuis la cote ouest-africaine vers l'interieur du Sahel. Finance des groupes armes locaux.", "type": "Narcotrafic", "substance": "Cannabis", "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html GIABA|https://www.giaba.org" }
+      "geometry": { "type": "LineString", "coordinates": [[-17.45, 14.72], [-16.6, 14.75], [-16.0, 15.2], [-15.8, 16.0], [-16.0, 17.0], [-16.0, 18.1]] },
+      "properties": { "name": "Dakar > Nouakchott", "description": "Route cotiere secondaire. Cocaine acheminee depuis le port de Dakar/M'bour vers la Mauritanie, puis nord.", "type": "Narcotrafic", "rank": "secondary", "detail": "Points de lancement cotiers entre M'bour et St-Louis. Pirogues et go-fast vers les iles Canaries ou transit terrestre vers Nouakchott.", "sources": "GI-TOC|https://globalinitiative.net UNODC|https://www.unodc.org" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[15.0, 12.1], [13.0, 13.5], [8.0, 17.0], [3.0, 20.0]] },
-      "properties": { "name": "Trafic armes lac Tchad -> nord", "description": "Flux d'armes depuis le bassin du lac Tchad (Boko Haram/ISWAP) vers le nord Niger et sud Libye.", "type": "Trafic d'armes", "substance": "Armes", "sources": "Conflict Armament Research|https://www.conflictarm.com SIPRI|https://www.sipri.org" }
+      "geometry": { "type": "LineString", "coordinates": [[-16.0, 18.1], [-16.5, 19.5], [-17.0, 21.0]] },
+      "properties": { "name": "Nouakchott > Nouadhibou", "description": "Route cotiere mauritanienne. Transit vers Nouadhibou, dernier point terrestre avant les Canaries.", "type": "Narcotrafic", "rank": "secondary", "detail": "Nouadhibou : base arriere pour les departs en mer vers les iles Canaries (Espagne). Go-fast et pirogues.", "sources": "GI-TOC|https://globalinitiative.net" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-1.5, 12.4], [-1.0, 14.0], [0.0, 16.3], [1.0, 18.5]] },
-      "properties": { "name": "Tramadol / medicaments contrefaits", "description": "Route du tramadol et medicaments contrefaits. Du Ghana/Nigeria vers le Sahel via Burkina Faso.", "type": "Trafic medicaments", "substance": "Tramadol", "sources": "UNODC|https://www.unodc.org INCB|https://www.incb.org" }
+      "geometry": { "type": "LineString", "coordinates": [[-17.0, 21.0], [-16.0, 24.0], [-15.0, 27.0], [-14.5, 28.5]] },
+      "properties": { "name": "Nouadhibou > Iles Canaries", "description": "Traversee maritime clandestine vers les iles Canaries. Route migratoire et narcotrafic.", "type": "Narcotrafic", "rank": "secondary", "detail": "Route maritime perilleuse. Go-fast charges de cocaine, pirogues de migrants. Interceptions regulieres par la marine espagnole et mauritanienne.", "sources": "UNODC|https://www.unodc.org GI-TOC|https://globalinitiative.net" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-1.5, 6.0], [-1.5, 9.0], [-1.5, 12.4], [0.0, 14.5]] },
-      "properties": { "name": "Carburant Ghana -> Burkina", "description": "Contrebande de carburant subventionne depuis le Ghana vers le Burkina Faso. Economie parallele importante.", "type": "Contrebande", "substance": "Carburant", "sources": "ICG|https://www.crisisgroup.org/africa/west-africa Reuters|https://www.reuters.com/world/africa" }
+      "geometry": { "type": "LineString", "coordinates": [[-7.6, 12.65], [-8.0, 13.5], [-9.0, 14.5], [-10.5, 15.0], [-12.0, 15.5], [-13.5, 15.8], [-15.0, 16.5], [-16.0, 18.1]] },
+      "properties": { "name": "Bamako > Kayes > Nouakchott", "description": "Route secondaire ouest depuis Bamako via Kayes et la frontiere Mali-Mauritanie vers Nouakchott.", "type": "Narcotrafic", "rank": "secondary", "detail": "Route de contournement via Nara, Nioro du Sahel, puis traversee de la frontiere mauritanienne. Utilisee quand la route nord est trop surveillee.", "sources": "ICG|https://www.crisisgroup.org/africa/sahel GI-TOC|https://globalinitiative.net" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-3.0, 14.5], [-2.0, 14.0], [-1.52, 12.37], [-0.5, 11.5], [0.5, 11.0], [1.0, 10.5]] },
+      "properties": { "name": "Mopti > Ouaga > Cotes", "description": "Route secondaire sud depuis Mopti via Ouagadougou vers les Etats cotiers (Togo, Ghana, Benin).", "type": "Narcotrafic", "rank": "secondary", "detail": "Corridor sud de redistribution. La cocaine transite vers les ports cotiers du golfe de Guinee pour reexportation vers l'Europe.", "sources": "GI-TOC|https://globalinitiative.net GIABA|https://www.giaba.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[14.0, 32.5], [13.0, 28.0], [11.0, 23.0], [8.0, 17.0], [5.0, 16.0], [2.5, 14.5]] },
+      "properties": { "name": "Armes Libye > Niger > Sahel", "description": "Flux d'armes depuis les depots libyens post-Kadhafi (2011). Principal vecteur d'armement des groupes jihadistes saheliens.", "type": "Trafic d'armes", "rank": "main", "detail": "Depots militaires pilles a Sebha, Oubari, Misrata. AK-47, RPG-7, mines, MANPADS SA-7. Transit via Agadez puis redistribution au Mali (JNIM, ISGS) et Burkina Faso.", "sources": "CAR|https://www.conflictarm.com SIPRI|https://www.sipri.org UNSC Panel|https://www.un.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[2.5, 14.5], [1.0, 15.0], [-0.05, 16.27], [-1.5, 17.0], [-3.0, 16.7]] },
+      "properties": { "name": "Armes Niger > Mali nord", "description": "Redistribution des armes libyennes depuis le Niger vers le nord Mali (Gao, Tombouctou, Kidal).", "type": "Trafic d'armes", "rank": "secondary", "detail": "Armes transitant par les zones frontalieres Niger-Mali. Fournissent les groupes armes du nord Mali et les milices communautaires.", "sources": "CAR|https://www.conflictarm.com ICG|https://www.crisisgroup.org/africa/sahel" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[2.11, 13.51], [3.5, 14.5], [6.0, 16.0], [8.0, 17.0], [10.0, 19.5], [11.5, 22.0], [13.0, 28.0]] },
+      "properties": { "name": "Migrants Niamey > Agadez > Libye", "description": "Route migratoire principale. Hub d'Agadez. Milliers de migrants/mois vers la Libye et la Mediterranee.", "type": "Migration", "rank": "main", "detail": "Agadez : plaque tournante migratoire. Convois de pick-up via Dirkou, Madama, Sebha. Depuis l'abrogation de la loi 2015-36 (2023), flux en forte hausse. Passeurs, racket, morts dans le desert.", "sources": "OIM|https://www.iom.int/countries/niger UNHCR|https://data.unhcr.org MMC|https://mixedmigration.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-11.5, 12.9], [-10.0, 12.8], [-8.0, 12.65], [-6.5, 13.0], [-5.0, 13.5], [-3.5, 14.0], [-2.5, 15.0], [-2.0, 17.0]] },
+      "properties": { "name": "Or artisanal sud Mali > nord", "description": "Contrebande d'or artisanal. Sites d'orpaillage du sud (Kenieba, Kangaba) vers Bamako puis nord pour export.", "type": "Contrebande or", "rank": "main", "detail": "50-70t/an d'or non declare. Orpaillage artisanal a Kenieba, Kangaba, Bougouni. Export via Bamako-Dubai (vols directs ou transit Lome/Accra). Finance indirectement les groupes armes.", "sources": "SWISSAID|https://www.swissaid.ch OCDE|https://www.oecd.org Reuters|https://www.reuters.com/world/africa" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[15.0, 12.1], [13.5, 12.8], [12.5, 13.5], [10.0, 15.5], [8.0, 17.0]] },
+      "properties": { "name": "Armes lac Tchad > Agadez", "description": "Flux d'armes depuis le bassin du lac Tchad vers le nord Niger. ISWAP/Boko Haram comme fournisseurs.", "type": "Trafic d'armes", "rank": "secondary", "detail": "Armes capturees par ISWAP redistribuees vers le nord. Route Diffa-Zinder-Agadez. Munitions, explosifs artisanaux, vehicules voles.", "sources": "CAR|https://www.conflictarm.com SIPRI|https://www.sipri.org" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-0.5, 5.5], [-0.8, 7.5], [-1.0, 9.5], [-1.2, 11.0], [-1.52, 12.37], [-1.0, 14.0]] },
+      "properties": { "name": "Tramadol Ghana > Sahel", "description": "Route du tramadol et medicaments contrefaits depuis les ports ghaneen/nigerians vers le Sahel.", "type": "Trafic medicaments", "rank": "secondary", "detail": "Tramadol d'Inde/Chine entre via Tema (Ghana) et Lagos. Distribution par les marches informels. Consommation massive chez jeunes et combattants.", "sources": "UNODC|https://www.unodc.org INCB|https://www.incb.org OMS|https://www.who.int" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-0.2, 5.5], [0.0, 8.0], [0.2, 10.0], [-0.5, 11.5], [-1.52, 12.37], [-1.0, 14.0], [0.0, 15.5]] },
+      "properties": { "name": "Carburant Ghana > Burkina > Niger", "description": "Contrebande de carburant subventionne depuis le Ghana vers le Burkina et le Niger.", "type": "Contrebande", "rank": "secondary", "detail": "Carburant achete a prix subventionne au Ghana, transporte en jerricans via pistes informelles, revendu au Burkina/Niger a prix majore.", "sources": "ICG|https://www.crisisgroup.org/africa/west-africa GI-TOC|https://globalinitiative.net" }
     }
   ]
 }

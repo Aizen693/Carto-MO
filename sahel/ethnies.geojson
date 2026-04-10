@@ -3,58 +3,58 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[-8.5, 12.0], [-6.0, 12.0], [-6.0, 13.5], [-8.5, 13.5], [-8.5, 12.0]]] },
-      "properties": { "name": "Bambara", "description": "Groupe ethnique majoritaire du Mali (env. 35%). Concentres dans la region de Bamako, Segou, Koulikoro. Langue vehiculaire du Mali.", "population": "6 millions", "sources": "Ethnologue|https://www.ethnologue.com/language/bam CIA Factbook|https://www.cia.gov/the-world-factbook/countries/mali" }
+      "geometry": { "type": "Polygon", "coordinates": [[[-8.8, 11.8], [-7.8, 11.6], [-6.8, 12.0], [-5.8, 12.3], [-5.5, 13.0], [-6.2, 13.6], [-7.0, 13.8], [-8.0, 13.5], [-8.6, 13.0], [-9.0, 12.5], [-8.8, 11.8]]] },
+      "properties": { "name": "Bambara", "description": "Groupe ethnique majoritaire du Mali (env. 35%). Concentres dans la region de Bamako, Segou, Koulikoro. Langue vehiculaire du Mali. Zone delimitee par le haut bassin du Niger et les regions administratives de Koulikoro-Segou.", "population": "6 millions", "detail": "Territoire historique couvrant les anciennes provinces du Royaume de Segou. Agriculture sedentaire, coeuur economique du Mali. Frontiere nord suit la limite de la zone soudanienne.", "sources": "Ethnologue|https://www.ethnologue.com/language/bam CIA Factbook|https://www.cia.gov/the-world-factbook/countries/mali JOSHUAPROJECT|https://joshuaproject.net/people_groups/10799/ML" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[-6.0, 13.5], [-2.0, 13.5], [-2.0, 15.5], [-6.0, 15.5], [-6.0, 13.5]]] },
-      "properties": { "name": "Peul / Fulani", "description": "Peuple semi-nomade reparti dans tout le Sahel. Au centre du conflit communautaire au Mali (region Mopti). Accusations de liens avec le JNIM (Katiba Macina).", "population": "4 millions (Mali)", "sources": "ICG|https://www.crisisgroup.org/africa/sahel/mali HRW|https://www.hrw.org/africa/mali" }
+      "geometry": { "type": "Polygon", "coordinates": [[[-5.5, 13.0], [-4.5, 13.2], [-3.2, 13.5], [-1.8, 14.0], [-1.2, 14.8], [-1.5, 15.5], [-2.5, 15.8], [-4.0, 15.6], [-5.2, 15.2], [-6.0, 14.5], [-6.2, 13.6], [-5.5, 13.0]]] },
+      "properties": { "name": "Peul / Fulani", "description": "Peuple semi-nomade reparti dans tout le Sahel. Epicentre au delta interieur du Niger (region Mopti). Au coeur du conflit communautaire. Accusations de liens avec le JNIM (Katiba Macina).", "population": "4 millions (Mali)", "detail": "Zone de concentration maximale : delta interieur du Niger, Mopti, Djenne, Tenenkou. Presence transnationale au Burkina (Sahel, Centre-Nord), Niger (Tillaberi, Tahoua). La frontiere suit les limites du delta interieur et la zone pastorale.", "sources": "ICG|https://www.crisisgroup.org/africa/sahel/mali HRW|https://www.hrw.org/africa/mali JOSHUAPROJECT|https://joshuaproject.net/people_groups/14150/ML" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[-4.0, 13.8], [-2.5, 13.8], [-2.5, 15.0], [-4.0, 15.0], [-4.0, 13.8]]] },
-      "properties": { "name": "Dogon", "description": "Peuple des falaises de Bandiagara. Victimes et auteurs de violences intercommunautaires avec les Peuls. Milice Dan Nan Ambassagou.", "population": "800 000", "sources": "UNESCO|https://whc.unesco.org/fr/list/516 ICG|https://www.crisisgroup.org/africa/sahel/mali" }
+      "geometry": { "type": "Polygon", "coordinates": [[[-3.8, 13.8], [-3.2, 13.5], [-2.6, 13.8], [-2.3, 14.3], [-2.5, 14.9], [-3.2, 15.0], [-3.8, 14.7], [-4.0, 14.2], [-3.8, 13.8]]] },
+      "properties": { "name": "Dogon", "description": "Peuple des falaises de Bandiagara et du plateau de Dogon. Victimes et auteurs de violences intercommunautaires avec les Peuls. Milice Dan Nan Ambassagou.", "population": "800 000", "detail": "Territoire ancestral centre sur les falaises de Bandiagara (patrimoine UNESCO). Plateau de Dogon entre Mopti et la frontiere burkinabe. Zone delimite par le delta interieur a l'ouest et le Gourma a l'est.", "sources": "UNESCO|https://whc.unesco.org/fr/list/516 ICG|https://www.crisisgroup.org/africa/sahel/mali JOSHUAPROJECT|https://joshuaproject.net/people_groups/11566/ML" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[-2.0, 15.5], [2.0, 15.5], [2.0, 18.0], [-2.0, 18.0], [-2.0, 15.5]]] },
-      "properties": { "name": "Songhai", "description": "Peuple du fleuve Niger. Concentres autour de Gao et Tombouctou. Heritiers de l'Empire Songhai.", "population": "1.5 million", "sources": "Ethnologue|https://www.ethnologue.com/language/ses CIA Factbook|https://www.cia.gov/the-world-factbook/countries/mali" }
+      "geometry": { "type": "Polygon", "coordinates": [[[-2.5, 15.0], [-0.8, 15.2], [0.5, 15.8], [1.5, 16.0], [1.8, 16.8], [1.2, 17.5], [-0.5, 17.2], [-1.8, 16.8], [-2.8, 16.2], [-3.0, 15.5], [-2.5, 15.0]]] },
+      "properties": { "name": "Songhai", "description": "Peuple du fleuve Niger. Concentres autour de Gao et Tombouctou. Heritiers de l'Empire Songhai. Zone delimitee par la boucle du Niger.", "population": "1.5 million", "detail": "Territoire historique le long du fleuve Niger de Tombouctou a Gao et Ansongo. Boucle du Niger. Frontiere est avec les Touareg suit la limite des zones irriguees. Presence significative a Niamey (Niger).", "sources": "Ethnologue|https://www.ethnologue.com/language/ses CIA Factbook|https://www.cia.gov/the-world-factbook/countries/mali JOSHUAPROJECT|https://joshuaproject.net/people_groups/15074/ML" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[0.0, 17.5], [4.0, 17.5], [4.0, 22.0], [0.0, 22.0], [0.0, 17.5]]] },
-      "properties": { "name": "Touareg", "description": "Peuple nomade du Sahara. Rebellions recurrentes (2012, CMA). Kidal historiquement centre politique touareg. Dispersion post-reprise FAMA 2023.", "population": "1.5 million (Sahel)", "sources": "ICG|https://www.crisisgroup.org/africa/sahel/mali Ethnologue|https://www.ethnologue.com/language/taq" }
+      "geometry": { "type": "Polygon", "coordinates": [[[-1.5, 17.5], [0.5, 17.0], [2.0, 17.2], [4.5, 18.0], [5.5, 19.5], [6.0, 21.0], [4.0, 22.5], [1.5, 23.0], [-1.0, 22.0], [-2.5, 20.5], [-2.0, 18.5], [-1.5, 17.5]]] },
+      "properties": { "name": "Touareg", "description": "Peuple nomade du Sahara. Rebellions recurrentes (1963, 1990, 2006, 2012). Kidal historiquement centre politique touareg. Dispersion post-reprise FAMA novembre 2023.", "population": "1.5 million (Sahel)", "detail": "Zone saharienne et sahelienne couvrant le nord Mali (regions Kidal, Taoudenit), nord Niger (Agadez, Air). Frontiere sud suit l'isohyete 200mm (limite pastoralisme pur). Territoire de la CMA/MNLA. Presence au sud Algerie et Libye.", "sources": "ICG|https://www.crisisgroup.org/africa/sahel/mali Ethnologue|https://www.ethnologue.com/language/taq MNLA|https://www.mnlamov.net" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[-3.0, 11.0], [-1.0, 11.0], [-1.0, 13.0], [-3.0, 13.0], [-3.0, 11.0]]] },
-      "properties": { "name": "Mossi", "description": "Ethnie majoritaire du Burkina Faso (env. 50%). Concentres dans le plateau central autour de Ouagadougou.", "population": "11 millions", "sources": "Ethnologue|https://www.ethnologue.com/language/mos CIA Factbook|https://www.cia.gov/the-world-factbook/countries/burkina-faso" }
+      "geometry": { "type": "Polygon", "coordinates": [[[-2.8, 11.2], [-1.8, 11.0], [-0.5, 11.2], [0.2, 11.8], [0.0, 12.5], [-0.5, 13.2], [-1.5, 13.5], [-2.5, 13.2], [-3.2, 12.5], [-3.0, 11.8], [-2.8, 11.2]]] },
+      "properties": { "name": "Mossi", "description": "Ethnie majoritaire du Burkina Faso (env. 50%). Concentres dans le plateau central autour de Ouagadougou. Royaumes historiques de Ouagadougou, Yatenga, Tenkodogo.", "population": "11 millions", "detail": "Plateau central du Burkina Faso. Royaumes Mossi historiques : Ouagadougou (sud), Yatenga (Ouahigouya, nord), Tenkodogo (est). Zone delimitee par la Volta Blanche et Volta Rouge. Societe tres hierarchisee autour du Mogho Naba.", "sources": "Ethnologue|https://www.ethnologue.com/language/mos CIA Factbook|https://www.cia.gov/the-world-factbook/countries/burkina-faso JOSHUAPROJECT|https://joshuaproject.net/people_groups/14019/UV" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[2.0, 12.0], [5.0, 12.0], [5.0, 14.5], [2.0, 14.5], [2.0, 12.0]]] },
-      "properties": { "name": "Haoussa", "description": "Plus grand groupe ethnique d'Afrique de l'Ouest. Dominants au sud Niger et nord Nigeria. Commerce et agriculture.", "population": "12 millions (Niger)", "sources": "Ethnologue|https://www.ethnologue.com/language/hau CIA Factbook|https://www.cia.gov/the-world-factbook/countries/niger" }
+      "geometry": { "type": "Polygon", "coordinates": [[[1.5, 11.8], [3.0, 11.5], [5.0, 11.8], [7.5, 12.5], [8.5, 13.0], [8.0, 14.0], [5.5, 14.2], [3.5, 14.0], [2.0, 13.5], [1.2, 12.8], [1.5, 11.8]]] },
+      "properties": { "name": "Haoussa", "description": "Plus grand groupe ethnique d'Afrique de l'Ouest. Dominants au sud Niger et nord Nigeria. Commerce et agriculture. Etats historiques de Kano, Katsina, Zinder, Maradi.", "population": "12 millions (Niger)", "detail": "Zone de concentration : sud Niger (regions Maradi, Zinder, Tahoua sud) et nord Nigeria (Kano, Katsina, Sokoto). Frontiere nord suit la limite des cultures pluviales. Cites-Etats historiques pre-coloniales. Reseau commercial transsaharien.", "sources": "Ethnologue|https://www.ethnologue.com/language/hau CIA Factbook|https://www.cia.gov/the-world-factbook/countries/niger JOSHUAPROJECT|https://joshuaproject.net/people_groups/12070/NG" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[5.0, 13.0], [14.0, 13.0], [14.0, 14.5], [5.0, 14.5], [5.0, 13.0]]] },
-      "properties": { "name": "Zarma / Djerma", "description": "Deuxieme ethnie du Niger. Concentres dans l'ouest (Niamey, Dosso, Tillaberi). Apparentes aux Songhai.", "population": "4 millions", "sources": "Ethnologue|https://www.ethnologue.com/language/dje CIA Factbook|https://www.cia.gov/the-world-factbook/countries/niger" }
+      "geometry": { "type": "Polygon", "coordinates": [[[0.5, 12.8], [2.0, 13.0], [3.0, 13.5], [3.5, 14.2], [3.0, 14.8], [2.0, 14.5], [0.8, 14.0], [0.2, 13.5], [0.5, 12.8]]] },
+      "properties": { "name": "Zarma / Djerma", "description": "Deuxieme ethnie du Niger. Concentres dans l'ouest autour de Niamey, Dosso, Tillaberi. Apparentes aux Songhai. Langue zarma largement comprise dans l'ouest nigerien.", "population": "4 millions", "detail": "Territoire centre sur la vallee du fleuve Niger au Niger. Regions de Niamey, Dosso, Tillaberi. Frontiere suit le bassin du Dallol Bosso a l'est. Presence dominante dans l'administration nigerienne pre-coup d'Etat.", "sources": "Ethnologue|https://www.ethnologue.com/language/dje CIA Factbook|https://www.cia.gov/the-world-factbook/countries/niger JOSHUAPROJECT|https://joshuaproject.net/people_groups/11562/NG" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[-6.0, 10.5], [-4.0, 10.5], [-4.0, 12.0], [-6.0, 12.0], [-6.0, 10.5]]] },
-      "properties": { "name": "Senoufo", "description": "Peuple du sud Mali et nord Cote d'Ivoire (region Sikasso). Agriculture et traditions initiatiques.", "population": "2.5 millions", "sources": "Ethnologue|https://www.ethnologue.com/language/sef" }
+      "geometry": { "type": "Polygon", "coordinates": [[[-6.5, 10.2], [-5.2, 10.0], [-4.2, 10.5], [-4.0, 11.2], [-4.5, 12.0], [-5.5, 12.2], [-6.5, 11.8], [-7.0, 11.0], [-6.5, 10.2]]] },
+      "properties": { "name": "Senoufo", "description": "Peuple du sud Mali et nord Cote d'Ivoire (region Sikasso). Agriculture et traditions initiatiques. Masques Poro.", "population": "2.5 millions", "detail": "Region de Sikasso (Mali), Korhogo (Cote d'Ivoire), Banfora (Burkina Faso). Zone delimitee par les limites de la savane soudanienne. Societe initiee Poro. Agriculture du coton.", "sources": "Ethnologue|https://www.ethnologue.com/language/sef JOSHUAPROJECT|https://joshuaproject.net/people_groups/14929/ML" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[-12.0, 13.0], [-9.0, 13.0], [-9.0, 15.5], [-12.0, 15.5], [-12.0, 13.0]]] },
-      "properties": { "name": "Soninke / Sarakole", "description": "Peuple de la region de Kayes (Mali). Grande diaspora. Heritiers de l'Empire du Ghana.", "population": "2 millions", "sources": "Ethnologue|https://www.ethnologue.com/language/snk" }
+      "geometry": { "type": "Polygon", "coordinates": [[[-12.5, 13.5], [-11.0, 13.0], [-9.5, 13.2], [-8.8, 14.0], [-9.0, 15.0], [-10.0, 15.5], [-11.5, 15.2], [-12.5, 14.5], [-12.5, 13.5]]] },
+      "properties": { "name": "Soninke / Sarakole", "description": "Peuple de la region de Kayes (Mali). Grande diaspora en France et Afrique de l'Ouest. Heritiers de l'Empire du Ghana (Wagadou).", "population": "2 millions", "detail": "Region de Kayes (Mali), Guidimakha (Mauritanie), Tambacounda (Senegal). Frontiere suit le bassin du haut Senegal. Empire du Ghana (Koumbi Saleh) VIIIe-XIe siecle. Forte tradition de migration saisonniere et diaspora.", "sources": "Ethnologue|https://www.ethnologue.com/language/snk JOSHUAPROJECT|https://joshuaproject.net/people_groups/15071/ML" }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Polygon", "coordinates": [[[-4.0, 11.5], [-2.0, 11.5], [-2.0, 13.0], [-4.0, 13.0], [-4.0, 11.5]]] },
-      "properties": { "name": "Bobo", "description": "Peuple de l'ouest Burkina Faso (region Bobo-Dioulasso). Agriculteurs, masques traditionnels.", "population": "1 million", "sources": "Ethnologue|https://www.ethnologue.com/language/bbo" }
+      "geometry": { "type": "Polygon", "coordinates": [[[-4.8, 10.8], [-3.8, 10.5], [-2.8, 10.8], [-2.5, 11.5], [-3.0, 12.2], [-4.0, 12.5], [-4.8, 12.0], [-5.2, 11.5], [-4.8, 10.8]]] },
+      "properties": { "name": "Bobo", "description": "Peuple de l'ouest Burkina Faso (region Bobo-Dioulasso). Agriculteurs, masques traditionnels celebres. Apparentes aux Bwa.", "population": "1 million", "detail": "Region de Bobo-Dioulasso et Houet (Burkina Faso). Zone de savane arboree. Frontiere suit les limites de la province du Houet. Masques de feuilles et festivals traditionnels.", "sources": "Ethnologue|https://www.ethnologue.com/language/bbo JOSHUAPROJECT|https://joshuaproject.net/people_groups/10771/UV" }
     }
   ]
 }
