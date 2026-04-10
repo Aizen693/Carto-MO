@@ -111,7 +111,6 @@ const ZONE_CONFIGS = {
       { label: 'Mars 16-31', file: '2026-mars-16-31.geojson' }
     ],
     OVERLAY_LAYERS: [
-      { id: 'puits',            label: 'Puits / Wells',           file: 'puits-mali.geojson',      cat: 'Terrain & Ressources' },
       { id: 'mines',            label: 'Ressources minieres',     file: 'mines.geojson',           cat: 'Terrain & Ressources' },
       { id: 'infrastructures',  label: 'Infrastructures & axes',  file: 'infrastructures.geojson', cat: 'Terrain & Ressources' },
       { id: 'ethnies',          label: 'Ethnies & sous-groupes',  file: 'ethnies.geojson',         cat: 'Populations' },
