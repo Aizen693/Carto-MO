@@ -417,9 +417,8 @@ const ZONE_CONFIG = {
     id: 'ethnies',
     file: 'ethnies.geojson',
     layers: [
-      { id: 'ethnies-fill', type: 'fill', paint: { 'fill-color': '#e07c5a', 'fill-opacity': 0.18 } },
-      { id: 'ethnies-outline', type: 'line', paint: { 'line-color': '#e07c5a', 'line-width': 1.2, 'line-opacity': 0.6 } },
-      { id: 'ethnies-labels', type: 'symbol', paint: { 'text-color': '#e07c5a', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 10, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+      { id: 'ethnies-fill', type: 'fill', paint: { 'fill-color': '#e07c5a', 'fill-opacity': 0.1 } },
+      { id: 'ethnies-outline', type: 'line', paint: { 'line-color': '#e07c5a', 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 0.8, 8, 1.2, 12, 1.8], 'line-opacity': 0.4 } }
     ]
   });
 
@@ -428,9 +427,9 @@ const ZONE_CONFIG = {
     id: 'forces',
     file: 'forces.geojson',
     layers: [
-      { id: 'forces-glow', type: 'circle', paint: { 'circle-radius': 7, 'circle-color': '#e63946', 'circle-opacity': 0.2, 'circle-blur': 0.8 } },
-      { id: 'forces-dots', type: 'circle', paint: { 'circle-radius': 4, 'circle-color': '#e63946', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
-      { id: 'forces-labels', type: 'symbol', paint: { 'text-color': '#e63946', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+      { id: 'forces-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#e63946', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
+      { id: 'forces-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#e63946', 'circle-stroke-opacity': 0.35 } },
+      { id: 'forces-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#e63946', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
     ]
   });
 
@@ -450,9 +449,9 @@ const ZONE_CONFIG = {
     id: 'population',
     file: 'population.geojson',
     layers: [
-      { id: 'population-lines', type: 'line', paint: { 'line-color': '#ab47bc', 'line-width': 2, 'line-dasharray': [2, 2], 'line-opacity': 0.7 } },
-      { id: 'population-dots', type: 'circle', paint: { 'circle-radius': 5, 'circle-color': '#ab47bc', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
-      { id: 'population-labels', type: 'symbol', paint: { 'text-color': '#ab47bc', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+      { id: 'population-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#ab47bc', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
+      { id: 'population-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#ab47bc', 'circle-stroke-opacity': 0.35 } },
+      { id: 'population-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#ab47bc', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
     ]
   });
 
@@ -473,8 +472,10 @@ const ZONE_CONFIG = {
     id: 'infrastructures',
     file: 'infrastructures.geojson',
     layers: [
-      { id: 'infra-lines', type: 'line', paint: { 'line-color': '#78909c', 'line-width': 1.8, 'line-opacity': 0.7 } },
-      { id: 'infra-labels', type: 'symbol', paint: { 'text-color': '#78909c', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'symbol-placement': 'line', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+      { id: 'infra-lines', type: 'line', paint: { 'line-color': '#78909c', 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.2, 8, 2, 12, 3], 'line-opacity': 0.5, 'line-dasharray': [3, 2] } },
+      { id: 'infra-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#78909c', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
+      { id: 'infra-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#78909c', 'circle-stroke-opacity': 0.35 } },
+      { id: 'infra-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#78909c', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
     ]
   });
 
@@ -483,9 +484,9 @@ const ZONE_CONFIG = {
     id: 'evenements',
     file: 'evenements.geojson',
     layers: [
-      { id: 'events-pulse', type: 'circle', paint: { 'circle-radius': 10, 'circle-color': '#ff5252', 'circle-opacity': 0.12, 'circle-blur': 1 } },
-      { id: 'events-dots', type: 'circle', paint: { 'circle-radius': 4, 'circle-color': '#ff5252', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
-      { id: 'events-labels', type: 'symbol', paint: { 'text-color': '#ff5252', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+      { id: 'events-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#ff5252', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
+      { id: 'events-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#ff5252', 'circle-stroke-opacity': 0.35 } },
+      { id: 'events-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#ff5252', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
     ]
   });
 
@@ -494,9 +495,8 @@ const ZONE_CONFIG = {
     id: 'flux',
     file: 'flux.geojson',
     layers: [
-      { id: 'flux-lines', type: 'line', paint: { 'line-color': '#ff9800', 'line-width': 2.2, 'line-dasharray': [4, 3], 'line-opacity': 0.75 } },
-      { id: 'flux-arrows', type: 'symbol', paint: {}, layout: { 'symbol-placement': 'line', 'symbol-spacing': 80, 'text-field': '\u25B6', 'text-size': 10, 'text-color': '#ff9800', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } },
-      { id: 'flux-labels', type: 'symbol', paint: { 'text-color': '#ff9800', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'symbol-placement': 'line', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+      { id: 'flux-lines', type: 'line', paint: { 'line-color': '#ff9800', 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.2, 8, 2, 12, 3], 'line-dasharray': [4, 3], 'line-opacity': 0.5 } },
+      { id: 'flux-arrows', type: 'symbol', paint: {}, layout: { 'symbol-placement': 'line', 'symbol-spacing': 80, 'text-field': '\u25B6', 'text-size': 10, 'text-color': '#ff9800', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
     ]
   });
 
