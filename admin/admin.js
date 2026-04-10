@@ -14,7 +14,7 @@ import {
 } from './modules/map-editor.js';
 import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js';
 import { init as initActors, renderActorList, updateZone as updateActorZone } from './modules/actor-manager.js';
-import { importGeoJSON, importStaticFiles, exportGeoJSON, loadPuitsGeoJSON, renderPuitsTable, deleteSelectedPuits, exportPuitsGeoJSON, importPuitsFile } from './modules/import-export.js';
+import { importGeoJSON, importStaticFiles, exportGeoJSON } from './modules/import-export.js';
 import { renderActivityLog } from './modules/activity-log.js';
 import { renderUserList } from './modules/user-manager.js';
 
@@ -374,73 +374,6 @@ function setupImportExport() {
       setTimeout(() => { if (progressWrap) progressWrap.style.display = 'none'; }, 4000);
     });
   }
-}
-
-// ── Puits manager ───────────────────────────────────────
-
-function setupPuitsManager() {
-  const tbody = document.getElementById('puits-tbody');
-  const searchInput = document.getElementById('puits-search');
-  const selectAll = document.getElementById('puits-select-all');
-  const deleteBtn = document.getElementById('btn-puits-delete');
-  const importBtn = document.getElementById('btn-puits-import');
-  const importFile = document.getElementById('puits-import-file');
-  const exportBtn = document.getElementById('btn-puits-export');
-
-  function refresh(filter) {
-    renderPuitsTable(tbody, filter);
-    selectAll.checked = false;
-    deleteBtn.disabled = true;
-  }
-
-  // Load existing puits on startup
-  loadPuitsGeoJSON().then(() => refresh());
-
-  // Search filter
-  searchInput.addEventListener('input', () => refresh(searchInput.value));
-
-  // Select all
-  selectAll.addEventListener('change', () => {
-    tbody.querySelectorAll('.puits-cb').forEach(cb => { cb.checked = selectAll.checked; });
-    deleteBtn.disabled = !selectAll.checked;
-  });
-
-  // Track checkbox changes for delete button state
-  tbody.addEventListener('change', (e) => {
-    if (e.target.classList.contains('puits-cb')) {
-      const any = tbody.querySelector('.puits-cb:checked');
-      deleteBtn.disabled = !any;
-      const tr = e.target.closest('tr');
-      if (tr) tr.classList.toggle('puits-selected', e.target.checked);
-    }
-  });
-
-  // Delete selected
-  deleteBtn.addEventListener('click', () => {
-    const count = tbody.querySelectorAll('.puits-cb:checked').length;
-    if (!count || !confirm(`Supprimer ${count} puits ?`)) return;
-    const deleted = deleteSelectedPuits();
-    refresh(searchInput.value);
-  });
-
-  // Import
-  importBtn.addEventListener('click', () => importFile.click());
-  importFile.addEventListener('change', async () => {
-    if (!importFile.files.length) return;
-    try {
-      const added = await importPuitsFile(importFile.files[0]);
-      refresh(searchInput.value);
-      alert(`${added} puits importes`);
-    } catch (e) {
-      alert('Erreur import : ' + e.message);
-    }
-    importFile.value = '';
-  });
-
-  // Export
-  exportBtn.addEventListener('click', () => {
-    exportPuitsGeoJSON();
-  });
 }
 
 // ── Calques manager ────────────────────────────────────
