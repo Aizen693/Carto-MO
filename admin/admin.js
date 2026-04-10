@@ -247,6 +247,8 @@ function setupSidebarTabs() {
 
       if (tab.dataset.tab === 'actors') {
         renderActorList(document.getElementById('actors-list'));
+      } else if (tab.dataset.tab === 'io') {
+        refreshCalquesList();
       } else if (tab.dataset.tab === 'logs') {
         refreshLogs();
       } else if (tab.dataset.tab === 'users') {
@@ -507,13 +509,6 @@ async function refreshCalquesList() {
   }
   if (emptyEl) emptyEl.style.display = 'none';
 
-  // Group by category
-  const cats = {};
-  overlays.forEach(o => {
-    if (!cats[o.cat]) cats[o.cat] = [];
-    cats[o.cat].push(o);
-  });
-
   // Check file status for each overlay
   const statuses = {};
   await Promise.all(overlays.map(async (o) => {
@@ -531,11 +526,9 @@ async function refreshCalquesList() {
     }
   }));
 
-  // Render
+  // Render in exact config order, numbered
   let html = '';
-  Object.entries(cats).forEach(([catName, items]) => {
-    html += `<div class="calques-cat">${catName}</div>`;
-    items.forEach(o => {
+  overlays.forEach((o, i) => {
       const s = statuses[o.id];
       let statusHTML, countLabel;
       if (s === 'absent') {
@@ -549,13 +542,12 @@ async function refreshCalquesList() {
         countLabel = `<span style="font:300 7px/1 var(--m);color:var(--tx1)">${s.count} pts</span>`;
       }
       html += `<div class="calque-row">
-        <span class="calque-name">${o.label}</span>
+        <span class="calque-name">${i + 1}. ${o.label}</span>
         ${countLabel}
         ${statusHTML}
-        <span class="calque-file">${o.file}</span>
         <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
+        <span class="calque-file">${o.file}</span>
       </div>`;
-    });
   });
   html += '<div id="calque-status-msg" class="calque-import-status"></div>';
   container.innerHTML = html;
