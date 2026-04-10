@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.2/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.2/mapbox-gl-geocoder.css">
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
 <link rel="stylesheet" href="../shared/styles.css">
 <style>
@@ -54,6 +56,16 @@
   border-top:1px solid var(--ln,rgba(255,255,255,0.07));
 }
 .sb-cat-label:first-child { border-top:none; }
+.mapboxgl-ctrl-geocoder { background:rgba(17,18,20,0.97) !important; border:1px solid rgba(255,255,255,0.07) !important; border-top:1px solid #c49a3c !important; box-shadow:none !important; }
+.mapboxgl-ctrl-geocoder input { color:#e8e6e3 !important; font:400 10px/1 'JetBrains Mono',monospace !important; }
+.mapboxgl-ctrl-geocoder input::placeholder { color:#3e444e !important; }
+.mapboxgl-ctrl-geocoder .suggestions { background:rgba(17,18,20,0.99) !important; border:1px solid rgba(255,255,255,0.07) !important; }
+.mapboxgl-ctrl-geocoder .suggestions .active > a, .mapboxgl-ctrl-geocoder .suggestions > li > a:hover { background:rgba(196,154,60,0.12) !important; }
+.mapboxgl-ctrl-geocoder .suggestions > li > a { color:#c8c5c0 !important; font:400 9px/1.4 'JetBrains Mono',monospace !important; border-bottom:1px solid rgba(255,255,255,0.04) !important; }
+.mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon-search { fill:#3e444e !important; }
+.mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--button { background:none !important; }
+.mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon-close { fill:#8a8680 !important; }
+.mapboxgl-ctrl-geocoder--pin-right > * { top:50% !important; transform:translateY(-50%) !important; }
 </style>
 </head>
 <body>
@@ -197,7 +209,7 @@
     <div class="sb-section-body">
       <div class="sb-tool-row" onclick="toggleHeatmap();toggleSidebar()"><span class="sb-tool-icon">&#x25D1;</span> Heatmap</div>
       <div class="sb-tool-row" onclick="toggleComparePanel();toggleSidebar()"><span class="sb-tool-icon">&#x25EB;</span> Comparer</div>
-      <div class="sb-tool-row" onclick="document.getElementById('search-input').focus();toggleSidebar()"><span class="sb-tool-icon">&#x2315;</span> Rechercher</div>
+      <div class="sb-tool-row" onclick="focusGeocoder();toggleSidebar()"><span class="sb-tool-icon">&#x2315;</span> Rechercher lieu</div>
       <div class="sb-tool-row" onclick="exportMap();toggleSidebar()"><span class="sb-tool-icon">&#x25A3;</span> Export PNG</div>
     </div>
 
@@ -575,6 +587,27 @@ const ZONE_CONFIG = {
         if (entry.getData() && !map.getSource(entry.getSrcId())) entry.addLayers();
       });
     });
+  };
+})();
+
+/* ── GEOCODER (recherche de lieux) ── */
+(function() {
+  var geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl,
+    placeholder: 'Rechercher un lieu...',
+    language: 'fr',
+    bbox: [-20, 2, 25, 30],
+    limit: 5,
+    marker: {
+      color: '#c49a3c'
+    }
+  });
+  map.addControl(geocoder, 'top-left');
+
+  window.focusGeocoder = function() {
+    var input = document.querySelector('.mapboxgl-ctrl-geocoder input');
+    if (input) input.focus();
   };
 })();
 </script>
