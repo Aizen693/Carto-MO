@@ -13,7 +13,7 @@
         "societe": "Barrick Mining",
         "pays_societe": "Canada",
         "remarques": "site ferme entre janvier 2025 et le 18 decembre 2025",
-        "sources": "Reuters, RFI, Agence Ecofin"
+        "sources": "Reuters|https://www.reuters.com/world/africa/mali-renews-barrick-minings-loulo-license-10-more-years-2026-02-13/ RFI|https://www.rfi.fr/fr/afrique/20260207-mali-reprise-de-la-production-de-la-mine-d-or-de-loulo-apr%C3%A8s-l-accord-entre-barrick-gold-et-bamako Agence Ecofin|https://www.agenceecofin.com/actualites-industries/1302-125763-la-suspension-de-loulo-gounkoto-peut-couter-550-millions-au-mali-en-2025-barrick"
       }
     },
     {
@@ -28,7 +28,7 @@
         "societe": "B2Gold",
         "pays_societe": "Canada",
         "remarques": "2e plus grande mine d'or du Mali",
-        "sources": "Ecofin Agency"
+        "sources": "Ecofin Agency|https://www.ecofinagency.com/mining/1309-45889-gold-mali-seals-deal-to-earn-more-from-fekola-complex"
       }
     },
     {
@@ -43,7 +43,7 @@
         "societe": "B2Gold",
         "pays_societe": "Canada",
         "remarques": "Nouveau depot rattache au complexe Fekola",
-        "sources": "Ecofin Agency"
+        "sources": "Ecofin Agency|https://www.ecofinagency.com/mining/1309-45889-gold-mali-seals-deal-to-earn-more-from-fekola-complex"
       }
     },
     {
@@ -57,7 +57,7 @@
         "statut": "Legale",
         "societe": "Resolute Mining",
         "pays_societe": "Australie",
-        "sources": "Reuters"
+        "sources": "Reuters|https://www.reuters.com/world/africa/mali-announces-more-new-mining-deals-under-revised-code-2025-09-22/"
       }
     },
     {
@@ -71,7 +71,7 @@
         "statut": "Legale",
         "societe": "Resolute Mining",
         "pays_societe": "Australie",
-        "sources": "Reuters"
+        "sources": "Reuters|https://www.reuters.com/world/africa/mali-announces-more-new-mining-deals-under-revised-code-2025-09-22/"
       }
     },
     {
@@ -85,7 +85,7 @@
         "statut": "Legale",
         "societe": "Allied Gold",
         "pays_societe": "Canada",
-        "sources": "Ecofin Agency"
+        "sources": "Ecofin Agency|https://www.ecofinagency.com/mining/1110-46005-mali-grants-10-year-mining-permit-for-sadiola-gold-mine"
       }
     },
     {
@@ -99,7 +99,7 @@
         "statut": "Legale",
         "societe": "Allied Gold",
         "pays_societe": "Canada",
-        "sources": "Reuters"
+        "sources": "Reuters|https://www.reuters.com/world/africa/mali-gold-output-plunges-23-barrick-halt-tougher-rules-reshape-sector-2026-01-16/"
       }
     },
     {
@@ -113,7 +113,7 @@
         "statut": "Legale",
         "societe": "Hummingbird Resources",
         "pays_societe": "Royaume-Uni",
-        "sources": "Reuters, APA News, Zonebourse"
+        "sources": "Reuters|https://www.reuters.com/sustainability/mali-detains-five-gold-mine-managers-over-alleged-code-breaches-sources-say-2026-01-27/ APA News|https://fr.apanews.net/news/mali-le-projet-aurifere-de-yanfolila-passe-sous-controle-local/"
       }
     },
     {
@@ -127,7 +127,7 @@
         "statut": "Legale",
         "societe": "Morila SA / SOREM / Flagship",
         "pays_societe": "Mali / Etats-Unis",
-        "sources": "Reuters, APA News"
+        "sources": "Reuters|https://www.reuters.com/world/africa/suspected-jihadists-attack-malis-morila-mine-2026-01-05/ APA News|https://fr.apanews.net/governance/mali-letat-reprend-la-mine-de-morila-apres-vingt-ans-de-gestion-privee/"
       }
     },
     {
@@ -141,7 +141,7 @@
         "statut": "Legale",
         "societe": "Robex Resources",
         "pays_societe": "Canada",
-        "sources": "Ecofin Agency"
+        "sources": "Ecofin Agency|https://www.ecofinagency.com/mining/1110-46005-mali-grants-10-year-mining-permit-for-sadiola-gold-mine"
       }
     },
     {
@@ -156,7 +156,7 @@
         "societe": "Toubani Resources",
         "pays_societe": "Australie",
         "remarques": "Projet",
-        "sources": "Reuters"
+        "sources": "Reuters|https://www.reuters.com/markets/commodities/mali-expects-rise-gold-output-2025-reopened-barrick-operations-2025-03-26/"
       }
     },
     {
@@ -170,7 +170,7 @@
         "statut": "Legale",
         "societe": "Robex Resources",
         "pays_societe": "Canada",
-        "sources": "Reuters"
+        "sources": "Reuters|https://www.reuters.com/markets/commodities/mali-expects-rise-gold-output-2025-reopened-barrick-operations-2025-03-26/"
       }
     },
     {
@@ -184,7 +184,7 @@
         "statut": "Legale",
         "societe": "Exploitants varies",
         "pays_societe": "Divers",
-        "sources": "Reuters"
+        "sources": "Reuters|https://www.reuters.com/markets/commodities/mali-expects-rise-gold-output-2025-reopened-barrick-operations-2025-03-26/"
       }
     },
     {
@@ -199,7 +199,7 @@
         "societe": "Endeavour Mining",
         "pays_societe": "Royaume-Uni",
         "remarques": "Mine fermee, projet historique",
-        "sources": "Reuters"
+        "sources": "Reuters|https://www.reuters.com/markets/commodities/mali-expects-rise-gold-output-2025-reopened-barrick-operations-2025-03-26/"
       }
     }
   ]

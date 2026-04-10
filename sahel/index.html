@@ -334,10 +334,17 @@ const ZONE_CONFIG = {
       var label = k.replace(/_/g, ' ').replace(/^\w/, function(c) { return c.toUpperCase(); });
       body += '<div class="popup-row"><span class="popup-key">' + label + '</span><span class="popup-val">' + v + '</span></div>';
     });
-    // Sources always last, styled distinctly
+    // Sources always last — clickable hyperlinks
     sourcesVal = (props.sources || props.Sources || '').toString().trim();
     if (sourcesVal) {
-      body += '<div class="popup-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);"><span class="popup-key" style="color:#888;">Sources</span><span class="popup-val" style="color:#999;font-style:italic;font-size:10px;">' + sourcesVal + '</span></div>';
+      var linksHtml = sourcesVal.split(/\s+(?=[^\s|]+\|http)/).map(function(s) {
+        var parts = s.split('|');
+        if (parts.length === 2 && parts[1].startsWith('http')) {
+          return '<a href="' + parts[1] + '" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-size:10px;font-family:\'JetBrains Mono\',monospace;border:1px solid rgba(196,154,60,0.25);padding:1px 6px;letter-spacing:0.04em;">' + parts[0] + '</a>';
+        }
+        return '<span style="color:#999;font-size:10px;">' + s + '</span>';
+      }).join(' ');
+      body += '<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="popup-key" style="color:#888;margin-right:2px;">Sources</span>' + linksHtml + '</div>';
     }
     return header + (body ? '<div class="popup-body">' + body + '</div>' : '');
   }
