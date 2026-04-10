@@ -412,9 +412,10 @@ const ZONE_CONFIG = {
     id: 'mines',
     file: 'mines.geojson',
     layers: [
-      { id: 'mines-glow', type: 'circle', paint: { 'circle-radius': 8, 'circle-color': '#ffd700', 'circle-opacity': 0.15, 'circle-blur': 0.8 } },
-      { id: 'mines-dots', type: 'circle', paint: { 'circle-radius': 4, 'circle-color': '#ffd700', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
-      { id: 'mines-labels', type: 'symbol', paint: { 'text-color': '#ffd700', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+      { id: 'mines-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 10, 8, 16, 12, 22], 'circle-color': '#d4a017', 'circle-opacity': 0.08, 'circle-blur': 1.2 } },
+      { id: 'mines-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 5, 8, 8, 12, 12], 'circle-color': 'transparent', 'circle-stroke-width': 1, 'circle-stroke-color': '#d4a017', 'circle-stroke-opacity': 0.4 } },
+      { id: 'mines-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 8, 4, 12, 6], 'circle-color': '#d4a017', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#1a1a1a' } },
+      { id: 'mines-labels', type: 'symbol', minzoom: 7, paint: { 'text-color': '#d4a017', 'text-halo-color': 'rgba(10,10,10,0.95)', 'text-halo-width': 1.5, 'text-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1] }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 7, 8, 12, 11], 'text-offset': [0, 1.4], 'text-anchor': 'top', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-optional': true, 'text-allow-overlap': false } }
     ]
   });
 
