@@ -317,6 +317,25 @@ const ZONE_CONFIG = {
 (function() {
   const layerRegistry = {};
 
+  // Calque popup color map
+  var calqueColors = { ethnies: '#e07c5a', forces: '#e63946', 'points-eau': '#29b6f6', population: '#ab47bc', mines: '#d4a017', infrastructures: '#66bb6a', evenements: '#ff5252', flux: '#ff9800' };
+
+  function makeCalquePopup(props, calqueId) {
+    var color = calqueColors[calqueId] || '#888';
+    var name = props.name || props.Name || props.nom || props.Nom || 'Point';
+    var header = '<div class="popup-header"><div class="popup-dot-bar" style="background:' + color + '"></div><div class="popup-actor">' + name + '</div></div>';
+    var body = '';
+    var skip = ['name','Name','nom','Nom','_color','_casualties','_period'];
+    Object.keys(props).forEach(function(k) {
+      if (skip.indexOf(k) !== -1) return;
+      var v = (props[k] || '').toString().trim();
+      if (!v) return;
+      var label = k.replace(/_/g, ' ').replace(/^\w/, function(c) { return c.toUpperCase(); });
+      body += '<div class="popup-row"><span class="popup-key">' + label + '</span><span class="popup-val">' + v + '</span></div>';
+    });
+    return header + (body ? '<div class="popup-body">' + body + '</div>' : '');
+  }
+
   function createLayerToggle(cfg) {
     let data = null;
     let visible = false;
@@ -336,9 +355,26 @@ const ZONE_CONFIG = {
           type: l.type,
           source: srcId,
           paint: l.paint,
-          layout: Object.assign({ visibility: visible ? 'visible' : 'none' }, l.layout || {})
+          layout: Object.assign({ visibility: visible ? 'visible' : 'none' }, l.layout || {}),
+          ...(l.minzoom ? { minzoom: l.minzoom } : {})
         });
       });
+
+      // Click popup on dot layers
+      var dotLayer = cfg.layers.find(function(l) { return l.id.indexOf('-dots') !== -1; });
+      if (dotLayer) {
+        map.on('click', dotLayer.id, function(e) {
+          if (!e.features || !e.features.length) return;
+          var f = e.features[0];
+          var coords = f.geometry.coordinates.slice();
+          new mapboxgl.Popup({ closeButton: true, maxWidth: '320px', className: 'algor-popup' })
+            .setLngLat(coords)
+            .setHTML(makeCalquePopup(f.properties, cfg.id))
+            .addTo(map);
+        });
+        map.on('mouseenter', dotLayer.id, function() { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', dotLayer.id, function() { map.getCanvas().style.cursor = ''; });
+      }
     }
 
     function toggle() {
