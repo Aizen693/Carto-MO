@@ -76,6 +76,9 @@ const ZONE_CONFIGS = {
       { label: '2021-2022', file: '2021-2022.geojson' },
       { label: '2023-2026', file: '2023-2026.geojson' }
     ],
+    OVERLAY_LAYERS: [
+      { id: 'zones-daesh', label: 'Zones Daesh (2013-2016)', file: 'map-zones.json', cat: 'Territoires' }
+    ],
     DATA_PATH: '../moyen-orient/',
     STYLES: { standard: 'mapbox://styles/mapbox/standard', satellite: 'mapbox://styles/mapbox/satellite-streets-v12', dark: 'mapbox://styles/mapbox/dark-v11' },
     MAP_CENTER: [43, 30], MAP_ZOOM: 4.5, MAP_BEARING: 0
@@ -107,6 +110,16 @@ const ZONE_CONFIGS = {
       { label: 'Mars 01-15', file: '2026-mars-01-15.geojson' },
       { label: 'Mars 16-31', file: '2026-mars-16-31.geojson' }
     ],
+    OVERLAY_LAYERS: [
+      { id: 'puits',            label: 'Puits / Wells',           file: 'puits-mali.geojson',      cat: 'Terrain & Ressources' },
+      { id: 'mines',            label: 'Ressources minieres',     file: 'mines.geojson',           cat: 'Terrain & Ressources' },
+      { id: 'infrastructures',  label: 'Infrastructures & axes',  file: 'infrastructures.geojson', cat: 'Terrain & Ressources' },
+      { id: 'ethnies',          label: 'Ethnies & sous-groupes',  file: 'ethnies.geojson',         cat: 'Populations' },
+      { id: 'population',       label: 'Population & mobilites',  file: 'population.geojson',      cat: 'Populations' },
+      { id: 'forces',           label: 'Forces en presence',      file: 'forces.geojson',          cat: 'Securite' },
+      { id: 'evenements',       label: 'Evenements securitaires', file: 'evenements.geojson',      cat: 'Securite' },
+      { id: 'flux',             label: 'Corridors & trafics',     file: 'flux.geojson',            cat: 'Reseaux illicites' }
+    ],
     DATA_PATH: '../sahel/',
     STYLES: { standard: 'mapbox://styles/mapbox/standard', satellite: 'mapbox://styles/mapbox/satellite-streets-v12', dark: 'mapbox://styles/mapbox/dark-v11' },
     MAP_CENTER: [1.5, 15.5], MAP_ZOOM: 4.8, MAP_BEARING: -10
@@ -128,6 +141,7 @@ const ZONE_CONFIGS = {
       { label: '2023' }, { label: '2024-S1' }, { label: '2024-S2' },
       { label: '2025-S1' }, { label: '2025-S2' }, { label: '2026' }
     ],
+    OVERLAY_LAYERS: [],
     DATA_PATH: '../rdc/',
     STYLES: { standard: 'mapbox://styles/mapbox/standard', satellite: 'mapbox://styles/mapbox/satellite-streets-v12', dark: 'mapbox://styles/mapbox/dark-v11' },
     MAP_CENTER: [28.5, -1.5], MAP_ZOOM: 6, MAP_BEARING: 0
@@ -213,6 +227,7 @@ async function setupApp() {
   setupZoneSelect();
   setupImportExport();
   setupPuitsManager();
+  setupCalquesManager();
   setupMapCoords();
 
   // Wait for map to be fully loaded before rendering points
@@ -276,6 +291,8 @@ function updateIOZoneBadge() {
   // Afficher/masquer section Puits selon la zone
   const puitsSection = document.getElementById('puits-section');
   if (puitsSection) puitsSection.style.display = currentZone === 'sahel' ? '' : 'none';
+  // Rafraichir la liste des calques
+  refreshCalquesList();
 }
 
 function setIOStatus(elId, msg, type) {
@@ -425,6 +442,134 @@ function setupPuitsManager() {
   // Export
   exportBtn.addEventListener('click', () => {
     exportPuitsGeoJSON();
+  });
+}
+
+// ── Calques manager ────────────────────────────────────
+
+let calqueImportTarget = null; // which overlay id is being imported
+
+function setupCalquesManager() {
+  const fileInput = document.getElementById('calque-import-file');
+  fileInput.addEventListener('change', async () => {
+    if (!fileInput.files.length || !calqueImportTarget) return;
+    const config = ZONE_CONFIGS[currentZone];
+    const overlay = config.OVERLAY_LAYERS?.find(o => o.id === calqueImportTarget);
+    if (!overlay) return;
+
+    const statusEl = document.getElementById('calque-status-msg');
+
+    try {
+      const text = await fileInput.files[0].text();
+      const data = JSON.parse(text);
+
+      if (!data.type || !data.features) {
+        throw new Error('Format invalide — FeatureCollection attendu');
+      }
+
+      // Write to the target file via download (user saves to correct location)
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = overlay.file;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      if (statusEl) {
+        statusEl.textContent = `${data.features.length} features — fichier "${overlay.file}" telecharge. Placez-le dans le dossier ${config.DATA_PATH.replace('../', '')}.`;
+        statusEl.className = 'calque-import-status io-status-ok';
+      }
+    } catch (e) {
+      if (statusEl) {
+        statusEl.textContent = 'Erreur : ' + e.message;
+        statusEl.className = 'calque-import-status io-status-err';
+      }
+    }
+
+    fileInput.value = '';
+    calqueImportTarget = null;
+    // Re-check statuses after a moment
+    setTimeout(refreshCalquesList, 1000);
+  });
+
+  refreshCalquesList();
+}
+
+async function refreshCalquesList() {
+  const container = document.getElementById('calques-list');
+  const emptyEl = document.getElementById('calques-empty');
+  if (!container) return;
+
+  const config = ZONE_CONFIGS[currentZone];
+  const overlays = config.OVERLAY_LAYERS || [];
+
+  if (!overlays.length) {
+    container.innerHTML = '';
+    if (emptyEl) emptyEl.style.display = '';
+    return;
+  }
+  if (emptyEl) emptyEl.style.display = 'none';
+
+  // Group by category
+  const cats = {};
+  overlays.forEach(o => {
+    if (!cats[o.cat]) cats[o.cat] = [];
+    cats[o.cat].push(o);
+  });
+
+  // Check file status for each overlay
+  const statuses = {};
+  await Promise.all(overlays.map(async (o) => {
+    try {
+      const res = await fetch(config.DATA_PATH + o.file, { method: 'GET' });
+      if (!res.ok) { statuses[o.id] = 'absent'; return; }
+      const data = await res.json();
+      if (data.features && data.features.length > 0) {
+        statuses[o.id] = { status: 'ok', count: data.features.length };
+      } else {
+        statuses[o.id] = { status: 'vide', count: 0 };
+      }
+    } catch {
+      statuses[o.id] = 'absent';
+    }
+  }));
+
+  // Render
+  let html = '';
+  Object.entries(cats).forEach(([catName, items]) => {
+    html += `<div class="calques-cat">${catName}</div>`;
+    items.forEach(o => {
+      const s = statuses[o.id];
+      let statusHTML, countLabel;
+      if (s === 'absent') {
+        statusHTML = '<span class="calque-status calque-status-absent">Absent</span>';
+        countLabel = '';
+      } else if (s.status === 'vide') {
+        statusHTML = '<span class="calque-status calque-status-vide">Vide</span>';
+        countLabel = '<span style="font:300 7px/1 var(--m);color:var(--tx2)">0 pts</span>';
+      } else {
+        statusHTML = '<span class="calque-status calque-status-ok">OK</span>';
+        countLabel = `<span style="font:300 7px/1 var(--m);color:var(--tx1)">${s.count} pts</span>`;
+      }
+      html += `<div class="calque-row">
+        <span class="calque-name">${o.label}</span>
+        ${countLabel}
+        ${statusHTML}
+        <span class="calque-file">${o.file}</span>
+        <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
+      </div>`;
+    });
+  });
+  html += '<div id="calque-status-msg" class="calque-import-status"></div>';
+  container.innerHTML = html;
+
+  // Bind import buttons
+  container.querySelectorAll('.calque-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      calqueImportTarget = btn.dataset.calqueId;
+      document.getElementById('calque-import-file').click();
+    });
   });
 }
 
