@@ -259,6 +259,7 @@ function setupZoneSelect() {
     switchZone(config);
     updateFormZone(currentZone, config);
     updateActorZone(currentZone, config);
+    updateIOZoneBadge();
     refreshPoints();
     loadStaticFiles();
   });
@@ -266,51 +267,96 @@ function setupZoneSelect() {
 
 // ── Import/Export ────────────────────────────────────────
 
+function updateIOZoneBadge() {
+  const badge = document.getElementById('io-zone-badge');
+  if (badge) {
+    const labels = { 'moyen-orient': 'Moyen-Orient', 'sahel': 'Sahel', 'rdc': 'RDC' };
+    badge.textContent = labels[currentZone] || currentZone;
+  }
+  // Afficher/masquer section Puits selon la zone
+  const puitsSection = document.getElementById('puits-section');
+  if (puitsSection) puitsSection.style.display = currentZone === 'sahel' ? '' : 'none';
+}
+
+function setIOStatus(elId, msg, type) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'io-status' + (type === 'ok' ? ' io-status-ok' : type === 'err' ? ' io-status-err' : '');
+}
+
 function setupImportExport() {
+  updateIOZoneBadge();
+
+  // ── Import GeoJSON ──
   document.getElementById('btn-import').addEventListener('click', async () => {
     const fileInput = document.getElementById('import-file');
-    if (!fileInput.files.length) { alert('Selectionnez un fichier GeoJSON'); return; }
-    if (!requireRole('editor')) { alert('Permission insuffisante'); return; }
+    if (!fileInput.files.length) { setIOStatus('import-status', 'Selectionnez un fichier GeoJSON.', 'err'); return; }
+    if (!requireRole('editor')) { setIOStatus('import-status', 'Permission insuffisante.', 'err'); return; }
+
+    const btn = document.getElementById('btn-import');
+    const fileName = fileInput.files[0].name;
+    btn.disabled = true;
+    setIOStatus('import-status', `Import de "${fileName}" en cours...`);
+
     try {
       const count = await importGeoJSON(fileInput.files[0], currentZone, ZONE_CONFIGS[currentZone]);
-      alert(`${count} points importes avec succes`);
+      setIOStatus('import-status', `${count} points importes depuis "${fileName}".`, 'ok');
       fileInput.value = '';
       refreshPoints();
+      loadStaticFiles();
     } catch (e) {
-      alert('Erreur import: ' + e.message);
+      setIOStatus('import-status', 'Erreur : ' + e.message, 'err');
     }
+    btn.disabled = false;
   });
 
+  // ── Export GeoJSON ──
   document.getElementById('btn-export').addEventListener('click', async () => {
+    const btn = document.getElementById('btn-export');
+    btn.disabled = true;
     try {
       await exportGeoJSON(currentZone);
     } catch (e) {
-      alert('Erreur export: ' + e.message);
+      alert('Erreur export : ' + e.message);
     }
+    btn.disabled = false;
   });
 
-  // Batch import static files into Supabase
+  // ── Migration batch vers Supabase ──
   const batchBtn = document.getElementById('btn-batch-import');
   if (batchBtn) {
     batchBtn.addEventListener('click', async () => {
-      if (!requireRole('admin')) { alert('Reservé aux administrateurs'); return; }
+      if (!requireRole('admin')) { setIOStatus('batch-import-status', 'Reserve aux administrateurs.', 'err'); return; }
       const config = ZONE_CONFIGS[currentZone];
-      if (!config.DATA_PATH) { alert('Pas de fichiers statiques pour cette zone'); return; }
-      if (!confirm(`Importer tous les fichiers statiques de la zone "${currentZone}" dans Supabase ?\nLes doublons seront ignores.`)) return;
+      if (!config.DATA_PATH) { setIOStatus('batch-import-status', 'Pas de fichiers statiques pour cette zone.', 'err'); return; }
+      if (!confirm(`Migrer tous les fichiers statiques de la zone "${currentZone}" vers Supabase ?\nLes doublons seront ignores.`)) return;
 
       batchBtn.disabled = true;
-      const statusEl = document.getElementById('batch-import-status');
+      const progressWrap = document.getElementById('batch-import-progress');
+      const progressFill = document.getElementById('batch-progress-fill');
+      const progressLabel = document.getElementById('batch-progress-label');
+      if (progressWrap) progressWrap.style.display = 'flex';
+
       try {
         const result = await importStaticFiles(currentZone, config, (current, total, label) => {
-          if (statusEl) statusEl.textContent = `Periode ${current}/${total} : ${label}...`;
+          const pct = Math.round((current / total) * 100);
+          if (progressFill) progressFill.style.width = pct + '%';
+          if (progressLabel) progressLabel.textContent = `${current}/${total} — ${label}`;
+          setIOStatus('batch-import-status', `Periode ${current}/${total} : ${label}...`);
         });
-        if (statusEl) statusEl.textContent = '';
-        alert(`Import termine !\n${result.total} points importes, ${result.skipped} ignores (doublons/sans nom).\n\n${result.perPeriod.map(p => `${p.label}: ${p.count}`).join('\n')}`);
+
+        if (progressFill) progressFill.style.width = '100%';
+        const summary = result.perPeriod.filter(p => p.count > 0).map(p => `${p.label}: ${p.count}`).join(', ');
+        setIOStatus('batch-import-status', `${result.total} points importes, ${result.skipped} ignores.${summary ? ' (' + summary + ')' : ''}`, 'ok');
         refreshPoints();
+        loadStaticFiles();
       } catch (e) {
-        alert('Erreur import batch: ' + e.message);
+        setIOStatus('batch-import-status', 'Erreur : ' + e.message, 'err');
       }
+
       batchBtn.disabled = false;
+      setTimeout(() => { if (progressWrap) progressWrap.style.display = 'none'; }, 4000);
     });
   }
 }
@@ -449,6 +495,16 @@ async function loadStaticFiles() {
           f.properties._period = period.label;
           f.properties._color = config.ACTOR_COLORS[actorName] || '#888888';
           f.properties._desc = rawDesc || null;
+
+          // Extract casualties from description (same logic as import-export.js)
+          if (!f.properties._casualties && rawDesc) {
+            const cm = rawDesc.match(/([0-9][0-9 ]*)\s*(?:tués?|morts?|victimes?|blessés?|hommes)/gi);
+            if (cm) {
+              const vals = cm.map(n => parseInt(n.replace(/\s/g, ''))).filter(n => !isNaN(n) && n > 0);
+              if (vals.length) f.properties._casualties = Math.max(...vals);
+            }
+          }
+          if (!f.properties._casualties) f.properties._casualties = 0;
 
           if (f.geometry.type === 'Point') {
             f.geometry.coordinates = [f.geometry.coordinates[0], f.geometry.coordinates[1]];

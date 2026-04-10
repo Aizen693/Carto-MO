@@ -92,34 +92,69 @@
 
       <!-- Tab: Import/Export -->
       <div class="sidebar-panel" id="panel-io">
-        <div class="panel-header"><span>Import / Export</span></div>
+        <div class="panel-header">
+          <span>Import / Export</span>
+          <span id="io-zone-badge" class="io-zone-badge"></span>
+        </div>
         <div class="panel-content">
-          <div class="io-section">
-            <div class="io-label">Importer un fichier GeoJSON</div>
-            <input type="file" id="import-file" accept=".geojson,.json" class="admin-input-file">
-            <button id="btn-import" class="admin-btn admin-btn-full">Importer</button>
-          </div>
-          <div class="io-section">
-            <div class="io-label">Exporter les points de la zone</div>
-            <button id="btn-export" class="admin-btn admin-btn-full">Exporter GeoJSON</button>
-          </div>
 
-          <div class="io-divider"></div>
-
-          <div class="io-section">
-            <div class="io-label">Migrer fichiers statiques vers Supabase</div>
-            <button id="btn-batch-import" class="admin-btn admin-btn-full" style="background:rgba(196,154,60,0.15);border-color:rgba(196,154,60,0.3);color:#c49a3c">Importer fichiers statiques</button>
-            <div id="batch-import-status" style="font:400 8px/1.4 var(--m);color:var(--ach);margin-top:4px"></div>
-          </div>
-
-          <div class="io-divider"></div>
-
-          <!-- PUITS SAHEL -->
-          <div class="io-section">
-            <div class="io-label" style="display:flex;align-items:center;justify-content:space-between">
-              Calques Puits — Sahel
-              <span id="puits-count" class="panel-count">0</span>
+          <!-- ── SECTION 1 : IMPORT GEOJSON ── -->
+          <div class="io-block">
+            <div class="io-block-header">
+              <span class="io-block-num">01</span>
+              <span class="io-block-title">Importer GeoJSON</span>
             </div>
+            <div class="io-block-desc">Ajoute les points du fichier a la zone active. Les couleurs sont attribuees automatiquement selon la table des acteurs.</div>
+            <input type="file" id="import-file" accept=".geojson,.json" class="admin-input-file">
+            <button id="btn-import" class="admin-btn admin-btn-full io-btn-action">
+              <span class="io-btn-icon">+</span> Importer dans la carte
+            </button>
+            <div id="import-status" class="io-status"></div>
+          </div>
+
+          <!-- ── SECTION 2 : EXPORT GEOJSON ── -->
+          <div class="io-block">
+            <div class="io-block-header">
+              <span class="io-block-num">02</span>
+              <span class="io-block-title">Exporter GeoJSON</span>
+            </div>
+            <div class="io-block-desc">Telecharge tous les points Supabase de la zone active au format GeoJSON. Compatible avec reimport.</div>
+            <button id="btn-export" class="admin-btn admin-btn-full io-btn-export">
+              <span class="io-btn-icon">&#8615;</span> Exporter les points
+            </button>
+          </div>
+
+          <div class="io-divider"></div>
+
+          <!-- ── SECTION 3 : MIGRATION BATCH ── -->
+          <div class="io-block">
+            <div class="io-block-header">
+              <span class="io-block-num">03</span>
+              <span class="io-block-title">Migration fichiers statiques</span>
+              <span class="io-tag io-tag-admin">Admin</span>
+            </div>
+            <div class="io-block-desc">Importe tous les fichiers GeoJSON/KML de la zone dans Supabase. Les doublons sont detectes et ignores automatiquement.</div>
+            <button id="btn-batch-import" class="admin-btn admin-btn-full io-btn-batch">
+              <span class="io-btn-icon">&#8644;</span> Migrer vers Supabase
+            </button>
+            <div id="batch-import-status" class="io-status"></div>
+            <div id="batch-import-progress" class="io-progress-wrap" style="display:none">
+              <div class="io-progress-bar"><div id="batch-progress-fill" class="io-progress-fill"></div></div>
+              <span id="batch-progress-label" class="io-progress-label"></span>
+            </div>
+          </div>
+
+          <div class="io-divider"></div>
+
+          <!-- ── SECTION 4 : CALQUES PUITS (Sahel) ── -->
+          <div class="io-block" id="puits-section">
+            <div class="io-block-header">
+              <span class="io-block-num">04</span>
+              <span class="io-block-title">Calques Puits</span>
+              <span class="io-tag io-tag-sahel">Sahel</span>
+              <span id="puits-count" class="panel-count" style="margin-left:auto">0</span>
+            </div>
+            <div class="io-block-desc">Gestion des points de puits au Mali. Import/export, selection et suppression.</div>
             <div class="puits-toolbar">
               <label class="puits-check-all"><input type="checkbox" id="puits-select-all"> Tout</label>
               <button id="btn-puits-delete" class="admin-btn admin-btn-sm admin-btn-danger" disabled>Supprimer</button>
@@ -145,6 +180,7 @@
             </div>
             <div id="puits-empty" style="display:none">Aucun puits charge. Importez un fichier.</div>
           </div>
+
         </div>
       </div>
 

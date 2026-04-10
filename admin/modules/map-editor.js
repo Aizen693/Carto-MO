@@ -82,41 +82,94 @@ function addAdminSource() {
 }
 
 function addAdminLayers() {
-  // Static file points (underneath admin points)
+  // ── Static file points — identical styling to public map (engine.js) ──
+
+  // Pulse ring (animated stroke)
+  editorMap.addLayer({
+    id: 'static-pulse',
+    type: 'circle',
+    source: STATIC_SOURCE,
+    paint: {
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 7, 7, 12, 12, 18],
+      'circle-color': ['get', '_color'],
+      'circle-opacity': 0,
+      'circle-stroke-color': ['get', '_color'],
+      'circle-stroke-width': 1,
+      'circle-stroke-opacity': 0.25,
+      'circle-pitch-alignment': 'map',
+      'circle-pitch-scale': 'map'
+    }
+  });
+
+  // Glow (soft blur halo) — matches public map exactly
   editorMap.addLayer({
     id: STATIC_LAYER_GLOW,
     type: 'circle',
     source: STATIC_SOURCE,
     paint: {
-      'circle-radius': 10,
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 5, 7, 9, 12, 14],
       'circle-color': ['get', '_color'],
       'circle-opacity': 0.12,
-      'circle-blur': 0.6
+      'circle-blur': 0.8,
+      'circle-pitch-alignment': 'map',
+      'circle-pitch-scale': 'map'
     }
   });
+
+  // Main dots — casualties-based dynamic radius, white stroke (public map style)
   editorMap.addLayer({
     id: STATIC_LAYER_DOTS,
     type: 'circle',
     source: STATIC_SOURCE,
     paint: {
-      'circle-radius': 5,
+      'circle-radius': ['interpolate', ['linear'], ['zoom'],
+        3, ['interpolate', ['linear'], ['get', '_casualties'], 0, 3.5, 10, 4, 100, 4.5, 500, 5, 1000, 5.5, 10000, 6.5],
+        7, ['interpolate', ['linear'], ['get', '_casualties'], 0, 5, 10, 5.5, 100, 6.5, 500, 7.5, 1000, 8.5, 10000, 10],
+        12, ['interpolate', ['linear'], ['get', '_casualties'], 0, 7, 10, 8, 100, 9.5, 500, 11, 1000, 13, 10000, 16]
+      ],
       'circle-color': ['get', '_color'],
-      'circle-stroke-color': 'rgba(255,255,255,0.3)',
-      'circle-stroke-width': 1,
-      'circle-opacity': 0.8
+      'circle-stroke-color': '#ffffff',
+      'circle-stroke-width': 1.5,
+      'circle-opacity': 1,
+      'circle-pitch-alignment': 'map',
+      'circle-pitch-scale': 'map'
     }
   });
 
-  // Admin (Supabase) points on top
+  // Labels at high zoom
+  editorMap.addLayer({
+    id: 'static-labels',
+    type: 'symbol',
+    source: STATIC_SOURCE,
+    minzoom: 10,
+    layout: {
+      'text-field': ['get', 'name'],
+      'text-size': 11,
+      'text-offset': [0, 1.3],
+      'text-anchor': 'top',
+      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
+      'text-optional': true,
+      'text-pitch-alignment': 'map'
+    },
+    paint: {
+      'text-color': '#fff',
+      'text-halo-color': 'rgba(0,0,0,0.9)',
+      'text-halo-width': 2,
+      'text-opacity': ['interpolate', ['linear'], ['zoom'], 10, 0, 12, 1]
+    }
+  });
+
+  // ── Admin (Supabase) points — same public-map style + gold selection ring ──
+
   editorMap.addLayer({
     id: ADMIN_LAYER_GLOW,
     type: 'circle',
     source: ADMIN_SOURCE,
     paint: {
-      'circle-radius': 12,
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 5, 7, 9, 12, 14],
       'circle-color': ['get', '_color'],
       'circle-opacity': 0.15,
-      'circle-blur': 0.6
+      'circle-blur': 0.8
     }
   });
 
@@ -125,7 +178,11 @@ function addAdminLayers() {
     type: 'circle',
     source: ADMIN_SOURCE,
     paint: {
-      'circle-radius': 6,
+      'circle-radius': ['interpolate', ['linear'], ['zoom'],
+        3, ['interpolate', ['linear'], ['get', '_casualties'], 0, 3.5, 10, 4, 100, 4.5, 500, 5, 1000, 5.5, 10000, 6.5],
+        7, ['interpolate', ['linear'], ['get', '_casualties'], 0, 5, 10, 5.5, 100, 6.5, 500, 7.5, 1000, 8.5, 10000, 10],
+        12, ['interpolate', ['linear'], ['get', '_casualties'], 0, 7, 10, 8, 100, 9.5, 500, 11, 1000, 13, 10000, 16]
+      ],
       'circle-color': ['get', '_color'],
       'circle-stroke-color': '#c49a3c',
       'circle-stroke-width': 1.5,
@@ -145,6 +202,18 @@ function addAdminLayers() {
       'circle-stroke-width': 2.5
     }
   });
+
+  // Pulse animation (matches public map)
+  let op = 0.1, dir = 1;
+  (function pulse() {
+    op += 0.015 * dir;
+    if (op > 0.65) dir = -1;
+    if (op < 0.05) dir = 1;
+    if (editorMap && editorMap.getLayer('static-pulse')) {
+      editorMap.setPaintProperty('static-pulse', 'circle-stroke-opacity', op);
+    }
+    requestAnimationFrame(pulse);
+  })();
 }
 
 function setupInteractions() {
@@ -204,6 +273,7 @@ export async function renderAdminPoints(points) {
     properties: {
       _id: p.id,
       _color: p._color || '#888888',
+      _casualties: p._casualties || 0,
       name: p.name,
       period: p.period,
       description: p.description
