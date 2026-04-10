@@ -458,17 +458,53 @@ function setupCalquesManager() {
         throw new Error('Format invalide — FeatureCollection ou JSON array attendu');
       }
 
-      // Write to the target file via download (user saves to correct location)
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = overlay.file;
-      a.click();
-      URL.revokeObjectURL(url);
+      // Push to GitHub repo directly
+      let GH_TOKEN = localStorage.getItem('carto_gh_token');
+      if (!GH_TOKEN) {
+        GH_TOKEN = prompt('Token GitHub requis pour push les calques.\nCollez votre Personal Access Token :');
+        if (!GH_TOKEN) throw new Error('Token GitHub requis');
+        localStorage.setItem('carto_gh_token', GH_TOKEN);
+      }
+      const GH_REPO  = 'Aizen693/Carto-MO';
+      const zonePath  = config.DATA_PATH.replace('../', '');
+      const ghPath    = `${zonePath}${overlay.file}`;
+      const content   = JSON.stringify(data, null, 2);
+      const b64       = btoa(unescape(encodeURIComponent(content)));
+
+      // Get current file SHA (needed for update)
+      let sha = null;
+      try {
+        const existing = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${ghPath}`, {
+          headers: { Authorization: `token ${GH_TOKEN}` }
+        });
+        if (existing.ok) {
+          const meta = await existing.json();
+          sha = meta.sha;
+        }
+      } catch (_) {}
+
+      const body = {
+        message: `[admin] Import calque ${overlay.label} (${data.features.length} features)`,
+        content: b64
+      };
+      if (sha) body.sha = sha;
+
+      const resp = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${ghPath}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${GH_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error('GitHub: ' + (err.message || resp.statusText));
+      }
 
       if (statusEl) {
-        statusEl.textContent = `${data.features.length} features — fichier "${overlay.file}" telecharge. Placez-le dans le dossier ${config.DATA_PATH.replace('../', '')}.`;
+        statusEl.textContent = `${data.features.length} features pushees dans "${overlay.file}". Deploiement en cours...`;
         statusEl.className = 'calque-import-status io-status-ok';
       }
     } catch (e) {
