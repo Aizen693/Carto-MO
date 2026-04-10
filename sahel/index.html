@@ -325,7 +325,8 @@ const ZONE_CONFIG = {
     var name = props.name || props.Name || props.nom || props.Nom || 'Point';
     var header = '<div class="popup-header"><div class="popup-dot-bar" style="background:' + color + '"></div><div class="popup-actor">' + name + '</div></div>';
     var body = '';
-    var skip = ['name','Name','nom','Nom','_color','_casualties','_period'];
+    var sourcesVal = '';
+    var skip = ['name','Name','nom','Nom','_color','_casualties','_period','sources','Sources'];
     Object.keys(props).forEach(function(k) {
       if (skip.indexOf(k) !== -1) return;
       var v = (props[k] || '').toString().trim();
@@ -333,6 +334,11 @@ const ZONE_CONFIG = {
       var label = k.replace(/_/g, ' ').replace(/^\w/, function(c) { return c.toUpperCase(); });
       body += '<div class="popup-row"><span class="popup-key">' + label + '</span><span class="popup-val">' + v + '</span></div>';
     });
+    // Sources always last, styled distinctly
+    sourcesVal = (props.sources || props.Sources || '').toString().trim();
+    if (sourcesVal) {
+      body += '<div class="popup-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);"><span class="popup-key" style="color:#888;">Sources</span><span class="popup-val" style="color:#999;font-style:italic;font-size:10px;">' + sourcesVal + '</span></div>';
+    }
     return header + (body ? '<div class="popup-body">' + body + '</div>' : '');
   }
 

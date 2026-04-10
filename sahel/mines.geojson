@@ -12,7 +12,8 @@
         "statut": "Legale",
         "societe": "Barrick Mining",
         "pays_societe": "Canada",
-        "remarques": "site ferme entre janvier 2025 et le 18 decembre 2025"
+        "remarques": "site ferme entre janvier 2025 et le 18 decembre 2025",
+        "sources": "Reuters, RFI, Agence Ecofin"
       }
     },
     {
@@ -26,7 +27,8 @@
         "statut": "Legale",
         "societe": "B2Gold",
         "pays_societe": "Canada",
-        "remarques": "2e plus grande mine d'or du Mali"
+        "remarques": "2e plus grande mine d'or du Mali",
+        "sources": "Ecofin Agency"
       }
     },
     {
@@ -40,7 +42,8 @@
         "statut": "Legale",
         "societe": "B2Gold",
         "pays_societe": "Canada",
-        "remarques": "Nouveau depot rattache au complexe Fekola"
+        "remarques": "Nouveau depot rattache au complexe Fekola",
+        "sources": "Ecofin Agency"
       }
     },
     {
@@ -54,7 +57,7 @@
         "statut": "Legale",
         "societe": "Resolute Mining",
         "pays_societe": "Australie",
-        "remarques": ""
+        "sources": "Reuters"
       }
     },
     {
@@ -68,7 +71,7 @@
         "statut": "Legale",
         "societe": "Resolute Mining",
         "pays_societe": "Australie",
-        "remarques": ""
+        "sources": "Reuters"
       }
     },
     {
@@ -82,7 +85,7 @@
         "statut": "Legale",
         "societe": "Allied Gold",
         "pays_societe": "Canada",
-        "remarques": ""
+        "sources": "Ecofin Agency"
       }
     },
     {
@@ -96,7 +99,7 @@
         "statut": "Legale",
         "societe": "Allied Gold",
         "pays_societe": "Canada",
-        "remarques": ""
+        "sources": "Reuters"
       }
     },
     {
@@ -110,7 +113,7 @@
         "statut": "Legale",
         "societe": "Hummingbird Resources",
         "pays_societe": "Royaume-Uni",
-        "remarques": ""
+        "sources": "Reuters, APA News, Zonebourse"
       }
     },
     {
@@ -124,7 +127,7 @@
         "statut": "Legale",
         "societe": "Morila SA / SOREM / Flagship",
         "pays_societe": "Mali / Etats-Unis",
-        "remarques": ""
+        "sources": "Reuters, APA News"
       }
     },
     {
@@ -138,7 +141,7 @@
         "statut": "Legale",
         "societe": "Robex Resources",
         "pays_societe": "Canada",
-        "remarques": ""
+        "sources": "Ecofin Agency"
       }
     },
     {
@@ -152,7 +155,8 @@
         "statut": "Legale",
         "societe": "Toubani Resources",
         "pays_societe": "Australie",
-        "remarques": "Projet"
+        "remarques": "Projet",
+        "sources": "Reuters"
       }
     },
     {
@@ -166,7 +170,7 @@
         "statut": "Legale",
         "societe": "Robex Resources",
         "pays_societe": "Canada",
-        "remarques": ""
+        "sources": "Reuters"
       }
     },
     {
@@ -180,7 +184,7 @@
         "statut": "Legale",
         "societe": "Exploitants varies",
         "pays_societe": "Divers",
-        "remarques": ""
+        "sources": "Reuters"
       }
     },
     {
@@ -194,7 +198,8 @@
         "statut": "Fermee",
         "societe": "Endeavour Mining",
         "pays_societe": "Royaume-Uni",
-        "remarques": "Mine fermee, projet historique"
+        "remarques": "Mine fermee, projet historique",
+        "sources": "Reuters"
       }
     }
   ]
