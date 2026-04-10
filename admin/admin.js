@@ -15,6 +15,7 @@ import {
 import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js';
 import { init as initActors, renderActorList, updateZone as updateActorZone } from './modules/actor-manager.js';
 import { importGeoJSON, importStaticFiles, exportGeoJSON } from './modules/import-export.js';
+import { purgeEmptyPoints } from './modules/firestore.js';
 import { renderActivityLog } from './modules/activity-log.js';
 import { renderUserList } from './modules/user-manager.js';
 
@@ -372,6 +373,26 @@ function setupImportExport() {
 
       batchBtn.disabled = false;
       setTimeout(() => { if (progressWrap) progressWrap.style.display = 'none'; }, 4000);
+    });
+  }
+
+  // ── Purge empty points (orphan puits) ──
+  const purgeBtn = document.getElementById('btn-purge-empty');
+  if (purgeBtn) {
+    purgeBtn.addEventListener('click', async () => {
+      if (!requireRole('admin')) { setIOStatus('purge-status', 'Reserve aux administrateurs.', 'err'); return; }
+      if (!confirm(`Supprimer tous les points SANS NOM ou SANS PERIODE de la zone "${currentZone}" ?\nCette action est irreversible.`)) return;
+
+      purgeBtn.disabled = true;
+      setIOStatus('purge-status', 'Purge en cours...');
+      try {
+        const count = await purgeEmptyPoints(currentZone);
+        setIOStatus('purge-status', `${count} points vides supprimes.`, count > 0 ? 'ok' : '');
+        if (count > 0) refreshPoints();
+      } catch (e) {
+        setIOStatus('purge-status', 'Erreur : ' + e.message, 'err');
+      }
+      purgeBtn.disabled = false;
     });
   }
 }

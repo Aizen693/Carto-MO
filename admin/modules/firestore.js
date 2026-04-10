@@ -104,6 +104,34 @@ export async function softDeletePoint(pointId, zone, name) {
   await logActivity(zone, 'delete', pointId, `Point "${name}" supprime`);
 }
 
+export async function purgeEmptyPoints(zone) {
+  const user = getCurrentUser();
+  // Find all points with no name or empty name (orphan puits)
+  const { data: orphans, error: fetchErr } = await supabase
+    .from('points')
+    .select('id')
+    .eq('zone', zone)
+    .eq('deleted', false)
+    .or('name.is.null,name.eq.,period.is.null,period.eq.');
+
+  if (fetchErr) throw fetchErr;
+  if (!orphans || !orphans.length) return 0;
+
+  const ids = orphans.map(p => p.id);
+  // Soft-delete in batches of 100
+  for (let i = 0; i < ids.length; i += 100) {
+    const batch = ids.slice(i, i + 100);
+    const { error } = await supabase
+      .from('points')
+      .update({ deleted: true, updated_by: user.uid, updated_at: new Date().toISOString() })
+      .in('id', batch);
+    if (error) throw error;
+  }
+
+  await logActivity(zone, 'delete', null, `Purge : ${ids.length} points sans nom/periode supprimes`);
+  return ids.length;
+}
+
 // ── Zone config (actor overrides) ───────────────────────
 
 export async function getZoneConfig(zone) {
