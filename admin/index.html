@@ -146,50 +146,13 @@
 
           <div class="io-divider"></div>
 
-          <!-- ── SECTION 4 : CALQUES PUITS (Sahel) ── -->
-          <div class="io-block" id="puits-section">
-            <div class="io-block-header">
-              <span class="io-block-num">04</span>
-              <span class="io-block-title">Calques Puits</span>
-              <span class="io-tag io-tag-sahel">Sahel</span>
-              <span id="puits-count" class="panel-count" style="margin-left:auto">0</span>
-            </div>
-            <div class="io-block-desc">Gestion des points de puits au Mali. Import/export, selection et suppression.</div>
-            <div class="puits-toolbar">
-              <label class="puits-check-all"><input type="checkbox" id="puits-select-all"> Tout</label>
-              <button id="btn-puits-delete" class="admin-btn admin-btn-sm admin-btn-danger" disabled>Supprimer</button>
-              <input type="file" id="puits-import-file" accept=".geojson,.json,.xlsx,.xls,.csv" style="display:none">
-              <button id="btn-puits-import" class="admin-btn admin-btn-sm">Importer</button>
-              <button id="btn-puits-export" class="admin-btn admin-btn-sm">Exporter</button>
-            </div>
-            <div id="puits-search-wrap">
-              <input type="text" id="puits-search" class="admin-input" placeholder="Filtrer par nom ou region...">
-            </div>
-            <div id="puits-table-wrap">
-              <table id="puits-table">
-                <thead>
-                  <tr>
-                    <th class="puits-th-check"></th>
-                    <th>Nom</th>
-                    <th>Region</th>
-                    <th>Coordonnees</th>
-                  </tr>
-                </thead>
-                <tbody id="puits-tbody"></tbody>
-              </table>
-            </div>
-            <div id="puits-empty" style="display:none">Aucun puits charge. Importez un fichier.</div>
-          </div>
-
-          <div class="io-divider"></div>
-
-          <!-- ── SECTION 5 : CALQUES / OVERLAYS ── -->
+          <!-- ── SECTION 4 : CALQUES / OVERLAYS ── -->
           <div class="io-block" id="calques-section">
             <div class="io-block-header">
-              <span class="io-block-num">05</span>
+              <span class="io-block-num">04</span>
               <span class="io-block-title">Calques de la zone</span>
             </div>
-            <div class="io-block-desc">Fichiers overlay affiches sur la carte publique. Importez un GeoJSON pour remplir ou remplacer un calque. Le fichier doit correspondre exactement au format attendu.</div>
+            <div class="io-block-desc">Fichiers overlay affiches sur la carte publique. Importez un GeoJSON pour remplir ou remplacer un calque.</div>
             <div id="calques-list"></div>
             <div id="calques-empty" class="io-status">Aucun calque defini pour cette zone.</div>
             <input type="file" id="calque-import-file" accept=".geojson,.json" style="display:none">

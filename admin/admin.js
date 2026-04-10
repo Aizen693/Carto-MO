@@ -226,7 +226,6 @@ async function setupApp() {
   setupSidebarTabs();
   setupZoneSelect();
   setupImportExport();
-  setupPuitsManager();
   setupCalquesManager();
   setupMapCoords();
 
@@ -288,9 +287,6 @@ function updateIOZoneBadge() {
     const labels = { 'moyen-orient': 'Moyen-Orient', 'sahel': 'Sahel', 'rdc': 'RDC' };
     badge.textContent = labels[currentZone] || currentZone;
   }
-  // Afficher/masquer section Puits selon la zone
-  const puitsSection = document.getElementById('puits-section');
-  if (puitsSection) puitsSection.style.display = currentZone === 'sahel' ? '' : 'none';
   // Rafraichir la liste des calques
   refreshCalquesList();
 }
