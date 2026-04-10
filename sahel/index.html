@@ -375,24 +375,21 @@ const ZONE_CONFIG = {
         map.addLayer(layerDef);
       });
 
-      // Click popup on interactive layers (dots, fills, lines)
-      var dotLayer = cfg.layers.find(function(l) { return l.id.indexOf('-dots') !== -1; });
-      var fillLayer = cfg.layers.find(function(l) { return l.type === 'fill'; });
-      var lineLayer = cfg.layers.find(function(l) { return l.id.indexOf('-lines') !== -1 && l.type === 'line'; });
-      var clickLayers = [dotLayer, fillLayer, lineLayer].filter(Boolean);
-      clickLayers.forEach(function(cl) {
-        map.on('click', cl.id, function(e) {
+      // Click popup on ALL interactive layers (dots, fills, lines, casings)
+      var clickableTypes = ['circle', 'fill', 'line'];
+      cfg.layers.forEach(function(l) {
+        if (clickableTypes.indexOf(l.type) === -1) return;
+        // Skip glow/casing layers (decorative only)
+        if (l.id.indexOf('-glow') !== -1 || l.id.indexOf('-casing') !== -1 || l.id.indexOf('-ring') !== -1 || l.id.indexOf('-pulse') !== -1) return;
+        map.on('click', l.id, function(e) {
           if (!e.features || !e.features.length) return;
-          var f = e.features[0];
-          var coords = e.lngLat;
-          if (f.geometry.type === 'Point') coords = f.geometry.coordinates.slice();
-          new mapboxgl.Popup({ closeButton: true, maxWidth: '320px', className: 'algor-popup' })
-            .setLngLat(coords)
-            .setHTML(makeCalquePopup(f.properties, cfg.id))
+          new mapboxgl.Popup({ closeButton: true, maxWidth: '340px', className: 'algor-popup' })
+            .setLngLat(e.lngLat)
+            .setHTML(makeCalquePopup(e.features[0].properties, cfg.id))
             .addTo(map);
         });
-        map.on('mouseenter', cl.id, function() { map.getCanvas().style.cursor = 'pointer'; });
-        map.on('mouseleave', cl.id, function() { map.getCanvas().style.cursor = ''; });
+        map.on('mouseenter', l.id, function() { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', l.id, function() { map.getCanvas().style.cursor = ''; });
       });
     }
 
