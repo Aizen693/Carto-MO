@@ -154,43 +154,36 @@
       <span class="sb-section-arrow open">&#x25B2;</span>
     </div>
     <div class="sb-section-body">
-      <div class="sb-cat-label">Terrain &amp; Ressources</div>
       <div class="sb-layer-row">
-        <span>Puits / Wells</span>
-        <div class="sb-toggle" id="sb-toggle-puits" onclick="togglePuits()"></div>
-      </div>
-      <div class="sb-layer-row">
-        <span>Ressources minieres</span>
-        <div class="sb-toggle" id="sb-toggle-mines" onclick="toggleLayer('mines')"></div>
-      </div>
-      <div class="sb-layer-row">
-        <span>Infrastructures &amp; axes</span>
-        <div class="sb-toggle" id="sb-toggle-infrastructures" onclick="toggleLayer('infrastructures')"></div>
-      </div>
-
-      <div class="sb-cat-label">Populations</div>
-      <div class="sb-layer-row">
-        <span>Ethnies &amp; sous-groupes</span>
+        <span>1. Ethnies &amp; sous-groupes</span>
         <div class="sb-toggle" id="sb-toggle-ethnies" onclick="toggleLayer('ethnies')"></div>
       </div>
       <div class="sb-layer-row">
-        <span>Population &amp; mobilites</span>
-        <div class="sb-toggle" id="sb-toggle-population" onclick="toggleLayer('population')"></div>
-      </div>
-
-      <div class="sb-cat-label">Securite</div>
-      <div class="sb-layer-row">
-        <span>Forces en presence</span>
+        <span>2. Forces en presence</span>
         <div class="sb-toggle" id="sb-toggle-forces" onclick="toggleLayer('forces')"></div>
       </div>
       <div class="sb-layer-row">
-        <span>Evenements securitaires</span>
+        <span>3. Points d'eau</span>
+        <div class="sb-toggle" id="sb-toggle-points-eau" onclick="toggleLayer('points-eau')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>4. Population &amp; mobilites</span>
+        <div class="sb-toggle" id="sb-toggle-population" onclick="toggleLayer('population')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>5. Ressources minieres</span>
+        <div class="sb-toggle" id="sb-toggle-mines" onclick="toggleLayer('mines')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>6. Infrastructures &amp; axes</span>
+        <div class="sb-toggle" id="sb-toggle-infrastructures" onclick="toggleLayer('infrastructures')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>7. Evenements securitaires</span>
         <div class="sb-toggle" id="sb-toggle-evenements" onclick="toggleLayer('evenements')"></div>
       </div>
-
-      <div class="sb-cat-label">Reseaux illicites</div>
       <div class="sb-layer-row">
-        <span>Corridors &amp; trafics</span>
+        <span>8. Flux &amp; trafics</span>
         <div class="sb-toggle" id="sb-toggle-flux" onclick="toggleLayer('flux')"></div>
       </div>
 
@@ -520,6 +513,17 @@ const ZONE_CONFIG = {
       { id: 'forces-glow', type: 'circle', paint: { 'circle-radius': 7, 'circle-color': '#e63946', 'circle-opacity': 0.2, 'circle-blur': 0.8 } },
       { id: 'forces-dots', type: 'circle', paint: { 'circle-radius': 4, 'circle-color': '#e63946', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
       { id: 'forces-labels', type: 'symbol', paint: { 'text-color': '#e63946', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
+    ]
+  });
+
+  /* ── CALQUE : Points d'eau ── */
+  createLayerToggle({
+    id: 'points-eau',
+    file: 'points-eau.geojson',
+    layers: [
+      { id: 'points-eau-glow', type: 'circle', paint: { 'circle-radius': 8, 'circle-color': '#29b6f6', 'circle-opacity': 0.18, 'circle-blur': 0.8 } },
+      { id: 'points-eau-dots', type: 'circle', paint: { 'circle-radius': 4, 'circle-color': '#29b6f6', 'circle-stroke-width': 1, 'circle-stroke-color': '#111214' } },
+      { id: 'points-eau-labels', type: 'symbol', paint: { 'text-color': '#29b6f6', 'text-halo-color': '#111214', 'text-halo-width': 1 }, layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.2], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] } }
     ]
   });
 

@@ -111,13 +111,14 @@ const ZONE_CONFIGS = {
       { label: 'Mars 16-31', file: '2026-mars-16-31.geojson' }
     ],
     OVERLAY_LAYERS: [
-      { id: 'mines',            label: 'Ressources minieres',     file: 'mines.geojson',           cat: 'Terrain & Ressources' },
-      { id: 'infrastructures',  label: 'Infrastructures & axes',  file: 'infrastructures.geojson', cat: 'Terrain & Ressources' },
-      { id: 'ethnies',          label: 'Ethnies & sous-groupes',  file: 'ethnies.geojson',         cat: 'Populations' },
-      { id: 'population',       label: 'Population & mobilites',  file: 'population.geojson',      cat: 'Populations' },
-      { id: 'forces',           label: 'Forces en presence',      file: 'forces.geojson',          cat: 'Securite' },
-      { id: 'evenements',       label: 'Evenements securitaires', file: 'evenements.geojson',      cat: 'Securite' },
-      { id: 'flux',             label: 'Corridors & trafics',     file: 'flux.geojson',            cat: 'Reseaux illicites' }
+      { id: 'ethnies',          label: 'Ethnies & sous-groupes',        file: 'ethnies.geojson',         cat: 'Populations' },
+      { id: 'forces',           label: 'Forces en presence',            file: 'forces.geojson',          cat: 'Securite' },
+      { id: 'points-eau',       label: 'Points d\'eau',                 file: 'points-eau.geojson',      cat: 'Terrain & Ressources' },
+      { id: 'population',       label: 'Population & mobilites',        file: 'population.geojson',      cat: 'Populations' },
+      { id: 'mines',            label: 'Ressources minieres',           file: 'mines.geojson',           cat: 'Terrain & Ressources' },
+      { id: 'infrastructures',  label: 'Infrastructures & axes',        file: 'infrastructures.geojson', cat: 'Terrain & Ressources' },
+      { id: 'evenements',       label: 'Evenements securitaires',       file: 'evenements.geojson',      cat: 'Securite' },
+      { id: 'flux',             label: 'Flux & trafics',                file: 'flux.geojson',            cat: 'Reseaux illicites' }
     ],
     DATA_PATH: '../sahel/',
     STYLES: { standard: 'mapbox://styles/mapbox/standard', satellite: 'mapbox://styles/mapbox/satellite-streets-v12', dark: 'mapbox://styles/mapbox/dark-v11' },
