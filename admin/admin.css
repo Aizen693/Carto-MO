@@ -632,47 +632,85 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
 .calque-import-status.io-status-ok { color: #52b788; }
 .calque-import-status.io-status-err { color: var(--err); }
 
+.calque-btn-manage {
+  background: rgba(82,183,136,0.08);
+  border-color: rgba(82,183,136,0.3);
+  color: #52b788;
+}
+.calque-btn-manage:hover { background: rgba(82,183,136,0.25); color: #7ddfb0; }
+.calque-btn-manage:disabled, .calque-btn-del:disabled {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+
+.calque-features-panel {
+  border-top: 1px solid var(--bg3);
+  margin-top: 6px;
+  padding-top: 8px;
+}
+.calque-features-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.calque-features-loading {
+  font: 400 9px/1.4 var(--m);
+  color: var(--tx2);
+  padding: 4px 0;
+}
+.calque-features-list {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.calque-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background .08s;
+}
+.calque-feature-item:hover { background: var(--bg2); }
 .calque-check-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
-  flex: 1;
-  min-width: 0;
+  font: 400 9px/1 var(--m);
+  color: var(--tx2);
 }
-.calque-check {
-  width: 14px;
-  height: 14px;
+.feat-check, .feat-select-all {
+  width: 12px;
+  height: 12px;
   accent-color: var(--err);
   cursor: pointer;
   flex-shrink: 0;
 }
-.calque-check:disabled {
-  opacity: 0.25;
-  cursor: default;
+.feat-name {
+  font: 500 9px/1.2 var(--m);
+  color: var(--tx);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
 }
-.calque-batch-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 12px 10px;
-  margin-top: 4px;
-  border-top: 1px solid var(--bg3);
-}
-.calque-select-all-label {
-  font: 400 10px/1 var(--m);
+.feat-detail {
+  font: 300 8px/1 var(--m);
   color: var(--tx2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
 }
-#calque-batch-delete {
-  font: 500 9px/1 var(--m);
-  padding: 5px 14px;
-}
-#calque-batch-delete:disabled {
-  opacity: 0.3;
-  cursor: default;
-  pointer-events: none;
-}
+.feat-delete-btn { font: 500 8px/1 var(--m); padding: 3px 8px; }
+.feat-delete-btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
 
 .io-section { margin-bottom: 16px; }
 .io-label {

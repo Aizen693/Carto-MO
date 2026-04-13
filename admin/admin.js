@@ -623,7 +623,6 @@ async function refreshCalquesList() {
       const purged = calquePurgedAt[currentZone + ':' + o.id];
       let statusHTML, countLabel, fileLabel, dateLabel;
       if (purged) {
-        // Calque was purged this session — show "Supprime" + purge time
         statusHTML = '<span class="calque-status calque-status-vide">Supprime</span>';
         countLabel = '';
         fileLabel = '';
@@ -647,10 +646,7 @@ async function refreshCalquesList() {
       const hasData = s !== 'absent' && s.status !== 'vide' && !purged;
       html += `<div class="calque-row">
         <div class="calque-row-top">
-          <label class="calque-check-label">
-            <input type="checkbox" class="calque-check" data-calque-id="${o.id}" data-calque-file="${o.file}" ${hasData ? '' : 'disabled'}>
-            <span class="calque-name">${i + 1}. ${o.label}</span>
-          </label>
+          <span class="calque-name">${i + 1}. ${o.label}</span>
           <div class="calque-row-meta">
             ${countLabel}
             ${statusHTML}
@@ -662,108 +658,160 @@ async function refreshCalquesList() {
         </div>
         <div class="calque-row-actions">
           <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
+          <button class="calque-btn calque-btn-manage" data-calque-id="${o.id}" data-calque-file="${o.file}" ${hasData ? '' : 'disabled'}>Gerer</button>
+          <button class="calque-btn calque-btn-del" data-calque-id="${o.id}" data-calque-file="${o.file}" ${hasData ? '' : 'disabled'}>Vider tout</button>
         </div>
+        <div class="calque-features-panel" id="features-panel-${o.id}" style="display:none"></div>
       </div>`;
   });
-  html += `<div class="calque-batch-bar">
-    <label class="calque-check-label calque-select-all-label"><input type="checkbox" id="calque-select-all"> Tout selectionner</label>
-    <button class="calque-btn calque-btn-del" id="calque-batch-delete" disabled>Vider la selection</button>
-  </div>`;
   html += '<div id="calque-status-msg" class="calque-import-status"></div>';
   container.innerHTML = html;
 
   // Bind import buttons
-  container.querySelectorAll('.calque-btn:not(.calque-btn-del)').forEach(btn => {
+  container.querySelectorAll('.calque-btn:not(.calque-btn-del):not(.calque-btn-manage)').forEach(btn => {
     btn.addEventListener('click', () => {
       calqueImportTarget = btn.dataset.calqueId;
       document.getElementById('calque-import-file').click();
     });
   });
 
-  // Checkboxes: update batch delete button state
-  const allChecks = container.querySelectorAll('.calque-check');
-  const batchBtn = document.getElementById('calque-batch-delete');
-  const selectAll = document.getElementById('calque-select-all');
+  // Bind "Gerer" buttons — open feature list panel
+  container.querySelectorAll('.calque-btn-manage').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.calqueId;
+      const file = btn.dataset.calqueFile;
+      const panel = document.getElementById('features-panel-' + id);
+      if (!panel) return;
 
-  function updateBatchBtn() {
-    const checked = container.querySelectorAll('.calque-check:checked:not(:disabled)');
-    if (batchBtn) batchBtn.disabled = checked.length === 0;
-  }
-  allChecks.forEach(cb => cb.addEventListener('change', () => {
-    updateBatchBtn();
-    // Sync select-all state
-    const enabled = container.querySelectorAll('.calque-check:not(:disabled)');
-    const checked = container.querySelectorAll('.calque-check:checked:not(:disabled)');
-    if (selectAll) selectAll.checked = enabled.length > 0 && checked.length === enabled.length;
-  }));
+      // Toggle panel
+      if (panel.style.display !== 'none') { panel.style.display = 'none'; btn.textContent = 'Gerer'; return; }
+      btn.textContent = 'Fermer';
+      panel.style.display = 'block';
+      panel.innerHTML = '<div class="calque-features-loading">Chargement...</div>';
 
-  if (selectAll) {
-    selectAll.addEventListener('change', () => {
-      const enabled = container.querySelectorAll('.calque-check:not(:disabled)');
-      enabled.forEach(cb => { cb.checked = selectAll.checked; });
-      updateBatchBtn();
-    });
-  }
-
-  // Batch delete
-  if (batchBtn) {
-    batchBtn.addEventListener('click', async () => {
-      const checked = [...container.querySelectorAll('.calque-check:checked:not(:disabled)')];
-      if (!checked.length) return;
-      const names = checked.map(cb => cb.dataset.calqueFile).join(', ');
-      if (!confirm(`Vider ${checked.length} calque(s) ?\n${names}\n\nLes fichiers seront remplaces par des GeoJSON vides.`)) return;
-
-      const statusEl = document.getElementById('calque-status-msg');
-      let GH_TOKEN = localStorage.getItem('carto_gh_token');
-      if (!GH_TOKEN) {
-        GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
-        if (!GH_TOKEN) return;
-        localStorage.setItem('carto_gh_token', GH_TOKEN);
-      }
-      const GH_REPO = 'Aizen693/Carto-MO';
       const config = ZONE_CONFIGS[currentZone];
-      const emptyGeo = { type: 'FeatureCollection', features: [] };
-      const emptyB64 = btoa(unescape(encodeURIComponent(JSON.stringify(emptyGeo))));
+      try {
+        const res = await fetch(config.DATA_PATH + file + '?v=' + Date.now());
+        if (!res.ok) throw new Error('Fichier introuvable');
+        const data = await res.json();
+        if (!data.features || !data.features.length) { panel.innerHTML = '<div class="calque-features-loading">Aucun point dans ce calque.</div>'; return; }
 
-      let ok = 0, fail = 0;
-      batchBtn.disabled = true;
-      batchBtn.textContent = 'Suppression...';
+        let fhtml = '<div class="calque-features-header"><label class="calque-check-label"><input type="checkbox" class="feat-select-all"> Tout</label><button class="calque-btn calque-btn-del feat-delete-btn" disabled>Supprimer la selection</button></div>';
+        fhtml += '<div class="calque-features-list">';
+        data.features.forEach((ft, idx) => {
+          const p = ft.properties || {};
+          const name = p.name || p.Name || p.nom || p.Nom || p.Acteur || p.acteur || Object.values(p)[0] || '(sans nom)';
+          const detail = p.Date || p.date || p['Pays + Lieu'] || p.description || '';
+          fhtml += `<label class="calque-feature-item"><input type="checkbox" class="feat-check" data-idx="${idx}"><span class="feat-name">${name}</span>${detail ? `<span class="feat-detail">${detail}</span>` : ''}</label>`;
+        });
+        fhtml += '</div>';
+        panel.innerHTML = fhtml;
 
-      for (const cb of checked) {
-        const file = cb.dataset.calqueFile;
-        const id = cb.dataset.calqueId;
+        // Wire up checkboxes
+        const checks = panel.querySelectorAll('.feat-check');
+        const selAll = panel.querySelector('.feat-select-all');
+        const delBtn = panel.querySelector('.feat-delete-btn');
+
+        function updateDelBtn() { delBtn.disabled = !panel.querySelector('.feat-check:checked'); }
+        checks.forEach(cb => cb.addEventListener('change', () => {
+          updateDelBtn();
+          selAll.checked = panel.querySelectorAll('.feat-check:checked').length === checks.length;
+        }));
+        selAll.addEventListener('change', () => { checks.forEach(cb => { cb.checked = selAll.checked; }); updateDelBtn(); });
+
+        // Delete selected features
+        delBtn.addEventListener('click', async () => {
+          const toRemove = new Set([...panel.querySelectorAll('.feat-check:checked')].map(cb => parseInt(cb.dataset.idx)));
+          if (!toRemove.size) return;
+          if (!confirm(`Supprimer ${toRemove.size} point(s) du calque "${file}" ?`)) return;
+
+          delBtn.disabled = true;
+          delBtn.textContent = 'Suppression...';
+          const kept = data.features.filter((_, idx) => !toRemove.has(idx));
+          const newData = { type: 'FeatureCollection', features: kept };
+
+          try {
+            let GH_TOKEN = localStorage.getItem('carto_gh_token');
+            if (!GH_TOKEN) {
+              GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
+              if (!GH_TOKEN) throw new Error('Token requis');
+              localStorage.setItem('carto_gh_token', GH_TOKEN);
+            }
+            const GH_REPO = 'Aizen693/Carto-MO';
+            const path = config.DATA_PATH.replace('../', '') + file;
+            const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
+            const getRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=main`, { headers: { 'Authorization': 'token ' + GH_TOKEN } });
+            if (!getRes.ok) throw new Error('SHA introuvable');
+            const sha = (await getRes.json()).sha;
+            const putRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
+              method: 'PUT',
+              headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message: `[admin] Suppression ${toRemove.size} pts de ${file}`, content: b64, sha, branch: 'main' })
+            });
+            if (!putRes.ok) throw new Error('Erreur GitHub: ' + putRes.status);
+            const statusEl = document.getElementById('calque-status-msg');
+            if (statusEl) { statusEl.textContent = `${toRemove.size} point(s) supprime(s) de "${file}". ${kept.length} restant(s).`; statusEl.className = 'calque-import-status io-status-ok'; }
+            panel.style.display = 'none';
+            btn.textContent = 'Gerer';
+            refreshCalquesList();
+          } catch (e) {
+            const statusEl = document.getElementById('calque-status-msg');
+            if (statusEl) { statusEl.textContent = 'Erreur: ' + e.message; statusEl.className = 'calque-import-status io-status-err'; }
+            delBtn.disabled = false;
+            delBtn.textContent = 'Supprimer la selection';
+          }
+        });
+      } catch (e) {
+        panel.innerHTML = `<div class="calque-features-loading" style="color:var(--err)">Erreur: ${e.message}</div>`;
+      }
+    });
+  });
+
+  // Bind "Vider tout" buttons
+  container.querySelectorAll('.calque-btn-del').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const file = btn.dataset.calqueFile;
+      const id = btn.dataset.calqueId;
+      if (!confirm(`Vider TOUT le calque "${file}" ? Le fichier sera remplace par un GeoJSON vide.`)) return;
+      const statusEl = document.getElementById('calque-status-msg');
+      try {
+        let GH_TOKEN = localStorage.getItem('carto_gh_token');
+        if (!GH_TOKEN) {
+          GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
+          if (!GH_TOKEN) throw new Error('Token GitHub requis');
+          localStorage.setItem('carto_gh_token', GH_TOKEN);
+        }
+        const GH_REPO = 'Aizen693/Carto-MO';
+        const emptyGeo = { type: 'FeatureCollection', features: [] };
+        const config = ZONE_CONFIGS[currentZone];
         const path = config.DATA_PATH.replace('../', '') + file;
-        try {
-          const getRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=main`, {
-            headers: { 'Authorization': 'token ' + GH_TOKEN }
-          });
-          if (!getRes.ok) { fail++; continue; }
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(emptyGeo))));
+        const getRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=main`, {
+          headers: { 'Authorization': 'token ' + GH_TOKEN }
+        });
+        if (getRes.ok) {
           const getData = await getRes.json();
           const putRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
             method: 'PUT',
             headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: `Vider calque ${file}`, content: emptyB64, sha: getData.sha, branch: 'main' })
+            body: JSON.stringify({ message: `Vider calque ${file}`, content: content, sha: getData.sha, branch: 'main' })
           });
           if (putRes.ok) {
             const now = new Date();
             calquePurgedAt[currentZone + ':' + id] = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' }) + ' ' + now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
-            ok++;
-          } else { fail++; }
-        } catch { fail++; }
-      }
-
-      if (statusEl) {
-        if (fail === 0) {
-          statusEl.textContent = `${ok} calque(s) vide(s) avec succes.`;
-          statusEl.className = 'calque-import-status io-status-ok';
+            if (statusEl) { statusEl.textContent = `Calque "${file}" vide avec succes.`; statusEl.className = 'calque-import-status io-status-ok'; }
+            refreshCalquesList();
+          } else {
+            if (statusEl) { statusEl.textContent = 'Erreur GitHub: ' + putRes.status; statusEl.className = 'calque-import-status io-status-err'; }
+          }
         } else {
-          statusEl.textContent = `${ok} vide(s), ${fail} erreur(s).`;
-          statusEl.className = 'calque-import-status io-status-err';
+          if (statusEl) { statusEl.textContent = 'Fichier introuvable sur GitHub: ' + getRes.status; statusEl.className = 'calque-import-status io-status-err'; }
         }
+      } catch (e) {
+        if (statusEl) { statusEl.textContent = 'Erreur: ' + e.message; statusEl.className = 'calque-import-status io-status-err'; }
       }
-      refreshCalquesList();
     });
-  }
+  });
 }
 
 // ── Convertisseur HTML/CSV → GeoJSON ────────────────────
