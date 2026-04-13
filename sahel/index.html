@@ -369,7 +369,12 @@ const ZONE_CONFIG = {
 
     function addLayers() {
       if (!data || map.getSource(srcId)) return;
-      map.addSource(srcId, { type: 'geojson', data: data });
+      try {
+        map.addSource(srcId, { type: 'geojson', data: data });
+      } catch (e) { console.warn('[calque ' + cfg.id + '] addSource error:', e.message); return; }
+      // Disable terrain temporarily to avoid DEM RangeError
+      var prevTerrain = null;
+      try { prevTerrain = map.getTerrain(); if (prevTerrain) map.setTerrain(null); } catch(e) {}
       cfg.layers.forEach(function(l) {
         var layerDef = {
           id: l.id,
@@ -380,8 +385,10 @@ const ZONE_CONFIG = {
         };
         if (l.minzoom) layerDef.minzoom = l.minzoom;
         if (l.filter) layerDef.filter = l.filter;
-        map.addLayer(layerDef);
+        try { map.addLayer(layerDef); } catch (e) { console.warn('[calque ' + cfg.id + '] addLayer ' + l.id + ' error:', e.message); }
       });
+      // Restore terrain after layers added
+      try { if (prevTerrain) map.setTerrain(prevTerrain); } catch(e) {}
 
       // Click popup on ALL interactive layers (dots, fills, lines, casings)
       var clickableTypes = ['circle', 'fill', 'line'];
