@@ -3,360 +3,63 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -15.9602,
-          18.077
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "SMH Nouakchott Oil Depot",
-        "Pays": "Mauritanie",
-        "Ville": "Nouakchott",
-        "Coordonnee": "18.0770,-15.9602",
-        "Proprietaire / Gestionnaire": "Societe Mauritanienne des Hydrocarbures (SMH) / Goumin",
-        "Type de stockage": "Depot hydrocarbures / carburant",
-        "Volume de stockage": "100000 m3 + extension",
-        "Commentaires / Source": "Depot d'hydrocarbures central de Nouakchott, agrandi en 2025; role principal de stockage de carburant pour la capitale et le pays [web:160][web:162]",
-        "name": "SMH Nouakchott Oil Depot"
-      }
+      "geometry": { "type": "LineString", "coordinates": [[-8.0, 12.65], [-5.5, 13.5], [-3.0, 14.5], [-0.05, 16.27]] },
+      "properties": { "name": "RN6 Bamako - Gao", "description": "Route nationale strategique reliant Bamako a Gao via Mopti. Axe logistique principal FAMA. Embuscades frequentes.", "type": "Route strategique", "sources": "OpenStreetMap|https://www.openstreetmap.org ACLED|https://acleddata.com" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -15.9894,
-          18.0714
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Port de Nouakchott (Gue de l'Or)",
-        "Pays": "Mauritanie",
-        "Ville": "Nouakchott",
-        "Coordonnee": "18.0714,-15.9894",
-        "Proprietaire / Gestionnaire": "Port autonome de Nouakchott",
-        "Type de stockage": "Port / hub logistique (general, conteneurs, hydrocarbures)",
-        "Volume de stockage": "Infrastructure portuaire de 10 berths, 800000 TEU an, 1000000 t oil, 150000000 t bulk",
-        "Commentaires / Source": "Port principal de Nouakchott, terminal petrolier, conteneurs, vrac, frigorifique [web:161][web:163]",
-        "name": "Port de Nouakchott (Gue de l'Or)"
-      }
+      "geometry": { "type": "LineString", "coordinates": [[-8.0, 12.65], [-5.3, 11.3], [-4.3, 10.5]] },
+      "properties": { "name": "Axe Bamako - Sikasso - Frontiere CI", "description": "Corridor commercial sud Mali vers Cote d'Ivoire. Route d'approvisionnement vitale.", "type": "Corridor commercial", "sources": "Banque Mondiale|https://www.worldbank.org/en/country/mali" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -17.0482,
-          20.9211
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Port de Nouadhibou",
-        "Pays": "Mauritanie",
-        "Ville": "Nouadhibou",
-        "Coordonnee": "20.9211,-17.0482",
-        "Proprietaire / Gestionnaire": "Port autonome de Nouadhibou",
-        "Type de stockage": "Port mineral / frigorifique / petrolier",
-        "Volume de stockage": "20000000 t / an (fer), 1000000 t fish",
-        "Commentaires / Source": "Port industriel mineralier, frigorifique et petrolier a Nouadhibou [web:167][web:172]",
-        "name": "Port de Nouadhibou"
-      }
+      "geometry": { "type": "LineString", "coordinates": [[-1.52, 12.37], [-0.85, 12.58], [-1.05, 14.04]] },
+      "properties": { "name": "Axe Ouaga - Kaya - Djibo", "description": "Route coupee par le JNIM. Ravitaillement de Djibo impossible par voie terrestre depuis 2022.", "type": "Route coupee", "sources": "ICG|https://www.crisisgroup.org/africa/sahel/burkina-faso MSF|https://www.msf.org/burkina-faso" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -15.973,
-          18.098
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Goumin port oil terminal",
-        "Pays": "Mauritanie",
-        "Ville": "Goumin/Nouakchott",
-        "Coordonnee": "18.0980,-15.9730",
-        "Proprietaire / Gestionnaire": "Goumin",
-        "Type de stockage": "Terminal petrolier de stockage",
-        "Volume de stockage": "Partie du reseau petrolier de Nouakchott",
-        "Commentaires / Source": "Plateforme de stockage petrolier situee a Goumin, a l'est de Nouakchott, qui approvisionne SMH et d'autres depots [web:160][web:162]",
-        "name": "Goumin port oil terminal"
-      }
+      "geometry": { "type": "LineString", "coordinates": [[2.11, 13.51], [7.99, 16.97]] },
+      "properties": { "name": "RN25 Niamey - Agadez", "description": "Route transsaharienne. Axe strategique pour les flux migratoires et le commerce vers la Libye.", "type": "Route strategique", "sources": "OIM|https://www.iom.int/countries/niger OpenStreetMap|https://www.openstreetmap.org" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -8.0029,
-          12.6392
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Hub logistique WFP Bamako",
-        "Pays": "Mali",
-        "Ville": "Bamako",
-        "Coordonnee": "12.6392,-8.0029",
-        "Proprietaire / Gestionnaire": "WFP / OCHA",
-        "Type de stockage": "Hub humanitaire & logistique",
-        "Volume de stockage": "Non precise",
-        "Commentaires / Source": "Hub principal logistique du WFP pour le Mali, stockage de vivres, non-perissables, equipements [web:169]",
-        "name": "Hub logistique WFP Bamako"
-      }
+      "geometry": { "type": "Point", "coordinates": [-7.95, 12.53] },
+      "properties": { "name": "Aeroport Bamako-Senou", "description": "Principal aeroport international du Mali. Hub logistique FAMA et Africa Corps.", "type": "Aeroport", "sources": "IATA|https://www.iata.org" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.2,
-          14.52
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Hub logistique WFP Mopti",
-        "Pays": "Mali",
-        "Ville": "Mopti",
-        "Coordonnee": "14.5200,-4.2000",
-        "Proprietaire / Gestionnaire": "WFP / OCHA",
-        "Type de stockage": "Hub humanitaire",
-        "Volume de stockage": "Non precise",
-        "Commentaires / Source": "Hub regional pour Mopti, Gao, region du fleuve Niger [web:169]",
-        "name": "Hub logistique WFP Mopti"
-      }
+      "geometry": { "type": "Point", "coordinates": [2.18, 13.48] },
+      "properties": { "name": "Aeroport Niamey-Diori Hamani", "description": "Aeroport international du Niger. Ancienne base logistique francaise.", "type": "Aeroport", "sources": "IATA|https://www.iata.org" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -0.05,
-          16.2667
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Hub logistique WFP Gao",
-        "Pays": "Mali",
-        "Ville": "Gao",
-        "Coordonnee": "16.2667,-0.0500",
-        "Proprietaire / Gestionnaire": "WFP / OCHA",
-        "Type de stockage": "Hub humanitaire",
-        "Volume de stockage": "Non precise",
-        "Commentaires / Source": "Hub logistique pour le nord du Mali et Gao [web:169]",
-        "name": "Hub logistique WFP Gao"
-      }
+      "geometry": { "type": "Point", "coordinates": [-1.51, 12.35] },
+      "properties": { "name": "Aeroport Ouagadougou", "description": "Aeroport international Thomas Sankara. Hub regional Afrique de l'Ouest.", "type": "Aeroport", "sources": "IATA|https://www.iata.org" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1.4167,
-          18.4333
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Hub logistique WFP Kidal",
-        "Pays": "Mali",
-        "Ville": "Kidal",
-        "Coordonnee": "18.4333,1.4167",
-        "Proprietaire / Gestionnaire": "WFP / OCHA",
-        "Type de stockage": "Hub humanitaire",
-        "Volume de stockage": "Non precise",
-        "Commentaires / Source": "Hub logistique pour la region de Kidal [web:169]",
-        "name": "Hub logistique WFP Kidal"
-      }
+      "geometry": { "type": "Point", "coordinates": [7.99, 16.97] },
+      "properties": { "name": "Aeroport Agadez (Base 201)", "description": "Aeroport et ancienne base de drones US. Infrastructure strategique pour le nord Niger.", "type": "Aeroport / Base", "sources": "Reuters|https://www.reuters.com/world/africa AP|https://apnews.com" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -8.0029,
-          12.6392
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Depot carburant Bamako",
-        "Pays": "Mali",
-        "Ville": "Bamako",
-        "Coordonnee": "12.6392,-8.0029",
-        "Proprietaire / Gestionnaire": "Gouvernement / societes petrolieres (Total, Shell, local chains)",
-        "Type de stockage": "Stockage carburant",
-        "Volume de stockage": "Non precise",
-        "Commentaires / Source": "Reseau de depots et stations-service de Bamako, affecte par le blocage du carburant depuis la frontiere avec le Burkina [web:166][web:20]",
-        "name": "Depot carburant Bamako"
-      }
+      "geometry": { "type": "LineString", "coordinates": [[-8.0, 12.65], [-11.4, 14.45], [-11.88, 16.25]] },
+      "properties": { "name": "Axe Bamako - Kayes - Dakar (chemin de fer)", "description": "Ancienne ligne ferroviaire Bamako-Dakar. Partiellement operationnelle. Projet de rehabilitation.", "type": "Voie ferree", "sources": "Banque Mondiale|https://www.worldbank.org/en/country/mali" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -10.5,
-          13.55
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Corridor logistique Bamako-Kayes-Nioro",
-        "Pays": "Mali",
-        "Ville": "Corridor Bamako-Kayes-Nioro",
-        "Coordonnee": "13.5500,-10.5000",
-        "Proprietaire / Gestionnaire": "Gouvernement / societes petrolieres",
-        "Type de stockage": "Convois de carburant, hubs de transbordement",
-        "Volume de stockage": "Non precise",
-        "Commentaires / Source": "Axe principal pour le carburant provenant de l'au-dela de la frontiere; axes vulnerables aux attaques de convoys [web:166][web:65]",
-        "name": "Corridor logistique Bamako-Kayes-Nioro"
-      }
+      "geometry": { "type": "LineString", "coordinates": [[-1.52, 12.37], [0.22, 12.06], [1.62, 12.29]] },
+      "properties": { "name": "RN4 Ouaga - Fada - Frontiere Niger", "description": "Route nationale est Burkina Faso. Zone a haut risque d'embuscades et IED.", "type": "Route a risque", "sources": "ACLED|https://acleddata.com" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.32,
-          11.1793
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Port sec de Bobo-Dioulasso",
-        "Pays": "Burkina Faso",
-        "Ville": "Bobo-Dioulasso",
-        "Coordonnee": "11.1793,-4.3200",
-        "Proprietaire / Gestionnaire": "BOAD / Gouvernement du Burkina Faso",
-        "Type de stockage": "Port sec multimodal (conteneurs, cereales, produits industriels)",
-        "Volume de stockage": "117000 t / an cereales, 113000 t engrais, 111000 t produits industriels; 11 stands frigorifiques",
-        "Commentaires / Source": "Port sec multimodal finance par la BOAD, premiere phase de 5.2 hectares, concu comme hub de transbordement pour le trafic de conteneurs et de marchandises [web:173]",
-        "name": "Port sec de Bobo-Dioulasso"
-      }
+      "geometry": { "type": "Point", "coordinates": [-0.05, 16.27] },
+      "properties": { "name": "Pont de Wabaria (Gao)", "description": "Pont strategique sur le Niger a Gao. Infrastructure critique pour l'approvisionnement du nord.", "type": "Pont strategique", "sources": "OpenStreetMap|https://www.openstreetmap.org" }
     },
     {
       "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.52,
-          12.37
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Hub logistique WFP Ouagadougou",
-        "Pays": "Burkina Faso",
-        "Ville": "Ouagadougou",
-        "Coordonnee": "12.3700,-1.5200",
-        "Proprietaire / Gestionnaire": "WFP / OCHA",
-        "Type de stockage": "Hub humanitaire",
-        "Volume de stockage": "Non precise",
-        "Commentaires / Source": "Hub principal pour le Burkina, stockage de vivres et equipements logistiques [web:169]",
-        "name": "Hub logistique WFP Ouagadougou"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.2,
-          10.9
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Hub logistique WFP Diebougou / Bobo",
-        "Pays": "Burkina Faso",
-        "Ville": "Diebougou / Bobo-Dioulasso",
-        "Coordonnee": "10.9000,-4.2000",
-        "Proprietaire / Gestionnaire": "WFP / OCHA",
-        "Type de stockage": "Hub regional pour le Sud-Ouest",
-        "Volume de stockage": "Non precise",
-        "Commentaires / Source": "Hub de soutien logistique pour le Sud-Ouest burkinabe [web:169]",
-        "name": "Hub logistique WFP Diebougou / Bobo"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -1.52,
-          12.37
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Depot carburant Ouagadougou",
-        "Pays": "Burkina Faso",
-        "Ville": "Ouagadougou",
-        "Coordonnee": "12.3700,-1.5200",
-        "Proprietaire / Gestionnaire": "Gouvernement / societes petrolieres",
-        "Type de stockage": "Stockage carburant",
-        "Volume de stockage": "Non precise",
-        "Commentaires / Source": "Depots de carburant alimentant la capitale, situes a l'exterieur de Ouagadougou, affectes par la securite des axes de transport [web:169][web:114]",
-        "name": "Depot carburant Ouagadougou"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.1,
-          11.4
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Depot hydrocarbures Peni, SONABHY",
-        "Pays": "Burkina Faso",
-        "Ville": "Peni",
-        "Coordonnee": "11.4000,-4.1000",
-        "Proprietaire / Gestionnaire": "SONABHY",
-        "Type de stockage": "Hydrocarbures (essence, diesel, mazout)",
-        "Volume de stockage": "104000 m³",
-        "Commentaires / Source": "Nouveau depot inaugure en janvier 2025 pres de Bobo-Dioulasso, 104000 m³, alimente tout le territoire burkinabe [web:180][web:182][web:188]",
-        "name": "Depot hydrocarbures Peni, SONABHY"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          0.015,
-          5.663
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Depot hydrocarbures Tema (Ghana, gere par SONABHY)",
-        "Pays": "Burkina Faso",
-        "Ville": "Tema, Ghana",
-        "Coordonnee": "5.6630,0.0150",
-        "Proprietaire / Gestionnaire": "SONABHY",
-        "Type de stockage": "Hydrocarbures liquides",
-        "Volume de stockage": "Volume non precisé, infrastructure majeure",
-        "Commentaires / Source": "Acquisition en 2025 d’un depot à Tema pour sécuriser l’approvisionnement du Burkina [web:184][web:186]",
-        "name": "Depot hydrocarbures Tema (Ghana, gere par SONABHY)"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -8.0029,
-          12.6392
-        ]
-      },
-      "properties": {
-        "Entrepot / hub": "Depot principal Star Oil Bamako",
-        "Pays": "Mali",
-        "Ville": "Bamako",
-        "Coordonnee": "12.6392,-8.0029",
-        "Proprietaire / Gestionnaire": "Star Oil",
-        "Type de stockage": "Carburant (essence, diesel, aviation)",
-        "Volume de stockage": "16000 m³",
-        "Commentaires / Source": "Dépôt principal de Star Oil à Bamako, 16000 m³, desservant la ville et le réseau de distribution [web:179]",
-        "name": "Depot principal Star Oil Bamako"
-      }
+      "geometry": { "type": "LineString", "coordinates": [[-3.0, 14.5], [-2.43, 13.25], [-1.05, 14.04]] },
+      "properties": { "name": "Axe Mopti - Dori (transfrontalier)", "description": "Corridor transfrontalier Mali-Burkina. Zone d'operations JNIM. Trafic et mouvements de population.", "type": "Route transfrontaliere", "sources": "ACLED|https://acleddata.com ICG|https://www.crisisgroup.org/africa/sahel" }
     }
   ]
 }
