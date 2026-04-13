@@ -19,7 +19,7 @@
         "bilan": "Bilan non précisé",
         "name": "JNIM / assaillants jihadistes",
         "type": "Attaque",
-        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 Africa Center|https://africacenter.org/spotlight/jnim-attacks-western-mali-sahel/"
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 AfricaCenter|https://africacenter.org/spotlight/jnim-attacks-western-mali-sahel/"
       }
     },
     {
@@ -82,7 +82,7 @@
         "bilan": "Bilan non précisé",
         "name": "JNIM / assaillants jihadistes",
         "type": "Attaque",
-        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 African Security Analysis|https://www.africansecurityanalysis.org/updates/burkina-faso-security-report-jnim-escalation-and-governance-risks"
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 AfricanSecurity|https://www.africansecurityanalysis.org/updates/burkina-faso-security-report-jnim-escalation-and-governance-risks"
       }
     },
     {
@@ -103,7 +103,7 @@
         "bilan": "Bilan non précisé",
         "name": "JNIM / assaillants jihadistes",
         "type": "Attaque",
-        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 Africa Center|https://africacenter.org/spotlight/jnim-attacks-western-mali-sahel/"
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 AfricaCenter|https://africacenter.org/spotlight/jnim-attacks-western-mali-sahel/"
       }
     },
     {
@@ -124,7 +124,7 @@
         "bilan": "Bilan non précisé",
         "name": "JNIM / assaillants jihadistes",
         "type": "Attaque",
-        "sources": "Africanews|https://www.africanews.com/2026/01/22/jihadist-attack-claims-lives-of-eleven-police-officers-in-burkina-faso/ The Defense Post|https://thedefensepost.com/2026/01/22/jihadist-police-burkina-faso/"
+        "sources": "Africanews|https://www.africanews.com/2026/01/22/jihadist-attack-claims-lives-of-eleven-police-officers-in-burkina-faso/ DefensePost|https://thedefensepost.com/2026/01/22/jihadist-police-burkina-faso/"
       }
     },
     {
@@ -166,7 +166,7 @@
         "bilan": "Bilan non précisé",
         "name": "JNIM / assaillants jihadistes",
         "type": "Attaque",
-        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 ADF Magazine|https://adf-magazine.com/2026/03/terror-groups-pressure-sahel-capitals/"
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 ADF|https://adf-magazine.com/2026/03/terror-groups-pressure-sahel-capitals/"
       }
     },
     {
@@ -208,7 +208,7 @@
         "bilan": "Bilan non précisé",
         "name": "JNIM / assaillants jihadistes",
         "type": "Incident frontalier",
-        "sources": "ACLED|https://acleddata.com/region/conflict-sahel Dispatch Risk|https://dispatchrisk.com/jihadist-threat-prompts-plans-for-expanded-military-deployments/"
+        "sources": "ACLED|https://acleddata.com/region/conflict-sahel DispatchRisk|https://dispatchrisk.com/jihadist-threat-prompts-plans-for-expanded-military-deployments/"
       }
     },
     {
@@ -229,7 +229,7 @@
         "bilan": "Bilan non précisé",
         "name": "JNIM / assaillants jihadistes",
         "type": "Attaque",
-        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 Africa Center|https://africacenter.org/spotlight/jnim-attacks-western-mali-sahel/"
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 AfricaCenter|https://africacenter.org/spotlight/jnim-attacks-western-mali-sahel/"
       }
     },
     {
@@ -250,7 +250,7 @@
         "bilan": "Bilan non précisé",
         "name": "JNIM / assaillants jihadistes",
         "type": "Attaque",
-        "sources": "AbidjanTV|https://abidjantv.net/afrique-3/burkina-faso-le-jnim-revendique-une-attaque-a-sebba/ African Security Analysis|https://www.africansecurityanalysis.org/updates/burkina-faso-iswap-jnim-rivalry-escalates-in-sebba-turning-tri-border-corridor-into-a-strategic-battleground"
+        "sources": "AbidjanTV|https://abidjantv.net/afrique-3/burkina-faso-le-jnim-revendique-une-attaque-a-sebba/ AfricanSecurity|https://www.africansecurityanalysis.org/updates/burkina-faso-iswap-jnim-rivalry-escalates-in-sebba-turning-tri-border-corridor-into-a-strategic-battleground"
       }
     },
     {
@@ -334,7 +334,7 @@
         "bilan": "Bilan non précisé",
         "name": "JNIM / assaillants jihadistes",
         "type": "Incident frontalier",
-        "sources": "ACLED|https://acleddata.com/region/conflict-sahel Dispatch Risk|https://dispatchrisk.com/jihadist-threat-prompts-plans-for-expanded-military-deployments/"
+        "sources": "ACLED|https://acleddata.com/region/conflict-sahel DispatchRisk|https://dispatchrisk.com/jihadist-threat-prompts-plans-for-expanded-military-deployments/"
       }
     },
     {
@@ -355,7 +355,7 @@
         "bilan": "Bilan non précisé",
         "name": "Assaillants armés",
         "type": "Attaque",
-        "sources": "Connectionivoirienne|https://connectionivoirienne.net/2026/03/09/burkina-faso-au-moins-30-policiers-tues-dans-une-attaque-jihadiste-contre-un-detachement-a-yamba/ Africa Eye|https://africa-eye.com/fr/2026/03/09/burkina-faso-au-moins-30-policiers-tues-dans-une-attaque-dans-lest-du-pays/"
+        "sources": "Connectionivoirienne|https://connectionivoirienne.net/2026/03/09/burkina-faso-au-moins-30-policiers-tues-dans-une-attaque-jihadiste-contre-un-detachement-a-yamba/ AfricaEye|https://africa-eye.com/fr/2026/03/09/burkina-faso-au-moins-30-policiers-tues-dans-une-attaque-dans-lest-du-pays/"
       }
     }
   ]
