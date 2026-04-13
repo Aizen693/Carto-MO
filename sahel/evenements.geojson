@@ -3,63 +3,2748 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-5.93, 12.07] },
-      "properties": { "name": "Attaque mine Morila", "description": "Attaque jihadiste presumee contre la mine d'or de Morila. Perturbation de la production.", "date": "05/01/2026", "type": "Attaque", "sources": "Reuters|https://www.reuters.com/world/africa/suspected-jihadists-attack-malis-morila-mine-2026-01-05" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "JNIM",
+        "2026-02-09": "2026-02-10",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - région du Sahel, plusieurs villages",
+        "Attaques et prise de positions rivales": "Poursuite d’offensive contre positions rivales",
+        "Plus de 40 combattants JNIM tués": "Inclus dans bilan de plus de 40 combattants JNIM tués",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026",
+        "name": "JNIM"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-8.15, 11.18] },
-      "properties": { "name": "Arrestation dirigeants Yanfolila", "description": "5 responsables de la mine d'or de Yanfolila arretes pour infractions au code minier.", "date": "27/01/2026", "type": "Arrestation", "sources": "Reuters|https://www.reuters.com/sustainability/mali-detains-five-gold-mine-managers-over-alleged-code-breaches-sources-say-2026-01-27" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "JNIM",
+        "2026-02-09": "2026-02-19",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - Est, Centre-Nord et Nord",
+        "Attaques et prise de positions rivales": "Vague d’attaques coordonnées contre forces et VDP",
+        "Plus de 40 combattants JNIM tués": "Plus de 120 soldats, gardes forestiers et VDP tués au total dans plus de 30 attaques",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "Reuters, 19 Feb 2026 - https://www.reuters.com/world/africa/islamist-militants-show-unprecedented-coordination-burkina-faso-attacks-2026-02-19/",
+        "name": "JNIM"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-10.57, 15.03] },
-      "properties": { "name": "7 mauritaniens tues (Ehl Elkori)", "description": "7 ressortissants mauritaniens tues par les FAMA a la frontiere Mali-Mauritanie. Crise diplomatique.", "date": "06/03/2026", "type": "Incident frontalier", "sources": "Sahel Intelligence|https://sahel-intelligence.com RFI|https://www.rfi.fr/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "Assaillants armés",
+        "2026-02-09": "2026-03-06",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - Yamba",
+        "Attaques et prise de positions rivales": "Attaque contre détachement de police",
+        "Plus de 40 combattants JNIM tués": "Bilan non précisé",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "Africa Center Daily Media Review, 9 Mar 2026 - https://africacenter.org/fr/daily-media-review/revue-de-presse-du-9-mars-2026/",
+        "name": "Assaillants armés"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-5.28, 14.87] },
-      "properties": { "name": "Accusations Mali-Mauritanie (camp M'Bera)", "description": "Le Mali accuse la Mauritanie d'heberger des soldats dans le camp de refugies de M'Bera. Nouakchott rejette.", "date": "20/03/2026", "type": "Crise diplomatique", "sources": "Sahel Intelligence|https://sahel-intelligence.com France 24|https://www.france24.com/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "Groupe armé lié à Al-Qaïda / JNIM",
+        "2026-02-09": "2026-03-10",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - axe routier / convoi de camions",
+        "Attaques et prise de positions rivales": "Attaque contre chauffeurs routiers",
+        "Plus de 40 combattants JNIM tués": "Au moins 12 chauffeurs tués",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "Reuters, 10 Mar 2026 - https://www.reuters.com/world/africa/al-qaeda-linked-group-killed-least-12-truck-drivers-mali-hrw-says-2026-03-10/",
+        "name": "Groupe armé lié à Al-Qaïda / JNIM"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [1.56, 13.54] },
-      "properties": { "name": "8 policiers tues (Tillaberi)", "description": "Attaque ISGS contre poste de police pres de la frontiere malienne. Zone la plus meurtriere du Sahel.", "date": "26/03/2026", "type": "Attaque", "sources": "AFP|https://www.france24.com/fr/afrique ACLED|https://acleddata.com" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "Jnim",
+        "2026-02-09": "2026-03-22",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - Centre-Nord",
+        "Attaques et prise de positions rivales": "Attaque contre soldats et VDP",
+        "Plus de 40 combattants JNIM tués": "Au moins 20 morts",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "RFI cité par Monthly Press Review March 2026 - https://migration-control.info/en/blog/monthly-press-review-march-2026/",
+        "name": "Jnim"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-10.28, 15.23] },
-      "properties": { "name": "5 mauritaniens tues (Yelimane)", "description": "5 victimes mauritaniennes identifiees. Nouakchott condamne des actes inacceptables.", "date": "28/03/2026", "type": "Incident frontalier", "sources": "Sahel Intelligence|https://sahel-intelligence.com RFI|https://www.rfi.fr/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "Forces maliennes / incident frontalier",
+        "2026-02-09": "2026-03-29",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - frontière mauritano-malienne",
+        "Attaques et prise de positions rivales": "Tension / incident frontalier sécuritaire",
+        "Plus de 40 combattants JNIM tués": "Bilan non précisé",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "Rapide Info, 29 Mar 2026 - https://rapideinfo.mr/mauritanie-mali-tensions-frontaliere-mars-2026/",
+        "name": "Forces maliennes / incident frontalier"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-1.05, 14.04] },
-      "properties": { "name": "Blocus de Djibo (continu)", "description": "Siege du JNIM sur Djibo. Aucun convoi terrestre depuis des mois. Crise humanitaire majeure.", "date": "Jan-Mars 2026", "type": "Siege", "sources": "MSF|https://www.msf.org/burkina-faso ICG|https://www.crisisgroup.org/africa/sahel/burkina-faso" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-16",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [0.86, 11.17] },
-      "properties": { "name": "Attaque JNIM - Nord Togo", "description": "Incursion jihadiste dans le nord du Togo. Extension de la menace vers les Etats cotiers.", "date": "Fev 2026", "type": "Incursion", "sources": "ACLED|https://acleddata.com ICG|https://www.crisisgroup.org/africa/west-africa" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-17",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-1.68, 11.16] },
-      "properties": { "name": "Attaques recurrentes axe Po-Ouaga", "description": "Embuscades regulieres sur l'axe routier reliant la frontiere ghanenne a Ouagadougou.", "date": "Jan-Mars 2026", "type": "Embuscades", "sources": "ACLED|https://acleddata.com RFI|https://www.rfi.fr/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-18",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-11.47, 12.87] },
-      "properties": { "name": "Reprise production Loulo-Gounkoto", "description": "Reprise de la production de la mine apres accord Barrick-Bamako. Fermeture de janvier a decembre 2025.", "date": "Fev 2026", "type": "Economique", "sources": "Reuters|https://www.reuters.com/world/africa/mali-renews-barrick-minings-loulo-license-10-more-years-2026-02-13 RFI|https://www.rfi.fr/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-19",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [2.11, 13.51] },
-      "properties": { "name": "Retrait troupes francaises Niger", "description": "Completion du retrait des forces francaises du Niger. Fin de la presence militaire occidentale au Sahel central.", "date": "Jan 2026", "type": "Geopolitique", "sources": "Reuters|https://www.reuters.com/world/africa AFP|https://www.france24.com/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-20",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-8.0, 12.65] },
-      "properties": { "name": "Alliance des Etats du Sahel (AES)", "description": "Consolidation de la confederation Mali-Burkina-Niger. Retrait definitif de la CEDEAO.", "date": "Jan 2026", "type": "Geopolitique", "sources": "Reuters|https://www.reuters.com/world/africa RFI|https://www.rfi.fr/fr/afrique ICG|https://www.crisisgroup.org/africa/sahel" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-21",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-22",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-23",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-24",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-25",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-26",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-27",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-28",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-29",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-30",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-01-31",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-01",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-02",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-03",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-04",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-05",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-06",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-07",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-08",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-09",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-10",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-11",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-12",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-13",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-14",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-15",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-16",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-17",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-18",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-19",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-20",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-21",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-22",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-23",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-24",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-25",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-26",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-27",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-02-28",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-01",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-02",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-03",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-04",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-05",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-06",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-07",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-08",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-09",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-10",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-11",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-12",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-13",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-14",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-15",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-16",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-17",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-18",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-19",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-20",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-21",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-22",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-23",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-24",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-25",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-26",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-27",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-28",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-29",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mauritanie - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-30",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Mali - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "2026-02-09": "2026-03-31",
+        "Burkina Faso - région du Sahel, plusieurs villages": "Burkina Faso - lieu à confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "JNIM": "À documenter",
+        "Burkina Faso - région du Sahel, plusieurs villages": "À confirmer",
+        "Attaques et prise de positions rivales": "Évènement sécuritaire à vérifier",
+        "Plus de 40 combattants JNIM tués": "Bilan à confirmer",
+        "ACLED Africa Overview March 2026 - https://acleddata.com/update/africa-overview-march-2026": "À compléter par dépouillement de sources ouvertes (ACLED, presse locale, communiqués officiels)",
+        "name": "À documenter"
+      }
     }
   ]
 }
