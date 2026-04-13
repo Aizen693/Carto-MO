@@ -538,17 +538,23 @@ async function refreshCalquesList() {
   }
   if (emptyEl) emptyEl.style.display = 'none';
 
-  // Check file status for each overlay
+  // Check file status + last modified for each overlay
   const statuses = {};
   await Promise.all(overlays.map(async (o) => {
     try {
       const res = await fetch(config.DATA_PATH + o.file, { method: 'GET' });
       if (!res.ok) { statuses[o.id] = 'absent'; return; }
+      const lastMod = res.headers.get('Last-Modified');
       const data = await res.json();
+      let dateStr = '';
+      if (lastMod) {
+        const d = new Date(lastMod);
+        dateStr = d.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' }) + ' ' + d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+      }
       if (data.features && data.features.length > 0) {
-        statuses[o.id] = { status: 'ok', count: data.features.length };
+        statuses[o.id] = { status: 'ok', count: data.features.length, date: dateStr };
       } else {
-        statuses[o.id] = { status: 'vide', count: 0 };
+        statuses[o.id] = { status: 'vide', count: 0, date: dateStr };
       }
     } catch {
       statuses[o.id] = 'absent';
@@ -570,22 +576,65 @@ async function refreshCalquesList() {
         statusHTML = '<span class="calque-status calque-status-ok">OK</span>';
         countLabel = `<span style="font:300 7px/1 var(--m);color:var(--tx1)">${s.count} pts</span>`;
       }
+      const dateLabel = (s && s.date) ? `<span style="font:300 7px/1 var(--m);color:var(--tx2);white-space:nowrap">${s.date}</span>` : '';
       html += `<div class="calque-row">
         <span class="calque-name">${i + 1}. ${o.label}</span>
         ${countLabel}
         ${statusHTML}
         <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
-        <span class="calque-file">${o.file}</span>
+        <button class="calque-btn calque-btn-del" data-calque-id="${o.id}" data-calque-file="${o.file}" title="Vider ce calque">Vider</button>
+        <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+          <span class="calque-file">${o.file}</span>
+          ${dateLabel}
+        </div>
       </div>`;
   });
   html += '<div id="calque-status-msg" class="calque-import-status"></div>';
   container.innerHTML = html;
 
   // Bind import buttons
-  container.querySelectorAll('.calque-btn').forEach(btn => {
+  container.querySelectorAll('.calque-btn:not(.calque-btn-del)').forEach(btn => {
     btn.addEventListener('click', () => {
       calqueImportTarget = btn.dataset.calqueId;
       document.getElementById('calque-import-file').click();
+    });
+  });
+
+  // Bind delete buttons
+  container.querySelectorAll('.calque-btn-del').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const file = btn.dataset.calqueFile;
+      const id = btn.dataset.calqueId;
+      if (!confirm(`Vider le calque "${file}" ? Le fichier sera remplace par un GeoJSON vide.`)) return;
+      try {
+        const emptyGeo = { type: 'FeatureCollection', features: [] };
+        const config = ZONE_CONFIGS[currentZone];
+        // Push empty GeoJSON to GitHub
+        const path = config.DATA_PATH.replace(/^\.\//, '').replace(/^\//, '') + file;
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(emptyGeo))));
+        // Get current SHA
+        const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}?ref=main`, {
+          headers: { 'Authorization': 'token ' + GITHUB_TOKEN }
+        });
+        if (getRes.ok) {
+          const getData = await getRes.json();
+          const putRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
+            method: 'PUT',
+            headers: { 'Authorization': 'token ' + GITHUB_TOKEN, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: `Vider calque ${file}`, content: content, sha: getData.sha, branch: 'main' })
+          });
+          if (putRes.ok) {
+            showStatus('calque-status-msg', `Calque "${file}" vide avec succes.`, 'ok');
+            refreshCalquesList();
+          } else {
+            showStatus('calque-status-msg', 'Erreur GitHub: ' + putRes.status, 'err');
+          }
+        } else {
+          showStatus('calque-status-msg', 'Fichier introuvable sur GitHub.', 'err');
+        }
+      } catch (e) {
+        showStatus('calque-status-msg', 'Erreur: ' + e.message, 'err');
+      }
     });
   });
 }

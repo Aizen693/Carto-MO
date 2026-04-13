@@ -517,7 +517,7 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
 
 .calque-row {
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr auto auto auto auto auto;
   align-items: center;
   gap: 6px;
   padding: 5px 4px;
@@ -576,6 +576,8 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
   white-space: nowrap;
 }
 .calque-btn:hover { background: var(--acb); color: #fff; }
+.calque-btn-del { background: rgba(168,64,64,0.08); border-color: rgba(168,64,64,0.3); color: var(--err); }
+.calque-btn-del:hover { background: rgba(168,64,64,0.25); color: #ff6b6b; }
 
 .calque-import-status {
   font: 400 7px/1.4 var(--m);
