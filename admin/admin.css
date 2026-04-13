@@ -581,26 +581,16 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
   background: var(--bg2);
 }
 
-.calque-row-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
 .calque-row-info {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-width: 0;
 }
 
 .calque-file {
   font: 300 9px/1 var(--m);
   color: var(--tx2);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .calque-date {
@@ -614,7 +604,6 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-shrink: 0;
 }
 
 .calque-btn {

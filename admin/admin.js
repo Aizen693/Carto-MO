@@ -600,15 +600,13 @@ async function refreshCalquesList() {
             ${statusHTML}
           </div>
         </div>
-        <div class="calque-row-bottom">
-          <div class="calque-row-info">
-            ${fileLabel}
-            ${dateLabel}
-          </div>
-          <div class="calque-row-actions">
-            <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
-            <button class="calque-btn calque-btn-del" data-calque-id="${o.id}" data-calque-file="${o.file}" title="Vider ce calque">Vider</button>
-          </div>
+        <div class="calque-row-info">
+          ${fileLabel}
+          ${dateLabel}
+        </div>
+        <div class="calque-row-actions">
+          <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
+          <button class="calque-btn calque-btn-del" data-calque-id="${o.id}" data-calque-file="${o.file}" title="Vider ce calque">Vider</button>
         </div>
       </div>`;
   });
