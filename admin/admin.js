@@ -403,6 +403,60 @@ function setupImportExport() {
 let calqueImportTarget = null; // which overlay id is being imported
 const calquePurgedAt = {}; // zone:id → "dd/mm/yyyy hh:mm" when purged
 
+// ── Helpers: CSV/rows → GeoJSON ────────────────────────
+
+function parseCSVtoGeoJSON(text) {
+  const lines = text.split('\n').filter(l => l.trim());
+  if (lines.length < 2) throw new Error('CSV: au moins un en-tete + une ligne');
+  const sep = text.includes('\t') ? '\t' : text.includes(';') ? ';' : ',';
+  const headers = lines[0].split(sep).map(h => h.trim().replace(/^"|"$/g, ''));
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const vals = lines[i].split(sep).map(v => v.trim().replace(/^"|"$/g, ''));
+    const row = {};
+    headers.forEach((h, j) => { if (h) row[h] = vals[j] || ''; });
+    rows.push(row);
+  }
+  return rowsToGeoJSON(rows);
+}
+
+function rowsToGeoJSON(rows) {
+  const allKeys = rows[0] ? Object.keys(rows[0]) : [];
+  const latAliases = ['lat', 'latitude', 'y'];
+  const lngAliases = ['lng', 'lon', 'longitude', 'long', 'x'];
+  const latCol = allKeys.find(k => latAliases.includes(k.toLowerCase().trim()));
+  const lngCol = allKeys.find(k => lngAliases.includes(k.toLowerCase().trim()));
+
+  const features = [];
+  for (const row of rows) {
+    const vals = Object.values(row).filter(v => v && v.toString().trim());
+    if (!vals.length) continue;
+
+    let lat = latCol ? parseFloat(row[latCol]) : 0;
+    let lng = lngCol ? parseFloat(row[lngCol]) : 0;
+    if (isNaN(lat)) lat = 0;
+    if (isNaN(lng)) lng = 0;
+
+    const props = {};
+    for (const [k, v] of Object.entries(row)) {
+      if (k === latCol || k === lngCol) continue;
+      const s = (v || '').toString().trim();
+      if (s) props[k] = s;
+    }
+    if (!props.name && !props.Name && !props.nom && !props.Nom) {
+      const firstKey = Object.keys(props)[0];
+      if (firstKey) props.name = props[firstKey];
+    }
+
+    features.push({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [lng, lat] },
+      properties: props
+    });
+  }
+  return { type: 'FeatureCollection', features };
+}
+
 function setupCalquesManager() {
   const fileInput = document.getElementById('calque-import-file');
   fileInput.addEventListener('change', async () => {
@@ -414,49 +468,47 @@ function setupCalquesManager() {
     const statusEl = document.getElementById('calque-status-msg');
 
     try {
-      const text = await fileInput.files[0].text();
-      let data = JSON.parse(text);
+      const file = fileInput.files[0];
+      const text = await file.text();
+      let data;
 
-      // ── Auto-convert JSON array (table export) to GeoJSON ──
-      if (Array.isArray(data)) {
-        const features = [];
-        for (const row of data) {
-          // Skip empty rows and header rows
-          const vals = Object.values(row).map(v => (v || '').toString().trim());
-          const hasContent = vals.some(v => v.length > 0 && v !== 'Date / période');
-          if (!hasContent) continue;
-
-          // Try to extract coordinates from known fields
-          const keys = Object.keys(row);
-          let lng = null, lat = null;
-          for (const k of keys) {
-            const v = (row[k] || '').toString().trim().toLowerCase();
-            if (/^-?\d+\.?\d*$/.test(v)) {
-              const n = parseFloat(v);
-              if (lng === null && n >= -180 && n <= 180) lng = n;
-              else if (lat === null && n >= -90 && n <= 90) lat = n;
-            }
-          }
-
-          // Build properties from all non-empty fields
-          const props = {};
-          for (const k of keys) {
-            const v = (row[k] || '').toString().trim();
-            if (v) props[k] = v;
-          }
-
-          // If no coordinates, create feature at [0,0] — user can fix later
-          features.push({
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: [lng || 0, lat || 0] },
-            properties: props
-          });
+      // ── Detect file type and parse accordingly ──
+      const isCSV = file.name.endsWith('.csv') || file.name.endsWith('.tsv');
+      if (isCSV) {
+        data = parseCSVtoGeoJSON(text);
+      } else {
+        data = JSON.parse(text);
+        // Auto-convert JSON array to GeoJSON
+        if (Array.isArray(data)) {
+          data = rowsToGeoJSON(data);
         }
-        data = { type: 'FeatureCollection', features };
       }
 
-      if (!data.type || !data.features) {
-        throw new Error('Format invalide — FeatureCollection ou JSON array attendu');
+      // Post-process: fix [0,0] coords from 'Coordonnée'/'Coordonnee'/'coords' column
+      if (data && data.features) {
+        data.features.forEach(ft => {
+          const c = ft.geometry && ft.geometry.coordinates;
+          if (c && c[0] === 0 && c[1] === 0) {
+            const p = ft.properties || {};
+            const raw = p['Coordonnée'] || p['Coordonnee'] || p['coordonnee'] || p['coords'] || p['coordinates'] || '';
+            if (raw && raw.includes(',')) {
+              const parts = raw.split(',');
+              const a = parseFloat(parts[0].trim()), b = parseFloat(parts[1].trim());
+              if (!isNaN(a) && !isNaN(b)) {
+                // Detect which is lat vs lng (lat is typically < 90)
+                if (Math.abs(a) <= 90 && Math.abs(b) <= 180) {
+                  ft.geometry.coordinates = [b, a]; // lat,lng → [lng,lat]
+                } else {
+                  ft.geometry.coordinates = [a, b]; // already lng,lat
+                }
+              }
+            }
+          }
+        });
+      }
+
+      if (!data || !data.type || !data.features) {
+        throw new Error('Format invalide — GeoJSON, JSON array ou CSV attendu');
       }
 
       // Push to GitHub repo directly
@@ -545,7 +597,7 @@ async function refreshCalquesList() {
   const statuses = {};
   await Promise.all(overlays.map(async (o) => {
     try {
-      const res = await fetch(config.DATA_PATH + o.file, { method: 'GET' });
+      const res = await fetch(config.DATA_PATH + o.file + '?v=' + Date.now(), { method: 'GET' });
       if (!res.ok) { statuses[o.id] = 'absent'; return; }
       const lastMod = res.headers.get('Last-Modified');
       const data = await res.json();
@@ -737,51 +789,35 @@ function setupConverter() {
 
       if (!rows.length) throw new Error('Aucune donnee extraite');
 
-      // ── Detect lat/lng columns ──
-      const allKeys = Object.keys(rows[0]);
-      const latAliases = ['lat', 'latitude', 'y', 'lat.', 'Latitude', 'LAT'];
-      const lngAliases = ['lng', 'lon', 'longitude', 'long', 'x', 'Longitude', 'LNG', 'LON'];
-      let latCol = allKeys.find(k => latAliases.includes(k.toLowerCase().trim()));
-      let lngCol = allKeys.find(k => lngAliases.includes(k.toLowerCase().trim()));
+      lastGeoJSON = rowsToGeoJSON(rows);
 
-      // ── Build GeoJSON ──
-      const features = [];
-      for (const row of rows) {
-        const vals = Object.values(row).filter(v => v && v.toString().trim());
-        if (!vals.length) continue;
-
-        let lat = latCol ? parseFloat(row[latCol]) : 0;
-        let lng = lngCol ? parseFloat(row[lngCol]) : 0;
-        if (isNaN(lat)) lat = 0;
-        if (isNaN(lng)) lng = 0;
-
-        const props = {};
-        for (const [k, v] of Object.entries(row)) {
-          if (k === latCol || k === lngCol) continue;
-          const s = (v || '').toString().trim();
-          if (s) props[k] = s;
+      // Post-process: fix [0,0] coords from combined coordinate columns
+      lastGeoJSON.features.forEach(ft => {
+        const c = ft.geometry && ft.geometry.coordinates;
+        if (c && c[0] === 0 && c[1] === 0) {
+          const p = ft.properties || {};
+          const raw = p['Coordonnée'] || p['Coordonnee'] || p['coordonnee'] || p['coords'] || p['coordinates'] || '';
+          if (raw && raw.includes(',')) {
+            const parts = raw.split(',');
+            const a = parseFloat(parts[0].trim()), b = parseFloat(parts[1].trim());
+            if (!isNaN(a) && !isNaN(b)) {
+              if (Math.abs(a) <= 90 && Math.abs(b) <= 180) {
+                ft.geometry.coordinates = [b, a];
+              } else {
+                ft.geometry.coordinates = [a, b];
+              }
+            }
+          }
         }
-        // Use first text field as "name" if no name prop
-        if (!props.name && !props.Name && !props.nom && !props.Nom) {
-          const firstKey = Object.keys(props)[0];
-          if (firstKey) props.name = props[firstKey];
-        }
+      });
 
-        features.push({
-          type: 'Feature',
-          geometry: { type: 'Point', coordinates: [lng, lat] },
-          properties: props
-        });
-      }
-
-      lastGeoJSON = { type: 'FeatureCollection', features };
       const json = JSON.stringify(lastGeoJSON, null, 2);
       outputEl.value = json;
       outputEl.style.display = 'block';
       btnDownload.style.display = 'inline-block';
 
-      const hasCoords = latCol && lngCol;
-      statusEl.textContent = `${features.length} features converties.${hasCoords ? '' : ' Coordonnees a [0,0] — ajoutez des colonnes lat/lng dans vos donnees source.'}`;
+      const hasZeroCoords = lastGeoJSON.features.some(f => f.geometry.coordinates[0] === 0 && f.geometry.coordinates[1] === 0);
+      statusEl.textContent = `${lastGeoJSON.features.length} features converties.${hasZeroCoords ? ' Certaines coordonnees a [0,0] — verifiez vos colonnes lat/lng.' : ''}`;
       statusEl.className = 'io-status io-status-ok';
 
     } catch (e) {
