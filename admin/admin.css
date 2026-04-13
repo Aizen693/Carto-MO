@@ -632,6 +632,48 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
 .calque-import-status.io-status-ok { color: #52b788; }
 .calque-import-status.io-status-err { color: var(--err); }
 
+.calque-check-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+.calque-check {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--err);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.calque-check:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.calque-batch-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 10px;
+  margin-top: 4px;
+  border-top: 1px solid var(--bg3);
+}
+.calque-select-all-label {
+  font: 400 10px/1 var(--m);
+  color: var(--tx2);
+}
+#calque-batch-delete {
+  font: 500 9px/1 var(--m);
+  padding: 5px 14px;
+}
+#calque-batch-delete:disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
 .io-section { margin-bottom: 16px; }
 .io-label {
   font: 500 8px/1 var(--bc);

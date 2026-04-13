@@ -644,9 +644,13 @@ async function refreshCalquesList() {
         fileLabel = `<span class="calque-file">${o.file}</span>`;
         dateLabel = s.date ? `<span class="calque-date">${s.date}</span>` : '';
       }
+      const hasData = s !== 'absent' && s.status !== 'vide' && !purged;
       html += `<div class="calque-row">
         <div class="calque-row-top">
-          <span class="calque-name">${i + 1}. ${o.label}</span>
+          <label class="calque-check-label">
+            <input type="checkbox" class="calque-check" data-calque-id="${o.id}" data-calque-file="${o.file}" ${hasData ? '' : 'disabled'}>
+            <span class="calque-name">${i + 1}. ${o.label}</span>
+          </label>
           <div class="calque-row-meta">
             ${countLabel}
             ${statusHTML}
@@ -658,10 +662,13 @@ async function refreshCalquesList() {
         </div>
         <div class="calque-row-actions">
           <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
-          <button class="calque-btn calque-btn-del" data-calque-id="${o.id}" data-calque-file="${o.file}" title="Vider ce calque">Vider</button>
         </div>
       </div>`;
   });
+  html += `<div class="calque-batch-bar">
+    <label class="calque-check-label calque-select-all-label"><input type="checkbox" id="calque-select-all"> Tout selectionner</label>
+    <button class="calque-btn calque-btn-del" id="calque-batch-delete" disabled>Vider la selection</button>
+  </div>`;
   html += '<div id="calque-status-msg" class="calque-import-status"></div>';
   container.innerHTML = html;
 
@@ -673,52 +680,90 @@ async function refreshCalquesList() {
     });
   });
 
-  // Bind delete buttons
-  container.querySelectorAll('.calque-btn-del').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const file = btn.dataset.calqueFile;
-      const id = btn.dataset.calqueId;
-      if (!confirm(`Vider le calque "${file}" ? Le fichier sera remplace par un GeoJSON vide.`)) return;
+  // Checkboxes: update batch delete button state
+  const allChecks = container.querySelectorAll('.calque-check');
+  const batchBtn = document.getElementById('calque-batch-delete');
+  const selectAll = document.getElementById('calque-select-all');
+
+  function updateBatchBtn() {
+    const checked = container.querySelectorAll('.calque-check:checked:not(:disabled)');
+    if (batchBtn) batchBtn.disabled = checked.length === 0;
+  }
+  allChecks.forEach(cb => cb.addEventListener('change', () => {
+    updateBatchBtn();
+    // Sync select-all state
+    const enabled = container.querySelectorAll('.calque-check:not(:disabled)');
+    const checked = container.querySelectorAll('.calque-check:checked:not(:disabled)');
+    if (selectAll) selectAll.checked = enabled.length > 0 && checked.length === enabled.length;
+  }));
+
+  if (selectAll) {
+    selectAll.addEventListener('change', () => {
+      const enabled = container.querySelectorAll('.calque-check:not(:disabled)');
+      enabled.forEach(cb => { cb.checked = selectAll.checked; });
+      updateBatchBtn();
+    });
+  }
+
+  // Batch delete
+  if (batchBtn) {
+    batchBtn.addEventListener('click', async () => {
+      const checked = [...container.querySelectorAll('.calque-check:checked:not(:disabled)')];
+      if (!checked.length) return;
+      const names = checked.map(cb => cb.dataset.calqueFile).join(', ');
+      if (!confirm(`Vider ${checked.length} calque(s) ?\n${names}\n\nLes fichiers seront remplaces par des GeoJSON vides.`)) return;
+
       const statusEl = document.getElementById('calque-status-msg');
-      try {
-        let GH_TOKEN = localStorage.getItem('carto_gh_token');
-        if (!GH_TOKEN) {
-          GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
-          if (!GH_TOKEN) throw new Error('Token GitHub requis');
-          localStorage.setItem('carto_gh_token', GH_TOKEN);
-        }
-        const GH_REPO = 'Aizen693/Carto-MO';
-        const emptyGeo = { type: 'FeatureCollection', features: [] };
-        const config = ZONE_CONFIGS[currentZone];
+      let GH_TOKEN = localStorage.getItem('carto_gh_token');
+      if (!GH_TOKEN) {
+        GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
+        if (!GH_TOKEN) return;
+        localStorage.setItem('carto_gh_token', GH_TOKEN);
+      }
+      const GH_REPO = 'Aizen693/Carto-MO';
+      const config = ZONE_CONFIGS[currentZone];
+      const emptyGeo = { type: 'FeatureCollection', features: [] };
+      const emptyB64 = btoa(unescape(encodeURIComponent(JSON.stringify(emptyGeo))));
+
+      let ok = 0, fail = 0;
+      batchBtn.disabled = true;
+      batchBtn.textContent = 'Suppression...';
+
+      for (const cb of checked) {
+        const file = cb.dataset.calqueFile;
+        const id = cb.dataset.calqueId;
         const path = config.DATA_PATH.replace('../', '') + file;
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(emptyGeo))));
-        // Get current SHA
-        const getRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=main`, {
-          headers: { 'Authorization': 'token ' + GH_TOKEN }
-        });
-        if (getRes.ok) {
+        try {
+          const getRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=main`, {
+            headers: { 'Authorization': 'token ' + GH_TOKEN }
+          });
+          if (!getRes.ok) { fail++; continue; }
           const getData = await getRes.json();
           const putRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
             method: 'PUT',
             headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: `Vider calque ${file}`, content: content, sha: getData.sha, branch: 'main' })
+            body: JSON.stringify({ message: `Vider calque ${file}`, content: emptyB64, sha: getData.sha, branch: 'main' })
           });
           if (putRes.ok) {
             const now = new Date();
             calquePurgedAt[currentZone + ':' + id] = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' }) + ' ' + now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
-            if (statusEl) { statusEl.textContent = `Calque "${file}" vide avec succes.`; statusEl.className = 'calque-import-status io-status-ok'; }
-            refreshCalquesList();
-          } else {
-            if (statusEl) { statusEl.textContent = 'Erreur GitHub: ' + putRes.status; statusEl.className = 'calque-import-status io-status-err'; }
-          }
-        } else {
-          if (statusEl) { statusEl.textContent = 'Fichier introuvable sur GitHub: ' + getRes.status; statusEl.className = 'calque-import-status io-status-err'; }
-        }
-      } catch (e) {
-        if (statusEl) { statusEl.textContent = 'Erreur: ' + e.message; statusEl.className = 'calque-import-status io-status-err'; }
+            ok++;
+          } else { fail++; }
+        } catch { fail++; }
       }
+
+      if (statusEl) {
+        if (fail === 0) {
+          statusEl.textContent = `${ok} calque(s) vide(s) avec succes.`;
+          statusEl.className = 'calque-import-status io-status-ok';
+        } else {
+          statusEl.textContent = `${ok} vide(s), ${fail} erreur(s).`;
+          statusEl.className = 'calque-import-status io-status-err';
+        }
+      }
+      refreshCalquesList();
     });
-  });
+  }
 }
 
 // ── Convertisseur HTML/CSV → GeoJSON ────────────────────
