@@ -433,23 +433,28 @@ const ZONE_CONFIG = {
     return TYPE_3D._default;
   }
 
-  // Build 5-layer 3D feature sets: base platform, body, mid-ring, cap, beacon
+  // Build 7-layer 3D feature sets
   function build3DFeatureSets(features) {
-    var S = { base: [], body: [], mid: [], cap: [], beacon: [] };
+    var S = { base: [], body: [], mid: [], cap: [], beacon: [], glow: [], label: [] };
     features.forEach(function(f) {
       if (!f.geometry || f.geometry.type !== 'Point') return;
       var c = f.geometry.coordinates, tp = detect3DType(f.properties);
       var p = Object.assign({}, f.properties, { _c: tp.color, _a: tp.accent, _g: tp.glow, _h: tp.h });
+      // Extrusion polygons
       S.base.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.baseR, tp.shape) } });
       S.body.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.bodyR, tp.shape) } });
       S.mid.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.bodyR * 1.2, tp.shape) } });
       S.cap.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.bodyR * 1.08, tp.shape) } });
       S.beacon.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: shapeCircle(c, tp.bodyR * 0.22) } });
+      // Ground glow ring (wide, very low, transparent)
+      S.glow.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: shapeCircle(c, tp.baseR * 1.6) } });
+      // Floating label (Point for symbol layer)
+      S.label.push({ type: 'Feature', properties: p, geometry: { type: 'Point', coordinates: c } });
     });
     return S;
   }
 
-  var PARTS_3D = ['base', 'body', 'mid', 'cap', 'beacon'];
+  var PARTS_3D = ['glow', 'base', 'body', 'mid', 'cap', 'beacon'];
 
   function createLayerToggle(cfg) {
     let data = null;
@@ -474,6 +479,8 @@ const ZONE_CONFIG = {
           PARTS_3D.forEach(function(k) {
             if (sets[k].length) map.addSource(cfg.id + '-3d-' + k, { type: 'geojson', data: { type: 'FeatureCollection', features: sets[k] } });
           });
+          // Label source (Point geometry for symbol layer)
+          if (sets.label.length) map.addSource(cfg.id + '-3d-label', { type: 'geojson', data: { type: 'FeatureCollection', features: sets.label } });
         } catch (e) { console.warn('[calque ' + cfg.id + '] 3D sources error:', e.message); }
       }
 
@@ -493,30 +500,40 @@ const ZONE_CONFIG = {
         try { map.addLayer(layerDef); } catch (e) { console.warn('[calque ' + cfg.id + '] addLayer ' + l.id + ' error:', e.message); }
       });
 
-      // ── 3D: add 5 extrusion layers ──
+      // ── 3D: add 7-layer extrusion system ──
       if (cfg.use3D) {
         var vis3 = (visible && is3DMode) ? 'visible' : 'none';
         var sp = cfg.id + '-3d-';
 
-        // 1. Base platform — wide, low, semi-transparent
+        // 0. Ground glow — wide halo at ground level
+        if (map.getSource(sp + 'glow')) try { map.addLayer({
+          id: sp + 'glow', type: 'fill-extrusion', source: sp + 'glow',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': ['get', '_g'], 'fill-extrusion-height': ['*', ['get', '_h'], 0.015], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.25 }
+        }); } catch(e) {}
+
+        // 1. Base platform — wide, low
         if (map.getSource(sp + 'base')) try { map.addLayer({
           id: sp + 'base', type: 'fill-extrusion', source: sp + 'base',
           layout: { visibility: vis3 },
-          paint: { 'fill-extrusion-color': ['get', '_g'], 'fill-extrusion-height': ['*', ['get', '_h'], 0.06], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.5 }
+          paint: { 'fill-extrusion-color': ['get', '_g'], 'fill-extrusion-height': ['*', ['get', '_h'], 0.07], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.6,
+            'fill-extrusion-ambient-occlusion-intensity': 0.5, 'fill-extrusion-ambient-occlusion-radius': 4 }
         }); } catch(e) {}
 
-        // 2. Main body — core structure
+        // 2. Main body — gradient via vertical-gradient
         if (map.getSource(sp + 'body')) try { map.addLayer({
           id: sp + 'body', type: 'fill-extrusion', source: sp + 'body',
           layout: { visibility: vis3 },
-          paint: { 'fill-extrusion-color': ['get', '_c'], 'fill-extrusion-height': ['get', '_h'], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.88 }
+          paint: { 'fill-extrusion-color': ['get', '_c'], 'fill-extrusion-height': ['get', '_h'], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.9,
+            'fill-extrusion-vertical-gradient': true,
+            'fill-extrusion-ambient-occlusion-intensity': 0.6, 'fill-extrusion-ambient-occlusion-radius': 6 }
         }); } catch(e) {}
 
         // 3. Mid-ring — decorative band at 45-52%
         if (map.getSource(sp + 'mid')) try { map.addLayer({
           id: sp + 'mid', type: 'fill-extrusion', source: sp + 'mid',
           layout: { visibility: vis3 },
-          paint: { 'fill-extrusion-color': ['get', '_a'], 'fill-extrusion-height': ['*', ['get', '_h'], 0.52], 'fill-extrusion-base': ['*', ['get', '_h'], 0.45], 'fill-extrusion-opacity': 0.7 }
+          paint: { 'fill-extrusion-color': ['get', '_a'], 'fill-extrusion-height': ['*', ['get', '_h'], 0.53], 'fill-extrusion-base': ['*', ['get', '_h'], 0.46], 'fill-extrusion-opacity': 0.75 }
         }); } catch(e) {}
 
         // 4. Top cap — bright crown
@@ -526,11 +543,36 @@ const ZONE_CONFIG = {
           paint: { 'fill-extrusion-color': ['get', '_a'], 'fill-extrusion-height': ['*', ['get', '_h'], 1.05], 'fill-extrusion-base': ['*', ['get', '_h'], 0.97], 'fill-extrusion-opacity': 1 }
         }); } catch(e) {}
 
-        // 5. Beacon spire — narrow antenna
+        // 5. Beacon spire — white antenna
         if (map.getSource(sp + 'beacon')) try { map.addLayer({
           id: sp + 'beacon', type: 'fill-extrusion', source: sp + 'beacon',
           layout: { visibility: vis3 },
-          paint: { 'fill-extrusion-color': '#ffffff', 'fill-extrusion-height': ['*', ['get', '_h'], 1.35], 'fill-extrusion-base': ['*', ['get', '_h'], 1.05], 'fill-extrusion-opacity': 0.92 }
+          paint: { 'fill-extrusion-color': '#ffffff', 'fill-extrusion-height': ['*', ['get', '_h'], 1.4], 'fill-extrusion-base': ['*', ['get', '_h'], 1.05], 'fill-extrusion-opacity': 0.92,
+            'fill-extrusion-vertical-gradient': true }
+        }); } catch(e) {}
+
+        // 6. Floating 3D label above beacon
+        if (map.getSource(sp + 'label')) try { map.addLayer({
+          id: sp + 'label', type: 'symbol', source: sp + 'label',
+          layout: {
+            visibility: vis3,
+            'text-field': ['get', 'name'],
+            'text-font': ['DIN Pro Bold', 'Arial Unicode MS Bold'],
+            'text-size': ['interpolate', ['linear'], ['zoom'], 4, 9, 7, 12, 10, 15],
+            'text-transform': 'uppercase',
+            'text-letter-spacing': 0.12,
+            'text-offset': [0, -3.5],
+            'text-anchor': 'bottom',
+            'text-max-width': 12,
+            'text-allow-overlap': false,
+            'text-padding': 8
+          },
+          paint: {
+            'text-color': ['get', '_a'],
+            'text-halo-color': 'rgba(0,0,0,0.92)',
+            'text-halo-width': 2,
+            'text-halo-blur': 1
+          }
         }); } catch(e) {}
       }
 
@@ -551,9 +593,9 @@ const ZONE_CONFIG = {
         map.on('mouseleave', l.id, function() { map.getCanvas().style.cursor = ''; });
       });
 
-      // Click popup on 3D extrusion layers
+      // Click popup on 3D extrusion + label layers
       if (cfg.use3D) {
-        PARTS_3D.forEach(function(k) {
+        PARTS_3D.concat(['label']).forEach(function(k) {
           var lid = cfg.id + '-3d-' + k;
           if (!map.getLayer(lid)) return;
           map.on('click', lid, function(e) {
@@ -592,7 +634,7 @@ const ZONE_CONFIG = {
   }
 
   function set3DVisibility(cfg, vis) {
-    PARTS_3D.forEach(function(k) {
+    PARTS_3D.concat(['label']).forEach(function(k) {
       var lid = cfg.id + '-3d-' + k;
       if (map.getLayer(lid)) map.setLayoutProperty(lid, 'visibility', vis);
     });
@@ -612,6 +654,20 @@ const ZONE_CONFIG = {
       if (entry.isVisible()) update3DVisibility(entry.cfg);
     });
   });
+
+  // ── ANIMATED BEACON PULSE ──
+  var beaconPhase = 0;
+  setInterval(function() {
+    beaconPhase = (beaconPhase + 1) % 60;
+    var pulse = 0.55 + 0.45 * Math.sin(beaconPhase * Math.PI / 30); // 0.1 → 1.0
+    calques3D.forEach(function(entry) {
+      if (!entry.isVisible() || !is3DMode) return;
+      var lid = entry.cfg.id + '-3d-beacon';
+      if (map.getLayer(lid)) {
+        try { map.setPaintProperty(lid, 'fill-extrusion-opacity', pulse); } catch(e) {}
+      }
+    });
+  }, 50);
 
   // Expose toggleLayer globally
   window.toggleLayer = function(id) {
