@@ -571,21 +571,29 @@ async function refreshCalquesList() {
         countLabel = '';
       } else if (s.status === 'vide') {
         statusHTML = '<span class="calque-status calque-status-vide">Vide</span>';
-        countLabel = '<span style="font:300 7px/1 var(--m);color:var(--tx2)">0 pts</span>';
+        countLabel = '<span class="calque-count calque-count--empty">0 pts</span>';
       } else {
         statusHTML = '<span class="calque-status calque-status-ok">OK</span>';
-        countLabel = `<span style="font:300 7px/1 var(--m);color:var(--tx1)">${s.count} pts</span>`;
+        countLabel = `<span class="calque-count">${s.count} pts</span>`;
       }
-      const dateLabel = (s && s.date) ? `<span style="font:300 7px/1 var(--m);color:var(--tx2);white-space:nowrap">${s.date}</span>` : '';
+      const dateLabel = (s && s.date) ? `<span class="calque-date">${s.date}</span>` : '';
       html += `<div class="calque-row">
-        <span class="calque-name">${i + 1}. ${o.label}</span>
-        <div class="calque-row-controls">
-          ${countLabel}
-          ${statusHTML}
-          <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
-          <button class="calque-btn calque-btn-del" data-calque-id="${o.id}" data-calque-file="${o.file}" title="Vider ce calque">Vider</button>
-          <span class="calque-file">${o.file}</span>
-          ${dateLabel}
+        <div class="calque-row-top">
+          <span class="calque-name">${i + 1}. ${o.label}</span>
+          <div class="calque-row-meta">
+            ${countLabel}
+            ${statusHTML}
+          </div>
+        </div>
+        <div class="calque-row-bottom">
+          <div class="calque-row-info">
+            <span class="calque-file">${o.file}</span>
+            ${dateLabel}
+          </div>
+          <div class="calque-row-actions">
+            <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
+            <button class="calque-btn calque-btn-del" data-calque-id="${o.id}" data-calque-file="${o.file}" title="Vider ce calque">Vider</button>
+          </div>
         </div>
       </div>`;
   });
@@ -607,20 +615,27 @@ async function refreshCalquesList() {
       const id = btn.dataset.calqueId;
       if (!confirm(`Vider le calque "${file}" ? Le fichier sera remplace par un GeoJSON vide.`)) return;
       try {
+        let GH_TOKEN = localStorage.getItem('carto_gh_token');
+        if (!GH_TOKEN) {
+          GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
+          if (!GH_TOKEN) throw new Error('Token GitHub requis');
+          localStorage.setItem('carto_gh_token', GH_TOKEN);
+        }
+        const GH_REPO = 'Aizen693/Carto-MO';
         const emptyGeo = { type: 'FeatureCollection', features: [] };
         const config = ZONE_CONFIGS[currentZone];
         // Push empty GeoJSON to GitHub
-        const path = config.DATA_PATH.replace(/^\.\//, '').replace(/^\//, '') + file;
+        const path = config.DATA_PATH.replace('../', '') + file;
         const content = btoa(unescape(encodeURIComponent(JSON.stringify(emptyGeo))));
         // Get current SHA
-        const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}?ref=main`, {
-          headers: { 'Authorization': 'token ' + GITHUB_TOKEN }
+        const getRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=main`, {
+          headers: { 'Authorization': 'token ' + GH_TOKEN }
         });
         if (getRes.ok) {
           const getData = await getRes.json();
-          const putRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
+          const putRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
             method: 'PUT',
-            headers: { 'Authorization': 'token ' + GITHUB_TOKEN, 'Content-Type': 'application/json' },
+            headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: `Vider calque ${file}`, content: content, sha: getData.sha, branch: 'main' })
           });
           if (putRes.ok) {

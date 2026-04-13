@@ -505,50 +505,64 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
 /* ── Calques list ── */
 
 .calques-cat {
-  font: 600 7px/1 var(--bc);
+  font: 600 9px/1 var(--bc);
   color: var(--tx2);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 8px 0 4px;
+  padding: 10px 0 6px;
   border-top: 1px solid var(--bg3);
-  margin-top: 6px;
+  margin-top: 8px;
 }
 .calques-cat:first-child { border-top: none; margin-top: 0; }
 
 .calque-row {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 10px 6px;
+  gap: 6px;
+  padding: 12px 10px;
   border-bottom: 1px solid var(--bg2);
-  transition: background .08s;
+  border-left: 2px solid transparent;
+  transition: background .08s, border-color .08s;
 }
-.calque-row:hover { background: var(--bg2); }
-.calque-row-controls {
+.calque-row:hover { background: var(--bg2); border-left-color: var(--acb); }
+
+.calque-row-top {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .calque-name {
-  font: 500 10px/1.3 var(--m);
+  font: 600 12px/1.3 var(--m);
   color: var(--tx);
+  flex: 1;
+  min-width: 0;
 }
 
-.calque-file {
-  font: 300 7px/1 var(--m);
+.calque-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.calque-count {
+  font: 400 10px/1 var(--m);
+  color: var(--tx1);
+  white-space: nowrap;
+}
+.calque-count--empty {
   color: var(--tx2);
-  grid-column: 1 / -1;
-  margin-top: -2px;
 }
 
 .calque-status {
-  font: 500 6px/1 var(--m);
-  padding: 2px 5px;
+  font: 600 8px/1 var(--m);
+  padding: 3px 8px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   border: 1px solid;
+  border-radius: 2px;
   white-space: nowrap;
 }
 .calque-status-ok {
@@ -567,27 +581,64 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
   background: var(--bg2);
 }
 
+.calque-row-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.calque-row-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.calque-file {
+  font: 300 9px/1 var(--m);
+  color: var(--tx2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calque-date {
+  font: 300 9px/1 var(--m);
+  color: var(--tx2);
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+.calque-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
 .calque-btn {
-  font: 400 6px/1 var(--m);
+  font: 500 9px/1 var(--m);
   color: var(--ach);
   background: var(--acd);
   border: 1px solid var(--acb);
-  padding: 2px 6px;
+  padding: 4px 10px;
   cursor: pointer;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: all .1s;
   white-space: nowrap;
+  border-radius: 2px;
 }
 .calque-btn:hover { background: var(--acb); color: #fff; }
 .calque-btn-del { background: rgba(168,64,64,0.08); border-color: rgba(168,64,64,0.3); color: var(--err); }
 .calque-btn-del:hover { background: rgba(168,64,64,0.25); color: #ff6b6b; }
 
 .calque-import-status {
-  font: 400 7px/1.4 var(--m);
+  font: 400 10px/1.4 var(--m);
   color: var(--tx2);
-  padding: 4px 4px 0;
-  min-height: 12px;
+  padding: 6px 4px 0;
+  min-height: 14px;
 }
 .calque-import-status.io-status-ok { color: #52b788; }
 .calque-import-status.io-status-err { color: var(--err); }
