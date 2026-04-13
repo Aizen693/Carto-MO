@@ -43,7 +43,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [7.99, 16.97] },
+      "geometry": { "type": "Point", "coordinates": [8.0181, 16.9556] },
       "properties": { "name": "Base aerienne 201 - Agadez", "description": "Ancienne base de drones americaine. Transferee aux FAN en aout 2024 apres retrait US.", "type": "Base aerienne", "force": "FAN", "sources": "Reuters|https://www.reuters.com/world/africa AP|https://apnews.com" }
     },
     {

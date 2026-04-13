@@ -316,6 +316,7 @@ const ZONE_CONFIG = {
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
 (function() {
   const layerRegistry = {};
+  const calques3D = []; // track calques with 3D layers for pitch updates
 
   // Calque popup color map
   var calqueColors = { ethnies: '#e07c5a', forces: '#e63946', 'points-eau': '#29b6f6', population: '#ab47bc', mines: '#d4a017', infrastructures: '#66bb6a', evenements: '#ff5252', flux: '#ff9800' };
@@ -357,6 +358,99 @@ const ZONE_CONFIG = {
     return header + (body ? '<div class="popup-body">' + body + '</div>' : '');
   }
 
+  /* ── 3D SHAPE GENERATORS ── */
+  function shapePolygon(c, r, sides, rot) {
+    var coords = [], rKm = r / 1000;
+    for (var i = 0; i <= sides; i++) {
+      var a = (i / sides) * 2 * Math.PI + (rot || 0);
+      var dx = rKm / 111.32, dy = rKm / (111.32 * Math.cos(c[1] * Math.PI / 180));
+      coords.push([c[0] + dy * Math.cos(a), c[1] + dx * Math.sin(a)]);
+    }
+    return [coords];
+  }
+  function shapeCircle(c, r) { return [createCircleMeters(c, r, 32)]; }
+  function shapeHex(c, r) { return shapePolygon(c, r, 6, Math.PI / 6); }
+  function shapePentagon(c, r) { return shapePolygon(c, r, 5, -Math.PI / 2); }
+  function shapeDiamond(c, r) { return shapePolygon(c, r, 4, 0); }
+  function shapeSquare(c, r) { return shapePolygon(c, r, 4, Math.PI / 4); }
+  function shapeOctagon(c, r) { return shapePolygon(c, r, 8, Math.PI / 8); }
+  function shapeStar(c, outerR, innerR, pts) {
+    var coords = [], roKm = outerR / 1000, riKm = innerR / 1000;
+    for (var i = 0; i <= pts * 2; i++) {
+      var a = (i / (pts * 2)) * 2 * Math.PI - Math.PI / 2;
+      var r = (i % 2 === 0) ? roKm : riKm;
+      var dx = r / 111.32, dy = r / (111.32 * Math.cos(c[1] * Math.PI / 180));
+      coords.push([c[0] + dy * Math.cos(a), c[1] + dx * Math.sin(a)]);
+    }
+    return [coords];
+  }
+
+  function makeShape(c, r, type) {
+    switch (type) {
+      case 'star': return shapeStar(c, r, r * 0.42, 5);
+      case 'hex': return shapeHex(c, r);
+      case 'pentagon': return shapePentagon(c, r);
+      case 'diamond': return shapeDiamond(c, r);
+      case 'square': return shapeSquare(c, r);
+      case 'octagon': return shapeOctagon(c, r);
+      default: return shapeCircle(c, r);
+    }
+  }
+
+  /* ── 3D TYPE PROFILES ── */
+  var TYPE_3D = {
+    aeroport:  { shape: 'star',     baseR: 16000, bodyR: 9000,  h: 120000, color: '#4fc3f7', accent: '#b3e5fc', glow: '#0288d1' },
+    port:      { shape: 'hex',      baseR: 14000, bodyR: 8000,  h: 80000,  color: '#26a69a', accent: '#80cbc4', glow: '#00897b' },
+    hub:       { shape: 'octagon',  baseR: 13000, bodyR: 7500,  h: 60000,  color: '#66bb6a', accent: '#a5d6a7', glow: '#2e7d32' },
+    depot:     { shape: 'square',   baseR: 11000, bodyR: 6500,  h: 50000,  color: '#ffa726', accent: '#ffe0b2', glow: '#e65100' },
+    pont:      { shape: 'diamond',  baseR: 10000, bodyR: 5500,  h: 40000,  color: '#8d6e63', accent: '#bcaaa4', glow: '#4e342e' },
+    corridor:  { shape: 'circle',   baseR: 9000,  bodyR: 5000,  h: 35000,  color: '#78909c', accent: '#b0bec5', glow: '#37474f' },
+    qg:        { shape: 'star',     baseR: 18000, bodyR: 10000, h: 130000, color: '#c62828', accent: '#ef9a9a', glow: '#b71c1c' },
+    base:      { shape: 'pentagon', baseR: 15000, bodyR: 8500,  h: 100000, color: '#e53935', accent: '#ef9a9a', glow: '#c62828' },
+    garnison:  { shape: 'hex',      baseR: 12000, bodyR: 7000,  h: 70000,  color: '#ff7043', accent: '#ffab91', glow: '#d84315' },
+    milice:    { shape: 'diamond',  baseR: 10000, bodyR: 5500,  h: 45000,  color: '#fdd835', accent: '#fff9c4', glow: '#f9a825' },
+    camp:      { shape: 'circle',   baseR: 12000, bodyR: 7000,  h: 55000,  color: '#ab47bc', accent: '#ce93d8', glow: '#7b1fa2' },
+    attaque:   { shape: 'diamond',  baseR: 10000, bodyR: 6000,  h: 60000,  color: '#ff1744', accent: '#ff8a80', glow: '#d50000' },
+    incident:  { shape: 'circle',   baseR: 9000,  bodyR: 5000,  h: 40000,  color: '#ff6d00', accent: '#ffab40', glow: '#e65100' },
+    _default:  { shape: 'circle',   baseR: 10000, bodyR: 6000,  h: 50000,  color: '#bdbdbd', accent: '#e0e0e0', glow: '#616161' }
+  };
+
+  function detect3DType(props) {
+    var t = ((props.type || '') + ' ' + (props.name || '') + ' ' + (props.description || '')).toLowerCase();
+    if (t.indexOf('aeroport') !== -1 || t.indexOf('base aer') !== -1) return TYPE_3D.aeroport;
+    if ((t.indexOf('port') !== -1 && t.indexOf('aero') === -1) || t.indexOf('terminal') !== -1) return TYPE_3D.port;
+    if (t.indexOf('hub') !== -1 || t.indexOf('entrepot') !== -1 || t.indexOf('logistique') !== -1) return TYPE_3D.hub;
+    if (t.indexOf('depot') !== -1 || t.indexOf('stockage') !== -1 || t.indexOf('carburant') !== -1 || t.indexOf('hydrocarbure') !== -1) return TYPE_3D.depot;
+    if (t.indexOf('pont') !== -1) return TYPE_3D.pont;
+    if (t.indexOf('corridor') !== -1) return TYPE_3D.corridor;
+    if (t.indexOf('qg') !== -1) return TYPE_3D.qg;
+    if (t.indexOf('base') !== -1 && t.indexOf('aero') === -1) return TYPE_3D.base;
+    if (t.indexOf('garnison') !== -1) return TYPE_3D.garnison;
+    if (t.indexOf('milice') !== -1 || t.indexOf('vdp') !== -1) return TYPE_3D.milice;
+    if (t.indexOf('camp') !== -1 || t.indexOf('refugi') !== -1 || t.indexOf('deplac') !== -1) return TYPE_3D.camp;
+    if (t.indexOf('attaque') !== -1 || t.indexOf('embuscade') !== -1 || t.indexOf('siege') !== -1) return TYPE_3D.attaque;
+    if (t.indexOf('incident') !== -1 || t.indexOf('crise') !== -1) return TYPE_3D.incident;
+    return TYPE_3D._default;
+  }
+
+  // Build 5-layer 3D feature sets: base platform, body, mid-ring, cap, beacon
+  function build3DFeatureSets(features) {
+    var S = { base: [], body: [], mid: [], cap: [], beacon: [] };
+    features.forEach(function(f) {
+      if (!f.geometry || f.geometry.type !== 'Point') return;
+      var c = f.geometry.coordinates, tp = detect3DType(f.properties);
+      var p = Object.assign({}, f.properties, { _c: tp.color, _a: tp.accent, _g: tp.glow, _h: tp.h });
+      S.base.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.baseR, tp.shape) } });
+      S.body.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.bodyR, tp.shape) } });
+      S.mid.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.bodyR * 1.2, tp.shape) } });
+      S.cap.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.bodyR * 1.08, tp.shape) } });
+      S.beacon.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: shapeCircle(c, tp.bodyR * 0.22) } });
+    });
+    return S;
+  }
+
+  var PARTS_3D = ['base', 'body', 'mid', 'cap', 'beacon'];
+
   function createLayerToggle(cfg) {
     let data = null;
     let visible = false;
@@ -372,14 +466,25 @@ const ZONE_CONFIG = {
       try {
         map.addSource(srcId, { type: 'geojson', data: data });
       } catch (e) { console.warn('[calque ' + cfg.id + '] addSource error:', e.message); return; }
+
+      // ── 3D: build multi-layer sources ──
+      if (cfg.use3D) {
+        try {
+          var sets = build3DFeatureSets(data.features);
+          PARTS_3D.forEach(function(k) {
+            if (sets[k].length) map.addSource(cfg.id + '-3d-' + k, { type: 'geojson', data: { type: 'FeatureCollection', features: sets[k] } });
+          });
+        } catch (e) { console.warn('[calque ' + cfg.id + '] 3D sources error:', e.message); }
+      }
+
       // Disable terrain temporarily to avoid DEM RangeError
       var prevTerrain = null;
       try { prevTerrain = map.getTerrain(); if (prevTerrain) map.setTerrain(null); } catch(e) {}
+
+      // Add 2D layers
       cfg.layers.forEach(function(l) {
         var layerDef = {
-          id: l.id,
-          type: l.type,
-          source: srcId,
+          id: l.id, type: l.type, source: srcId,
           paint: l.paint,
           layout: Object.assign({ visibility: visible ? 'visible' : 'none' }, l.layout || {})
         };
@@ -387,25 +492,79 @@ const ZONE_CONFIG = {
         if (l.filter) layerDef.filter = l.filter;
         try { map.addLayer(layerDef); } catch (e) { console.warn('[calque ' + cfg.id + '] addLayer ' + l.id + ' error:', e.message); }
       });
+
+      // ── 3D: add 5 extrusion layers ──
+      if (cfg.use3D) {
+        var vis3 = (visible && is3DMode) ? 'visible' : 'none';
+        var sp = cfg.id + '-3d-';
+
+        // 1. Base platform — wide, low, semi-transparent
+        if (map.getSource(sp + 'base')) try { map.addLayer({
+          id: sp + 'base', type: 'fill-extrusion', source: sp + 'base',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': ['get', '_g'], 'fill-extrusion-height': ['*', ['get', '_h'], 0.06], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.5 }
+        }); } catch(e) {}
+
+        // 2. Main body — core structure
+        if (map.getSource(sp + 'body')) try { map.addLayer({
+          id: sp + 'body', type: 'fill-extrusion', source: sp + 'body',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': ['get', '_c'], 'fill-extrusion-height': ['get', '_h'], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.88 }
+        }); } catch(e) {}
+
+        // 3. Mid-ring — decorative band at 45-52%
+        if (map.getSource(sp + 'mid')) try { map.addLayer({
+          id: sp + 'mid', type: 'fill-extrusion', source: sp + 'mid',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': ['get', '_a'], 'fill-extrusion-height': ['*', ['get', '_h'], 0.52], 'fill-extrusion-base': ['*', ['get', '_h'], 0.45], 'fill-extrusion-opacity': 0.7 }
+        }); } catch(e) {}
+
+        // 4. Top cap — bright crown
+        if (map.getSource(sp + 'cap')) try { map.addLayer({
+          id: sp + 'cap', type: 'fill-extrusion', source: sp + 'cap',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': ['get', '_a'], 'fill-extrusion-height': ['*', ['get', '_h'], 1.05], 'fill-extrusion-base': ['*', ['get', '_h'], 0.97], 'fill-extrusion-opacity': 1 }
+        }); } catch(e) {}
+
+        // 5. Beacon spire — narrow antenna
+        if (map.getSource(sp + 'beacon')) try { map.addLayer({
+          id: sp + 'beacon', type: 'fill-extrusion', source: sp + 'beacon',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': '#ffffff', 'fill-extrusion-height': ['*', ['get', '_h'], 1.35], 'fill-extrusion-base': ['*', ['get', '_h'], 1.05], 'fill-extrusion-opacity': 0.92 }
+        }); } catch(e) {}
+      }
+
       // Restore terrain after layers added
       try { if (prevTerrain) map.setTerrain(prevTerrain); } catch(e) {}
 
-      // Click popup on ALL interactive layers (dots, fills, lines, casings)
+      // Click popup on 2D layers
       var clickableTypes = ['circle', 'fill', 'line'];
       cfg.layers.forEach(function(l) {
         if (clickableTypes.indexOf(l.type) === -1) return;
-        // Skip glow/casing layers (decorative only)
         if (l.id.indexOf('-glow') !== -1 || l.id.indexOf('-casing') !== -1 || l.id.indexOf('-ring') !== -1 || l.id.indexOf('-pulse') !== -1) return;
         map.on('click', l.id, function(e) {
           if (!e.features || !e.features.length) return;
           new mapboxgl.Popup({ closeButton: true, maxWidth: '340px', className: 'algor-popup' })
-            .setLngLat(e.lngLat)
-            .setHTML(makeCalquePopup(e.features[0].properties, cfg.id))
-            .addTo(map);
+            .setLngLat(e.lngLat).setHTML(makeCalquePopup(e.features[0].properties, cfg.id)).addTo(map);
         });
         map.on('mouseenter', l.id, function() { map.getCanvas().style.cursor = 'pointer'; });
         map.on('mouseleave', l.id, function() { map.getCanvas().style.cursor = ''; });
       });
+
+      // Click popup on 3D extrusion layers
+      if (cfg.use3D) {
+        PARTS_3D.forEach(function(k) {
+          var lid = cfg.id + '-3d-' + k;
+          if (!map.getLayer(lid)) return;
+          map.on('click', lid, function(e) {
+            if (!e.features || !e.features.length) return;
+            new mapboxgl.Popup({ closeButton: true, maxWidth: '340px', className: 'algor-popup' })
+              .setLngLat(e.lngLat).setHTML(makeCalquePopup(e.features[0].properties, cfg.id)).addTo(map);
+          });
+          map.on('mouseenter', lid, function() { map.getCanvas().style.cursor = 'pointer'; });
+          map.on('mouseleave', lid, function() { map.getCanvas().style.cursor = ''; });
+        });
+      }
     }
 
     function toggle() {
@@ -418,12 +577,41 @@ const ZONE_CONFIG = {
       cfg.layers.forEach(function(l) {
         if (map.getLayer(l.id)) map.setLayoutProperty(l.id, 'visibility', vis);
       });
+      if (cfg.use3D) {
+        if (visible) update3DVisibility(cfg); else set3DVisibility(cfg, 'none');
+      }
+    }
+
+    if (cfg.use3D) {
+      calques3D.push({ cfg: cfg, isVisible: function() { return visible; } });
     }
 
     layerRegistry[cfg.id] = { addLayers: addLayers, getData: function() { return data; }, getSrcId: function() { return srcId; } };
     window.toggleLayer = window.toggleLayer || function(id) { layerRegistry[id] && layerRegistry[id].toggle && layerRegistry[id].toggle(); };
     layerRegistry[cfg.id].toggle = toggle;
   }
+
+  function set3DVisibility(cfg, vis) {
+    PARTS_3D.forEach(function(k) {
+      var lid = cfg.id + '-3d-' + k;
+      if (map.getLayer(lid)) map.setLayoutProperty(lid, 'visibility', vis);
+    });
+  }
+
+  function update3DVisibility(cfg) {
+    // 3D mode: hide 2D dots, show extrusions — 2D mode: inverse
+    var dotIds = cfg.layers.filter(function(l) { return l.type === 'circle'; }).map(function(l) { return l.id; });
+    dotIds.forEach(function(id) {
+      if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', is3DMode ? 'none' : 'visible');
+    });
+    set3DVisibility(cfg, is3DMode ? 'visible' : 'none');
+  }
+
+  map.on('pitch', function() {
+    calques3D.forEach(function(entry) {
+      if (entry.isVisible()) update3DVisibility(entry.cfg);
+    });
+  });
 
   // Expose toggleLayer globally
   window.toggleLayer = function(id) {
@@ -446,6 +634,8 @@ const ZONE_CONFIG = {
   createLayerToggle({
     id: 'forces',
     file: 'forces.geojson',
+    use3D: true,
+    color3D: '#e63946',
     layers: [
       { id: 'forces-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': ['match', ['get', 'force'], 'FAMA', '#2e7d32', 'FAMA / Wagner', '#6c757d', 'FAN', '#558b2f', 'ANA', '#33691e', 'VDP', '#ccaa00', 'Dan Nan Ambassagou', '#d4a017', 'ANT', '#7cb342', '#e63946'], 'circle-opacity': 0.07, 'circle-blur': 1.2 } },
       { id: 'forces-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': ['match', ['get', 'force'], 'FAMA', '#2e7d32', 'FAMA / Wagner', '#6c757d', 'FAN', '#558b2f', 'ANA', '#33691e', 'VDP', '#ccaa00', 'Dan Nan Ambassagou', '#d4a017', 'ANT', '#7cb342', '#e63946'], 'circle-stroke-opacity': 0.35 } },
@@ -468,6 +658,8 @@ const ZONE_CONFIG = {
   createLayerToggle({
     id: 'population',
     file: 'population.geojson',
+    use3D: true,
+    color3D: '#e040fb',
     layers: [
       { id: 'population-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 8, 100000, 12, 500000, 18, 2000000, 28], 8, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 14, 100000, 20, 500000, 28, 2000000, 40]], 'circle-color': '#e040fb', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
       { id: 'population-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 4, 100000, 6, 500000, 9, 2000000, 14], 8, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 7, 100000, 10, 500000, 14, 2000000, 22]], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#e040fb', 'circle-stroke-opacity': 0.3 } },
@@ -490,6 +682,8 @@ const ZONE_CONFIG = {
   createLayerToggle({
     id: 'infrastructures',
     file: 'infrastructures.geojson',
+    use3D: true,
+    color3D: '#66bb6a',
     layers: [
       { id: 'infra-lines', type: 'line', paint: { 'line-color': ['match', ['get', 'type'], 'Route coupee', '#ef5350', 'Route a risque', '#ff9800', 'Voie ferree', '#78909c', '#8d6e63'], 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1, 8, 1.8, 12, 2.5], 'line-opacity': 0.45, 'line-dasharray': ['match', ['get', 'type'], 'Voie ferree', ['literal', [1, 2]], ['literal', [4, 2]]] } },
       { id: 'infra-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#8d6e63', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
@@ -502,6 +696,8 @@ const ZONE_CONFIG = {
   createLayerToggle({
     id: 'evenements',
     file: 'evenements.geojson',
+    use3D: true,
+    color3D: '#ff5252',
     layers: [
       { id: 'events-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': ['match', ['get', 'type'], 'Attaque', '#ff1744', 'Embuscades', '#ff1744', 'Incursion', '#ff1744', 'Siege', '#d50000', 'Incident frontalier', '#ff6d00', 'Crise diplomatique', '#ff6d00', 'Economique', '#ffd740', 'Geopolitique', '#ab47bc', '#ff5252'], 'circle-opacity': 0.07, 'circle-blur': 1.2 } },
       { id: 'events-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': ['match', ['get', 'type'], 'Attaque', '#ff1744', 'Embuscades', '#ff1744', 'Incursion', '#ff1744', 'Siege', '#d50000', 'Incident frontalier', '#ff6d00', 'Crise diplomatique', '#ff6d00', 'Economique', '#ffd740', 'Geopolitique', '#ab47bc', '#ff5252'], 'circle-stroke-opacity': 0.35 } },
