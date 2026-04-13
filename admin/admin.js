@@ -579,11 +579,11 @@ async function refreshCalquesList() {
       const dateLabel = (s && s.date) ? `<span style="font:300 7px/1 var(--m);color:var(--tx2);white-space:nowrap">${s.date}</span>` : '';
       html += `<div class="calque-row">
         <span class="calque-name">${i + 1}. ${o.label}</span>
-        ${countLabel}
-        ${statusHTML}
-        <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
-        <button class="calque-btn calque-btn-del" data-calque-id="${o.id}" data-calque-file="${o.file}" title="Vider ce calque">Vider</button>
-        <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+        <div class="calque-row-controls">
+          ${countLabel}
+          ${statusHTML}
+          <button class="calque-btn" data-calque-id="${o.id}">Importer</button>
+          <button class="calque-btn calque-btn-del" data-calque-id="${o.id}" data-calque-file="${o.file}" title="Vider ce calque">Vider</button>
           <span class="calque-file">${o.file}</span>
           ${dateLabel}
         </div>
