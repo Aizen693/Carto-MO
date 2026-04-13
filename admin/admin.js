@@ -626,12 +626,10 @@ async function refreshCalquesList() {
     btn.addEventListener('click', async () => {
       const file = btn.dataset.calqueFile;
       const id = btn.dataset.calqueId;
-      console.log('[VIDER] click:', id, file);
       if (!confirm(`Vider le calque "${file}" ? Le fichier sera remplace par un GeoJSON vide.`)) return;
-      console.log('[VIDER] confirmed');
+      const statusEl = document.getElementById('calque-status-msg');
       try {
         let GH_TOKEN = localStorage.getItem('carto_gh_token');
-        console.log('[VIDER] token from localStorage:', GH_TOKEN ? 'present (' + GH_TOKEN.substring(0,8) + '...)' : 'MISSING');
         if (!GH_TOKEN) {
           GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
           if (!GH_TOKEN) throw new Error('Token GitHub requis');
@@ -641,42 +639,31 @@ async function refreshCalquesList() {
         const emptyGeo = { type: 'FeatureCollection', features: [] };
         const config = ZONE_CONFIGS[currentZone];
         const path = config.DATA_PATH.replace('../', '') + file;
-        console.log('[VIDER] path:', path);
         const content = btoa(unescape(encodeURIComponent(JSON.stringify(emptyGeo))));
         // Get current SHA
-        const getUrl = `https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=main`;
-        console.log('[VIDER] GET SHA:', getUrl);
-        const getRes = await fetch(getUrl, {
+        const getRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=main`, {
           headers: { 'Authorization': 'token ' + GH_TOKEN }
         });
-        console.log('[VIDER] GET status:', getRes.status);
         if (getRes.ok) {
           const getData = await getRes.json();
-          console.log('[VIDER] SHA:', getData.sha);
           const putRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
             method: 'PUT',
             headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: `Vider calque ${file}`, content: content, sha: getData.sha, branch: 'main' })
           });
-          console.log('[VIDER] PUT status:', putRes.status);
           if (putRes.ok) {
             const now = new Date();
             calquePurgedAt[currentZone + ':' + id] = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' }) + ' ' + now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
-            showStatus('calque-status-msg', `Calque "${file}" vide avec succes.`, 'ok');
+            if (statusEl) { statusEl.textContent = `Calque "${file}" vide avec succes.`; statusEl.className = 'calque-import-status io-status-ok'; }
             refreshCalquesList();
           } else {
-            const errBody = await putRes.text();
-            console.error('[VIDER] PUT error body:', errBody);
-            showStatus('calque-status-msg', 'Erreur GitHub: ' + putRes.status, 'err');
+            if (statusEl) { statusEl.textContent = 'Erreur GitHub: ' + putRes.status; statusEl.className = 'calque-import-status io-status-err'; }
           }
         } else {
-          const errBody = await getRes.text();
-          console.error('[VIDER] GET error body:', errBody);
-          showStatus('calque-status-msg', 'Fichier introuvable sur GitHub: ' + getRes.status, 'err');
+          if (statusEl) { statusEl.textContent = 'Fichier introuvable sur GitHub: ' + getRes.status; statusEl.className = 'calque-import-status io-status-err'; }
         }
       } catch (e) {
-        console.error('[VIDER] exception:', e);
-        showStatus('calque-status-msg', 'Erreur: ' + e.message, 'err');
+        if (statusEl) { statusEl.textContent = 'Erreur: ' + e.message; statusEl.className = 'calque-import-status io-status-err'; }
       }
     });
   });
