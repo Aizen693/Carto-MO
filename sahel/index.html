@@ -334,7 +334,7 @@ const ZONE_CONFIG = {
     var header = '<div class="popup-header"><div class="popup-dot-bar" style="background:' + color + '"></div><div class="popup-actor">' + name + '</div></div>';
     var body = '';
     var sourcesVal = '';
-    var skip = ['name','Name','nom','Nom','_color','_casualties','_period','sources','Sources'];
+    var skip = ['name','Name','nom','Nom','_color','_casualties','_period','sources','Sources','source','Coordonnée','type'];
     Object.keys(props).forEach(function(k) {
       if (skip.indexOf(k) !== -1) return;
       var v = (props[k] || '').toString().trim();
@@ -343,7 +343,7 @@ const ZONE_CONFIG = {
       body += '<div class="popup-row"><span class="popup-key">' + label + '</span><span class="popup-val">' + linkifyText(v) + '</span></div>';
     });
     // Sources always last — clickable hyperlinks
-    sourcesVal = (props.sources || props.Sources || '').toString().trim();
+    sourcesVal = (props.sources || props.Sources || props.source || '').toString().trim();
     if (sourcesVal) {
       var linksHtml = sourcesVal.split(/\s+(?=[^\s|]+\|http)/).map(function(s) {
         var parts = s.split('|');
