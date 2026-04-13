@@ -3,63 +3,343 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-5.93, 12.07] },
-      "properties": { "name": "Attaque mine Morila", "description": "Attaque jihadiste presumee contre la mine d'or de Morila. Perturbation de la production.", "date": "05/01/2026", "type": "Attaque", "sources": "Reuters|https://www.reuters.com/world/africa/suspected-jihadists-attack-malis-morila-mine-2026-01-05" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-16",
+        "Pays + Lieu": "Mali - région de Gao",
+        "Coordonnée": "16.2667,-0.0500",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Contexte régional confirmé par ACLED; lieu approximatif à Gao",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-8.15, 11.18] },
-      "properties": { "name": "Arrestation dirigeants Yanfolila", "description": "5 responsables de la mine d'or de Yanfolila arretes pour infractions au code minier.", "date": "27/01/2026", "type": "Arrestation", "sources": "Reuters|https://www.reuters.com/sustainability/mali-detains-five-gold-mine-managers-over-alleged-code-breaches-sources-say-2026-01-27" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-17",
+        "Pays + Lieu": "Burkina Faso - Djibo, Soum",
+        "Coordonnée": "14.0994,-1.6306",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-10.57, 15.03] },
-      "properties": { "name": "7 mauritaniens tues (Ehl Elkori)", "description": "7 ressortissants mauritaniens tues par les FAMA a la frontiere Mali-Mauritanie. Crise diplomatique.", "date": "06/03/2026", "type": "Incident frontalier", "sources": "Sahel Intelligence|https://sahel-intelligence.com RFI|https://www.rfi.fr/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-18",
+        "Pays + Lieu": "Mali - Ansongo, Gao",
+        "Coordonnée": "15.6597,0.4967",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-5.28, 14.87] },
-      "properties": { "name": "Accusations Mali-Mauritanie (camp M'Bera)", "description": "Le Mali accuse la Mauritanie d'heberger des soldats dans le camp de refugies de M'Bera. Nouakchott rejette.", "date": "20/03/2026", "type": "Crise diplomatique", "sources": "Sahel Intelligence|https://sahel-intelligence.com France 24|https://www.france24.com/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-19",
+        "Pays + Lieu": "Burkina Faso - Dori, Sahel",
+        "Coordonnée": "14.0349,-0.0345",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [1.56, 13.54] },
-      "properties": { "name": "8 policiers tues (Tillaberi)", "description": "Attaque ISGS contre poste de police pres de la frontiere malienne. Zone la plus meurtriere du Sahel.", "date": "26/03/2026", "type": "Attaque", "sources": "AFP|https://www.france24.com/fr/afrique ACLED|https://acleddata.com" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-20",
+        "Pays + Lieu": "Mali - Ménaka, Ménaka",
+        "Coordonnée": "15.9182,2.4022",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-10.28, 15.23] },
-      "properties": { "name": "5 mauritaniens tues (Yelimane)", "description": "5 victimes mauritaniennes identifiees. Nouakchott condamne des actes inacceptables.", "date": "28/03/2026", "type": "Incident frontalier", "sources": "Sahel Intelligence|https://sahel-intelligence.com RFI|https://www.rfi.fr/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-21",
+        "Pays + Lieu": "Burkina Faso - Fada N’Gourma, Est",
+        "Coordonnée": "12.0616,0.3584",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-1.05, 14.04] },
-      "properties": { "name": "Blocus de Djibo (continu)", "description": "Siege du JNIM sur Djibo. Aucun convoi terrestre depuis des mois. Crise humanitaire majeure.", "date": "Jan-Mars 2026", "type": "Siege", "sources": "MSF|https://www.msf.org/burkina-faso ICG|https://www.crisisgroup.org/africa/sahel/burkina-faso" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-22",
+        "Pays + Lieu": "Mali - Douentza, Douentza",
+        "Coordonnée": "14.9958,-2.9517",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [0.86, 11.17] },
-      "properties": { "name": "Attaque JNIM - Nord Togo", "description": "Incursion jihadiste dans le nord du Togo. Extension de la menace vers les Etats cotiers.", "date": "Fev 2026", "type": "Incursion", "sources": "ACLED|https://acleddata.com ICG|https://www.crisisgroup.org/africa/west-africa" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-23",
+        "Pays + Lieu": "Burkina Faso - Kaya, Centre-Nord",
+        "Coordonnée": "13.0910,-1.0844",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-1.68, 11.16] },
-      "properties": { "name": "Attaques recurrentes axe Po-Ouaga", "description": "Embuscades regulieres sur l'axe routier reliant la frontiere ghanenne a Ouagadougou.", "date": "Jan-Mars 2026", "type": "Embuscades", "sources": "ACLED|https://acleddata.com RFI|https://www.rfi.fr/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-24",
+        "Pays + Lieu": "Mali - Nara, Nara",
+        "Coordonnée": "15.1691,-7.2860",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-11.47, 12.87] },
-      "properties": { "name": "Reprise production Loulo-Gounkoto", "description": "Reprise de la production de la mine apres accord Barrick-Bamako. Fermeture de janvier a decembre 2025.", "date": "Fev 2026", "type": "Economique", "sources": "Reuters|https://www.reuters.com/world/africa/mali-renews-barrick-minings-loulo-license-10-more-years-2026-02-13 RFI|https://www.rfi.fr/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-25",
+        "Pays + Lieu": "Mauritanie - Bassikounou, Hodh Ech Chargui",
+        "Coordonnée": "16.0713,-5.8624",
+        "Type d'évènement": "Incident sécuritaire frontalier",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [2.11, 13.51] },
-      "properties": { "name": "Retrait troupes francaises Niger", "description": "Completion du retrait des forces francaises du Niger. Fin de la presence militaire occidentale au Sahel central.", "date": "Jan 2026", "type": "Geopolitique", "sources": "Reuters|https://www.reuters.com/world/africa AFP|https://www.france24.com/fr/afrique" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-26",
+        "Pays + Lieu": "Mali - Tessit, Gao",
+        "Coordonnée": "14.7017,0.0017",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation approximative",
+        "name": "JNIM / assaillants jihadistes"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-8.0, 12.65] },
-      "properties": { "name": "Alliance des Etats du Sahel (AES)", "description": "Consolidation de la confederation Mali-Burkina-Niger. Retrait definitif de la CEDEAO.", "date": "Jan 2026", "type": "Geopolitique", "sources": "Reuters|https://www.reuters.com/world/africa RFI|https://www.rfi.fr/fr/afrique ICG|https://www.crisisgroup.org/africa/sahel" }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-27",
+        "Pays + Lieu": "Burkina Faso - Sebba, Yagha",
+        "Coordonnée": "13.4364,0.5300",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-28",
+        "Pays + Lieu": "Mali - Kwala, Koulikoro",
+        "Coordonnée": "13.7440,-8.0830",
+        "Type d'évènement": "Incident sécuritaire sur axe",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation approximative",
+        "name": "JNIM / assaillants jihadistes"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-29",
+        "Pays + Lieu": "Burkina Faso - Ouahigouya, Nord",
+        "Coordonnée": "13.5828,-2.4216",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-30",
+        "Pays + Lieu": "Mali - Hombori, Douentza",
+        "Coordonnée": "15.2770,-1.6917",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée",
+        "name": "JNIM / assaillants jihadistes"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-31",
+        "Pays + Lieu": "Mauritanie - Adel Bagrou, Hodh Ech Chargui",
+        "Coordonnée": "15.7740,-7.3630",
+        "Type d'évènement": "Incident sécuritaire frontalier",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0,
+          0
+        ]
+      },
+      "properties": {
+        "Acteur": "Assaillants armés",
+        "Date": "2026-03-06",
+        "Pays + Lieu": "Burkina Faso - Yamba",
+        "Coordonnée": "12.9530,0.7980",
+        "Type d'évènement": "Attaque contre police",
+        "bilan": "Bilan non précisé",
+        "source": "Revue de presse du 9 mars 2026 [web:46]",
+        "name": "Assaillants armés"
+      }
     }
   ]
 }
