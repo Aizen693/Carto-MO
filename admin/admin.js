@@ -840,18 +840,35 @@ function setupConverter() {
         const table = doc.querySelector('table');
         if (!table) throw new Error('Aucun <table> detecte dans le HTML');
 
-        const trs = table.querySelectorAll('tr');
-        if (trs.length < 2) throw new Error('Le tableau doit avoir au moins un en-tete et une ligne');
+        const allTrs = [...table.querySelectorAll('tr')];
+        if (allTrs.length < 2) throw new Error('Le tableau doit avoir au moins un en-tete et une ligne');
 
-        // Extract headers from first row
+        // Smart header detection: skip <thead> rows with single-letter headers (A,B,C = Google Sheets)
+        // and find the first row with real column names
+        let headerRowIdx = 0;
+        for (let i = 0; i < Math.min(allTrs.length, 5); i++) {
+          const cells = [...allTrs[i].querySelectorAll('th, td')].map(c => c.textContent.trim()).filter(Boolean);
+          const isSingleLetters = cells.length > 1 && cells.every(c => /^[A-Z]{1,2}$/.test(c));
+          const isRowNumber = cells.length === 1 && /^\d+$/.test(cells[0]);
+          if (isSingleLetters || isRowNumber || !cells.length) { headerRowIdx = i + 1; continue; }
+          // Found real headers
+          headerRowIdx = i;
+          break;
+        }
+
+        // Extract headers
         const headers = [];
-        trs[0].querySelectorAll('th, td').forEach(cell => {
+        allTrs[headerRowIdx].querySelectorAll('th, td').forEach(cell => {
           headers.push(cell.textContent.trim());
         });
 
-        // Extract data rows
-        for (let i = 1; i < trs.length; i++) {
-          const cells = trs[i].querySelectorAll('td, th');
+        // Extract data rows (skip empty rows and freezebar rows)
+        for (let i = headerRowIdx + 1; i < allTrs.length; i++) {
+          const cells = allTrs[i].querySelectorAll('td, th');
+          // Skip rows with only empty cells or row numbers
+          const texts = [...cells].map(c => c.textContent.trim());
+          const hasContent = texts.some((t, j) => j > 0 && t.length > 0);
+          if (!hasContent) continue;
           const row = {};
           cells.forEach((cell, j) => {
             if (headers[j]) row[headers[j]] = cell.textContent.trim();
