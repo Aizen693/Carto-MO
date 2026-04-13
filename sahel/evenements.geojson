@@ -17,9 +17,9 @@
         "Coordonnée": "16.2667,-0.0500",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Contexte régional confirmé par ACLED; lieu approximatif à Gao",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 Africa Center|https://africacenter.org/spotlight/jnim-attacks-western-mali-sahel/"
       }
     },
     {
@@ -38,9 +38,9 @@
         "Coordonnée": "14.0994,-1.6306",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 CrisisWatch|https://www.crisisgroup.org/crisiswatch/january-trends-and-february-alerts-2026"
       }
     },
     {
@@ -59,9 +59,9 @@
         "Coordonnée": "15.6597,0.4967",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026"
       }
     },
     {
@@ -80,9 +80,9 @@
         "Coordonnée": "14.0349,-0.0345",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 African Security Analysis|https://www.africansecurityanalysis.org/updates/burkina-faso-security-report-jnim-escalation-and-governance-risks"
       }
     },
     {
@@ -101,9 +101,9 @@
         "Coordonnée": "15.9182,2.4022",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 Africa Center|https://africacenter.org/spotlight/jnim-attacks-western-mali-sahel/"
       }
     },
     {
@@ -122,9 +122,9 @@
         "Coordonnée": "12.0616,0.3584",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "Africanews|https://www.africanews.com/2026/01/22/jihadist-attack-claims-lives-of-eleven-police-officers-in-burkina-faso/ The Defense Post|https://thedefensepost.com/2026/01/22/jihadist-police-burkina-faso/"
       }
     },
     {
@@ -143,9 +143,9 @@
         "Coordonnée": "14.9958,-2.9517",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "HRW|https://www.hrw.org/world-report/2026/country-chapters/mali ACLED|https://acleddata.com/update/africa-overview-january-2026"
       }
     },
     {
@@ -164,9 +164,9 @@
         "Coordonnée": "13.0910,-1.0844",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 ADF Magazine|https://adf-magazine.com/2026/03/terror-groups-pressure-sahel-capitals/"
       }
     },
     {
@@ -185,9 +185,9 @@
         "Coordonnée": "15.1691,-7.2860",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026"
       }
     },
     {
@@ -206,9 +206,9 @@
         "Coordonnée": "16.0713,-5.8624",
         "Type d'évènement": "Incident sécuritaire frontalier",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Incident frontalier"
+        "type": "Incident frontalier",
+        "sources": "ACLED|https://acleddata.com/region/conflict-sahel Dispatch Risk|https://dispatchrisk.com/jihadist-threat-prompts-plans-for-expanded-military-deployments/"
       }
     },
     {
@@ -227,9 +227,9 @@
         "Coordonnée": "14.7017,0.0017",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation approximative",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 Africa Center|https://africacenter.org/spotlight/jnim-attacks-western-mali-sahel/"
       }
     },
     {
@@ -248,9 +248,9 @@
         "Coordonnée": "13.4364,0.5300",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "AbidjanTV|https://abidjantv.net/afrique-3/burkina-faso-le-jnim-revendique-une-attaque-a-sebba/ African Security Analysis|https://www.africansecurityanalysis.org/updates/burkina-faso-iswap-jnim-rivalry-escalates-in-sebba-turning-tri-border-corridor-into-a-strategic-battleground"
       }
     },
     {
@@ -269,9 +269,9 @@
         "Coordonnée": "13.7440,-8.0830",
         "Type d'évènement": "Incident sécuritaire sur axe",
         "bilan": "Bilan non précisé",
-        "source": "Localisation approximative",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "MaliActu|https://maliactu.net/nouvelle-embuscade-contre-les-fama-sur-laxe-gomitra-kwala-dans-la-region-de-koulikoro-quatre-fama-et-un-civil-tues-quinze-terroristes-et-deux-vehicules-pulverises-par-laviation/ ACLED|https://acleddata.com/country/mali"
       }
     },
     {
@@ -290,9 +290,9 @@
         "Coordonnée": "13.5828,-2.4216",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "ACLED|https://acleddata.com/update/africa-overview-january-2026 CrisisWatch|https://www.crisisgroup.org/crisiswatch/january-trends-and-february-alerts-2026"
       }
     },
     {
@@ -311,9 +311,9 @@
         "Coordonnée": "15.2770,-1.6917",
         "Type d'évènement": "Incident sécuritaire / pression armée",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "HRW|https://www.hrw.org/fr/world-report/2026/country-chapters/mali ACLED|https://acleddata.com/country/mali"
       }
     },
     {
@@ -332,9 +332,9 @@
         "Coordonnée": "15.7740,-7.3630",
         "Type d'évènement": "Incident sécuritaire frontalier",
         "bilan": "Bilan non précisé",
-        "source": "Localisation confirmée du chef-lieu",
         "name": "JNIM / assaillants jihadistes",
-        "type": "Incident frontalier"
+        "type": "Incident frontalier",
+        "sources": "ACLED|https://acleddata.com/region/conflict-sahel Dispatch Risk|https://dispatchrisk.com/jihadist-threat-prompts-plans-for-expanded-military-deployments/"
       }
     },
     {
@@ -353,9 +353,9 @@
         "Coordonnée": "12.9530,0.7980",
         "Type d'évènement": "Attaque contre police",
         "bilan": "Bilan non précisé",
-        "source": "Revue de presse du 9 mars 2026 [web:46]",
         "name": "Assaillants armés",
-        "type": "Attaque"
+        "type": "Attaque",
+        "sources": "Connectionivoirienne|https://connectionivoirienne.net/2026/03/09/burkina-faso-au-moins-30-policiers-tues-dans-une-attaque-jihadiste-contre-un-detachement-a-yamba/ Africa Eye|https://africa-eye.com/fr/2026/03/09/burkina-faso-au-moins-30-policiers-tues-dans-une-attaque-dans-lest-du-pays/"
       }
     }
   ]
