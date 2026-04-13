@@ -401,6 +401,7 @@ function setupImportExport() {
 // ── Calques manager ────────────────────────────────────
 
 let calqueImportTarget = null; // which overlay id is being imported
+const calquePurgedAt = {}; // zone:id → "dd/mm/yyyy hh:mm" when purged
 
 function setupCalquesManager() {
   const fileInput = document.getElementById('calque-import-file');
@@ -503,6 +504,8 @@ function setupCalquesManager() {
         throw new Error('GitHub: ' + (err.message || resp.statusText));
       }
 
+      // Clear purged flag on successful import
+      delete calquePurgedAt[currentZone + ':' + overlay.id];
       if (statusEl) {
         statusEl.textContent = `${data.features.length} features pushees dans "${overlay.file}". Deploiement en cours...`;
         statusEl.className = 'calque-import-status io-status-ok';
@@ -565,18 +568,30 @@ async function refreshCalquesList() {
   let html = '';
   overlays.forEach((o, i) => {
       const s = statuses[o.id];
-      let statusHTML, countLabel;
-      if (s === 'absent') {
+      const purged = calquePurgedAt[currentZone + ':' + o.id];
+      let statusHTML, countLabel, fileLabel, dateLabel;
+      if (purged) {
+        // Calque was purged this session — show "Supprime" + purge time
+        statusHTML = '<span class="calque-status calque-status-vide">Supprime</span>';
+        countLabel = '';
+        fileLabel = '';
+        dateLabel = `<span class="calque-date">${purged}</span>`;
+      } else if (s === 'absent') {
         statusHTML = '<span class="calque-status calque-status-absent">Absent</span>';
         countLabel = '';
+        fileLabel = '';
+        dateLabel = '';
       } else if (s.status === 'vide') {
         statusHTML = '<span class="calque-status calque-status-vide">Vide</span>';
         countLabel = '<span class="calque-count calque-count--empty">0 pts</span>';
+        fileLabel = `<span class="calque-file">${o.file}</span>`;
+        dateLabel = s.date ? `<span class="calque-date">${s.date}</span>` : '';
       } else {
         statusHTML = '<span class="calque-status calque-status-ok">OK</span>';
         countLabel = `<span class="calque-count">${s.count} pts</span>`;
+        fileLabel = `<span class="calque-file">${o.file}</span>`;
+        dateLabel = s.date ? `<span class="calque-date">${s.date}</span>` : '';
       }
-      const dateLabel = (s && s.date) ? `<span class="calque-date">${s.date}</span>` : '';
       html += `<div class="calque-row">
         <div class="calque-row-top">
           <span class="calque-name">${i + 1}. ${o.label}</span>
@@ -587,7 +602,7 @@ async function refreshCalquesList() {
         </div>
         <div class="calque-row-bottom">
           <div class="calque-row-info">
-            <span class="calque-file">${o.file}</span>
+            ${fileLabel}
             ${dateLabel}
           </div>
           <div class="calque-row-actions">
@@ -639,6 +654,8 @@ async function refreshCalquesList() {
             body: JSON.stringify({ message: `Vider calque ${file}`, content: content, sha: getData.sha, branch: 'main' })
           });
           if (putRes.ok) {
+            const now = new Date();
+            calquePurgedAt[currentZone + ':' + id] = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' }) + ' ' + now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
             showStatus('calque-status-msg', `Calque "${file}" vide avec succes.`, 'ok');
             refreshCalquesList();
           } else {
