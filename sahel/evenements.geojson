@@ -6,19 +6,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0,
-          0
+          -0.05,
+          16.2667
         ]
       },
       "properties": {
-        "JNIM / assaillants jihadistes": "JNIM / assaillants jihadistes",
-        "2026-02-19": "2026-02-19",
-        "Burkina Faso - Titao, marché local": "Burkina Faso - Djibo, base militaire et marché",
-        "13.7667,-2.0667": "14.0994,-1.6306",
-        "Attaque contre marché et base militaire": "Attaque sur base / marché",
-        "Plusieurs civils et combattants tués": "Bilan inclus dans le total Reuters",
-        "Reuters mentionne marché incendié à Titao [web:21]": "Reuters et source de suivi mentionnent Djibo dans la séquence d’attaques [web:21][web:90]",
-        "name": "JNIM / assaillants jihadistes"
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-16",
+        "Pays + Lieu": "Mali - région de Gao",
+        "Coordonnée": "16.2667,-0.0500",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Contexte régional confirmé par ACLED; lieu approximatif à Gao",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
       }
     },
     {
@@ -26,19 +27,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0,
-          0
+          -1.6306,
+          14.0994
         ]
       },
       "properties": {
-        "JNIM / assaillants jihadistes": "JNIM / assaillants jihadistes",
-        "2026-02-19": "2026-02-19",
-        "Burkina Faso - Titao, marché local": "Burkina Faso - marchés et convois dans l’Est",
-        "13.7667,-2.0667": "12.0616,0.3584",
-        "Attaque contre marché et base militaire": "Attaque logistique / civils",
-        "Plusieurs civils et combattants tués": "Bilan inclus dans le total Reuters",
-        "Reuters mentionne marché incendié à Titao [web:21]": "Reuters signale des attaques sur marchés et convois à l’Est [web:21]",
-        "name": "JNIM / assaillants jihadistes"
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-17",
+        "Pays + Lieu": "Burkina Faso - Djibo, Soum",
+        "Coordonnée": "14.0994,-1.6306",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
       }
     },
     {
@@ -46,19 +48,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0,
-          0
+          0.4967,
+          15.6597
         ]
       },
       "properties": {
-        "JNIM / assaillants jihadistes": "JNIM / assaillants jihadistes",
-        "2026-02-19": "2026-03-10",
-        "Burkina Faso - Titao, marché local": "Mali - axes routiers vers Bamako",
-        "13.7667,-2.0667": "12.6392,-8.0029",
-        "Attaque contre marché et base militaire": "Attaque sur transport routier",
-        "Plusieurs civils et combattants tués": "Au moins 12 chauffeurs tués",
-        "Reuters mentionne marché incendié à Titao [web:21]": "Reuters/HRW, attaque contre chauffeurs routiers [web:31]",
-        "name": "JNIM / assaillants jihadistes"
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-18",
+        "Pays + Lieu": "Mali - Ansongo, Gao",
+        "Coordonnée": "15.6597,0.4967",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
       }
     },
     {
@@ -66,19 +69,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0,
-          0
+          -0.0345,
+          14.0349
         ]
       },
       "properties": {
-        "JNIM / assaillants jihadistes": "JNIM / assaillants jihadistes",
-        "2026-02-19": "2026-03-29",
-        "Burkina Faso - Titao, marché local": "Mauritanie - corridor frontalier avec le Mali",
-        "13.7667,-2.0667": "16.0713,-5.8624",
-        "Attaque contre marché et base militaire": "Incident logistique / frontalier",
-        "Plusieurs civils et combattants tués": "Bilan non précisé",
-        "Reuters mentionne marché incendié à Titao [web:21]": "Tensions frontalières évoquées par la presse mauritanienne [web:9][web:12]",
-        "name": "JNIM / assaillants jihadistes"
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-19",
+        "Pays + Lieu": "Burkina Faso - Dori, Sahel",
+        "Coordonnée": "14.0349,-0.0345",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
       }
     },
     {
@@ -86,19 +90,20 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0,
-          0
+          2.4022,
+          15.9182
         ]
       },
       "properties": {
-        "JNIM / assaillants jihadistes": "JNIM / assaillants jihadistes",
-        "2026-02-19": "2026-02-14",
-        "Burkina Faso - Titao, marché local": "Burkina Faso - Titao, marché central",
-        "13.7667,-2.0667": "13.7667,-2.0667",
-        "Attaque contre marché et base militaire": "Attaque de marché et base militaire",
-        "Plusieurs civils et combattants tués": "Au moins 38 civils tués selon HRW",
-        "Reuters mentionne marché incendié à Titao [web:21]": "HRW/Reuters, attaque du 14 février à Titao [web:130][web:100]",
-        "name": "JNIM / assaillants jihadistes"
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-20",
+        "Pays + Lieu": "Mali - Ménaka, Ménaka",
+        "Coordonnée": "15.9182,2.4022",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
       }
     },
     {
@@ -106,19 +111,251 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          0,
-          0
+          0.3584,
+          12.0616
         ]
       },
       "properties": {
-        "JNIM / assaillants jihadistes": "JNIM / assaillants jihadistes",
-        "2026-02-19": "2026-02-14",
-        "Burkina Faso - Titao, marché local": "Burkina Faso - Djibo, marché central",
-        "13.7667,-2.0667": "14.0994,-1.6306",
-        "Attaque contre marché et base militaire": "Incendie de marché",
-        "Plusieurs civils et combattants tués": "Bilan non précisé",
-        "Reuters mentionne marché incendié à Titao [web:21]": "Reuters indique que le marché central de Djibo a été incendié lors des attaques coordonnées [web:21][web:124]",
-        "name": "JNIM / assaillants jihadistes"
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-21",
+        "Pays + Lieu": "Burkina Faso - Fada N’Gourma, Est",
+        "Coordonnée": "12.0616,0.3584",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.9517,
+          14.9958
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-22",
+        "Pays + Lieu": "Mali - Douentza, Douentza",
+        "Coordonnée": "14.9958,-2.9517",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.0844,
+          13.091
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-23",
+        "Pays + Lieu": "Burkina Faso - Kaya, Centre-Nord",
+        "Coordonnée": "13.0910,-1.0844",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.286,
+          15.1691
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-24",
+        "Pays + Lieu": "Mali - Nara, Nara",
+        "Coordonnée": "15.1691,-7.2860",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.8624,
+          16.0713
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-25",
+        "Pays + Lieu": "Mauritanie - Bassikounou, Hodh Ech Chargui",
+        "Coordonnée": "16.0713,-5.8624",
+        "Type d'évènement": "Incident sécuritaire frontalier",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Incident frontalier"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.0017,
+          14.7017
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-26",
+        "Pays + Lieu": "Mali - Tessit, Gao",
+        "Coordonnée": "14.7017,0.0017",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation approximative",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.53,
+          13.4364
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-27",
+        "Pays + Lieu": "Burkina Faso - Sebba, Yagha",
+        "Coordonnée": "13.4364,0.5300",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.083,
+          13.744
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-28",
+        "Pays + Lieu": "Mali - Kwala, Koulikoro",
+        "Coordonnée": "13.7440,-8.0830",
+        "Type d'évènement": "Incident sécuritaire sur axe",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation approximative",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.4216,
+          13.5828
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-29",
+        "Pays + Lieu": "Burkina Faso - Ouahigouya, Nord",
+        "Coordonnée": "13.5828,-2.4216",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.6917,
+          15.277
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-30",
+        "Pays + Lieu": "Mali - Hombori, Douentza",
+        "Coordonnée": "15.2770,-1.6917",
+        "Type d'évènement": "Incident sécuritaire / pression armée",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Attaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.363,
+          15.774
+        ]
+      },
+      "properties": {
+        "Acteur": "JNIM / assaillants jihadistes",
+        "Date": "2026-01-31",
+        "Pays + Lieu": "Mauritanie - Adel Bagrou, Hodh Ech Chargui",
+        "Coordonnée": "15.7740,-7.3630",
+        "Type d'évènement": "Incident sécuritaire frontalier",
+        "bilan": "Bilan non précisé",
+        "source": "Localisation confirmée du chef-lieu",
+        "name": "JNIM / assaillants jihadistes",
+        "type": "Incident frontalier"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.798,
+          12.953
+        ]
+      },
+      "properties": {
+        "Acteur": "Assaillants armés",
+        "Date": "2026-03-06",
+        "Pays + Lieu": "Burkina Faso - Yamba",
+        "Coordonnée": "12.9530,0.7980",
+        "Type d'évènement": "Attaque contre police",
+        "bilan": "Bilan non précisé",
+        "source": "Revue de presse du 9 mars 2026 [web:46]",
+        "name": "Assaillants armés",
+        "type": "Attaque"
       }
     }
   ]

@@ -55,6 +55,14 @@ function parseDesc(raw) {
   return Object.keys(r).length ? r : { raw };
 }
 
+function linkifyText(text) {
+  return text.replace(/(https?:\/\/[^\s<>"']+)/g, function(url) {
+    var display = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    if (display.length > 40) display = display.substring(0, 37) + '...';
+    return '<a href="' + url + '" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-family:\'JetBrains Mono\',monospace;font-size:9px;border-bottom:1px solid rgba(196,154,60,0.3);">' + display + '</a>';
+  });
+}
+
 function makePopupHTML(p) {
   const color = p._color || '#888';
   const desc = p._desc && p._desc !== 'null' ? parseDesc(p._desc) : null;
@@ -64,8 +72,8 @@ function makePopupHTML(p) {
     if (desc.date)   body += `<div class="popup-row"><span class="popup-key">Date</span><span class="popup-val bold">${desc.date}</span></div>`;
     if (desc.pays)   body += `<div class="popup-row"><span class="popup-key">Pays</span><span class="popup-val">${desc.pays}</span></div>`;
     if (desc.event)  body += `<div class="popup-row"><span class="popup-key">Événement</span><span class="popup-val bold">${desc.event}</span></div>`;
-    if (desc.detail) body += `<div class="popup-row"><span class="popup-key">Détail</span><span class="popup-val">${desc.detail}</span></div>`;
-    if (desc.raw)    body += `<div class="popup-row"><span class="popup-val" style="white-space:pre-line;color:#ffffff">${desc.raw}</span></div>`;
+    if (desc.detail) body += `<div class="popup-row"><span class="popup-key">Détail</span><span class="popup-val">${linkifyText(desc.detail)}</span></div>`;
+    if (desc.raw)    body += `<div class="popup-row"><span class="popup-val" style="white-space:pre-line;color:#ffffff">${linkifyText(desc.raw)}</span></div>`;
   }
   let otanBlock = '';
   if (otan && otan.cotation) {

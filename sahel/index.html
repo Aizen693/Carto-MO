@@ -320,6 +320,14 @@ const ZONE_CONFIG = {
   // Calque popup color map
   var calqueColors = { ethnies: '#e07c5a', forces: '#e63946', 'points-eau': '#29b6f6', population: '#ab47bc', mines: '#d4a017', infrastructures: '#66bb6a', evenements: '#ff5252', flux: '#ff9800' };
 
+  function linkifyText(text) {
+    return text.replace(/(https?:\/\/[^\s<>"']+)/g, function(url) {
+      var display = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+      if (display.length > 40) display = display.substring(0, 37) + '...';
+      return '<a href="' + url + '" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-family:\'JetBrains Mono\',monospace;font-size:9px;border-bottom:1px solid rgba(196,154,60,0.3);">' + display + '</a>';
+    });
+  }
+
   function makeCalquePopup(props, calqueId) {
     var color = calqueColors[calqueId] || '#888';
     var name = props.name || props.Name || props.nom || props.Nom || 'Point';
@@ -332,7 +340,7 @@ const ZONE_CONFIG = {
       var v = (props[k] || '').toString().trim();
       if (!v) return;
       var label = k.replace(/_/g, ' ').replace(/^\w/, function(c) { return c.toUpperCase(); });
-      body += '<div class="popup-row"><span class="popup-key">' + label + '</span><span class="popup-val">' + v + '</span></div>';
+      body += '<div class="popup-row"><span class="popup-key">' + label + '</span><span class="popup-val">' + linkifyText(v) + '</span></div>';
     });
     // Sources always last — clickable hyperlinks
     sourcesVal = (props.sources || props.Sources || '').toString().trim();
@@ -476,7 +484,7 @@ const ZONE_CONFIG = {
     id: 'infrastructures',
     file: 'infrastructures.geojson',
     layers: [
-      { id: 'infra-lines', type: 'line', paint: { 'line-color': ['match', ['get', 'type'], 'Route coupee', '#ef5350', 'Route a risque', '#ff9800', 'Voie ferree', '#78909c', 'Corridor logistique', '#66bb6a', 'Corridor commercial', '#42a5f5', 'Corridor petrolier', '#ffa726', 'Corridor transfrontalier', '#ab47bc', '#8d6e63'], 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1, 8, 1.8, 12, 2.5], 'line-opacity': 0.45, 'line-dasharray': ['match', ['get', 'type'], 'Voie ferree', ['literal', [1, 2]], 'Corridor logistique', ['literal', [2, 3]], 'Corridor commercial', ['literal', [2, 3]], 'Corridor petrolier', ['literal', [2, 3]], 'Corridor transfrontalier', ['literal', [2, 3]], ['literal', [4, 2]]] } },
+      { id: 'infra-lines', type: 'line', paint: { 'line-color': ['match', ['get', 'type'], 'Route coupee', '#ef5350', 'Route a risque', '#ff9800', 'Voie ferree', '#78909c', '#8d6e63'], 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1, 8, 1.8, 12, 2.5], 'line-opacity': 0.45, 'line-dasharray': ['match', ['get', 'type'], 'Voie ferree', ['literal', [1, 2]], ['literal', [4, 2]]] } },
       { id: 'infra-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#8d6e63', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
       { id: 'infra-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#8d6e63', 'circle-stroke-opacity': 0.35 } },
       { id: 'infra-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#8d6e63', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
