@@ -1,205 +1,1297 @@
 {
   "type": "FeatureCollection",
+  "name": "mines_sahel",
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-11.47, 12.87] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12.71667,
+          22.68333
+        ]
+      },
       "properties": {
-        "name": "Loulo - Gounkoto",
-        "categorie": "Mines Legales",
-        "region": "Kayes",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "Barrick Mining",
-        "pays_societe": "Canada",
-        "remarques": "site ferme entre janvier 2025 et le 18 decembre 2025",
-        "sources": "Reuters|https://www.reuters.com/world/africa/mali-renews-barrick-minings-loulo-license-10-more-years-2026-02-13/ RFI|https://www.rfi.fr/fr/afrique/20260207-mali-reprise-de-la-production-de-la-mine-d-or-de-loulo-apr%C3%A8s-l-accord-entre-barrick-gold-et-bamako Agence Ecofin|https://www.agenceecofin.com/actualites-industries/1302-125763-la-suspension-de-loulo-gounkoto-peut-couter-550-millions-au-mali-en-2025-barrick"
+        "name": "F'Derik (District de Zouerate)",
+        "description": "Depot majeur - type Sedimentary",
+        "type": "Fer",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mauritania",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2498"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-11.39, 13.08] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12.3375,
+          22.8736
+        ]
+      },
       "properties": {
-        "name": "Fekola",
-        "categorie": "Mines Legales",
-        "region": "Kayes",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "B2Gold",
-        "pays_societe": "Canada",
-        "remarques": "2e plus grande mine d'or du Mali",
-        "sources": "Ecofin Agency|https://www.ecofinagency.com/mining/1309-45889-gold-mali-seals-deal-to-earn-more-from-fekola-complex"
+        "name": "Guelb El Rhein (District de Zouerate)",
+        "description": "Depot majeur - type Sedimentary",
+        "type": "Fer",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mauritania",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2499"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-11.35, 13.12] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12.66667,
+          22.66667
+        ]
+      },
       "properties": {
-        "name": "Fekola Regional",
-        "categorie": "Mines Legales",
-        "region": "Kayes",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "B2Gold",
-        "pays_societe": "Canada",
-        "remarques": "Nouveau depot rattache au complexe Fekola",
-        "sources": "Ecofin Agency|https://www.ecofinagency.com/mining/1309-45889-gold-mali-seals-deal-to-earn-more-from-fekola-complex"
+        "name": "Tazadit (District de Zouerate)",
+        "description": "Depot majeur - type Sedimentary",
+        "type": "Fer",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mauritania",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2501"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-5.68, 11.46] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12.66667,
+          22.66667
+        ]
+      },
       "properties": {
-        "name": "Syama",
-        "categorie": "Mines Legales",
-        "region": "Sikasso",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "Resolute Mining",
-        "pays_societe": "Australie",
-        "sources": "Reuters|https://www.reuters.com/world/africa/mali-announces-more-new-mining-deals-under-revised-code-2025-09-22/"
+        "name": "Rouessa (District de Zouerate)",
+        "description": "Depot majeur - type Sedimentary",
+        "type": "Fer",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mauritania",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2500"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-5.72, 11.38] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -13.7,
+          20.8
+        ]
+      },
       "properties": {
-        "name": "Tabakoroni",
-        "categorie": "Mines Legales",
-        "region": "Sikasso",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "Resolute Mining",
-        "pays_societe": "Australie",
-        "sources": "Reuters|https://www.reuters.com/world/africa/mali-announces-more-new-mining-deals-under-revised-code-2025-09-22/"
+        "name": "Bou Naga",
+        "description": "Depot majeur - type Igneous",
+        "type": "Terres rares",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mauritania",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2502"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-11.76, 13.60] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.06667,
+          14.78333
+        ]
+      },
+      "properties": {
+        "name": "Tambao",
+        "description": "Depot majeur - type Sedimentary",
+        "type": "Manganese",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Burkina Faso",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2198"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.9258,
+          11.85
+        ]
+      },
+      "properties": {
+        "name": "Kodjari",
+        "description": "Depot majeur - type Sedimentary",
+        "type": "Phosphate",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Burkina Faso",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2199"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.4833,
+          11.4167
+        ]
+      },
+      "properties": {
+        "name": "Sinsinkourou",
+        "description": "Depot majeur - type Igneous",
+        "type": "Lithium",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mali",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2494"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.48333,
+          15.66667
+        ]
+      },
+      "properties": {
+        "name": "Ansongo",
+        "description": "Depot majeur - type Sedimentary",
+        "type": "Manganese, Fer",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mali",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2495"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.345,
+          12.4217
+        ]
+      },
+      "properties": {
+        "name": "Tapoa",
+        "description": "Depot majeur - type Sedimentary",
+        "type": "Phosphate",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Niger",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2599"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.3333,
+          18.7667
+        ]
+      },
+      "properties": {
+        "name": "Arlit (SOMAIR/COMINAK)",
+        "description": "Depot majeur - type Hydrothermal",
+        "type": "Uranium",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Niger",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2600"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -11.4167,
+          12.6167
+        ]
+      },
+      "properties": {
+        "name": "Western Mali Bauxites",
+        "description": "Depot majeur - type Surficial",
+        "type": "Aluminium",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mali",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2492"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14.5833,
+          19.5
+        ]
+      },
+      "properties": {
+        "name": "Akjoujt (Guelb Moghrein)",
+        "description": "Depot majeur - type Hydrothermal",
+        "type": "Cuivre, Or",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mauritania",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2496"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.75,
+          12.3333
+        ]
+      },
+      "properties": {
+        "name": "Perkoa",
+        "description": "Depot majeur - type Hydrothermal",
+        "type": "Zinc, Argent",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Burkina Faso",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2200"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.3,
+          11.1833
+        ]
+      },
+      "properties": {
+        "name": "Guiro",
+        "description": "Depot majeur - type Hydrothermal",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Burkina Faso",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2195"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.5333,
+          13.5833
+        ]
+      },
+      "properties": {
+        "name": "Sebba",
+        "description": "Depot majeur - type Hydrothermal",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Burkina Faso",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2196"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.7636,
+          11.5872
+        ]
+      },
+      "properties": {
+        "name": "Poura",
+        "description": "Depot majeur - type Hydrothermal",
+        "type": "Or, Argent, Cuivre, Antimoine",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Burkina Faso",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2197"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.4667,
+          12.0167
+        ]
+      },
+      "properties": {
+        "name": "Syama-Tabakoroni",
+        "description": "Depot majeur - type Hydrothermal",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mali",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2493"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14.38,
+          19.75
+        ]
+      },
+      "properties": {
+        "name": "Akjoujt Tailings Project",
+        "description": "Depot majeur - type Hydrothermal",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mauritania",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2497"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.05,
+          13.65
+        ]
+      },
+      "properties": {
+        "name": "Koma Bangou",
+        "description": "Depot majeur - type Hydrothermal",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Niger",
+        "sources": "USGS Major Deposits (OFR 2005-1294) - https://mrdata.usgs.gov/major-deposits/show-ofr20051294.php?rec_id=2598"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -11.583,
+          12.866
+        ]
+      },
+      "properties": {
+        "name": "Loulo-Gounkoto",
+        "description": "Complexe minier or, production ~600 000 oz/an",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Barrick Gold (80%), Etat du Mali (20%)",
+        "pays": "Mali",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -11.75,
+          13.616
+        ]
+      },
       "properties": {
         "name": "Sadiola",
-        "categorie": "Mines Legales",
-        "region": "Kayes",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "Allied Gold",
-        "pays_societe": "Canada",
-        "sources": "Ecofin Agency|https://www.ecofinagency.com/mining/1110-46005-mali-grants-10-year-mining-permit-for-sadiola-gold-mine"
+        "description": "Mine d'or a ciel ouvert, region de Kayes",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Allied Gold Corp (80%), Etat du Mali (20%)",
+        "pays": "Mali",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-11.70, 13.55] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -11.7,
+          13.45
+        ]
+      },
       "properties": {
-        "name": "Korali-Sud",
-        "categorie": "Mines Legales",
-        "region": "Kayes",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "Allied Gold",
-        "pays_societe": "Canada",
-        "sources": "Reuters|https://www.reuters.com/world/africa/mali-gold-output-plunges-23-barrick-halt-tougher-rules-reshape-sector-2026-01-16/"
+        "name": "Fekola",
+        "description": "Mine d'or, sud-ouest Mali",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "B2Gold Corp (80%), Etat du Mali (20%)",
+        "pays": "Mali",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-8.15, 11.18] },
-      "properties": {
-        "name": "Yanfolila",
-        "categorie": "Mines Legales",
-        "region": "Sikasso",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "Hummingbird Resources",
-        "pays_societe": "Royaume-Uni",
-        "sources": "Reuters|https://www.reuters.com/sustainability/mali-detains-five-gold-mine-managers-over-alleged-code-breaches-sources-say-2026-01-27/ APA News|https://fr.apanews.net/news/mali-le-projet-aurifere-de-yanfolila-passe-sous-controle-local/"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-5.93, 12.07] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.633,
+          11.767
+        ]
+      },
       "properties": {
         "name": "Morila",
-        "categorie": "Mines Legales",
-        "region": "Sikasso",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "Morila SA / SOREM / Flagship",
-        "pays_societe": "Mali / Etats-Unis",
-        "sources": "Reuters|https://www.reuters.com/world/africa/suspected-jihadists-attack-malis-morila-mine-2026-01-05/ APA News|https://fr.apanews.net/governance/mali-letat-reprend-la-mine-de-morila-apres-vingt-ans-de-gestion-privee/"
+        "description": "Mine d'or, sud Mali, retraitement des residus",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Firefinch Ltd",
+        "pays": "Mali",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-6.03, 12.56] },
-      "properties": {
-        "name": "Nampala",
-        "categorie": "Mines Legales",
-        "region": "Sikasso",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "Robex Resources",
-        "pays_societe": "Canada",
-        "sources": "Ecofin Agency|https://www.ecofinagency.com/mining/1110-46005-mali-grants-10-year-mining-permit-for-sadiola-gold-mine"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-8.25, 12.30] },
-      "properties": {
-        "name": "Kobada",
-        "categorie": "Mines Legales",
-        "region": "Koulikoro",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "Toubani Resources",
-        "pays_societe": "Australie",
-        "remarques": "Projet",
-        "sources": "Reuters|https://www.reuters.com/markets/commodities/mali-expects-rise-gold-output-2025-reopened-barrick-operations-2025-03-26/"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-6.00, 12.50] },
-      "properties": {
-        "name": "Nampala Sud",
-        "categorie": "Mines Legales",
-        "region": "Sikasso",
-        "type_exploitation": "Industrielle",
-        "statut": "Legale",
-        "societe": "Robex Resources",
-        "pays_societe": "Canada",
-        "sources": "Reuters|https://www.reuters.com/markets/commodities/mali-expects-rise-gold-output-2025-reopened-barrick-operations-2025-03-26/"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-7.05, 12.15] },
-      "properties": {
-        "name": "Kodieran / Faboula",
-        "categorie": "Mines Legales",
-        "region": "Sikasso / Koulikoro",
-        "type_exploitation": "Industrielle ou projet avance",
-        "statut": "Legale",
-        "societe": "Exploitants varies",
-        "pays_societe": "Divers",
-        "sources": "Reuters|https://www.reuters.com/markets/commodities/mali-expects-rise-gold-output-2025-reopened-barrick-operations-2025-03-26/"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-8.35, 11.58] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.2,
+          11.35
+        ]
+      },
       "properties": {
         "name": "Kalana",
-        "categorie": "Mines Fermees",
-        "region": "Sikasso",
-        "type_exploitation": "Industrielle",
+        "description": "Mine d'or a ciel ouvert, sud Mali",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Endeavour Mining",
+        "pays": "Mali",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -11.8,
+          13.95
+        ]
+      },
+      "properties": {
+        "name": "Yatela",
+        "description": "Mine d'or fermee, region de Kayes",
+        "type": "Or",
         "statut": "Fermee",
-        "societe": "Endeavour Mining",
-        "pays_societe": "Royaume-Uni",
-        "remarques": "Mine fermee, projet historique",
-        "sources": "Reuters|https://www.reuters.com/markets/commodities/mali-expects-rise-gold-output-2025-reopened-barrick-operations-2025-03-26/"
+        "operateur": "AngloGold Ashanti / IAMGOLD",
+        "pays": "Mali",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -11.467,
+          13.033
+        ]
+      },
+      "properties": {
+        "name": "Tabakoto",
+        "description": "Mine d'or souterraine, ouest Mali",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Endeavour Mining",
+        "pays": "Mali",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.05,
+          11.4
+        ]
+      },
+      "properties": {
+        "name": "Yanfolila (Komana)",
+        "description": "Mine d'or, sud Mali",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Hummingbird Resources",
+        "pays": "Mali",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.73,
+          11.55
+        ]
+      },
+      "properties": {
+        "name": "Goulamina",
+        "description": "Projet lithium, region de Bougouni",
+        "type": "Lithium",
+        "statut": "Active",
+        "operateur": "Leo Lithium / Ganfeng Lithium",
+        "pays": "Mali",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.05,
+          11.67
+        ]
+      },
+      "properties": {
+        "name": "Kodieran",
+        "description": "Mine d'or, sud Mali",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Wassoul'Or",
+        "pays": "Mali",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.267,
+          14.383
+        ]
+      },
+      "properties": {
+        "name": "Essakane",
+        "description": "Plus grande mine d'or du Burkina, ~400 000 oz/an",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "IAMGOLD (90%), Etat du BF (10%)",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.3,
+          11.333
+        ]
+      },
+      "properties": {
+        "name": "Hounde",
+        "description": "Mine d'or a ciel ouvert, region de Tuy",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Endeavour Mining (90%), Etat du BF (10%)",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.667,
+          14.133
+        ]
+      },
+      "properties": {
+        "name": "Inata",
+        "description": "Mine d'or, ceinture birimienne",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Avocet Mining (90%), Etat du BF (10%)",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.483,
+          11.85
+        ]
+      },
+      "properties": {
+        "name": "Mana (Siou-Fofina)",
+        "description": "Mine d'or, ceinture birimienne",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "SEMAFO / Endeavour Mining",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.233,
+          13.233
+        ]
+      },
+      "properties": {
+        "name": "Bissa-Bouly",
+        "description": "Complexe minier or, Sanmatenga",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Nordgold (90%), Etat du BF (10%)",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.35,
+          13.267
+        ]
+      },
+      "properties": {
+        "name": "Taparko-Bouroum",
+        "description": "Mine d'or, nord-est Burkina",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Nordgold",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.367,
+          11.467
+        ]
+      },
+      "properties": {
+        "name": "Youga",
+        "description": "Mine d'or, sud Burkina",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Endeavour Mining",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.783,
+          13.25
+        ]
+      },
+      "properties": {
+        "name": "Kalsaka",
+        "description": "Mine d'or, 150 km NW de Ouagadougou",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Kalsaka Mining SA",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.717,
+          13.833
+        ]
+      },
+      "properties": {
+        "name": "Karma",
+        "description": "Mine d'or, region de Yatenga",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Nere Mining (90%), Etat du BF (10%)",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.917,
+          12.583
+        ]
+      },
+      "properties": {
+        "name": "Bombore",
+        "description": "Mine d'or, production commerciale depuis 2022",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Orezone Gold Corporation",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.85,
+          12.4
+        ]
+      },
+      "properties": {
+        "name": "Sanbrado",
+        "description": "Mine d'or, ceinture birimienne",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "West African Resources",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.767,
+          10.633
+        ]
+      },
+      "properties": {
+        "name": "Wahgnion (Banfora)",
+        "description": "Mine d'or nationalisee en 2025",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "SOPAMIB (nationalise)",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.85,
+          12.533
+        ]
+      },
+      "properties": {
+        "name": "Boungou",
+        "description": "Mine d'or nationalisee en 2025, est du Burkina",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "SOPAMIB (nationalise)",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.217,
+          11.617
+        ]
+      },
+      "properties": {
+        "name": "Yaramoko",
+        "description": "Mine d'or souterraine haute teneur",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Fortuna Silver Mines",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.85,
+          11.5
+        ]
+      },
+      "properties": {
+        "name": "Kiaka",
+        "description": "Projet or en developpement",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "West African Resources",
+        "pays": "Burkina Faso",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.31,
+          18.675
+        ]
+      },
+      "properties": {
+        "name": "Akouta (COMINAK)",
+        "description": "Mine d'uranium souterraine, fermee en 2021",
+        "type": "Uranium",
+        "statut": "Fermee",
+        "operateur": "COMINAK (Orano/SOPAMIN)",
+        "pays": "Niger",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.3,
+          17.85
+        ]
+      },
+      "properties": {
+        "name": "Imouraren",
+        "description": "Plus grand gisement d'uranium en Afrique, exploitation suspendue",
+        "type": "Uranium",
+        "statut": "Active",
+        "operateur": "Orano / SOPAMIN",
+        "pays": "Niger",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.4,
+          18.7
+        ]
+      },
+      "properties": {
+        "name": "Madaouela",
+        "description": "Projet uranium, pres d'Arlit",
+        "type": "Uranium",
+        "statut": "Active",
+        "operateur": "GoviEx Uranium",
+        "pays": "Niger",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.55,
+          18.0
+        ]
+      },
+      "properties": {
+        "name": "Anou Araren",
+        "description": "Mine de charbon, centrale electrique d'Anou Araren",
+        "type": "Charbon",
+        "statut": "Active",
+        "operateur": "SONICHAR",
+        "pays": "Niger",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.75,
+          17.867
+        ]
+      },
+      "properties": {
+        "name": "Tchirozérine",
+        "description": "Exploitation artisanale d'etain et tungstene, region d'Agadez",
+        "type": "Etain, Tungstene",
+        "statut": "Artisanale",
+        "operateur": "Artisans locaux",
+        "pays": "Niger",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.05,
+          14.2
+        ]
+      },
+      "properties": {
+        "name": "Samira Hill",
+        "description": "Mine d'or, region du Liptako",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "SEMAFO / Societe des Mines du Liptako (SML)",
+        "pays": "Niger",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.3,
+          21.0
+        ]
+      },
+      "properties": {
+        "name": "Djado",
+        "description": "Zone d'orpaillage artisanal, nord-est Niger",
+        "type": "Or",
+        "statut": "Artisanale",
+        "operateur": "Orpailleurs artisanaux",
+        "pays": "Niger",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.75,
+          20.583
+        ]
+      },
+      "properties": {
+        "name": "Tasiast",
+        "description": "Grande mine d'or a ciel ouvert, ouest Mauritanie",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Kinross Gold",
+        "pays": "Mauritania",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12.533,
+          22.483
+        ]
+      },
+      "properties": {
+        "name": "M'Haoudat",
+        "description": "Mine de fer, district de Zouerate",
+        "type": "Fer",
+        "statut": "Active",
+        "operateur": "SNIM",
+        "pays": "Mauritania",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12.65,
+          22.7
+        ]
+      },
+      "properties": {
+        "name": "Kedia d'Idjil",
+        "description": "Mine de fer historique, district de Zouerate",
+        "type": "Fer",
+        "statut": "Active",
+        "operateur": "SNIM",
+        "pays": "Mauritania",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12.9,
+          22.45
+        ]
+      },
+      "properties": {
+        "name": "El Aouj",
+        "description": "Projet fer, extension sud de Zouerate",
+        "type": "Fer",
+        "statut": "Active",
+        "operateur": "SNIM",
+        "pays": "Mauritania",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.95,
+          19.6
+        ]
+      },
+      "properties": {
+        "name": "Chami",
+        "description": "Zone d'orpaillage artisanal, region d'Inchiri",
+        "type": "Or",
+        "statut": "Artisanale",
+        "operateur": "Orpailleurs artisanaux",
+        "pays": "Mauritania",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14.0,
+          20.0
+        ]
+      },
+      "properties": {
+        "name": "Tijirit (Eleonore)",
+        "description": "Mine d'or, region de l'Adrar",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Aura Minerals",
+        "pays": "Mauritania",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14.3,
+          21.3
+        ]
+      },
+      "properties": {
+        "name": "Tmeimichat",
+        "description": "Projet or, nord Mauritanie",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Algold Resources",
+        "pays": "Mauritania",
+        "sources": "Wikipedia / mining-technology.com / World Nuclear Association"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.205355,
+          11.037639
+        ]
+      },
+      "properties": {
+        "name": "V3 - Samnatenga",
+        "description": "Carriere/mine (OpenStreetMap)",
+        "type": "Inconnu",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Burkina Faso",
+        "sources": "OpenStreetMap - https://www.openstreetmap.org/node/801928855"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.150009,
+          22.659164
+        ]
+      },
+      "properties": {
+        "name": "Site OSM 2417989539",
+        "description": "Carriere/mine (OpenStreetMap)",
+        "type": "Sel",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mali",
+        "sources": "OpenStreetMap - https://www.openstreetmap.org/node/2417989539"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.494126,
+          12.26409
+        ]
+      },
+      "properties": {
+        "name": "orpaillage",
+        "description": "Site d'orpaillage artisanal (OpenStreetMap)",
+        "type": "Or",
+        "statut": "Artisanale",
+        "operateur": "",
+        "pays": "Burkina Faso",
+        "sources": "OpenStreetMap - https://www.openstreetmap.org/node/2460481871"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.493747,
+          12.266229
+        ]
+      },
+      "properties": {
+        "name": "orpaillage",
+        "description": "Site d'orpaillage artisanal (OpenStreetMap)",
+        "type": "Or",
+        "statut": "Artisanale",
+        "operateur": "",
+        "pays": "Burkina Faso",
+        "sources": "OpenStreetMap - https://www.openstreetmap.org/node/2460481875"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.740718,
+          17.515003
+        ]
+      },
+      "properties": {
+        "name": "Mine d'uranium d'Azelik",
+        "description": "Carriere/mine (OpenStreetMap)",
+        "type": "Inconnu",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Niger",
+        "sources": "OpenStreetMap - https://www.openstreetmap.org/node/8197432594"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -11.506688,
+          12.908765
+        ]
+      },
+      "properties": {
+        "name": "Afrigold Pit",
+        "description": "Carriere/mine (OpenStreetMap)",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "Afrigold",
+        "pays": "Mali",
+        "sources": "OpenStreetMap - https://www.openstreetmap.org/node/9212473067"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.24204,
+          10.980861
+        ]
+      },
+      "properties": {
+        "name": "Artisanal Mining",
+        "description": "Carriere/mine (OpenStreetMap)",
+        "type": "Or",
+        "statut": "Active",
+        "operateur": "",
+        "pays": "Mali",
+        "sources": "OpenStreetMap - https://www.openstreetmap.org/node/10902673623"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.19115,
+          11.62421
+        ]
+      },
+      "properties": {
+        "name": "mine lefa",
+        "description": "Puits de mine (OpenStreetMap)",
+        "type": "Or",
+        "statut": "Artisanale",
+        "operateur": "entreprises",
+        "pays": "Mali",
+        "sources": "OpenStreetMap - https://www.openstreetmap.org/node/10967420348"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.912145,
+          10.75137
+        ]
+      },
+      "properties": {
+        "name": "TRI-K Gold Mine",
+        "description": "Puits de mine (OpenStreetMap)",
+        "type": "Inconnu",
+        "statut": "Artisanale",
+        "operateur": "",
+        "pays": "Mali",
+        "sources": "OpenStreetMap - https://www.openstreetmap.org/node/11387537026"
       }
     }
   ]
