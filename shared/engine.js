@@ -708,18 +708,20 @@ function initHeatmap(features) {
       layout: { visibility: 'none' },
       paint: {
         'heatmap-weight': 1,
-        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 3, 0.8, 10, 2.5],
+        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 3, 2, 6, 3.5, 10, 5],
         'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'],
-          0,   'rgba(0,0,0,0)',
-          0.05, 'rgba(30,60,120,0.4)',
-          0.15, 'rgba(65,105,225,0.6)',
-          0.3, 'rgba(0,200,150,0.7)',
-          0.5, 'rgba(255,220,0,0.8)',
-          0.7, 'rgba(255,120,0,0.9)',
-          1.0, 'rgba(220,20,20,1)'
+          0,    'rgba(0,0,0,0)',
+          0.02, 'rgba(20,40,100,0.3)',
+          0.08, 'rgba(40,80,200,0.55)',
+          0.2,  'rgba(0,200,150,0.7)',
+          0.35, 'rgba(200,220,0,0.8)',
+          0.5,  'rgba(255,180,0,0.88)',
+          0.7,  'rgba(255,80,0,0.93)',
+          0.85, 'rgba(220,20,20,0.97)',
+          1.0,  'rgba(180,0,0,1)'
         ],
-        'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 3, 25, 7, 40, 12, 55],
-        'heatmap-opacity': 0.8,
+        'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 3, 50, 5, 65, 7, 80, 10, 100, 12, 120],
+        'heatmap-opacity': 0.9,
       }
     }, 'kml-dots-glow');
   }
@@ -729,7 +731,7 @@ function toggleHeatmap() {
   heatmapVisible = !heatmapVisible;
   var el = document.getElementById('btn-heatmap');
   if (el) el.classList.toggle('active', heatmapVisible);
-  // If no heatmap source yet, load from evenements calque + period data
+  // Load all attack data: evenements calque + all period files
   if (!map.getSource('heatmap-src') && heatmapVisible && !_heatmapCalqueLoaded) {
     _heatmapCalqueLoaded = true;
     var allPts = [];
@@ -738,13 +740,18 @@ function toggleHeatmap() {
       if (!geo || !geo.features) return;
       geo.features.forEach(function(f) { if (f.geometry && f.geometry.type === 'Point') allPts.push(f); });
     });
-    // Also fetch evenements calque for attack density
-    fetch('./evenements.geojson?v=' + Date.now()).then(function(r) { return r.json(); }).then(function(d) {
-      if (d && d.features) d.features.forEach(function(f) { if (f.geometry && f.geometry.type === 'Point') allPts.push(f); });
+    // Fetch evenements calque + all period files in parallel
+    var fetches = [fetch('./evenements.geojson?v=' + Date.now()).then(function(r) { return r.json(); }).catch(function() { return null; })];
+    if (typeof PERIODS !== 'undefined') PERIODS.forEach(function(p) {
+      fetches.push(fetch('./' + p.file + '?v=' + Date.now()).then(function(r) { return r.json(); }).catch(function() { return null; }));
+    });
+    Promise.all(fetches).then(function(results) {
+      results.forEach(function(d) {
+        if (!d || !d.features) return;
+        d.features.forEach(function(f) { if (f.geometry && f.geometry.type === 'Point') allPts.push(f); });
+      });
       initHeatmap(allPts);
       map.setLayoutProperty('heatmap-layer', 'visibility', 'visible');
-    }).catch(function() {
-      if (allPts.length) { initHeatmap(allPts); map.setLayoutProperty('heatmap-layer', 'visibility', 'visible'); }
     });
     return;
   }

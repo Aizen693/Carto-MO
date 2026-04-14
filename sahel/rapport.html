@@ -9,387 +9,282 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-:root {
-  --bg: #111214;
-  --bg1: #161819;
-  --bg2: #1b1d1f;
-  --bg3: #212326;
-  --ln: rgba(255,255,255,0.07);
-  --ln1: rgba(255,255,255,0.12);
-  --tx: #c8cdd6;
-  --tx1: #727a87;
-  --tx2: #3e444e;
-  --txh: #e8ecf2;
-  --ac: #c49a3c;
-  --ach: #e0b452;
-  --acd: rgba(196,154,60,0.09);
-  --acb: rgba(196,154,60,0.20);
-  --bc: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  --b: 'Barlow', system-ui, sans-serif;
-  --m: 'JetBrains Mono', 'Courier New', monospace;
-}
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { font-family: var(--m); background: var(--bg); color: var(--tx); -webkit-font-smoothing: antialiased; }
-body { min-height: 100vh; }
-
-#header {
-  height: 44px; background: var(--bg1); border-bottom: 1px solid var(--ln);
-  display: flex; align-items: center; padding: 0 24px; gap: 16px;
-  position: sticky; top: 0; z-index: 100;
-}
-#header h1 { font-family: var(--bc); font-size: 13px; font-weight: 600; color: var(--txh); letter-spacing: 0.05em; text-transform: uppercase; }
-.hdr-sep { width: 1px; height: 20px; background: var(--ln); }
-.hdr-tag { font-family: var(--m); font-size: 9px; color: var(--ac); letter-spacing: 0.12em; text-transform: uppercase; }
-.hdr-spacer { flex: 1; }
-.hdr-back { font-family: var(--m); font-size: 9px; color: var(--tx1); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.15s; display: flex; align-items: center; gap: 6px; }
-.hdr-back:hover { color: var(--ac); }
-
-#main { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
-
-.hero-label { font-family: var(--m); font-size: 9px; color: var(--ac); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
-.hero-title { font-family: var(--bc); font-size: 32px; font-weight: 600; color: var(--txh); letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.15; margin-bottom: 6px; }
-.hero-sub { font-family: var(--b); font-size: 13px; color: var(--tx1); line-height: 1.6; max-width: 650px; margin-bottom: 40px; }
-
-.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 48px; }
-.metric-card { background: var(--bg1); border: 1px solid var(--ln); padding: 18px 20px; }
-.metric-label { font-family: var(--m); font-size: 8px; color: var(--tx2); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px; }
-.metric-value { font-family: var(--bc); font-size: 28px; font-weight: 600; color: var(--txh); }
-.metric-value small { font-size: 12px; color: var(--tx1); font-weight: 400; margin-left: 4px; }
-
-.section { margin-bottom: 48px; }
-.section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
-.section-num { font-family: var(--m); font-size: 9px; color: var(--ac); letter-spacing: 0.15em; }
-.section-title { font-family: var(--bc); font-size: 18px; font-weight: 600; color: var(--txh); letter-spacing: 0.04em; text-transform: uppercase; }
-.section-desc { font-family: var(--b); font-size: 11px; color: var(--tx1); margin-bottom: 20px; line-height: 1.6; }
-
-.chart-box { background: var(--bg1); border: 1px solid var(--ln); padding: 24px; position: relative; }
-.chart-wrap { position: relative; width: 100%; height: 320px; }
-.chart-wrap-sm { position: relative; width: 100%; height: 260px; }
-
-.legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 16px; }
-.legend-item { display: flex; align-items: center; gap: 5px; font-family: var(--m); font-size: 8px; color: var(--tx1); }
-.legend-dot { width: 8px; height: 8px; flex-shrink: 0; }
-
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-.locked-section { background: var(--bg1); border: 1px solid var(--acb); padding: 48px 40px; text-align: center; position: relative; margin-top: 48px; }
-.locked-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--ac), transparent); }
-.lock-icon { width: 40px; height: 40px; border: 1px solid var(--acb); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-.lock-icon svg { stroke: var(--ac); }
-.locked-title { font-family: var(--bc); font-size: 22px; font-weight: 600; color: var(--txh); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
-.locked-desc { font-family: var(--b); font-size: 12px; color: var(--tx1); line-height: 1.7; max-width: 500px; margin: 0 auto 24px; }
-.locked-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 28px; }
-.locked-tag { font-family: var(--m); font-size: 8px; color: var(--ac); background: var(--acd); border: 1px solid var(--acb); padding: 4px 10px; letter-spacing: 0.1em; text-transform: uppercase; }
-.locked-cta { display: inline-block; font-family: var(--bc); font-size: 13px; font-weight: 600; color: var(--bg); background: var(--ac); padding: 10px 32px; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: none; transition: background 0.15s; }
-.locked-cta:hover { background: var(--ach); }
-
-#footer { border-top: 1px solid var(--ln); padding: 16px 24px; display: flex; align-items: center; justify-content: center; font-family: var(--m); font-size: 7px; color: var(--tx2); letter-spacing: 0.14em; text-transform: uppercase; }
-
-#loading { text-align: center; padding: 80px 0; font-family: var(--m); font-size: 11px; color: var(--tx1); letter-spacing: 0.1em; }
-
-@media (max-width: 800px) {
-  .metrics { grid-template-columns: repeat(2, 1fr); }
-  .two-col { grid-template-columns: 1fr; }
-}
+:root{--bg:#111214;--bg1:#161819;--bg2:#1b1d1f;--bg3:#212326;--ln:rgba(255,255,255,0.07);--ln1:rgba(255,255,255,0.12);--tx:#c8cdd6;--tx1:#727a87;--tx2:#3e444e;--txh:#e8ecf2;--ac:#c49a3c;--ach:#e0b452;--acd:rgba(196,154,60,0.09);--acb:rgba(196,154,60,0.20);--bc:'Barlow Condensed','Arial Narrow',sans-serif;--b:'Barlow',system-ui,sans-serif;--m:'JetBrains Mono','Courier New',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-family:var(--m);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased}
+body{min-height:100vh}
+#header{height:44px;background:var(--bg1);border-bottom:1px solid var(--ln);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100}
+#header h1{font-family:var(--bc);font-size:13px;font-weight:600;color:var(--txh);letter-spacing:.05em;text-transform:uppercase}
+.hdr-sep{width:1px;height:20px;background:var(--ln)}
+.hdr-tag{font-family:var(--m);font-size:9px;color:var(--ac);letter-spacing:.12em;text-transform:uppercase}
+.hdr-spacer{flex:1}
+.hdr-back{font-family:var(--m);font-size:9px;color:var(--tx1);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .15s;display:flex;align-items:center;gap:6px}
+.hdr-back:hover{color:var(--ac)}
+#main{max-width:1200px;margin:0 auto;padding:40px 24px 80px}
+.hero-label{font-family:var(--m);font-size:9px;color:var(--ac);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+.hero-title{font-family:var(--bc);font-size:32px;font-weight:600;color:var(--txh);letter-spacing:.03em;text-transform:uppercase;line-height:1.15;margin-bottom:6px}
+.hero-sub{font-family:var(--b);font-size:13px;color:var(--tx1);line-height:1.6;max-width:650px;margin-bottom:40px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:48px}
+.metric-card{background:var(--bg1);border:1px solid var(--ln);padding:18px 20px}
+.metric-label{font-family:var(--m);font-size:8px;color:var(--tx2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+.metric-value{font-family:var(--bc);font-size:28px;font-weight:600;color:var(--txh)}
+.metric-value small{font-size:12px;color:var(--tx1);font-weight:400;margin-left:4px}
+.section{margin-bottom:48px}
+.section-header{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.section-num{font-family:var(--m);font-size:9px;color:var(--ac);letter-spacing:.15em}
+.section-title{font-family:var(--bc);font-size:18px;font-weight:600;color:var(--txh);letter-spacing:.04em;text-transform:uppercase}
+.section-desc{font-family:var(--b);font-size:11px;color:var(--tx1);margin-bottom:20px;line-height:1.6}
+.chart-box{background:var(--bg1);border:1px solid var(--ln);padding:24px;position:relative}
+.chart-wrap{position:relative;width:100%;height:340px}
+.chart-wrap-sm{position:relative;width:100%;height:280px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:16px}
+.legend-item{display:flex;align-items:center;gap:5px;font-family:var(--m);font-size:8px;color:var(--tx1)}
+.legend-dot{width:8px;height:8px;flex-shrink:0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.locked-section{background:var(--bg1);border:1px solid var(--acb);padding:48px 40px;text-align:center;position:relative;margin-top:48px}
+.locked-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ac),transparent)}
+.lock-icon{width:40px;height:40px;border:1px solid var(--acb);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.lock-icon svg{stroke:var(--ac)}
+.locked-title{font-family:var(--bc);font-size:22px;font-weight:600;color:var(--txh);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
+.locked-desc{font-family:var(--b);font-size:12px;color:var(--tx1);line-height:1.7;max-width:500px;margin:0 auto 24px}
+.locked-list{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:28px}
+.locked-tag{font-family:var(--m);font-size:8px;color:var(--ac);background:var(--acd);border:1px solid var(--acb);padding:4px 10px;letter-spacing:.1em;text-transform:uppercase}
+.locked-cta{display:inline-block;font-family:var(--bc);font-size:13px;font-weight:600;color:var(--bg);background:var(--ac);padding:10px 32px;text-transform:uppercase;letter-spacing:.06em;text-decoration:none;transition:background .15s}
+.locked-cta:hover{background:var(--ach)}
+#footer{border-top:1px solid var(--ln);padding:16px 24px;display:flex;align-items:center;justify-content:center;font-family:var(--m);font-size:7px;color:var(--tx2);letter-spacing:.14em;text-transform:uppercase}
+#loading{text-align:center;padding:80px 0;font-family:var(--m);font-size:11px;color:var(--tx1);letter-spacing:.1em}
+.data-table{width:100%;border-collapse:collapse;margin-top:16px}
+.data-table th,.data-table td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--ln);font-family:var(--m);font-size:9px}
+.data-table th{color:var(--tx2);text-transform:uppercase;letter-spacing:.1em;font-weight:400;font-size:7px}
+.data-table td{color:var(--tx)}
+.data-table tr:hover td{background:var(--bg2)}
+.tag{display:inline-block;font-family:var(--m);font-size:7px;padding:2px 6px;letter-spacing:.08em;text-transform:uppercase;border:1px solid}
+@media(max-width:800px){.metrics{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
 <div id="header">
-  <h1>Algor Int</h1>
-  <div class="hdr-sep"></div>
-  <span class="hdr-tag">Rapport analytique</span>
+  <h1>Algor Int</h1><div class="hdr-sep"></div>
+  <span class="hdr-tag">Rapport analytique · Calques</span>
   <div class="hdr-spacer"></div>
   <a class="hdr-back" href="./index.html">&larr; Retour carte</a>
 </div>
-
 <div id="main">
-  <div class="hero-label">Sahel · Mali · Burkina Faso · Niger · 2026</div>
+  <div class="hero-label">Sahel · Mali · Burkina Faso · Niger · Mauritanie · Tchad</div>
   <div class="hero-title">Analyse multicouche du theatre sahelien</div>
-  <div class="hero-sub">Rapport de synthese base sur 8 calques superposables couvrant les dynamiques securitaires, ethniques, demographiques et logistiques du Sahel. Donnees issues des sources OSINT Algor Int.</div>
-
-  <div id="loading">Chargement des calques...</div>
-  <div id="content" style="display:none">
-
-    <!-- METRICS -->
-    <div class="metrics">
-      <div class="metric-card"><div class="metric-label">Evenements securitaires</div><div class="metric-value" id="m-events">--</div></div>
-      <div class="metric-card"><div class="metric-label">Bases / forces</div><div class="metric-value" id="m-forces">--</div></div>
-      <div class="metric-card"><div class="metric-label">Infrastructures</div><div class="metric-value" id="m-infra">--</div></div>
-      <div class="metric-card"><div class="metric-label">Calques actifs</div><div class="metric-value">8</div></div>
-    </div>
-
-    <!-- SECTION 1 : REPARTITION PAR CALQUE -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-num">01</span>
-        <span class="section-title">Volume par calque</span>
-      </div>
-      <div class="section-desc">Nombre de features (points, lignes, polygones) par couche thematique. Les calques points d'eau et mines representent les donnees les plus volumineuses.</div>
-      <div class="legend" id="legend-1"></div>
-      <div class="chart-box">
-        <div class="chart-wrap"><canvas id="chart-bars"></canvas></div>
-      </div>
-    </div>
-
-    <!-- SECTION 2 + 3 -->
-    <div class="section">
-      <div class="two-col">
-        <div>
-          <div class="section-header">
-            <span class="section-num">02</span>
-            <span class="section-title">Repartition par pays</span>
-          </div>
-          <div class="section-desc">Distribution geographique des evenements securitaires et des forces armees par pays.</div>
-          <div class="chart-box">
-            <div class="chart-wrap-sm"><canvas id="chart-pays"></canvas></div>
-          </div>
-        </div>
-        <div>
-          <div class="section-header">
-            <span class="section-num">03</span>
-            <span class="section-title">Types d'evenements</span>
-          </div>
-          <div class="section-desc">Ventilation des evenements securitaires par categorie (attaques, incidents frontaliers, crises).</div>
-          <div class="chart-box">
-            <div class="chart-wrap-sm"><canvas id="chart-types"></canvas></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION 4 : FORCES -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-num">04</span>
-        <span class="section-title">Forces en presence</span>
-      </div>
-      <div class="section-desc">Repartition des bases et garnisons par force armee sur le theatre sahelien.</div>
-      <div class="legend" id="legend-forces"></div>
-      <div class="chart-box">
-        <div class="chart-wrap-sm"><canvas id="chart-forces"></canvas></div>
-      </div>
-    </div>
-
-    <!-- SECTION 5 : INFRA -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-num">05</span>
-        <span class="section-title">Infrastructures par type</span>
-      </div>
-      <div class="section-desc">Repartition des infrastructures strategiques par categorie (aeroports, ports, hubs logistiques, depots).</div>
-      <div class="chart-box">
-        <div class="chart-wrap-sm"><canvas id="chart-infra"></canvas></div>
-      </div>
-    </div>
-
-    <!-- LOCKED -->
-    <div class="locked-section">
-      <div class="lock-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="11" width="18" height="11" rx="0"/>
-          <path d="M7 11V7a5 5 0 0110 0v4"/>
-        </svg>
-      </div>
-      <div class="locked-title">Rapports detailles disponibles</div>
-      <div class="locked-desc">Les graphiques ci-dessus representent un apercu des capacites d'analyse Algor Int. Les rapports complets incluent des analyses croisees, projections operationnelles et flux temps reel.</div>
-      <div class="locked-list">
-        <span class="locked-tag">Fiches acteurs detaillees</span>
-        <span class="locked-tag">Analyse reseaux</span>
-        <span class="locked-tag">Heatmaps temporelles</span>
-        <span class="locked-tag">Projections menaces</span>
-        <span class="locked-tag">Rapports PDF personnalises</span>
-        <span class="locked-tag">Flux temps reel</span>
-      </div>
-      <a class="locked-cta" href="mailto:contact@algor-int.com">Contacter Algor Int</a>
-    </div>
-
-  </div>
+  <div class="hero-sub">Synthese analytique generee dynamiquement a partir des 8 calques overlay : ethnies, forces armees, infrastructures, evenements securitaires, population deplacee, ressources minieres, points d'eau, flux et trafics.</div>
+  <div id="loading">Chargement des 8 calques...</div>
+  <div id="content" style="display:none"></div>
 </div>
-
 <div id="footer">Algor Int · Rapport analytique · Sahel · Usage restreint</div>
 
 <script>
-var CALQUES = [
-  { id: 'ethnies',         file: 'ethnies.geojson',         label: 'Ethnies',         color: '#e07c5a' },
-  { id: 'forces',          file: 'forces.geojson',          label: 'Forces',          color: '#e63946' },
-  { id: 'points-eau',      file: 'points-eau.geojson',      label: 'Points d\'eau',   color: '#29b6f6' },
-  { id: 'population',      file: 'population.geojson',      label: 'Population',      color: '#ab47bc' },
-  { id: 'mines',           file: 'mines.geojson',           label: 'Mines',           color: '#d4a017' },
-  { id: 'infrastructures', file: 'infrastructures.geojson', label: 'Infrastructures', color: '#66bb6a' },
-  { id: 'evenements',      file: 'evenements.geojson',      label: 'Evenements',      color: '#ff5252' },
-  { id: 'flux',            file: 'flux.geojson',            label: 'Flux',            color: '#ff9800' }
-];
+var CALQUES = {
+  ethnies:         { file: 'ethnies.geojson',         label: 'Ethnies',          color: '#e07c5a' },
+  forces:          { file: 'forces.geojson',          label: 'Forces',           color: '#e63946' },
+  'points-eau':    { file: 'points-eau.geojson',      label: 'Points d\'eau',    color: '#29b6f6' },
+  population:      { file: 'population.geojson',      label: 'Population',       color: '#ab47bc' },
+  mines:           { file: 'mines.geojson',           label: 'Mines',            color: '#d4a017' },
+  infrastructures: { file: 'infrastructures.geojson', label: 'Infrastructures',  color: '#66bb6a' },
+  evenements:      { file: 'evenements.geojson',      label: 'Evenements',       color: '#ff5252' },
+  flux:            { file: 'flux.geojson',            label: 'Flux & trafics',   color: '#ff9800' }
+};
+var GC = 'rgba(255,255,255,0.06)', TC = 'rgba(255,255,255,0.4)', CF = { family: "'JetBrains Mono'" };
 
-var gridColor = 'rgba(255,255,255,0.06)';
-var tickColor = 'rgba(255,255,255,0.4)';
-var chartFont = { family: "'JetBrains Mono'" };
+function countBy(features, key) {
+  var m = {};
+  features.forEach(function(f) { var v = (f.properties[key] || 'Non precise').toString().trim(); if (v) m[v] = (m[v] || 0) + 1; });
+  return m;
+}
+function sortDesc(obj) {
+  return Object.entries(obj).sort(function(a, b) { return b[1] - a[1]; });
+}
+function detectPays(f) {
+  var p = f.properties, pays = p.pays || '';
+  if (!pays && p['Pays + Lieu']) pays = p['Pays + Lieu'].split(' - ')[0].trim();
+  if (!pays && f.geometry && f.geometry.coordinates) {
+    var lng = Array.isArray(f.geometry.coordinates[0]) ? f.geometry.coordinates[0][0] : f.geometry.coordinates[0];
+    var lat = Array.isArray(f.geometry.coordinates[0]) ? f.geometry.coordinates[0][1] : f.geometry.coordinates[1];
+    if (lng < -12) pays = 'Mauritanie';
+    else if (lng < -5 && lat > 14) pays = 'Mauritanie';
+    else if (lng < -3 && lat > 10) pays = 'Mali';
+    else if (lng < 0.5 && lat < 15.5) pays = 'Burkina Faso';
+    else if (lng < 5) pays = 'Niger';
+    else if (lng > 10) pays = 'Tchad';
+    else pays = 'Mali';
+  }
+  if (pays.indexOf('Mali') !== -1) return 'Mali';
+  if (pays.indexOf('Burkina') !== -1) return 'Burkina Faso';
+  if (pays.indexOf('Niger') !== -1) return 'Niger';
+  if (pays.indexOf('Mauritani') !== -1) return 'Mauritanie';
+  if (pays.indexOf('Tchad') !== -1) return 'Tchad';
+  if (pays.indexOf('Ghana') !== -1) return 'Ghana';
+  if (pays.indexOf('Ivoire') !== -1) return 'Cote d\'Ivoire';
+  return pays || 'Non precise';
+}
 
 // Load all calques
-Promise.all(CALQUES.map(function(c) {
-  return fetch('./' + c.file + '?v=' + Date.now()).then(function(r) { return r.json(); }).then(function(d) {
-    c.data = d;
-    c.count = d.features ? d.features.length : 0;
-    return c;
-  }).catch(function() { c.data = { features: [] }; c.count = 0; return c; });
-})).then(function(calques) {
+var keys = Object.keys(CALQUES);
+Promise.all(keys.map(function(k) {
+  return fetch('./' + CALQUES[k].file + '?v=' + Date.now()).then(function(r) { return r.json(); }).then(function(d) {
+    CALQUES[k].data = d; CALQUES[k].count = d.features ? d.features.length : 0;
+  }).catch(function() { CALQUES[k].data = { features: [] }; CALQUES[k].count = 0; });
+})).then(function() {
   document.getElementById('loading').style.display = 'none';
-  document.getElementById('content').style.display = 'block';
+  var ct = document.getElementById('content'); ct.style.display = 'block';
 
-  var evts = calques.find(function(c) { return c.id === 'evenements'; });
-  var forces = calques.find(function(c) { return c.id === 'forces'; });
-  var infra = calques.find(function(c) { return c.id === 'infrastructures'; });
+  var evts = CALQUES.evenements, forces = CALQUES.forces, infra = CALQUES.infrastructures;
+  var pop = CALQUES.population, flux = CALQUES.flux, mines = CALQUES.mines;
+  var eau = CALQUES['points-eau'], ethnies = CALQUES.ethnies;
 
-  // Metrics
-  document.getElementById('m-events').textContent = evts.count;
-  document.getElementById('m-forces').textContent = forces.count;
-  document.getElementById('m-infra').textContent = infra.count;
-
-  // ── CHART 1: Volume par calque (bar) ──
-  var leg1 = document.getElementById('legend-1');
-  calques.forEach(function(c) {
-    var d = document.createElement('div');
-    d.className = 'legend-item';
-    d.innerHTML = '<div class="legend-dot" style="background:' + c.color + '"></div>' + c.label;
-    leg1.appendChild(d);
-  });
-  new Chart(document.getElementById('chart-bars'), {
-    type: 'bar',
-    data: {
-      labels: calques.map(function(c) { return c.label; }),
-      datasets: [{
-        data: calques.map(function(c) { return c.count; }),
-        backgroundColor: calques.map(function(c) { return c.color + 'cc'; }),
-        borderColor: calques.map(function(c) { return c.color; }),
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { color: gridColor }, ticks: { color: tickColor, font: Object.assign({ size: 9 }, chartFont), maxRotation: 45 } },
-        y: { grid: { color: gridColor }, ticks: { color: tickColor, font: Object.assign({ size: 9 }, chartFont) }, beginAtZero: true }
-      }
-    }
+  var totalPts = keys.reduce(function(s, k) { return s + CALQUES[k].count; }, 0);
+  var totalDeplaces = 0;
+  if (pop.data.features) pop.data.features.forEach(function(f) {
+    totalDeplaces += parseInt(f.properties.personnes || 0);
   });
 
-  // ── CHART 2: Repartition par pays (donut) ──
-  var paysCounts = {};
-  [evts, forces].forEach(function(c) {
-    if (!c.data.features) return;
-    c.data.features.forEach(function(f) {
-      var p = f.properties;
-      var pays = (p.pays || p['Pays + Lieu'] || '').toString().split(' - ')[0].trim();
-      if (!pays) {
-        // Try to detect from coordinates
-        var lng = f.geometry && f.geometry.coordinates ? f.geometry.coordinates[0] : 0;
-        if (lng < -5) pays = 'Mali';
-        else if (lng < 0.5) pays = 'Burkina Faso';
-        else if (lng < 5) pays = 'Niger';
-        else if (lng > 10) pays = 'Tchad';
-        else pays = 'Autre';
-      }
-      // Normalize
-      if (pays.indexOf('Mali') !== -1) pays = 'Mali';
-      else if (pays.indexOf('Burkina') !== -1) pays = 'Burkina Faso';
-      else if (pays.indexOf('Niger') !== -1) pays = 'Niger';
-      else if (pays.indexOf('Mauritani') !== -1) pays = 'Mauritanie';
-      else if (pays.indexOf('Tchad') !== -1) pays = 'Tchad';
-      paysCounts[pays] = (paysCounts[pays] || 0) + 1;
-    });
+  // ── METRICS ──
+  ct.innerHTML = '<div class="metrics">' +
+    '<div class="metric-card"><div class="metric-label">Total features</div><div class="metric-value">' + totalPts.toLocaleString('fr') + '</div></div>' +
+    '<div class="metric-card"><div class="metric-label">Attaques / evenements</div><div class="metric-value">' + evts.count + '</div></div>' +
+    '<div class="metric-card"><div class="metric-label">Deplaces / refugies</div><div class="metric-value">' + (totalDeplaces > 1000000 ? (totalDeplaces / 1000000).toFixed(1) + '<small>M</small>' : totalDeplaces.toLocaleString('fr')) + '</div></div>' +
+    '<div class="metric-card"><div class="metric-label">Calques</div><div class="metric-value">8</div></div>' +
+  '</div>';
+
+  // ── S1: VOLUME PAR CALQUE (radar) ──
+  ct.innerHTML += '<div class="section"><div class="section-header"><span class="section-num">01</span><span class="section-title">Empreinte par calque</span></div>' +
+    '<div class="section-desc">Volume de donnees par couche thematique. Le radar montre la densite relative de chaque calque (echelle logarithmique pour compenser l\'ecart entre points d\'eau et evenements).</div>' +
+    '<div class="chart-box"><div class="chart-wrap"><canvas id="c1"></canvas></div></div></div>';
+
+  var radarLabels = keys.map(function(k) { return CALQUES[k].label; });
+  var radarData = keys.map(function(k) { return Math.log10(CALQUES[k].count + 1); });
+  var radarColors = keys.map(function(k) { return CALQUES[k].color; });
+  new Chart(document.getElementById('c1'), {
+    type: 'radar',
+    data: { labels: radarLabels, datasets: [{ data: radarData, backgroundColor: 'rgba(196,154,60,0.12)', borderColor: '#c49a3c', borderWidth: 2, pointBackgroundColor: radarColors, pointRadius: 5, pointHoverRadius: 8 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(ctx) { return keys[ctx.dataIndex] ? CALQUES[keys[ctx.dataIndex]].label + ': ' + CALQUES[keys[ctx.dataIndex]].count + ' features' : ''; } } } },
+      scales: { r: { angleLines: { color: GC }, grid: { color: GC }, pointLabels: { color: TC, font: Object.assign({ size: 10 }, CF) }, ticks: { display: false } } } }
   });
-  var paysColors = { 'Mali': '#e63946', 'Burkina Faso': '#ff9800', 'Niger': '#66bb6a', 'Mauritanie': '#29b6f6', 'Tchad': '#ab47bc', 'Autre': '#78909c' };
-  var paysLabels = Object.keys(paysCounts).sort(function(a, b) { return paysCounts[b] - paysCounts[a]; });
-  new Chart(document.getElementById('chart-pays'), {
+
+  // ── S2 + S3: EVENEMENTS PAR TYPE + PAR PAYS ──
+  ct.innerHTML += '<div class="section"><div class="two-col"><div>' +
+    '<div class="section-header"><span class="section-num">02</span><span class="section-title">Evenements par type</span></div>' +
+    '<div class="section-desc">Ventilation des ' + evts.count + ' evenements securitaires par categorie.</div>' +
+    '<div class="chart-box"><div class="chart-wrap-sm"><canvas id="c2"></canvas></div></div></div><div>' +
+    '<div class="section-header"><span class="section-num">03</span><span class="section-title">Evenements par pays</span></div>' +
+    '<div class="section-desc">Repartition geographique des attaques et incidents frontaliers.</div>' +
+    '<div class="chart-box"><div class="chart-wrap-sm"><canvas id="c3"></canvas></div></div></div></div></div>';
+
+  var typeMap = countBy(evts.data.features || [], 'type');
+  var typeSorted = sortDesc(typeMap);
+  var typeColors = { 'Attaque': '#ff1744', 'Incident frontalier': '#ff6d00', 'Siege': '#d50000', 'Crise diplomatique': '#ab47bc', 'Economique': '#ffd740', 'Geopolitique': '#7b1fa2' };
+  new Chart(document.getElementById('c2'), {
     type: 'doughnut',
-    data: {
-      labels: paysLabels,
-      datasets: [{ data: paysLabels.map(function(k) { return paysCounts[k]; }), backgroundColor: paysLabels.map(function(k) { return paysColors[k] || '#888'; }), borderColor: '#111214', borderWidth: 2 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: true, position: 'right', labels: { color: tickColor, font: Object.assign({ size: 9 }, chartFont), boxWidth: 10, padding: 8 } } }
-    }
+    data: { labels: typeSorted.map(function(e) { return e[0]; }), datasets: [{ data: typeSorted.map(function(e) { return e[1]; }), backgroundColor: typeSorted.map(function(e) { return typeColors[e[0]] || '#888'; }), borderColor: '#111214', borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8, padding: 6 } } } }
   });
 
-  // ── CHART 3: Types d'evenements (donut) ──
-  var typeCounts = {};
-  if (evts.data.features) evts.data.features.forEach(function(f) {
-    var t = f.properties.type || 'Autre';
-    typeCounts[t] = (typeCounts[t] || 0) + 1;
-  });
-  var typeColors = { 'Attaque': '#ff1744', 'Incident frontalier': '#ff6d00', 'Crise diplomatique': '#ff6d00', 'Economique': '#ffd740', 'Geopolitique': '#ab47bc', 'Siege': '#d50000', 'Embuscades': '#e53935' };
-  var typeLabels = Object.keys(typeCounts).sort(function(a, b) { return typeCounts[b] - typeCounts[a]; });
-  new Chart(document.getElementById('chart-types'), {
+  var paysEvts = {};
+  (evts.data.features || []).forEach(function(f) { var p = detectPays(f); paysEvts[p] = (paysEvts[p] || 0) + 1; });
+  var paysSorted = sortDesc(paysEvts);
+  var paysColors = { 'Mali': '#e63946', 'Burkina Faso': '#ff9800', 'Niger': '#66bb6a', 'Mauritanie': '#29b6f6', 'Tchad': '#ab47bc' };
+  new Chart(document.getElementById('c3'), {
     type: 'doughnut',
-    data: {
-      labels: typeLabels,
-      datasets: [{ data: typeLabels.map(function(k) { return typeCounts[k]; }), backgroundColor: typeLabels.map(function(k) { return typeColors[k] || '#888'; }), borderColor: '#111214', borderWidth: 2 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: true, position: 'right', labels: { color: tickColor, font: Object.assign({ size: 9 }, chartFont), boxWidth: 10, padding: 8 } } }
-    }
+    data: { labels: paysSorted.map(function(e) { return e[0]; }), datasets: [{ data: paysSorted.map(function(e) { return e[1]; }), backgroundColor: paysSorted.map(function(e) { return paysColors[e[0]] || '#78909c'; }), borderColor: '#111214', borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8, padding: 6 } } } }
   });
 
-  // ── CHART 4: Forces par force (horizontal bar) ──
-  var forceCounts = {};
+  // ── S4: FORCES PAR PAYS (stacked bar) ──
+  ct.innerHTML += '<div class="section"><div class="section-header"><span class="section-num">04</span><span class="section-title">Dispositif militaire par pays</span></div>' +
+    '<div class="section-desc">Repartition des bases, QG et garnisons par force armee et par pays. Inclut les milices pro-gouvernementales et forces conjointes.</div>' +
+    '<div class="legend" id="leg-forces"></div><div class="chart-box"><div class="chart-wrap-sm"><canvas id="c4"></canvas></div></div></div>';
+
+  var forcesByPays = {};
+  var allForces = {};
   var forceColors = { 'FAMA': '#2e7d32', 'FAMA / Wagner': '#6c757d', 'FAN': '#558b2f', 'ANA': '#33691e', 'VDP': '#ccaa00', 'Dan Nan Ambassagou': '#d4a017', 'ANT': '#7cb342' };
-  if (forces.data.features) forces.data.features.forEach(function(f) {
-    var fc = f.properties.force || f.properties.type || 'Autre';
-    forceCounts[fc] = (forceCounts[fc] || 0) + 1;
+  (forces.data.features || []).forEach(function(f) {
+    var p = detectPays(f), fc = f.properties.force || 'Autre';
+    allForces[fc] = true;
+    if (!forcesByPays[p]) forcesByPays[p] = {};
+    forcesByPays[p][fc] = (forcesByPays[p][fc] || 0) + 1;
   });
-  var forceLabels = Object.keys(forceCounts).sort(function(a, b) { return forceCounts[b] - forceCounts[a]; });
-  var legF = document.getElementById('legend-forces');
-  forceLabels.forEach(function(k) {
-    var d = document.createElement('div');
-    d.className = 'legend-item';
-    d.innerHTML = '<div class="legend-dot" style="background:' + (forceColors[k] || '#888') + '"></div>' + k;
+  var fpLabels = Object.keys(forcesByPays).sort();
+  var forceNames = Object.keys(allForces).sort();
+  var legF = document.getElementById('leg-forces');
+  forceNames.forEach(function(fc) {
+    var d = document.createElement('div'); d.className = 'legend-item';
+    d.innerHTML = '<div class="legend-dot" style="background:' + (forceColors[fc] || '#888') + '"></div>' + fc;
     legF.appendChild(d);
   });
-  new Chart(document.getElementById('chart-forces'), {
+  new Chart(document.getElementById('c4'), {
     type: 'bar',
-    data: {
-      labels: forceLabels,
-      datasets: [{ data: forceLabels.map(function(k) { return forceCounts[k]; }), backgroundColor: forceLabels.map(function(k) { return (forceColors[k] || '#888') + 'cc'; }), borderColor: forceLabels.map(function(k) { return forceColors[k] || '#888'; }), borderWidth: 1 }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { color: gridColor }, ticks: { color: tickColor, font: Object.assign({ size: 9 }, chartFont), stepSize: 1 }, beginAtZero: true },
-        y: { grid: { color: gridColor }, ticks: { color: tickColor, font: Object.assign({ size: 9 }, chartFont) } }
-      }
-    }
+    data: { labels: fpLabels, datasets: forceNames.map(function(fc) { return { label: fc, data: fpLabels.map(function(p) { return (forcesByPays[p] || {})[fc] || 0; }), backgroundColor: (forceColors[fc] || '#888') + 'cc', borderColor: forceColors[fc] || '#888', borderWidth: 0.5 }; }) },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF) } }, y: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF), stepSize: 1 }, beginAtZero: true } } }
   });
 
-  // ── CHART 5: Infrastructures par type (horizontal bar) ──
-  var infraCounts = {};
-  if (infra.data.features) infra.data.features.forEach(function(f) {
-    if (f.geometry.type !== 'Point') return; // Only points, not lines
-    var t = f.properties.type || 'Autre';
-    infraCounts[t] = (infraCounts[t] || 0) + 1;
-  });
+  // ── S5: INFRASTRUCTURES PAR TYPE + PAYS (grouped bar) ──
+  ct.innerHTML += '<div class="section"><div class="section-header"><span class="section-num">05</span><span class="section-title">Infrastructures strategiques</span></div>' +
+    '<div class="section-desc">Repartition des aeroports, ports, hubs logistiques et depots par pays. Seuls les points sont comptabilises (les axes routiers sont exclus).</div>' +
+    '<div class="chart-box"><div class="chart-wrap-sm"><canvas id="c5"></canvas></div></div></div>';
+
+  var infraByPays = {};
+  var allInfraTypes = {};
   var infraColors = { 'Aeroport': '#4fc3f7', 'Aeroport / Base': '#4fc3f7', 'Hub / Entrepot': '#66bb6a', 'Pont strategique': '#8d6e63', 'Corridor logistique': '#78909c' };
-  var infraLabels = Object.keys(infraCounts).sort(function(a, b) { return infraCounts[b] - infraCounts[a]; });
-  new Chart(document.getElementById('chart-infra'), {
-    type: 'bar',
-    data: {
-      labels: infraLabels,
-      datasets: [{ data: infraLabels.map(function(k) { return infraCounts[k]; }), backgroundColor: infraLabels.map(function(k) { return (infraColors[k] || '#66bb6a') + 'cc'; }), borderColor: infraLabels.map(function(k) { return infraColors[k] || '#66bb6a'; }), borderWidth: 1 }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { color: gridColor }, ticks: { color: tickColor, font: Object.assign({ size: 9 }, chartFont), stepSize: 1 }, beginAtZero: true },
-        y: { grid: { color: gridColor }, ticks: { color: tickColor, font: Object.assign({ size: 9 }, chartFont) } }
-      }
-    }
+  (infra.data.features || []).forEach(function(f) {
+    if (f.geometry.type !== 'Point') return;
+    var p = detectPays(f), t = f.properties.type || 'Autre';
+    allInfraTypes[t] = true;
+    if (!infraByPays[p]) infraByPays[p] = {};
+    infraByPays[p][t] = (infraByPays[p][t] || 0) + 1;
   });
+  var ipLabels = Object.keys(infraByPays).sort();
+  var infraTypeNames = Object.keys(allInfraTypes);
+  new Chart(document.getElementById('c5'), {
+    type: 'bar',
+    data: { labels: ipLabels, datasets: infraTypeNames.map(function(t) { return { label: t, data: ipLabels.map(function(p) { return (infraByPays[p] || {})[t] || 0; }), backgroundColor: (infraColors[t] || '#66bb6a') + 'cc', borderColor: infraColors[t] || '#66bb6a', borderWidth: 0.5 }; }) },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8, padding: 6 } } },
+      scales: { x: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF) } }, y: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF), stepSize: 1 }, beginAtZero: true } } }
+  });
+
+  // ── S6: POPULATION DEPLACEE (bar horizontal) ──
+  ct.innerHTML += '<div class="section"><div class="section-header"><span class="section-num">06</span><span class="section-title">Population deplacee et refugiee</span></div>' +
+    '<div class="section-desc">Nombre de personnes deplacees, refugiees ou assiègees par site. Donnees issues du calque population (' + pop.count + ' sites).</div>' +
+    '<div class="chart-box"><div class="chart-wrap"><canvas id="c6"></canvas></div></div></div>';
+
+  var popData = (pop.data.features || []).map(function(f) {
+    return { name: f.properties.name || 'Site', count: parseInt(f.properties.personnes || 0), type: f.properties.type || '' };
+  }).sort(function(a, b) { return b.count - a.count; });
+  var popTypeColors = { 'IDPs': '#e040fb', 'Camp refugies': '#ab47bc', 'Refugies': '#ce93d8', 'Siege': '#d50000', 'Flux': '#ff9800' };
+  new Chart(document.getElementById('c6'), {
+    type: 'bar',
+    data: { labels: popData.map(function(d) { return d.name.length > 30 ? d.name.substring(0, 28) + '...' : d.name; }),
+      datasets: [{ data: popData.map(function(d) { return d.count; }), backgroundColor: popData.map(function(d) { return (popTypeColors[d.type] || '#ab47bc') + 'cc'; }), borderColor: popData.map(function(d) { return popTypeColors[d.type] || '#ab47bc'; }), borderWidth: 1 }] },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF), callback: function(v) { return v >= 1000000 ? (v/1000000) + 'M' : v >= 1000 ? (v/1000) + 'k' : v; } }, beginAtZero: true }, y: { grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 8 }, CF) } } } }
+  });
+
+  // ── S7: FLUX & TRAFICS (table) ──
+  ct.innerHTML += '<div class="section"><div class="section-header"><span class="section-num">07</span><span class="section-title">Flux et trafics illicites</span></div>' +
+    '<div class="section-desc">Corridors de trafic identifies dans le calque flux (' + flux.count + ' routes cartographiees).</div>' +
+    '<div class="chart-box"><table class="data-table" id="flux-table"><thead><tr><th>Route</th><th>Type</th><th>Rang</th></tr></thead><tbody></tbody></table></div></div>';
+
+  var fluxTable = document.querySelector('#flux-table tbody');
+  var fluxTypeColors = { 'Narcotrafic': '#c62828', 'Trafic d\'armes': '#bf360c', 'Migration': '#8d6e63', 'Contrebande or': '#f9a825', 'Contrebande': '#8e24aa', 'Trafic medicaments': '#8e24aa' };
+  (flux.data.features || []).forEach(function(f) {
+    var p = f.properties;
+    var tr = document.createElement('tr');
+    var typeColor = fluxTypeColors[p.type] || '#ff9800';
+    tr.innerHTML = '<td>' + (p.name || '--') + '</td><td><span class="tag" style="color:' + typeColor + ';border-color:' + typeColor + '40">' + (p.type || '--') + '</span></td><td>' + (p.rank || '--') + '</td>';
+    fluxTable.appendChild(tr);
+  });
+
+  // ── LOCKED ──
+  ct.innerHTML += '<div class="locked-section"><div class="lock-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="0"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>' +
+    '<div class="locked-title">Rapports detailles disponibles</div>' +
+    '<div class="locked-desc">Ces graphiques representent un apercu des capacites d\'analyse Algor Int. Les rapports complets incluent des analyses croisees, projections operationnelles et flux temps reel.</div>' +
+    '<div class="locked-list"><span class="locked-tag">Fiches acteurs detaillees</span><span class="locked-tag">Analyse reseaux</span><span class="locked-tag">Heatmaps temporelles</span><span class="locked-tag">Projections menaces</span><span class="locked-tag">Rapports PDF</span><span class="locked-tag">Flux temps reel</span></div>' +
+    '<a class="locked-cta" href="mailto:contact@algor-int.com">Contacter Algor Int</a></div>';
 });
 </script>
 </body>
