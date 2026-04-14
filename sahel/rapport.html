@@ -443,26 +443,39 @@ function parseBiwEvent(f) {
     event: mE ? mE[1].trim() : ''
   };
 }
+// Correlation evenements biweekly -> calques du menu (par mots-cles)
+var LAYER_KW = {
+  ethnies:         ['peul','touareg','bambara','songhai','dogon','mossi','haoussa','ethnique','intercommunautaire','communautaire'],
+  forces:          ['fama','militaire','armee','soldat','convoi','embuscade','policier','gendarm','garnison','patrouille','execution','operation','poste militaire','base','gsim','jnim','isgs','katiba','djihad','jihad'],
+  'points-eau':    ['puits','forage','eau','riviere','fleuve','hydrau'],
+  population:      ['civils','refugies','refugie','deplaces','deplace','camp','enlevement','victime','morts','tues','tue','blesses','assassina'],
+  mines:           ['mine','orpail','aurifere','morila','loulo','taoudenni','extract','or '],
+  infrastructures: ['aeroport','pont','route','hub','port','depot','entrepot','corridor logistique','poste frontier','poste forestier'],
+  evenements:      [], // catch-all: tous les evenements
+  flux:            ['citern','carburant','contreband','transhuman','blocus','trafic','migration','migrant','expuls','frontier','passage','accuse','desescalade','diplomat','incursion']
+};
+
+function matchLayers(text) {
+  var t = (text || '').toLowerCase();
+  var hit = {};
+  Object.keys(LAYER_KW).forEach(function(layer) {
+    if (layer === 'evenements') { hit[layer] = true; return; }
+    var kws = LAYER_KW[layer];
+    for (var i = 0; i < kws.length; i++) {
+      if (t.indexOf(kws[i]) !== -1) { hit[layer] = true; return; }
+    }
+  });
+  return hit;
+}
+
 function aggBiw(feats) {
-  var a = { total: feats.length, jnim:0, isgs:0, fama:0, pays:{}, crossBorder:0, diplo:0 };
+  var a = { total: feats.length, byLayer: {} };
+  Object.keys(LAYER_KW).forEach(function(l) { a.byLayer[l] = 0; });
   feats.forEach(function(f) {
     var e = parseBiwEvent(f);
-    var actor = e.actor.toLowerCase();
-    if (actor.indexOf('jnim') !== -1) a.jnim++;
-    if (actor.indexOf('isgs') !== -1 || actor.indexOf('ei sahel') !== -1) a.isgs++;
-    if (actor.indexOf('fama') !== -1 || actor.indexOf('malienne') !== -1 || actor.indexOf('mauritanienne') !== -1) a.fama++;
-    var pays = e.pays.toLowerCase();
-    if (pays.indexOf('-') !== -1) a.crossBorder++;
-    var key = 'autre';
-    if (pays.indexOf('mauritanie') !== -1 && pays.indexOf('mali') !== -1) key = 'mali-mrt';
-    else if (pays.indexOf('mali') !== -1) key = 'mali';
-    else if (pays.indexOf('burkina') !== -1) key = 'burkina';
-    else if (pays.indexOf('niger') !== -1 && pays.indexOf('nigeria') === -1) key = 'niger';
-    else if (pays.indexOf('mauritanie') !== -1) key = 'mauritanie';
-    else if (pays.indexOf('tchad') !== -1) key = 'tchad';
-    a.pays[key] = (a.pays[key] || 0) + 1;
-    var ev = e.event.toLowerCase();
-    if (ev.indexOf('accuse') !== -1 || ev.indexOf('desescalade') !== -1 || ev.indexOf('diplomat') !== -1) a.diplo++;
+    var txt = e.actor + ' ' + e.event + ' ' + e.pays;
+    var hits = matchLayers(txt);
+    Object.keys(hits).forEach(function(l) { if (hits[l]) a.byLayer[l]++; });
   });
   return a;
 }
@@ -503,22 +516,31 @@ function buildEvolutionBlock() {
     '</div>';
   }
 
+  // 8 calques du menu (meme ordre)
+  var layerOrder = [
+    { key: 'ethnies',         label: 'Ethnies',          sub: 'Conflits intercommunautaires' },
+    { key: 'forces',          label: 'Forces',           sub: 'Militaire / groupes armes' },
+    { key: 'points-eau',      label: 'Points eau',       sub: 'Puits / infra hydraulique' },
+    { key: 'population',      label: 'Population',       sub: 'Civils / deplaces / victimes' },
+    { key: 'mines',           label: 'Mines',            sub: 'Sites miniers / orpaillage' },
+    { key: 'infrastructures', label: 'Infrastructures',  sub: 'Aeroports / ponts / routes' },
+    { key: 'evenements',      label: 'Evenements',       sub: 'Total incidents documentes' },
+    { key: 'flux',            label: 'Flux & trafics',   sub: 'Migration / contrebande / frontiere' }
+  ];
+
+  var cards = layerOrder.map(function(L) {
+    var prevV = P.byLayer[L.key] || 0;
+    var currV = C.byLayer[L.key] || 0;
+    return card(L.label, prevV, currV, '', L.sub);
+  }).join('');
+
   var h = '<div class="evo-wrap">' +
     '<div class="evo-head">' +
       '<div class="evo-title">\u2605 Evolution 14 jours</div>' +
       '<div class="evo-period">' + periodLbl + '</div>' +
     '</div>' +
-    '<div class="evo-sub">Comparaison de la periode bimensuelle courante avec la precedente. Variation en % du nombre d\'evenements securitaires documentes par categorie.</div>' +
-    '<div class="evo-grid">' +
-      card('Total evenements', P.total, C.total, '', '') +
-      card('Attaques JNIM', P.jnim, C.jnim, '', 'GSIM / al-Qaida') +
-      card('Attaques ISGS', P.isgs, C.isgs, '', 'Etat Islamique Sahel') +
-      card('Op. FAMA / etat', P.fama, C.fama, '', 'Forces armees') +
-      card('Mali', P.pays.mali || 0, C.pays.mali || 0, '', '') +
-      card('Niger', P.pays.niger || 0, C.pays.niger || 0, '', '') +
-      card('Burkina Faso', P.pays.burkina || 0, C.pays.burkina || 0, '', '') +
-      card('Axe Mali-Mauritanie', P.pays['mali-mrt'] || 0, C.pays['mali-mrt'] || 0, '', 'Incidents frontaliers') +
-    '</div>' +
+    '<div class="evo-sub">Correlation des evenements des 2 dernieres quinzaines avec les 8 calques overlay de la carte. Chaque evenement est classe dans un ou plusieurs calques selon son contenu.</div>' +
+    '<div class="evo-grid">' + cards + '</div>' +
   '</div>';
   return h;
 }
