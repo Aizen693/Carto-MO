@@ -770,11 +770,10 @@ function closeTutorial() {
   if (ov) ov.style.display = 'none';
   localStorage.setItem(ZONE_CONFIG.TUTORIAL_KEY, '1');
 }
+// Tutorial: always hidden by default, shown only after map loads
 (function () {
-  const seen = localStorage.getItem(ZONE_CONFIG.TUTORIAL_KEY);
   const el = document.getElementById('tutorial-overlay');
-  if (!el) return;
-  el.style.display = seen ? 'none' : 'flex';
+  if (el) el.style.display = 'none';
 })();
 
 // ── INITIALISATION ───────────────────────────────────────────────────
@@ -788,5 +787,11 @@ map.on('load', async () => {
   for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
   // Auto-selection premiere periode
   togglePeriod(0);
+  // Show tutorial AFTER everything is loaded (if not already seen)
+  var tutKey = ZONE_CONFIG.TUTORIAL_KEY;
+  if (tutKey && !localStorage.getItem(tutKey)) {
+    var tutEl = document.getElementById('tutorial-overlay');
+    if (tutEl) tutEl.style.display = 'flex';
+  }
 });
 map.on('error', (e) => console.warn('Mapbox error:', e));
