@@ -101,7 +101,25 @@ body{min-height:100vh}
 .security-val{font-weight:500}
 .bar-indicator{height:6px;background:var(--bg3);margin:8px 0;border-radius:0;overflow:hidden}
 .bar-fill{height:100%;border-radius:0}
-@media(max-width:800px){.metrics{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.passage-grid{grid-template-columns:1fr}.info-grid{grid-template-columns:1fr}.three-col{grid-template-columns:1fr}.security-grid{grid-template-columns:1fr}}
+.evo-wrap{background:var(--bg1);border:1px solid var(--acb);padding:24px;position:relative;margin-bottom:48px}
+.evo-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ac),transparent)}
+.evo-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:8px}
+.evo-title{font-family:var(--bc);font-size:18px;font-weight:600;color:var(--txh);letter-spacing:.04em;text-transform:uppercase}
+.evo-period{font-family:var(--m);font-size:8px;color:var(--ac);letter-spacing:.12em;text-transform:uppercase}
+.evo-sub{font-family:var(--b);font-size:11px;color:var(--tx1);margin-bottom:20px;line-height:1.6}
+.evo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.evo-card{background:var(--bg2);border:1px solid var(--ln);padding:16px 18px;position:relative}
+.evo-card-label{font-family:var(--m);font-size:8px;color:var(--tx2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.evo-card-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.evo-card-val{font-family:var(--bc);font-size:26px;font-weight:600;color:var(--txh);line-height:1}
+.evo-card-val small{font-size:11px;color:var(--tx1);font-weight:400;margin-left:3px}
+.evo-delta{display:inline-block;font-family:var(--m);font-size:10px;font-weight:500;padding:2px 7px;border:1px solid;letter-spacing:.05em}
+.evo-up{color:#ff5252;border-color:rgba(255,82,82,0.5);background:rgba(255,82,82,0.10)}
+.evo-down{color:#66bb6a;border-color:rgba(102,187,106,0.5);background:rgba(102,187,106,0.10)}
+.evo-flat{color:#78909c;border-color:rgba(120,144,156,0.5);background:rgba(120,144,156,0.08)}
+.evo-new{color:#ffa726;border-color:rgba(255,167,38,0.5);background:rgba(255,167,38,0.10)}
+.evo-card-sub{font-family:var(--m);font-size:7px;color:var(--tx1);letter-spacing:.08em;margin-top:8px}
+@media(max-width:800px){.metrics{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.passage-grid{grid-template-columns:1fr}.info-grid{grid-template-columns:1fr}.three-col{grid-template-columns:1fr}.security-grid{grid-template-columns:1fr}.evo-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -394,6 +412,13 @@ var CALQUES = {
   evenements:      { file: 'evenements.geojson',      label: 'Evenements',       color: '#ff5252' },
   flux:            { file: 'flux.geojson',            label: 'Flux & trafics',   color: '#ff9800' }
 };
+// Biweekly snapshots (chronological) for evolution panel
+var BIWEEKLY = [
+  '2026-jan-01-15','2026-jan-16-31',
+  '2026-fev-01-14','2026-fev-15-28',
+  '2026-mars-01-15','2026-mars-16-31'
+];
+var BIW_DATA = {};
 var GC = 'rgba(255,255,255,0.06)', TC = 'rgba(255,255,255,0.4)', CF = { family: "'JetBrains Mono'" };
 
 function countBy(features, key) {
@@ -404,6 +429,100 @@ function countBy(features, key) {
 function sortDesc(obj) {
   return Object.entries(obj).sort(function(a, b) { return b[1] - a[1]; });
 }
+// ── EVOLUTION 14-JOUR : helpers ──
+function parseBiwEvent(f) {
+  var p = f.properties || {};
+  var desc = (p.description || '') + '';
+  var mD = desc.match(/Date\s*[:]\s*([\d\/]+)/);
+  var mP = desc.match(/Pays\s*[:]\s*([^\n]+)/);
+  var mE = desc.match(/Evenement\s*[:]\s*([^\n]+)/);
+  return {
+    actor: (p.name || '') + '',
+    date: mD ? mD[1].trim() : '',
+    pays: mP ? mP[1].trim() : '',
+    event: mE ? mE[1].trim() : ''
+  };
+}
+function aggBiw(feats) {
+  var a = { total: feats.length, jnim:0, isgs:0, fama:0, pays:{}, crossBorder:0, diplo:0 };
+  feats.forEach(function(f) {
+    var e = parseBiwEvent(f);
+    var actor = e.actor.toLowerCase();
+    if (actor.indexOf('jnim') !== -1) a.jnim++;
+    if (actor.indexOf('isgs') !== -1 || actor.indexOf('ei sahel') !== -1) a.isgs++;
+    if (actor.indexOf('fama') !== -1 || actor.indexOf('malienne') !== -1 || actor.indexOf('mauritanienne') !== -1) a.fama++;
+    var pays = e.pays.toLowerCase();
+    if (pays.indexOf('-') !== -1) a.crossBorder++;
+    var key = 'autre';
+    if (pays.indexOf('mauritanie') !== -1 && pays.indexOf('mali') !== -1) key = 'mali-mrt';
+    else if (pays.indexOf('mali') !== -1) key = 'mali';
+    else if (pays.indexOf('burkina') !== -1) key = 'burkina';
+    else if (pays.indexOf('niger') !== -1 && pays.indexOf('nigeria') === -1) key = 'niger';
+    else if (pays.indexOf('mauritanie') !== -1) key = 'mauritanie';
+    else if (pays.indexOf('tchad') !== -1) key = 'tchad';
+    a.pays[key] = (a.pays[key] || 0) + 1;
+    var ev = e.event.toLowerCase();
+    if (ev.indexOf('accuse') !== -1 || ev.indexOf('desescalade') !== -1 || ev.indexOf('diplomat') !== -1) a.diplo++;
+  });
+  return a;
+}
+function deltaPct(prev, curr) {
+  if (prev === 0 && curr === 0) return { cls: 'evo-flat', lbl: '=' };
+  if (prev === 0) return { cls: 'evo-new', lbl: 'NEW' };
+  if (curr === 0) return { cls: 'evo-down', lbl: '-100%' };
+  var d = Math.round((curr - prev) / prev * 100);
+  if (d === 0) return { cls: 'evo-flat', lbl: '=' };
+  var lbl = (d > 0 ? '+' : '') + d + '%';
+  return { cls: (d > 0 ? 'evo-up' : 'evo-down'), lbl: lbl };
+}
+function labelBiw(fn) {
+  var m = fn.match(/2026-(\w+)-(\d+)-(\d+)/);
+  if (!m) return fn;
+  var mon = { jan:'Janv.', fev:'Fev.', mars:'Mars', avril:'Avril', mai:'Mai', juin:'Juin', juil:'Juil.', aout:'Aout', sep:'Sep.', oct:'Oct.', nov:'Nov.', dec:'Dec.' }[m[1]] || m[1];
+  return m[2] + '-' + m[3] + ' ' + mon;
+}
+function buildEvolutionBlock() {
+  // Find 2 most recent biweekly files with at least 1 event in either
+  var avail = BIWEEKLY.filter(function(fn) { return BIW_DATA[fn] !== undefined; });
+  if (avail.length < 2) return '';
+  var curr = avail[avail.length - 1];
+  var prev = avail[avail.length - 2];
+  var C = aggBiw(BIW_DATA[curr]);
+  var P = aggBiw(BIW_DATA[prev]);
+  var periodLbl = labelBiw(prev) + ' \u2192 ' + labelBiw(curr) + ' 2026';
+
+  function card(label, prevV, currV, unit, sub) {
+    var d = deltaPct(prevV, currV);
+    return '<div class="evo-card">' +
+      '<div class="evo-card-label">' + label + '</div>' +
+      '<div class="evo-card-row">' +
+        '<div class="evo-card-val">' + currV + (unit ? '<small>' + unit + '</small>' : '') + '</div>' +
+        '<span class="evo-delta ' + d.cls + '">' + d.lbl + '</span>' +
+      '</div>' +
+      '<div class="evo-card-sub">Prec. ' + prevV + (unit ? ' ' + unit : '') + (sub ? ' \u00B7 ' + sub : '') + '</div>' +
+    '</div>';
+  }
+
+  var h = '<div class="evo-wrap">' +
+    '<div class="evo-head">' +
+      '<div class="evo-title">\u2605 Evolution 14 jours</div>' +
+      '<div class="evo-period">' + periodLbl + '</div>' +
+    '</div>' +
+    '<div class="evo-sub">Comparaison de la periode bimensuelle courante avec la precedente. Variation en % du nombre d\'evenements securitaires documentes par categorie.</div>' +
+    '<div class="evo-grid">' +
+      card('Total evenements', P.total, C.total, '', '') +
+      card('Attaques JNIM', P.jnim, C.jnim, '', 'GSIM / al-Qaida') +
+      card('Attaques ISGS', P.isgs, C.isgs, '', 'Etat Islamique Sahel') +
+      card('Op. FAMA / etat', P.fama, C.fama, '', 'Forces armees') +
+      card('Mali', P.pays.mali || 0, C.pays.mali || 0, '', '') +
+      card('Niger', P.pays.niger || 0, C.pays.niger || 0, '', '') +
+      card('Burkina Faso', P.pays.burkina || 0, C.pays.burkina || 0, '', '') +
+      card('Axe Mali-Mauritanie', P.pays['mali-mrt'] || 0, C.pays['mali-mrt'] || 0, '', 'Incidents frontaliers') +
+    '</div>' +
+  '</div>';
+  return h;
+}
+
 function detectPays(f) {
   var p = f.properties, pays = p.pays || '';
   if (!pays && p['Pays + Lieu']) pays = p['Pays + Lieu'].split(' - ')[0].trim();
@@ -428,13 +547,19 @@ function detectPays(f) {
   return pays || 'Non precise';
 }
 
-// Load all calques
+// Load all calques + biweekly snapshots
 var keys = Object.keys(CALQUES);
-Promise.all(keys.map(function(k) {
+var calqPromises = keys.map(function(k) {
   return fetch('./' + CALQUES[k].file + '?v=' + Date.now()).then(function(r) { return r.json(); }).then(function(d) {
     CALQUES[k].data = d; CALQUES[k].count = d.features ? d.features.length : 0;
   }).catch(function() { CALQUES[k].data = { features: [] }; CALQUES[k].count = 0; });
-})).then(function() {
+});
+var biwPromises = BIWEEKLY.map(function(fn) {
+  return fetch('./' + fn + '.geojson?v=' + Date.now()).then(function(r) { return r.json(); })
+    .then(function(d) { BIW_DATA[fn] = (d && d.features) ? d.features : []; })
+    .catch(function() { BIW_DATA[fn] = []; });
+});
+Promise.all(calqPromises.concat(biwPromises)).then(function() {
   document.getElementById('loading').style.display = 'none';
   var ct = document.getElementById('content'); ct.style.display = 'block';
 
@@ -458,6 +583,9 @@ Promise.all(keys.map(function(k) {
     '<div class="metric-card"><div class="metric-label">Deplaces / refugies</div><div class="metric-value">' + (totalDeplaces > 1000000 ? (totalDeplaces / 1000000).toFixed(1) + '<small>M</small>' : totalDeplaces.toLocaleString('fr')) + '</div></div>' +
     '<div class="metric-card"><div class="metric-label">Calques</div><div class="metric-value">8</div></div>' +
   '</div>';
+
+  // ── EVOLUTION 14 JOURS (biweekly delta) ──
+  html += buildEvolutionBlock();
 
   // S1
   html += '<div class="section"><div class="section-header"><span class="section-num">01</span><span class="section-title">Empreinte par calque</span></div>' +
