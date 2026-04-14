@@ -59,7 +59,49 @@ body{min-height:100vh}
 .data-table td{color:var(--tx)}
 .data-table tr:hover td{background:var(--bg2)}
 .tag{display:inline-block;font-family:var(--m);font-size:7px;padding:2px 6px;letter-spacing:.08em;text-transform:uppercase;border:1px solid}
-@media(max-width:800px){.metrics{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}}
+.border-header{font-family:var(--bc);font-size:26px;font-weight:600;color:var(--txh);text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px}
+.border-sub{font-family:var(--b);font-size:11px;color:var(--tx1);margin-bottom:6px}
+.border-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.border-tag{font-family:var(--m);font-size:7px;padding:3px 10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid;border-radius:0}
+.corridor-box{background:var(--bg2);border:1px solid var(--ln);padding:14px 18px;margin-bottom:12px}
+.corridor-title{font-family:var(--bc);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.corridor-desc{font-family:var(--m);font-size:8px;color:var(--tx1);letter-spacing:.03em}
+.corridor-tag{font-family:var(--m);font-size:7px;padding:2px 8px;border-radius:0;display:inline-block;margin-left:8px}
+.stat-row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.stat-box{flex:1;min-width:120px;border:1px solid;padding:12px 16px;text-align:center}
+.stat-val{font-family:var(--bc);font-size:22px;font-weight:600;margin-bottom:2px}
+.stat-label{font-family:var(--m);font-size:7px;color:var(--tx1);letter-spacing:.08em;text-transform:uppercase}
+.timeline-item{display:flex;gap:16px;margin-bottom:20px;position:relative;padding-left:20px}
+.timeline-item::before{content:'';position:absolute;left:4px;top:8px;width:10px;height:10px;border-radius:50%;border:2px solid var(--tx2);background:var(--bg1)}
+.timeline-item::after{content:'';position:absolute;left:8px;top:20px;width:2px;height:calc(100% + 4px);background:var(--ln)}
+.timeline-item:last-child::after{display:none}
+.timeline-date{font-family:var(--m);font-size:8px;color:var(--ac);letter-spacing:.08em;text-transform:uppercase;min-width:120px;flex-shrink:0}
+.timeline-title{font-family:var(--bc);font-size:13px;font-weight:600;color:var(--txh);text-transform:uppercase;margin-bottom:3px}
+.timeline-desc{font-family:var(--b);font-size:10px;color:var(--tx1);line-height:1.5}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.info-card{background:var(--bg2);border:1px solid var(--ln);padding:16px 18px}
+.info-card-title{font-family:var(--bc);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.info-card-val{font-family:var(--bc);font-size:22px;font-weight:600;color:var(--txh);margin-bottom:2px}
+.info-card-sub{font-family:var(--m);font-size:8px;color:var(--tx1);margin-bottom:8px}
+.info-card-desc{font-family:var(--b);font-size:9px;color:var(--tx1);line-height:1.5;margin-bottom:8px}
+.info-card-pin{font-family:var(--m);font-size:7px;color:var(--tx1);margin-bottom:3px}
+.info-card-warn{font-family:var(--m);font-size:7px;color:#ff9800;margin-bottom:3px}
+.sources-line{font-family:var(--m);font-size:7px;color:var(--tx2);margin-top:16px;letter-spacing:.04em}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.passage-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.passage-col{background:var(--bg2);border:1px solid var(--ln);padding:16px}
+.passage-col-title{font-family:var(--bc);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.passage-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:var(--m);font-size:9px;color:var(--tx)}
+.passage-legend{display:flex;gap:16px;margin-top:16px;font-family:var(--m);font-size:8px;color:var(--tx1)}
+.passage-legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+.arrow-step{text-align:center;font-family:var(--m);font-size:10px;color:var(--tx2);margin:8px 0;letter-spacing:.05em}
+.security-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.security-box{background:var(--bg2);border:1px solid var(--ln);padding:16px 18px}
+.security-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-family:var(--m);font-size:9px}
+.security-val{font-weight:500}
+.bar-indicator{height:6px;background:var(--bg3);margin:8px 0;border-radius:0;overflow:hidden}
+.bar-fill{height:100%;border-radius:0}
+@media(max-width:800px){.metrics{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.passage-grid{grid-template-columns:1fr}.info-grid{grid-template-columns:1fr}.three-col{grid-template-columns:1fr}.security-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -75,6 +117,270 @@ body{min-height:100vh}
   <div class="hero-sub">Synthese analytique generee dynamiquement a partir des 8 calques overlay : ethnies, forces armees, infrastructures, evenements securitaires, population deplacee, ressources minieres, points d'eau, flux et trafics.</div>
   <div id="loading">Chargement des 8 calques...</div>
   <div id="content" style="display:none"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION FRONTIERE MAURITANIE-MALI                                -->
+  <!-- ══════════════════════════════════════════════════════════════════ -->
+  <div style="margin-top:64px;padding-top:32px;border-top:1px solid var(--ln)">
+    <div class="border-header">Frontiere Mauritanie-Mali : Analyse des flux transfrontaliers</div>
+    <div class="border-sub">Zone frontaliere 2 067 km · Regions : Hodh El Chargui · Hodh El Gharbi · Assaba · Corridor Nord Nouadhibou</div>
+    <div class="border-tags">
+      <span class="border-tag" style="color:#ff5252;border-color:#ff5252">Donnees 2023-2026</span>
+      <span class="border-tag" style="color:#66bb6a;border-color:#66bb6a">Sources : UNHCR · IOM · ACLED · GRANIT · GI-TOC · ADF</span>
+      <span class="border-tag" style="color:#ff9800;border-color:#ff9800">Mise a jour : Mars 2026</span>
+    </div>
+  </div>
+
+  <!-- S08: Points de passage -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <span class="section-title">Points de passage : officiel vs. non-officiel</span>
+    </div>
+    <div class="section-desc">Frontiere Mauritanie-Mali (2 067 km) — Situation 2025-2026</div>
+    <div class="passage-grid">
+      <div class="passage-col">
+        <div class="passage-col-title" style="color:#ff9800"><span style="font-size:12px">&#x1F315;</span> Corridor Nord</div>
+        <div class="passage-item">Bir Moghrein-Araouane <span class="corridor-tag" style="color:#ff5252;border:1px solid #ff5252">Informel</span></div>
+        <div class="passage-item">Tidjikja-Tombouctou (piste) <span class="corridor-tag" style="color:#ff9800;border:1px solid #ff9800">Zone militaire</span></div>
+        <div class="passage-item">Route orpailleurs (Zouerate-Taoudenni) <span class="corridor-tag" style="color:#ff5252;border:1px solid #ff5252">Non controle</span></div>
+        <div class="passage-item">Piste Ain Bentili-frontiere <span class="corridor-tag" style="color:#ff5252;border:1px solid #ff5252">Zone interdite</span></div>
+      </div>
+      <div class="passage-col">
+        <div class="passage-col-title" style="color:#ff5252"><span style="font-size:12px">&#x1F534;</span> Frontiere Est (Hodh El Chargui)</div>
+        <div class="passage-item">Bassikounou-Nioro du Sahel <span class="corridor-tag" style="color:#66bb6a;border:1px solid #66bb6a">Principal &#x2713;</span></div>
+        <div class="passage-item">Amourj-Wagadou (foret) <span class="corridor-tag" style="color:#ff9800;border:1px solid #ff9800">JNIM / Informel</span></div>
+        <div class="passage-item">Fassala-Nara <span class="corridor-tag" style="color:#ab47bc;border:1px solid #ab47bc">Transhumance</span></div>
+        <div class="passage-item">Nema-Menaka (piste) <span class="corridor-tag" style="color:#ff5252;border:1px solid #ff5252">Informel</span></div>
+      </div>
+      <div class="passage-col">
+        <div class="passage-col-title" style="color:#66bb6a"><span style="font-size:12px">&#x1F7E2;</span> Frontiere Sud (Hodh Gharbi / Assaba)</div>
+        <div class="passage-item">Selibaby-Kayes (Gogui) <span class="corridor-tag" style="color:#29b6f6;border:1px solid #29b6f6">FMP OIM &#x2713;</span></div>
+        <div class="passage-item">Kiffa-Diema (Assaba) <span class="corridor-tag" style="color:#ff9800;border:1px solid #ff9800">Semi-officiel</span></div>
+        <div class="passage-item">Bourem Guebara-Yelimane <span class="corridor-tag" style="color:#ff5252;border:1px solid #ff5252">Non materialise</span></div>
+        <div class="passage-item">Guidimakha-Kayes (pistes) <span class="corridor-tag" style="color:#ab47bc;border:1px solid #ab47bc">Multiples pistes</span></div>
+      </div>
+    </div>
+    <div class="passage-legend">
+      <span><span class="passage-legend-dot" style="background:#66bb6a"></span> Point officiel controle</span>
+      <span><span class="passage-legend-dot" style="background:#ff9800"></span> Semi-officiel / saisonnier</span>
+      <span><span class="passage-legend-dot" style="background:#ff5252"></span> Informel / interdit</span>
+    </div>
+    <div class="sources-line">Plus de 70% de la frontiere n'est pas materialisee (absence de bornes). Sources : UNDP/PBF 2023, Wikipedia, Cridem 2026</div>
+  </div>
+
+  <!-- S09: Volume refugies + S10: Profil flux -->
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <div class="section-header">
+          <span class="section-num">09</span>
+          <span class="section-title">Volume de refugies par region mauritanienne</span>
+        </div>
+        <div class="section-desc">UNHCR — Evolution 2022-2026 (milliers de personnes)</div>
+        <div class="chart-box">
+          <div class="chart-wrap-sm"><canvas id="c-refugees"></canvas></div>
+          <div class="sources-line">Sources : UNHCR Mauritania Country Profile 2024-2026 · UNHCR Refugee Influx Hodh Chargui Mar.2026 · PASAS-Minka Nov.2025</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-header">
+          <span class="section-num">10</span>
+          <span class="section-title">Profil des flux entrants depuis le Mali</span>
+        </div>
+        <div class="section-desc">OIM DTM · UNHCR — Donnees 2024 (estimation)</div>
+        <div class="chart-box">
+          <div class="chart-wrap-sm"><canvas id="c-profil"></canvas></div>
+          <div class="stat-row">
+            <div class="stat-box" style="border-color:#ff5252"><div class="stat-val" style="color:#ff5252">73%</div><div class="stat-label">Hommes 20-30 ans</div></div>
+            <div class="stat-box" style="border-color:#ffa726"><div class="stat-val" style="color:#ffa726">15%</div><div class="stat-label">Motif orpaillage</div></div>
+            <div class="stat-box" style="border-color:#29b6f6"><div class="stat-val" style="color:#29b6f6">53%</div><div class="stat-label">Recherche d'emploi</div></div>
+          </div>
+          <div class="sources-line">Sources : OIM DTM Mali Q3 2024 · Journal du Mali Avr.2025 · UNHCR Profiling Mauritanie Nov.2024</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S11: Corridor Nord -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">11</span>
+      <span class="section-title">Corridor Nord : Transit Mali-Nouadhibou (orpailleurs & migration irreguliere)</span>
+    </div>
+    <div class="section-desc">Route saharienne — Flux 2024-2025 · Sources : OIM, Frontex, IRA, Journal du Mali</div>
+    <div class="two-col">
+      <div>
+        <div class="corridor-box" style="border-left:3px solid #ff5252">
+          <div class="corridor-title" style="color:#ff5252">&#x1F1F2;&#x1F1F1; Mali — Zones de depart</div>
+          <div class="corridor-desc">Kayes · Nioro du Sahel · Kidal · Taoudenni (sites auriferes)</div>
+        </div>
+        <div class="arrow-step">&#x2193; piste saharienne ~1 200 km</div>
+        <div class="corridor-box" style="border-left:3px solid #ff9800">
+          <div class="corridor-title" style="color:#ff9800">&#x1F1F2;&#x1F1F7; Mauritanie — Traversee desertique</div>
+          <div class="corridor-desc">Zone militaire Nord-Est · Tidjikja · Adrar · Atar (relai)</div>
+        </div>
+        <div class="arrow-step">&#x2193; Route de l'Espoir / piste</div>
+        <div class="corridor-box" style="border-left:3px solid #29b6f6">
+          <div class="corridor-title" style="color:#29b6f6">&#x1F1F2;&#x1F1F7; Nouadhibou — Point d'embarquement</div>
+          <div class="corridor-desc">Transit vers Canaries (Espagne) · +25 000 departs en 2024 · -46% H1 2025 (renforcement securitaire)</div>
+        </div>
+        <div class="arrow-step">&#x2193; Route Atlantique (la plus meurtriere)</div>
+        <div class="corridor-box" style="border-left:3px solid #66bb6a">
+          <div class="corridor-title" style="color:#66bb6a">&#x1F1EA;&#x1F1F8; Iles Canaries — Destination finale</div>
+          <div class="corridor-desc">41 425 arrivees 2024 · Mali = 1er pays d'origine UE 2024 · 16 500 Maliens arrives en Europe</div>
+        </div>
+      </div>
+      <div>
+        <div class="chart-box">
+          <div class="chart-wrap-sm"><canvas id="c-corridor"></canvas></div>
+          <div class="stat-row">
+            <div class="stat-box" style="border-color:#ff5252"><div class="stat-val" style="color:#ff5252">+500</div><div class="stat-label">Deces route Atlantique 2024</div></div>
+            <div class="stat-box" style="border-color:#ff9800"><div class="stat-val" style="color:#ff9800">+2 000</div><div class="stat-label">Personnes interceptees H1 2025</div></div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-box" style="border-color:#29b6f6"><div class="stat-val" style="color:#29b6f6">1 800</div><div class="stat-label">Entrees/mois en Mauritanie (OIM 2024)</div></div>
+            <div class="stat-box" style="border-color:#66bb6a"><div class="stat-val" style="color:#66bb6a">210 M&#x20AC;</div><div class="stat-label">UE &#x2192; Mauritanie (controle frontiere, fev.2025)</div></div>
+          </div>
+          <div class="sources-line">Sources : Frontex 2024 · PASAS-Minka Nov.2025 · Journal du Mali Avr.2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S12: Effort securitaire -->
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <div class="section-header">
+          <span class="section-num">12</span>
+          <span class="section-title">Effort securitaire — Frontieres Est & Sud</span>
+        </div>
+        <div class="section-desc">Dispositif FAM · Gendarmerie · Cooperation internationale 2024-2026</div>
+        <div class="security-grid">
+          <div class="security-box" style="border-top:2px solid #ff5252">
+            <div style="font-family:var(--bc);font-size:12px;font-weight:600;color:#ff5252;text-transform:uppercase;margin-bottom:12px">Frontiere Est — Hodh El Chargui</div>
+            <div class="security-row"><span>Reseau HUMINT</span><span class="security-val" style="color:#66bb6a">Actif &#x2713;</span></div>
+            <div style="font-family:var(--m);font-size:7px;color:var(--tx2);margin-bottom:4px">Couverture renseignement</div>
+            <div class="bar-indicator"><div class="bar-fill" style="width:65%;background:#66bb6a"></div></div>
+            <div class="security-row"><span>Drones surveillance</span><span class="security-val" style="color:#66bb6a">Deployes</span></div>
+            <div class="security-row"><span>Unites mobiles desert</span><span class="security-val" style="color:#66bb6a">~5 000 FAM</span></div>
+            <div class="security-row"><span>Cooperation US (AFRICOM)</span><span class="security-val" style="color:#66bb6a">2025-2026</span></div>
+            <div class="security-row"><span>Incursions detectees (2024-26)</span><span class="security-val" style="color:#ff5252">+12 cas</span></div>
+          </div>
+          <div class="security-box" style="border-top:2px solid #66bb6a">
+            <div style="font-family:var(--bc);font-size:12px;font-weight:600;color:#66bb6a;text-transform:uppercase;margin-bottom:12px">Frontiere Sud — Hodh Gharbi & Assaba</div>
+            <div class="security-row"><span>Brigades Hodh Gharbi</span><span class="security-val" style="color:#29b6f6">Nouvelles 2026</span></div>
+            <div style="font-family:var(--m);font-size:7px;color:var(--tx2);margin-bottom:4px">Couverture securitaire</div>
+            <div class="bar-indicator"><div class="bar-fill" style="width:45%;background:#29b6f6"></div></div>
+            <div class="security-row"><span>Manoeuvres Assaba (dec.2025)</span><span class="security-val" style="color:#66bb6a">Realisees</span></div>
+            <div class="security-row"><span>Gendarmerie "Zbar 2024"</span><span class="security-val" style="color:#29b6f6">Multi-regions</span></div>
+            <div class="security-row"><span>Systeme biometrique frontiere</span><span class="security-val" style="color:#ff9800">En deploiement</span></div>
+            <div class="security-row"><span>Expulsions (debut 2025)</span><span class="security-val" style="color:#ff5252">+28 000</span></div>
+          </div>
+        </div>
+        <div class="chart-box" style="margin-top:16px">
+          <div class="chart-wrap-sm"><canvas id="c-security"></canvas></div>
+        </div>
+        <div class="sources-line">Sources : ADF Mag. Jan.2026 · Cridem Dec.2025 · GRANIT Oct.2025 · Medias24 Juin 2024 · PASAS Nov.2025</div>
+      </div>
+      <div>
+        <div class="section-header">
+          <span class="section-num">13</span>
+          <span class="section-title">Chronologie des incidents frontaliers critiques</span>
+        </div>
+        <div class="section-desc">Zone frontaliere Mauritanie-Mali · 2022-2026 · Sources : RFI, Cridem, ACLED</div>
+        <div class="chart-box" style="padding:20px 24px">
+          <div class="timeline-item">
+            <div><div class="timeline-date">Janvier & Mars 2022</div>
+            <div class="timeline-title">Premiers incidents transfrontaliers documentes</div>
+            <div class="timeline-desc">Deux commercants mauritaniens blesses par balle. 3 incidents pres du Hodh Chargui. Debut de la serie de tensions. (Source : UNDP/PBF)</div></div>
+          </div>
+          <div class="timeline-item">
+            <div><div class="timeline-date">2022 — Continu</div>
+            <div class="timeline-title">Declaration "zone interdite" & Zone militaire Nord-Est</div>
+            <div class="timeline-desc">Mauritanie ferme formellement sa frontiere nord-est aux civils. Zone tampon militarisee (Cheggat-Ain Bentili-Dhar Tichitt). (Source : Wikipedia, Voyage.gc.ca)</div></div>
+          </div>
+          <div class="timeline-item">
+            <div><div class="timeline-date">Jan. 2023 - Avr. 2024</div>
+            <div class="timeline-title">Afflux massif — 200 000 refugies franchissent la frontiere</div>
+            <div class="timeline-desc">Offensive JNIM Kayes/Segou. Mbera : 110 000 personnes. 90 000+ hors camp. Pression securitaire mauritanienne declaree menace nationale. (Source : UNHCR)</div></div>
+          </div>
+          <div class="timeline-item">
+            <div><div class="timeline-date">Aout 2024</div>
+            <div class="timeline-title">Mali interdit la transhumance mauritanienne</div>
+            <div class="timeline-desc">Decision unilaterale du Mali. Concentration de betail au sud de la Mauritanie. Risque de conflit intercommunautaire. Tension diplomatique. (Source : GRANIT Oct.2025)</div></div>
+          </div>
+          <div class="timeline-item">
+            <div><div class="timeline-date">Oct.2025 - Fev.2026</div>
+            <div class="timeline-title">Nouveau flux : +10 000 refugies en 4 mois (Hodh Chargui)</div>
+            <div class="timeline-desc">Depuis le 24 octobre 2025. Offensive JNIM dans l'Ouest Mali (Kayes). 318 000 total estime fin 2025. Saturation des services. (Source : UNHCR Mar.2026)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S14: Economies illicites -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">14</span>
+      <span class="section-title">Economies illicites et flux transfrontaliers informels</span>
+    </div>
+    <div class="section-desc">Trafics documentes 2024-2026 · Sources : GI-TOC, ACLED, UNHCR, ISS Africa, Timbuktu Institute</div>
+    <div class="info-grid">
+      <div class="info-card" style="border-top:2px solid #ffa726">
+        <div class="info-card-title" style="color:#ffa726">&#x26CF; Orpaillage & Transit Or</div>
+        <div class="info-card-val">Kayes &#x2192; Dubai</div>
+        <div class="info-card-sub">via Mauritanie et Maghreb</div>
+        <div class="info-card-desc">Or extrait (Kayes, Kenieba) transite par la Mauritanie vers Nouadhibou ou Nouakchott puis vers le Maghreb et Dubai. Les orpailleurs empruntent le corridor Nord. Financement partiel du JNIM (Katibat Serma).</div>
+        <div class="info-card-pin">&#x1F4CD; Routes : Kayes &#x2192; Selibaby &#x2192; Kiffa &#x2192; Atar &#x2192; Nouadhibou</div>
+        <div class="info-card-warn">&#x26A0; Taoudenni (nord Mali) : site aurifere cle, corridor saharien</div>
+      </div>
+      <div class="info-card" style="border-top:2px solid #66bb6a">
+        <div class="info-card-title" style="color:#66bb6a">&#x1F402; Betail (Transhumance & Vol)</div>
+        <div class="info-card-val">300 000+</div>
+        <div class="info-card-sub">tetes concentrees cote mauritanien (2025)</div>
+        <div class="info-card-desc">Betail malien en Mauritanie suite a l'interdiction de transhumance d'aout 2024. Betail vole au Mali (Macina, Kayes) revendu via marches mauritaniens. FVR (Fievre Vallee du Rift) : epidemie sept.-oct. 2025, deces humains et pertes animales.</div>
+        <div class="info-card-pin">&#x1F4CD; Axe : Nioro-Fassala-Nema (transhumance)</div>
+        <div class="info-card-warn">&#x26A0; Wagadou forest : vol betail + base JNIM</div>
+      </div>
+      <div class="info-card" style="border-top:2px solid #ff5252">
+        <div class="info-card-title" style="color:#ff5252">&#x26FD; Carburant & Contrebande</div>
+        <div class="info-card-val">Blocus JNIM</div>
+        <div class="info-card-sub">Segou-Sikasso-Bamako, Oct.2025 (ACLED)</div>
+        <div class="info-card-desc">JNIM controle les routes de ravitaillement en carburant. Convois brules pres Sikasso, Kolondieba, Loulouni. Impact sur prix des biens de 1ere necessite au Mali et dans les zones frontalieres mauritaniennes.</div>
+        <div class="info-card-pin">&#x1F4CD; Route : Ghana/ports cotiers &#x2192; Nord Mali &#x2192; Mauritanie</div>
+        <div class="info-card-warn">&#x26A0; Contrebande carburant (Mauritanie-Mali) : marche informel</div>
+      </div>
+      <div class="info-card" style="border-top:2px solid #e040fb">
+        <div class="info-card-title" style="color:#e040fb">&#x1F6B6; Traite humaine & Migration</div>
+        <div class="info-card-val">16 500</div>
+        <div class="info-card-sub">Maliens en Europe irregulier 2024 (OIM)</div>
+        <div class="info-card-desc">Mali = 1er pays d'origine des irreguliers en Europe (2024). Route : Mali &#x2192; Mauritanie &#x2192; Nouadhibou &#x2192; Canaries. +500 morts route Atlantique 2024. Expulsion de +500 Maliens de Mauritanie en mars 2025 (reconduits a Gogui).</div>
+        <div class="info-card-pin">&#x1F4CD; FMP Gogui (OIM) : point de suivi retours forces</div>
+        <div class="info-card-warn">&#x26A0; Detentions arbitraires, refoulements documentes (HRW 2025)</div>
+      </div>
+      <div class="info-card" style="border-top:2px solid #ef5350">
+        <div class="info-card-title" style="color:#ef5350">&#x1F52B; Armes & Reseau JNIM</div>
+        <div class="info-card-val">Wagadou</div>
+        <div class="info-card-sub">Foret frontaliere, base operationnelle JNIM</div>
+        <div class="info-card-desc">La foret de Wagadou (frontiere Mauritanie-Mali) est la base du GSIM/JNIM. Armes circulent depuis la Libye (nord Mali) vers le centre et la zone frontaliere. Aucune grande attaque en Mauritanie, mais infiltration progressive documentee.</div>
+        <div class="info-card-pin">&#x1F4CD; Zones : Amourj, Bassikounou, Foret Wagadou</div>
+        <div class="info-card-warn">&#x26A0; Motos, equipements : contrebande via ports cotiers</div>
+      </div>
+      <div class="info-card" style="border-top:2px solid #29b6f6">
+        <div class="info-card-title" style="color:#29b6f6">&#x1F6D2; Denrees & Commerce informel</div>
+        <div class="info-card-val">35%</div>
+        <div class="info-card-sub">population Hodh Chargui = refugies (UNHCR 2025)</div>
+        <div class="info-card-desc">Marches frontaliers informels : mil, sorgho, legumes, intrants agricoles. Dependance humanitaire forte (PAM/WFP). Services de base satures : sante, eau, education. KOICA : 4M USD UNHCR Hodh Chargui 2024-2026.</div>
+        <div class="info-card-pin">&#x1F4CD; Bassikounou, Nema, Amourj : marches actifs</div>
+        <div class="info-card-warn">&#x26A0; Risque de penurie suite retrait USAID 2025</div>
+      </div>
+    </div>
+    <div class="sources-line">Sources : GI-TOC 2025 · ACLED Nov.2025 · UNHCR Mar.2026 · PASAS Nov.2025 · Journal du Mali Avr.2025 · HRW Aout 2025 · ADF Magazine Jan.2026</div>
+  </div>
+
 </div>
 <div id="footer">Algor Int · Rapport analytique · Sahel · Usage restreint</div>
 
@@ -279,12 +585,60 @@ Promise.all(keys.map(function(k) {
     fluxTable.appendChild(tr);
   });
 
-  // ── LOCKED ──
-  ct.innerHTML += '<div class="locked-section"><div class="lock-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="0"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>' +
-    '<div class="locked-title">Rapports detailles disponibles</div>' +
-    '<div class="locked-desc">Ces graphiques representent un apercu des capacites d\'analyse Algor Int. Les rapports complets incluent des analyses croisees, projections operationnelles et flux temps reel.</div>' +
-    '<div class="locked-list"><span class="locked-tag">Fiches acteurs detaillees</span><span class="locked-tag">Analyse reseaux</span><span class="locked-tag">Heatmaps temporelles</span><span class="locked-tag">Projections menaces</span><span class="locked-tag">Rapports PDF</span><span class="locked-tag">Flux temps reel</span></div>' +
-    '<a class="locked-cta" href="mailto:contact@algor-int.com">Contacter Algor Int</a></div>';
+  // Section locked supprimee — la carte fait partie des rapports detailles
+});
+
+// ── CHARTS STATIQUES FRONTIERE MAURITANIE-MALI ──
+// S09: Refugies par region
+new Chart(document.getElementById('c-refugees'), {
+  type: 'bar',
+  data: {
+    labels: ['2022', '2023', 'Avr.2024', 'Dec.2024', 'Juin 2025', 'Janv.2026', 'Mars 2026'],
+    datasets: [
+      { label: 'Hodh El Chargui (camp + hors camp)', data: [85, 155, 200, 230, 260, 290, 318], backgroundColor: '#e63946cc', borderColor: '#e63946', borderWidth: 1 },
+      { label: 'Autres regions (Guidimakha, Assaba...)', data: [8, 15, 25, 35, 45, 55, 60], backgroundColor: '#29b6f644', borderColor: '#29b6f6', borderWidth: 1 }
+    ]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'top', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8 } } },
+    scales: { x: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 8 }, CF) } }, y: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 8 }, CF), callback: function(v) { return v + 'k'; } }, beginAtZero: true } } }
+});
+
+// S10: Profil flux
+new Chart(document.getElementById('c-profil'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Refugies (conflit)', 'Migrants eco.', 'Orpailleurs', 'Retournes / expulses', 'Transhumants', 'Autres'],
+    datasets: [{ data: [45, 25, 15, 8, 5, 2], backgroundColor: ['#e63946', '#29b6f6', '#ffa726', '#ff7043', '#66bb6a', '#ab47bc'], borderColor: '#111214', borderWidth: 2 }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'right', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8, padding: 6 } } } }
+});
+
+// S11: Corridor Nord
+new Chart(document.getElementById('c-corridor'), {
+  type: 'line',
+  data: {
+    labels: ['2021', '2022', '2023', '2024', 'H1 2025'],
+    datasets: [
+      { label: 'Arrivees Canaries (toutes nationalites)', data: [22, 31, 40, 41, 18], borderColor: '#29b6f6', backgroundColor: '#29b6f622', borderWidth: 2, pointRadius: 5, tension: 0.3, fill: false },
+      { label: 'Maliens irreguliers Europe (estime)', data: [4, 6, 9, 12, 10], borderColor: '#ff9800', backgroundColor: '#ff980022', borderWidth: 2, pointRadius: 5, tension: 0.3, fill: false, borderDash: [5, 3] }
+    ]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'top', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8 } } },
+    scales: { x: { grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF) } }, y: { grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF), callback: function(v) { return v + 'k'; } }, beginAtZero: true } } }
+});
+
+// S12: Radar securite
+new Chart(document.getElementById('c-security'), {
+  type: 'radar',
+  data: {
+    labels: ['Renseignement HUMINT', 'Surveillance aerienne (drones)', 'Unites mobiles terrain', 'Cooperation internationale', 'Controle biometrique', 'Presence physique postes'],
+    datasets: [
+      { label: 'Hodh El Chargui (Est)', data: [80, 70, 75, 60, 40, 55], backgroundColor: 'rgba(230,57,70,0.15)', borderColor: '#e63946', borderWidth: 2, pointBackgroundColor: '#e63946', pointRadius: 4 },
+      { label: 'Hodh El Gharbi / Assaba (Sud)', data: [30, 25, 40, 45, 50, 35], backgroundColor: 'rgba(102,187,106,0.15)', borderColor: '#66bb6a', borderWidth: 2, pointBackgroundColor: '#66bb6a', pointRadius: 4 }
+    ]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8 } } },
+    scales: { r: { angleLines: { color: GC }, grid: { color: GC }, pointLabels: { color: TC, font: Object.assign({ size: 8 }, CF) }, ticks: { display: true, color: TC, font: { size: 7 }, backdropColor: 'transparent', stepSize: 25 }, suggestedMin: 0, suggestedMax: 100 } } }
 });
 </script>
 </body>
