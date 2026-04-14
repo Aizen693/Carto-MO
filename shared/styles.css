@@ -437,10 +437,10 @@ html, body {
 .popup-val { font: 400 10px/1.5 var(--m); color: #ffffff; flex: 1; }
 .popup-val.bold { font: 500 10px/1.5 var(--m); color: #ffffff; }
 
-#tutorial-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.87); z-index: 100; display: flex; align-items: center; justify-content: center; }
+#tutorial-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.87); z-index: 100; display: flex; align-items: center; justify-content: center; overflow-y: auto; padding: 20px 0; }
 #tutorial-box {
   background: var(--bg1); border: 1px solid var(--ln1); border-top: 1px solid var(--ac);
-  padding: 20px 22px 18px; max-width: 400px; width: 90%; position: relative;
+  padding: 20px 22px 18px; max-width: 400px; width: 90%; position: relative; max-height: 90vh; overflow-y: auto;
 }
 #tutorial-skip {
   position: absolute; top: 10px; right: 12px;
