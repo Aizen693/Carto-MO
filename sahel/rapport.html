@@ -449,31 +449,24 @@ Promise.all(keys.map(function(k) {
     totalDeplaces += parseInt(f.properties.personnes || 0);
   });
 
-  // ── METRICS ──
-  ct.innerHTML = '<div class="metrics">' +
+  // ── BUILD ALL HTML FIRST, THEN CREATE CHARTS ──
+  var html = '';
+
+  // METRICS
+  html += '<div class="metrics">' +
     '<div class="metric-card"><div class="metric-label">Total features</div><div class="metric-value">' + totalPts.toLocaleString('fr') + '</div></div>' +
     '<div class="metric-card"><div class="metric-label">Attaques / evenements</div><div class="metric-value">' + evts.count + '</div></div>' +
     '<div class="metric-card"><div class="metric-label">Deplaces / refugies</div><div class="metric-value">' + (totalDeplaces > 1000000 ? (totalDeplaces / 1000000).toFixed(1) + '<small>M</small>' : totalDeplaces.toLocaleString('fr')) + '</div></div>' +
     '<div class="metric-card"><div class="metric-label">Calques</div><div class="metric-value">8</div></div>' +
   '</div>';
 
-  // ── S1: VOLUME PAR CALQUE (radar) ──
-  ct.innerHTML += '<div class="section"><div class="section-header"><span class="section-num">01</span><span class="section-title">Empreinte par calque</span></div>' +
-    '<div class="section-desc">Volume de donnees par couche thematique. Le radar montre la densite relative de chaque calque (echelle logarithmique pour compenser l\'ecart entre points d\'eau et evenements).</div>' +
+  // S1
+  html += '<div class="section"><div class="section-header"><span class="section-num">01</span><span class="section-title">Empreinte par calque</span></div>' +
+    '<div class="section-desc">Volume de donnees par couche thematique (echelle logarithmique).</div>' +
     '<div class="chart-box"><div class="chart-wrap"><canvas id="c1"></canvas></div></div></div>';
 
-  var radarLabels = keys.map(function(k) { return CALQUES[k].label; });
-  var radarData = keys.map(function(k) { return Math.log10(CALQUES[k].count + 1); });
-  var radarColors = keys.map(function(k) { return CALQUES[k].color; });
-  new Chart(document.getElementById('c1'), {
-    type: 'radar',
-    data: { labels: radarLabels, datasets: [{ data: radarData, backgroundColor: 'rgba(196,154,60,0.12)', borderColor: '#c49a3c', borderWidth: 2, pointBackgroundColor: radarColors, pointRadius: 5, pointHoverRadius: 8 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(ctx) { return keys[ctx.dataIndex] ? CALQUES[keys[ctx.dataIndex]].label + ': ' + CALQUES[keys[ctx.dataIndex]].count + ' features' : ''; } } } },
-      scales: { r: { angleLines: { color: GC }, grid: { color: GC }, pointLabels: { color: TC, font: Object.assign({ size: 10 }, CF) }, ticks: { display: false } } } }
-  });
-
-  // ── S2 + S3: EVENEMENTS PAR TYPE + PAR PAYS ──
-  ct.innerHTML += '<div class="section"><div class="two-col"><div>' +
+  // S2 + S3
+  html += '<div class="section"><div class="two-col"><div>' +
     '<div class="section-header"><span class="section-num">02</span><span class="section-title">Evenements par type</span></div>' +
     '<div class="section-desc">Ventilation des ' + evts.count + ' evenements securitaires par categorie.</div>' +
     '<div class="chart-box"><div class="chart-wrap-sm"><canvas id="c2"></canvas></div></div></div><div>' +
@@ -481,111 +474,84 @@ Promise.all(keys.map(function(k) {
     '<div class="section-desc">Repartition geographique des attaques et incidents frontaliers.</div>' +
     '<div class="chart-box"><div class="chart-wrap-sm"><canvas id="c3"></canvas></div></div></div></div></div>';
 
+  // S4
+  html += '<div class="section"><div class="section-header"><span class="section-num">04</span><span class="section-title">Dispositif militaire par pays</span></div>' +
+    '<div class="section-desc">Repartition des bases, QG et garnisons par force armee et par pays.</div>' +
+    '<div class="legend" id="leg-forces"></div><div class="chart-box"><div class="chart-wrap-sm"><canvas id="c4"></canvas></div></div></div>';
+
+  // S5
+  html += '<div class="section"><div class="section-header"><span class="section-num">05</span><span class="section-title">Infrastructures strategiques</span></div>' +
+    '<div class="section-desc">Repartition des aeroports, ports, hubs logistiques et depots par pays.</div>' +
+    '<div class="chart-box"><div class="chart-wrap-sm"><canvas id="c5"></canvas></div></div></div>';
+
+  // S6
+  html += '<div class="section"><div class="section-header"><span class="section-num">06</span><span class="section-title">Population deplacee et refugiee</span></div>' +
+    '<div class="section-desc">Nombre de personnes deplacees par site (' + pop.count + ' sites).</div>' +
+    '<div class="chart-box"><div class="chart-wrap"><canvas id="c6"></canvas></div></div></div>';
+
+  // S7
+  html += '<div class="section"><div class="section-header"><span class="section-num">07</span><span class="section-title">Flux et trafics illicites</span></div>' +
+    '<div class="section-desc">Corridors de trafic identifies (' + flux.count + ' routes).</div>' +
+    '<div class="chart-box"><table class="data-table" id="flux-table"><thead><tr><th>Route</th><th>Type</th><th>Rang</th></tr></thead><tbody></tbody></table></div></div>';
+
+  // INSERT ALL HTML AT ONCE
+  ct.innerHTML = html;
+
+  // ── NOW CREATE ALL CHARTS (DOM is ready) ──
+
+  // Prepare data
+  var radarLabels = keys.map(function(k) { return CALQUES[k].label; });
+  var radarData = keys.map(function(k) { return Math.log10(CALQUES[k].count + 1); });
+  var radarColors = keys.map(function(k) { return CALQUES[k].color; });
   var typeMap = countBy(evts.data.features || [], 'type');
   var typeSorted = sortDesc(typeMap);
   var typeColors = { 'Attaque': '#ff1744', 'Incident frontalier': '#ff6d00', 'Siege': '#d50000', 'Crise diplomatique': '#ab47bc', 'Economique': '#ffd740', 'Geopolitique': '#7b1fa2' };
-  new Chart(document.getElementById('c2'), {
-    type: 'doughnut',
-    data: { labels: typeSorted.map(function(e) { return e[0]; }), datasets: [{ data: typeSorted.map(function(e) { return e[1]; }), backgroundColor: typeSorted.map(function(e) { return typeColors[e[0]] || '#888'; }), borderColor: '#111214', borderWidth: 2 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8, padding: 6 } } } }
-  });
-
   var paysEvts = {};
   (evts.data.features || []).forEach(function(f) { var p = detectPays(f); paysEvts[p] = (paysEvts[p] || 0) + 1; });
   var paysSorted = sortDesc(paysEvts);
   var paysColors = { 'Mali': '#e63946', 'Burkina Faso': '#ff9800', 'Niger': '#66bb6a', 'Mauritanie': '#29b6f6', 'Tchad': '#ab47bc' };
-  new Chart(document.getElementById('c3'), {
-    type: 'doughnut',
-    data: { labels: paysSorted.map(function(e) { return e[0]; }), datasets: [{ data: paysSorted.map(function(e) { return e[1]; }), backgroundColor: paysSorted.map(function(e) { return paysColors[e[0]] || '#78909c'; }), borderColor: '#111214', borderWidth: 2 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8, padding: 6 } } } }
-  });
-
-  // ── S4: FORCES PAR PAYS (stacked bar) ──
-  ct.innerHTML += '<div class="section"><div class="section-header"><span class="section-num">04</span><span class="section-title">Dispositif militaire par pays</span></div>' +
-    '<div class="section-desc">Repartition des bases, QG et garnisons par force armee et par pays. Inclut les milices pro-gouvernementales et forces conjointes.</div>' +
-    '<div class="legend" id="leg-forces"></div><div class="chart-box"><div class="chart-wrap-sm"><canvas id="c4"></canvas></div></div></div>';
-
-  var forcesByPays = {};
-  var allForces = {};
+  var forcesByPays = {}, allForces = {};
   var forceColors = { 'FAMA': '#2e7d32', 'FAMA / Wagner': '#6c757d', 'FAN': '#558b2f', 'ANA': '#33691e', 'VDP': '#ccaa00', 'Dan Nan Ambassagou': '#d4a017', 'ANT': '#7cb342' };
-  (forces.data.features || []).forEach(function(f) {
-    var p = detectPays(f), fc = f.properties.force || 'Autre';
-    allForces[fc] = true;
-    if (!forcesByPays[p]) forcesByPays[p] = {};
-    forcesByPays[p][fc] = (forcesByPays[p][fc] || 0) + 1;
-  });
+  (forces.data.features || []).forEach(function(f) { var p = detectPays(f), fc = f.properties.force || 'Autre'; allForces[fc] = true; if (!forcesByPays[p]) forcesByPays[p] = {}; forcesByPays[p][fc] = (forcesByPays[p][fc] || 0) + 1; });
   var fpLabels = Object.keys(forcesByPays).sort();
   var forceNames = Object.keys(allForces).sort();
-  var legF = document.getElementById('leg-forces');
-  forceNames.forEach(function(fc) {
-    var d = document.createElement('div'); d.className = 'legend-item';
-    d.innerHTML = '<div class="legend-dot" style="background:' + (forceColors[fc] || '#888') + '"></div>' + fc;
-    legF.appendChild(d);
-  });
-  new Chart(document.getElementById('c4'), {
-    type: 'bar',
-    data: { labels: fpLabels, datasets: forceNames.map(function(fc) { return { label: fc, data: fpLabels.map(function(p) { return (forcesByPays[p] || {})[fc] || 0; }), backgroundColor: (forceColors[fc] || '#888') + 'cc', borderColor: forceColors[fc] || '#888', borderWidth: 0.5 }; }) },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { x: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF) } }, y: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF), stepSize: 1 }, beginAtZero: true } } }
-  });
-
-  // ── S5: INFRASTRUCTURES PAR TYPE + PAYS (grouped bar) ──
-  ct.innerHTML += '<div class="section"><div class="section-header"><span class="section-num">05</span><span class="section-title">Infrastructures strategiques</span></div>' +
-    '<div class="section-desc">Repartition des aeroports, ports, hubs logistiques et depots par pays. Seuls les points sont comptabilises (les axes routiers sont exclus).</div>' +
-    '<div class="chart-box"><div class="chart-wrap-sm"><canvas id="c5"></canvas></div></div></div>';
-
-  var infraByPays = {};
-  var allInfraTypes = {};
+  var infraByPays = {}, allInfraTypes = {};
   var infraColors = { 'Aeroport': '#4fc3f7', 'Aeroport / Base': '#4fc3f7', 'Hub / Entrepot': '#66bb6a', 'Pont strategique': '#8d6e63', 'Corridor logistique': '#78909c' };
-  (infra.data.features || []).forEach(function(f) {
-    if (f.geometry.type !== 'Point') return;
-    var p = detectPays(f), t = f.properties.type || 'Autre';
-    allInfraTypes[t] = true;
-    if (!infraByPays[p]) infraByPays[p] = {};
-    infraByPays[p][t] = (infraByPays[p][t] || 0) + 1;
-  });
+  (infra.data.features || []).forEach(function(f) { if (f.geometry.type !== 'Point') return; var p = detectPays(f), t = f.properties.type || 'Autre'; allInfraTypes[t] = true; if (!infraByPays[p]) infraByPays[p] = {}; infraByPays[p][t] = (infraByPays[p][t] || 0) + 1; });
   var ipLabels = Object.keys(infraByPays).sort();
   var infraTypeNames = Object.keys(allInfraTypes);
-  new Chart(document.getElementById('c5'), {
-    type: 'bar',
-    data: { labels: ipLabels, datasets: infraTypeNames.map(function(t) { return { label: t, data: ipLabels.map(function(p) { return (infraByPays[p] || {})[t] || 0; }), backgroundColor: (infraColors[t] || '#66bb6a') + 'cc', borderColor: infraColors[t] || '#66bb6a', borderWidth: 0.5 }; }) },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8, padding: 6 } } },
-      scales: { x: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF) } }, y: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF), stepSize: 1 }, beginAtZero: true } } }
-  });
-
-  // ── S6: POPULATION DEPLACEE (bar horizontal) ──
-  ct.innerHTML += '<div class="section"><div class="section-header"><span class="section-num">06</span><span class="section-title">Population deplacee et refugiee</span></div>' +
-    '<div class="section-desc">Nombre de personnes deplacees, refugiees ou assiègees par site. Donnees issues du calque population (' + pop.count + ' sites).</div>' +
-    '<div class="chart-box"><div class="chart-wrap"><canvas id="c6"></canvas></div></div></div>';
-
-  var popData = (pop.data.features || []).map(function(f) {
-    return { name: f.properties.name || 'Site', count: parseInt(f.properties.personnes || 0), type: f.properties.type || '' };
-  }).sort(function(a, b) { return b.count - a.count; });
+  var popData = (pop.data.features || []).map(function(f) { return { name: f.properties.name || 'Site', count: parseInt(f.properties.personnes || 0), type: f.properties.type || '' }; }).sort(function(a, b) { return b.count - a.count; });
   var popTypeColors = { 'IDPs': '#e040fb', 'Camp refugies': '#ab47bc', 'Refugies': '#ce93d8', 'Siege': '#d50000', 'Flux': '#ff9800' };
-  new Chart(document.getElementById('c6'), {
-    type: 'bar',
-    data: { labels: popData.map(function(d) { return d.name.length > 30 ? d.name.substring(0, 28) + '...' : d.name; }),
-      datasets: [{ data: popData.map(function(d) { return d.count; }), backgroundColor: popData.map(function(d) { return (popTypeColors[d.type] || '#ab47bc') + 'cc'; }), borderColor: popData.map(function(d) { return popTypeColors[d.type] || '#ab47bc'; }), borderWidth: 1 }] },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { x: { grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF), callback: function(v) { return v >= 1000000 ? (v/1000000) + 'M' : v >= 1000 ? (v/1000) + 'k' : v; } }, beginAtZero: true }, y: { grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 8 }, CF) } } } }
-  });
 
-  // ── S7: FLUX & TRAFICS (table) ──
-  ct.innerHTML += '<div class="section"><div class="section-header"><span class="section-num">07</span><span class="section-title">Flux et trafics illicites</span></div>' +
-    '<div class="section-desc">Corridors de trafic identifies dans le calque flux (' + flux.count + ' routes cartographiees).</div>' +
-    '<div class="chart-box"><table class="data-table" id="flux-table"><thead><tr><th>Route</th><th>Type</th><th>Rang</th></tr></thead><tbody></tbody></table></div></div>';
+  // C1: Radar
+  new Chart(document.getElementById('c1'), { type: 'radar', data: { labels: radarLabels, datasets: [{ data: radarData, backgroundColor: 'rgba(196,154,60,0.12)', borderColor: '#c49a3c', borderWidth: 2, pointBackgroundColor: radarColors, pointRadius: 5, pointHoverRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(ctx) { return keys[ctx.dataIndex] ? CALQUES[keys[ctx.dataIndex]].label + ': ' + CALQUES[keys[ctx.dataIndex]].count + ' features' : ''; } } } }, scales: { r: { angleLines: { color: GC }, grid: { color: GC }, pointLabels: { color: TC, font: Object.assign({ size: 10 }, CF) }, ticks: { display: false } } } } });
 
+  // C2: Donut types
+  new Chart(document.getElementById('c2'), { type: 'doughnut', data: { labels: typeSorted.map(function(e) { return e[0]; }), datasets: [{ data: typeSorted.map(function(e) { return e[1]; }), backgroundColor: typeSorted.map(function(e) { return typeColors[e[0]] || '#888'; }), borderColor: '#111214', borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8, padding: 6 } } } } });
+
+  // C3: Donut pays
+  new Chart(document.getElementById('c3'), { type: 'doughnut', data: { labels: paysSorted.map(function(e) { return e[0]; }), datasets: [{ data: paysSorted.map(function(e) { return e[1]; }), backgroundColor: paysSorted.map(function(e) { return paysColors[e[0]] || '#78909c'; }), borderColor: '#111214', borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8, padding: 6 } } } } });
+
+  // C4: Forces stacked bar + legend
+  var legF = document.getElementById('leg-forces');
+  if (legF) forceNames.forEach(function(fc) { var d = document.createElement('div'); d.className = 'legend-item'; d.innerHTML = '<div class="legend-dot" style="background:' + (forceColors[fc] || '#888') + '"></div>' + fc; legF.appendChild(d); });
+  new Chart(document.getElementById('c4'), { type: 'bar', data: { labels: fpLabels, datasets: forceNames.map(function(fc) { return { label: fc, data: fpLabels.map(function(p) { return (forcesByPays[p] || {})[fc] || 0; }), backgroundColor: (forceColors[fc] || '#888') + 'cc', borderColor: forceColors[fc] || '#888', borderWidth: 0.5 }; }) }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF) } }, y: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF), stepSize: 1 }, beginAtZero: true } } } });
+
+  // C5: Infra stacked bar
+  new Chart(document.getElementById('c5'), { type: 'bar', data: { labels: ipLabels, datasets: infraTypeNames.map(function(t) { return { label: t, data: ipLabels.map(function(p) { return (infraByPays[p] || {})[t] || 0; }), backgroundColor: (infraColors[t] || '#66bb6a') + 'cc', borderColor: infraColors[t] || '#66bb6a', borderWidth: 0.5 }; }) }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: TC, font: Object.assign({ size: 8 }, CF), boxWidth: 8, padding: 6 } } }, scales: { x: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF) } }, y: { stacked: true, grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF), stepSize: 1 }, beginAtZero: true } } } });
+
+  // C6: Population bar horizontal
+  new Chart(document.getElementById('c6'), { type: 'bar', data: { labels: popData.map(function(d) { return d.name.length > 30 ? d.name.substring(0, 28) + '...' : d.name; }), datasets: [{ data: popData.map(function(d) { return d.count; }), backgroundColor: popData.map(function(d) { return (popTypeColors[d.type] || '#ab47bc') + 'cc'; }), borderColor: popData.map(function(d) { return popTypeColors[d.type] || '#ab47bc'; }), borderWidth: 1 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 9 }, CF), callback: function(v) { return v >= 1000000 ? (v/1000000) + 'M' : v >= 1000 ? (v/1000) + 'k' : v; } }, beginAtZero: true }, y: { grid: { color: GC }, ticks: { color: TC, font: Object.assign({ size: 8 }, CF) } } } } });
+
+  // S7: Flux table (DOM manipulation)
   var fluxTable = document.querySelector('#flux-table tbody');
   var fluxTypeColors = { 'Narcotrafic': '#c62828', 'Trafic d\'armes': '#bf360c', 'Migration': '#8d6e63', 'Contrebande or': '#f9a825', 'Contrebande': '#8e24aa', 'Trafic medicaments': '#8e24aa' };
-  (flux.data.features || []).forEach(function(f) {
-    var p = f.properties;
-    var tr = document.createElement('tr');
-    var typeColor = fluxTypeColors[p.type] || '#ff9800';
-    tr.innerHTML = '<td>' + (p.name || '--') + '</td><td><span class="tag" style="color:' + typeColor + ';border-color:' + typeColor + '40">' + (p.type || '--') + '</span></td><td>' + (p.rank || '--') + '</td>';
+  if (fluxTable) (flux.data.features || []).forEach(function(f) {
+    var p = f.properties, tr = document.createElement('tr');
+    var tc = fluxTypeColors[p.type] || '#ff9800';
+    tr.innerHTML = '<td>' + (p.name || '--') + '</td><td><span class="tag" style="color:' + tc + ';border-color:' + tc + '40">' + (p.type || '--') + '</span></td><td>' + (p.rank || '--') + '</td>';
     fluxTable.appendChild(tr);
   });
-
-  // Section locked supprimee — la carte fait partie des rapports detailles
 });
 
 // ── CHARTS STATIQUES FRONTIERE MAURITANIE-MALI ──
