@@ -209,7 +209,8 @@ function enableCompare(secondIndex) {
   const p1 = activePeriods.size === 1 ? PERIODS[[...activePeriods][0]].label : 'Période 1';
   document.getElementById('split-label-1').textContent = p1;
   document.getElementById('split-label-2').textContent = PERIODS[secondIndex].label;
-  document.getElementById('btn-compare').classList.add('active');
+  var _cmpBtn = document.getElementById('btn-compare');
+  if (_cmpBtn) _cmpBtn.classList.add('active');
   if (map2Instance) { map2Instance.remove(); map2Instance = null; }
   map2Instance = new mapboxgl.Map({
     container: 'map2', style: map.getStyle() || STYLES.standard,
@@ -235,7 +236,8 @@ function closeCompare() {
   document.getElementById('map2').style.display = 'none';
   document.getElementById('split-label-1').style.display = 'none';
   document.getElementById('split-label-2').style.display = 'none';
-  document.getElementById('btn-compare').classList.remove('active');
+  var _cmpBtn2 = document.getElementById('btn-compare');
+  if (_cmpBtn2) _cmpBtn2.classList.remove('active');
   if (map2Instance) { map.off('move', syncMaps); map2Instance.remove(); map2Instance = null; }
 }
 
@@ -680,8 +682,8 @@ function animateCounter(target) {
 
 // ── EXPORT PNG ────────────────────────────────────────────────────────
 function exportMap() {
-  const btn = document.getElementById('btn-export');
-  btn.textContent = '\u23F3 Export...';
+  var btn = document.getElementById('btn-export');
+  if (btn) btn.textContent = '\u23F3 Export...';
   map.once('render', () => {
     const canvas = map.getCanvas();
     const link = document.createElement('a');
@@ -689,7 +691,7 @@ function exportMap() {
     link.download = 'algor-int-' + period + '.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-    btn.textContent = 'PNG';
+    if (btn) btn.textContent = 'PNG';
   });
   map.triggerRepaint();
 }
@@ -705,25 +707,47 @@ function initHeatmap(features) {
       id: 'heatmap-layer', type: 'heatmap', source: 'heatmap-src', maxzoom: 14,
       layout: { visibility: 'none' },
       paint: {
-        'heatmap-weight': ['interpolate', ['linear'], ['get', '_casualties'], 0, 0.3, 100, 1, 1000, 2, 10000, 4],
-        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 3, 0.6, 10, 2],
+        'heatmap-weight': 1,
+        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 3, 0.8, 10, 2.5],
         'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'],
-          0,   'rgba(0,0,255,0)',
-          0.1, 'rgba(65,105,225,0.6)',
+          0,   'rgba(0,0,0,0)',
+          0.05, 'rgba(30,60,120,0.4)',
+          0.15, 'rgba(65,105,225,0.6)',
           0.3, 'rgba(0,200,150,0.7)',
           0.5, 'rgba(255,220,0,0.8)',
           0.7, 'rgba(255,120,0,0.9)',
           1.0, 'rgba(220,20,20,1)'
         ],
-        'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 3, 20, 7, 35, 12, 50],
-        'heatmap-opacity': 0.75,
+        'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 3, 25, 7, 40, 12, 55],
+        'heatmap-opacity': 0.8,
       }
     }, 'kml-dots-glow');
   }
 }
+let _heatmapCalqueLoaded = false;
 function toggleHeatmap() {
   heatmapVisible = !heatmapVisible;
-  document.getElementById('btn-heatmap').classList.toggle('active', heatmapVisible);
+  var el = document.getElementById('btn-heatmap');
+  if (el) el.classList.toggle('active', heatmapVisible);
+  // If no heatmap source yet, load from evenements calque + period data
+  if (!map.getSource('heatmap-src') && heatmapVisible && !_heatmapCalqueLoaded) {
+    _heatmapCalqueLoaded = true;
+    var allPts = [];
+    // Collect period data points
+    Object.values(loadedData).forEach(function(geo) {
+      if (!geo || !geo.features) return;
+      geo.features.forEach(function(f) { if (f.geometry && f.geometry.type === 'Point') allPts.push(f); });
+    });
+    // Also fetch evenements calque for attack density
+    fetch('./evenements.geojson?v=' + Date.now()).then(function(r) { return r.json(); }).then(function(d) {
+      if (d && d.features) d.features.forEach(function(f) { if (f.geometry && f.geometry.type === 'Point') allPts.push(f); });
+      initHeatmap(allPts);
+      map.setLayoutProperty('heatmap-layer', 'visibility', 'visible');
+    }).catch(function() {
+      if (allPts.length) { initHeatmap(allPts); map.setLayoutProperty('heatmap-layer', 'visibility', 'visible'); }
+    });
+    return;
+  }
   if (map.getLayer('heatmap-layer')) map.setLayoutProperty('heatmap-layer', 'visibility', heatmapVisible ? 'visible' : 'none');
 }
 
