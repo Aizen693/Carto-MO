@@ -701,8 +701,6 @@ function toggleHeatmap() {
         map.setLayoutProperty('heatmap-layer', 'visibility', 'visible');
       }
     }).catch(function() {});
-      map.setLayoutProperty('heatmap-layer', 'visibility', 'visible');
-    });
     return;
   }
   if (map.getLayer('heatmap-layer')) map.setLayoutProperty('heatmap-layer', 'visibility', heatmapVisible ? 'visible' : 'none');
