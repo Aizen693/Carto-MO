@@ -163,27 +163,23 @@
         <div class="sb-toggle" id="sb-toggle-forces" onclick="toggleLayer('forces')"></div>
       </div>
       <div class="sb-layer-row">
-        <span>3. Points d'eau</span>
-        <div class="sb-toggle" id="sb-toggle-points-eau" onclick="toggleLayer('points-eau')"></div>
-      </div>
-      <div class="sb-layer-row">
-        <span>4. Population &amp; mobilites</span>
+        <span>3. Population &amp; mobilites</span>
         <div class="sb-toggle" id="sb-toggle-population" onclick="toggleLayer('population')"></div>
       </div>
       <div class="sb-layer-row">
-        <span>5. Ressources minieres</span>
+        <span>4. Ressources minieres</span>
         <div class="sb-toggle" id="sb-toggle-mines" onclick="toggleLayer('mines')"></div>
       </div>
       <div class="sb-layer-row">
-        <span>6. Infrastructures &amp; axes</span>
+        <span>5. Infrastructures &amp; axes</span>
         <div class="sb-toggle" id="sb-toggle-infrastructures" onclick="toggleLayer('infrastructures')"></div>
       </div>
       <div class="sb-layer-row">
-        <span>7. Evenements securitaires</span>
+        <span>6. Evenements securitaires</span>
         <div class="sb-toggle" id="sb-toggle-evenements" onclick="toggleLayer('evenements')"></div>
       </div>
       <div class="sb-layer-row">
-        <span>8. Flux &amp; trafics</span>
+        <span>7. Flux &amp; trafics</span>
         <div class="sb-toggle" id="sb-toggle-flux" onclick="toggleLayer('flux')"></div>
       </div>
 
@@ -303,16 +299,16 @@ const ZONE_CONFIG = {
     satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
     dark:      'mapbox://styles/mapbox/dark-v11'
   },
-  MAP_CENTER: [1.5, 15.5],
-  MAP_ZOOM: 4.8,
-  MAP_BEARING: -10,
+  MAP_CENTER: [-9.5, 15.0],
+  MAP_ZOOM: 5.4,
+  MAP_BEARING: -8,
   MAP_ZONES: null,
   BADGE_ALL_TEXT: 'Toutes · Jan–Mars 2026',
   TUTORIAL_KEY: 'algor-tutorial-sahel-seen'
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js?v=20260414f"></script>
+<script src="../shared/engine.js?v=20260414g"></script>
 <script>
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
 (function() {
@@ -337,13 +333,25 @@ const ZONE_CONFIG = {
     var body = '';
     var sourcesVal = '';
     var skip = ['name','Name','nom','Nom','_color','_casualties','_period','sources','Sources','source','Coordonnée','type'];
-    Object.keys(props).forEach(function(k) {
-      if (skip.indexOf(k) !== -1) return;
+    var labelMap = { 'evolution_15j': 'Δ 15 jours', 'volume': 'Volume', 'objet': 'Objet', 'detail': 'Detail', 'description': 'Description', 'rank': 'Niveau', 'force': 'Force', 'personnes': 'Personnes', 'ville': 'Ville', 'pays': 'Pays' };
+    var order = ['volume', 'evolution_15j', 'objet', 'description', 'detail', 'rank', 'force', 'personnes', 'ville', 'pays'];
+    var seen = {};
+    function renderRow(k) {
+      if (skip.indexOf(k) !== -1 || seen[k]) return;
       var v = (props[k] || '').toString().trim();
       if (!v) return;
-      var label = k.replace(/_/g, ' ').replace(/^\w/, function(c) { return c.toUpperCase(); });
-      body += '<div class="popup-row"><span class="popup-key">' + label + '</span><span class="popup-val">' + linkifyText(v) + '</span></div>';
-    });
+      seen[k] = true;
+      var label = labelMap[k] || k.replace(/_/g, ' ').replace(/^\w/, function(c) { return c.toUpperCase(); });
+      var valHtml = linkifyText(v);
+      // Highlight evolution percentages
+      if (k === 'evolution_15j') {
+        var color2 = v.indexOf('+') === 0 ? '#ff5252' : v.indexOf('-') === 0 ? '#66bb6a' : '#c49a3c';
+        valHtml = '<span style="color:' + color2 + ';font-weight:600">' + v + '</span>';
+      }
+      body += '<div class="popup-row"><span class="popup-key">' + label + '</span><span class="popup-val">' + valHtml + '</span></div>';
+    }
+    order.forEach(renderRow);
+    Object.keys(props).forEach(renderRow);
     // Sources always last — clickable hyperlinks
     sourcesVal = (props.sources || props.Sources || props.source || '').toString().trim();
     if (sourcesVal) {
@@ -700,16 +708,7 @@ const ZONE_CONFIG = {
     ]
   });
 
-  /* ── CALQUE : Points d'eau ── */
-  createLayerToggle({
-    id: 'points-eau',
-    file: 'points-eau.geojson',
-    layers: [
-      { id: 'points-eau-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#29b6f6', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
-      { id: 'points-eau-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#29b6f6', 'circle-stroke-opacity': 0.35 } },
-      { id: 'points-eau-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#29b6f6', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
-    ]
-  });
+  /* Calque points-eau supprime — non pertinent pour analyse trafics/flux */
 
   /* ── CALQUE : Population & mobilites ── */
   createLayerToggle({

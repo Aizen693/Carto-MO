@@ -111,7 +111,7 @@
         "type": "Point",
         "coordinates": [
           -7.9499,
-          12.5360
+          12.536
         ]
       },
       "properties": {
@@ -527,8 +527,8 @@
       "properties": {
         "name": "Depot hydrocarbures Peni, SONABHY",
         "type": "Hub / Entrepot",
-        "description": "Hydrocarbures (essence, diesel, mazout). 104000 m³",
-        "sources": "Nouveau depot inaugure en janvier 2025 pres de Bobo-Dioulasso, 104000 m³, alimente tout le territoire burkinabe [web:180][web:182][web:188]",
+        "description": "Hydrocarbures (essence, diesel, mazout). 104000 m\u00b3",
+        "sources": "Nouveau depot inaugure en janvier 2025 pres de Bobo-Dioulasso, 104000 m\u00b3, alimente tout le territoire burkinabe [web:180][web:182][web:188]",
         "ville": "Peni",
         "pays": "Burkina Faso"
       }
@@ -545,8 +545,8 @@
       "properties": {
         "name": "Depot hydrocarbures Tema (Ghana, gere par SONABHY)",
         "type": "Hub / Entrepot",
-        "description": "Hydrocarbures liquides. Volume non precisé, infrastructure majeure",
-        "sources": "Acquisition en 2025 d’un depot à Tema pour sécuriser l’approvisionnement du Burkina [web:184][web:186]",
+        "description": "Hydrocarbures liquides. Volume non precis\u00e9, infrastructure majeure",
+        "sources": "Acquisition en 2025 d\u2019un depot \u00e0 Tema pour s\u00e9curiser l\u2019approvisionnement du Burkina [web:184][web:186]",
         "ville": "Tema, Ghana",
         "pays": "Burkina Faso"
       }
@@ -563,8 +563,8 @@
       "properties": {
         "name": "Depot principal Star Oil Bamako",
         "type": "Hub / Entrepot",
-        "description": "Carburant (essence, diesel, aviation). 16000 m³",
-        "sources": "Dépôt principal de Star Oil à Bamako, 16000 m³, desservant la ville et le réseau de distribution [web:179]",
+        "description": "Carburant (essence, diesel, aviation). 16000 m\u00b3",
+        "sources": "D\u00e9p\u00f4t principal de Star Oil \u00e0 Bamako, 16000 m\u00b3, desservant la ville et le r\u00e9seau de distribution [web:179]",
         "ville": "Bamako",
         "pays": "Mali"
       }
@@ -722,6 +722,204 @@
         "name": "Axe Bamako - Corridor Bamako-Kayes-Nioro",
         "type": "Corridor transfrontalier",
         "sources": "Donnees logistiques compilees"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.4275,
+          15.92
+        ]
+      },
+      "properties": {
+        "name": "Gogui (FMP OIM Mali-Mauritanie)",
+        "type": "Hub / Entrepot",
+        "description": "Point de passage frontalier officiel Mali-Mauritanie. FMP (Flow Monitoring Point) gere par OIM. 60% du trafic legal Mali-Mauritanie. 800kg cocaine saisis janv. 2026.",
+        "ville": "Gogui",
+        "pays": "Mali",
+        "sources": "OIM-DTM|https://dtm.iom.int OCRTIS-Mali|https://www.interieur.gouv.ml UNHCR|https://data.unhcr.org"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.598,
+          11.86
+        ]
+      },
+      "properties": {
+        "name": "Bissau (Capitale Guinee-Bissau)",
+        "type": "Hub / Entrepot",
+        "description": "Hub majeur cocaine ouest-africaine. Port + aeroport. Point d'entree historique des cartels colombo-bissau-guineens. Multi-tonnes saisies recurrentes.",
+        "ville": "Bissau",
+        "pays": "Guinee-Bissau",
+        "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html GI-TOC|https://globalinitiative.net"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -13.677,
+          9.537
+        ]
+      },
+      "properties": {
+        "name": "Conakry (Capitale Guinee)",
+        "type": "Hub / Entrepot",
+        "description": "Port et aeroport international. Point d'entree alternatif cocaine. Plateforme de redistribution vers Bamako via Kankan-Siguiri (zone aurifere).",
+        "ville": "Conakry",
+        "pays": "Guinee",
+        "sources": "UNODC|https://www.unodc.org GI-TOC|https://globalinitiative.net"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -11.43,
+          14.45
+        ]
+      },
+      "properties": {
+        "name": "Kayes (Hub corridor ouest)",
+        "type": "Hub / Entrepot",
+        "description": "Capitale regionale Ouest Mali. Noeud strategique RN1 Bamako-Dakar + chemin de fer. Point de transit cocaine, or, refugies. Saisies douanieres en hausse 2025-2026.",
+        "ville": "Kayes",
+        "pays": "Mali",
+        "sources": "OCRTIS-Mali|https://www.interieur.gouv.ml UNODC|https://www.unodc.org Banque Mondiale|https://www.worldbank.org/en/country/mali"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -13.171,
+          8.484
+        ]
+      },
+      "properties": {
+        "name": "Freetown (Sierra Leone)",
+        "type": "Hub / Entrepot",
+        "description": "Port atlantique. Point de transit secondaire cocaine. Hub diamants bruts revendus a Bamako-Dubai.",
+        "ville": "Freetown",
+        "pays": "Sierra Leone",
+        "sources": "UNODC|https://www.unodc.org GI-TOC|https://globalinitiative.net"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -17.45,
+          14.72
+        ]
+      },
+      "properties": {
+        "name": "Dakar - Port Autonome",
+        "type": "Hub / Entrepot",
+        "description": "Principal port d'entree maritime ouest-africain. Conteneurs commerciaux dissimulant cocaine. Point depart RN1 + chemin de fer Dakar-Bamako.",
+        "ville": "Dakar",
+        "pays": "Senegal",
+        "sources": "OCRTIS-Senegal|https://www.douanes.sn UNODC|https://www.unodc.org Port Dakar|https://www.portdakar.sn"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12.27,
+          14.79
+        ]
+      },
+      "properties": {
+        "name": "Selibaby (Hodh El Gharbi)",
+        "type": "Hub / Entrepot",
+        "description": "Capitale regionale mauritanienne. Point de passage informel principal Selibaby-Kayes. Zone deportations refugies maliens 2025.",
+        "ville": "Selibaby",
+        "pays": "Mauritanie",
+        "sources": "GRANIT|https://www.granit.org UNHCR|https://data.unhcr.org HRW|https://www.hrw.org"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.32,
+          16.16
+        ]
+      },
+      "properties": {
+        "name": "Camp Mbera (Bassikounou)",
+        "type": "Hub / Entrepot",
+        "description": "Plus grand camp de refugies maliens en Mauritanie. 318 000 personnes (mars 2026). +10 000 en 4 mois suite offensive JNIM Ouest Mali.",
+        "ville": "Bassikounou",
+        "pays": "Mauritanie",
+        "sources": "UNHCR|https://data.unhcr.org OCHA|https://www.unocha.org PASAS|https://www.pasas-minka.org"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -11.3,
+          12.85
+        ]
+      },
+      "properties": {
+        "name": "Kenieba (zone aurifere)",
+        "type": "Hub / Entrepot",
+        "description": "Principal site d'orpaillage artisanal sud-ouest Mali. 50-70 t/an or non declare. Export Bamako-Dubai. Finance indirectement groupes armes.",
+        "ville": "Kenieba",
+        "pays": "Mali",
+        "sources": "SWISSAID|https://www.swissaid.ch OCDE|https://www.oecd.org Reuters|https://www.reuters.com/world/africa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.3,
+          12.4
+        ]
+      },
+      "properties": {
+        "name": "Siguiri (Guinee, zone aurifere)",
+        "type": "Hub / Entrepot",
+        "description": "Principale zone aurifere de Guinee. Point de convergence narcotrafic-or-armes sur axe Conakry-Kankan-Bamako.",
+        "ville": "Siguiri",
+        "pays": "Guinee",
+        "sources": "SWISSAID|https://www.swissaid.ch UNODC|https://www.unodc.org GI-TOC|https://globalinitiative.net"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -13.7,
+          13.78
+        ]
+      },
+      "properties": {
+        "name": "Tambacounda (Senegal Est)",
+        "type": "Hub / Entrepot",
+        "description": "Hub regional Senegal Oriental. Point de consolidation drogue + migrants sur axe Dakar-Bamako. Croisement avec route Casamance-nord.",
+        "ville": "Tambacounda",
+        "pays": "Senegal",
+        "sources": "UNODC|https://www.unodc.org Frontex|https://frontex.europa.eu OCRTIS-Senegal|https://www.douanes.sn"
       }
     }
   ]

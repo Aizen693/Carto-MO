@@ -3,83 +3,273 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-16.02, 12.2], [-15.4, 12.8], [-14.5, 13.5], [-13.5, 14.0], [-12.0, 14.5], [-11.0, 15.0], [-9.5, 15.5], [-8.0, 14.0], [-7.6, 12.65]] },
-      "properties": { "name": "Guinee-Bissau > Bamako", "description": "Route principale de la cocaine depuis la Guinee-Bissau, plateforme de redistribution majeure, vers Bamako via Kayes.", "type": "Narcotrafic", "rank": "main", "detail": "La Guinee-Bissau est le hub majeur d'entree de la cocaine sud-americaine en Afrique. Saisies recurrentes de multi-tonnes. Transit par la region de Kayes puis Bamako.", "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html GI-TOC|https://globalinitiative.net" }
+      "geometry": { "type": "LineString", "coordinates": [[-15.598, 11.860], [-14.5, 12.3], [-13.6, 12.8], [-12.5, 13.2], [-11.4, 14.4], [-10.5, 14.7], [-9.5, 14.5], [-8.6, 14.0], [-8.0, 12.65]] },
+      "properties": {
+        "name": "Bissau > Conakry > Kayes > Bamako",
+        "description": "Axe principal de la cocaine ouest-africaine. Bissau (hub d'entree sud-americain) vers Bamako via Kayes. Volume estime 18-25 t/an, +32% sur Q1 2026 vs Q4 2025.",
+        "type": "Narcotrafic",
+        "rank": "main",
+        "volume": "18-25 t/an cocaine",
+        "evolution_15j": "+32%",
+        "objet": "Cocaine en briques 1-25 kg",
+        "detail": "Bissau reste le hub regional. Saisies recurrentes : 2.6 t (mars 2019), 1.9 t (sept 2019), 800 kg (jan 2026 Bamako). Transit Kayes via la RN1 puis Bamako. Reseau colombo-bissau-guineen.",
+        "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html GI-TOC|https://globalinitiative.net OCRTIS-Mali|https://www.interieur.gouv.ml"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-7.6, 12.65], [-5.5, 13.5], [-3.0, 14.5], [-0.05, 16.27]] },
-      "properties": { "name": "Bamako > Mopti > Gao", "description": "Axe central de transit Bamako-Mopti-Gao. Colonne vertebrale du narcotrafic au Mali via la RN6.", "type": "Narcotrafic", "rank": "main", "detail": "La RN6 est l'axe logistique principal. Drogue stockee dans des entrepots a Gao avant redistribution vers le nord (Kidal, Taoudenit) ou l'est.", "sources": "ICG|https://www.crisisgroup.org/africa/sahel GI-TOC|https://globalinitiative.net" }
+      "geometry": { "type": "LineString", "coordinates": [[-13.677, 9.537], [-13.0, 10.5], [-12.0, 11.5], [-11.0, 12.5], [-10.5, 13.5], [-10.0, 14.0], [-9.0, 14.0], [-8.0, 12.65]] },
+      "properties": {
+        "name": "Conakry > Siguiri > Bamako",
+        "description": "Route secondaire depuis Conakry via les zones aurifere de Siguiri. Cocaine et armes legeres.",
+        "type": "Narcotrafic",
+        "rank": "main",
+        "volume": "5-8 t/an cocaine",
+        "evolution_15j": "+18%",
+        "objet": "Cocaine, ephedrine, AK-47",
+        "detail": "Conakry recoit la cocaine par voie maritime (port). Transit terrestre via Kankan, Siguiri (or), Bamako. Convergence narcotrafic + or + armes. Volume en hausse depuis fermeture frontiere senegalaise 2025.",
+        "sources": "UNODC|https://www.unodc.org GI-TOC|https://globalinitiative.net Reuters|https://www.reuters.com/world/africa"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-0.05, 16.27], [1.0, 16.5], [1.68, 18.1], [1.0, 20.0], [0.0, 22.5]] },
-      "properties": { "name": "Gao > Kidal > Taoudenit", "description": "Route nord depuis Gao via Kidal et Taoudenit vers le sud algerien et la Libye. Zone desertique, pas de controle.", "type": "Narcotrafic", "rank": "main", "detail": "Convois de 4x4 charges de cocaine transitent par Kidal, zone historique des trafiquants touareg, vers Taoudenit et les frontieres algeriennes. Zone hors controle etatique.", "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html ICG|https://www.crisisgroup.org/africa/sahel" }
+      "geometry": { "type": "LineString", "coordinates": [[-13.171, 8.484], [-12.5, 9.5], [-11.5, 10.5], [-10.5, 11.5], [-9.5, 12.5], [-8.5, 12.65], [-8.0, 12.65]] },
+      "properties": {
+        "name": "Freetown > Kankan > Bamako",
+        "description": "Axe Sierra Leone via Guinee-Forestiere. Diamants, cocaine, migrants irreguliers.",
+        "type": "Narcotrafic",
+        "rank": "secondary",
+        "volume": "2-3 t/an cocaine + 1500 carats diamants",
+        "evolution_15j": "+8%",
+        "objet": "Cocaine, diamants bruts, especes",
+        "detail": "Route plus discrete utilisee depuis le renforcement des controles guineens. Diamants bruts SL revendus a Bamako puis exportes Dubai. Cocaine consolidee avec flux Bissau a Bamako.",
+        "sources": "GI-TOC|https://globalinitiative.net SWISSAID|https://www.swissaid.ch UNODC|https://www.unodc.org"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-0.05, 16.27], [2.5, 17.0], [5.0, 18.0], [8.0, 20.0], [12.0, 24.0], [14.0, 28.0]] },
-      "properties": { "name": "Gao > Agadez > Libye", "description": "Route est depuis Gao via le Niger (Agadez) vers la Libye. Convergence narcotrafic et trafic d'armes.", "type": "Narcotrafic", "rank": "main", "detail": "Route de transit passant par Menaka, puis Agadez (Niger). Cocaine et cannabis achemines vers les marches libyens et mediterraneens.", "sources": "GI-TOC|https://globalinitiative.net UNODC|https://www.unodc.org" }
+      "geometry": { "type": "LineString", "coordinates": [[-17.45, 14.72], [-16.5, 14.9], [-15.5, 15.0], [-14.5, 15.0], [-13.5, 15.0], [-12.5, 15.0], [-11.5, 15.0], [-10.5, 14.7], [-9.0, 14.0], [-8.0, 12.65]] },
+      "properties": {
+        "name": "Dakar > Tambacounda > Kayes > Bamako",
+        "description": "Axe officiel Dakar-Bamako (RN1 + chemin de fer). Cocaine sous couverture commerciale, contrebande electronique.",
+        "type": "Narcotrafic",
+        "rank": "main",
+        "volume": "8-12 t/an cocaine",
+        "evolution_15j": "+15%",
+        "objet": "Cocaine dissimulee, electronique, devises",
+        "detail": "Port de Dakar = principal point d'entree maritime ouest-africain. Conteneurs commerciaux dissimulant la drogue. Transit ferroviaire et routier (RN1) jusqu'a Kayes puis Bamako. Saisies au scanner Kayes en hausse 2025-2026.",
+        "sources": "UNODC|https://www.unodc.org/unodc/en/drug-trafficking/west-and-central-africa.html OCRTIS-Senegal|https://www.douanes.sn GI-TOC|https://globalinitiative.net"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-17.45, 14.72], [-16.6, 14.75], [-16.0, 15.2], [-15.8, 16.0], [-16.0, 17.0], [-16.0, 18.1]] },
-      "properties": { "name": "Dakar > Nouakchott", "description": "Route cotiere secondaire. Cocaine acheminee depuis le port de Dakar/M'bour vers la Mauritanie, puis nord.", "type": "Narcotrafic", "rank": "secondary", "detail": "Points de lancement cotiers entre M'bour et St-Louis. Pirogues et go-fast vers les iles Canaries ou transit terrestre vers Nouakchott.", "sources": "GI-TOC|https://globalinitiative.net UNODC|https://www.unodc.org" }
+      "geometry": { "type": "LineString", "coordinates": [[-8.0, 12.65], [-9.0, 13.5], [-10.0, 14.0], [-10.5, 14.5], [-11.0, 15.0], [-11.5, 15.4], [-11.9, 15.92], [-12.0, 16.5], [-12.5, 17.0], [-13.0, 17.5], [-14.0, 17.8], [-15.5, 18.0], [-16.0, 18.1]] },
+      "properties": {
+        "name": "Bamako > Kayes > Gogui > Nouakchott",
+        "description": "Corridor strategique Mali-Mauritanie. Point de passage GOGUI principal (FMP OIM). Drogue, armes, civils, betail.",
+        "type": "Narcotrafic",
+        "rank": "main",
+        "volume": "6-10 t/an cocaine + flux mixte",
+        "evolution_15j": "+45%",
+        "objet": "Cocaine, ephedrine, armes, especes, civils",
+        "detail": "Axe en explosion depuis 2025. Gogui (point officiel OIM) controle 60% du trafic legal. Pistes paralleles informelles : Selibaby-Kayes, Kiffa-Diema. 800kg cocaine saisis Gogui janv. 2026. Convergence narcotrafic + traite humaine. Saturation des FMP OIM.",
+        "sources": "OIM-DTM|https://dtm.iom.int UNHCR|https://data.unhcr.org GI-TOC|https://globalinitiative.net OCRTIS-Mali|https://www.interieur.gouv.ml ACLED|https://acleddata.com"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-16.0, 18.1], [-16.5, 19.5], [-17.0, 21.0]] },
-      "properties": { "name": "Nouakchott > Nouadhibou", "description": "Route cotiere mauritanienne. Transit vers Nouadhibou, dernier point terrestre avant les Canaries.", "type": "Narcotrafic", "rank": "secondary", "detail": "Nouadhibou : base arriere pour les departs en mer vers les iles Canaries (Espagne). Go-fast et pirogues.", "sources": "GI-TOC|https://globalinitiative.net" }
+      "geometry": { "type": "LineString", "coordinates": [[-10.5, 13.5], [-11.0, 14.5], [-11.5, 15.5], [-12.0, 16.0], [-12.5, 16.5], [-13.0, 17.0], [-13.5, 17.3], [-14.0, 17.5], [-14.5, 17.8], [-15.5, 17.9], [-16.0, 18.1]] },
+      "properties": {
+        "name": "Nara > Selibaby > Nouakchott (piste informelle)",
+        "description": "Piste paralelle non controlee. Contrebande heavy : armes, carburant, motos, especes. Zone JNIM-friendly.",
+        "type": "Trafic d'armes",
+        "rank": "main",
+        "volume": "~2000 AK-47/an + munitions",
+        "evolution_15j": "+62%",
+        "objet": "AK-47, RPG-7, motos Yamaha, carburant, especes",
+        "detail": "Foret de Wagadou = base operationnelle JNIM. Piste informelle utilisee comme corridor armement vers et depuis le Mali central. Deportation +500 Maliens par Mauritanie en mars 2025 a refoule via cette piste. Aucune presence FMP.",
+        "sources": "GI-TOC|https://globalinitiative.net ACLED|https://acleddata.com HRW|https://www.hrw.org GRANIT|https://www.granit.org"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-17.0, 21.0], [-16.0, 24.0], [-15.0, 27.0], [-14.5, 28.5]] },
-      "properties": { "name": "Nouadhibou > Iles Canaries", "description": "Traversee maritime clandestine vers les iles Canaries. Route migratoire et narcotrafic.", "type": "Narcotrafic", "rank": "secondary", "detail": "Route maritime perilleuse. Go-fast charges de cocaine, pirogues de migrants. Interceptions regulieres par la marine espagnole et mauritanienne.", "sources": "UNODC|https://www.unodc.org GI-TOC|https://globalinitiative.net" }
+      "geometry": { "type": "LineString", "coordinates": [[-16.0, 18.1], [-16.2, 19.0], [-16.5, 20.0], [-16.8, 20.5], [-17.0, 21.0]] },
+      "properties": {
+        "name": "Nouakchott > Nouadhibou (cabotage)",
+        "description": "Axe cotier mauritanien. Migrants irreguliers + cocaine destinee aux Canaries. Surveillance Frontex H+24.",
+        "type": "Migration",
+        "rank": "main",
+        "volume": "1800 personnes/mois + 1.5 t cocaine/an",
+        "evolution_15j": "-46%",
+        "objet": "Migrants, cocaine, devises EUR/USD",
+        "detail": "Renforcement securitaire suite accord UE-Mauritanie 210 M€ fev 2025. Departs vers Canaries en chute (-46% H1 2025). Mais flux mineur reactive vers le Sahara occidental. Pirogues + go-fast.",
+        "sources": "Frontex|https://frontex.europa.eu OIM|https://www.iom.int UNHCR|https://data.unhcr.org GI-TOC|https://globalinitiative.net"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-7.6, 12.65], [-8.0, 13.5], [-9.0, 14.5], [-10.5, 15.0], [-12.0, 15.5], [-13.5, 15.8], [-15.0, 16.5], [-16.0, 18.1]] },
-      "properties": { "name": "Bamako > Kayes > Nouakchott", "description": "Route secondaire ouest depuis Bamako via Kayes et la frontiere Mali-Mauritanie vers Nouakchott.", "type": "Narcotrafic", "rank": "secondary", "detail": "Route de contournement via Nara, Nioro du Sahel, puis traversee de la frontiere mauritanienne. Utilisee quand la route nord est trop surveillee.", "sources": "ICG|https://www.crisisgroup.org/africa/sahel GI-TOC|https://globalinitiative.net" }
+      "geometry": { "type": "LineString", "coordinates": [[-17.0, 21.0], [-15.5, 22.0], [-14.0, 23.0], [-13.0, 24.5], [-13.0, 26.0], [-13.5, 27.5]] },
+      "properties": {
+        "name": "Nouadhibou > Sahara occidental > Maroc",
+        "description": "Axe transsaharien marocain. Cocaine, hashish marocain en sens inverse, migrants subsahariens.",
+        "type": "Narcotrafic",
+        "rank": "main",
+        "volume": "3-5 t/an cocaine + 50 t hashish",
+        "evolution_15j": "+22%",
+        "objet": "Cocaine (sud-nord), hashish (nord-sud), migrants",
+        "detail": "Route majeure depuis renforcement controles Atlantique. Hashish marocain Rif descend vers Sahel. Cocaine remonte. Zones grises Polisario / Sahara occidental. Convoi Toyota.",
+        "sources": "UNODC|https://www.unodc.org/wdr2024 GI-TOC|https://globalinitiative.net DGSN-Maroc|https://www.policemarocaine.ma"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-3.0, 14.5], [-2.0, 14.0], [-1.52, 12.37], [-0.5, 11.5], [0.5, 11.0], [1.0, 10.5]] },
-      "properties": { "name": "Mopti > Ouaga > Cotes", "description": "Route secondaire sud depuis Mopti via Ouagadougou vers les Etats cotiers (Togo, Ghana, Benin).", "type": "Narcotrafic", "rank": "secondary", "detail": "Corridor sud de redistribution. La cocaine transite vers les ports cotiers du golfe de Guinee pour reexportation vers l'Europe.", "sources": "GI-TOC|https://globalinitiative.net GIABA|https://www.giaba.org" }
+      "geometry": { "type": "LineString", "coordinates": [[-11.5, 12.9], [-10.5, 13.0], [-9.5, 13.0], [-8.5, 12.8], [-8.0, 12.65]] },
+      "properties": {
+        "name": "Kenieba > Bamako (or artisanal)",
+        "description": "Or artisanal sud-ouest Mali (Kenieba, Kangaba, Bougouni). Export dissimule via Bamako.",
+        "type": "Contrebande or",
+        "rank": "main",
+        "volume": "50-70 t/an or non declare",
+        "evolution_15j": "+12%",
+        "objet": "Or 22-24K barres et poudre",
+        "detail": "50-70 tonnes/an d'or non declare au Mali. Sites Kenieba, Kangaba, Bougouni. Export Bamako-Dubai vols directs ou transit Lome. Finance indirectement les groupes armes du nord et JNIM. Hausse depuis crise carburant 2025.",
+        "sources": "SWISSAID|https://www.swissaid.ch OCDE|https://www.oecd.org Reuters|https://www.reuters.com/world/africa"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[14.0, 32.5], [13.0, 28.0], [11.0, 23.0], [8.0, 17.0], [5.0, 16.0], [2.5, 14.5]] },
-      "properties": { "name": "Armes Libye > Niger > Sahel", "description": "Flux d'armes depuis les depots libyens post-Kadhafi (2011). Principal vecteur d'armement des groupes jihadistes saheliens.", "type": "Trafic d'armes", "rank": "main", "detail": "Depots militaires pilles a Sebha, Oubari, Misrata. AK-47, RPG-7, mines, MANPADS SA-7. Transit via Agadez puis redistribution au Mali (JNIM, ISGS) et Burkina Faso.", "sources": "CAR|https://www.conflictarm.com SIPRI|https://www.sipri.org UNSC Panel|https://www.un.org" }
+      "geometry": { "type": "LineString", "coordinates": [[-8.0, 12.65], [-9.0, 13.5], [-10.5, 14.5], [-11.5, 15.5], [-12.5, 16.5], [-15.0, 17.5], [-16.0, 18.1], [-17.0, 21.0]] },
+      "properties": {
+        "name": "Or Bamako > Nouadhibou > Dubai",
+        "description": "Route alternative export or via Mauritanie. Evite les vols directs Bamako-Dubai surveilles.",
+        "type": "Contrebande or",
+        "rank": "secondary",
+        "volume": "~15 t/an",
+        "evolution_15j": "+38%",
+        "objet": "Or non declare, devises",
+        "detail": "Contournement des controles aeroportuaires de Bamako. Or depose a Nouakchott (raffinerie privee 2024) puis exporte vers Dubai par vols Mauritania Airlines. Pertes fiscales Mali estimees 1.2 Md USD/an.",
+        "sources": "SWISSAID|https://www.swissaid.ch GI-TOC|https://globalinitiative.net Reuters|https://www.reuters.com/world/africa"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[2.5, 14.5], [1.0, 15.0], [-0.05, 16.27], [-1.5, 17.0], [-3.0, 16.7]] },
-      "properties": { "name": "Armes Niger > Mali nord", "description": "Redistribution des armes libyennes depuis le Niger vers le nord Mali (Gao, Tombouctou, Kidal).", "type": "Trafic d'armes", "rank": "secondary", "detail": "Armes transitant par les zones frontalieres Niger-Mali. Fournissent les groupes armes du nord Mali et les milices communautaires.", "sources": "CAR|https://www.conflictarm.com ICG|https://www.crisisgroup.org/africa/sahel" }
+      "geometry": { "type": "LineString", "coordinates": [[-8.0, 12.65], [-7.5, 12.5], [-7.0, 12.3], [-6.0, 11.5], [-5.0, 10.0], [-4.0, 8.5], [-4.0, 7.0], [-4.0, 5.5]] },
+      "properties": {
+        "name": "Bamako > Sikasso > Cote d'Ivoire (Abidjan)",
+        "description": "Corridor commercial historique. Reactivation post-crise carburant 2025. Cocaine en transit vers ports Abidjan.",
+        "type": "Narcotrafic",
+        "rank": "main",
+        "volume": "4-6 t/an cocaine + 800 t marchandises legales",
+        "evolution_15j": "+28%",
+        "objet": "Cocaine, carburant, marchandises mixtes",
+        "detail": "Frontiere CI rouverte oct 2024. Convois Bamako-Sikasso-Korhogo-Abidjan. Carburant CI vers Mali (penurie JNIM). Cocaine sortante vers port Abidjan pour reexportation Europe. Risque embuscades JNIM Sikasso.",
+        "sources": "ACLED|https://acleddata.com UNODC|https://www.unodc.org GI-TOC|https://globalinitiative.net OCRTIS-CI|https://www.douanes.ci"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[2.11, 13.51], [3.5, 14.5], [6.0, 16.0], [8.0, 17.0], [10.0, 19.5], [11.5, 22.0], [13.0, 28.0]] },
-      "properties": { "name": "Migrants Niamey > Agadez > Libye", "description": "Route migratoire principale. Hub d'Agadez. Milliers de migrants/mois vers la Libye et la Mediterranee.", "type": "Migration", "rank": "main", "detail": "Agadez : plaque tournante migratoire. Convois de pick-up via Dirkou, Madama, Sebha. Depuis l'abrogation de la loi 2015-36 (2023), flux en forte hausse. Passeurs, racket, morts dans le desert.", "sources": "OIM|https://www.iom.int/countries/niger UNHCR|https://data.unhcr.org MMC|https://mixedmigration.org" }
+      "geometry": { "type": "LineString", "coordinates": [[-8.0, 12.65], [-6.5, 13.2], [-5.0, 13.5], [-4.0, 14.0], [-3.0, 14.5]] },
+      "properties": {
+        "name": "Bamako > Mopti (axe central)",
+        "description": "Axe Bamako-Mopti. RN6. Convois militaires FAMA, civils, marchandises. Embuscades JNIM frequentes.",
+        "type": "Narcotrafic",
+        "rank": "secondary",
+        "volume": "2-3 t/an cocaine",
+        "evolution_15j": "-12%",
+        "objet": "Cocaine, marchandises, civils",
+        "detail": "Axe historique mais en chute depuis blocus JNIM oct 2025. Carburant rationne. Routes alternatives (Nara, Diema) en hausse. Cocaine reduite mais persistante.",
+        "sources": "ACLED|https://acleddata.com ICG|https://www.crisisgroup.org/africa/sahel"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-11.5, 12.9], [-10.0, 12.8], [-8.0, 12.65], [-6.5, 13.0], [-5.0, 13.5], [-3.5, 14.0], [-2.5, 15.0], [-2.0, 17.0]] },
-      "properties": { "name": "Or artisanal sud Mali > nord", "description": "Contrebande d'or artisanal. Sites d'orpaillage du sud (Kenieba, Kangaba) vers Bamako puis nord pour export.", "type": "Contrebande or", "rank": "main", "detail": "50-70t/an d'or non declare. Orpaillage artisanal a Kenieba, Kangaba, Bougouni. Export via Bamako-Dubai (vols directs ou transit Lome/Accra). Finance indirectement les groupes armes.", "sources": "SWISSAID|https://www.swissaid.ch OCDE|https://www.oecd.org Reuters|https://www.reuters.com/world/africa" }
+      "geometry": { "type": "LineString", "coordinates": [[-15.598, 11.860], [-14.0, 13.0], [-13.0, 14.0], [-12.0, 14.5], [-11.4, 14.4], [-11.0, 15.0], [-10.5, 15.5], [-10.0, 16.0]] },
+      "properties": {
+        "name": "Bissau > Senegal Casamance > Mauritanie",
+        "description": "Route maritime + terrestre via Casamance senegalaise. Cocaine et migrants subsahariens.",
+        "type": "Migration",
+        "rank": "main",
+        "volume": "1200 migrants/mois",
+        "evolution_15j": "+24%",
+        "objet": "Migrants OF, cocaine, especes",
+        "detail": "Casamance utilisee comme zone tampon. Migrants regroupes a Ziguinchor puis Tambacounda. Cocaine consolidee a Tambacounda avant transit nord. Route en hausse depuis fermeture corridor Niger-Libye.",
+        "sources": "OIM|https://www.iom.int Frontex|https://frontex.europa.eu UNHCR|https://data.unhcr.org"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[15.0, 12.1], [13.5, 12.8], [12.5, 13.5], [10.0, 15.5], [8.0, 17.0]] },
-      "properties": { "name": "Armes lac Tchad > Agadez", "description": "Flux d'armes depuis le bassin du lac Tchad vers le nord Niger. ISWAP/Boko Haram comme fournisseurs.", "type": "Trafic d'armes", "rank": "secondary", "detail": "Armes capturees par ISWAP redistribuees vers le nord. Route Diffa-Zinder-Agadez. Munitions, explosifs artisanaux, vehicules voles.", "sources": "CAR|https://www.conflictarm.com SIPRI|https://www.sipri.org" }
+      "geometry": { "type": "LineString", "coordinates": [[-9.5, 15.5], [-10.0, 15.8], [-10.5, 16.0], [-11.0, 16.2], [-11.5, 16.4], [-12.0, 16.5], [-13.0, 16.8]] },
+      "properties": {
+        "name": "Transhumance Mauritanie > Mali (betail)",
+        "description": "Mouvement saisonnier de betail entre la Mauritanie (Hodh) et le Mali (Nara, Nioro). Bloque par Mali aout 2024.",
+        "type": "Contrebande",
+        "rank": "main",
+        "volume": "300 000+ tetes",
+        "evolution_15j": "-67%",
+        "objet": "Bovins, ovins, caprins",
+        "detail": "Interdiction unilaterale du Mali aout 2024 a stoppe la transhumance officielle. Concentration de 300 000 tetes cote mauritanien. Trafic frontalier informel +180%. Risque sanitaire FVR (Fievre Vallee du Rift) confirme sept 2025.",
+        "sources": "GRANIT|https://www.granit.org FAO|https://www.fao.org/mauritania OIE|https://www.woah.org"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-0.5, 5.5], [-0.8, 7.5], [-1.0, 9.5], [-1.2, 11.0], [-1.52, 12.37], [-1.0, 14.0]] },
-      "properties": { "name": "Tramadol Ghana > Sahel", "description": "Route du tramadol et medicaments contrefaits depuis les ports ghaneen/nigerians vers le Sahel.", "type": "Trafic medicaments", "rank": "secondary", "detail": "Tramadol d'Inde/Chine entre via Tema (Ghana) et Lagos. Distribution par les marches informels. Consommation massive chez jeunes et combattants.", "sources": "UNODC|https://www.unodc.org INCB|https://www.incb.org OMS|https://www.who.int" }
+      "geometry": { "type": "LineString", "coordinates": [[-12.0, 14.5], [-11.5, 15.0], [-11.0, 15.5], [-10.5, 16.0], [-10.0, 16.3]] },
+      "properties": {
+        "name": "Refugies Kayes > Mbera (refoulements)",
+        "description": "Flux de refugies maliens fuyant offensive JNIM ouest Mali. Direction camp Mbera. Refoulements documentes HRW.",
+        "type": "Migration",
+        "rank": "main",
+        "volume": "+10 000 personnes en 4 mois (oct 2025-fev 2026)",
+        "evolution_15j": "+85%",
+        "objet": "Refugies civils, dont 60% femmes/enfants",
+        "detail": "Offensive JNIM Ouest Mali (Kayes, Segou) a declenche un nouvel afflux. Camp Mbera sature : 318 000 personnes total. Detentions arbitraires + refoulements documentes HRW 2025. UE 210 M€ debloques.",
+        "sources": "UNHCR|https://data.unhcr.org HRW|https://www.hrw.org OCHA|https://www.unocha.org PASAS|https://www.pasas-minka.org"
+      }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "LineString", "coordinates": [[-0.2, 5.5], [0.0, 8.0], [0.2, 10.0], [-0.5, 11.5], [-1.52, 12.37], [-1.0, 14.0], [0.0, 15.5]] },
-      "properties": { "name": "Carburant Ghana > Burkina > Niger", "description": "Contrebande de carburant subventionne depuis le Ghana vers le Burkina et le Niger.", "type": "Contrebande", "rank": "secondary", "detail": "Carburant achete a prix subventionne au Ghana, transporte en jerricans via pistes informelles, revendu au Burkina/Niger a prix majore.", "sources": "ICG|https://www.crisisgroup.org/africa/west-africa GI-TOC|https://globalinitiative.net" }
+      "geometry": { "type": "LineString", "coordinates": [[-13.0, 16.0], [-13.5, 17.0], [-14.0, 17.5], [-15.0, 18.0], [-16.0, 18.1]] },
+      "properties": {
+        "name": "Carburant Nouakchott > Hodh (contrebande)",
+        "description": "Carburant subventionne mauritanien revendu cote Mali (penurie JNIM). Convois jerricans + camions.",
+        "type": "Contrebande",
+        "rank": "main",
+        "volume": "~20 000 L/jour",
+        "evolution_15j": "+95%",
+        "objet": "Diesel, essence en jerricans 200L",
+        "detail": "Penurie carburant Mali oct 2025 (JNIM brule convois). Marche noir explosif en Hodh El Chargui. Prix Nouakchott 21 MRU/L vs Bamako 850 FCFA/L (+300%). Reseau motos + camions citernes.",
+        "sources": "GI-TOC|https://globalinitiative.net Cridem|https://cridem.org Reuters|https://www.reuters.com/world/africa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-11.5, 15.5], [-11.0, 15.0], [-10.5, 14.5], [-9.5, 13.5], [-8.0, 12.65]] },
+      "properties": {
+        "name": "JNIM Wagadou > Bamako (operations)",
+        "description": "Mouvement de combattants JNIM depuis foret Wagadou (frontiere Mauritanie) vers operations Mali central et Bamako.",
+        "type": "Trafic d'armes",
+        "rank": "main",
+        "volume": "~150 combattants/mois",
+        "evolution_15j": "+40%",
+        "objet": "Combattants, armes, motos, IED",
+        "detail": "Foret Wagadou = base operationnelle JNIM (Katibat Macina). Infiltration progressive Bamako depuis 2024. Attentats Bamako sept 2024 (academie gendarmerie). Risque haute pression sur capitale 2026.",
+        "sources": "ACLED|https://acleddata.com ICG|https://www.crisisgroup.org/africa/sahel HRW|https://www.hrw.org RFI|https://www.rfi.fr/fr/afrique"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "LineString", "coordinates": [[-15.598, 11.860], [-15.0, 12.5], [-14.5, 13.0], [-14.0, 13.5], [-13.5, 14.0], [-13.0, 14.5], [-12.5, 14.5], [-12.0, 14.5]] },
+      "properties": {
+        "name": "Armes Bissau > Casamance > Kayes",
+        "description": "Stocks armes Casamance (rebellion MFDC residuelle) revendus reseaux maliens. Volume modere mais persistant.",
+        "type": "Trafic d'armes",
+        "rank": "secondary",
+        "volume": "~500 AK-47/an",
+        "evolution_15j": "+15%",
+        "objet": "AK-47, munitions, mines APM",
+        "detail": "MFDC affaibli mais stocks d'armes persistants. Reseau bissau-guineen revend a brokers maliens. Transit via pistes forestieres senegalaises puis Tambacounda-Kayes.",
+        "sources": "GI-TOC|https://globalinitiative.net SIPRI|https://www.sipri.org CAR|https://www.conflictarm.com"
+      }
     }
   ]
 }

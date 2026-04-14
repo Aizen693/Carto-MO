@@ -388,7 +388,6 @@ body{min-height:100vh}
 var CALQUES = {
   ethnies:         { file: 'ethnies.geojson',         label: 'Ethnies',          color: '#e07c5a' },
   forces:          { file: 'forces.geojson',          label: 'Forces',           color: '#e63946' },
-  'points-eau':    { file: 'points-eau.geojson',      label: 'Points d\'eau',    color: '#29b6f6' },
   population:      { file: 'population.geojson',      label: 'Population',       color: '#ab47bc' },
   mines:           { file: 'mines.geojson',           label: 'Mines',            color: '#d4a017' },
   infrastructures: { file: 'infrastructures.geojson', label: 'Infrastructures',  color: '#66bb6a' },
@@ -441,7 +440,7 @@ Promise.all(keys.map(function(k) {
 
   var evts = CALQUES.evenements, forces = CALQUES.forces, infra = CALQUES.infrastructures;
   var pop = CALQUES.population, flux = CALQUES.flux, mines = CALQUES.mines;
-  var eau = CALQUES['points-eau'], ethnies = CALQUES.ethnies;
+  var ethnies = CALQUES.ethnies;
 
   var totalPts = keys.reduce(function(s, k) { return s + CALQUES[k].count; }, 0);
   var totalDeplaces = 0;
