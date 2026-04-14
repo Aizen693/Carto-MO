@@ -467,7 +467,7 @@ async function renderAll() {
   allFeatures.forEach(f => { const n = f.properties.name; if (n && !actorsVisible[n]) actorsVisible[n] = f.properties._color; });
   updateLegend(actorsVisible);
   updateChart(allFeatures);
-  initHeatmap(allFeatures);
+  // Heatmap isolee : ne PAS reinitialiser ici (source = evenements.geojson uniquement)
 }
 
 function addLayers(m, srcPts, srcCircles) {
