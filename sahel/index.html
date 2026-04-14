@@ -312,7 +312,7 @@ const ZONE_CONFIG = {
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js?v=20260414c"></script>
+<script src="../shared/engine.js?v=20260414d"></script>
 <script>
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
 (function() {
@@ -815,7 +815,42 @@ const ZONE_CONFIG = {
 </script>
 
 <!-- TUTORIEL -->
-<!-- tutorial disabled -->
+<div id="tutorial-overlay" style="display:none">
+  <div id="tutorial-box">
+    <button id="tutorial-skip" onclick="closeTutorial()">Passer</button>
+    <h2 class="tuto-main-title">Attaques jihadistes<br>au Sahel — 2026</h2>
+    <p class="subtitle">Cartographie d'acteurs · Mali · Burkina · Niger · Tchad · Mauritanie</p>
+    <div class="tuto-step">
+      <div class="tuto-icon">⊡</div>
+      <div>
+        <div class="tuto-title">Sélectionner une période</div>
+        <div class="tuto-desc">Choisissez une période bimensuelle (Jan 01-15, Jan 16-31…) ou utilisez le slider. Le bouton Play anime toutes les périodes chronologiquement.</div>
+      </div>
+    </div>
+    <div class="tuto-step">
+      <div class="tuto-icon">◉</div>
+      <div>
+        <div class="tuto-title">Les points</div>
+        <div class="tuto-desc">Chaque point représente un événement. La couleur indique l'acteur (rouge = jihadiste, bleu/vert = force étatique, jaune = milice). La taille reflète le nombre de victimes.</div>
+      </div>
+    </div>
+    <div class="tuto-step">
+      <div class="tuto-icon">◇</div>
+      <div>
+        <div class="tuto-title">Cotation du renseignement OTAN</div>
+        <div class="tuto-desc">Chaque événement est évalué selon la grille OTAN. La lettre indique la fiabilité de la source, le chiffre la véracité du contenu.<span class="otan-grades">A1 = totalement fiable / corroboré · B2 = probable · C3 = peut-être vrai · F6 = non estimable</span></div>
+      </div>
+    </div>
+    <div class="tuto-step">
+      <div class="tuto-icon">◈</div>
+      <div>
+        <div class="tuto-title">Outils avancés</div>
+        <div class="tuto-desc">HEATMAP — zones les plus actives · COMPARER — deux périodes côte à côte · PNG — exporter la carte · Vue 3D avec clic droit + glisser.</div>
+      </div>
+    </div>
+    <button id="tutorial-close" onclick="closeTutorial()">OK — Commencer</button>
+  </div>
+</div>
 
 <!-- AUTH GATE -->
 <script type="module">

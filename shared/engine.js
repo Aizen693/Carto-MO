@@ -560,59 +560,16 @@ function setStyle(s) {
 }
 
 function setupMapLayersOn(m) {
-  // ── TERRAIN DEM ──
   try {
     if (!m.getSource('mapbox-dem')) m.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
-    m.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+    m.setTerrain({ source: 'mapbox-dem', exaggeration: 1.2 });
   } catch (e) { console.warn('Terrain non supporté:', e); }
-
-  // ── SKY / ATMOSPHERE ──
   try {
-    if (!m.getLayer('sky')) m.addLayer({ id: 'sky', type: 'sky', paint: {
-      'sky-type': 'atmosphere',
-      'sky-atmosphere-sun': [220, 8],
-      'sky-atmosphere-sun-intensity': 15,
-      'sky-atmosphere-color': 'rgba(20,80,200,1.0)',
-      'sky-atmosphere-halo-color': 'rgba(255,120,30,0.95)',
-      'sky-opacity': ['interpolate', ['linear'], ['zoom'], 0, 0, 3, 0.3, 6, 0.8, 8, 1.0]
-    } });
+    if (!m.getLayer('sky')) m.addLayer({ id: 'sky', type: 'sky', paint: { 'sky-type': 'atmosphere', 'sky-atmosphere-sun': [220, 8], 'sky-atmosphere-sun-intensity': 14, 'sky-atmosphere-color': 'rgba(30,100,220,1.0)', 'sky-atmosphere-halo-color': 'rgba(255,140,40,0.9)', 'sky-opacity': ['interpolate', ['linear'], ['zoom'], 0, 0, 4, 0.4, 7, 1.0] } });
   } catch (e) { console.warn('Sky non supporté:', e); }
-
-  // ── FOG / ATMOSPHERE DEPTH ──
+  try { m.setLight({ anchor: 'map', color: '#ffd580', intensity: 0.8, position: [1.5, 200, 10] }); } catch (e) {}
   try {
-    m.setFog({
-      'range': [1, 12],
-      'color': 'rgba(15,20,35,0.85)',
-      'high-color': 'rgba(40,60,120,0.7)',
-      'horizon-blend': 0.08,
-      'space-color': 'rgba(8,12,25,1)',
-      'star-intensity': 0.4
-    });
-  } catch (e) { console.warn('Fog non supporté:', e); }
-
-  // ── DIRECTIONAL + AMBIENT LIGHTING ──
-  try {
-    m.setLights([
-      { id: 'sun', type: 'directional', properties: { direction: [210, 40], color: '#ffeedd', intensity: 0.7, 'cast-shadows': true, 'shadow-intensity': 0.6 } },
-      { id: 'ambient', type: 'ambient', properties: { color: '#b8c4d8', intensity: 0.45 } }
-    ]);
-  } catch (e) {
-    // Fallback for older Mapbox versions
-    try { m.setLight({ anchor: 'map', color: '#ffd580', intensity: 0.8, position: [1.5, 210, 40] }); } catch (e2) {}
-  }
-
-  // ── 3D BUILDINGS ──
-  try {
-    if (m.getSource('composite') && !m.getLayer('3d-buildings')) m.addLayer({ id: '3d-buildings', source: 'composite', 'source-layer': 'building', filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 10, paint: {
-      'fill-extrusion-color': ['interpolate', ['linear'], ['get', 'height'], 0, '#d4c5a9', 30, '#b8a88a', 80, '#a09070', 200, '#6a5a48'],
-      'fill-extrusion-height': ['get', 'height'],
-      'fill-extrusion-base': ['get', 'min_height'],
-      'fill-extrusion-opacity': ['interpolate', ['linear'], ['zoom'], 10, 0.4, 12, 0.92],
-      'fill-extrusion-ambient-occlusion-intensity': 0.65,
-      'fill-extrusion-ambient-occlusion-radius': 6,
-      'fill-extrusion-ambient-occlusion-wall-radius': 4,
-      'fill-extrusion-ambient-occlusion-ground-radius': 8
-    } });
+    if (m.getSource('composite') && !m.getLayer('3d-buildings')) m.addLayer({ id: '3d-buildings', source: 'composite', 'source-layer': 'building', filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 10, paint: { 'fill-extrusion-color': ['interpolate', ['linear'], ['get', 'height'], 0, '#d4c5a9', 30, '#b8a88a', 80, '#a09070', 200, '#6a5a48'], 'fill-extrusion-height': ['get', 'height'], 'fill-extrusion-base': ['get', 'min_height'], 'fill-extrusion-opacity': ['interpolate', ['linear'], ['zoom'], 10, 0.4, 12, 0.9], 'fill-extrusion-ambient-occlusion-intensity': 0.5, 'fill-extrusion-ambient-occlusion-radius': 4 } });
   } catch (e) {}
 }
 
