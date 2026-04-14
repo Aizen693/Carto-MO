@@ -697,6 +697,8 @@ function exportMap() {
 }
 
 // ── HEATMAP ──────────────────────────────────────────────────────────
+// Heatmap isolee : uniquement le calque evenements securitaires
+// Pas de correlation avec les acteurs ou les periodes
 function initHeatmap(features) {
   const pts = features.filter(f => f.geometry && f.geometry.type === 'Point');
   if (map.getSource('heatmap-src')) {
@@ -704,24 +706,26 @@ function initHeatmap(features) {
   } else {
     map.addSource('heatmap-src', { type: 'geojson', data: { type: 'FeatureCollection', features: pts } });
     map.addLayer({
-      id: 'heatmap-layer', type: 'heatmap', source: 'heatmap-src', maxzoom: 14,
+      id: 'heatmap-layer', type: 'heatmap', source: 'heatmap-src', maxzoom: 16,
       layout: { visibility: 'none' },
       paint: {
         'heatmap-weight': 1,
-        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 3, 2, 6, 3.5, 10, 5],
+        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 3, 4, 5, 6, 7, 8, 10, 10, 14, 12],
         'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'],
           0,    'rgba(0,0,0,0)',
-          0.02, 'rgba(20,40,100,0.3)',
-          0.08, 'rgba(40,80,200,0.55)',
-          0.2,  'rgba(0,200,150,0.7)',
-          0.35, 'rgba(200,220,0,0.8)',
-          0.5,  'rgba(255,180,0,0.88)',
-          0.7,  'rgba(255,80,0,0.93)',
-          0.85, 'rgba(220,20,20,0.97)',
-          1.0,  'rgba(180,0,0,1)'
+          0.01, 'rgba(10,20,80,0.25)',
+          0.05, 'rgba(30,60,180,0.5)',
+          0.12, 'rgba(0,180,200,0.65)',
+          0.22, 'rgba(0,220,100,0.75)',
+          0.35, 'rgba(200,230,0,0.82)',
+          0.5,  'rgba(255,180,0,0.9)',
+          0.65, 'rgba(255,100,0,0.94)',
+          0.8,  'rgba(230,30,0,0.97)',
+          0.92, 'rgba(180,0,0,1)',
+          1.0,  'rgba(120,0,0,1)'
         ],
-        'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 3, 50, 5, 65, 7, 80, 10, 100, 12, 120],
-        'heatmap-opacity': 0.9,
+        'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 3, 80, 5, 110, 7, 140, 10, 160, 12, 180],
+        'heatmap-opacity': 0.92,
       }
     }, 'kml-dots-glow');
   }
@@ -731,26 +735,15 @@ function toggleHeatmap() {
   heatmapVisible = !heatmapVisible;
   var el = document.getElementById('btn-heatmap');
   if (el) el.classList.toggle('active', heatmapVisible);
-  // Load all attack data: evenements calque + all period files
+  // Source isolee : UNIQUEMENT evenements.geojson (pas de donnees acteurs/periodes)
   if (!map.getSource('heatmap-src') && heatmapVisible && !_heatmapCalqueLoaded) {
     _heatmapCalqueLoaded = true;
-    var allPts = [];
-    // Collect period data points
-    Object.values(loadedData).forEach(function(geo) {
-      if (!geo || !geo.features) return;
-      geo.features.forEach(function(f) { if (f.geometry && f.geometry.type === 'Point') allPts.push(f); });
-    });
-    // Fetch evenements calque + all period files in parallel
-    var fetches = [fetch('./evenements.geojson?v=' + Date.now()).then(function(r) { return r.json(); }).catch(function() { return null; })];
-    if (typeof PERIODS !== 'undefined') PERIODS.forEach(function(p) {
-      fetches.push(fetch('./' + p.file + '?v=' + Date.now()).then(function(r) { return r.json(); }).catch(function() { return null; }));
-    });
-    Promise.all(fetches).then(function(results) {
-      results.forEach(function(d) {
-        if (!d || !d.features) return;
-        d.features.forEach(function(f) { if (f.geometry && f.geometry.type === 'Point') allPts.push(f); });
-      });
-      initHeatmap(allPts);
+    fetch('./evenements.geojson?v=' + Date.now()).then(function(r) { return r.json(); }).then(function(d) {
+      if (d && d.features) {
+        initHeatmap(d.features);
+        map.setLayoutProperty('heatmap-layer', 'visibility', 'visible');
+      }
+    }).catch(function() {});
       map.setLayoutProperty('heatmap-layer', 'visibility', 'visible');
     });
     return;
