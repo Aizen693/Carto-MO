@@ -667,22 +667,19 @@ function initHeatmap(features) {
       layout: { visibility: 'none' },
       paint: {
         'heatmap-weight': 1,
-        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 3, 4, 5, 6, 7, 8, 10, 10, 14, 12],
+        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 3, 0.6, 6, 1.2, 9, 2, 12, 3],
         'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'],
           0,    'rgba(0,0,0,0)',
-          0.01, 'rgba(10,20,80,0.25)',
-          0.05, 'rgba(30,60,180,0.5)',
-          0.12, 'rgba(0,180,200,0.65)',
-          0.22, 'rgba(0,220,100,0.75)',
-          0.35, 'rgba(200,230,0,0.82)',
-          0.5,  'rgba(255,180,0,0.9)',
-          0.65, 'rgba(255,100,0,0.94)',
-          0.8,  'rgba(230,30,0,0.97)',
-          0.92, 'rgba(180,0,0,1)',
-          1.0,  'rgba(120,0,0,1)'
+          0.1,  'rgba(25,40,90,0.35)',
+          0.25, 'rgba(30,80,180,0.5)',
+          0.4,  'rgba(0,180,170,0.6)',
+          0.55, 'rgba(220,200,0,0.7)',
+          0.7,  'rgba(240,140,0,0.8)',
+          0.85, 'rgba(220,50,0,0.88)',
+          1.0,  'rgba(160,10,0,0.95)'
         ],
-        'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 3, 80, 5, 110, 7, 140, 10, 160, 12, 180],
-        'heatmap-opacity': 0.92,
+        'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 3, 18, 5, 28, 7, 40, 10, 55, 12, 70],
+        'heatmap-opacity': 0.75,
       }
     }, 'kml-dots-glow');
   }
@@ -695,12 +692,15 @@ function toggleHeatmap() {
   // Source isolee : UNIQUEMENT evenements.geojson (pas de donnees acteurs/periodes)
   if (!map.getSource('heatmap-src') && heatmapVisible && !_heatmapCalqueLoaded) {
     _heatmapCalqueLoaded = true;
-    fetch('./evenements.geojson?v=' + Date.now()).then(function(r) { return r.json(); }).then(function(d) {
-      if (d && d.features) {
-        initHeatmap(d.features);
-        map.setLayoutProperty('heatmap-layer', 'visibility', 'visible');
-      }
-    }).catch(function() {});
+    // Charge heatmap-data.geojson (120 points ACLED reels) + evenements.geojson
+    Promise.all([
+      fetch('./heatmap-data.geojson?v=' + Date.now()).then(function(r) { return r.json(); }).catch(function() { return null; }),
+      fetch('./evenements.geojson?v=' + Date.now()).then(function(r) { return r.json(); }).catch(function() { return null; })
+    ]).then(function(results) {
+      var pts = [];
+      results.forEach(function(d) { if (d && d.features) d.features.forEach(function(f) { if (f.geometry && f.geometry.type === 'Point') pts.push(f); }); });
+      if (pts.length) { initHeatmap(pts); map.setLayoutProperty('heatmap-layer', 'visibility', 'visible'); }
+    });
     return;
   }
   if (map.getLayer('heatmap-layer')) map.setLayoutProperty('heatmap-layer', 'visibility', heatmapVisible ? 'visible' : 'none');
