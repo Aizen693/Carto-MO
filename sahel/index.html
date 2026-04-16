@@ -852,44 +852,118 @@ const ZONE_CONFIG = {
   </div>
 </div>
 
-<!-- HAND TRACKING -->
+<!-- HAND TRACKING v2 — optimised for accessibility & fluidity -->
 <video id="ht-webcam" autoplay playsinline style="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none"></video>
 <canvas id="ht-canvas" style="position:fixed;inset:0;z-index:9998;pointer-events:none"></canvas>
-<div id="ht-badge" style="position:fixed;bottom:70px;left:50%;transform:translateX(-50%);z-index:9998;font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:0.2em;text-transform:uppercase;color:#00e5ff;padding:6px 16px;background:rgba(6,8,15,0.7);border:1px solid rgba(0,229,255,0.3);backdrop-filter:blur(4px);opacity:0;transition:opacity 0.15s;pointer-events:none"></div>
+<div id="ht-badge" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9998;font:600 13px/1 'JetBrains Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:#00e5ff;padding:10px 22px;background:rgba(6,8,15,0.82);border:1px solid rgba(0,229,255,0.35);border-radius:6px;backdrop-filter:blur(6px);opacity:0;transition:opacity 0.18s;pointer-events:none"></div>
+
+<!-- Gesture guide overlay -->
+<div id="ht-guide" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(4,6,12,0.92);backdrop-filter:blur(8px);pointer-events:all">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;max-width:520px;padding:32px">
+    <div style="font:700 18px/1.2 'JetBrains Mono',monospace;letter-spacing:0.1em;color:#00e5ff;text-transform:uppercase;margin-bottom:28px">Hand Tracking — Guide</div>
+    <div style="display:grid;grid-template-columns:64px 1fr;gap:16px 20px;text-align:left;align-items:center">
+      <div style="font-size:42px;text-align:center">&#x1F91A;</div>
+      <div>
+        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">Main ouverte</div>
+        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.65)">Rapprocher ou eloigner la main pour zoomer</div>
+      </div>
+      <div style="font-size:42px;text-align:center">&#x1F90F;</div>
+      <div>
+        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">Pincer + glisser</div>
+        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.65)">Pouce et index ensemble, deplacer la carte</div>
+      </div>
+      <div style="font-size:42px;text-align:center">&#x1F91E;</div>
+      <div>
+        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">Double pincement</div>
+        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.65)">Deux pincements rapides pour selectionner un point</div>
+      </div>
+    </div>
+    <button id="ht-guide-close" style="margin-top:28px;font:600 12px/1 'JetBrains Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:#06080f;background:#00e5ff;border:none;padding:12px 32px;border-radius:4px;cursor:pointer">Compris</button>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js" crossorigin="anonymous"></script>
 <script>
 /* =========================================================
-   HAND TRACKING for Mapbox GL v3
-   - Pas de webcam visible (juste 2 points curseur)
-   - Pinch 1x + drag = deplacer la carte
-   - Double pinch     = ouvrir popup du point le plus proche
-   - Main ouverte     = zoom (rapprocher/eloigner main)
+   HAND TRACKING v2 for Mapbox GL
+   Optimise pour fluidite et accessibilite (seniors)
+   - OneEuro filter pour lissage sans latence
+   - Curseurs larges avec retour visuel d'etat
+   - Seuils tolerants, dead zones, cooldowns
+   - Guide visuel a la premiere activation
+   - Zoom smooth par palm-size moyenne glissante
    ========================================================= */
 (function(){
   var vid=document.getElementById('ht-webcam');
   var hc=document.getElementById('ht-canvas');
   var badge=document.getElementById('ht-badge');
+  var guide=document.getElementById('ht-guide');
   var ctx=null, detector=null, active=false;
   var cW=0, cH=0;
+  var guideShown=false;
 
-  var PINCH_ON=0.065, PINCH_OFF=0.09;
-  var PAN_SENS=3.5;
-  var DOUBLE_PINCH_MS=600;
-  var ZOOM_LERP=0.08;
+  /* ── OneEuro Filter (jitter removal, industry standard) ── */
+  function OneEuro(freq,minCut,beta,dCut){
+    this.freq=freq||60;this.minCut=minCut||1.0;this.beta=beta||0.007;this.dCut=dCut||1.0;
+    this.xPrev=null;this.dxPrev=0;this.tPrev=null;
+  }
+  OneEuro.prototype.alpha=function(cut){var te=1.0/this.freq;var tau=1.0/(2*Math.PI*cut);return 1.0/(1.0+tau/te)};
+  OneEuro.prototype.filter=function(x,t){
+    if(this.xPrev===null){this.xPrev=x;this.tPrev=t;return x}
+    if(t!==undefined&&this.tPrev!==undefined){var dt=t-this.tPrev;if(dt>0)this.freq=1.0/dt}
+    this.tPrev=t;
+    var dx=(x-this.xPrev)*this.freq;
+    var adx=this.alpha(this.dCut);
+    dx=adx*dx+(1-adx)*this.dxPrev;this.dxPrev=dx;
+    var cut=this.minCut+this.beta*Math.abs(dx);
+    var ax=this.alpha(cut);
+    var out=ax*x+(1-ax)*this.xPrev;
+    this.xPrev=out;
+    return out;
+  };
 
+  /* Filters for each tracked point */
+  var fIndexX=new OneEuro(60,1.2,0.005,1.0);
+  var fIndexY=new OneEuro(60,1.2,0.005,1.0);
+  var fThumbX=new OneEuro(60,1.2,0.005,1.0);
+  var fThumbY=new OneEuro(60,1.2,0.005,1.0);
+  var fPinchD=new OneEuro(60,0.8,0.002,1.0);
+  var fPalmSz=new OneEuro(60,0.5,0.001,1.0);
+
+  /* ── Tuning — more forgiving for older users ── */
+  var PINCH_ON=0.075;       // wider pinch start zone (was 0.065)
+  var PINCH_OFF=0.105;      // wider pinch end hysteresis (was 0.09)
+  var PAN_SENS=3.2;         // slightly reduced for control
+  var PAN_DEAD=1.5;         // dead zone pixels to prevent accidental drift
+  var DOUBLE_PINCH_MS=800;  // longer window for double tap (was 600)
+  var ZOOM_LERP=0.06;       // smoother zoom interpolation (was 0.08)
+  var ZOOM_DEAD=0.003;      // dead zone for palm size change
+  var ZOOM_SCALE=14;        // zoom sensitivity (was 18)
+  var SELECT_COOLDOWN=800;  // cooldown after selection to prevent re-trigger
+  var LOST_HAND_GRACE=300;  // ms grace period before resetting on hand loss
+
+  /* ── State ── */
   var hand={pinching:false, lastX:null, lastY:null};
-  var pinchHist={lastRelease:0, lastMx:0, lastMy:0};
+  var pinchHist={lastRelease:0};
   var palmLast=null;
   var zoomTarget=null;
+  var lastSelectTime=0;
+  var lastHandSeen=0;
+  var frameTime=0;
+  var pulsePhase=0;
 
-  // 60fps zoom interpolation
+  /* Smooth cursor positions (post-filter, in screen px) */
+  var cursorIndex={x:0,y:0};
+  var cursorThumb={x:0,y:0};
+
+  /* ── 60fps zoom interpolation ── */
   function zoomLoop(){
     if(active && zoomTarget!==null && window.map){
       var cur=map.getZoom();
       var diff=zoomTarget-cur;
-      if(Math.abs(diff)>0.005) map.setZoom(cur+diff*ZOOM_LERP);
+      if(Math.abs(diff)>0.004) map.setZoom(cur+diff*ZOOM_LERP);
+      else zoomTarget=null;
     }
     requestAnimationFrame(zoomLoop);
   }
@@ -901,19 +975,41 @@ const ZONE_CONFIG = {
     cW=w;cH=h;hc.width=cW;hc.height=cH;
   }
 
+  /* ── Public toggle ── */
   window.toggleHandTrack=function(){
     if(active){htStop();return}
     htStart();
   };
 
+  function resetFilters(){
+    [fIndexX,fIndexY,fThumbX,fThumbY,fPinchD,fPalmSz].forEach(function(f){
+      f.xPrev=null;f.dxPrev=0;f.tPrev=null;
+    });
+  }
+
   function htStart(){
     active=true;
     ctx=hc.getContext('2d');
     syncSize();
+    resetFilters();
     document.getElementById('btn-handtrack').style.color='#00e5ff';
 
+    /* Show guide once */
+    if(!guideShown){
+      guideShown=true;
+      guide.style.display='block';
+      document.getElementById('ht-guide-close').onclick=function(){
+        guide.style.display='none';
+      };
+    }
+
     detector=new Hands({locateFile:function(f){return 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/'+f}});
-    detector.setOptions({maxNumHands:1,modelComplexity:0,minDetectionConfidence:0.5,minTrackingConfidence:0.4});
+    detector.setOptions({
+      maxNumHands:1,
+      modelComplexity:1,         // higher accuracy model (was 0)
+      minDetectionConfidence:0.6,
+      minTrackingConfidence:0.5  // more stable tracking (was 0.4)
+    });
     detector.onResults(onHands);
 
     var detecting=false;
@@ -923,11 +1019,11 @@ const ZONE_CONFIG = {
         detecting=true;
         return detector.send({image:vid}).then(function(){detecting=false}).catch(function(){detecting=false});
       },
-      width:480,height:360,facingMode:'user'
+      width:640,height:480,facingMode:'user'  // higher res for accuracy (was 480x360)
     });
     cam.start();
     window._htCam=cam;
-    showB('Hand tracking ON');
+    showB('HAND TRACKING ACTIF');
   }
 
   function htStop(){
@@ -935,80 +1031,137 @@ const ZONE_CONFIG = {
     if(ctx)ctx.clearRect(0,0,cW,cH);
     document.getElementById('btn-handtrack').style.color='';
     hand.pinching=false;hand.lastX=null;palmLast=null;zoomTarget=null;
-    showB('Hand tracking OFF');
+    resetFilters();
+    showB('HAND TRACKING DESACTIVE');
   }
 
+  /* ── Main frame handler ── */
   function onHands(res){
     if(!ctx||!active)return;
     syncSize();
+    frameTime=performance.now()/1000;
+    pulsePhase=(pulsePhase+0.04)%(Math.PI*2);
     ctx.clearRect(0,0,cW,cH);
+
     var hands=res.multiHandLandmarks;
-    if(!hands||!hands.length){hand.pinching=false;hand.lastX=null;palmLast=null;return}
+    if(!hands||!hands.length){
+      /* Grace period: don't reset instantly on hand loss */
+      if(performance.now()-lastHandSeen>LOST_HAND_GRACE){
+        hand.pinching=false;hand.lastX=null;palmLast=null;
+      }
+      return;
+    }
+    lastHandSeen=performance.now();
     var lm=hands[0];
-    drawCursors(lm);
+    filterAndDraw(lm);
     processGesture(lm);
   }
 
-  /* ── Draw ONLY 2 cursor dots (thumb + index) — no skeleton, no webcam ── */
-  function drawCursors(lm){
-    var thumbX=(1-lm[4].x)*cW, thumbY=lm[4].y*cH;
-    var indexX=(1-lm[8].x)*cW, indexY=lm[8].y*cH;
-    var pd=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
-    var pinching=pd<PINCH_OFF;
+  /* ── Filter landmarks + draw cursors ── */
+  function filterAndDraw(lm){
+    var t=frameTime;
+    /* Mirror X (webcam), filter each coordinate */
+    var rawIX=1-lm[8].x, rawIY=lm[8].y;
+    var rawTX=1-lm[4].x, rawTY=lm[4].y;
 
-    // Index finger cursor (main)
-    ctx.beginPath();ctx.arc(indexX,indexY,pinching?8:6,0,Math.PI*2);
-    ctx.fillStyle=pinching?'rgba(0,229,255,0.85)':'rgba(0,229,255,0.5)';
+    var ix=fIndexX.filter(rawIX,t)*cW;
+    var iy=fIndexY.filter(rawIY,t)*cH;
+    var tx=fThumbX.filter(rawTX,t)*cW;
+    var ty=fThumbY.filter(rawTY,t)*cH;
+
+    cursorIndex.x=ix; cursorIndex.y=iy;
+    cursorThumb.x=tx; cursorThumb.y=ty;
+
+    var pd=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
+    var isPinch=pd<PINCH_OFF;
+    var pulse=0.5+0.5*Math.sin(pulsePhase);
+
+    /* ── Index cursor (primary) ── larger, with animated ring ── */
+    var iR=isPinch?12:9;
+    var oR=isPinch?22:16;
+
+    // Glow halo
+    var grad=ctx.createRadialGradient(ix,iy,iR*0.5,ix,iy,oR*1.5);
+    grad.addColorStop(0,isPinch?'rgba(0,229,255,0.18)':'rgba(0,229,255,0.08)');
+    grad.addColorStop(1,'rgba(0,229,255,0)');
+    ctx.beginPath();ctx.arc(ix,iy,oR*1.5,0,Math.PI*2);
+    ctx.fillStyle=grad;ctx.fill();
+
+    // Solid center
+    ctx.beginPath();ctx.arc(ix,iy,iR,0,Math.PI*2);
+    ctx.fillStyle=isPinch?'rgba(0,229,255,0.9)':'rgba(0,229,255,0.55)';
     ctx.fill();
-    // Outer ring
-    ctx.beginPath();ctx.arc(indexX,indexY,pinching?14:10,0,Math.PI*2);
-    ctx.strokeStyle=pinching?'rgba(0,229,255,0.5)':'rgba(0,229,255,0.2)';
+
+    // Animated outer ring
+    ctx.beginPath();ctx.arc(ix,iy,oR+pulse*3,0,Math.PI*2);
+    ctx.strokeStyle=isPinch?'rgba(0,229,255,0.6)':'rgba(0,229,255,0.25)';
+    ctx.lineWidth=2;ctx.stroke();
+
+    /* ── Thumb cursor (secondary) ── */
+    ctx.beginPath();ctx.arc(tx,ty,6,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,229,255,0.4)';
+    ctx.fill();
+    ctx.beginPath();ctx.arc(tx,ty,10,0,Math.PI*2);
+    ctx.strokeStyle='rgba(0,229,255,0.15)';
     ctx.lineWidth=1.5;ctx.stroke();
 
-    // Thumb cursor (secondary)
-    ctx.beginPath();ctx.arc(thumbX,thumbY,4,0,Math.PI*2);
-    ctx.fillStyle='rgba(0,229,255,0.35)';
-    ctx.fill();
+    /* ── Connection line when close ── */
+    if(isPinch){
+      ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(ix,iy);
+      ctx.strokeStyle='rgba(0,229,255,0.35)';ctx.lineWidth=1.5;
+      ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
+    }
 
-    // Line between thumb and index when close
-    if(pinching){
-      ctx.beginPath();ctx.moveTo(thumbX,thumbY);ctx.lineTo(indexX,indexY);
-      ctx.strokeStyle='rgba(0,229,255,0.3)';ctx.lineWidth=1;ctx.stroke();
+    /* ── Gesture state indicator on cursor ── */
+    if(hand.pinching){
+      /* Show small directional crosshair when panning */
+      var cLen=8;
+      ctx.strokeStyle='rgba(0,229,255,0.4)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(ix-cLen,iy);ctx.lineTo(ix+cLen,iy);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(ix,iy-cLen);ctx.lineTo(ix,iy+cLen);ctx.stroke();
     }
   }
 
-  /* ── Palm size (wrist → middle tip) ── */
-  function palmSize(lm){return Math.hypot(lm[0].x-lm[12].x,lm[0].y-lm[12].y)}
+  /* ── Palm size (wrist-to-middle-tip), filtered ── */
+  function palmSize(lm){
+    var raw=Math.hypot(lm[0].x-lm[12].x,lm[0].y-lm[12].y);
+    return fPalmSz.filter(raw,frameTime);
+  }
 
-  /* ── Is hand open? More tolerant version ── */
+  /* ── Is hand open? ── */
   function isOpen(lm){
-    // Check if thumb-index distance is large (not pinching) AND palm is spread
     var thumbIdx=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
-    if(thumbIdx<0.1)return false; // pinching = not open
-    // At least 2 fingers extended (tip above pip)
+    if(thumbIdx<0.11)return false;
     var ext=0;
-    if(lm[8].y<lm[6].y)ext++;   // index
-    if(lm[12].y<lm[10].y)ext++; // middle
-    if(lm[16].y<lm[14].y)ext++; // ring
-    if(lm[20].y<lm[18].y)ext++; // pinky
+    if(lm[8].y<lm[6].y)ext++;
+    if(lm[12].y<lm[10].y)ext++;
+    if(lm[16].y<lm[14].y)ext++;
+    if(lm[20].y<lm[18].y)ext++;
     return ext>=2;
+  }
+
+  /* ── Pinch distance, filtered ── */
+  function pinchDist(lm){
+    var raw=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
+    return fPinchD.filter(raw,frameTime);
   }
 
   /* ── GESTURES ── */
   function processGesture(lm){
     if(!window.map)return;
-    var pd=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
+    var pd=pinchDist(lm);
     var open=isOpen(lm);
+    var now=performance.now();
 
     /* OPEN HAND → zoom by palm distance */
     if(open && !hand.pinching){
       var ps=palmSize(lm);
       if(palmLast!==null){
         var delta=ps-palmLast;
-        if(Math.abs(delta)>0.002){
+        if(Math.abs(delta)>ZOOM_DEAD){
           var cur=zoomTarget!==null?zoomTarget:map.getZoom();
-          zoomTarget=Math.max(3,Math.min(18,cur+delta*18));
-          showB(delta>0?'Zoom +':'Zoom -');
+          zoomTarget=Math.max(3,Math.min(18,cur+delta*ZOOM_SCALE));
+          showB(delta>0?'ZOOM +':'ZOOM \u2212');
         }
       }
       palmLast=ps;
@@ -1022,18 +1175,15 @@ const ZONE_CONFIG = {
       var mx=(lm[4].x+lm[8].x)/2, my=(lm[4].y+lm[8].y)/2;
       hand.lastX=mx;hand.lastY=my;
 
-      // Check DOUBLE PINCH
-      var now=performance.now();
-      if(now-pinchHist.lastRelease<DOUBLE_PINCH_MS){
-        // Double pinch → find and click nearest feature
+      /* Check DOUBLE PINCH (selection) */
+      if(now-pinchHist.lastRelease<DOUBLE_PINCH_MS && now-lastSelectTime>SELECT_COOLDOWN){
         var sx=(1-mx)*cW, sy=my*cH;
         var mapCanvas=map.getCanvas();
         var rect=mapCanvas.getBoundingClientRect();
         var px=sx-rect.left, py=sy-rect.top;
-        // Query in a 30px radius box for tolerance
-        var bbox=[[px-30,py-30],[px+30,py+30]];
+        var tol=40; // larger tolerance for older users (was 30)
+        var bbox=[[px-tol,py-tol],[px+tol,py+tol]];
         var features=map.queryRenderedFeatures(bbox);
-        // Filter out decorative layers (glow, ring, casing, base layers)
         var skipParts=['glow','ring','casing','pulse','3d-','arrows','label'];
         var clickable=features.filter(function(f){
           var id=f.layer.id||'';
@@ -1042,12 +1192,12 @@ const ZONE_CONFIG = {
         });
         if(clickable.length){
           var f=clickable[0];
-          // Fire the existing popup system by simulating a map click event
           var lngLat=f.geometry.type==='Point'
             ?{lng:f.geometry.coordinates[0],lat:f.geometry.coordinates[1]}
             :map.unproject([px,py]);
           map.fire('click',{point:{x:px,y:py},lngLat:lngLat,originalEvent:{preventDefault:function(){}}});
-          showB('Selection');
+          showB('SELECTION');
+          lastSelectTime=now;
         }
         hand.pinching=false;
         pinchHist.lastRelease=0;
@@ -1058,30 +1208,31 @@ const ZONE_CONFIG = {
 
     /* PINCH END */
     if(hand.pinching && pd>PINCH_OFF){
-      pinchHist.lastRelease=performance.now();
+      pinchHist.lastRelease=now;
       hand.pinching=false;hand.lastX=null;
       hideB();
       return;
     }
 
-    /* PINCHING → pan map */
+    /* PINCHING → pan map (with dead zone) */
     if(hand.pinching){
       var mx=(lm[4].x+lm[8].x)/2, my=(lm[4].y+lm[8].y)/2;
       if(hand.lastX!==null){
         var dx=(mx-hand.lastX)*cW*PAN_SENS;
         var dy=(my-hand.lastY)*cH*PAN_SENS;
-        if(Math.abs(dx)>0.5||Math.abs(dy)>0.5){
+        /* Dead zone: ignore micro-movements */
+        if(Math.abs(dx)>PAN_DEAD||Math.abs(dy)>PAN_DEAD){
           map.panBy([dx,dy],{duration:0});
-          showB('Deplacement');
+          showB('DEPLACEMENT');
         }
       }
       hand.lastX=mx;hand.lastY=my;
     }
   }
 
-  /* Badge */
+  /* ── Badge (larger, clearer) ── */
   var bTm=null;
-  function showB(t){badge.textContent=t;badge.style.opacity='1';clearTimeout(bTm);bTm=setTimeout(hideB,900)}
+  function showB(t){badge.textContent=t;badge.style.opacity='1';clearTimeout(bTm);bTm=setTimeout(hideB,1200)}
   function hideB(){badge.style.opacity='0'}
 
   window.addEventListener('resize',syncSize);
