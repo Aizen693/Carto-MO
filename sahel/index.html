@@ -852,80 +852,76 @@ const ZONE_CONFIG = {
   </div>
 </div>
 
-<!-- HAND TRACKING LAYERS -->
-<video id="ht-webcam" autoplay playsinline style="position:fixed;inset:0;z-index:0;object-fit:cover;width:100%;height:100%;transform:scaleX(-1);opacity:0;filter:brightness(0.6) saturate(0.2);pointer-events:none;transition:opacity 0.4s"></video>
-<canvas id="ht-canvas" style="position:fixed;inset:0;z-index:9998;pointer-events:none;transform:scaleX(-1)"></canvas>
+<!-- HAND TRACKING -->
+<video id="ht-webcam" autoplay playsinline style="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none"></video>
+<canvas id="ht-canvas" style="position:fixed;inset:0;z-index:9998;pointer-events:none"></canvas>
 <div id="ht-badge" style="position:fixed;bottom:70px;left:50%;transform:translateX(-50%);z-index:9998;font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:0.2em;text-transform:uppercase;color:#00e5ff;padding:6px 16px;background:rgba(6,8,15,0.7);border:1px solid rgba(0,229,255,0.3);backdrop-filter:blur(4px);opacity:0;transition:opacity 0.15s;pointer-events:none"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js" crossorigin="anonymous"></script>
 <script>
 /* =========================================================
-   HAND TRACKING for Mapbox GL — integrated as sidebar tool
-   Gestures:
-   - Pinch 1x + drag  → pan the map
-   - Double pinch      → click nearest feature (open popup)
-   - Open hand         → zoom (palm size = distance)
+   HAND TRACKING for Mapbox GL v3
+   - Pas de webcam visible (juste 2 points curseur)
+   - Pinch 1x + drag = deplacer la carte
+   - Double pinch     = ouvrir popup du point le plus proche
+   - Main ouverte     = zoom (rapprocher/eloigner main)
    ========================================================= */
 (function(){
-  const vid=document.getElementById('ht-webcam');
-  const hc=document.getElementById('ht-canvas');
-  const badge=document.getElementById('ht-badge');
-  let ctx=null, detector=null, active=false;
-  let cW=0, cH=0;
+  var vid=document.getElementById('ht-webcam');
+  var hc=document.getElementById('ht-canvas');
+  var badge=document.getElementById('ht-badge');
+  var ctx=null, detector=null, active=false;
+  var cW=0, cH=0;
 
-  const PINCH_ON=0.065, PINCH_OFF=0.09;
-  const PAN_SENS=3.5;
-  const DOUBLE_PINCH_MS=500;
-  const CAM_LERP=0.08;
+  var PINCH_ON=0.065, PINCH_OFF=0.09;
+  var PAN_SENS=3.5;
+  var DOUBLE_PINCH_MS=600;
+  var ZOOM_LERP=0.08;
 
-  let hand={pinching:false, lastX:null, lastY:null};
-  let pinchHist={lastRelease:0};
-  let palmLast=null;
-  let zoomTarget=null;
+  var hand={pinching:false, lastX:null, lastY:null};
+  var pinchHist={lastRelease:0, lastMx:0, lastMy:0};
+  var palmLast=null;
+  var zoomTarget=null;
 
   // 60fps zoom interpolation
   function zoomLoop(){
     if(active && zoomTarget!==null && window.map){
-      const cur=map.getZoom();
-      const diff=zoomTarget-cur;
-      if(Math.abs(diff)>0.01){
-        map.setZoom(cur+diff*CAM_LERP);
-      }
+      var cur=map.getZoom();
+      var diff=zoomTarget-cur;
+      if(Math.abs(diff)>0.005) map.setZoom(cur+diff*ZOOM_LERP);
     }
     requestAnimationFrame(zoomLoop);
   }
   requestAnimationFrame(zoomLoop);
 
   function syncSize(){
-    const w=window.innerWidth, h=window.innerHeight;
+    var w=window.innerWidth, h=window.innerHeight;
     if(w===cW&&h===cH)return;
     cW=w;cH=h;hc.width=cW;hc.height=cH;
   }
 
   window.toggleHandTrack=function(){
-    if(active){stop();return}
-    start();
+    if(active){htStop();return}
+    htStart();
   };
 
-  function start(){
+  function htStart(){
     active=true;
     ctx=hc.getContext('2d');
     syncSize();
-    vid.style.opacity='0.15';
     document.getElementById('btn-handtrack').style.color='#00e5ff';
 
-    detector=new Hands({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${f}`});
+    detector=new Hands({locateFile:function(f){return 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/'+f}});
     detector.setOptions({maxNumHands:1,modelComplexity:0,minDetectionConfidence:0.5,minTrackingConfidence:0.4});
     detector.onResults(onHands);
 
-    let detecting=false;
-    const cam=new Camera(vid,{
-      onFrame:async()=>{
+    var detecting=false;
+    var cam=new Camera(vid,{
+      onFrame:function(){
         if(!active||detecting)return;
         detecting=true;
-        try{await detector.send({image:vid})}catch(e){}
-        detecting=false;
+        return detector.send({image:vid}).then(function(){detecting=false}).catch(function(){detecting=false});
       },
       width:480,height:360,facingMode:'user'
     });
@@ -934,9 +930,8 @@ const ZONE_CONFIG = {
     showB('Hand tracking ON');
   }
 
-  function stop(){
+  function htStop(){
     active=false;
-    vid.style.opacity='0';
     if(ctx)ctx.clearRect(0,0,cW,cH);
     document.getElementById('btn-handtrack').style.color='';
     hand.pinching=false;hand.lastX=null;palmLast=null;zoomTarget=null;
@@ -947,50 +942,72 @@ const ZONE_CONFIG = {
     if(!ctx||!active)return;
     syncSize();
     ctx.clearRect(0,0,cW,cH);
-    const hands=res.multiHandLandmarks||[];
-    if(!hands.length){hand.pinching=false;hand.lastX=null;palmLast=null;return}
-    drawSkel(hands[0]);
-    processGesture(hands[0]);
+    var hands=res.multiHandLandmarks;
+    if(!hands||!hands.length){hand.pinching=false;hand.lastX=null;palmLast=null;return}
+    var lm=hands[0];
+    drawCursors(lm);
+    processGesture(lm);
   }
 
-  /* ── Skeleton ── */
-  const BONES=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
-  function drawSkel(lm){
-    ctx.strokeStyle='rgba(0,229,255,0.2)';ctx.lineWidth=1;
-    BONES.forEach(([a,b])=>{ctx.beginPath();ctx.moveTo(lm[a].x*cW,lm[a].y*cH);ctx.lineTo(lm[b].x*cW,lm[b].y*cH);ctx.stroke()});
-    [4,8].forEach(i=>{ctx.beginPath();ctx.arc(lm[i].x*cW,lm[i].y*cH,3,0,Math.PI*2);ctx.fillStyle='rgba(0,229,255,0.6)';ctx.fill()});
-    const pd=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
-    if(pd<PINCH_OFF){
-      const mx=(lm[4].x+lm[8].x)/2*cW,my=(lm[4].y+lm[8].y)/2*cH;
-      ctx.beginPath();ctx.arc(mx,my,Math.max(4,pd*cW*0.3),0,Math.PI*2);
-      ctx.strokeStyle=`rgba(0,229,255,${((1-pd/PINCH_OFF)*0.5).toFixed(2)})`;ctx.lineWidth=2;
-      ctx.stroke();
+  /* ── Draw ONLY 2 cursor dots (thumb + index) — no skeleton, no webcam ── */
+  function drawCursors(lm){
+    var thumbX=(1-lm[4].x)*cW, thumbY=lm[4].y*cH;
+    var indexX=(1-lm[8].x)*cW, indexY=lm[8].y*cH;
+    var pd=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
+    var pinching=pd<PINCH_OFF;
+
+    // Index finger cursor (main)
+    ctx.beginPath();ctx.arc(indexX,indexY,pinching?8:6,0,Math.PI*2);
+    ctx.fillStyle=pinching?'rgba(0,229,255,0.85)':'rgba(0,229,255,0.5)';
+    ctx.fill();
+    // Outer ring
+    ctx.beginPath();ctx.arc(indexX,indexY,pinching?14:10,0,Math.PI*2);
+    ctx.strokeStyle=pinching?'rgba(0,229,255,0.5)':'rgba(0,229,255,0.2)';
+    ctx.lineWidth=1.5;ctx.stroke();
+
+    // Thumb cursor (secondary)
+    ctx.beginPath();ctx.arc(thumbX,thumbY,4,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,229,255,0.35)';
+    ctx.fill();
+
+    // Line between thumb and index when close
+    if(pinching){
+      ctx.beginPath();ctx.moveTo(thumbX,thumbY);ctx.lineTo(indexX,indexY);
+      ctx.strokeStyle='rgba(0,229,255,0.3)';ctx.lineWidth=1;ctx.stroke();
     }
   }
 
-  /* ── Palm size ── */
+  /* ── Palm size (wrist → middle tip) ── */
   function palmSize(lm){return Math.hypot(lm[0].x-lm[12].x,lm[0].y-lm[12].y)}
+
+  /* ── Is hand open? More tolerant version ── */
   function isOpen(lm){
-    let e=0;
-    if(lm[8].y<lm[6].y)e++;if(lm[12].y<lm[10].y)e++;
-    if(lm[16].y<lm[14].y)e++;if(lm[20].y<lm[18].y)e++;
-    return e>=3;
+    // Check if thumb-index distance is large (not pinching) AND palm is spread
+    var thumbIdx=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
+    if(thumbIdx<0.1)return false; // pinching = not open
+    // At least 2 fingers extended (tip above pip)
+    var ext=0;
+    if(lm[8].y<lm[6].y)ext++;   // index
+    if(lm[12].y<lm[10].y)ext++; // middle
+    if(lm[16].y<lm[14].y)ext++; // ring
+    if(lm[20].y<lm[18].y)ext++; // pinky
+    return ext>=2;
   }
 
-  /* ── Main gesture logic ── */
+  /* ── GESTURES ── */
   function processGesture(lm){
     if(!window.map)return;
-    const pd=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
-    const open=isOpen(lm);
+    var pd=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
+    var open=isOpen(lm);
 
-    /* OPEN HAND → zoom */
+    /* OPEN HAND → zoom by palm distance */
     if(open && !hand.pinching){
-      const ps=palmSize(lm);
+      var ps=palmSize(lm);
       if(palmLast!==null){
-        const delta=ps-palmLast;
-        if(Math.abs(delta)>0.003){
-          const cur=zoomTarget!==null?zoomTarget:map.getZoom();
-          zoomTarget=Math.max(3,Math.min(18,cur+delta*15));
+        var delta=ps-palmLast;
+        if(Math.abs(delta)>0.002){
+          var cur=zoomTarget!==null?zoomTarget:map.getZoom();
+          zoomTarget=Math.max(3,Math.min(18,cur+delta*18));
           showB(delta>0?'Zoom +':'Zoom -');
         }
       }
@@ -1002,33 +1019,35 @@ const ZONE_CONFIG = {
     /* PINCH START */
     if(!hand.pinching && pd<PINCH_ON){
       hand.pinching=true;
-      const mx=(lm[4].x+lm[8].x)/2, my=(lm[4].y+lm[8].y)/2;
+      var mx=(lm[4].x+lm[8].x)/2, my=(lm[4].y+lm[8].y)/2;
       hand.lastX=mx;hand.lastY=my;
 
-      // Double pinch → simulate click
-      const now=performance.now();
+      // Check DOUBLE PINCH
+      var now=performance.now();
       if(now-pinchHist.lastRelease<DOUBLE_PINCH_MS){
-        const sx=(1-mx)*cW, sy=my*cH;
-        // Simulate a click at that screen position on the map
-        const mapRect=map.getCanvas().getBoundingClientRect();
-        const px=sx-mapRect.left, py=sy-mapRect.top;
-        const features=map.queryRenderedFeatures([px,py]);
-        if(features.length){
-          const f=features[0];
-          const coords=f.geometry.type==='Point'?f.geometry.coordinates:null;
-          if(coords){
-            // Build popup content from properties
-            const props=f.properties||{};
-            const name=props.name||props.Name||props.nom||'Point';
-            let html='<div style="font-weight:600;margin-bottom:4px">'+name+'</div>';
-            Object.entries(props).forEach(([k,v])=>{
-              if(['name','Name','nom','_color','_casualties','_period'].includes(k))return;
-              if(!v||v==='undefined')return;
-              html+='<div style="font-size:10px;color:#aaa"><b>'+k+'</b>: '+String(v).substring(0,120)+'</div>';
-            });
-            new mapboxgl.Popup({maxWidth:'320px'}).setLngLat(coords).setHTML(html).addTo(map);
-            showB('Selection');
-          }
+        // Double pinch → find and click nearest feature
+        var sx=(1-mx)*cW, sy=my*cH;
+        var mapCanvas=map.getCanvas();
+        var rect=mapCanvas.getBoundingClientRect();
+        var px=sx-rect.left, py=sy-rect.top;
+        // Query in a 30px radius box for tolerance
+        var bbox=[[px-30,py-30],[px+30,py+30]];
+        var features=map.queryRenderedFeatures(bbox);
+        // Filter out decorative layers (glow, ring, casing, base layers)
+        var skipParts=['glow','ring','casing','pulse','3d-','arrows','label'];
+        var clickable=features.filter(function(f){
+          var id=f.layer.id||'';
+          for(var i=0;i<skipParts.length;i++){if(id.indexOf(skipParts[i])!==-1)return false}
+          return true;
+        });
+        if(clickable.length){
+          var f=clickable[0];
+          // Fire the existing popup system by simulating a map click event
+          var lngLat=f.geometry.type==='Point'
+            ?{lng:f.geometry.coordinates[0],lat:f.geometry.coordinates[1]}
+            :map.unproject([px,py]);
+          map.fire('click',{point:{x:px,y:py},lngLat:lngLat,originalEvent:{preventDefault:function(){}}});
+          showB('Selection');
         }
         hand.pinching=false;
         pinchHist.lastRelease=0;
@@ -1047,11 +1066,11 @@ const ZONE_CONFIG = {
 
     /* PINCHING → pan map */
     if(hand.pinching){
-      const mx=(lm[4].x+lm[8].x)/2, my=(lm[4].y+lm[8].y)/2;
+      var mx=(lm[4].x+lm[8].x)/2, my=(lm[4].y+lm[8].y)/2;
       if(hand.lastX!==null){
-        const dx=(mx-hand.lastX)*cW*PAN_SENS;
-        const dy=(my-hand.lastY)*cH*PAN_SENS;
-        if(Math.abs(dx)>1||Math.abs(dy)>1){
+        var dx=(mx-hand.lastX)*cW*PAN_SENS;
+        var dy=(my-hand.lastY)*cH*PAN_SENS;
+        if(Math.abs(dx)>0.5||Math.abs(dy)>0.5){
           map.panBy([dx,dy],{duration:0});
           showB('Deplacement');
         }
@@ -1061,7 +1080,7 @@ const ZONE_CONFIG = {
   }
 
   /* Badge */
-  let bTm=null;
+  var bTm=null;
   function showB(t){badge.textContent=t;badge.style.opacity='1';clearTimeout(bTm);bTm=setTimeout(hideB,900)}
   function hideB(){badge.style.opacity='0'}
 
