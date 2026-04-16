@@ -852,34 +852,34 @@ const ZONE_CONFIG = {
   </div>
 </div>
 
-<!-- HAND TRACKING v3 — refonte complete, machine a etats, hold-to-select -->
+<!-- HAND TRACKING v4 — ultra-lean, double-pinch fiable -->
 <video id="ht-webcam" autoplay playsinline style="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none"></video>
 <canvas id="ht-canvas" style="position:fixed;inset:0;z-index:9998;pointer-events:none"></canvas>
 <div id="ht-badge" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9998;font:600 15px/1 'JetBrains Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:#00e5ff;padding:12px 26px;background:rgba(6,8,15,0.85);border:1px solid rgba(0,229,255,0.4);border-radius:6px;backdrop-filter:blur(6px);opacity:0;transition:opacity 0.18s;pointer-events:none"></div>
+<button id="ht-home-btn" onclick="if(window.map&&window.ZONE_CONFIG){map.flyTo({center:ZONE_CONFIG.MAP_CENTER,zoom:ZONE_CONFIG.MAP_ZOOM,bearing:ZONE_CONFIG.MAP_BEARING,pitch:0,duration:1000})}" style="display:none;position:fixed;bottom:24px;left:24px;z-index:9999;font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:#00e5ff;background:rgba(6,8,15,0.85);border:1px solid rgba(0,229,255,0.35);border-radius:6px;padding:10px 16px;cursor:pointer;backdrop-filter:blur(4px)">HOME</button>
 
-<!-- Gesture guide overlay v3 -->
+<!-- Gesture guide -->
 <div id="ht-guide" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(4,6,12,0.92);backdrop-filter:blur(8px);pointer-events:all">
-  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;max-width:540px;padding:32px">
-    <div style="font:700 18px/1.2 'JetBrains Mono',monospace;letter-spacing:0.1em;color:#00e5ff;text-transform:uppercase;margin-bottom:28px">Hand Tracking — Guide</div>
-    <div style="display:grid;grid-template-columns:64px 1fr;gap:16px 20px;text-align:left;align-items:center">
-      <div style="font-size:42px;text-align:center">&#x261D;</div>
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;max-width:480px;padding:32px">
+    <div style="font:700 18px/1.2 'JetBrains Mono',monospace;letter-spacing:0.1em;color:#00e5ff;text-transform:uppercase;margin-bottom:28px">Hand Tracking</div>
+    <div style="display:grid;grid-template-columns:56px 1fr;gap:16px 16px;text-align:left;align-items:center">
+      <div style="font-size:36px;text-align:center">&#x1F90F;</div>
       <div>
-        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">Pointer</div>
-        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.65)">Levez l'index pour deplacer le curseur sur la carte</div>
+        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;margin-bottom:6px">PINCER + GLISSER</div>
+        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.6)">Deplacer la carte</div>
       </div>
-      <div style="font-size:42px;text-align:center">&#x1F90F;</div>
+      <div style="font-size:36px;text-align:center">&#x1F90F;&#x1F90F;</div>
       <div>
-        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">Pincer</div>
-        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.65)">Pincez et glissez pour deplacer la carte. Pincez deux fois rapidement pour selectionner un point.</div>
+        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;margin-bottom:6px">DOUBLE PINCEMENT</div>
+        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.6)">Pincer, relacher, pincer — ouvre le popup du point</div>
       </div>
-      <div style="font-size:42px;text-align:center">&#x1F91A;</div>
+      <div style="font-size:36px;text-align:center">&#x1F91A;</div>
       <div>
-        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">Main ouverte</div>
-        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.65)">Montez la main pour zoomer, descendez pour dezoomer</div>
+        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;margin-bottom:6px">MAIN OUVERTE</div>
+        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.6)">Monter = zoomer, descendre = dezoomer</div>
       </div>
     </div>
-    <div style="margin-top:20px;font:400 11px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.4)">Survolez le bouton HOME en bas a gauche pour revenir a la vue initiale</div>
-    <button id="ht-guide-close" style="margin-top:24px;font:600 12px/1 'JetBrains Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:#06080f;background:#00e5ff;border:none;padding:12px 32px;border-radius:4px;cursor:pointer">Compris</button>
+    <button id="ht-guide-close" style="margin-top:28px;font:600 12px/1 'JetBrains Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:#06080f;background:#00e5ff;border:none;padding:12px 32px;border-radius:4px;cursor:pointer">Compris</button>
   </div>
 </div>
 
@@ -887,445 +887,239 @@ const ZONE_CONFIG = {
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js" crossorigin="anonymous"></script>
 <script>
 /* =========================================================
-   HAND TRACKING v3 for Mapbox GL
-   Refonte complete — machine a etats, hold-to-select,
-   zoom par position Y du poignet, maxBounds Sahel,
-   bouton Home, curseurs contextuels
+   HAND TRACKING v4 — ultra-lean
+   - Pinch distance RAW (pas de filtre) = detection instantanee
+   - Seuils tres espaces (0.08 / 0.14) = pas d'ambiguite
+   - Throttle 100ms = leger meme avec tous calques
+   - Curseur = 1 seul point, rien d'autre
+   - Home button = HTML (zero canvas ops)
    ========================================================= */
 (function(){
   var vid=document.getElementById('ht-webcam');
   var hc=document.getElementById('ht-canvas');
   var badge=document.getElementById('ht-badge');
   var guide=document.getElementById('ht-guide');
+  var homeBtn=document.getElementById('ht-home-btn');
   var ctx=null,detector=null,active=false;
-  var cW=0,cH=0;
-  var guideShown=false;
+  var cW=0,cH=0,guideShown=false;
 
-  /* ── OneEuro Filter ── */
-  function OneEuro(freq,minCut,beta,dCut){
-    this.freq=freq||60;this.minCut=minCut||1.0;this.beta=beta||0.007;this.dCut=dCut||1.0;
-    this.xPrev=null;this.dxPrev=0;this.tPrev=null;
+  /* ── OneEuro Filter (cursor only) ── */
+  function OE(freq,minCut,beta,dCut){
+    this.f=freq;this.mc=minCut;this.b=beta;this.dc=dCut;
+    this.xp=null;this.dp=0;this.tp=null;
   }
-  OneEuro.prototype.alpha=function(cut){var te=1.0/this.freq;var tau=1.0/(2*Math.PI*cut);return 1.0/(1.0+tau/te)};
-  OneEuro.prototype.filter=function(x,t){
-    if(this.xPrev===null){this.xPrev=x;this.tPrev=t;return x}
-    if(t!==undefined&&this.tPrev!==undefined){var dt=t-this.tPrev;if(dt>0)this.freq=1.0/dt}
-    this.tPrev=t;
-    var dx=(x-this.xPrev)*this.freq;
-    var adx=this.alpha(this.dCut);
-    dx=adx*dx+(1-adx)*this.dxPrev;this.dxPrev=dx;
-    var cut=this.minCut+this.beta*Math.abs(dx);
-    var ax=this.alpha(cut);
-    var out=ax*x+(1-ax)*this.xPrev;
-    this.xPrev=out;return out;
+  OE.prototype.a=function(c){var te=1/this.f;return 1/(1+1/(2*Math.PI*c*te))};
+  OE.prototype.run=function(x,t){
+    if(this.xp===null){this.xp=x;this.tp=t;return x}
+    var dt=t-this.tp;if(dt>0)this.f=1/dt;this.tp=t;
+    var dx=(x-this.xp)*this.f;
+    var a1=this.a(this.dc);dx=a1*dx+(1-a1)*this.dp;this.dp=dx;
+    var a2=this.a(this.mc+this.b*Math.abs(dx));
+    var o=a2*x+(1-a2)*this.xp;this.xp=o;return o;
   };
+  OE.prototype.reset=function(){this.xp=null;this.dp=0;this.tp=null};
 
-  /* Filters */
-  var fIndexX=new OneEuro(60,1.2,0.005,1.0);
-  var fIndexY=new OneEuro(60,1.2,0.005,1.0);
-  var fThumbX=new OneEuro(60,1.2,0.005,1.0);
-  var fThumbY=new OneEuro(60,1.2,0.005,1.0);
-  var fPinchD=new OneEuro(60,0.8,0.002,1.0);
-  var fWristY=new OneEuro(60,0.8,0.003,1.0);
+  /* Only filter cursor X/Y and wrist Y (3 filters, was 6) */
+  var fCX=new OE(12,1.5,0.007,1.0);
+  var fCY=new OE(12,1.5,0.007,1.0);
+  var fWY=new OE(12,0.8,0.003,1.0);
 
-  /* ── Tuning v3b ── */
-  var PINCH_ON=0.075;
-  var PINCH_OFF=0.105;
-  var PAN_SENS=2.8;
-  var PAN_DEAD=2.0;
-  var DOUBLE_PINCH_MS=1200;   // 1.2s window for double pinch (very generous)
+  /* ── Config ── */
+  var PINCH_ON=0.08;          // easy to trigger
+  var PINCH_OFF=0.14;         // must clearly open to release (big gap!)
+  var PAN_SENS=2.5;
+  var PAN_DEAD=1.5;
+  var DOUBLE_PINCH_MS=1500;   // 1.5 second window — very generous
   var ZOOM_Y_DEAD=0.025;
   var ZOOM_Y_SCALE=8;
   var ZOOM_LERP=0.06;
-  var OPEN_DEBOUNCE=200;
-  var SELECT_COOLDOWN=1000;
-  var SELECT_TOL=50;
-  var LOST_HAND_GRACE=300;
-  var HOME_HOVER_TIME=1000;
-  var HOME_BTN_SIZE=56;
-  var HOME_BTN_MARGIN=24;
-  var SAHEL_BOUNDS=[[-25,-2],[32,37]];
+  var OPEN_DEBOUNCE=250;
+  var SELECT_COOLDOWN=1200;
+  var SELECT_TOL=55;          // large tolerance
+  var LOST_HAND_GRACE=400;
+  var BOUNDS=[[-25,-2],[32,37]];
 
-  /* ── State machine ── */
-  var S={IDLE:0,POINTING:1,PINCHING:2,ZOOMING:3};
-  var state=S.IDLE;
-  var isPanning=false;
-  var panLastX=null,panLastY=null;
-  var pinchReleaseTime=0;      // timestamp of last pinch release (for double-pinch)
-  var pinchReleaseX=0,pinchReleaseY=0;  // cursor pos at last release
+  /* ── State ── */
+  var IDLE=0,POINT=1,PINCH=2,ZOOM=3;
+  var st=IDLE;
+  var panLX=null,panLY=null;
+  var relTime=0;              // last pinch release timestamp
   var openSince=0;
-  var zoomAnchorY=null;
-  var zoomTarget=null;
-  var lastSelectTime=0;
-  var lastHandSeen=0;
-  var frameTime=0;
-  var homeHoverStart=0,homeHoverActive=false,homeTriggered=false;
-  var cursorX=0,cursorY=0,thumbX=0,thumbY=0;
+  var zAnchor=null,zTarget=null;
+  var lastSel=0,lastHand=0,fTime=0;
+  var cx=0,cy=0;              // cursor screen pos
 
-  /* ── 60fps zoom interpolation ── */
-  function zoomLoop(){
-    if(active&&zoomTarget!==null&&window.map){
-      var cur=map.getZoom();
-      var diff=zoomTarget-cur;
-      if(Math.abs(diff)>0.004)map.setZoom(cur+diff*ZOOM_LERP);
-      else zoomTarget=null;
+  /* ── Zoom loop ── */
+  (function zl(){
+    if(active&&zTarget!==null&&window.map){
+      var c=map.getZoom(),d=zTarget-c;
+      if(Math.abs(d)>0.004)map.setZoom(c+d*ZOOM_LERP);else zTarget=null;
     }
-    requestAnimationFrame(zoomLoop);
-  }
-  requestAnimationFrame(zoomLoop);
+    requestAnimationFrame(zl);
+  })();
 
-  function syncSize(){
+  function sync(){
     var w=window.innerWidth,h=window.innerHeight;
-    if(w===cW&&h===cH)return;
-    cW=w;cH=h;hc.width=cW;hc.height=cH;
+    if(w!==cW||h!==cH){cW=w;cH=h;hc.width=cW;hc.height=cH}
   }
 
-  window.toggleHandTrack=function(){
-    if(active){htStop();return}
-    htStart();
-  };
+  window.toggleHandTrack=function(){if(active)stop();else start()};
 
-  function resetFilters(){
-    [fIndexX,fIndexY,fThumbX,fThumbY,fPinchD,fWristY].forEach(function(f){
-      f.xPrev=null;f.dxPrev=0;f.tPrev=null;
-    });
-  }
-  function resetState(){
-    state=S.IDLE;isPanning=false;
-    panLastX=null;zoomAnchorY=null;zoomTarget=null;
-    openSince=0;pinchReleaseTime=0;
-    homeHoverActive=false;homeHoverStart=0;homeTriggered=false;
-  }
-
-  function htStart(){
-    active=true;
-    ctx=hc.getContext('2d');
-    syncSize();resetFilters();resetState();
+  function start(){
+    active=true;ctx=hc.getContext('2d');sync();
+    fCX.reset();fCY.reset();fWY.reset();
+    st=IDLE;panLX=null;relTime=0;openSince=0;zAnchor=null;zTarget=null;
     document.getElementById('btn-handtrack').style.color='#00e5ff';
+    homeBtn.style.display='block';
 
-    /* Lock map to Sahel */
-    if(window.map){
-      map.setMaxBounds(SAHEL_BOUNDS);
-      map.setMinZoom(3.5);
-      map.setMaxZoom(12);
-    }
+    if(window.map){map.setMaxBounds(BOUNDS);map.setMinZoom(3.5);map.setMaxZoom(12)}
 
-    /* Show guide once */
     if(!guideShown){
-      guideShown=true;
-      guide.style.display='block';
+      guideShown=true;guide.style.display='block';
       document.getElementById('ht-guide-close').onclick=function(){guide.style.display='none'};
     }
 
     detector=new Hands({locateFile:function(f){return 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/'+f}});
-    detector.setOptions({maxNumHands:1,modelComplexity:0,minDetectionConfidence:0.55,minTrackingConfidence:0.45});
-    detector.onResults(onHands);
+    detector.setOptions({maxNumHands:1,modelComplexity:0,minDetectionConfidence:0.5,minTrackingConfidence:0.4});
+    detector.onResults(onRes);
 
-    var detecting=false,lastSend=0,FRAME_INTERVAL=80;
+    var busy=false,last=0;
     var cam=new Camera(vid,{
       onFrame:function(){
-        if(!active||detecting)return;
-        var now=performance.now();
-        if(now-lastSend<FRAME_INTERVAL)return;
-        lastSend=now;detecting=true;
-        return detector.send({image:vid}).then(function(){detecting=false}).catch(function(){detecting=false});
+        if(!active||busy)return;
+        var n=performance.now();if(n-last<100)return;  // 10fps max
+        last=n;busy=true;
+        return detector.send({image:vid}).then(function(){busy=false}).catch(function(){busy=false});
       },
       width:320,height:240,facingMode:'user'
     });
-    cam.start();
-    window._htCam=cam;
+    cam.start();window._htCam=cam;
     showB('HAND TRACKING ACTIF');
   }
 
-  function htStop(){
+  function stop(){
     active=false;
     if(ctx)ctx.clearRect(0,0,cW,cH);
     document.getElementById('btn-handtrack').style.color='';
-    resetState();resetFilters();
-    /* Unlock map bounds */
-    if(window.map){
-      map.setMaxBounds(null);
-      map.setMinZoom(0);
-      map.setMaxZoom(22);
-    }
-    showB('HAND TRACKING DESACTIVE');
+    homeBtn.style.display='none';
+    st=IDLE;panLX=null;relTime=0;zAnchor=null;zTarget=null;
+    fCX.reset();fCY.reset();fWY.reset();
+    if(window.map){map.setMaxBounds(null);map.setMinZoom(0);map.setMaxZoom(22)}
+    showB('HAND TRACKING OFF');
   }
 
-  /* ── Gesture detection helpers ── */
-  function isOpen(lm){
-    var thumbIdx=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
-    if(thumbIdx<0.11)return false;
-    var ext=0;
-    if(lm[8].y<lm[6].y)ext++;
-    if(lm[12].y<lm[10].y)ext++;
-    if(lm[16].y<lm[14].y)ext++;
-    if(lm[20].y<lm[18].y)ext++;
-    return ext>=2;
-  }
-  function pinchDist(lm){
-    return fPinchD.filter(Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y),frameTime);
-  }
-  function wristY(lm){
-    return fWristY.filter(lm[0].y,frameTime);
-  }
-
-  /* ── Main frame handler ── */
-  function onHands(res){
+  /* ── Frame handler ── */
+  function onRes(res){
     if(!ctx||!active)return;
-    syncSize();
-    frameTime=performance.now()/1000;
+    sync();fTime=performance.now()/1000;
     ctx.clearRect(0,0,cW,cH);
 
-    var hands=res.multiHandLandmarks;
-    if(!hands||!hands.length){
-      if(performance.now()-lastHandSeen>LOST_HAND_GRACE){
-        state=S.IDLE;pinchSub=PS.NONE;
-        panLastX=null;zoomAnchorY=null;openSince=0;
-      }
-      drawHomeButton();
+    var h=res.multiHandLandmarks;
+    if(!h||!h.length){
+      if(performance.now()-lastHand>LOST_HAND_GRACE){st=IDLE;panLX=null;zAnchor=null;openSince=0}
       return;
     }
-    lastHandSeen=performance.now();
-    var lm=hands[0];
-    var t=frameTime;
+    lastHand=performance.now();
+    var lm=h[0],t=fTime,now=performance.now();
 
-    /* Filter cursor positions */
-    cursorX=fIndexX.filter(1-lm[8].x,t)*cW;
-    cursorY=fIndexY.filter(lm[8].y,t)*cH;
-    thumbX=fThumbX.filter(1-lm[4].x,t)*cW;
-    thumbY=fThumbY.filter(lm[4].y,t)*cH;
+    /* Filter cursor position (smooth) */
+    cx=fCX.run(1-lm[8].x,t)*cW;
+    cy=fCY.run(lm[8].y,t)*cH;
 
-    /* Read gesture signals */
-    var pd=pinchDist(lm);
+    /* RAW pinch distance — no filter for instant detection */
+    var pd=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
     var open=isOpen(lm);
-    var now=performance.now();
 
-    processState(lm,pd,open,now);
-    drawCursor(now);
-    drawHomeButton();
-    checkHomeHover(now);
-  }
-
-  /* ── State machine ── */
-  function processState(lm,pd,open,now){
+    /* ── State machine ── */
     if(!window.map)return;
 
-    switch(state){
-    case S.IDLE:
-    case S.POINTING:
+    switch(st){
+    case IDLE:
+    case POINT:
       if(pd<PINCH_ON){
-        /* Pinch start — check if double-pinch */
-        if(now-pinchReleaseTime<DOUBLE_PINCH_MS&&now-lastSelectTime>SELECT_COOLDOWN){
-          doSelect(cursorX,cursorY);
-          lastSelectTime=now;
-          pinchReleaseTime=0;
-          state=S.PINCHING;isPanning=false;
-          return;
+        /* PINCH START — check double-pinch first */
+        if(relTime>0&&now-relTime<DOUBLE_PINCH_MS&&now-lastSel>SELECT_COOLDOWN){
+          doSelect(cx,cy);lastSel=now;relTime=0;
+          st=PINCH;return;
         }
-        state=S.PINCHING;isPanning=false;
-        panLastX=cursorX;panLastY=cursorY;
+        st=PINCH;panLX=cx;panLY=cy;
         return;
       }
       if(open){
-        if(openSince===0)openSince=now;
+        if(!openSince)openSince=now;
         if(now-openSince>=OPEN_DEBOUNCE){
-          state=S.ZOOMING;
-          zoomAnchorY=wristY(lm);
-          showB('ZOOM — MONTER OU DESCENDRE');
-          return;
+          st=ZOOM;zAnchor=fWY.run(lm[0].y,t);
+          showB('ZOOM');return;
         }
-      }else{openSince=0}
-      state=S.POINTING;
-      break;
+      }else openSince=0;
+      st=POINT;break;
 
-    case S.PINCHING:
+    case PINCH:
       if(pd>PINCH_OFF){
-        /* Pinch release — record time for double-pinch detection */
-        pinchReleaseTime=now;
-        pinchReleaseX=cursorX;pinchReleaseY=cursorY;
-        state=S.POINTING;isPanning=false;
-        panLastX=null;hideB();return;
+        /* RELEASE — record for double-pinch */
+        relTime=now;st=POINT;panLX=null;hideB();return;
       }
-      /* Continue pinch → pan */
-      if(panLastX!==null){
-        var pdx=cursorX-panLastX;
-        var pdy=cursorY-panLastY;
-        if(Math.abs(pdx)>PAN_DEAD||Math.abs(pdy)>PAN_DEAD){
-          map.panBy([-pdx,-pdy],{duration:0});
-          if(!isPanning){isPanning=true;showB('DEPLACEMENT')}
+      /* PAN */
+      if(panLX!==null){
+        var dx=cx-panLX,dy=cy-panLY;
+        if(Math.abs(dx)>PAN_DEAD||Math.abs(dy)>PAN_DEAD){
+          map.panBy([-dx,-dy],{duration:0});showB('DEPLACEMENT');
         }
       }
-      panLastX=cursorX;panLastY=cursorY;
-      break;
+      panLX=cx;panLY=cy;break;
 
-    case S.ZOOMING:
-      if(!open){
-        state=S.POINTING;zoomAnchorY=null;openSince=0;
-        hideB();return;
-      }
-      if(pd<PINCH_ON){
-        state=S.PINCHING;isPanning=false;
-        panLastX=cursorX;panLastY=cursorY;
-        zoomAnchorY=null;openSince=0;return;
-      }
-      processZoom(lm);
+    case ZOOM:
+      if(!open){st=POINT;zAnchor=null;openSince=0;hideB();return}
+      if(pd<PINCH_ON){st=PINCH;panLX=cx;panLY=cy;zAnchor=null;openSince=0;return}
+      var wy=fWY.run(lm[0].y,t);
+      if(zAnchor!==null){
+        var dY=wy-zAnchor;
+        if(Math.abs(dY)>ZOOM_Y_DEAD){
+          var c=zTarget!==null?zTarget:map.getZoom();
+          zTarget=Math.max(3.5,Math.min(12,c-dY*ZOOM_Y_SCALE*0.3));
+          zAnchor=zAnchor*0.97+wy*0.03;
+          showB(dY<0?'ZOOM +':'ZOOM \u2212');
+        }
+      }else zAnchor=wy;
       break;
     }
+
+    /* Draw single cursor dot */
+    ctx.beginPath();ctx.arc(cx,cy,st===PINCH?10:7,0,Math.PI*2);
+    ctx.fillStyle=st===PINCH?'rgba(0,229,255,0.85)':'rgba(0,229,255,0.45)';
+    ctx.fill();
   }
 
-  /* ── Zoom by wrist Y ── */
-  function processZoom(lm){
-    var wy=wristY(lm);
-    if(zoomAnchorY===null){zoomAnchorY=wy;return}
-    var deltaY=wy-zoomAnchorY;
-    if(Math.abs(deltaY)<ZOOM_Y_DEAD)return;
-    var cur=zoomTarget!==null?zoomTarget:map.getZoom();
-    var zd=-deltaY*ZOOM_Y_SCALE;
-    zoomTarget=Math.max(3.5,Math.min(12,cur+zd*0.3));
-    zoomAnchorY=zoomAnchorY*0.97+wy*0.03;
-    showB(zd>0?'ZOOM +':'ZOOM \u2212');
+  function isOpen(lm){
+    if(Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y)<0.11)return false;
+    var e=0;
+    if(lm[8].y<lm[6].y)e++;if(lm[12].y<lm[10].y)e++;
+    if(lm[16].y<lm[14].y)e++;if(lm[20].y<lm[18].y)e++;
+    return e>=2;
   }
 
-  /* ── Feature selection ── */
   function doSelect(sx,sy){
-    var mapCanvas=map.getCanvas();
-    var rect=mapCanvas.getBoundingClientRect();
-    var px=sx-rect.left,py=sy-rect.top;
-    var tol=SELECT_TOL;
-    var bbox=[[px-tol,py-tol],[px+tol,py+tol]];
-    var features=map.queryRenderedFeatures(bbox);
+    var mc=map.getCanvas(),r=mc.getBoundingClientRect();
+    var px=sx-r.left,py=sy-r.top,tol=SELECT_TOL;
+    var feats=map.queryRenderedFeatures([[px-tol,py-tol],[px+tol,py+tol]]);
     var skip=['glow','ring','casing','pulse','3d-','arrows','label'];
-    var clickable=features.filter(function(f){
+    var hit=feats.filter(function(f){
       var id=f.layer.id||'';
-      for(var i=0;i<skip.length;i++){if(id.indexOf(skip[i])!==-1)return false}
+      for(var i=0;i<skip.length;i++)if(id.indexOf(skip[i])!==-1)return false;
       return true;
     });
-    if(clickable.length){
-      var f=clickable[0];
-      var lngLat=f.geometry.type==='Point'
-        ?{lng:f.geometry.coordinates[0],lat:f.geometry.coordinates[1]}
-        :map.unproject([px,py]);
-      map.fire('click',{point:{x:px,y:py},lngLat:lngLat,originalEvent:{preventDefault:function(){}}});
+    if(hit.length){
+      var f=hit[0];
+      var ll=f.geometry.type==='Point'?{lng:f.geometry.coordinates[0],lat:f.geometry.coordinates[1]}:map.unproject([px,py]);
+      map.fire('click',{point:{x:px,y:py},lngLat:ll,originalEvent:{preventDefault:function(){}}});
       showB('SELECTION');
-    }else{
-      showB('AUCUN POINT ICI');
-    }
+    }else showB('AUCUN POINT');
   }
 
-  /* ── Draw cursor ── */
-  function drawCursor(now){
-    var ix=cursorX,iy=cursorY;
-
-    switch(state){
-    case S.POINTING:
-      ctx.beginPath();ctx.arc(ix,iy,7,0,Math.PI*2);
-      ctx.fillStyle='rgba(0,229,255,0.5)';ctx.fill();
-      ctx.beginPath();ctx.arc(ix,iy,16,0,Math.PI*2);
-      ctx.strokeStyle='rgba(0,229,255,0.25)';ctx.lineWidth=2;ctx.stroke();
-      break;
-
-    case S.PINCHING:
-      /* Crosshair + dot */
-      ctx.strokeStyle='rgba(0,229,255,0.7)';ctx.lineWidth=2;
-      ctx.beginPath();ctx.moveTo(ix-12,iy);ctx.lineTo(ix+12,iy);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(ix,iy-12);ctx.lineTo(ix,iy+12);ctx.stroke();
-      ctx.beginPath();ctx.arc(ix,iy,5,0,Math.PI*2);
-      ctx.fillStyle='rgba(0,229,255,0.6)';ctx.fill();
-      /* Thumb-index line */
-      ctx.beginPath();ctx.moveTo(thumbX,thumbY);ctx.lineTo(ix,iy);
-      ctx.strokeStyle='rgba(0,229,255,0.2)';ctx.lineWidth=1.5;ctx.stroke();
-      break;
-
-    case S.ZOOMING:
-      /* Up arrow */
-      ctx.fillStyle='rgba(0,229,255,0.6)';
-      ctx.beginPath();
-      ctx.moveTo(ix,iy-22);ctx.lineTo(ix-8,iy-12);ctx.lineTo(ix+8,iy-12);
-      ctx.closePath();ctx.fill();
-      /* Down arrow */
-      ctx.beginPath();
-      ctx.moveTo(ix,iy+22);ctx.lineTo(ix-8,iy+12);ctx.lineTo(ix+8,iy+12);
-      ctx.closePath();ctx.fill();
-      /* Center dot */
-      ctx.beginPath();ctx.arc(ix,iy,4,0,Math.PI*2);
-      ctx.fillStyle='rgba(0,229,255,0.4)';ctx.fill();
-      break;
-
-    default:
-      ctx.beginPath();ctx.arc(ix,iy,5,0,Math.PI*2);
-      ctx.fillStyle='rgba(0,229,255,0.2)';ctx.fill();
-    }
-  }
-
-  /* ── Home button (bottom-left) ── */
-  function drawHomeButton(){
-    var bx=HOME_BTN_MARGIN+HOME_BTN_SIZE/2;
-    var by=cH-HOME_BTN_MARGIN-HOME_BTN_SIZE/2;
-    var r=HOME_BTN_SIZE/2;
-    var hov=homeHoverActive;
-
-    /* Background circle */
-    ctx.beginPath();ctx.arc(bx,by,r,0,Math.PI*2);
-    ctx.fillStyle=hov?'rgba(0,229,255,0.2)':'rgba(6,8,15,0.75)';
-    ctx.fill();
-    ctx.strokeStyle=hov?'rgba(0,229,255,0.7)':'rgba(0,229,255,0.25)';
-    ctx.lineWidth=2;ctx.stroke();
-
-    /* Progress ring while hovering */
-    if(homeHoverStart>0&&hov){
-      var elapsed=performance.now()-homeHoverStart;
-      var prog=Math.min(1,elapsed/HOME_HOVER_TIME);
-      ctx.beginPath();
-      ctx.arc(bx,by,r+3,-Math.PI/2,-Math.PI/2+prog*Math.PI*2);
-      ctx.strokeStyle='rgba(0,229,255,0.9)';ctx.lineWidth=3;ctx.stroke();
-    }
-
-    /* House icon */
-    ctx.strokeStyle=hov?'#00e5ff':'rgba(0,229,255,0.5)';
-    ctx.lineWidth=2;
-    ctx.beginPath();
-    ctx.moveTo(bx,by-12);
-    ctx.lineTo(bx-12,by);ctx.lineTo(bx-8,by);
-    ctx.lineTo(bx-8,by+10);ctx.lineTo(bx+8,by+10);
-    ctx.lineTo(bx+8,by);ctx.lineTo(bx+12,by);
-    ctx.closePath();ctx.stroke();
-
-    /* HOME text */
-    ctx.font='600 8px "JetBrains Mono",monospace';
-    ctx.fillStyle=hov?'#00e5ff':'rgba(0,229,255,0.4)';
-    ctx.textAlign='center';ctx.textBaseline='top';
-    ctx.fillText('HOME',bx,by+14);
-  }
-
-  function checkHomeHover(now){
-    var bx=HOME_BTN_MARGIN+HOME_BTN_SIZE/2;
-    var by=cH-HOME_BTN_MARGIN-HOME_BTN_SIZE/2;
-    var dist=Math.hypot(cursorX-bx,cursorY-by);
-
-    if(dist<HOME_BTN_SIZE/2+10){
-      if(!homeHoverActive){homeHoverActive=true;homeHoverStart=now}
-      if(!homeTriggered&&now-homeHoverStart>=HOME_HOVER_TIME){
-        homeTriggered=true;
-        map.flyTo({
-          center:window.ZONE_CONFIG?ZONE_CONFIG.MAP_CENTER:[-9.5,15.0],
-          zoom:window.ZONE_CONFIG?ZONE_CONFIG.MAP_ZOOM:5.4,
-          bearing:window.ZONE_CONFIG?ZONE_CONFIG.MAP_BEARING:-8,
-          pitch:0,duration:1200
-        });
-        showB('VUE INITIALE');
-        setTimeout(function(){homeTriggered=false},2000);
-      }
-    }else{
-      homeHoverActive=false;homeHoverStart=0;homeTriggered=false;
-    }
-  }
-
-  /* ── Badge ── */
-  var bTm=null;
-  function showB(t){badge.textContent=t;badge.style.opacity='1';clearTimeout(bTm);bTm=setTimeout(hideB,1800)}
+  var bT=null;
+  function showB(t){badge.textContent=t;badge.style.opacity='1';clearTimeout(bT);bT=setTimeout(hideB,1800)}
   function hideB(){badge.style.opacity='0'}
-
-  window.addEventListener('resize',syncSize);
+  window.addEventListener('resize',sync);
 })();
 </script>
 
