@@ -951,7 +951,6 @@ const ZONE_CONFIG = {
   var lastSelectTime=0;
   var lastHandSeen=0;
   var frameTime=0;
-  var pulsePhase=0;
 
   /* Smooth cursor positions (post-filter, in screen px) */
   var cursorIndex={x:0,y:0};
@@ -1006,20 +1005,25 @@ const ZONE_CONFIG = {
     detector=new Hands({locateFile:function(f){return 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/'+f}});
     detector.setOptions({
       maxNumHands:1,
-      modelComplexity:1,         // higher accuracy model (was 0)
-      minDetectionConfidence:0.6,
-      minTrackingConfidence:0.5  // more stable tracking (was 0.4)
+      modelComplexity:0,         // lightweight model — OneEuro filter compensates
+      minDetectionConfidence:0.55,
+      minTrackingConfidence:0.45
     });
     detector.onResults(onHands);
 
     var detecting=false;
+    var lastSend=0;
+    var FRAME_INTERVAL=50;  // cap at ~20fps detection (plenty with OneEuro smoothing)
     var cam=new Camera(vid,{
       onFrame:function(){
         if(!active||detecting)return;
+        var now=performance.now();
+        if(now-lastSend<FRAME_INTERVAL)return;  // throttle to save CPU
+        lastSend=now;
         detecting=true;
         return detector.send({image:vid}).then(function(){detecting=false}).catch(function(){detecting=false});
       },
-      width:640,height:480,facingMode:'user'  // higher res for accuracy (was 480x360)
+      width:320,height:240,facingMode:'user'  // low res = fast inference, filter handles smoothing
     });
     cam.start();
     window._htCam=cam;
@@ -1040,7 +1044,6 @@ const ZONE_CONFIG = {
     if(!ctx||!active)return;
     syncSize();
     frameTime=performance.now()/1000;
-    pulsePhase=(pulsePhase+0.04)%(Math.PI*2);
     ctx.clearRect(0,0,cW,cH);
 
     var hands=res.multiHandLandmarks;
@@ -1074,51 +1077,29 @@ const ZONE_CONFIG = {
 
     var pd=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
     var isPinch=pd<PINCH_OFF;
-    var pulse=0.5+0.5*Math.sin(pulsePhase);
 
-    /* ── Index cursor (primary) ── larger, with animated ring ── */
-    var iR=isPinch?12:9;
-    var oR=isPinch?22:16;
-
-    // Glow halo
-    var grad=ctx.createRadialGradient(ix,iy,iR*0.5,ix,iy,oR*1.5);
-    grad.addColorStop(0,isPinch?'rgba(0,229,255,0.18)':'rgba(0,229,255,0.08)');
-    grad.addColorStop(1,'rgba(0,229,255,0)');
-    ctx.beginPath();ctx.arc(ix,iy,oR*1.5,0,Math.PI*2);
-    ctx.fillStyle=grad;ctx.fill();
+    /* ── Index cursor (primary) ── large, simple, no gradient ── */
+    var iR=isPinch?11:8;
 
     // Solid center
     ctx.beginPath();ctx.arc(ix,iy,iR,0,Math.PI*2);
-    ctx.fillStyle=isPinch?'rgba(0,229,255,0.9)':'rgba(0,229,255,0.55)';
+    ctx.fillStyle=isPinch?'rgba(0,229,255,0.9)':'rgba(0,229,255,0.5)';
     ctx.fill();
 
-    // Animated outer ring
-    ctx.beginPath();ctx.arc(ix,iy,oR+pulse*3,0,Math.PI*2);
-    ctx.strokeStyle=isPinch?'rgba(0,229,255,0.6)':'rgba(0,229,255,0.25)';
+    // Outer ring
+    ctx.beginPath();ctx.arc(ix,iy,isPinch?20:14,0,Math.PI*2);
+    ctx.strokeStyle=isPinch?'rgba(0,229,255,0.55)':'rgba(0,229,255,0.2)';
     ctx.lineWidth=2;ctx.stroke();
 
     /* ── Thumb cursor (secondary) ── */
-    ctx.beginPath();ctx.arc(tx,ty,6,0,Math.PI*2);
-    ctx.fillStyle='rgba(0,229,255,0.4)';
+    ctx.beginPath();ctx.arc(tx,ty,5,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,229,255,0.35)';
     ctx.fill();
-    ctx.beginPath();ctx.arc(tx,ty,10,0,Math.PI*2);
-    ctx.strokeStyle='rgba(0,229,255,0.15)';
-    ctx.lineWidth=1.5;ctx.stroke();
 
-    /* ── Connection line when close ── */
+    /* ── Connection line when pinching ── */
     if(isPinch){
       ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(ix,iy);
-      ctx.strokeStyle='rgba(0,229,255,0.35)';ctx.lineWidth=1.5;
-      ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
-    }
-
-    /* ── Gesture state indicator on cursor ── */
-    if(hand.pinching){
-      /* Show small directional crosshair when panning */
-      var cLen=8;
-      ctx.strokeStyle='rgba(0,229,255,0.4)';ctx.lineWidth=1;
-      ctx.beginPath();ctx.moveTo(ix-cLen,iy);ctx.lineTo(ix+cLen,iy);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(ix,iy-cLen);ctx.lineTo(ix,iy+cLen);ctx.stroke();
+      ctx.strokeStyle='rgba(0,229,255,0.3)';ctx.lineWidth=1.5;ctx.stroke();
     }
   }
 
