@@ -870,7 +870,7 @@ const ZONE_CONFIG = {
       <div style="font-size:42px;text-align:center">&#x1F90F;</div>
       <div>
         <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">Pincer</div>
-        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.65)">Maintenez pouce-index pour selectionner un point, ou glissez pour deplacer la carte</div>
+        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.65)">Pincez et glissez pour deplacer la carte. Pincez deux fois rapidement pour selectionner un point.</div>
       </div>
       <div style="font-size:42px;text-align:center">&#x1F91A;</div>
       <div>
@@ -928,13 +928,12 @@ const ZONE_CONFIG = {
   var fPinchD=new OneEuro(60,0.8,0.002,1.0);
   var fWristY=new OneEuro(60,0.8,0.003,1.0);
 
-  /* ── Tuning v3 ── */
+  /* ── Tuning v3b ── */
   var PINCH_ON=0.075;
   var PINCH_OFF=0.105;
   var PAN_SENS=2.8;
   var PAN_DEAD=2.0;
-  var HOLD_TIME_MS=600;
-  var HOLD_MOVE_THRESH=12;
+  var DOUBLE_PINCH_MS=1200;   // 1.2s window for double pinch (very generous)
   var ZOOM_Y_DEAD=0.025;
   var ZOOM_Y_SCALE=8;
   var ZOOM_LERP=0.06;
@@ -949,18 +948,17 @@ const ZONE_CONFIG = {
 
   /* ── State machine ── */
   var S={IDLE:0,POINTING:1,PINCHING:2,ZOOMING:3};
-  var PS={NONE:0,HOLD_WAIT:1,PANNING:2,SELECTED:3};
   var state=S.IDLE;
-  var pinchSub=PS.NONE;
-  var pinchStartX=0,pinchStartY=0,pinchStartTime=0;
+  var isPanning=false;
   var panLastX=null,panLastY=null;
+  var pinchReleaseTime=0;      // timestamp of last pinch release (for double-pinch)
+  var pinchReleaseX=0,pinchReleaseY=0;  // cursor pos at last release
   var openSince=0;
   var zoomAnchorY=null;
   var zoomTarget=null;
   var lastSelectTime=0;
   var lastHandSeen=0;
   var frameTime=0;
-  var fillProgress=0;
   var homeHoverStart=0,homeHoverActive=false,homeTriggered=false;
   var cursorX=0,cursorY=0,thumbX=0,thumbY=0;
 
@@ -993,9 +991,9 @@ const ZONE_CONFIG = {
     });
   }
   function resetState(){
-    state=S.IDLE;pinchSub=PS.NONE;
+    state=S.IDLE;isPanning=false;
     panLastX=null;zoomAnchorY=null;zoomTarget=null;
-    openSince=0;fillProgress=0;
+    openSince=0;pinchReleaseTime=0;
     homeHoverActive=false;homeHoverStart=0;homeTriggered=false;
   }
 
@@ -1023,7 +1021,7 @@ const ZONE_CONFIG = {
     detector.setOptions({maxNumHands:1,modelComplexity:0,minDetectionConfidence:0.55,minTrackingConfidence:0.45});
     detector.onResults(onHands);
 
-    var detecting=false,lastSend=0,FRAME_INTERVAL=50;
+    var detecting=false,lastSend=0,FRAME_INTERVAL=80;
     var cam=new Camera(vid,{
       onFrame:function(){
         if(!active||detecting)return;
@@ -1116,9 +1114,15 @@ const ZONE_CONFIG = {
     case S.IDLE:
     case S.POINTING:
       if(pd<PINCH_ON){
-        state=S.PINCHING;pinchSub=PS.HOLD_WAIT;
-        pinchStartX=cursorX;pinchStartY=cursorY;
-        pinchStartTime=now;
+        /* Pinch start — check if double-pinch */
+        if(now-pinchReleaseTime<DOUBLE_PINCH_MS&&now-lastSelectTime>SELECT_COOLDOWN){
+          doSelect(cursorX,cursorY);
+          lastSelectTime=now;
+          pinchReleaseTime=0;
+          state=S.PINCHING;isPanning=false;
+          return;
+        }
+        state=S.PINCHING;isPanning=false;
         panLastX=cursorX;panLastY=cursorY;
         return;
       }
@@ -1136,11 +1140,22 @@ const ZONE_CONFIG = {
 
     case S.PINCHING:
       if(pd>PINCH_OFF){
-        state=S.POINTING;pinchSub=PS.NONE;
-        panLastX=null;fillProgress=0;
-        hideB();return;
+        /* Pinch release — record time for double-pinch detection */
+        pinchReleaseTime=now;
+        pinchReleaseX=cursorX;pinchReleaseY=cursorY;
+        state=S.POINTING;isPanning=false;
+        panLastX=null;hideB();return;
       }
-      processPinch(now);
+      /* Continue pinch → pan */
+      if(panLastX!==null){
+        var pdx=cursorX-panLastX;
+        var pdy=cursorY-panLastY;
+        if(Math.abs(pdx)>PAN_DEAD||Math.abs(pdy)>PAN_DEAD){
+          map.panBy([-pdx,-pdy],{duration:0});
+          if(!isPanning){isPanning=true;showB('DEPLACEMENT')}
+        }
+      }
+      panLastX=cursorX;panLastY=cursorY;
       break;
 
     case S.ZOOMING:
@@ -1149,49 +1164,12 @@ const ZONE_CONFIG = {
         hideB();return;
       }
       if(pd<PINCH_ON){
-        state=S.PINCHING;pinchSub=PS.HOLD_WAIT;
-        pinchStartX=cursorX;pinchStartY=cursorY;
-        pinchStartTime=now;
+        state=S.PINCHING;isPanning=false;
         panLastX=cursorX;panLastY=cursorY;
         zoomAnchorY=null;openSince=0;return;
       }
       processZoom(lm);
       break;
-    }
-  }
-
-  /* ── Pinch sub-states ── */
-  function processPinch(now){
-    if(pinchSub===PS.SELECTED)return;
-
-    var dx=cursorX-pinchStartX;
-    var dy=cursorY-pinchStartY;
-    var moveDist=Math.hypot(dx,dy);
-
-    if(pinchSub===PS.HOLD_WAIT){
-      var elapsed=now-pinchStartTime;
-      fillProgress=Math.min(1,elapsed/HOLD_TIME_MS);
-
-      if(moveDist>HOLD_MOVE_THRESH){
-        pinchSub=PS.PANNING;fillProgress=0;
-        showB('DEPLACEMENT');
-      }else if(elapsed>=HOLD_TIME_MS&&now-lastSelectTime>SELECT_COOLDOWN){
-        doSelect(cursorX,cursorY);
-        pinchSub=PS.SELECTED;fillProgress=0;
-        lastSelectTime=now;
-      }
-      return;
-    }
-
-    if(pinchSub===PS.PANNING){
-      if(panLastX!==null){
-        var pdx=cursorX-panLastX;
-        var pdy=cursorY-panLastY;
-        if(Math.abs(pdx)>PAN_DEAD||Math.abs(pdy)>PAN_DEAD){
-          map.panBy([-pdx,-pdy],{duration:0});
-        }
-      }
-      panLastX=cursorX;panLastY=cursorY;
     }
   }
 
@@ -1234,7 +1212,7 @@ const ZONE_CONFIG = {
     }
   }
 
-  /* ── Draw cursor with state feedback ── */
+  /* ── Draw cursor ── */
   function drawCursor(now){
     var ix=cursorX,iy=cursorY;
 
@@ -1247,32 +1225,12 @@ const ZONE_CONFIG = {
       break;
 
     case S.PINCHING:
-      if(pinchSub===PS.HOLD_WAIT){
-        /* Solid center */
-        ctx.beginPath();ctx.arc(ix,iy,9,0,Math.PI*2);
-        ctx.fillStyle='rgba(0,229,255,0.7)';ctx.fill();
-        /* Background ring */
-        ctx.beginPath();ctx.arc(ix,iy,20,0,Math.PI*2);
-        ctx.strokeStyle='rgba(0,229,255,0.15)';ctx.lineWidth=2;ctx.stroke();
-        /* Progress arc */
-        ctx.beginPath();
-        ctx.arc(ix,iy,20,-Math.PI/2,-Math.PI/2+fillProgress*Math.PI*2);
-        ctx.strokeStyle='rgba(0,229,255,0.9)';ctx.lineWidth=3;ctx.stroke();
-      }else if(pinchSub===PS.PANNING){
-        var sz=14;
-        ctx.strokeStyle='rgba(0,229,255,0.7)';ctx.lineWidth=2;
-        ctx.beginPath();ctx.moveTo(ix-sz,iy);ctx.lineTo(ix+sz,iy);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(ix,iy-sz);ctx.lineTo(ix,iy+sz);ctx.stroke();
-        ctx.beginPath();ctx.arc(ix,iy,5,0,Math.PI*2);
-        ctx.fillStyle='rgba(0,229,255,0.5)';ctx.fill();
-      }else if(pinchSub===PS.SELECTED){
-        ctx.beginPath();ctx.arc(ix,iy,22,0,Math.PI*2);
-        ctx.fillStyle='rgba(0,229,255,0.15)';ctx.fill();
-        ctx.strokeStyle='rgba(0,229,255,0.9)';ctx.lineWidth=3;
-        ctx.beginPath();
-        ctx.moveTo(ix-8,iy);ctx.lineTo(ix-2,iy+7);ctx.lineTo(ix+10,iy-6);
-        ctx.stroke();
-      }
+      /* Crosshair + dot */
+      ctx.strokeStyle='rgba(0,229,255,0.7)';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(ix-12,iy);ctx.lineTo(ix+12,iy);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(ix,iy-12);ctx.lineTo(ix,iy+12);ctx.stroke();
+      ctx.beginPath();ctx.arc(ix,iy,5,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,229,255,0.6)';ctx.fill();
       /* Thumb-index line */
       ctx.beginPath();ctx.moveTo(thumbX,thumbY);ctx.lineTo(ix,iy);
       ctx.strokeStyle='rgba(0,229,255,0.2)';ctx.lineWidth=1.5;ctx.stroke();
