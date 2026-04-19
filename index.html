@@ -811,64 +811,53 @@ map.on('style.load', () => {
 /* ═══════════════════════════════════════════════════════════
    DYNAMIC CONFLICT FLOWS
    ═══════════════════════════════════════════════════════════ */
+/* Intra-zone seulement — mouvements locaux de conflit */
 const CITIES = {
-  /* Hubs exterieurs */
-  moscou:    [37.6173, 55.7558],
-  paris:     [2.3522,  48.8566],
-  pekin:     [116.4074, 39.9042],
-  washington:[-77.0369, 38.9072],
-  ankara:    [32.8597, 39.9334],
-  riyad:     [46.6753, 24.7136],
-  doha:      [51.531,  25.2854],
   /* Moyen-Orient */
-  teheran:   [51.389,  35.6892],
   bagdad:    [44.3661, 33.3152],
   damas:     [36.2765, 33.5138],
   beyrouth:  [35.5018, 33.8938],
   sanaa:     [44.191,  15.3694],
   aden:      [45.0186, 12.7855],
+  mossoul:   [43.1482, 36.3350],
+  alep:      [37.1343, 36.2021],
   /* Sahel */
   bamako:    [-8.0029, 12.6392],
   niamey:    [2.1254,  13.5115],
   ouaga:     [-1.5197, 12.3714],
   ndjamena:  [15.0502, 12.1191],
   agadez:    [7.9889,  16.9742],
-  tripoli:   [13.1913, 32.8872],
+  gao:       [-0.0236, 16.2717],
   /* RDC */
   kinshasa:  [15.2663, -4.4419],
   goma:      [29.2218, -1.6779],
   bukavu:    [28.8608, -2.5095],
-  bangui:    [18.5582, 4.3947],
-  kampala:   [32.5825, 0.3476]
+  bunia:     [29.6225, 1.5655],
+  beni:      [29.4730, 0.4908]
 };
 
+/* Flux INTRA-ZONE uniquement — conflits locaux */
 const FLOWS = [
-  /* MOYEN-ORIENT — 5 flux */
-  { from: 'teheran',  to: 'damas',    type: 'arms' },
-  { from: 'teheran',  to: 'sanaa',    type: 'arms' },
-  { from: 'moscou',   to: 'damas',    type: 'arms' },
-  { from: 'damas',    to: 'beyrouth', type: 'troop' },
-  { from: 'riyad',    to: 'sanaa',    type: 'intel' },
-  /* SAHEL — 6 flux */
-  { from: 'paris',    to: 'niamey',   type: 'troop' },
-  { from: 'paris',    to: 'bamako',   type: 'intel' },
-  { from: 'moscou',   to: 'bamako',   type: 'arms' },
-  { from: 'tripoli',  to: 'agadez',   type: 'arms' },
-  { from: 'bamako',   to: 'ouaga',    type: 'troop' },
-  { from: 'doha',     to: 'ndjamena', type: 'money' },
-  /* RDC — 4 flux */
-  { from: 'kinshasa', to: 'goma',     type: 'troop' },
-  { from: 'kampala',  to: 'goma',     type: 'arms' },
-  { from: 'goma',     to: 'bukavu',   type: 'troop' },
-  { from: 'pekin',    to: 'kinshasa', type: 'money' }
+  /* MOYEN-ORIENT — axes conflictuels */
+  { from: 'damas',    to: 'beyrouth' },
+  { from: 'damas',    to: 'alep' },
+  { from: 'bagdad',   to: 'damas' },
+  { from: 'bagdad',   to: 'mossoul' },
+  { from: 'sanaa',    to: 'aden' },
+  /* SAHEL — corridors djihadistes */
+  { from: 'bamako',   to: 'gao' },
+  { from: 'bamako',   to: 'ouaga' },
+  { from: 'ouaga',    to: 'niamey' },
+  { from: 'niamey',   to: 'agadez' },
+  { from: 'agadez',   to: 'ndjamena' },
+  /* RDC — front Est */
+  { from: 'kinshasa', to: 'goma' },
+  { from: 'goma',     to: 'bukavu' },
+  { from: 'goma',     to: 'beni' },
+  { from: 'beni',     to: 'bunia' }
 ];
 
-const FLOW_COLORS = {
-  arms:  '#e07b50',  /* armement — orange-rouge */
-  troop: '#c49a3c',  /* troupes — dore */
-  intel: '#4fb8cc',  /* renseignement — cyan */
-  money: '#9a7dc4'   /* financements — violet */
-};
+const FLOW_COLOR = '#c49a3c';  /* or militaire, coherent design */
 
 /* Great-circle interpolation (sphere slerp) */
 function greatCircle(from, to, steps = 48) {
@@ -894,17 +883,25 @@ function greatCircle(from, to, steps = 48) {
   return pts;
 }
 
+/* Precompute arc geometries + particles positions */
+let flowArcs = [];  /* [{coords: [...pts], length}] */
+
 function addFlows() {
   if (!map) { console.warn('[flows] map missing'); return; }
 
   try {
-    /* Origin/destination points (pulsing endpoints) */
+    /* Build arcs */
+    flowArcs = FLOWS
+      .filter(f => CITIES[f.from] && CITIES[f.to])
+      .map(f => {
+        const coords = greatCircle(CITIES[f.from], CITIES[f.to], 64);
+        return { coords, length: coords.length };
+      });
+
+    /* Endpoint cities — static gold dots with subtle glow */
     const endpointCoords = new Set();
     FLOWS.forEach(f => {
-      if (!CITIES[f.from] || !CITIES[f.to]) {
-        console.warn('[flows] missing city:', f);
-        return;
-      }
+      if (!CITIES[f.from] || !CITIES[f.to]) return;
       endpointCoords.add(CITIES[f.from].join(','));
       endpointCoords.add(CITIES[f.to].join(','));
     });
@@ -922,10 +919,10 @@ function addFlows() {
       type: 'circle',
       source: 'flow-endpoints',
       paint: {
-        'circle-radius': 8,
-        'circle-color': '#ffffff',
-        'circle-opacity': 0.35,
-        'circle-blur': 1.0
+        'circle-radius': 7,
+        'circle-color': FLOW_COLOR,
+        'circle-opacity': 0.15,
+        'circle-blur': 1.5
       }
     });
     map.addLayer({
@@ -933,80 +930,103 @@ function addFlows() {
       type: 'circle',
       source: 'flow-endpoints',
       paint: {
-        'circle-radius': 3,
-        'circle-color': '#ffffff',
+        'circle-radius': 2.5,
+        'circle-color': FLOW_COLOR,
         'circle-opacity': 0.9
       }
     });
 
-    /* One layer per flow type (for distinct colors) */
-    for (const type of Object.keys(FLOW_COLORS)) {
-      const features = FLOWS.filter(f => f.type === type && CITIES[f.from] && CITIES[f.to]).map(f => ({
-        type: 'Feature',
-        properties: { type },
-        geometry: {
-          type: 'LineString',
-          coordinates: greatCircle(CITIES[f.from], CITIES[f.to], 48)
-        }
-      }));
+    /* Static arc background (thin gold lines) */
+    const arcFeatures = flowArcs.map(a => ({
+      type: 'Feature',
+      geometry: { type: 'LineString', coordinates: a.coords }
+    }));
+    map.addSource('flow-arcs', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features: arcFeatures }
+    });
+    map.addLayer({
+      id: 'flow-arcs-bg',
+      type: 'line',
+      source: 'flow-arcs',
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': FLOW_COLOR,
+        'line-width': 0.8,
+        'line-opacity': 0.25
+      }
+    });
 
-      map.addSource('flow-' + type, {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features }
-      });
+    /* Moving particles — one travelling dot per arc */
+    map.addSource('flow-particles', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features: [] }
+    });
+    /* Glow behind particle */
+    map.addLayer({
+      id: 'flow-particles-glow',
+      type: 'circle',
+      source: 'flow-particles',
+      paint: {
+        'circle-radius': 8,
+        'circle-color': FLOW_COLOR,
+        'circle-opacity': 0.35,
+        'circle-blur': 1.2
+      }
+    });
+    /* Solid core */
+    map.addLayer({
+      id: 'flow-particles-dot',
+      type: 'circle',
+      source: 'flow-particles',
+      paint: {
+        'circle-radius': 2.2,
+        'circle-color': '#ffe8a8',
+        'circle-opacity': 1
+      }
+    });
 
-      /* Background line (subtle, always visible) */
-      map.addLayer({
-        id: 'flow-' + type + '-bg',
-        type: 'line',
-        source: 'flow-' + type,
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: {
-          'line-color': FLOW_COLORS[type],
-          'line-width': 1.8,
-          'line-opacity': 0.35
-        }
-      });
-
-      /* Animated dash overlay (flowing ant-trail) */
-      map.addLayer({
-        id: 'flow-' + type + '-dash',
-        type: 'line',
-        source: 'flow-' + type,
-        layout: { 'line-cap': 'butt', 'line-join': 'round' },
-        paint: {
-          'line-color': FLOW_COLORS[type],
-          'line-width': 2.2,
-          'line-opacity': 0.95,
-          'line-dasharray': [2, 4]
-        }
-      });
-    }
-    console.log('[flows] layers ok', Object.keys(FLOW_COLORS).length, 'types,', FLOWS.length, 'flows');
+    console.log('[flows] ok', flowArcs.length, 'arcs');
   } catch (e) {
     console.error('[flows] error:', e);
   }
 }
 
-/* Dash animation — ant-trail effect (always 2 values = dash, gap) */
-const DASH_SEQ = [
-  [2, 4], [2.2, 3.8], [2.4, 3.6], [2.6, 3.4], [2.8, 3.2], [3, 3],
-  [3.2, 2.8], [3.4, 2.6], [3.6, 2.4], [3.8, 2.2], [4, 2],
-  [3.8, 2.2], [3.6, 2.4], [3.4, 2.6], [3.2, 2.8], [3, 3],
-  [2.8, 3.2], [2.6, 3.4], [2.4, 3.6], [2.2, 3.8]
-];
-
+/* Animated particles traveling along each arc */
 function startFlowAnimation() {
-  let idx = 0;
-  setInterval(() => {
-    idx = (idx + 1) % DASH_SEQ.length;
-    for (const type of Object.keys(FLOW_COLORS)) {
-      const lyr = 'flow-' + type + '-dash';
-      if (map.getLayer(lyr)) {
-        map.setPaintProperty(lyr, 'line-dasharray', DASH_SEQ[idx]);
+  let t = 0;
+  const SPEED = 0.006;  /* progress per frame (~0-1 per arc) */
+
+  function tick() {
+    t = (t + SPEED) % 1;
+    const features = [];
+    for (const arc of flowArcs) {
+      /* 2 particles per arc, offset by 0.5 for continuous flow */
+      for (const offset of [0, 0.5]) {
+        const p = (t + offset) % 1;
+        const idx = Math.floor(p * (arc.length - 1));
+        const frac = p * (arc.length - 1) - idx;
+        const a = arc.coords[idx];
+        const b = arc.coords[Math.min(idx + 1, arc.length - 1)];
+        /* Linear interp between two adjacent great-circle points (ok for short segments) */
+        const lng = a[0] + (b[0] - a[0]) * frac;
+        const lat = a[1] + (b[1] - a[1]) * frac;
+        /* Fade particle at extremities for smooth entry/exit */
+        const fadeIn = Math.min(1, p * 10);
+        const fadeOut = Math.min(1, (1 - p) * 10);
+        const opacity = Math.min(fadeIn, fadeOut);
+        features.push({
+          type: 'Feature',
+          properties: { opacity },
+          geometry: { type: 'Point', coordinates: [lng, lat] }
+        });
       }
     }
-  }, 80);
+    const src = map.getSource('flow-particles');
+    if (src) src.setData({ type: 'FeatureCollection', features });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 }
 
 /* ═══ Continuous rotation ═══ */
