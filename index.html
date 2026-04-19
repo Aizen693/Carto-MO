@@ -806,13 +806,14 @@ map.on('style.load', () => {
 
 /* ═══ Continuous rotation ═══ */
 let rotationPaused = false;
-const ROTATION_SPEED = 0.35; // ~21°/sec, tour complet en ~17s — match prototype
+const ROTATION_SPEED = 0.5; // ~30°/sec, tour complet en ~12s
 
 function startRotation() {
   function tick() {
-    if (!rotationPaused && map.loaded()) {
+    if (!rotationPaused) {
       const current = map.getCenter();
-      map.jumpTo({ center: [current.lng + ROTATION_SPEED, current.lat] });
+      /* setCenter is faster than jumpTo for a simple longitude shift */
+      map.setCenter([current.lng + ROTATION_SPEED, current.lat]);
       positionLabels();
     }
     requestAnimationFrame(tick);
