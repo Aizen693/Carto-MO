@@ -895,7 +895,7 @@ function greatCircle(from, to, steps = 48) {
 }
 
 function addFlows() {
-  if (!window.map) { console.warn('[flows] map missing'); return; }
+  if (!map) { console.warn('[flows] map missing'); return; }
 
   try {
     /* Origin/destination points (pulsing endpoints) */
