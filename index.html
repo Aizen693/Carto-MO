@@ -806,7 +806,7 @@ map.on('style.load', () => {
 
 /* ═══ Continuous rotation ═══ */
 let rotationPaused = false;
-const ROTATION_SPEED = 0.015; // degrees per frame at 60fps
+const ROTATION_SPEED = 0.04; // ~2.4°/sec, tour complet en ~2m30
 
 function startRotation() {
   function tick() {
