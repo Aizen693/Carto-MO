@@ -935,7 +935,6 @@ const ZONE_CONFIG = {
   var ZOOM_LERP=0.06;
   var OPEN_DEBOUNCE=250;
   var SELECT_COOLDOWN=1200;
-  var SELECT_TOL=55;          // large tolerance
   var LOST_HAND_GRACE=400;
   var BOUNDS=[[-25,-2],[32,37]];
 
@@ -1099,21 +1098,27 @@ const ZONE_CONFIG = {
   }
 
   function doSelect(sx,sy){
-    var mc=map.getCanvas(),r=mc.getBoundingClientRect();
-    var px=sx-r.left,py=sy-r.top,tol=SELECT_TOL;
-    var feats=map.queryRenderedFeatures([[px-tol,py-tol],[px+tol,py+tol]]);
-    var skip=['glow','ring','casing','pulse','3d-','arrows','label'];
-    var hit=feats.filter(function(f){
-      var id=f.layer.id||'';
-      for(var i=0;i<skip.length;i++)if(id.indexOf(skip[i])!==-1)return false;
-      return true;
-    });
-    if(hit.length){
-      var f=hit[0];
-      var ll=f.geometry.type==='Point'?{lng:f.geometry.coordinates[0],lat:f.geometry.coordinates[1]}:map.unproject([px,py]);
-      map.fire('click',{point:{x:px,y:py},lngLat:ll,originalEvent:{preventDefault:function(){}}});
-      showB('SELECTION');
-    }else showB('AUCUN POINT');
+    /* Defer to next tick so detection frame isn't blocked */
+    var _sx=sx,_sy=sy;
+    setTimeout(function(){
+      try{
+        var mc=map.getCanvas(),r=mc.getBoundingClientRect();
+        var px=_sx-r.left,py=_sy-r.top,tol=20; // small bbox = fast query
+        var feats=map.queryRenderedFeatures([[px-tol,py-tol],[px+tol,py+tol]]);
+        var skip=['glow','ring','casing','pulse','3d-','arrows','label','fill','outline'];
+        var hit=feats.filter(function(f){
+          var id=f.layer.id||'';
+          for(var i=0;i<skip.length;i++)if(id.indexOf(skip[i])!==-1)return false;
+          return true;
+        });
+        if(hit.length){
+          var f=hit[0];
+          var ll=f.geometry.type==='Point'?{lng:f.geometry.coordinates[0],lat:f.geometry.coordinates[1]}:map.unproject([px,py]);
+          map.fire('click',{point:{x:px,y:py},lngLat:ll,originalEvent:{preventDefault:function(){}}});
+          showB('SELECTION');
+        }else showB('AUCUN POINT');
+      }catch(e){}
+    },0);
   }
 
   var bT=null;
