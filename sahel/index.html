@@ -154,6 +154,10 @@
       <span class="sb-section-arrow open">&#x25B2;</span>
     </div>
     <div class="sb-section-body">
+      <div class="sb-style-row">
+        <button class="sb-style-btn" onclick="toggleAllLayers(true)">Tout activer</button>
+        <button class="sb-style-btn" onclick="toggleAllLayers(false)">Tout enlever</button>
+      </div>
       <div class="sb-layer-row">
         <span>1. Ethnies &amp; sous-groupes</span>
         <div class="sb-toggle" id="sb-toggle-ethnies" onclick="toggleLayer('ethnies')"></div>
@@ -682,6 +686,17 @@ const ZONE_CONFIG = {
   // Expose toggleLayer globally
   window.toggleLayer = function(id) {
     if (layerRegistry[id] && layerRegistry[id].toggle) layerRegistry[id].toggle();
+  };
+
+  // Bulk toggle all 7 layers
+  window.toggleAllLayers = function(on) {
+    ['ethnies','forces','population','mines','infrastructures','evenements','flux'].forEach(function(id) {
+      var el = document.getElementById('sb-toggle-' + id);
+      if (!el) return;
+      var isOn = el.classList.contains('on');
+      if (on && !isOn) window.toggleLayer(id);
+      else if (!on && isOn) window.toggleLayer(id);
+    });
   };
 
   /* ── CALQUE : Ethnies & sous-groupes ── */
