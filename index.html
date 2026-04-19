@@ -759,15 +759,42 @@ map.on('style.load', () => {
     }
   });
 
+  /* Zone area — grande halo qui delimite visuellement la zone */
+  map.addLayer({
+    id: 'zones-area',
+    type: 'circle',
+    source: 'zones',
+    paint: {
+      'circle-radius': 48,
+      'circle-color': '#c49a3c',
+      'circle-opacity': 0.06,
+      'circle-blur': 1
+    }
+  });
+
   map.addLayer({
     id: 'zones-glow',
     type: 'circle',
     source: 'zones',
     paint: {
-      'circle-radius': 24,
+      'circle-radius': 28,
       'circle-color': '#c49a3c',
-      'circle-opacity': 0.12,
-      'circle-blur': 1
+      'circle-opacity': 0.18,
+      'circle-blur': 0.8
+    }
+  });
+
+  /* Anneau exterieur — signature "zone prioritaire" */
+  map.addLayer({
+    id: 'zones-ring-outer',
+    type: 'circle',
+    source: 'zones',
+    paint: {
+      'circle-radius': 18,
+      'circle-color': 'transparent',
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#c49a3c',
+      'circle-stroke-opacity': 0.35
     }
   });
 
@@ -776,11 +803,11 @@ map.on('style.load', () => {
     type: 'circle',
     source: 'zones',
     paint: {
-      'circle-radius': 10,
+      'circle-radius': 12,
       'circle-color': 'transparent',
-      'circle-stroke-width': 1.5,
-      'circle-stroke-color': '#c49a3c',
-      'circle-stroke-opacity': 0.6
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#e0b452',
+      'circle-stroke-opacity': 0.85
     }
   });
 
@@ -789,9 +816,9 @@ map.on('style.load', () => {
     type: 'circle',
     source: 'zones',
     paint: {
-      'circle-radius': 4,
-      'circle-color': '#c49a3c',
-      'circle-opacity': 0.95
+      'circle-radius': 5,
+      'circle-color': '#ffe8a8',
+      'circle-opacity': 1
     }
   });
 
@@ -811,8 +838,20 @@ map.on('style.load', () => {
 /* ═══════════════════════════════════════════════════════════
    DYNAMIC CONFLICT FLOWS
    ═══════════════════════════════════════════════════════════ */
-/* Intra-zone seulement — mouvements locaux de conflit */
 const CITIES = {
+  /* Hubs exterieurs */
+  moscou:    [37.6173, 55.7558],
+  paris:     [2.3522,  48.8566],
+  pekin:     [116.4074, 39.9042],
+  washington:[-77.0369, 38.9072],
+  bruxelles: [4.3517,  50.8503],
+  doha:      [51.531,  25.2854],
+  riyad:     [46.6753, 24.7136],
+  ankara:    [32.8597, 39.9334],
+  tripoli:   [13.1913, 32.8872],
+  nairobi:   [36.8219, -1.2921],
+  kampala:   [32.5825, 0.3476],
+  bangui:    [18.5582, 4.3947],
   /* Moyen-Orient */
   bagdad:    [44.3661, 33.3152],
   damas:     [36.2765, 33.5138],
@@ -836,25 +875,41 @@ const CITIES = {
   beni:      [29.4730, 0.4908]
 };
 
-/* Flux INTRA-ZONE uniquement — conflits locaux */
+/* Flux — mix intra-zones + axes geopolitiques globaux */
 const FLOWS = [
-  /* MOYEN-ORIENT — axes conflictuels */
-  { from: 'damas',    to: 'beyrouth' },
-  { from: 'damas',    to: 'alep' },
-  { from: 'bagdad',   to: 'damas' },
-  { from: 'bagdad',   to: 'mossoul' },
-  { from: 'sanaa',    to: 'aden' },
-  /* SAHEL — corridors djihadistes */
-  { from: 'bamako',   to: 'gao' },
-  { from: 'bamako',   to: 'ouaga' },
-  { from: 'ouaga',    to: 'niamey' },
-  { from: 'niamey',   to: 'agadez' },
-  { from: 'agadez',   to: 'ndjamena' },
-  /* RDC — front Est */
-  { from: 'kinshasa', to: 'goma' },
-  { from: 'goma',     to: 'bukavu' },
-  { from: 'goma',     to: 'beni' },
-  { from: 'beni',     to: 'bunia' }
+  /* ─── INTRA-MOYEN-ORIENT ─── */
+  { from: 'damas',    to: 'beyrouth',  tier: 'local' },
+  { from: 'damas',    to: 'alep',      tier: 'local' },
+  { from: 'bagdad',   to: 'damas',     tier: 'local' },
+  { from: 'bagdad',   to: 'mossoul',   tier: 'local' },
+  { from: 'sanaa',    to: 'aden',      tier: 'local' },
+  /* ─── INTRA-SAHEL ─── */
+  { from: 'bamako',   to: 'gao',       tier: 'local' },
+  { from: 'bamako',   to: 'ouaga',     tier: 'local' },
+  { from: 'ouaga',    to: 'niamey',    tier: 'local' },
+  { from: 'niamey',   to: 'agadez',    tier: 'local' },
+  { from: 'agadez',   to: 'ndjamena',  tier: 'local' },
+  /* ─── INTRA-RDC ─── */
+  { from: 'kinshasa', to: 'goma',      tier: 'local' },
+  { from: 'goma',     to: 'bukavu',    tier: 'local' },
+  { from: 'goma',     to: 'beni',      tier: 'local' },
+  { from: 'beni',     to: 'bunia',     tier: 'local' },
+  /* ─── GLOBAL — Moyen-Orient ─── */
+  { from: 'moscou',   to: 'damas',     tier: 'global' },
+  { from: 'ankara',   to: 'mossoul',   tier: 'global' },
+  { from: 'riyad',    to: 'aden',      tier: 'global' },
+  { from: 'washington', to: 'bagdad',  tier: 'global' },
+  /* ─── GLOBAL — Sahel ─── */
+  { from: 'paris',    to: 'niamey',    tier: 'global' },
+  { from: 'moscou',   to: 'bamako',    tier: 'global' },
+  { from: 'tripoli',  to: 'agadez',    tier: 'global' },
+  { from: 'doha',     to: 'ndjamena',  tier: 'global' },
+  /* ─── GLOBAL — RDC ─── */
+  { from: 'bruxelles', to: 'kinshasa', tier: 'global' },
+  { from: 'pekin',    to: 'kinshasa',  tier: 'global' },
+  { from: 'kampala',  to: 'goma',      tier: 'global' },
+  { from: 'nairobi',  to: 'goma',      tier: 'global' },
+  { from: 'bangui',   to: 'bunia',     tier: 'global' }
 ];
 
 const FLOW_COLOR = '#c49a3c';  /* or militaire, coherent design */
@@ -895,7 +950,7 @@ function addFlows() {
       .filter(f => CITIES[f.from] && CITIES[f.to])
       .map(f => {
         const coords = greatCircle(CITIES[f.from], CITIES[f.to], 64);
-        return { coords, length: coords.length };
+        return { coords, length: coords.length, tier: f.tier || 'local' };
       });
 
     /* Endpoint cities — static gold dots with subtle glow */
@@ -936,9 +991,10 @@ function addFlows() {
       }
     });
 
-    /* Static arc background (thin gold lines) */
+    /* Static arc background (varies by tier) */
     const arcFeatures = flowArcs.map(a => ({
       type: 'Feature',
+      properties: { tier: a.tier },
       geometry: { type: 'LineString', coordinates: a.coords }
     }));
     map.addSource('flow-arcs', {
@@ -952,8 +1008,8 @@ function addFlows() {
       layout: { 'line-cap': 'round', 'line-join': 'round' },
       paint: {
         'line-color': FLOW_COLOR,
-        'line-width': 0.8,
-        'line-opacity': 0.25
+        'line-width': ['match', ['get', 'tier'], 'local', 1.0, 0.6],
+        'line-opacity': ['match', ['get', 'tier'], 'local', 0.35, 0.18]
       }
     });
 
