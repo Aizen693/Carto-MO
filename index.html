@@ -694,6 +694,31 @@ html, body {
   </div>
 </div>
 
+<!-- ═══════════════════════════════ FLUX LEGEND ═══════════════════════════════ -->
+<div id="flow-legend" style="position:fixed;left:32px;bottom:64px;z-index:40;display:flex;flex-direction:column;gap:8px;padding:14px 16px;background:rgba(15,17,20,0.82);backdrop-filter:blur(10px);border:1px solid var(--ln);pointer-events:none">
+  <div style="font-family:var(--m);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--tx1);margin-bottom:4px">Typologie des flux</div>
+  <div style="display:flex;align-items:center;gap:10px;font-family:var(--m);font-size:10px;color:var(--tx);letter-spacing:0.08em">
+    <span style="display:inline-block;width:20px;height:2px;background:#e07b50;box-shadow:0 0 6px #e07b50"></span>
+    <span style="flex:1">Armement</span>
+    <span style="font-size:9px;color:var(--tx1)">04</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;font-family:var(--m);font-size:10px;color:var(--tx);letter-spacing:0.08em">
+    <span style="display:inline-block;width:20px;height:2px;background:#c49a3c;box-shadow:0 0 6px #c49a3c"></span>
+    <span style="flex:1">Deploiements</span>
+    <span style="font-size:9px;color:var(--tx1)">05</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;font-family:var(--m);font-size:10px;color:var(--tx);letter-spacing:0.08em">
+    <span style="display:inline-block;width:20px;height:2px;background:#4fb8cc;box-shadow:0 0 6px #4fb8cc"></span>
+    <span style="flex:1">Renseignement</span>
+    <span style="font-size:9px;color:var(--tx1)">03</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;font-family:var(--m);font-size:10px;color:var(--tx);letter-spacing:0.08em">
+    <span style="display:inline-block;width:20px;height:2px;background:#9a7dc4;box-shadow:0 0 6px #9a7dc4"></span>
+    <span style="flex:1">Financements</span>
+    <span style="font-size:9px;color:var(--tx1)">02</span>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════ STATUS BAR ═══════════════════════════════ -->
 <div id="status-bar">
   <div class="sb-cell accent">
@@ -795,6 +820,9 @@ map.on('style.load', () => {
     }
   });
 
+  /* ═══ DYNAMIC FLOWS — conflits & actions sur les 3 zones ═══ */
+  addFlows();
+
   /* Show zone labels */
   document.getElementById('zone-label-mo').style.display = 'block';
   document.getElementById('zone-label-sahel').style.display = 'block';
@@ -802,7 +830,200 @@ map.on('style.load', () => {
 
   positionLabels();
   startRotation();
+  startFlowAnimation();
 });
+
+/* ═══════════════════════════════════════════════════════════
+   DYNAMIC CONFLICT FLOWS
+   ═══════════════════════════════════════════════════════════ */
+const CITIES = {
+  /* Hubs exterieurs */
+  moscou:    [37.6173, 55.7558],
+  paris:     [2.3522,  48.8566],
+  pekin:     [116.4074, 39.9042],
+  washington:[-77.0369, 38.9072],
+  ankara:    [32.8597, 39.9334],
+  riyad:     [46.6753, 24.7136],
+  doha:      [51.531,  25.2854],
+  /* Moyen-Orient */
+  teheran:   [51.389,  35.6892],
+  bagdad:    [44.3661, 33.3152],
+  damas:     [36.2765, 33.5138],
+  beyrouth:  [35.5018, 33.8938],
+  sanaa:     [44.191,  15.3694],
+  aden:      [45.0186, 12.7855],
+  /* Sahel */
+  bamako:    [-8.0029, 12.6392],
+  niamey:    [2.1254,  13.5115],
+  ouaga:     [-1.5197, 12.3714],
+  ndjamena:  [15.0502, 12.1191],
+  agadez:    [7.9889,  16.9742],
+  tripoli:   [13.1913, 32.8872],
+  /* RDC */
+  kinshasa:  [15.2663, -4.4419],
+  goma:      [29.2218, -1.6779],
+  bukavu:    [28.8608, -2.5095],
+  bangui:    [18.5582, 4.3947],
+  kampala:   [32.5825, 0.3476]
+};
+
+const FLOWS = [
+  /* MOYEN-ORIENT — 5 flux */
+  { from: 'teheran',  to: 'damas',    type: 'arms' },
+  { from: 'teheran',  to: 'sanaa',    type: 'arms' },
+  { from: 'moscou',   to: 'damas',    type: 'arms' },
+  { from: 'damas',    to: 'beyrouth', type: 'troop' },
+  { from: 'riyad',    to: 'sanaa',    type: 'intel' },
+  /* SAHEL — 6 flux */
+  { from: 'paris',    to: 'niamey',   type: 'troop' },
+  { from: 'paris',    to: 'bamako',   type: 'intel' },
+  { from: 'moscou',   to: 'bamako',   type: 'arms' },
+  { from: 'tripoli',  to: 'agadez',   type: 'arms' },
+  { from: 'bamako',   to: 'ouaga',    type: 'troop' },
+  { from: 'doha',     to: 'ndjamena', type: 'money' },
+  /* RDC — 4 flux */
+  { from: 'kinshasa', to: 'goma',     type: 'troop' },
+  { from: 'kampala',  to: 'goma',     type: 'arms' },
+  { from: 'goma',     to: 'bukavu',   type: 'troop' },
+  { from: 'pekin',    to: 'kinshasa', type: 'money' }
+];
+
+const FLOW_COLORS = {
+  arms:  '#e07b50',  /* armement — orange-rouge */
+  troop: '#c49a3c',  /* troupes — dore */
+  intel: '#4fb8cc',  /* renseignement — cyan */
+  money: '#9a7dc4'   /* financements — violet */
+};
+
+/* Great-circle interpolation (sphere slerp) */
+function greatCircle(from, to, steps = 48) {
+  const [lo1, la1] = from.map(x => x * Math.PI / 180);
+  const [lo2, la2] = to.map(x => x * Math.PI / 180);
+  const d = 2 * Math.asin(Math.sqrt(
+    Math.pow(Math.sin((la1 - la2) / 2), 2) +
+    Math.cos(la1) * Math.cos(la2) * Math.pow(Math.sin((lo1 - lo2) / 2), 2)
+  ));
+  if (!isFinite(d) || d === 0) return [from, to];
+  const pts = [];
+  for (let i = 0; i <= steps; i++) {
+    const f = i / steps;
+    const A = Math.sin((1 - f) * d) / Math.sin(d);
+    const B = Math.sin(f * d) / Math.sin(d);
+    const x = A * Math.cos(la1) * Math.cos(lo1) + B * Math.cos(la2) * Math.cos(lo2);
+    const y = A * Math.cos(la1) * Math.sin(lo1) + B * Math.cos(la2) * Math.sin(lo2);
+    const z = A * Math.sin(la1) + B * Math.sin(la2);
+    const lat = Math.atan2(z, Math.sqrt(x * x + y * y)) * 180 / Math.PI;
+    const lon = Math.atan2(y, x) * 180 / Math.PI;
+    pts.push([lon, lat]);
+  }
+  return pts;
+}
+
+function addFlows() {
+  if (!window.map) return;
+
+  /* Origin/destination points (pulsing endpoints) */
+  const endpointCoords = new Set();
+  FLOWS.forEach(f => {
+    endpointCoords.add(CITIES[f.from].join(','));
+    endpointCoords.add(CITIES[f.to].join(','));
+  });
+  const endpoints = Array.from(endpointCoords).map(s => {
+    const [lng, lat] = s.split(',').map(Number);
+    return { type: 'Feature', geometry: { type: 'Point', coordinates: [lng, lat] } };
+  });
+
+  map.addSource('flow-endpoints', {
+    type: 'geojson',
+    data: { type: 'FeatureCollection', features: endpoints }
+  });
+  map.addLayer({
+    id: 'flow-endpoints-glow',
+    type: 'circle',
+    source: 'flow-endpoints',
+    paint: {
+      'circle-radius': 6,
+      'circle-color': '#ffffff',
+      'circle-opacity': 0.2,
+      'circle-blur': 1.2
+    }
+  });
+  map.addLayer({
+    id: 'flow-endpoints-dot',
+    type: 'circle',
+    source: 'flow-endpoints',
+    paint: {
+      'circle-radius': 2,
+      'circle-color': '#ffffff',
+      'circle-opacity': 0.65
+    }
+  });
+
+  /* One layer per flow type (for distinct colors) */
+  for (const type of Object.keys(FLOW_COLORS)) {
+    const features = FLOWS.filter(f => f.type === type).map(f => ({
+      type: 'Feature',
+      properties: { type },
+      geometry: {
+        type: 'LineString',
+        coordinates: greatCircle(CITIES[f.from], CITIES[f.to], 48)
+      }
+    }));
+
+    map.addSource('flow-' + type, {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features }
+    });
+
+    /* Background line (subtle, always visible) */
+    map.addLayer({
+      id: 'flow-' + type + '-bg',
+      type: 'line',
+      source: 'flow-' + type,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': FLOW_COLORS[type],
+        'line-width': 1.2,
+        'line-opacity': 0.15
+      }
+    });
+
+    /* Animated dash overlay (flowing) */
+    map.addLayer({
+      id: 'flow-' + type + '-dash',
+      type: 'line',
+      source: 'flow-' + type,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': FLOW_COLORS[type],
+        'line-width': 1.6,
+        'line-opacity': 0.85,
+        'line-dasharray': [0, 4, 3]
+      }
+    });
+  }
+}
+
+/* Dash animation — classic ant-trail effect */
+const DASH_SEQ = [
+  [0, 4, 3],      [0.5, 4, 2.5],  [1, 4, 2],      [1.5, 4, 1.5],
+  [2, 4, 1],      [2.5, 4, 0.5],  [3, 4, 0],
+  [0, 0.5, 3, 3.5], [0, 1, 3, 3],   [0, 1.5, 3, 2.5],
+  [0, 2, 3, 2],   [0, 2.5, 3, 1.5], [0, 3, 3, 1],   [0, 3.5, 3, 0.5]
+];
+
+function startFlowAnimation() {
+  let idx = 0;
+  setInterval(() => {
+    idx = (idx + 1) % DASH_SEQ.length;
+    for (const type of Object.keys(FLOW_COLORS)) {
+      const lyr = 'flow-' + type + '-dash';
+      if (map.getLayer(lyr)) {
+        map.setPaintProperty(lyr, 'line-dasharray', DASH_SEQ[idx]);
+      }
+    }
+  }, 80);
+}
 
 /* ═══ Continuous rotation ═══ */
 let rotationPaused = false;
