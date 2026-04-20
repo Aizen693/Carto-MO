@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap');
-@import url('./tokens.css?v=20260420g');
+@import url('./tokens.css?v=20260420h');
 
 /* Design tokens (couleurs, typo, spacing, motion, line-height) dans tokens.css.
    REGLE : aucune valeur hardcodee dans ce fichier ni ailleurs. Utiliser var(--*). */
@@ -390,12 +390,25 @@ html, body {
 #search-input:focus { border-color: var(--acb); }
 #search-input::placeholder { color: var(--tx2); }
 #search-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 10px; pointer-events: none; color: var(--tx2); }
-#search-results { background: rgba(17,18,20,0.99); border: 1px solid var(--ln); border-top: none; display: none; max-height: 190px; overflow-y: auto; }
+#search-results { background: rgba(17,18,20,0.99); border: 1px solid var(--ln); border-top: none; display: none; max-height: 420px; overflow-y: auto; }
 .search-result { padding: 9px 10px; font: 400 9px/1 var(--m); color: var(--tx1); cursor: pointer; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--bg3); transition: background .08s; }
 .search-result:hover { background: var(--bg2); color: var(--txh); }
 .search-result-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 .search-result-name { font-weight: 500; color: var(--txh); }
 .search-result-sub { color: var(--tx2); font-size: 8px; }
+.search-category-header {
+  padding: 6px 10px 4px;
+  font: 600 7px/1 var(--bc);
+  color: var(--tx2);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(0,0,0,0.18);
+  border-bottom: 1px solid var(--bg3);
+  border-top: 1px solid var(--bg3);
+}
+.search-category-header:first-child { border-top: none; }
+.search-result-actor:hover .search-result-name { color: var(--ach); }
+.search-result-place .search-result-dot { width: 6px; height: 6px; }
 
 .mapboxgl-popup { z-index: 9998 !important; filter: none !important; }
 .mapboxgl-popup-tip { display: none !important; }

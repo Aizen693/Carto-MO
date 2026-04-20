@@ -580,51 +580,87 @@ const SEARCH_BBOX = (ZONE_CONFIG.SEARCH_BBOX || [-20, 2, 55, 40]).join(',');
 let searchGeoTimer = null;
 let searchGeoReqId = 0;
 
-function renderSearchResults(actorMatches, placeMatches, query) {
+function renderCategoryHeader(label) {
+  const h = document.createElement('div');
+  h.className = 'search-category-header';
+  h.textContent = label;
+  searchResults.appendChild(h);
+}
+
+function renderActorEntry(actor) {
+  // actor: {name, count, color, sample}
+  const div = document.createElement('div'); div.className = 'search-result search-result-actor';
+  div.innerHTML = '<div class="search-result-dot" style="background:' + (actor.color || '#888') + '"></div>' +
+    '<div><div class="search-result-name">' + actor.name + '</div>' +
+    '<div class="search-result-sub">' + actor.count + ' evenement' + (actor.count > 1 ? 's' : '') + ' · cliquer pour filtrer</div></div>';
+  div.onclick = () => {
+    toggleActorFilter(actor.name);
+    searchResults.style.display = 'none'; searchInput.value = '';
+  };
+  searchResults.appendChild(div);
+}
+
+function renderPlaceEntry(p) {
+  const div = document.createElement('div'); div.className = 'search-result search-result-place';
+  // type : country / region / place (city) / locality
+  const kind = (p.place_type && p.place_type[0]) || 'lieu';
+  const kindLabel = kind === 'country' ? 'Pays' : kind === 'region' ? 'Region' : kind === 'place' ? 'Ville' : kind === 'locality' ? 'Localite' : 'Lieu';
+  const sub = (p.place_name || '').replace(p.text + ', ', '') || kindLabel;
+  div.innerHTML = '<div class="search-result-dot" style="background:var(--ac)"></div>' +
+    '<div><div class="search-result-name">' + p.text + '</div>' +
+    '<div class="search-result-sub">' + kindLabel + ' · ' + sub + '</div></div>';
+  div.onclick = () => {
+    const zoomByKind = kind === 'country' ? 5 : kind === 'region' ? 7 : 10;
+    map.flyTo({ center: p.center, zoom: zoomByKind, duration: 1200, essential: true });
+    searchResults.style.display = 'none'; searchInput.value = '';
+  };
+  searchResults.appendChild(div);
+}
+
+function renderEventEntry(f) {
+  const div = document.createElement('div'); div.className = 'search-result search-result-event';
+  const color = f.properties._color || '#888';
+  const parsed = f.properties._desc ? parseDesc(f.properties._desc) : null;
+  const lieu = parsed && parsed.pays ? parsed.pays : '';
+  const evt = parsed && parsed.event ? parsed.event : '';
+  div.innerHTML = '<div class="search-result-dot" style="background:' + color + '"></div>' +
+    '<div><div class="search-result-name">' + f.properties.name + '</div>' +
+    '<div class="search-result-sub">' + (evt || lieu || '') + (lieu && evt ? ' · ' : '') + (f.properties._period || '') + '</div></div>';
+  div.onclick = () => {
+    const coords = f.geometry.coordinates;
+    map.flyTo({ center: coords, zoom: 10, duration: 1200, essential: true });
+    searchResults.style.display = 'none'; searchInput.value = '';
+    setTimeout(() => {
+      const sp = new mapboxgl.Popup({ closeButton: true, maxWidth: '310px', className: 'algor-popup' })
+        .setLngLat(coords).setHTML(makePopupHTML(f.properties)).addTo(map);
+      sp.getElement()?.querySelector('.mapboxgl-popup-close-button')?.addEventListener('click', () => sp.remove());
+    }, 1300);
+  };
+  searchResults.appendChild(div);
+}
+
+function renderSearchResults(actors, places, events, query) {
   searchResults.innerHTML = '';
-  const seen = new Set();
-  actorMatches.slice(0, 8).forEach(f => {
-    const key = f.properties.name + '_' + f.properties._period;
-    if (seen.has(key)) return; seen.add(key);
-    const div = document.createElement('div'); div.className = 'search-result';
-    const color = f.properties._color || '#888';
-    const parsed = f.properties._desc ? parseDesc(f.properties._desc) : null;
-    const lieu = parsed && parsed.pays ? parsed.pays : '';
-    const evt = parsed && parsed.event ? parsed.event : '';
-    div.innerHTML = '<div class="search-result-dot" style="background:' + color + '"></div>' +
-      '<div><div class="search-result-name">' + f.properties.name + '</div>' +
-      '<div class="search-result-sub">' + (evt || lieu || '') + (lieu && evt ? ' · ' : '') + f.properties._period + '</div></div>';
-    div.onclick = () => {
-      const coords = f.geometry.coordinates;
-      map.flyTo({ center: coords, zoom: 10, duration: 1200, essential: true });
-      searchResults.style.display = 'none'; searchInput.value = '';
-      setTimeout(() => {
-        const sp = new mapboxgl.Popup({ closeButton: true, maxWidth: '310px', className: 'algor-popup' })
-          .setLngLat(coords).setHTML(makePopupHTML(f.properties)).addTo(map);
-        sp.getElement()?.querySelector('.mapboxgl-popup-close-button')?.addEventListener('click', () => sp.remove());
-      }, 1300);
-    };
-    searchResults.appendChild(div);
-  });
-  placeMatches.slice(0, 5).forEach(p => {
-    const div = document.createElement('div'); div.className = 'search-result';
-    div.innerHTML = '<div class="search-result-dot" style="background:#c49a3c;border-radius:2px"></div>' +
-      '<div><div class="search-result-name">' + p.text + '</div>' +
-      '<div class="search-result-sub">' + (p.place_name || '').replace(p.text + ', ', '') + '</div></div>';
-    div.onclick = () => {
-      map.flyTo({ center: p.center, zoom: 10, duration: 1200, essential: true });
-      searchResults.style.display = 'none'; searchInput.value = '';
-    };
-    searchResults.appendChild(div);
-  });
-  if (!actorMatches.length && !placeMatches.length) {
-    // Etat vide : on affiche un message au lieu de masquer (P2)
-    var empty = document.createElement('div');
+  const hasAny = actors.length || places.length || events.length;
+  if (!hasAny) {
+    const empty = document.createElement('div');
     empty.className = 'search-result search-state-empty';
     empty.innerHTML = '<div class="search-result-sub" style="flex:1;text-align:center;padding:4px 0">Aucun resultat · affinez la requete</div>';
     searchResults.appendChild(empty);
     searchResults.style.display = 'block';
     return;
+  }
+  if (actors.length) {
+    renderCategoryHeader('Acteurs');
+    actors.slice(0, 6).forEach(renderActorEntry);
+  }
+  if (places.length) {
+    renderCategoryHeader('Pays · Regions · Villes');
+    places.slice(0, 6).forEach(renderPlaceEntry);
+  }
+  if (events.length) {
+    renderCategoryHeader('Evenements');
+    events.slice(0, 5).forEach(renderEventEntry);
   }
   searchResults.style.display = 'block';
 }
@@ -640,39 +676,62 @@ function renderSearchState(kind, msg) {
   searchResults.style.display = 'block';
 }
 
-searchInput.addEventListener('input', function () {
-  const q = this.value.trim().toLowerCase();
-  if (!q || q.length < 2) { searchResults.style.display = 'none'; searchResults.innerHTML = ''; return; }
-  const actorMatches = [];
+// Construit acteurs + evenements a partir des features chargees, dedup par nom.
+function collectLocalMatches(q) {
+  const actorMap = new Map();  // name -> {count, color, sample}
+  const events = [];
+  const seenEventKey = new Set();
   Object.values(loadedData).forEach(geo => {
     if (!geo) return;
     geo.features.forEach(f => {
       if (!f.geometry || f.geometry.type !== 'Point') return;
-      const name = (f.properties.name || '').toLowerCase();
+      const rawName = f.properties.name || '';
+      const name = rawName.toLowerCase();
       const desc = (f.properties._desc || '').toLowerCase();
-      if (name.includes(q) || desc.includes(q)) actorMatches.push(f);
+      const matchesName = name.includes(q);
+      const matchesDesc = desc.includes(q);
+      if (!matchesName && !matchesDesc) return;
+      // ACTEUR : si le nom correspond, on agrege par nom
+      if (matchesName && rawName) {
+        const cur = actorMap.get(rawName) || { name: rawName, count: 0, color: f.properties._color || '#888', sample: f };
+        cur.count++;
+        actorMap.set(rawName, cur);
+      }
+      // EVENEMENT : on l'ajoute seulement si la desc matche (pour ne pas doublonner avec l'acteur)
+      // ou si le nom matche MAIS qu'on veut l'evenement specifique (dedup par name+period)
+      if (matchesDesc && !matchesName) {
+        const k = rawName + '_' + (f.properties._period || '') + '_' + (f.properties._desc || '').substring(0, 40);
+        if (!seenEventKey.has(k)) { seenEventKey.add(k); events.push(f); }
+      }
     });
   });
-  // Si pas de match local, on affiche 'Recherche...' pendant que le geocoder tourne
-  if (!actorMatches.length) renderSearchState('loading', 'Recherche · geocoder...');
-  else renderSearchResults(actorMatches, [], q);
+  return { actors: Array.from(actorMap.values()).sort((a,b) => b.count - a.count), events };
+}
+
+searchInput.addEventListener('input', function () {
+  const q = this.value.trim().toLowerCase();
+  if (!q || q.length < 2) { searchResults.style.display = 'none'; searchResults.innerHTML = ''; return; }
+  const { actors, events } = collectLocalMatches(q);
+  // Affichage immediat avec les resultats locaux (pas de blocage sur geocoder)
+  if (!actors.length && !events.length) renderSearchState('loading', 'Recherche · geocoder...');
+  else renderSearchResults(actors, [], events, q);
+
   clearTimeout(searchGeoTimer);
   const myReqId = ++searchGeoReqId;
   searchGeoTimer = setTimeout(() => {
     const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(q) +
-      '.json?access_token=' + mapboxgl.accessToken + '&language=fr&limit=5&bbox=' + SEARCH_BBOX +
-      '&types=place,locality,region,country,poi';
+      '.json?access_token=' + mapboxgl.accessToken + '&language=fr&limit=6&bbox=' + SEARCH_BBOX +
+      '&types=place,locality,region,country,district,neighborhood,poi';
     fetch(url).then(r => {
       if (!r.ok) throw new Error(r.status);
       return r.json();
     }).then(data => {
       if (myReqId !== searchGeoReqId) return;
       const places = (data && data.features) ? data.features : [];
-      renderSearchResults(actorMatches, places, q);
+      renderSearchResults(actors, places, events, q);
     }).catch(err => {
       if (myReqId !== searchGeoReqId) return;
-      // Si le local a des resultats, on les garde. Sinon etat erreur.
-      if (actorMatches.length) renderSearchResults(actorMatches, [], q);
+      if (actors.length || events.length) renderSearchResults(actors, [], events, q);
       else renderSearchState('error', 'Geocoder · code ' + (err && err.message || 'net') + ' · reessayer');
     });
   }, 250);
