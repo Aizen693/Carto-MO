@@ -42,6 +42,24 @@
   --bc:     'Barlow Condensed', 'Arial Narrow', sans-serif;
   --b:      'Barlow', system-ui, sans-serif;
   --m:      'JetBrains Mono', 'Courier New', monospace;
+
+  /* Motion (sync avec shared/tokens.css) */
+  --mo-fast:  .1s;
+  --mo-base:  .2s;
+  --mo-slow:  .3s;
+
+  /* Spacing (4px scale) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+
+  /* Line-heights */
+  --lh-tight: 1;
+  --lh-snug:  1.2;
+  --lh-base:  1.5;
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -350,7 +368,7 @@ html, body {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background var(--mo-fast) ease;
   position: relative;
 }
 .zone-card:hover { background: var(--bg2); }
@@ -484,7 +502,7 @@ html, body {
   font-family: var(--m);
   font-size: 14px;
   color: var(--tx1);
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform var(--mo-base) ease, color var(--mo-base) ease;
 }
 .zone-card:hover .zone-cta-arrow {
   transform: translateX(4px);
@@ -524,7 +542,7 @@ html, body {
 }
 .sb-cell.accent strong { color: var(--ac); }
 .sb-cell.cyan strong { color: var(--cyan); }
-.sb-admin { color: var(--tx1); text-decoration: none; cursor: pointer; transition: color .12s, background .12s; }
+.sb-admin { color: var(--tx1); text-decoration: none; cursor: pointer; transition: color var(--mo-fast), background var(--mo-fast); }
 .sb-admin:hover { color: var(--ac); background: rgba(196,154,60,0.06); }
 .sb-spacer { flex: 1; border-right: 1px solid var(--ln); }
 
