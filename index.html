@@ -1152,15 +1152,21 @@ updateClock();
 setInterval(updateClock, 1000);
 
 function updateCoords() {
-  if (!map || !map.loaded()) return;
-  const c = map.getCenter();
-  const ns = c.lat >= 0 ? 'N' : 'S';
-  const ew = c.lng >= 0 ? 'E' : 'W';
-  const lat = Math.abs(c.lat).toFixed(3).padStart(7, '0');
-  const lng = Math.abs(c.lng).toFixed(3).padStart(7, '0');
-  document.getElementById('coords').textContent = `${lat}° ${ns}, ${lng}° ${ew}`;
+  if (!map) return;
+  try {
+    const c = map.getCenter();
+    const ns = c.lat >= 0 ? 'N' : 'S';
+    const ew = c.lng >= 0 ? 'E' : 'W';
+    const lat = Math.abs(c.lat).toFixed(3).padStart(7, '0');
+    const lng = Math.abs(c.lng).toFixed(3).padStart(7, '0');
+    document.getElementById('coords').textContent = `${lat}° ${ns}, ${lng}° ${ew}`;
+  } catch (_) {}
 }
 setInterval(updateCoords, 200);
+// MAJ immediate a chaque mouvement (drag / rotation globe / fly)
+if (typeof map !== 'undefined' && map && map.on) {
+  map.on('move', updateCoords);
+}
 
 /* ═══ Zone card hover → fly globe to that zone ═══ */
 document.querySelectorAll('.zone-card').forEach(card => {
