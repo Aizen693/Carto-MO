@@ -695,15 +695,15 @@ html, body {
       <div class="zone-card-meta">
         <div class="meta-cell">
           <div class="meta-cell-label">Periode</div>
-          <div class="meta-cell-value small">Jan–Mar 26</div>
+          <div class="meta-cell-value">—</div>
         </div>
         <div class="meta-cell">
           <div class="meta-cell-label">Evenements</div>
-          <div class="meta-cell-value" id="sahel-event-count">—</div>
+          <div class="meta-cell-value">—</div>
         </div>
         <div class="meta-cell">
           <div class="meta-cell-label">Acteurs</div>
-          <div class="meta-cell-value" id="sahel-actor-count">—</div>
+          <div class="meta-cell-value">—</div>
         </div>
       </div>
       <div class="zone-card-cta">
@@ -726,7 +726,7 @@ html, body {
       <div class="zone-card-meta">
         <div class="meta-cell">
           <div class="meta-cell-label">Periode</div>
-          <div class="meta-cell-value small">2023–26</div>
+          <div class="meta-cell-value">—</div>
         </div>
         <div class="meta-cell">
           <div class="meta-cell-label">Evenements</div>
@@ -1187,36 +1187,6 @@ document.getElementById('year').textContent = new Date().getFullYear();
 /* ═══ Reposition labels on resize ═══ */
 window.addEventListener('resize', positionLabels);
 
-/* ═══════════════════════════════════════════════════════════
-   Dynamic Sahel stats
-   ═══════════════════════════════════════════════════════════ */
-(async () => {
-  const files = [
-    '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
-    '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
-    '2026-mars-01-15.geojson','2026-mars-16-31.geojson'
-  ];
-  let total = 0;
-  const actors = new Set();
-  await Promise.all(files.map(async f => {
-    try {
-      const res = await fetch('./sahel/' + f);
-      if (!res.ok) return;
-      const data = await res.json();
-      if (data.features) {
-        total += data.features.length;
-        data.features.forEach(ft => {
-          const a = ft.properties && (ft.properties.name || ft.properties.acteur || ft.properties.actor);
-          if (a) actors.add(a);
-        });
-      }
-    } catch (_) {}
-  }));
-  const ev = document.getElementById('sahel-event-count');
-  const ac = document.getElementById('sahel-actor-count');
-  if (ev) ev.textContent = total || '—';
-  if (ac) ac.textContent = actors.size || '—';
-})();
 </script>
 </body>
 </html>
