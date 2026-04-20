@@ -221,7 +221,77 @@ html, body {
   color: var(--tx);
   line-height: 1.55;
   max-width: 380px;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
+}
+
+/* ═══ HERO CTAs (P1 — une seule CTA primaire) ═══ */
+.hero-cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  pointer-events: all;
+  margin-bottom: 26px;
+}
+.hero-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--m);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--ac);
+  border: 1px solid var(--ac);
+  padding: 13px 24px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--mo-base), transform var(--mo-fast);
+}
+.hero-cta-primary:hover { background: var(--ach); border-color: var(--ach); }
+.hero-cta-primary:active { transform: translateY(1px); }
+.hero-cta-primary .arrow { transition: transform var(--mo-base); }
+.hero-cta-primary:hover .arrow { transform: translateX(3px); }
+.hero-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--m);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx1);
+  text-decoration: none;
+  transition: color var(--mo-fast);
+}
+.hero-cta-secondary:hover { color: var(--ach); }
+
+/* ═══ TRUST BAND (P1 — signaux de confiance honnetes sous le hero) ═══ */
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  pointer-events: all;
+  max-width: 420px;
+}
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--m);
+  font-size: 9px;
+  color: var(--tx1);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.trust-badge::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background: var(--ac);
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -631,15 +701,27 @@ html, body {
 <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
 <div id="hero">
   <div class="hero-tag">OSINT · Cartography · 2026</div>
-  <h2 class="hero-title">
-    Geopolitical<br>
-    intelligence<br>
-    <span class="ac">platform.</span>
-  </h2>
+  <h1 class="hero-title">
+    Renseignement<br>
+    cartographique<br>
+    <span class="ac">pour analystes.</span>
+  </h1>
   <p class="hero-subtitle">
-    Plateforme de veille cartographique dediee aux theatres de conflit armes.
-    Trois zones d'analyse, sept couches de donnees, des milliers d'evenements geolocalises et sources croisees.
+    Veille OSINT sur les theatres de conflit armes. Analyse multicouche,
+    evenements geolocalises, sources croisees ACLED et AfricaCenter.
   </p>
+  <div class="hero-cta-group">
+    <a class="hero-cta-primary" href="./moyen-orient/index.html">
+      Voir la demo · Moyen-Orient <span class="arrow">&rarr;</span>
+    </a>
+    <a class="hero-cta-secondary" href="#zones-panel">Zones payantes &middot; Sahel &middot; RDC &rarr;</a>
+  </div>
+  <div class="hero-trust" aria-label="Signaux de confiance">
+    <span class="trust-badge">Donnees UE</span>
+    <span class="trust-badge">TLS 1.3 &middot; Acces par role</span>
+    <span class="trust-badge">Mapbox open-source</span>
+    <span class="trust-badge">Sources &middot; ACLED &middot; AfricaCenter</span>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════ ZONES PANEL ═══════════════════════════════ -->
