@@ -1,0 +1,58 @@
+/* ═══════════════════════════════════════════════════════════
+   DESIGN TOKENS — source unique Algor Int
+   Couleurs, typo, spacing, motion, line-height.
+   REGLE : aucune valeur hardcodee dans les composants. Si un
+   token manque, l'ajouter ici — pas en local dans un module.
+   DA : dark #111214 / or #c49a3c / zero border-radius / OSINT Palantir
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  /* ── Couleurs backgrounds ────────────────────────────── */
+  --bg:    #111214;  /* fond principal */
+  --bg1:   #161819;  /* panels, header */
+  --bg2:   #1b1d1f;  /* hover, elevated */
+  --bg3:   #212326;  /* input bg */
+  --bg4:   #2a2c30;  /* slider track */
+
+  /* ── Couleurs traits ─────────────────────────────────── */
+  --ln:    rgba(255,255,255,0.07);  /* trait discret */
+  --ln1:   rgba(255,255,255,0.12);  /* trait standard */
+  --ln2:   rgba(255,255,255,0.20);  /* trait marque */
+
+  /* ── Couleurs texte (WCAG AA valide) ─────────────────── */
+  --tx:    #c8cdd6;  /* body 11.74:1 sur bg */
+  --tx1:   #8e96a2;  /* labels 6.28:1 sur bg (v2026-04) */
+  --tx2:   #6a7280;  /* faded 3.87:1 sur bg, 3:1 min non-text (v2026-04) */
+  --txh:   #e8ecf2;  /* high contrast 15.81:1 */
+
+  /* ── Accent or ─────────────────────────────────────── */
+  --ac:    #c49a3c;  /* or principal */
+  --ach:   #e0b452;  /* or hover */
+  --acd:   rgba(196,154,60,0.09);  /* or-soft fill */
+  --acb:   rgba(196,154,60,0.20);  /* or-soft border */
+
+  /* ── Status ──────────────────────────────────────────── */
+  --err:   #d76060;  /* erreur 5.12:1 sur bg (v2026-04) */
+
+  /* ── Familles typo ───────────────────────────────────── */
+  --bc:    'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --b:     'Barlow', system-ui, sans-serif;
+  --m:     'JetBrains Mono', 'Courier New', monospace;
+
+  /* ── Spacing (4px scale) ─────────────────────────────── */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+
+  /* ── Motion durations ────────────────────────────────── */
+  --mo-fast:  .1s;
+  --mo-base:  .2s;
+  --mo-slow:  .3s;
+
+  /* ── Line-heights ────────────────────────────────────── */
+  --lh-tight:  1;    /* labels / data cells (OSINT DA) */
+  --lh-snug:   1.2;  /* titres condensed */
+  --lh-base:   1.5;  /* texte narratif (popups, tuto desc) */
+}
