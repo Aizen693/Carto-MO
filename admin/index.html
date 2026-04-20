@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
-<link rel="stylesheet" href="admin.css?v=20260413c">
+<link rel="stylesheet" href="admin.css?v=20260420a">
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
 </head>
@@ -80,6 +80,31 @@
         <div class="panel-header">
           <span>Points admin</span>
           <span id="points-count" class="panel-count">0</span>
+        </div>
+        <div id="points-toolbar">
+          <div class="pt-search-wrap">
+            <span class="pt-search-icon">⌕</span>
+            <input type="text" id="points-search" class="admin-input pt-search-input" placeholder="Rechercher (nom, pays, detail)  ⌘K">
+            <button id="points-search-clear" class="pt-search-clear" title="Effacer">×</button>
+          </div>
+          <div class="pt-filters">
+            <select id="points-filter-actor" class="admin-select admin-select-sm"><option value="">Tous acteurs</option></select>
+            <select id="points-filter-period" class="admin-select admin-select-sm"><option value="">Toutes periodes</option></select>
+          </div>
+          <div class="pt-bulk-bar" id="points-bulk-bar">
+            <span id="pt-bulk-count">0 selectionnes</span>
+            <div class="pt-bulk-actions">
+              <button id="pt-bulk-clear" class="admin-btn admin-btn-sm">Deselectionner</button>
+              <button id="pt-bulk-delete" class="admin-btn admin-btn-sm admin-btn-danger">Supprimer</button>
+            </div>
+          </div>
+          <div class="pt-select-all-wrap">
+            <label class="pt-select-all-label">
+              <input type="checkbox" id="pt-select-all" class="pt-checkbox">
+              <span>Tout selectionner (visible)</span>
+            </label>
+            <button id="btn-export-csv" class="admin-btn admin-btn-sm" title="Exporter en CSV">CSV</button>
+          </div>
         </div>
         <div id="points-list" class="panel-scroll"></div>
       </div>
@@ -211,6 +236,30 @@
     </div>
   </div>
 
+  <!-- TOAST / UNDO -->
+  <div id="toast-host" class="toast-host"></div>
+
+  <!-- KBD SHORTCUTS PANEL -->
+  <div id="kbd-overlay" class="kbd-overlay" style="display:none">
+    <div class="kbd-box">
+      <div class="kbd-head">
+        <span>Raccourcis clavier</span>
+        <button class="kbd-close" id="kbd-close">×</button>
+      </div>
+      <div class="kbd-list">
+        <div class="kbd-row"><kbd>⌘K</kbd> <kbd>/</kbd> <span>Focus recherche</span></div>
+        <div class="kbd-row"><kbd>Esc</kbd> <span>Fermer le drawer / effacer recherche</span></div>
+        <div class="kbd-row"><kbd>Del</kbd> <kbd>⌫</kbd> <span>Supprimer la selection</span></div>
+        <div class="kbd-row"><kbd>⌘A</kbd> <span>Selectionner tous les points visibles</span></div>
+        <div class="kbd-row"><kbd>⌘S</kbd> <span>Sauvegarder le point ouvert</span></div>
+        <div class="kbd-row"><kbd>⌘Z</kbd> <span>Annuler derniere suppression</span></div>
+        <div class="kbd-row"><kbd>?</kbd> <span>Afficher cette aide</span></div>
+      </div>
+    </div>
+  </div>
+
+  <button id="kbd-help-btn" class="kbd-help-btn" title="Raccourcis clavier (?)">?</button>
+
   <!-- POINT DRAWER (bottom) -->
   <div id="point-drawer">
     <div class="drawer-header">
@@ -268,6 +317,6 @@
 
 </div>
 
-<script type="module" src="admin.js?v=20260413d"></script>
+<script type="module" src="admin.js?v=20260420a"></script>
 </body>
 </html>

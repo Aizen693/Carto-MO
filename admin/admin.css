@@ -297,6 +297,101 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
   padding: 10px 12px;
 }
 
+/* ═══ POINTS TOOLBAR (search + filters + bulk) ═══ */
+
+#points-toolbar {
+  padding: 8px 10px 6px;
+  border-bottom: 1px solid var(--ln);
+  background: var(--bg1);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.pt-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.pt-search-icon {
+  position: absolute;
+  left: 8px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--tx2);
+  pointer-events: none;
+}
+.pt-search-input {
+  width: 100%;
+  padding: 6px 26px 6px 24px !important;
+  font: 400 9px/1 var(--m) !important;
+}
+.pt-search-clear {
+  position: absolute;
+  right: 4px; top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--tx2);
+  cursor: pointer;
+  padding: 0 6px;
+  font-size: 14px;
+  line-height: 1;
+  display: none;
+}
+.pt-search-clear:hover { color: var(--txh); }
+.pt-search-wrap.has-value .pt-search-clear { display: block; }
+.pt-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.pt-filters .admin-select {
+  width: 100%;
+  min-width: 0;
+}
+.pt-select-all-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 4px;
+}
+.pt-select-all-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: 400 8px/1 var(--m);
+  color: var(--tx1);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+}
+.pt-select-all-label:hover { color: var(--txh); }
+.pt-checkbox {
+  width: 12px; height: 12px;
+  accent-color: var(--ac);
+  cursor: pointer;
+}
+.pt-bulk-bar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--acd);
+  border: 1px solid var(--acb);
+  font: 500 8px/1 var(--m);
+  color: var(--ach);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.pt-bulk-actions {
+  display: flex;
+  gap: 6px;
+}
+
 /* ═══ POINTS LIST ═══ */
 
 .point-row {
@@ -310,6 +405,13 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
 }
 .point-row:hover { background: var(--bg2); }
 .point-row.selected { background: var(--acd); }
+.point-row.bulk-selected { background: rgba(196,154,60,0.14); border-left: 2px solid var(--ac); }
+.point-row-checkbox {
+  width: 12px; height: 12px;
+  accent-color: var(--ac);
+  cursor: pointer;
+  flex-shrink: 0;
+}
 .point-dot {
   width: 6px; height: 6px;
   border-radius: 50%;
@@ -994,3 +1096,143 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--bg4); }
 ::-webkit-scrollbar-thumb:hover { background: var(--tx2); }
+
+/* ═══ TOAST / UNDO ═══ */
+
+.toast-host {
+  position: fixed;
+  bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(17,18,20,0.98);
+  border: 1px solid var(--ln1);
+  border-left: 2px solid var(--ac);
+  font: 400 9px/1.3 var(--m);
+  color: var(--txh);
+  letter-spacing: 0.04em;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+  min-width: 280px;
+  pointer-events: auto;
+  animation: toast-in 0.18s ease-out;
+}
+.toast.toast-success { border-left-color: var(--ok); }
+.toast.toast-error { border-left-color: var(--err); }
+.toast-msg { flex: 1; }
+.toast-action {
+  background: transparent;
+  border: 1px solid var(--ac);
+  color: var(--ac);
+  padding: 5px 10px;
+  font: 500 8px/1 var(--m);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .1s;
+}
+.toast-action:hover { background: var(--acd); color: var(--ach); }
+.toast-close {
+  background: transparent;
+  border: none;
+  color: var(--tx1);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 4px;
+  line-height: 1;
+}
+.toast-close:hover { color: var(--txh); }
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.toast.closing { animation: toast-out 0.15s ease-in forwards; }
+@keyframes toast-out {
+  to { opacity: 0; transform: translateY(4px); }
+}
+
+/* ═══ KEYBOARD SHORTCUTS OVERLAY ═══ */
+
+.kbd-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: rgba(8,9,11,0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kbd-box {
+  background: var(--bg);
+  border: 1px solid var(--ln1);
+  border-top: 2px solid var(--ac);
+  width: 420px;
+  max-width: 90vw;
+}
+.kbd-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ln);
+  font: 600 10px/1 var(--bc);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txh);
+}
+.kbd-close {
+  background: transparent;
+  border: none;
+  color: var(--tx1);
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+}
+.kbd-close:hover { color: var(--txh); }
+.kbd-list {
+  padding: 14px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.kbd-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 400 9px/1.2 var(--m);
+  color: var(--tx);
+}
+.kbd-row span { margin-left: 4px; color: var(--tx1); }
+.kbd-row kbd {
+  display: inline-block;
+  min-width: 22px;
+  padding: 3px 6px;
+  background: var(--bg2);
+  border: 1px solid var(--ln1);
+  border-bottom-width: 2px;
+  font: 500 9px/1 var(--m);
+  color: var(--ach);
+  text-align: center;
+}
+.kbd-help-btn {
+  position: fixed;
+  bottom: 14px; right: 14px;
+  z-index: 50;
+  width: 28px; height: 28px;
+  background: rgba(17,18,20,0.9);
+  border: 1px solid var(--ln1);
+  color: var(--tx1);
+  font: 500 11px/1 var(--m);
+  cursor: pointer;
+  transition: color .1s, border-color .1s;
+}
+.kbd-help-btn:hover { color: var(--ac); border-color: var(--ac); }

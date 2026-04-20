@@ -173,6 +173,32 @@ export async function exportGeoJSON(zone) {
   await logActivity(zone, 'export', null, `Export GeoJSON : ${features.length} points`);
 }
 
+export async function exportCSV(zone) {
+  const points = await getPoints(zone);
+  const headers = ['id','name','period','lng','lat','casualties','color','description','created_at','updated_at'];
+  const escape = v => {
+    if (v == null) return '';
+    const s = String(v).replace(/"/g, '""');
+    return /[",\n;]/.test(s) ? `"${s}"` : s;
+  };
+  const rows = points.map(p => [
+    p.id, p.name, p.period,
+    p.coordinates?.[0] ?? '', p.coordinates?.[1] ?? '',
+    p._casualties ?? 0, p._color ?? '',
+    (p.description || '').replace(/\n/g, ' | '),
+    p.createdAt || '', p.updatedAt || ''
+  ].map(escape).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `carto-mo-${zone}-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  await logActivity(zone, 'export', null, `Export CSV : ${points.length} points`);
+}
+
 // ── PUITS MANAGER ───────────────────────────────────────
 
 let puitsFeatures = [];

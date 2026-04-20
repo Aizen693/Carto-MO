@@ -14,8 +14,8 @@ import {
 } from './modules/map-editor.js';
 import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js';
 import { init as initActors, renderActorList, updateZone as updateActorZone } from './modules/actor-manager.js';
-import { importGeoJSON, importStaticFiles, exportGeoJSON } from './modules/import-export.js';
-import { purgeEmptyPoints } from './modules/firestore.js';
+import { importGeoJSON, importStaticFiles, exportGeoJSON, exportCSV } from './modules/import-export.js';
+import { purgeEmptyPoints, bulkSoftDeletePoints, restorePoints } from './modules/firestore.js';
 import { renderActivityLog } from './modules/activity-log.js';
 import { renderUserList } from './modules/user-manager.js';
 
@@ -153,6 +153,11 @@ const ZONE_CONFIGS = {
 
 let currentZone = 'moyen-orient';
 let points = [];
+let filteredPoints = [];
+let selectedIds = new Set();
+let searchQuery = '';
+let filterActor = '';
+let filterPeriod = '';
 
 // ── Init ────────────────────────────────────────────────
 
@@ -230,6 +235,9 @@ async function setupApp() {
   setupCalquesManager();
   setupConverter();
   setupMapCoords();
+  setupPointsToolbar();
+  setupKeyboardShortcuts();
+  setupKbdHelp();
 
   // Wait for map to be fully loaded before rendering points
   await whenReady();
@@ -278,6 +286,12 @@ function setupZoneSelect() {
     updateFormZone(currentZone, config);
     updateActorZone(currentZone, config);
     updateIOZoneBadge();
+    selectedIds.clear();
+    searchQuery = '';
+    filterActor = '';
+    filterPeriod = '';
+    const searchInput = document.getElementById('points-search');
+    if (searchInput) { searchInput.value = ''; searchInput.parentElement?.classList.remove('has-value'); }
     refreshPoints();
     loadStaticFiles();
   });
@@ -1051,10 +1065,45 @@ async function refreshPoints() {
   try {
     points = await getPoints(currentZone);
     renderAdminPoints(points);
-    renderPointsList(points);
+    populateFilterDropdowns();
+    applyPointsFilter();
     document.getElementById('points-count').textContent = points.length;
   } catch (e) {
     console.error('Erreur chargement points:', e);
+  }
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+function matchesFilter(p) {
+  if (filterActor && p.name !== filterActor) return false;
+  if (filterPeriod && p.period !== filterPeriod) return false;
+  if (!searchQuery) return true;
+  const q = searchQuery.toLowerCase();
+  const hay = [p.name, p.period, p.description].filter(Boolean).join(' ').toLowerCase();
+  return hay.includes(q);
+}
+
+function applyPointsFilter() {
+  filteredPoints = points.filter(matchesFilter);
+  // Drop selections that are no longer visible
+  for (const id of [...selectedIds]) {
+    if (!filteredPoints.some(p => p.id === id)) selectedIds.delete(id);
+  }
+  renderPointsList(filteredPoints);
+  updateBulkBar();
+  updatePointsCount();
+}
+
+function updatePointsCount() {
+  const el = document.getElementById('points-count');
+  if (!el) return;
+  if (filteredPoints.length !== points.length) {
+    el.textContent = `${filteredPoints.length}/${points.length}`;
+  } else {
+    el.textContent = points.length;
   }
 }
 
@@ -1063,23 +1112,36 @@ function renderPointsList(pts) {
   container.innerHTML = '';
 
   if (!pts.length) {
-    container.innerHTML = '<div style="font:400 9px/1.4 var(--m);color:var(--tx2);padding:12px;text-align:center">Aucun point admin pour cette zone.<br>Cliquez sur la carte pour ajouter.</div>';
+    const empty = points.length
+      ? 'Aucun resultat pour ce filtre.'
+      : 'Aucun point admin pour cette zone.<br>Cliquez sur la carte pour ajouter.';
+    container.innerHTML = `<div style="font:400 9px/1.4 var(--m);color:var(--tx2);padding:12px;text-align:center">${empty}</div>`;
     return;
   }
 
   pts.forEach(p => {
     const row = document.createElement('div');
-    row.className = 'point-row';
+    row.className = 'point-row' + (selectedIds.has(p.id) ? ' bulk-selected' : '');
     row.dataset.id = p.id;
 
     const desc = p.description?.split('\n')[0] || '';
     row.innerHTML = `
+      <input type="checkbox" class="point-row-checkbox" ${selectedIds.has(p.id) ? 'checked' : ''}>
       <span class="point-dot" style="background:${p._color || '#888'}"></span>
       <div class="point-info">
-        <div class="point-name">${p.name || 'Sans nom'}</div>
-        <div class="point-meta">${p.period || ''} ${desc ? '— ' + desc : ''}</div>
+        <div class="point-name">${escapeHtml(p.name || 'Sans nom')}</div>
+        <div class="point-meta">${escapeHtml(p.period || '')} ${desc ? '— ' + escapeHtml(desc) : ''}</div>
       </div>
     `;
+
+    const cb = row.querySelector('.point-row-checkbox');
+    cb.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (cb.checked) selectedIds.add(p.id);
+      else selectedIds.delete(p.id);
+      row.classList.toggle('bulk-selected', cb.checked);
+      updateBulkBar();
+    });
 
     row.addEventListener('click', () => {
       document.querySelectorAll('.point-row').forEach(r => r.classList.remove('selected'));
@@ -1093,9 +1155,307 @@ function renderPointsList(pts) {
   });
 }
 
+function populateFilterDropdowns() {
+  const actorSel = document.getElementById('points-filter-actor');
+  const periodSel = document.getElementById('points-filter-period');
+  if (!actorSel || !periodSel) return;
+
+  const actors = [...new Set(points.map(p => p.name).filter(Boolean))].sort();
+  const periods = [...new Set(points.map(p => p.period).filter(Boolean))].sort();
+
+  const prevActor = actorSel.value;
+  const prevPeriod = periodSel.value;
+
+  actorSel.innerHTML = '<option value="">Tous acteurs</option>' +
+    actors.map(a => `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`).join('');
+  periodSel.innerHTML = '<option value="">Toutes periodes</option>' +
+    periods.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+
+  if (actors.includes(prevActor)) actorSel.value = prevActor;
+  if (periods.includes(prevPeriod)) periodSel.value = prevPeriod;
+}
+
+function updateBulkBar() {
+  const bar = document.getElementById('points-bulk-bar');
+  const countEl = document.getElementById('pt-bulk-count');
+  const selectAll = document.getElementById('pt-select-all');
+  if (!bar) return;
+  if (selectedIds.size > 0) {
+    bar.style.display = 'flex';
+    countEl.textContent = `${selectedIds.size} selectionne${selectedIds.size > 1 ? 's' : ''}`;
+  } else {
+    bar.style.display = 'none';
+  }
+  if (selectAll) {
+    const visibleIds = filteredPoints.map(p => p.id);
+    selectAll.checked = visibleIds.length > 0 && visibleIds.every(id => selectedIds.has(id));
+    selectAll.indeterminate = !selectAll.checked && visibleIds.some(id => selectedIds.has(id));
+  }
+}
+
+function selectAllVisible(check) {
+  if (check) filteredPoints.forEach(p => selectedIds.add(p.id));
+  else filteredPoints.forEach(p => selectedIds.delete(p.id));
+  document.querySelectorAll('.point-row').forEach(row => {
+    const id = row.dataset.id;
+    const cb = row.querySelector('.point-row-checkbox');
+    if (cb) cb.checked = selectedIds.has(id);
+    row.classList.toggle('bulk-selected', selectedIds.has(id));
+  });
+  updateBulkBar();
+}
+
+async function bulkDeleteSelected() {
+  if (!requireRole('admin')) { showToast('Reserve aux administrateurs.', 'error'); return; }
+  if (!selectedIds.size) return;
+  const ids = [...selectedIds];
+  if (!confirm(`Supprimer ${ids.length} point(s) ?\nTu pourras annuler juste apres.`)) return;
+  try {
+    await bulkSoftDeletePoints(ids, currentZone);
+    selectedIds.clear();
+    showUndoToast(`${ids.length} point(s) supprime(s)`, ids);
+    await refreshPoints();
+  } catch (e) {
+    showToast('Erreur : ' + e.message, 'error');
+  }
+}
+
+function setupPointsToolbar() {
+  const searchInput = document.getElementById('points-search');
+  const searchWrap = searchInput?.parentElement;
+  const clearBtn = document.getElementById('points-search-clear');
+  const actorSel = document.getElementById('points-filter-actor');
+  const periodSel = document.getElementById('points-filter-period');
+  const selectAll = document.getElementById('pt-select-all');
+  const bulkClear = document.getElementById('pt-bulk-clear');
+  const bulkDelete = document.getElementById('pt-bulk-delete');
+  const exportCsvBtn = document.getElementById('btn-export-csv');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      searchQuery = searchInput.value.trim();
+      if (searchWrap) searchWrap.classList.toggle('has-value', !!searchQuery);
+      applyPointsFilter();
+    });
+  }
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      searchQuery = '';
+      if (searchWrap) searchWrap.classList.remove('has-value');
+      applyPointsFilter();
+      searchInput.focus();
+    });
+  }
+  if (actorSel) {
+    actorSel.addEventListener('change', () => { filterActor = actorSel.value; applyPointsFilter(); });
+  }
+  if (periodSel) {
+    periodSel.addEventListener('change', () => { filterPeriod = periodSel.value; applyPointsFilter(); });
+  }
+  if (selectAll) {
+    selectAll.addEventListener('click', () => selectAllVisible(selectAll.checked));
+  }
+  if (bulkClear) {
+    bulkClear.addEventListener('click', () => {
+      selectedIds.clear();
+      document.querySelectorAll('.point-row.bulk-selected').forEach(r => r.classList.remove('bulk-selected'));
+      document.querySelectorAll('.point-row-checkbox').forEach(cb => { cb.checked = false; });
+      updateBulkBar();
+    });
+  }
+  if (bulkDelete) {
+    bulkDelete.addEventListener('click', bulkDeleteSelected);
+  }
+  if (exportCsvBtn) {
+    exportCsvBtn.addEventListener('click', async () => {
+      exportCsvBtn.disabled = true;
+      try {
+        await exportCSV(currentZone);
+        showToast('Export CSV telecharge.', 'success');
+      } catch (e) {
+        showToast('Erreur export : ' + e.message, 'error');
+      }
+      exportCsvBtn.disabled = false;
+    });
+  }
+}
+
 function refreshLogs() {
   const zone = document.getElementById('log-zone-filter').value;
   renderActivityLog(document.getElementById('logs-list'), zone);
 }
 
 document.getElementById('log-zone-filter').addEventListener('change', refreshLogs);
+
+// ── Toast manager (avec undo) ───────────────────────────
+
+let lastDeletedIds = null;
+let lastDeletedZone = null;
+
+function showToast(msg, type = '', duration = 3500) {
+  const host = document.getElementById('toast-host');
+  if (!host) return;
+  const t = document.createElement('div');
+  t.className = 'toast' + (type === 'success' ? ' toast-success' : type === 'error' ? ' toast-error' : '');
+  t.innerHTML = `<span class="toast-msg">${escapeHtml(msg)}</span><button class="toast-close" aria-label="Fermer">×</button>`;
+  t.querySelector('.toast-close').addEventListener('click', () => dismissToast(t));
+  host.appendChild(t);
+  if (duration > 0) setTimeout(() => dismissToast(t), duration);
+  return t;
+}
+
+function dismissToast(t) {
+  if (!t || !t.parentElement) return;
+  t.classList.add('closing');
+  setTimeout(() => t.remove(), 150);
+}
+
+function showUndoToast(msg, deletedIds) {
+  lastDeletedIds = [...deletedIds];
+  lastDeletedZone = currentZone;
+  const host = document.getElementById('toast-host');
+  if (!host) return;
+  const t = document.createElement('div');
+  t.className = 'toast toast-success';
+  t.innerHTML = `
+    <span class="toast-msg">${escapeHtml(msg)}</span>
+    <button class="toast-action">Annuler</button>
+    <button class="toast-close">×</button>
+  `;
+  t.querySelector('.toast-close').addEventListener('click', () => dismissToast(t));
+  t.querySelector('.toast-action').addEventListener('click', async () => {
+    try {
+      await restorePoints(lastDeletedIds, lastDeletedZone);
+      lastDeletedIds = null;
+      showToast('Restauration effectuee.', 'success');
+      await refreshPoints();
+    } catch (e) {
+      showToast('Erreur restauration : ' + e.message, 'error');
+    }
+    dismissToast(t);
+  });
+  host.appendChild(t);
+  setTimeout(() => dismissToast(t), 8000);
+}
+
+async function undoLastDelete() {
+  if (!lastDeletedIds || !lastDeletedIds.length) {
+    showToast('Rien a annuler.', '');
+    return;
+  }
+  try {
+    await restorePoints(lastDeletedIds, lastDeletedZone);
+    const n = lastDeletedIds.length;
+    lastDeletedIds = null;
+    showToast(`${n} point(s) restaure(s).`, 'success');
+    await refreshPoints();
+  } catch (e) {
+    showToast('Erreur : ' + e.message, 'error');
+  }
+}
+
+// ── Raccourcis clavier ──────────────────────────────────
+
+function isTypingTarget(el) {
+  if (!el) return false;
+  const tag = el.tagName;
+  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable;
+}
+
+function setupKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    const mod = e.metaKey || e.ctrlKey;
+    const searchInput = document.getElementById('points-search');
+    const drawer = document.getElementById('point-drawer');
+    const kbdOverlay = document.getElementById('kbd-overlay');
+    const drawerOpen = drawer && drawer.classList.contains('open');
+
+    // Escape — close drawer or overlay, or clear search
+    if (e.key === 'Escape') {
+      if (kbdOverlay && kbdOverlay.style.display !== 'none') {
+        kbdOverlay.style.display = 'none';
+        return;
+      }
+      if (drawerOpen) {
+        document.getElementById('form-cancel')?.click();
+        return;
+      }
+      if (document.activeElement === searchInput) {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+        searchInput.blur();
+      }
+      return;
+    }
+
+    // Cmd/Ctrl+K — focus search
+    if (mod && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      const pointsTab = document.querySelector('.sidebar-tab[data-tab="points"]');
+      if (pointsTab && !pointsTab.classList.contains('active')) pointsTab.click();
+      if (searchInput) { searchInput.focus(); searchInput.select(); }
+      return;
+    }
+
+    // "/" (not inside input) — focus search
+    if (e.key === '/' && !isTypingTarget(e.target)) {
+      e.preventDefault();
+      if (searchInput) { searchInput.focus(); searchInput.select(); }
+      return;
+    }
+
+    // "?" — show help
+    if (e.key === '?' && !isTypingTarget(e.target)) {
+      e.preventDefault();
+      if (kbdOverlay) kbdOverlay.style.display = 'flex';
+      return;
+    }
+
+    // Cmd/Ctrl+S — save drawer form
+    if (mod && e.key.toLowerCase() === 's') {
+      if (drawerOpen) {
+        e.preventDefault();
+        document.getElementById('form-save')?.click();
+      }
+      return;
+    }
+
+    // Cmd/Ctrl+Z — undo last delete
+    if (mod && e.key.toLowerCase() === 'z' && !isTypingTarget(e.target)) {
+      e.preventDefault();
+      undoLastDelete();
+      return;
+    }
+
+    // Cmd/Ctrl+A — select all visible (only when points tab active & not typing)
+    if (mod && e.key.toLowerCase() === 'a' && !isTypingTarget(e.target)) {
+      const pointsTab = document.querySelector('.sidebar-tab[data-tab="points"].active');
+      if (pointsTab) {
+        e.preventDefault();
+        selectAllVisible(true);
+      }
+      return;
+    }
+
+    // Delete / Backspace — delete selection (not while typing)
+    if ((e.key === 'Delete' || (e.key === 'Backspace' && mod)) && !isTypingTarget(e.target)) {
+      if (selectedIds.size > 0) {
+        e.preventDefault();
+        bulkDeleteSelected();
+      }
+      return;
+    }
+  });
+}
+
+function setupKbdHelp() {
+  const btn = document.getElementById('kbd-help-btn');
+  const overlay = document.getElementById('kbd-overlay');
+  const close = document.getElementById('kbd-close');
+  if (btn && overlay) btn.addEventListener('click', () => { overlay.style.display = 'flex'; });
+  if (close && overlay) close.addEventListener('click', () => { overlay.style.display = 'none'; });
+  if (overlay) overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.style.display = 'none';
+  });
+}

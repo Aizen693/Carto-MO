@@ -104,6 +104,33 @@ export async function softDeletePoint(pointId, zone, name) {
   await logActivity(zone, 'delete', pointId, `Point "${name}" supprime`);
 }
 
+export async function bulkSoftDeletePoints(pointIds, zone) {
+  if (!pointIds || !pointIds.length) return 0;
+  const user = getCurrentUser();
+  for (let i = 0; i < pointIds.length; i += 100) {
+    const batch = pointIds.slice(i, i + 100);
+    const { error } = await supabase
+      .from('points')
+      .update({ deleted: true, updated_by: user.uid, updated_at: new Date().toISOString() })
+      .in('id', batch);
+    if (error) throw error;
+  }
+  await logActivity(zone, 'delete', null, `Suppression en masse : ${pointIds.length} points`);
+  return pointIds.length;
+}
+
+export async function restorePoints(pointIds, zone) {
+  if (!pointIds || !pointIds.length) return 0;
+  const user = getCurrentUser();
+  const { error } = await supabase
+    .from('points')
+    .update({ deleted: false, updated_by: user.uid, updated_at: new Date().toISOString() })
+    .in('id', pointIds);
+  if (error) throw error;
+  await logActivity(zone, 'restore', null, `Restauration : ${pointIds.length} point(s)`);
+  return pointIds.length;
+}
+
 export async function purgeEmptyPoints(zone) {
   const user = getCurrentUser();
   // Find all points with no name or empty name (orphan puits)
