@@ -1109,11 +1109,10 @@ window.focusGeocoder = function() {
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js" crossorigin="anonymous"></script>
+<!-- MediaPipe Hands (~2 Mo) : charge UNIQUEMENT a l'activation du hand tracking (P3 perf) -->
 <script>
 /* =========================================================
-   HAND TRACKING v4 — ultra-lean
+   HAND TRACKING v4 — ultra-lean (+ lazy-load MediaPipe P3)
    - Pinch distance RAW (pas de filtre) = detection instantanee
    - Seuils tres espaces (0.08 / 0.14) = pas d'ambiguite
    - Throttle 100ms = leger meme avec tous calques
@@ -1188,9 +1187,38 @@ window.focusGeocoder = function() {
     if(w!==cW||h!==cH){cW=w;cH=h;hc.width=cW;hc.height=cH}
   }
 
+  /* ── Lazy-load MediaPipe libs (2 Mo) uniquement sur activation ── */
+  var libsLoaded=false, libsLoading=null;
+  function loadLibs(){
+    if(libsLoaded) return Promise.resolve();
+    if(libsLoading) return libsLoading;
+    function inject(src){
+      return new Promise(function(resolve, reject){
+        var s=document.createElement('script');
+        s.src=src; s.crossOrigin='anonymous';
+        s.onload=resolve; s.onerror=reject;
+        document.head.appendChild(s);
+      });
+    }
+    libsLoading = inject('https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js')
+      .then(function(){ return inject('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js'); })
+      .then(function(){ libsLoaded=true; });
+    return libsLoading;
+  }
+
   window.toggleHandTrack=function(){if(active)stop();else start()};
 
   function start(){
+    // Charge MediaPipe a la demande (pas au boot de la page)
+    showB('CHARGEMENT · MediaPipe');
+    document.getElementById('btn-handtrack').style.color='#00e5ff';
+    loadLibs().then(function(){ _startCore(); }).catch(function(){
+      showB('Chargement · echec · reessayer');
+      document.getElementById('btn-handtrack').style.color='';
+    });
+  }
+
+  function _startCore(){
     active=true;ctx=hc.getContext('2d');sync();
     fCX.reset();fCY.reset();fWY.reset();
     st=IDLE;panLX=null;relTime=0;openSince=0;zAnchor=null;zTarget=null;
