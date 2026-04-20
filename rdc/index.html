@@ -364,7 +364,7 @@ const ZONE_CONFIG = {
 
 <!-- AUTH GATE -->
 <script type="module">
-import { initZoneAuth, zoneLogin } from '../shared/zone-auth.js';
+import { initZoneAuth, zoneLogin } from '../shared/zone-auth.js?v=20260420d';
 
 const overlay = document.getElementById('zone-login-overlay');
 const errEl = document.getElementById('zone-login-error');
@@ -393,8 +393,12 @@ async function doLogin() {
   const email = document.getElementById('zone-email').value.trim();
   const pw = document.getElementById('zone-password').value;
   errEl.style.display = 'none';
-  if (!email || !pw) { errEl.textContent = 'Email et mot de passe requis'; errEl.style.display = 'block'; return; }
-  try { await zoneLogin(email, pw); } catch (e) { errEl.textContent = 'Identifiants invalides'; errEl.style.display = 'block'; }
+  if (!email || !pw) { errEl.textContent = 'Auth · email et mot de passe requis'; errEl.style.display = 'block'; return; }
+  try { await zoneLogin(email, pw); } catch (e) {
+    var code = (e && (e.status || e.code)) || 401;
+    errEl.textContent = 'Auth · code ' + code + ' · identifiants invalides';
+    errEl.style.display = 'block';
+  }
 }
 </script>
 </body>
