@@ -834,18 +834,13 @@ window.focusGeocoder = function() {
   // frontaliere (pas le pays entier) pour zoomer sur la frontiere elle-meme,
   // la ou sont concentrees les attaques (sources ACLED / AfricaCenter dans
   // la couche 6. Evenements securitaires).
-  // tampon = corridor (polygone) ou attaques/flux transfrontaliers sont concentres.
-  // Sources : ACLED, AfricaCenter for Strategic Studies, Crisis Group (2024-2026).
   var GROUPS = {
     'mrt-mli': { iso: ['MRT','MLI'], color: '#e07c5a', label: 'Mauritanie · Mali',
-                 bbox: [-11.8, 14.8, -4.7, 17.2], // Hodh ech Chargui / Kayes nord
-                 tampon: [[-11.0, 15.3],[-4.7, 14.9],[-4.7, 17.2],[-11.0, 16.9],[-11.0, 15.3]] },
+                 bbox: [-11.8, 14.8, -4.7, 17.2] }, // Hodh ech Chargui / Kayes nord
     'mli-sen': { iso: ['MLI','SEN'], color: '#ff5252', label: 'Mali · Senegal',
-                 bbox: [-12.5, 12.2, -10.3, 15.1], // Kayes / Bakel
-                 tampon: [[-12.6, 13.3],[-10.6, 13.3],[-10.6, 15.1],[-12.6, 15.1],[-12.6, 13.3]] },
+                 bbox: [-12.5, 12.2, -10.3, 15.1] }, // Kayes / Bakel
     'mli-gin': { iso: ['MLI','GIN'], color: '#d4a017', label: 'Mali · Guinee',
-                 bbox: [-11.6, 10.3, -7.8, 12.9], // Yanfolila / Siguiri
-                 tampon: [[-10.8, 10.4],[-7.8, 10.4],[-7.8, 12.2],[-10.8, 12.2],[-10.8, 10.4]] }
+                 bbox: [-11.6, 10.3, -7.8, 12.9] }  // Yanfolila / Siguiri
   };
   var state = { master: false, groups: {
     'mrt-mli': false, 'mli-sen': false, 'mli-gin': false
@@ -863,13 +858,7 @@ window.focusGeocoder = function() {
   }
 
   function groupLayerIds(key) {
-    return {
-      fill: 'fr-' + key + '-fill',
-      line: 'fr-' + key + '-line',
-      tamponFill: 'fr-' + key + '-tampon-fill',
-      tamponLine: 'fr-' + key + '-tampon-line',
-      tamponSrc:  'fr-' + key + '-tampon-src'
-    };
+    return { fill: 'fr-' + key + '-fill', line: 'fr-' + key + '-line' };
   }
 
   function ensureGroupLayers(key) {
@@ -902,40 +891,6 @@ window.focusGeocoder = function() {
           }
         });
       }
-      // Zone tampon : corridor ou flux & attaques transfrontaliers sont concentres
-      if (g.tampon) {
-        if (!map.getSource(ids.tamponSrc)) {
-          map.addSource(ids.tamponSrc, {
-            type: 'geojson',
-            data: {
-              type: 'Feature',
-              properties: { pair: key },
-              geometry: { type: 'Polygon', coordinates: [g.tampon] }
-            }
-          });
-        }
-        if (!map.getLayer(ids.tamponFill)) {
-          map.addLayer({
-            id: ids.tamponFill,
-            type: 'fill',
-            source: ids.tamponSrc,
-            paint: { 'fill-color': g.color, 'fill-opacity': 0.22 }
-          });
-        }
-        if (!map.getLayer(ids.tamponLine)) {
-          map.addLayer({
-            id: ids.tamponLine,
-            type: 'line',
-            source: ids.tamponSrc,
-            paint: {
-              'line-color': g.color,
-              'line-width': 1.4,
-              'line-opacity': 0.7,
-              'line-dasharray': [3, 2]
-            }
-          });
-        }
-      }
       return true;
     } catch (e) { return false; }
   }
@@ -943,7 +898,7 @@ window.focusGeocoder = function() {
   function setGroupVisibility(key, visible) {
     var ids = groupLayerIds(key);
     if (visible) ensureGroupLayers(key); // safe: try/catch inside
-    ['fill','line','tamponFill','tamponLine'].forEach(function(k) {
+    ['fill','line'].forEach(function(k) {
       var id = ids[k];
       try { if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none'); } catch(e) {}
     });
