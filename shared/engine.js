@@ -576,23 +576,14 @@ function setupMapLayersOn(m) {
 // ── RECHERCHE ────────────────────────────────────────────────────────
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
-searchInput.addEventListener('input', function () {
-  const q = this.value.trim().toLowerCase();
-  searchResults.style.display = 'none'; searchResults.innerHTML = '';
-  if (!q || q.length < 2) return;
-  const matches = [];
-  Object.values(loadedData).forEach(geo => {
-    if (!geo) return;
-    geo.features.forEach(f => {
-      if (!f.geometry || f.geometry.type !== 'Point') return;
-      const name = (f.properties.name || '').toLowerCase();
-      const desc = (f.properties._desc || '').toLowerCase();
-      if (name.includes(q) || desc.includes(q)) matches.push(f);
-    });
-  });
-  if (!matches.length) return;
+const SEARCH_BBOX = (ZONE_CONFIG.SEARCH_BBOX || [-20, 2, 55, 40]).join(',');
+let searchGeoTimer = null;
+let searchGeoReqId = 0;
+
+function renderSearchResults(actorMatches, placeMatches, query) {
+  searchResults.innerHTML = '';
   const seen = new Set();
-  matches.slice(0, 12).forEach(f => {
+  actorMatches.slice(0, 8).forEach(f => {
     const key = f.properties.name + '_' + f.properties._period;
     if (seen.has(key)) return; seen.add(key);
     const div = document.createElement('div'); div.className = 'search-result';
@@ -615,7 +606,50 @@ searchInput.addEventListener('input', function () {
     };
     searchResults.appendChild(div);
   });
+  placeMatches.slice(0, 5).forEach(p => {
+    const div = document.createElement('div'); div.className = 'search-result';
+    div.innerHTML = '<div class="search-result-dot" style="background:#c49a3c;border-radius:2px"></div>' +
+      '<div><div class="search-result-name">' + p.text + '</div>' +
+      '<div class="search-result-sub">' + (p.place_name || '').replace(p.text + ', ', '') + '</div></div>';
+    div.onclick = () => {
+      map.flyTo({ center: p.center, zoom: 10, duration: 1200, essential: true });
+      searchResults.style.display = 'none'; searchInput.value = '';
+    };
+    searchResults.appendChild(div);
+  });
+  if (!actorMatches.length && !placeMatches.length) {
+    searchResults.style.display = 'none';
+    return;
+  }
   searchResults.style.display = 'block';
+}
+
+searchInput.addEventListener('input', function () {
+  const q = this.value.trim().toLowerCase();
+  if (!q || q.length < 2) { searchResults.style.display = 'none'; searchResults.innerHTML = ''; return; }
+  const actorMatches = [];
+  Object.values(loadedData).forEach(geo => {
+    if (!geo) return;
+    geo.features.forEach(f => {
+      if (!f.geometry || f.geometry.type !== 'Point') return;
+      const name = (f.properties.name || '').toLowerCase();
+      const desc = (f.properties._desc || '').toLowerCase();
+      if (name.includes(q) || desc.includes(q)) actorMatches.push(f);
+    });
+  });
+  renderSearchResults(actorMatches, [], q);
+  clearTimeout(searchGeoTimer);
+  const myReqId = ++searchGeoReqId;
+  searchGeoTimer = setTimeout(() => {
+    const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(q) +
+      '.json?access_token=' + mapboxgl.accessToken + '&language=fr&limit=5&bbox=' + SEARCH_BBOX +
+      '&types=place,locality,region,country,poi';
+    fetch(url).then(r => r.json()).then(data => {
+      if (myReqId !== searchGeoReqId) return;
+      const places = (data && data.features) ? data.features : [];
+      renderSearchResults(actorMatches, places, q);
+    }).catch(() => {});
+  }, 250);
 });
 document.addEventListener('click', (e) => {
   if (!document.getElementById('search-box').contains(e.target)) searchResults.style.display = 'none';
