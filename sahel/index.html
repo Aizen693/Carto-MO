@@ -831,9 +831,12 @@ window.focusGeocoder = function() {
 (function() {
   var FRONTIERES_SOURCE_ID = 'frontieres-countries';
   var GROUPS = {
-    ouest:  { iso: ['SEN','GIN'],       color: '#29b6f6', label: 'Senegal · Guinee' },
-    nord:   { iso: ['MRT','DZA'],       color: '#e07c5a', label: 'Mauritanie · Algerie' },
-    centre: { iso: ['MLI','MRT','DZA'], color: '#d4a017', label: 'Mali · Mauritanie · Algerie' }
+    ouest:  { iso: ['SEN','GIN'],       color: '#29b6f6', label: 'Senegal · Guinee',
+              bbox: [-17.6, 7.1, -7.5, 16.8] },
+    nord:   { iso: ['MRT','DZA'],       color: '#e07c5a', label: 'Mauritanie · Algerie',
+              bbox: [-17.1, 14.7, 12.0, 37.1] },
+    centre: { iso: ['MLI','MRT','DZA'], color: '#d4a017', label: 'Mali · Mauritanie · Algerie',
+              bbox: [-17.1, 10.2, 12.0, 37.1] }
   };
   var state = { master: false, groups: { ouest: false, nord: false, centre: false } };
 
@@ -906,6 +909,47 @@ window.focusGeocoder = function() {
     if (masterEl) masterEl.classList.toggle('on', state.master && activeCount > 0);
   }
 
+  function unionBbox(keys) {
+    var bbox = null;
+    keys.forEach(function(k) {
+      var b = GROUPS[k] && GROUPS[k].bbox;
+      if (!b) return;
+      if (!bbox) { bbox = b.slice(); return; }
+      bbox[0] = Math.min(bbox[0], b[0]);
+      bbox[1] = Math.min(bbox[1], b[1]);
+      bbox[2] = Math.max(bbox[2], b[2]);
+      bbox[3] = Math.max(bbox[3], b[3]);
+    });
+    return bbox;
+  }
+
+  // Vue globale "Sahel vue d'ensemble" — utilisee quand les 3 groupes sont actifs
+  var GLOBAL_SAHEL_BBOX = [-17.5, 10.0, 12.0, 27.0];
+
+  function zoomToActive() {
+    var activeKeys = Object.keys(state.groups).filter(function(k) { return state.groups[k]; });
+    if (!state.master || !activeKeys.length) return;
+    var bbox;
+    if (activeKeys.length === Object.keys(GROUPS).length) {
+      // Tous actifs -> vue globale Sahel (cadre fixe, pas l'union brute qui
+      // irait jusqu'au nord de l'Algerie et provoquerait un dezoom mondial)
+      bbox = GLOBAL_SAHEL_BBOX;
+    } else {
+      bbox = unionBbox(activeKeys);
+    }
+    if (!bbox) return;
+    try {
+      map.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], {
+        padding: 60,
+        duration: 1400,
+        pitch: 0,
+        bearing: ZONE_CONFIG.MAP_BEARING,
+        essential: true,
+        maxZoom: 6
+      });
+    } catch (e) {}
+  }
+
   function refresh() {
     Object.keys(GROUPS).forEach(function(key) {
       var effectivelyOn = state.master && state.groups[key];
@@ -924,17 +968,20 @@ window.focusGeocoder = function() {
 
   window.toggleFrontieresMaster = function() {
     state.master = !state.master;
-    // Quand on active le master pour la 1re fois, on active au moins 2 groupes par defaut
+    // Quand on active le master pour la 1re fois, on active tous les groupes pour
+    // une vue globale (et respecte la regle "2 pays minimum")
     if (state.master) {
       var activeCount = Object.keys(state.groups).filter(function(k) { return state.groups[k]; }).length;
       if (activeCount < 2) {
         state.groups.ouest = true;
         state.groups.nord = true;
+        state.groups.centre = true;
       }
       var sub = document.getElementById('sb-frontieres-sub');
       if (sub) sub.classList.add('open');
     }
     refresh();
+    if (state.master) zoomToActive();
   };
 
   window.toggleFrontieresGroup = function(key) {
@@ -946,6 +993,7 @@ window.focusGeocoder = function() {
     var anyOn = Object.keys(state.groups).some(function(k) { return state.groups[k]; });
     if (!anyOn) state.master = false;
     refresh();
+    if (state.master && state.groups[key]) zoomToActive();
   };
 
   // Retry ajout des couches sur styledata (quand le style est pret pour addSource)
