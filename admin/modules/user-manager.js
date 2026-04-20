@@ -2,9 +2,9 @@
  * user-manager.js — Gestion des utilisateurs (admin only)
  */
 
-import { getUsers, updateUserRole } from './firestore.js';
-import { requireRole } from './auth.js';
-import { supabase } from '../supabase-config.js';
+import { getUsers, updateUserRole } from './firestore.js?v=20260420a';
+import { requireRole } from './auth.js?v=20260420a';
+import { supabase } from '../supabase-config.js?v=20260420a';
 
 const SUPABASE_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';

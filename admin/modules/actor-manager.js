@@ -2,8 +2,8 @@
  * actor-manager.js — Gestion des acteurs (couleurs, groupes)
  */
 
-import { getZoneConfig, updateZoneConfig } from './firestore.js';
-import { requireRole } from './auth.js';
+import { getZoneConfig, updateZoneConfig } from './firestore.js?v=20260420a';
+import { requireRole } from './auth.js?v=20260420a';
 
 let currentZone = null;
 let localConfig = null;

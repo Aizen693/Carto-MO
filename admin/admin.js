@@ -5,19 +5,19 @@
  * le changement de zone et la coordination des modules.
  */
 
-import { initAuth, login, logout, getCurrentUser, requireRole } from './modules/auth.js';
-import { getPoints } from './modules/firestore.js';
-import { logActivity } from './modules/firestore.js';
+import { initAuth, login, logout, getCurrentUser, requireRole } from './modules/auth.js?v=20260420a';
+import { getPoints } from './modules/firestore.js?v=20260420a';
+import { logActivity } from './modules/firestore.js?v=20260420a';
 import {
   initEditorMap, whenReady, renderAdminPoints, renderStaticPoints, onMapClick, onPointClick,
   flyToPoint, selectPoint, switchZone, destroy as destroyMap
-} from './modules/map-editor.js';
-import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js';
-import { init as initActors, renderActorList, updateZone as updateActorZone } from './modules/actor-manager.js';
-import { importGeoJSON, importStaticFiles, exportGeoJSON, exportCSV } from './modules/import-export.js';
-import { purgeEmptyPoints, bulkSoftDeletePoints, restorePoints } from './modules/firestore.js';
-import { renderActivityLog } from './modules/activity-log.js';
-import { renderUserList } from './modules/user-manager.js';
+} from './modules/map-editor.js?v=20260420a';
+import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js?v=20260420a';
+import { init as initActors, renderActorList, updateZone as updateActorZone } from './modules/actor-manager.js?v=20260420a';
+import { importGeoJSON, importStaticFiles, exportGeoJSON, exportCSV } from './modules/import-export.js?v=20260420a';
+import { purgeEmptyPoints, bulkSoftDeletePoints, restorePoints } from './modules/firestore.js?v=20260420a';
+import { renderActivityLog } from './modules/activity-log.js?v=20260420a';
+import { renderUserList } from './modules/user-manager.js?v=20260420a';
 
 // ── Zone configs (mirrored from each zone's index.html) ─────────────
 

@@ -2,7 +2,7 @@
  * activity-log.js — Journal d'activite
  */
 
-import { getActivityLog } from './firestore.js';
+import { getActivityLog } from './firestore.js?v=20260420a';
 
 export async function renderActivityLog(container, zone) {
   container.innerHTML = '<div class="log-loading">Chargement...</div>';

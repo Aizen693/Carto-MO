@@ -3,8 +3,8 @@
  * Note: le nom du fichier est conserve pour compatibilite des imports
  */
 
-import { supabase } from '../supabase-config.js';
-import { getCurrentUser } from './auth.js';
+import { supabase } from '../supabase-config.js?v=20260420a';
+import { getCurrentUser } from './auth.js?v=20260420a';
 
 // ── Points ──────────────────────────────────────────────
 

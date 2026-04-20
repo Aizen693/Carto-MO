@@ -7,7 +7,7 @@
  * On utilise fetch() direct avec le token de la session.
  */
 
-import { supabase } from '../supabase-config.js';
+import { supabase } from '../supabase-config.js?v=20260420a';
 
 const SUPABASE_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';

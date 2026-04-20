@@ -2,8 +2,8 @@
  * import-export.js — Import/export GeoJSON
  */
 
-import { createPoint, bulkCreatePoints, getPoints, logActivity } from './firestore.js';
-import { getCurrentUser } from './auth.js';
+import { createPoint, bulkCreatePoints, getPoints, logActivity } from './firestore.js?v=20260420a';
+import { getCurrentUser } from './auth.js?v=20260420a';
 
 export async function importGeoJSON(file, zone, zoneConfig) {
   return new Promise((resolve, reject) => {
