@@ -229,6 +229,38 @@ html, body {
 }
 .sb-toggle.on::after { transform: translateX(14px); }
 
+/* Sous-calques (frontieres) */
+.sb-layer-parent { cursor: pointer; }
+.sb-sub-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 5px;
+  background: var(--bg3);
+  color: var(--tx2);
+  font: 400 7px/1 var(--m);
+  letter-spacing: 0.08em;
+  border: 1px solid var(--ln);
+}
+.sb-sub-badge.has-active { color: var(--ac); border-color: var(--acb); }
+.sb-sublayers {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .2s ease;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid var(--ln);
+}
+.sb-sublayers.open { max-height: 220px; }
+.sb-sublayer-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 5px 12px 5px 22px; font: 400 8px/1 var(--m); color: var(--tx1);
+  border-top: 1px solid rgba(255,255,255,0.03);
+}
+.sb-sub-label { display: inline-flex; align-items: center; gap: 7px; }
+.sb-sub-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.sb-toggle-sm { width: 22px; height: 11px; }
+.sb-toggle-sm::after { width: 7px; height: 7px; }
+.sb-toggle-sm.on::after { transform: translateX(11px); }
+
 .sb-style-row {
   display: flex; gap: 2px; padding: 6px 12px;
 }

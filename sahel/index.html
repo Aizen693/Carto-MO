@@ -9,7 +9,7 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
-<link rel="stylesheet" href="../shared/styles.css">
+<link rel="stylesheet" href="../shared/styles.css?v=20260420b">
 <style>
 #zone-login-overlay {
   position:fixed;inset:0;z-index:9999;background:rgba(10,11,13,0.97);
@@ -174,6 +174,24 @@
         <span>7. Flux &amp; trafics</span>
         <div class="sb-toggle" id="sb-toggle-flux" onclick="toggleLayer('flux')"></div>
       </div>
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleFrontieresSection(event)">
+        <span>8. Frontieres <span class="sb-sub-badge" id="sb-frontieres-badge">0/3</span></span>
+        <div class="sb-toggle" id="sb-toggle-frontieres" onclick="event.stopPropagation();toggleFrontieresMaster()"></div>
+      </div>
+      <div class="sb-sublayers" id="sb-frontieres-sub">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#29b6f6"></span>Senegal · Guinee</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-ouest" onclick="toggleFrontieresGroup('ouest')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e07c5a"></span>Mauritanie · Algerie</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-nord" onclick="toggleFrontieresGroup('nord')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#d4a017"></span>Mali · Mauritanie · Algerie</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-centre" onclick="toggleFrontieresGroup('centre')"></div>
+        </div>
+      </div>
 
       <div class="sb-cat-label">Style carte</div>
       <div class="sb-style-row">
@@ -302,7 +320,7 @@ const ZONE_CONFIG = {
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js?v=20260420a"></script>
+<script src="../shared/engine.js?v=20260420b"></script>
 <script>
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
 (function() {
@@ -686,6 +704,13 @@ const ZONE_CONFIG = {
       if (on && !isOn) window.toggleLayer(id);
       else if (!on && isOn) window.toggleLayer(id);
     });
+    // Frontieres master
+    var frMaster = document.getElementById('sb-toggle-frontieres');
+    if (frMaster && typeof window.toggleFrontieresMaster === 'function') {
+      var isFrOn = frMaster.classList.contains('on');
+      if (on && !isFrOn) window.toggleFrontieresMaster();
+      else if (!on && isFrOn) window.toggleFrontieresMaster();
+    }
   };
 
   /* ── CALQUE : Ethnies & sous-groupes ── */
@@ -801,6 +826,147 @@ window.focusGeocoder = function() {
   var input = document.getElementById('search-input');
   if (input) { input.focus(); input.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
 };
+
+/* ── CALQUE FRONTIERES (sous-calques par groupes de pays) ── */
+(function() {
+  var FRONTIERES_SOURCE_ID = 'frontieres-countries';
+  var GROUPS = {
+    ouest:  { iso: ['SEN','GIN'],       color: '#29b6f6', label: 'Senegal · Guinee' },
+    nord:   { iso: ['MRT','DZA'],       color: '#e07c5a', label: 'Mauritanie · Algerie' },
+    centre: { iso: ['MLI','MRT','DZA'], color: '#d4a017', label: 'Mali · Mauritanie · Algerie' }
+  };
+  var state = { master: false, groups: { ouest: false, nord: false, centre: false } };
+
+  function ensureSource() {
+    if (map.getSource(FRONTIERES_SOURCE_ID)) return true;
+    try {
+      map.addSource(FRONTIERES_SOURCE_ID, {
+        type: 'vector',
+        url: 'mapbox://mapbox.country-boundaries-v1'
+      });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function groupLayerIds(key) {
+    return { fill: 'fr-' + key + '-fill', line: 'fr-' + key + '-line' };
+  }
+
+  function ensureGroupLayers(key) {
+    if (!ensureSource()) return false;
+    var g = GROUPS[key];
+    var ids = groupLayerIds(key);
+    var filter = ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', g.iso]];
+    try {
+      if (!map.getLayer(ids.fill)) {
+        map.addLayer({
+          id: ids.fill,
+          type: 'fill',
+          source: FRONTIERES_SOURCE_ID,
+          'source-layer': 'country_boundaries',
+          filter: filter,
+          paint: { 'fill-color': g.color, 'fill-opacity': 0.08 }
+        });
+      }
+      if (!map.getLayer(ids.line)) {
+        map.addLayer({
+          id: ids.line,
+          type: 'line',
+          source: FRONTIERES_SOURCE_ID,
+          'source-layer': 'country_boundaries',
+          filter: filter,
+          paint: {
+            'line-color': g.color,
+            'line-width': ['interpolate', ['linear'], ['zoom'], 3, 1.2, 6, 2.2, 10, 3.5],
+            'line-opacity': 0.85
+          }
+        });
+      }
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function setGroupVisibility(key, visible) {
+    var ids = groupLayerIds(key);
+    if (visible) ensureGroupLayers(key); // safe: try/catch inside
+    ['fill','line'].forEach(function(k) {
+      var id = ids[k];
+      try { if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none'); } catch(e) {}
+    });
+  }
+
+  function updateBadge() {
+    var activeCount = Object.keys(state.groups).filter(function(k) { return state.groups[k]; }).length;
+    var badge = document.getElementById('sb-frontieres-badge');
+    if (badge) {
+      badge.textContent = activeCount + '/3';
+      badge.classList.toggle('has-active', activeCount > 0);
+    }
+    var masterEl = document.getElementById('sb-toggle-frontieres');
+    if (masterEl) masterEl.classList.toggle('on', state.master && activeCount > 0);
+  }
+
+  function refresh() {
+    Object.keys(GROUPS).forEach(function(key) {
+      var effectivelyOn = state.master && state.groups[key];
+      setGroupVisibility(key, effectivelyOn);
+      var el = document.getElementById('sb-toggle-fr-' + key);
+      if (el) el.classList.toggle('on', state.groups[key]);
+    });
+    updateBadge();
+  }
+
+  window.toggleFrontieresSection = function(e) {
+    if (e && e.target && e.target.closest && e.target.closest('.sb-toggle')) return;
+    var sub = document.getElementById('sb-frontieres-sub');
+    if (sub) sub.classList.toggle('open');
+  };
+
+  window.toggleFrontieresMaster = function() {
+    state.master = !state.master;
+    // Quand on active le master pour la 1re fois, on active au moins 2 groupes par defaut
+    if (state.master) {
+      var activeCount = Object.keys(state.groups).filter(function(k) { return state.groups[k]; }).length;
+      if (activeCount < 2) {
+        state.groups.ouest = true;
+        state.groups.nord = true;
+      }
+      var sub = document.getElementById('sb-frontieres-sub');
+      if (sub) sub.classList.add('open');
+    }
+    refresh();
+  };
+
+  window.toggleFrontieresGroup = function(key) {
+    if (!(key in state.groups)) return;
+    state.groups[key] = !state.groups[key];
+    // Si on active un groupe mais que le master est off, on active aussi le master
+    if (state.groups[key] && !state.master) state.master = true;
+    // Si on desactive le dernier groupe, on eteint aussi le master
+    var anyOn = Object.keys(state.groups).some(function(k) { return state.groups[k]; });
+    if (!anyOn) state.master = false;
+    refresh();
+  };
+
+  // Retry ajout des couches sur styledata (quand le style est pret pour addSource)
+  map.on('styledata', function() {
+    Object.keys(state.groups).forEach(function(key) {
+      var effectivelyOn = state.master && state.groups[key];
+      if (effectivelyOn && !map.getLayer(groupLayerIds(key).line)) {
+        setGroupVisibility(key, true);
+      }
+    });
+  });
+  // Retry sur sourcedata aussi (au cas ou styledata ne fire pas)
+  map.on('sourcedata', function() {
+    Object.keys(state.groups).forEach(function(key) {
+      var effectivelyOn = state.master && state.groups[key];
+      if (effectivelyOn && !map.getLayer(groupLayerIds(key).line)) {
+        setGroupVisibility(key, true);
+      }
+    });
+  });
+})();
 </script>
 
 <!-- TUTORIEL -->
