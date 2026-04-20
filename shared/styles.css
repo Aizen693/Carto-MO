@@ -648,3 +648,30 @@ html, body {
   #header h1 { font-size: 10px; }
   .mapboxgl-ctrl-bottom-right { bottom: 130px !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Focus visible — a11y clavier (P1)
+   Ring gold 2px, offset 2px sur navigation clavier uniquement.
+   Clic souris n'affiche pas de ring (match comportement existant).
+   ═══════════════════════════════════════════════════════════ */
+*:focus { outline: none; }
+*:focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: 2px;
+}
+/* Toggles : ring decale plus loin car element petit et arrondi */
+.sb-toggle:focus-visible,
+.sb-toggle-sm:focus-visible {
+  outline-offset: 3px;
+}
+/* Inputs : ring interieur pour ne pas deborder les panels */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: 1px;
+}
+/* Skip si utilisateur prefere reduced motion : pas de transition */
+@media (prefers-reduced-motion: reduce) {
+  *:focus-visible { transition: none; }
+}
