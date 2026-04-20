@@ -454,6 +454,8 @@ html, body {
 }
 .sb-cell.accent strong { color: var(--ac); }
 .sb-cell.cyan strong { color: var(--cyan); }
+.sb-admin { color: var(--tx1); text-decoration: none; cursor: pointer; transition: color .12s, background .12s; }
+.sb-admin:hover { color: var(--ac); background: rgba(196,154,60,0.06); }
 .sb-spacer { flex: 1; border-right: 1px solid var(--ln); }
 
 /* ═══════════════════════════════════════════════════════════
@@ -779,6 +781,9 @@ html, body {
   <div class="sb-cell cyan">
     <span>Feed <strong>LIVE</strong></span>
   </div>
+  <a class="sb-cell sb-admin" href="./admin/">
+    <span>Admin</span>
+  </a>
   <div class="sb-cell">
     <span>© Algor Int <strong id="year">2026</strong></span>
   </div>
