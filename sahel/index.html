@@ -989,15 +989,19 @@ window.focusGeocoder = function() {
 
   window.toggleFrontieresMaster = function() {
     state.master = !state.master;
-    // Quand on active le master pour la 1re fois, on active toutes les paires
-    // pour une vue globale des tensions frontalieres Sahel.
     if (state.master) {
+      // Activation du master : si aucun sous-calque n'est coche, on les active
+      // tous pour donner une vue globale des tensions frontalieres ouest.
       var activeCount = Object.keys(state.groups).filter(function(k) { return state.groups[k]; }).length;
       if (activeCount < 1) {
         Object.keys(state.groups).forEach(function(k) { state.groups[k] = true; });
       }
       var sub = document.getElementById('sb-frontieres-sub');
       if (sub) sub.classList.add('open');
+    } else {
+      // Desactivation du master : on eteint aussi tous les curseurs des paires
+      // pour que l'etat UI soit coherent (plus aucun toggle dore visible).
+      Object.keys(state.groups).forEach(function(k) { state.groups[k] = false; });
     }
     refresh();
     if (state.master) zoomToActive();
