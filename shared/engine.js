@@ -618,9 +618,25 @@ function renderSearchResults(actorMatches, placeMatches, query) {
     searchResults.appendChild(div);
   });
   if (!actorMatches.length && !placeMatches.length) {
-    searchResults.style.display = 'none';
+    // Etat vide : on affiche un message au lieu de masquer (P2)
+    var empty = document.createElement('div');
+    empty.className = 'search-result search-state-empty';
+    empty.innerHTML = '<div class="search-result-sub" style="flex:1;text-align:center;padding:4px 0">Aucun resultat · affinez la requete</div>';
+    searchResults.appendChild(empty);
+    searchResults.style.display = 'block';
     return;
   }
+  searchResults.style.display = 'block';
+}
+
+function renderSearchState(kind, msg) {
+  // kind: 'loading' | 'error'
+  searchResults.innerHTML = '';
+  var div = document.createElement('div');
+  div.className = 'search-result search-state-' + kind;
+  var color = kind === 'error' ? 'var(--err)' : 'var(--tx2)';
+  div.innerHTML = '<div class="search-result-sub" style="flex:1;text-align:center;padding:4px 0;color:' + color + '">' + msg + '</div>';
+  searchResults.appendChild(div);
   searchResults.style.display = 'block';
 }
 
@@ -637,18 +653,28 @@ searchInput.addEventListener('input', function () {
       if (name.includes(q) || desc.includes(q)) actorMatches.push(f);
     });
   });
-  renderSearchResults(actorMatches, [], q);
+  // Si pas de match local, on affiche 'Recherche...' pendant que le geocoder tourne
+  if (!actorMatches.length) renderSearchState('loading', 'Recherche · geocoder...');
+  else renderSearchResults(actorMatches, [], q);
   clearTimeout(searchGeoTimer);
   const myReqId = ++searchGeoReqId;
   searchGeoTimer = setTimeout(() => {
     const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(q) +
       '.json?access_token=' + mapboxgl.accessToken + '&language=fr&limit=5&bbox=' + SEARCH_BBOX +
       '&types=place,locality,region,country,poi';
-    fetch(url).then(r => r.json()).then(data => {
+    fetch(url).then(r => {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    }).then(data => {
       if (myReqId !== searchGeoReqId) return;
       const places = (data && data.features) ? data.features : [];
       renderSearchResults(actorMatches, places, q);
-    }).catch(() => {});
+    }).catch(err => {
+      if (myReqId !== searchGeoReqId) return;
+      // Si le local a des resultats, on les garde. Sinon etat erreur.
+      if (actorMatches.length) renderSearchResults(actorMatches, [], q);
+      else renderSearchState('error', 'Geocoder · code ' + (err && err.message || 'net') + ' · reessayer');
+    });
   }, 250);
 });
 document.addEventListener('click', (e) => {
