@@ -774,8 +774,8 @@ map.on('load', async () => {
   updateSliderLabel(0);
   // Prechargement en arriere-plan
   for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
-  // Auto-selection premiere periode
-  togglePeriod(0);
+  // Restauration etat depuis URL ou auto-selection premiere periode
+  if (!restoreStateFromURL()) togglePeriod(0);
   // Show tutorial AFTER everything is loaded (if not already seen)
   var tutKey = ZONE_CONFIG.TUTORIAL_KEY;
   if (tutKey && !localStorage.getItem(tutKey)) {
@@ -783,4 +783,54 @@ map.on('load', async () => {
     if (tutEl) tutEl.style.display = 'flex';
   }
 });
+
+// ── URL SHARING (P2) ─────────────────────────────────────────────────
+// Parametres supportes :
+//   ?p=0,1,2  liste d'index de periodes actives (ou 'all')
+//   ?actor=<nom>  filtre acteur actif
+// Permet de partager un lien reproduisant l'etat exact de l'analyse.
+function restoreStateFromURL() {
+  var params = new URLSearchParams(window.location.search);
+  var pParam = params.get('p');
+  var actorParam = params.get('actor');
+  var did = false;
+  if (pParam === 'all') {
+    toggleAll();
+    did = true;
+  } else if (pParam) {
+    var indices = pParam.split(',').map(function(s){return parseInt(s, 10);}).filter(function(i){return !isNaN(i) && i >= 0 && i < PERIODS.length;});
+    if (indices.length) {
+      indices.forEach(function(i){ togglePeriod(i); });
+      did = true;
+    }
+  }
+  if (actorParam) {
+    // Applique le filtre acteur apres les periodes (pour que applyFilter ait un set actif)
+    setTimeout(function(){ toggleActorFilter(decodeURIComponent(actorParam)); }, 80);
+    did = true;
+  }
+  return did;
+}
+
+var _urlSyncTimer = null;
+function syncStateToURL() {
+  if (_urlSyncTimer) clearTimeout(_urlSyncTimer);
+  _urlSyncTimer = setTimeout(function(){
+    var params = new URLSearchParams();
+    if (showAll) params.set('p', 'all');
+    else if (activePeriods.size) params.set('p', [...activePeriods].sort(function(a,b){return a-b;}).join(','));
+    if (activeFilter) params.set('actor', encodeURIComponent(activeFilter));
+    var q = params.toString();
+    var newUrl = window.location.pathname + (q ? '?' + q : '') + window.location.hash;
+    try { history.replaceState(null, '', newUrl); } catch(e) {}
+  }, 250);
+}
+
+// Hook sur togglePeriod / toggleAll / toggleActorFilter via proxy : on appelle syncStateToURL apres.
+var _origTogglePeriod = togglePeriod;
+togglePeriod = function(i){ _origTogglePeriod(i); syncStateToURL(); };
+var _origToggleAll = toggleAll;
+toggleAll = function(){ _origToggleAll(); syncStateToURL(); };
+var _origToggleActorFilter = toggleActorFilter;
+toggleActorFilter = function(n){ _origToggleActorFilter(n); syncStateToURL(); };
 map.on('error', (e) => console.warn('Mapbox error:', e));
