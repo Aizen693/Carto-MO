@@ -10,14 +10,14 @@
   --ln1:   rgba(255,255,255,0.12);
   --ln2:   rgba(255,255,255,0.20);
   --tx:    #c8cdd6;
-  --tx1:   #727a87;
-  --tx2:   #3e444e;
+  --tx1:   #8e96a2;  /* WCAG AA : 6.28:1 sur bg (etait #727a87 / 4.33) */
+  --tx2:   #6a7280;  /* WCAG AA non-text 3:1 : 3.87:1 sur bg (etait #3e444e / 1.91) */
   --txh:   #e8ecf2;
   --ac:    #c49a3c;
   --ach:   #e0b452;
   --acd:   rgba(196,154,60,0.09);
   --acb:   rgba(196,154,60,0.20);
-  --err:   #a84040;
+  --err:   #d76060;  /* WCAG AA : 5.12:1 sur bg (etait #a84040 / 3.10) */
   --bc:  'Barlow Condensed', 'Arial Narrow', sans-serif;
   --b:   'Barlow', system-ui, sans-serif;
   --m:   'JetBrains Mono', 'Courier New', monospace;
