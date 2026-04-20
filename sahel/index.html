@@ -175,29 +175,21 @@
         <div class="sb-toggle" id="sb-toggle-flux" onclick="toggleLayer('flux')"></div>
       </div>
       <div class="sb-layer-row sb-layer-parent" onclick="toggleFrontieresSection(event)">
-        <span>8. Frontieres <span class="sb-sub-badge" id="sb-frontieres-badge">0/5</span></span>
+        <span>8. Frontieres Ouest <span class="sb-sub-badge" id="sb-frontieres-badge">0/3</span></span>
         <div class="sb-toggle" id="sb-toggle-frontieres" onclick="event.stopPropagation();toggleFrontieresMaster()"></div>
       </div>
       <div class="sb-sublayers" id="sb-frontieres-sub">
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#ff5252"></span>Mali · Burkina Faso</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mli-bfa" onclick="toggleFrontieresGroup('mli-bfa')"></div>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e07c5a"></span>Mauritanie · Mali</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mrt-mli" onclick="toggleFrontieresGroup('mrt-mli')"></div>
         </div>
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#ff9800"></span>Burkina Faso · Niger</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-bfa-ner" onclick="toggleFrontieresGroup('bfa-ner')"></div>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#ff5252"></span>Mali · Senegal</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mli-sen" onclick="toggleFrontieresGroup('mli-sen')"></div>
         </div>
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#d4a017"></span>Mali · Niger</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mli-ner" onclick="toggleFrontieresGroup('mli-ner')"></div>
-        </div>
-        <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#29b6f6"></span>Niger · Tchad</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-ner-tcd" onclick="toggleFrontieresGroup('ner-tcd')"></div>
-        </div>
-        <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e07c5a"></span>Mali · Mauritanie</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mli-mrt" onclick="toggleFrontieresGroup('mli-mrt')"></div>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#d4a017"></span>Mali · Guinee</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mli-gin" onclick="toggleFrontieresGroup('mli-gin')"></div>
         </div>
       </div>
 
@@ -843,20 +835,15 @@ window.focusGeocoder = function() {
   // la ou sont concentrees les attaques (sources ACLED / AfricaCenter dans
   // la couche 6. Evenements securitaires).
   var GROUPS = {
-    'mli-bfa': { iso: ['MLI','BFA'], color: '#ff5252', label: 'Mali · Burkina Faso',
-                 bbox: [-5.4, 13.5, -0.1, 15.1] },  // Liptako-Gourma
-    'bfa-ner': { iso: ['BFA','NER'], color: '#ff9800', label: 'Burkina Faso · Niger',
-                 bbox: [-0.2, 11.4, 2.6, 14.3] },   // Tillaberi / Torodi
-    'mli-ner': { iso: ['MLI','NER'], color: '#d4a017', label: 'Mali · Niger',
-                 bbox: [0.3, 14.7, 4.3, 17.3] },    // Menaka / Gao
-    'ner-tcd': { iso: ['NER','TCD'], color: '#29b6f6', label: 'Niger · Tchad',
-                 bbox: [13.4, 13.0, 16.6, 23.6] },  // Lac Tchad
-    'mli-mrt': { iso: ['MLI','MRT'], color: '#e07c5a', label: 'Mali · Mauritanie',
-                 bbox: [-11.6, 14.6, -4.7, 17.1] } // Hodh ech Chargui / Bassikounou
+    'mrt-mli': { iso: ['MRT','MLI'], color: '#e07c5a', label: 'Mauritanie · Mali',
+                 bbox: [-11.8, 14.8, -4.7, 17.2] }, // Hodh ech Chargui / Kayes nord
+    'mli-sen': { iso: ['MLI','SEN'], color: '#ff5252', label: 'Mali · Senegal',
+                 bbox: [-12.5, 12.2, -10.3, 15.1] }, // Kayes / Bakel
+    'mli-gin': { iso: ['MLI','GIN'], color: '#d4a017', label: 'Mali · Guinee',
+                 bbox: [-11.6, 10.3, -7.8, 12.9] }  // Yanfolila / Siguiri
   };
   var state = { master: false, groups: {
-    'mli-bfa': false, 'bfa-ner': false, 'mli-ner': false,
-    'ner-tcd': false, 'mli-mrt': false
+    'mrt-mli': false, 'mli-sen': false, 'mli-gin': false
   } };
 
   function ensureSource() {
@@ -943,8 +930,8 @@ window.focusGeocoder = function() {
     return bbox;
   }
 
-  // Vue globale "Sahel vue d'ensemble" — utilisee quand les 3 groupes sont actifs
-  var GLOBAL_SAHEL_BBOX = [-17.5, 10.0, 12.0, 27.0];
+  // Vue globale "Sahel ouest" — utilisee quand toutes les paires sont actives
+  var GLOBAL_SAHEL_BBOX = [-17.5, 9.8, -4.7, 17.5];
 
   function zoomToActive() {
     var activeKeys = Object.keys(state.groups).filter(function(k) { return state.groups[k]; });
