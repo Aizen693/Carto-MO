@@ -1,0 +1,17 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[49.70,-15.30],[50.50,-15.30],[50.50,-16.20],[49.70,-16.20],[49.70,-15.30]]]},"properties":{"name":"Masoala","detail":"Peninsule NE, plus grand parc national (2300 km2), trafic bois de rose cible","statut":"Menace","sources":"WWF|https://www.wwf.mg UNESCO|https://whc.unesco.org/fr/list/1257"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[46.45,-24.55],[47.05,-24.55],[47.05,-25.15],[46.45,-25.15],[46.45,-24.55]]]},"properties":{"name":"Andohahela","detail":"SE, foret humide + epineuse","statut":"Protege","sources":"UNESCO|https://whc.unesco.org/fr/list/1257"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[46.70,-16.00],[47.25,-16.00],[47.25,-16.60],[46.70,-16.60],[46.70,-16.00]]]},"properties":{"name":"Ankarafantsika","detail":"Nord-ouest, foret seche","statut":"Protege"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[45.10,-22.30],[45.55,-22.30],[45.55,-22.80],[45.10,-22.80],[45.10,-22.30]]]},"properties":{"name":"Isalo","detail":"Sud, massif greseux, tourisme","statut":"Protege","sources":"Madagascar National Parks|https://www.parcs-madagascar.com"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[47.30,-21.10],[47.55,-21.10],[47.55,-21.40],[47.30,-21.40],[47.30,-21.10]]]},"properties":{"name":"Ranomafana","detail":"Est central, foret pluviale","statut":"Protege","sources":"UNESCO|https://whc.unesco.org/fr/list/1257"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[48.30,-18.70],[48.55,-18.70],[48.55,-19.10],[48.30,-19.10],[48.30,-18.70]]]},"properties":{"name":"Andasibe-Mantadia","detail":"Est, lemuriens indri, tres frequente","statut":"Protege"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[48.95,-12.70],[49.35,-12.70],[49.35,-13.20],[48.95,-13.20],[48.95,-12.70]]]},"properties":{"name":"Ankarana","detail":"Nord, massif karstique tsingy","statut":"Protege"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[44.55,-18.80],[44.95,-18.80],[44.95,-19.30],[44.55,-19.30],[44.55,-18.80]]]},"properties":{"name":"Tsingy de Bemaraha","detail":"Ouest, UNESCO, karsts aiguilles","statut":"Protege","sources":"UNESCO|https://whc.unesco.org/fr/list/494"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[44.15,-20.10],[44.55,-20.10],[44.55,-20.40],[44.15,-20.40],[44.15,-20.10]]]},"properties":{"name":"Menabe Antimena (Allee Baobabs)","detail":"Ouest, baobabs emblematiques, deforestation","statut":"Menace","sources":"WWF|https://www.wwf.mg"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[49.60,-14.25],[49.95,-14.25],[49.95,-14.70],[49.60,-14.70],[49.60,-14.25]]]},"properties":{"name":"Marojejy","detail":"NE, UNESCO, Lemuriens propitheques soyeux","statut":"Menace bois de rose","sources":"UNESCO|https://whc.unesco.org/fr/list/1257"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[46.35,-19.60],[46.65,-19.60],[46.65,-19.90],[46.35,-19.90],[46.35,-19.60]]]},"properties":{"name":"Mantadia / Analamazaotra","detail":"Centre-est, foret primaire","statut":"Protege"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[49.40,-14.80],[49.80,-14.80],[49.80,-15.20],[49.40,-15.20],[49.40,-14.80]]]},"properties":{"name":"Anjanaharibe-Sud","detail":"NE, Lemuriens, trafic bois rose","statut":"Menace","sources":"WWF|https://www.wwf.mg"}}
+  ]
+}
