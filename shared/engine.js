@@ -633,7 +633,7 @@ function renderSearchResults(actors, places) {
     actors.slice(0, 5).forEach(renderActorRow);
   }
   if (places.length) {
-    renderCategoryHeader('Lieux · Villes · Pays · Regions');
+    renderCategoryHeader('Lieu · Ville · Region');
     places.slice(0, 8).forEach(renderPlaceRow);
   }
   searchResults.style.display = 'block';
