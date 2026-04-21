@@ -1,1 +1,9 @@
-{"type":"FeatureCollection","features":[]}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.52,-18.92]},"properties":{"name":"Transition Randrianirina","Date":"2026-04-05","Pays + Lieu":"Madagascar - Antananarivo","type":"Geopolitique","detail":"Etapes institutionnelles (HCC, CENI) et calendrier electoral. Pression FMI pour reprise programme.","rank":"B2","sources":"FMI|https://www.imf.org/fr/Countries/MDG RFI|https://www.rfi.fr/fr/afrique/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[50.20,-15.70]},"properties":{"name":"Reseaux vanille (SAVA)","Date":"2026-04-08","Pays + Lieu":"Madagascar - SAVA / Antalaha","type":"Economique","detail":"Pattern : tensions pre-recolte (mai-juin). Vol de gousses vertes, violences sur producteurs. Volatilite prix mondiaux.","rank":"A2","sources":"Fairtrade|https://www.fairtrade.net/product/vanilla Mongabay|https://fr.mongabay.com/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.95,-15.70]},"properties":{"name":"Reseaux bois de rose (SAVA / Masoala)","Date":"2026-04-10","Pays + Lieu":"Madagascar - Parc Masoala","type":"Incursion","detail":"Pattern : fin de saison humide, reprise des incursions dans parc Masoala.","rank":"A2","sources":"EIA|https://eia-international.org/forests/ WWF|https://www.wwf.mg/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.07,-25.17]},"properties":{"name":"Crise Grand Sud","Date":"2026-04-12","Pays + Lieu":"Madagascar - Androy / Ambovombe","type":"Humanitaire","detail":"Crise alimentaire chronique Grand Sud. Saison de soudure. PAM rapporte une pression persistante malgre les interventions.","rank":"A1","sources":"PAM|https://fr.wfp.org/pays/madagascar OCHA|https://reliefweb.int/country/mdg FAO|https://www.fao.org/madagascar/fr/"}}
+  ]
+}
