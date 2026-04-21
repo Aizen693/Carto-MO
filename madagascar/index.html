@@ -724,9 +724,9 @@ const ZONE_CONFIG = {
     id: 'ethnies',
     file: 'ethnies.geojson',
     layers: [
-      { id: 'ethnies-fill', type: 'fill', paint: { 'fill-color': ethniesColorExpr, 'fill-opacity': 0.18 } },
-      { id: 'ethnies-outline', type: 'line', paint: { 'line-color': ethniesColorExpr, 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.2, 8, 2, 12, 3], 'line-opacity': 0.7 } },
-      { id: 'ethnies-label', type: 'symbol', paint: { 'text-color': 'rgba(255,255,255,0.85)' }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 11, 6, 15, 10, 19], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-transform': 'uppercase', 'text-letter-spacing': 0.3, 'text-max-width': 14, 'text-allow-overlap': false, 'text-padding': 40 } }
+      { id: 'ethnies-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 10, 8, 16, 12, 22], 'circle-color': ethniesColorExpr, 'circle-opacity': 0.12, 'circle-blur': 1.1 } },
+      { id: 'ethnies-dot', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 6, 12, 9], 'circle-color': ethniesColorExpr, 'circle-stroke-width': 0.8, 'circle-stroke-color': '#0d1117', 'circle-opacity': 0.9 } },
+      { id: 'ethnies-label', type: 'symbol', paint: { 'text-color': 'rgba(255,255,255,0.85)', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 10, 6, 12, 10, 15], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-transform': 'uppercase', 'text-letter-spacing': 0.15, 'text-offset': [0, 1.2], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-padding': 10 } }
     ]
   });
 
@@ -811,20 +811,19 @@ const ZONE_CONFIG = {
     ]
   });
 
-  /* ── CALQUE : Parcs nationaux (polygones, vert forestier) ── */
+  /* ── CALQUE : Parcs nationaux (points vert forestier) ── */
   createLayerToggle({
     id: 'parcs',
     file: 'parcs.geojson',
     layers: [
-      { id: 'parcs-fill', type: 'fill', paint: { 'fill-color': '#2e7d32', 'fill-opacity': 0.18 } },
-      { id: 'parcs-outline', type: 'line', paint: { 'line-color': '#66bb6a', 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1, 8, 1.6, 12, 2.2], 'line-opacity': 0.75, 'line-dasharray': [2, 2] } },
-      { id: 'parcs-label', type: 'symbol', paint: { 'text-color': '#a5d6a7', 'text-halo-color': 'rgba(0,0,0,0.85)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 12, 12, 15], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-transform': 'uppercase', 'text-letter-spacing': 0.12, 'text-max-width': 10, 'text-padding': 30 } }
+      { id: 'parcs-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 14, 12, 20], 'circle-color': '#2e7d32', 'circle-opacity': 0.12, 'circle-blur': 1.2 } },
+      { id: 'parcs-dot', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 6, 12, 9], 'circle-color': '#2e7d32', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#66bb6a', 'circle-opacity': 0.9 } },
+      { id: 'parcs-label', type: 'symbol', paint: { 'text-color': '#a5d6a7', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 11, 12, 14], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-transform': 'uppercase', 'text-letter-spacing': 0.12, 'text-offset': [0, 1.2], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-padding': 10 } }
     ]
   });
 
-  /* ── CALQUE : Zones maritimes (ZEE + piraterie + peche INN) ── */
+  /* ── CALQUE : Zones maritimes (points seulement, pas de polygones) ── */
   var zonesMaritimesColorExpr = ['match', ['get', 'type'],
-    'ZEE', '#29b6f6',
     'Piraterie', '#e63946',
     'Peche INN', '#ff9800',
     'Port', '#c49a3c',
@@ -833,10 +832,10 @@ const ZONE_CONFIG = {
     id: 'zones-maritimes',
     file: 'zones-maritimes.geojson',
     layers: [
-      { id: 'zm-fill', type: 'fill', filter: ['==', ['geometry-type'], 'Polygon'], paint: { 'fill-color': zonesMaritimesColorExpr, 'fill-opacity': 0.12 } },
-      { id: 'zm-outline', type: 'line', filter: ['==', ['geometry-type'], 'Polygon'], paint: { 'line-color': zonesMaritimesColorExpr, 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1, 8, 1.6, 12, 2.4], 'line-opacity': 0.7, 'line-dasharray': [3, 2] } },
-      { id: 'zm-dots', type: 'circle', filter: ['==', ['geometry-type'], 'Point'], paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 3, 8, 5, 12, 8], 'circle-color': zonesMaritimesColorExpr, 'circle-stroke-width': 0.8, 'circle-stroke-color': '#0d1117' } },
-      { id: 'zm-label', type: 'symbol', paint: { 'text-color': 'rgba(220,240,255,0.85)', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 11, 12, 13], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-letter-spacing': 0.06, 'text-max-width': 12, 'text-padding': 30 } }
+      { id: 'zm-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 11, 8, 18, 12, 26], 'circle-color': zonesMaritimesColorExpr, 'circle-opacity': 0.10, 'circle-blur': 1.2 } },
+      { id: 'zm-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 5, 8, 8, 12, 12], 'circle-color': 'transparent', 'circle-stroke-width': 1, 'circle-stroke-color': zonesMaritimesColorExpr, 'circle-stroke-opacity': 0.45 } },
+      { id: 'zm-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 3, 8, 5, 12, 8], 'circle-color': zonesMaritimesColorExpr, 'circle-stroke-width': 0.8, 'circle-stroke-color': '#0d1117' } },
+      { id: 'zm-label', type: 'symbol', paint: { 'text-color': 'rgba(220,240,255,0.85)', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 11, 12, 13], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-letter-spacing': 0.06, 'text-offset': [0, 1.2], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-padding': 10 } }
     ]
   });
 
