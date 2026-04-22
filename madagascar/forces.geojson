@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.52,-18.92]},"properties":{"name":"Ministere Defense - Antananarivo","force":"FADM","type":"Etat-major","detail":"Etat-major FADM, ministere defense","statut":"Operationnel","sources":"Armees Madagascar|https://www.defense.gov.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.48,-18.79]},"properties":{"name":"Base aerienne Ivato","force":"FADM","type":"Base aerienne","detail":"Base aerienne principale, helicopteres + transport","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.49,-18.85]},"properties":{"name":"Camp militaire CAPSAT - Soanierana","force":"CAPSAT","type":"Caserne","detail":"Corps ayant dirige le basculement politique Oct 2025","statut":"Actif","sources":"RFI|https://www.rfi.fr Le Monde|https://www.lemonde.fr"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.28,-12.28]},"properties":{"name":"Base navale Antsiranana","force":"FADM","type":"Base navale","detail":"Principale base navale, surveillance maritime","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.98,-25.03]},"properties":{"name":"Base operationnelle Fort-Dauphin","force":"FADM","type":"Base operationnelle","detail":"Appui surveillance QMM + couverture Anosy","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.50,-18.90]},"properties":{"name":"Gendarmerie nationale - HQ","force":"Gendarmerie nationale","type":"Etat-major","detail":"Direction centrale gendarmerie","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.25,-22.55]},"properties":{"name":"Gendarmerie Fianarantsoa","force":"Gendarmerie nationale","type":"Brigade regionale","detail":"Couverture hautes terres sud + liaison dahalo","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.10,-23.35]},"properties":{"name":"Gendarmerie Ihosy","force":"Gendarmerie nationale","type":"Brigade","detail":"Carrefour anti-dahalo Bara/Antandroy","statut":"Sous-dotee","sources":"Crisis Group|https://www.crisisgroup.org"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.07,-25.17]},"properties":{"name":"Gendarmerie Ambovombe","force":"Gendarmerie nationale","type":"Brigade","detail":"Zone dahalo Androy, chef-lieu","statut":"Sous-dotee"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.85,-24.72]},"properties":{"name":"Gendarmerie Betroka","force":"Gendarmerie nationale","type":"Brigade","detail":"Carrefour dahalo Anosy/Androy","statut":"Sous-dotee"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.39,-18.15]},"properties":{"name":"Gendarmerie Toamasina","force":"Gendarmerie nationale","type":"Brigade regionale","detail":"Port de Toamasina","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[50.27,-14.67]},"properties":{"name":"Gendarmerie Sambava","force":"Gendarmerie nationale","type":"Brigade","detail":"SAVA, mission anti-trafic bois de rose + vanille","statut":"Operationnel","sources":"EIA|https://eia-international.org"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[45.37,-22.42]},"properties":{"name":"Gendarmerie Ilakaka","force":"Gendarmerie nationale","type":"Brigade","detail":"Saphir, anti-orpaillage et trafic","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.52,-18.93]},"properties":{"name":"Police nationale - HQ","force":"Police nationale","type":"Etat-major","detail":"Direction centrale police, urbain Antananarivo","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.53,-18.88]},"properties":{"name":"DGSP - Antananarivo","force":"DGSP","type":"Renseignement","detail":"Direction generale de la securite d'Etat","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.36,-18.13]},"properties":{"name":"Commandos marins Toamasina","force":"Commandos marins","type":"Unite speciale","detail":"Protection port + interventions maritimes","statut":"Operationnel"}}
+  ]
+}

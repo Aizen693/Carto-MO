@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Algor Int — Attaques Sahel 2026</title>
+<title>Algor Int — Madagascar · Securite &amp; trafics 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
@@ -65,7 +65,7 @@
       <img src="algor_int_logo.jpg" alt="" style="height:28px;opacity:0.6">
       <div>
         <div class="zl-title">Algor Int</div>
-        <div class="zl-sub">Acces restreint -- Sahel</div>
+        <div class="zl-sub">Acces restreint -- Madagascar</div>
       </div>
     </div>
     <div id="zone-login-error"></div>
@@ -81,7 +81,7 @@
     <a href="../index.html" title="Retour à la sélection" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
       <img src="algor_int_logo.jpg" alt="Algor Int" style="height:28px;opacity:0.7;">
       <div>
-        <h1>Attaques jihadistes — Sahel</h1>
+        <h1>Madagascar — Securite &amp; trafics</h1>
         <p>Cartographie d'acteurs · 2026</p>
       </div>
     </a>
@@ -113,16 +113,16 @@
 
 <div id="hover-tooltip" class="zone-gated"></div>
 
-<div id="btn-center-sahel" class="zone-gated" onclick="centerMap()" title="Recentrer sur le Sahel" style="
+<div id="btn-center-madagascar" class="zone-gated" onclick="centerMap()" title="Recentrer sur Madagascar" style="
   position: absolute; bottom: 60px; left: 12px; z-index: 6;
   background: rgba(17,18,20,0.97); border: 1px solid rgba(255,255,255,0.07);
   border-top: 1px solid #c49a3c; padding: 6px 11px; cursor: pointer;
   font: 500 8px/1 'JetBrains Mono', monospace; color: #727a87;
   letter-spacing: 0.14em; text-transform: uppercase; user-select: none;
-  transition: color .1s, background .1s; white-space: nowrap;
+  transition: color var(--mo-fast), background var(--mo-fast); white-space: nowrap;
 " onmouseover="this.style.color='#e0b452';this.style.background='rgba(196,154,60,0.09)'"
    onmouseout="this.style.color='#727a87';this.style.background='rgba(17,18,20,0.97)'">
-  Recentrer Sahel
+  Recentrer Madagascar
 </div>
 
 <div id="sidebar-overlay" class="zone-gated" onclick="toggleSidebar()"></div>
@@ -174,31 +174,13 @@
         <span>7. Flux &amp; trafics</span>
         <div class="sb-toggle" id="sb-toggle-flux" onclick="toggleLayer('flux')"></div>
       </div>
-      <div class="sb-layer-row sb-layer-parent" onclick="toggleFrontieresSection(event)">
-        <span>8. Frontieres Ouest <span class="sb-sub-badge" id="sb-frontieres-badge">0/5</span></span>
-        <div class="sb-toggle" id="sb-toggle-frontieres" onclick="event.stopPropagation();toggleFrontieresMaster()"></div>
+      <div class="sb-layer-row">
+        <span>8. Parcs nationaux</span>
+        <div class="sb-toggle" id="sb-toggle-parcs" onclick="toggleLayer('parcs')"></div>
       </div>
-      <div class="sb-sublayers" id="sb-frontieres-sub">
-        <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#29b6f6"></span>Mauritanie · Sahara occ.</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mrt-esh" onclick="toggleFrontieresGroup('mrt-esh')"></div>
-        </div>
-        <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#ab47bc"></span>Mauritanie · Algerie</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mrt-dza" onclick="toggleFrontieresGroup('mrt-dza')"></div>
-        </div>
-        <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e07c5a"></span>Mauritanie · Mali</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mrt-mli" onclick="toggleFrontieresGroup('mrt-mli')"></div>
-        </div>
-        <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#ff5252"></span>Mali · Senegal</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mli-sen" onclick="toggleFrontieresGroup('mli-sen')"></div>
-        </div>
-        <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#d4a017"></span>Mali · Guinee</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mli-gin" onclick="toggleFrontieresGroup('mli-gin')"></div>
-        </div>
+      <div class="sb-layer-row">
+        <span>9. Zones maritimes</span>
+        <div class="sb-toggle" id="sb-toggle-zones-maritimes" onclick="toggleLayer('zones-maritimes')"></div>
       </div>
 
       <div class="sb-cat-label">Style carte</div>
@@ -257,51 +239,56 @@
 <!-- ZONE CONFIG -->
 <script>
 const ZONE_CONFIG = {
-  ZONE_ID: 'sahel',
+  ZONE_ID: 'madagascar',
   OTAN_DATA: {},
   ACTOR_GROUPS: {
-    'Groupes jihadistes': [
-      'JNIM', 'GSIM', 'AQMI', 'Ansar Dine', 'MUJAO', 'Al-Mourabitoun',
-      'Katiba Macina', 'Katiba Serma', 'Ansarul Islam',
-      'ISWAP', 'ISGS', 'État Islamique Sahel', 'Boko Haram'
+    'Forces étatiques': [
+      'FADM', 'Gendarmerie nationale', 'Police nationale',
+      'CAPSAT', 'DGSP', 'FIGN', 'Commandos marins'
     ],
-    'Forces étatiques & coalitions': [
-      'Armée malienne (FAMA)', 'Armée burkinabè (ANA)', 'Armée nigérienne (FAN)',
-      'Armée tchadienne (ANT)', 'Armée mauritanienne',
-      'Force Barkhane', 'Force Serval', 'G5 Sahel', 'MINUSMA',
-      'MISAHEL', 'Coalition multinationale', 'Wagner / Africa Corps'
+    'Banditisme & groupes armés': [
+      'Dahalo', 'Malaso', 'Reseaux dahalo Androy', 'Reseaux dahalo Anosy',
+      'Gangs urbains Antananarivo', 'Reseaux kidnapping Karana'
     ],
-    'Milices & groupes armés': [
-      'GATIA', 'MSA', 'Imghad', 'Dan Nan Ambassagou',
-      'VDP / Dozos', 'GSSP', 'Milices Koglweogo', 'Milices Peules'
+    'Mouvements politiques': [
+      'Transition Randrianirina', 'Gen Z Madagascar', 'Mouvement Hery Vaovao',
+      'TGV (ex-Rajoelina)', 'HVM (Ravalomanana)', 'Opposition civile'
     ],
-    'Mouvements politico-militaires': [
-      'MNLA', 'CMA', 'Plateforme', 'HCUA', 'MAA', 'CMFPR'
+    'Trafics & reseaux criminels': [
+      'Reseaux bois de rose (SAVA / Masoala)', 'Reseaux vanille (SAVA)',
+      'Orpailleurs illegaux', 'Reseaux saphir (Ilakaka)',
+      'Reseaux tortues / lemuriens', 'Piraterie canal Mozambique',
+      'Peche INN flottes etrangeres'
+    ],
+    'International': [
+      'AU / UA', 'SADC', 'ONU', 'France', 'UE', 'FMI', 'Banque mondiale', 'USA'
     ]
   },
   ACTOR_COLORS: {
-    'JNIM':'#e63946','GSIM':'#c1121f','AQMI':'#9d0208','Ansar Dine':'#dc2f02',
-    'MUJAO':'#e85d04','Al-Mourabitoun':'#f48c06','Katiba Macina':'#ff4d6d',
-    'Katiba Serma':'#ff6b35','Ansarul Islam':'#faa307','ISWAP':'#6d023a',
-    'ISGS':'#7b2d8b','État Islamique Sahel':'#9b2c9b','Boko Haram':'#4a0e4e',
-    'Armée malienne (FAMA)':'#2e7d32','Armée burkinabè (ANA)':'#33691e',
-    'Armée nigérienne (FAN)':'#558b2f','Armée tchadienne (ANT)':'#7cb342',
-    'Armée mauritanienne':'#9ccc65','Force Barkhane':'#2d6a4f',
-    'Force Serval':'#40916c','G5 Sahel':'#52b788','MINUSMA':'#74c69d',
-    'MISAHEL':'#95d5b2','Coalition multinationale':'#1b4332','Wagner / Africa Corps':'#6c757d',
-    'GATIA':'#ccaa00','MSA':'#b5a300','Imghad':'#9c8b00','Dan Nan Ambassagou':'#d4a017',
-    'VDP / Dozos':'#c9a227','GSSP':'#b8860b','Milices Koglweogo':'#a07800','Milices Peules':'#8b6914',
-    'MNLA':'#ab47bc','CMA':'#8e24aa','Plateforme':'#6a1b9a','HCUA':'#ce93d8','MAA':'#ba68c8','CMFPR':'#9c27b0'
+    'FADM':'#2e7d32','Gendarmerie nationale':'#33691e','Police nationale':'#558b2f',
+    'CAPSAT':'#1b5e20','DGSP':'#4caf50','FIGN':'#388e3c','Commandos marins':'#66bb6a',
+    'Dahalo':'#e63946','Malaso':'#c1121f','Reseaux dahalo Androy':'#9d0208',
+    'Reseaux dahalo Anosy':'#dc2f02','Gangs urbains Antananarivo':'#ff4d6d',
+    'Reseaux kidnapping Karana':'#ff6b35',
+    'Transition Randrianirina':'#6a1b9a','Gen Z Madagascar':'#ab47bc',
+    'Mouvement Hery Vaovao':'#ba68c8','TGV (ex-Rajoelina)':'#ce93d8',
+    'HVM (Ravalomanana)':'#8e24aa','Opposition civile':'#9c27b0',
+    'Reseaux bois de rose (SAVA / Masoala)':'#a07800','Reseaux vanille (SAVA)':'#d4a017',
+    'Orpailleurs illegaux':'#c9a227','Reseaux saphir (Ilakaka)':'#4fc3f7',
+    'Reseaux tortues / lemuriens':'#8b6914','Piraterie canal Mozambique':'#29b6f6',
+    'Peche INN flottes etrangeres':'#0288d1',
+    'AU / UA':'#95d5b2','SADC':'#52b788','ONU':'#74c69d','France':'#40916c',
+    'UE':'#2d6a4f','FMI':'#1b4332','Banque mondiale':'#081c15','USA':'#6c757d'
   },
   normalizeName: function(raw) {
     if (!raw) return null;
     const n = raw.trim();
     if (!n || /^\d{4}-\d{4}$/.test(n)) return null;
     const MAP = {
-      'JNIM ': 'JNIM', 'AQMI ': 'AQMI', 'Barkhane': 'Force Barkhane',
-      'Serval': 'Force Serval', 'FAMA': 'Armée malienne (FAMA)',
-      'ANA': 'Armée burkinabè (ANA)', 'FAN': 'Armée nigérienne (FAN)',
-      'ANT': 'Armée tchadienne (ANT)',
+      'Armee malgache': 'FADM',
+      'Armee FADM': 'FADM',
+      'Gendarmerie': 'Gendarmerie nationale',
+      'Police': 'Police nationale'
     };
     return MAP[n] !== undefined ? MAP[n] : n;
   },
@@ -312,19 +299,21 @@ const ZONE_CONFIG = {
     { label: 'Fev 15-28', file: '2026-fev-15-28.geojson' },
     { label: 'Mars 01-15', file: '2026-mars-01-15.geojson' },
     { label: 'Mars 16-31', file: '2026-mars-16-31.geojson' },
+    { label: 'Avr 01-15', file: '2026-avr-01-15.geojson' },
+    { label: 'Avr 16-21', file: '2026-avr-16-21.geojson' },
   ],
   STYLES: {
     standard:  'mapbox://styles/mapbox/standard',
     satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
     dark:      'mapbox://styles/mapbox/dark-v11'
   },
-  MAP_CENTER: [-9.5, 15.0],
-  MAP_ZOOM: 5.4,
-  MAP_BEARING: -8,
+  MAP_CENTER: [47.0, -19.0],
+  MAP_ZOOM: 5.5,
+  MAP_BEARING: 0,
   MAP_ZONES: null,
-  SEARCH_BBOX: [-20, 2, 25, 30],
-  BADGE_ALL_TEXT: 'Toutes · Jan–Mars 2026',
-  TUTORIAL_KEY: 'algor-tutorial-sahel-seen'
+  SEARCH_BBOX: [41, -27, 52, -10],
+  BADGE_ALL_TEXT: 'Toutes · Jan–Avr 2026',
+  TUTORIAL_KEY: 'algor-tutorial-madagascar-seen'
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
@@ -336,7 +325,7 @@ const ZONE_CONFIG = {
   const calques3D = []; // track calques with 3D layers for pitch updates
 
   // Calque popup color map
-  var calqueColors = { ethnies: '#e07c5a', forces: '#e63946', 'points-eau': '#29b6f6', population: '#ab47bc', mines: '#d4a017', infrastructures: '#66bb6a', evenements: '#ff5252', flux: '#ff9800' };
+  var calqueColors = { ethnies: '#e07c5a', forces: '#e63946', 'points-eau': '#29b6f6', population: '#ab47bc', mines: '#d4a017', infrastructures: '#66bb6a', evenements: '#ff5252', flux: '#ff9800', parcs: '#2e7d32', 'zones-maritimes': '#29b6f6' };
 
   function linkifyText(text) {
     return text.replace(/(https?:\/\/[^\s<>"']+)/g, function(url) {
@@ -705,31 +694,39 @@ const ZONE_CONFIG = {
 
   // Bulk toggle all 7 layers
   window.toggleAllLayers = function(on) {
-    ['ethnies','forces','population','mines','infrastructures','evenements','flux'].forEach(function(id) {
+    ['ethnies','forces','population','mines','infrastructures','evenements','flux','parcs','zones-maritimes'].forEach(function(id) {
       var el = document.getElementById('sb-toggle-' + id);
       if (!el) return;
       var isOn = el.classList.contains('on');
       if (on && !isOn) window.toggleLayer(id);
       else if (!on && isOn) window.toggleLayer(id);
     });
-    // Frontieres master
-    var frMaster = document.getElementById('sb-toggle-frontieres');
-    if (frMaster && typeof window.toggleFrontieresMaster === 'function') {
-      var isFrOn = frMaster.classList.contains('on');
-      if (on && !isFrOn) window.toggleFrontieresMaster();
-      else if (!on && isFrOn) window.toggleFrontieresMaster();
-    }
   };
 
-  /* ── CALQUE : Ethnies & sous-groupes ── */
-  var ethniesColorExpr = ['match', ['get', 'name'], 'Bambara', '#c49a3c', 'Peul / Fulani', '#e07c5a', 'Dogon', '#8d6e63', 'Songhai', '#d4a017', 'Touareg', '#a0887a', 'Mossi', '#66bb6a', 'Haoussa', '#ef9a9a', 'Zarma / Djerma', '#78909c', 'Senoufo', '#a1887f', 'Soninke / Sarakole', '#ce93d8', 'Bobo', '#ffb74d', 'Gourmantche', '#b8860b', 'Lobi / Dagara', '#9e9e9e', 'Maure', '#bca58a', 'Malinke / Mandingue', '#d1884f', 'Soussou', '#4db6ac', 'Guerze / Kpelle', '#7cb342', 'Temne', '#ba68c8', 'Mende', '#9575cd', 'Wolof', '#4fc3f7', 'Serer', '#81c784', 'Diola', '#26a69a', 'Akan / Baoule', '#ffa726', 'Krou / Bete', '#8d6e63', 'Lagunaires (Ebrie / Adjoukrou)', '#90a4ae', '#888888'];
+  /* ── CALQUE : Ethnies & sous-groupes (Madagascar) ── */
+  var ethniesColorExpr = ['match', ['get', 'name'],
+    'Merina', '#c49a3c',
+    'Betsileo', '#e07c5a',
+    'Sakalava', '#4fc3f7',
+    'Tsimihety', '#66bb6a',
+    'Betsimisaraka', '#81c784',
+    'Antandroy', '#e63946',
+    'Antanosy', '#ff6b35',
+    'Bara', '#d4a017',
+    'Sihanaka', '#26a69a',
+    'Antemoro', '#ab47bc',
+    'Antakarana', '#29b6f6',
+    'Mahafaly', '#a0887a',
+    'Vezo', '#4db6ac',
+    'Antaisaka', '#9575cd',
+    '#888888'];
   createLayerToggle({
     id: 'ethnies',
     file: 'ethnies.geojson',
     layers: [
-      { id: 'ethnies-fill', type: 'fill', paint: { 'fill-color': ethniesColorExpr, 'fill-opacity': 0.18 } },
-      { id: 'ethnies-outline', type: 'line', paint: { 'line-color': ethniesColorExpr, 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.2, 8, 2, 12, 3], 'line-opacity': 0.7 } },
-      { id: 'ethnies-label', type: 'symbol', paint: { 'text-color': 'rgba(255,255,255,0.85)' }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 11, 6, 15, 10, 19], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-transform': 'uppercase', 'text-letter-spacing': 0.3, 'text-max-width': 14, 'text-allow-overlap': false, 'text-padding': 40 } }
+      { id: 'ethnies-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 10, 8, 16, 12, 22], 'circle-color': ethniesColorExpr, 'circle-opacity': 0.12, 'circle-blur': 1.1 } },
+      { id: 'ethnies-dot', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 6, 12, 9], 'circle-color': ethniesColorExpr, 'circle-stroke-width': 0.8, 'circle-stroke-color': '#0d1117', 'circle-opacity': 0.9 } },
+      { id: 'ethnies-label', type: 'symbol', paint: { 'text-color': 'rgba(255,255,255,0.85)', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 10, 6, 12, 10, 15], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-transform': 'uppercase', 'text-letter-spacing': 0.15, 'text-offset': [0, 1.2], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-padding': 10 } }
     ]
   });
 
@@ -814,6 +811,33 @@ const ZONE_CONFIG = {
     ]
   });
 
+  /* ── CALQUE : Parcs nationaux (points vert forestier) ── */
+  createLayerToggle({
+    id: 'parcs',
+    file: 'parcs.geojson',
+    layers: [
+      { id: 'parcs-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 14, 12, 20], 'circle-color': '#2e7d32', 'circle-opacity': 0.12, 'circle-blur': 1.2 } },
+      { id: 'parcs-dot', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 6, 12, 9], 'circle-color': '#2e7d32', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#66bb6a', 'circle-opacity': 0.9 } },
+      { id: 'parcs-label', type: 'symbol', paint: { 'text-color': '#a5d6a7', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 11, 12, 14], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-transform': 'uppercase', 'text-letter-spacing': 0.12, 'text-offset': [0, 1.2], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-padding': 10 } }
+    ]
+  });
+
+  /* ── CALQUE : Zones maritimes (points seulement, pas de polygones) ── */
+  var zonesMaritimesColorExpr = ['match', ['get', 'type'],
+    'Piraterie', '#e63946',
+    'Peche INN', '#ff9800',
+    'Port', '#c49a3c',
+    '#4fc3f7'];
+  createLayerToggle({
+    id: 'zones-maritimes',
+    file: 'zones-maritimes.geojson',
+    layers: [
+      { id: 'zm-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 11, 8, 18, 12, 26], 'circle-color': zonesMaritimesColorExpr, 'circle-opacity': 0.10, 'circle-blur': 1.2 } },
+      { id: 'zm-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 5, 8, 8, 12, 12], 'circle-color': 'transparent', 'circle-stroke-width': 1, 'circle-stroke-color': zonesMaritimesColorExpr, 'circle-stroke-opacity': 0.45 } },
+      { id: 'zm-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 3, 8, 5, 12, 8], 'circle-color': zonesMaritimesColorExpr, 'circle-stroke-width': 0.8, 'circle-stroke-color': '#0d1117' } },
+      { id: 'zm-label', type: 'symbol', paint: { 'text-color': 'rgba(220,240,255,0.85)', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 11, 12, 13], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-letter-spacing': 0.06, 'text-offset': [0, 1.2], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-padding': 10 } }
+    ]
+  });
 
 
   // Re-add all layers on style change
@@ -835,217 +859,17 @@ window.focusGeocoder = function() {
   if (input) { input.focus(); input.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
 };
 
-/* ── CALQUE FRONTIERES (sous-calques par groupes de pays) ── */
-(function() {
-  var FRONTIERES_SOURCE_ID = 'frontieres-countries';
-  // Chaque sous-calque = une paire de pays. Le bbox cadre etroitement la bande
-  // frontaliere (pas le pays entier) pour zoomer sur la frontiere elle-meme,
-  // la ou sont concentrees les attaques (sources ACLED / AfricaCenter dans
-  // la couche 6. Evenements securitaires).
-  var GROUPS = {
-    'mrt-esh': { iso: ['MRT','ESH'], color: '#29b6f6', label: 'Mauritanie · Sahara occ.',
-                 bbox: [-17.1, 20.8, -8.5, 23.2] }, // cote atlantique -> tri-point DZA
-    'mrt-dza': { iso: ['MRT','DZA'], color: '#ab47bc', label: 'Mauritanie · Algerie',
-                 bbox: [-9.0, 24.8, -4.5, 27.5] }, // segment court nord-est (tri-points ESH/MLI)
-    'mrt-mli': { iso: ['MRT','MLI'], color: '#e07c5a', label: 'Mauritanie · Mali',
-                 bbox: [-11.8, 14.8, -4.7, 17.2] }, // Hodh ech Chargui / Kayes nord
-    'mli-sen': { iso: ['MLI','SEN'], color: '#ff5252', label: 'Mali · Senegal',
-                 bbox: [-12.5, 12.2, -10.3, 15.1] }, // Kayes / Bakel
-    'mli-gin': { iso: ['MLI','GIN'], color: '#d4a017', label: 'Mali · Guinee',
-                 bbox: [-11.6, 10.3, -7.8, 12.9] }  // Yanfolila / Siguiri
-  };
-  var state = { master: false, groups: {
-    'mrt-esh': false, 'mrt-dza': false, 'mrt-mli': false, 'mli-sen': false, 'mli-gin': false
-  } };
-
-  function ensureSource() {
-    if (map.getSource(FRONTIERES_SOURCE_ID)) return true;
-    try {
-      map.addSource(FRONTIERES_SOURCE_ID, {
-        type: 'vector',
-        url: 'mapbox://mapbox.country-boundaries-v1'
-      });
-      return true;
-    } catch (e) { return false; }
-  }
-
-  function groupLayerIds(key) {
-    return { fill: 'fr-' + key + '-fill', line: 'fr-' + key + '-line' };
-  }
-
-  function ensureGroupLayers(key) {
-    if (!ensureSource()) return false;
-    var g = GROUPS[key];
-    var ids = groupLayerIds(key);
-    var filter = ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', g.iso]];
-    try {
-      if (!map.getLayer(ids.fill)) {
-        map.addLayer({
-          id: ids.fill,
-          type: 'fill',
-          source: FRONTIERES_SOURCE_ID,
-          'source-layer': 'country_boundaries',
-          filter: filter,
-          paint: { 'fill-color': g.color, 'fill-opacity': 0.08 }
-        });
-      }
-      if (!map.getLayer(ids.line)) {
-        map.addLayer({
-          id: ids.line,
-          type: 'line',
-          source: FRONTIERES_SOURCE_ID,
-          'source-layer': 'country_boundaries',
-          filter: filter,
-          paint: {
-            'line-color': g.color,
-            'line-width': ['interpolate', ['linear'], ['zoom'], 3, 1.2, 6, 2.2, 10, 3.5],
-            'line-opacity': 0.85
-          }
-        });
-      }
-      return true;
-    } catch (e) { return false; }
-  }
-
-  function setGroupVisibility(key, visible) {
-    var ids = groupLayerIds(key);
-    if (visible) ensureGroupLayers(key); // safe: try/catch inside
-    ['fill','line'].forEach(function(k) {
-      var id = ids[k];
-      try { if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none'); } catch(e) {}
-    });
-  }
-
-  function updateBadge() {
-    var total = Object.keys(GROUPS).length;
-    var activeCount = Object.keys(state.groups).filter(function(k) { return state.groups[k]; }).length;
-    var badge = document.getElementById('sb-frontieres-badge');
-    if (badge) {
-      badge.textContent = activeCount + '/' + total;
-      badge.classList.toggle('has-active', activeCount > 0);
-    }
-    var masterEl = document.getElementById('sb-toggle-frontieres');
-    if (masterEl) masterEl.classList.toggle('on', state.master && activeCount > 0);
-  }
-
-  function unionBbox(keys) {
-    var bbox = null;
-    keys.forEach(function(k) {
-      var b = GROUPS[k] && GROUPS[k].bbox;
-      if (!b) return;
-      if (!bbox) { bbox = b.slice(); return; }
-      bbox[0] = Math.min(bbox[0], b[0]);
-      bbox[1] = Math.min(bbox[1], b[1]);
-      bbox[2] = Math.max(bbox[2], b[2]);
-      bbox[3] = Math.max(bbox[3], b[3]);
-    });
-    return bbox;
-  }
-
-  // Vue globale "Sahel ouest + arc saharien" — utilisee quand toutes les paires sont actives
-  var GLOBAL_SAHEL_BBOX = [-17.5, 9.8, -4.3, 27.7];
-
-  function zoomToActive() {
-    var activeKeys = Object.keys(state.groups).filter(function(k) { return state.groups[k]; });
-    if (!state.master || !activeKeys.length) return;
-    var bbox;
-    // Zoom serre sur la bande frontaliere : si une seule paire active, on
-    // zoome au plus pres (jusqu'a 7.5). Si plusieurs paires, on calcule l'union
-    // mais on reste raisonnable. Si toutes actives, vue globale Sahel.
-    if (activeKeys.length === Object.keys(GROUPS).length) {
-      bbox = GLOBAL_SAHEL_BBOX;
-    } else {
-      bbox = unionBbox(activeKeys);
-    }
-    if (!bbox) return;
-    var maxZ = activeKeys.length === 1 ? 7.5 : (activeKeys.length === 2 ? 6.2 : 5.5);
-    try {
-      map.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], {
-        padding: 40,
-        duration: 1400,
-        pitch: 0,
-        bearing: ZONE_CONFIG.MAP_BEARING,
-        essential: true,
-        maxZoom: maxZ
-      });
-    } catch (e) {}
-  }
-
-  function refresh() {
-    Object.keys(GROUPS).forEach(function(key) {
-      var effectivelyOn = state.master && state.groups[key];
-      setGroupVisibility(key, effectivelyOn);
-      var el = document.getElementById('sb-toggle-fr-' + key);
-      if (el) el.classList.toggle('on', state.groups[key]);
-    });
-    updateBadge();
-  }
-
-  window.toggleFrontieresSection = function(e) {
-    if (e && e.target && e.target.closest && e.target.closest('.sb-toggle')) return;
-    var sub = document.getElementById('sb-frontieres-sub');
-    if (sub) sub.classList.toggle('open');
-  };
-
-  window.toggleFrontieresMaster = function() {
-    state.master = !state.master;
-    if (state.master) {
-      // Activation du master : si aucun sous-calque n'est coche, on les active
-      // tous pour donner une vue globale des tensions frontalieres ouest.
-      var activeCount = Object.keys(state.groups).filter(function(k) { return state.groups[k]; }).length;
-      if (activeCount < 1) {
-        Object.keys(state.groups).forEach(function(k) { state.groups[k] = true; });
-      }
-      var sub = document.getElementById('sb-frontieres-sub');
-      if (sub) sub.classList.add('open');
-    } else {
-      // Desactivation du master : on eteint aussi tous les curseurs des paires
-      // pour que l'etat UI soit coherent (plus aucun toggle dore visible).
-      Object.keys(state.groups).forEach(function(k) { state.groups[k] = false; });
-    }
-    refresh();
-    if (state.master) zoomToActive();
-  };
-
-  window.toggleFrontieresGroup = function(key) {
-    if (!(key in state.groups)) return;
-    state.groups[key] = !state.groups[key];
-    // Si on active un groupe mais que le master est off, on active aussi le master
-    if (state.groups[key] && !state.master) state.master = true;
-    // Si on desactive le dernier groupe, on eteint aussi le master
-    var anyOn = Object.keys(state.groups).some(function(k) { return state.groups[k]; });
-    if (!anyOn) state.master = false;
-    refresh();
-    if (state.master && state.groups[key]) zoomToActive();
-  };
-
-  // Retry ajout des couches sur styledata (quand le style est pret pour addSource)
-  map.on('styledata', function() {
-    Object.keys(state.groups).forEach(function(key) {
-      var effectivelyOn = state.master && state.groups[key];
-      if (effectivelyOn && !map.getLayer(groupLayerIds(key).line)) {
-        setGroupVisibility(key, true);
-      }
-    });
-  });
-  // Retry sur sourcedata aussi (au cas ou styledata ne fire pas)
-  map.on('sourcedata', function() {
-    Object.keys(state.groups).forEach(function(key) {
-      var effectivelyOn = state.master && state.groups[key];
-      if (effectivelyOn && !map.getLayer(groupLayerIds(key).line)) {
-        setGroupVisibility(key, true);
-      }
-    });
-  });
-})();
+/* Zone Madagascar : pas de calque Frontieres (ile).
+   Les deux nouveaux calques Parcs nationaux et Zones maritimes sont de simples
+   calques geojson fetches par le factory superposable ci-dessus. */
 </script>
 
 <!-- TUTORIEL -->
 <div id="tutorial-overlay" style="display:none">
   <div id="tutorial-box">
     <button id="tutorial-skip" onclick="closeTutorial()">Passer</button>
-    <h2 class="tuto-main-title">Attaques jihadistes<br>au Sahel — 2026</h2>
-    <p class="subtitle">Cartographie d'acteurs · Mali · Burkina · Niger · Tchad · Mauritanie</p>
+    <h2 class="tuto-main-title">Madagascar<br>Securite &amp; trafics — 2026</h2>
+    <p class="subtitle">Cartographie d'acteurs · Transition Randrianirina · Dahalo · Trafics (vanille, bois de rose, or, saphir)</p>
     <div class="tuto-step">
       <div class="tuto-icon">⊡</div>
       <div>
@@ -1057,7 +881,7 @@ window.focusGeocoder = function() {
       <div class="tuto-icon">◉</div>
       <div>
         <div class="tuto-title">Les points</div>
-        <div class="tuto-desc">Chaque point représente un événement. La couleur indique l'acteur (rouge = jihadiste, bleu/vert = force étatique, jaune = milice). La taille reflète le nombre de victimes.</div>
+        <div class="tuto-desc">Chaque point représente un événement. La couleur indique l'acteur (rouge = banditisme / dahalo, vert = force étatique FADM / Gendarmerie, jaune = trafics, violet = politique). La taille reflète le nombre de victimes.</div>
       </div>
     </div>
     <div class="tuto-step">

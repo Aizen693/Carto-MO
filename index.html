@@ -42,6 +42,24 @@
   --bc:     'Barlow Condensed', 'Arial Narrow', sans-serif;
   --b:      'Barlow', system-ui, sans-serif;
   --m:      'JetBrains Mono', 'Courier New', monospace;
+
+  /* Motion (sync avec shared/tokens.css) */
+  --mo-fast:  .1s;
+  --mo-base:  .2s;
+  --mo-slow:  .3s;
+
+  /* Spacing (4px scale) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+
+  /* Line-heights */
+  --lh-tight: 1;
+  --lh-snug:  1.2;
+  --lh-base:  1.5;
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -221,7 +239,77 @@ html, body {
   color: var(--tx);
   line-height: 1.55;
   max-width: 380px;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
+}
+
+/* ═══ HERO CTAs (P1 — une seule CTA primaire) ═══ */
+.hero-cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  pointer-events: all;
+  margin-bottom: 26px;
+}
+.hero-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--m);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--ac);
+  border: 1px solid var(--ac);
+  padding: 13px 24px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--mo-base), transform var(--mo-fast);
+}
+.hero-cta-primary:hover { background: var(--ach); border-color: var(--ach); }
+.hero-cta-primary:active { transform: translateY(1px); }
+.hero-cta-primary .arrow { transition: transform var(--mo-base); }
+.hero-cta-primary:hover .arrow { transform: translateX(3px); }
+.hero-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--m);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx1);
+  text-decoration: none;
+  transition: color var(--mo-fast);
+}
+.hero-cta-secondary:hover { color: var(--ach); }
+
+/* ═══ TRUST BAND (P1 — signaux de confiance honnetes sous le hero) ═══ */
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  pointer-events: all;
+  max-width: 420px;
+}
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--m);
+  font-size: 9px;
+  color: var(--tx1);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.trust-badge::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background: var(--ac);
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -280,7 +368,7 @@ html, body {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background var(--mo-fast) ease;
   position: relative;
 }
 .zone-card:hover { background: var(--bg2); }
@@ -414,7 +502,7 @@ html, body {
   font-family: var(--m);
   font-size: 14px;
   color: var(--tx1);
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform var(--mo-base) ease, color var(--mo-base) ease;
 }
 .zone-card:hover .zone-cta-arrow {
   transform: translateX(4px);
@@ -454,7 +542,7 @@ html, body {
 }
 .sb-cell.accent strong { color: var(--ac); }
 .sb-cell.cyan strong { color: var(--cyan); }
-.sb-admin { color: var(--tx1); text-decoration: none; cursor: pointer; transition: color .12s, background .12s; }
+.sb-admin { color: var(--tx1); text-decoration: none; cursor: pointer; transition: color var(--mo-fast), background var(--mo-fast); }
 .sb-admin:hover { color: var(--ac); background: rgba(196,154,60,0.06); }
 .sb-spacer { flex: 1; border-right: 1px solid var(--ln); }
 
@@ -631,15 +719,27 @@ html, body {
 <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
 <div id="hero">
   <div class="hero-tag">OSINT · Cartography · 2026</div>
-  <h2 class="hero-title">
-    Geopolitical<br>
-    intelligence<br>
-    <span class="ac">platform.</span>
-  </h2>
+  <h1 class="hero-title">
+    Renseignement<br>
+    cartographique<br>
+    <span class="ac">pour analystes.</span>
+  </h1>
   <p class="hero-subtitle">
-    Plateforme de veille cartographique dediee aux theatres de conflit armes.
-    Trois zones d'analyse, sept couches de donnees, des milliers d'evenements geolocalises et sources croisees.
+    Veille OSINT sur les theatres de conflit armes. Analyse multicouche,
+    evenements geolocalises, sources croisees ACLED et AfricaCenter.
   </p>
+  <div class="hero-cta-group">
+    <a class="hero-cta-primary" href="./moyen-orient/index.html">
+      Voir la demo · Moyen-Orient <span class="arrow">&rarr;</span>
+    </a>
+    <a class="hero-cta-secondary" href="#zones-panel">Zones payantes &middot; Sahel &middot; RDC &rarr;</a>
+  </div>
+  <div class="hero-trust" aria-label="Signaux de confiance">
+    <span class="trust-badge">Donnees UE</span>
+    <span class="trust-badge">TLS 1.3 &middot; Acces par role</span>
+    <span class="trust-badge">Mapbox open-source</span>
+    <span class="trust-badge">Sources &middot; ACLED &middot; AfricaCenter</span>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════ ZONES PANEL ═══════════════════════════════ -->
@@ -695,15 +795,15 @@ html, body {
       <div class="zone-card-meta">
         <div class="meta-cell">
           <div class="meta-cell-label">Periode</div>
-          <div class="meta-cell-value small">Jan–Mar 26</div>
+          <div class="meta-cell-value">—</div>
         </div>
         <div class="meta-cell">
           <div class="meta-cell-label">Evenements</div>
-          <div class="meta-cell-value" id="sahel-event-count">—</div>
+          <div class="meta-cell-value">—</div>
         </div>
         <div class="meta-cell">
           <div class="meta-cell-label">Acteurs</div>
-          <div class="meta-cell-value" id="sahel-actor-count">—</div>
+          <div class="meta-cell-value">—</div>
         </div>
       </div>
       <div class="zone-card-cta">
@@ -726,7 +826,38 @@ html, body {
       <div class="zone-card-meta">
         <div class="meta-cell">
           <div class="meta-cell-label">Periode</div>
-          <div class="meta-cell-value small">2023–26</div>
+          <div class="meta-cell-value">—</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Evenements</div>
+          <div class="meta-cell-value">—</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Acteurs</div>
+          <div class="meta-cell-value">—</div>
+        </div>
+      </div>
+      <div class="zone-card-cta">
+        <span class="zone-cta-label subscribe">S'abonner</span>
+        <span class="zone-cta-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- MADAGASCAR -->
+    <a class="zone-card" href="./madagascar/index.html" data-zone="madagascar">
+      <div class="zone-card-row1">
+        <span class="zone-card-index">ZONE 04</span>
+        <span class="zone-card-status restricted">Sur abonnement</span>
+      </div>
+      <div class="zone-card-name">Madagascar</div>
+      <div class="zone-card-region">Grand Sud · SAVA · Analamanga · Canal Mozambique</div>
+      <div class="zone-card-desc">
+        Transition politique post-Rajoelina, dahalo, trafics (vanille, bois de rose, or, saphir), piraterie maritime. Neuf calques dont parcs nationaux et zones maritimes.
+      </div>
+      <div class="zone-card-meta">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Periode</div>
+          <div class="meta-cell-value">—</div>
         </div>
         <div class="meta-cell">
           <div class="meta-cell-label">Evenements</div>
@@ -1206,15 +1337,21 @@ updateClock();
 setInterval(updateClock, 1000);
 
 function updateCoords() {
-  if (!map || !map.loaded()) return;
-  const c = map.getCenter();
-  const ns = c.lat >= 0 ? 'N' : 'S';
-  const ew = c.lng >= 0 ? 'E' : 'W';
-  const lat = Math.abs(c.lat).toFixed(3).padStart(7, '0');
-  const lng = Math.abs(c.lng).toFixed(3).padStart(7, '0');
-  document.getElementById('coords').textContent = `${lat}° ${ns}, ${lng}° ${ew}`;
+  if (!map) return;
+  try {
+    const c = map.getCenter();
+    const ns = c.lat >= 0 ? 'N' : 'S';
+    const ew = c.lng >= 0 ? 'E' : 'W';
+    const lat = Math.abs(c.lat).toFixed(3).padStart(7, '0');
+    const lng = Math.abs(c.lng).toFixed(3).padStart(7, '0');
+    document.getElementById('coords').textContent = `${lat}° ${ns}, ${lng}° ${ew}`;
+  } catch (_) {}
 }
 setInterval(updateCoords, 200);
+// MAJ immediate a chaque mouvement (drag / rotation globe / fly)
+if (typeof map !== 'undefined' && map && map.on) {
+  map.on('move', updateCoords);
+}
 
 /* ═══ Zone card hover → fly globe to that zone ═══ */
 document.querySelectorAll('.zone-card').forEach(card => {
@@ -1241,36 +1378,6 @@ document.getElementById('year').textContent = new Date().getFullYear();
 /* ═══ Reposition labels on resize ═══ */
 window.addEventListener('resize', positionLabels);
 
-/* ═══════════════════════════════════════════════════════════
-   Dynamic Sahel stats
-   ═══════════════════════════════════════════════════════════ */
-(async () => {
-  const files = [
-    '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
-    '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
-    '2026-mars-01-15.geojson','2026-mars-16-31.geojson'
-  ];
-  let total = 0;
-  const actors = new Set();
-  await Promise.all(files.map(async f => {
-    try {
-      const res = await fetch('./sahel/' + f);
-      if (!res.ok) return;
-      const data = await res.json();
-      if (data.features) {
-        total += data.features.length;
-        data.features.forEach(ft => {
-          const a = ft.properties && (ft.properties.name || ft.properties.acteur || ft.properties.actor);
-          if (a) actors.add(a);
-        });
-      }
-    } catch (_) {}
-  }));
-  const ev = document.getElementById('sahel-event-count');
-  const ac = document.getElementById('sahel-actor-count');
-  if (ev) ev.textContent = total || '—';
-  if (ac) ac.textContent = actors.size || '—';
-})();
 </script>
 </body>
 </html>

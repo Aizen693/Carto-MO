@@ -1,0 +1,8 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.10,-23.35]},"properties":{"name":"Dahalo","Date":"2026-04-18","Pays + Lieu":"Madagascar - Ihorombe / Ihosy","type":"Attaque","detail":"Pattern : attaques dahalo. Absence prolongee gendarmerie, militarisation partielle.","rank":"B3","sources":"Crisis Group|https://www.crisisgroup.org/africa/southern-africa/madagascar"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.52,-18.92]},"properties":{"name":"Gen Z Madagascar","Date":"2026-04-19","Pays + Lieu":"Madagascar - Antananarivo","type":"Geopolitique","detail":"Mobilisations recurrentes du mouvement Gen Z. Themes : transparence transition, services publics.","rank":"B3","sources":"RFI|https://www.rfi.fr/fr/afrique/ France 24|https://www.france24.com/fr/afrique/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.28,-12.28]},"properties":{"name":"Commandos marins","Date":"2026-04-20","Pays + Lieu":"Madagascar - Antsiranana","type":"Incident","detail":"Pattern : operations navales surveillance ZEE nord. Boutres suspectes.","rank":"B3","sources":"IMB Piracy Reporting Centre|https://www.icc-ccs.org/piracy-reporting-centre"}}
+  ]
+}
