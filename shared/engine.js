@@ -354,7 +354,7 @@ async function loadKML(index) {
   if (loadedData[index]) return loadedData[index];
   try {
     let geo, descMap = {};
-    const res = await fetch('./' + PERIODS[index].file + '?v=20260422a');
+    const res = await fetch('./' + PERIODS[index].file + '?v=20260422b');
     if (!res.ok) throw new Error('404');
     if (PERIODS[index].file.endsWith('.geojson')) {
       geo = await res.json();
