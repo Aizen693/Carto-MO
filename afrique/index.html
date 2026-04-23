@@ -5,139 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Algor Int — Afrique Maritime</title>
 <link rel="icon" type="image/jpeg" href="../favicon.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<link rel="stylesheet" href="../shared/styles.css?v=20260423a">
 <style>
-:root {
-  --bg: #0a0b0d; --bg1:#0f1114; --bg2:#14171b;
-  --ln:rgba(255,255,255,0.06); --ln1:rgba(255,255,255,0.12);
-  --tx:#b8bec7; --tx1:#6b7280; --txh:#e8ecf2;
-  --ac:#c49a3c; --ach:#e0b452;
-  --acd:rgba(196,154,60,0.08); --acb:rgba(196,154,60,0.25);
-  --bc:'Barlow Condensed',sans-serif; --b:'Barlow',sans-serif; --m:'JetBrains Mono',monospace;
+/* === AFRIQUE — style editorial overrides === */
+#map { background: #b4cad8; }
+.hdr-cell-sm { display: flex; align-items: center; padding: 0 12px; border-right: 1px solid var(--ln); }
+.hdr-cell-sm span { font: 500 9px/1 var(--m); color: var(--tx1); letter-spacing: 0.18em; text-transform: uppercase; }
+.hdr-cell-sm strong { color: var(--ac); font-weight: 600; }
 
-  /* Palette editoriale map */
-  --map-land:#ebe7e0;
-  --map-desert:#e8d9b5;
-  --map-forest:#dbe3d0;
-  --map-highland:#dcd3c0;
-  --map-ocean-deep:#8fa8c2;
-  --map-ocean-mid:#b4cad8;
-  --map-ocean-coast:#c8d9e3;
-  --map-ocean-tropical:#9abcbe;
-  --map-border:#bcb5a8;
-  --map-label:#4a4540;
+/* Login gate (reuse Sahel pattern) */
+#zone-login-overlay { position:fixed;inset:0;z-index:9999;background:rgba(10,11,13,0.97);display:flex;align-items:center;justify-content:center; }
+#zone-login-box { background:var(--bg1);border:1px solid var(--ln);border-top:2px solid var(--ac);padding:32px 36px;width:340px;max-width:90vw; }
+.zl-brand { display:flex;align-items:center;gap:10px;margin-bottom:20px; }
+.zl-title { font:600 14px/1 var(--bc);color:var(--txh);letter-spacing:0.06em;text-transform:uppercase; }
+.zl-sub { font:400 8px/1 var(--m);color:var(--tx1);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px; }
+#zone-login-box input { display:block;width:100%;box-sizing:border-box;margin-bottom:10px;padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--ln);color:var(--txh);font:400 11px/1.4 var(--m);outline:none; }
+#zone-login-box input:focus { border-color:var(--ac); }
+#zone-login-btn { width:100%;padding:9px;background:rgba(196,154,60,0.12);border:1px solid rgba(196,154,60,0.35);color:var(--ac);font:500 8px/1 var(--bc);letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;margin-top:4px; }
+#zone-login-btn:hover { background:rgba(196,154,60,0.2); }
+#zone-login-error { display:none;font:400 9px/1.3 var(--m);color:#ef4444;padding:6px 0;margin-bottom:6px; }
+.zone-gated { display:none !important; }
 
-  /* Couleurs calques */
-  --flux-main:#b8862d;
-  --flux-sec:#6b7079;
-  --flux-oil:#7c4f9e;
-  --flux-ore:#8d6e63;
-  --port-commercial:#c49a3c;
-  --port-oil:#7c4f9e;
-  --port-ore:#8d6e63;
-  --port-fish:#4fb8cc;
-  --port-mil:#b4534b;
-  --pirate:#b4534b;
-  --nav-fr:#1a4d7a;
-  --nav-cn:#8b2e3c;
-  --nav-us:#2e8b8b;
-}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{font-family:var(--m);background:var(--bg);color:var(--tx);height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased;user-select:none}
+/* Legende compacte */
+#legend { position: fixed; bottom: 14px; right: 14px; background: rgba(10,11,13,0.92); backdrop-filter: blur(10px); border: 1px solid var(--ln); padding: 12px 14px; min-width: 220px; max-width: 280px; z-index: 50; }
+#legend h3 { font:600 9px/1 var(--bc); color: var(--ac); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 8px; }
+.legend-row { display:flex; align-items:center; gap:8px; padding:2px 0; font:400 10px/1.25 var(--b); color: var(--tx); }
+.legend-swatch { width:10px; height:10px; flex:0 0 10px; }
+.legend-swatch.line { height: 2px; width: 16px; flex: 0 0 16px; }
 
-/* Login gate */
-#zone-login-overlay{position:fixed;inset:0;z-index:9999;background:rgba(10,11,13,0.97);display:flex;align-items:center;justify-content:center}
-#zone-login-box{background:var(--bg1);border:1px solid var(--ln);border-top:2px solid var(--ac);padding:32px 36px;width:340px;max-width:90vw}
-.zl-brand{display:flex;align-items:center;gap:10px;margin-bottom:20px}
-.zl-title{font:600 14px/1 var(--bc);color:var(--txh);letter-spacing:0.06em;text-transform:uppercase}
-.zl-sub{font:400 8px/1 var(--m);color:var(--tx1);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px}
-#zone-login-box input{display:block;width:100%;box-sizing:border-box;margin-bottom:10px;padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--ln1);color:var(--txh);font:400 11px/1.4 var(--m);outline:none}
-#zone-login-box input:focus{border-color:var(--ac)}
-#zone-login-btn{width:100%;padding:9px;background:var(--acd);border:1px solid var(--acb);color:var(--ac);font:500 8px/1 var(--bc);letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;margin-top:4px}
-#zone-login-btn:hover{background:rgba(196,154,60,0.2)}
-#zone-login-error{display:none;font:400 9px/1.3 var(--m);color:#ef4444;padding:6px 0;margin-bottom:6px}
-.zone-gated{display:none !important}
+/* Popup dark-or coherent Sahel */
+.mapboxgl-popup-content { background: var(--bg1) !important; border: 1px solid var(--ln) !important; border-top: 2px solid var(--ac) !important; padding: 0 !important; max-width: 360px !important; color: var(--tx); box-shadow: 0 6px 24px rgba(0,0,0,0.35) !important; }
+.mapboxgl-popup-close-button { color: var(--tx1) !important; right: 6px !important; top: 4px !important; font-size: 16px !important; }
+.mapboxgl-popup-close-button:hover { color: var(--ac) !important; }
+.mapboxgl-popup-tip { display: none; }
+.popup-header { padding: 10px 14px 8px; border-bottom: 1px solid var(--ln); display: flex; align-items: center; gap: 8px; }
+.popup-dot-bar { width: 4px; height: 14px; }
+.popup-actor { font: 600 12px/1.1 var(--bc); color: var(--txh); letter-spacing: 0.08em; text-transform: uppercase; }
+.popup-body { padding: 10px 14px; }
+.popup-row { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
+.popup-key { font: 500 8px/1 var(--m); color: var(--tx1); letter-spacing: 0.16em; text-transform: uppercase; }
+.popup-val { font: 400 11px/1.45 var(--b); color: var(--tx); white-space: pre-wrap; }
 
-/* Header */
-#header{position:fixed;top:0;left:0;right:0;height:48px;background:rgba(10,11,13,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--ln);display:flex;align-items:center;padding:0 18px;z-index:100;gap:14px}
-#btn-sidebar{background:transparent;border:1px solid var(--ln1);color:var(--txh);padding:7px 12px;font:500 10px/1 var(--m);letter-spacing:0.12em;text-transform:uppercase;cursor:pointer}
-#btn-sidebar:hover{border-color:var(--ac);color:var(--ac)}
-.hdr-logo-link{display:flex;align-items:center;gap:10px;text-decoration:none}
-.hdr-logo{height:26px;opacity:0.75}
-.hdr-brand h1{font:600 14px/1.05 var(--bc);color:var(--txh);letter-spacing:0.08em;text-transform:uppercase}
-.hdr-brand p{font:400 8px/1.2 var(--m);color:var(--tx1);letter-spacing:0.2em;text-transform:uppercase;margin-top:3px}
-.hdr-spacer{flex:1}
-.hdr-badge{font:400 9px/1 var(--m);color:var(--tx1);letter-spacing:0.18em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--ln);background:rgba(255,255,255,0.03)}
-.hdr-badge strong{color:var(--ac);font-weight:600}
+/* Sidebar close btn mobile */
+#sidebar-close-btn { position:absolute; top:10px; right:10px; background:transparent; border:none; color:var(--tx1); font-size: 22px; cursor:pointer; z-index:5; line-height:1; display:none; }
+#sidebar-close-btn:hover { color: var(--ac); }
+@media (max-width: 900px) { #sidebar-close-btn { display: block; } }
 
-/* Map container */
-#map{position:fixed;top:48px;left:0;right:0;bottom:0;background:var(--map-ocean-deep)}
-.mapboxgl-ctrl-bottom-left,.mapboxgl-ctrl-bottom-right{opacity:0.35}
-.mapboxgl-ctrl-bottom-left:hover,.mapboxgl-ctrl-bottom-right:hover{opacity:1}
-
-/* Sidebar */
-#sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:110;display:none}
-#sidebar-overlay.open{display:block}
-#sidebar{position:fixed;top:0;left:0;bottom:0;width:360px;background:var(--bg1);border-right:1px solid var(--ln);transform:translateX(-100%);transition:transform .24s ease;z-index:111;display:flex;flex-direction:column;padding-top:48px}
-#sidebar.open{transform:translateX(0)}
-#sidebar-close{position:absolute;top:12px;right:12px;background:transparent;border:none;color:var(--tx1);font-size:20px;cursor:pointer;line-height:1}
-#sidebar-close:hover{color:var(--ac)}
-.sb-section{border-top:1px solid var(--ln)}
-.sb-section-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;user-select:none;background:var(--bg2)}
-.sb-section-header:hover{background:rgba(196,154,60,0.05)}
-.sb-section-title{font:600 10px/1 var(--m);color:var(--txh);letter-spacing:0.22em;text-transform:uppercase}
-.sb-section-arrow{font-size:9px;color:var(--ac);transition:transform .2s}
-.sb-section-body{max-height:1200px;overflow:hidden;transition:max-height .3s ease}
-.sb-section-body.collapsed{max-height:0}
-.sb-group{padding:0 14px}
-.sb-group-header{display:flex;align-items:center;justify-content:space-between;padding:11px 6px;cursor:pointer;border-bottom:1px solid var(--ln)}
-.sb-group-header:hover{background:rgba(255,255,255,0.02)}
-.sb-group-title{font:500 11px/1 var(--b);color:var(--txh);letter-spacing:0.05em;display:flex;align-items:center;gap:8px}
-.sb-group-title .sb-badge{font:500 8px/1 var(--m);color:var(--ac);letter-spacing:0.1em;padding:2px 6px;background:var(--acd);border:1px solid var(--acb)}
-.sb-group-arrow{font-size:9px;color:var(--tx1);transition:transform .2s}
-.sb-group-arrow.open{transform:rotate(90deg);color:var(--ac)}
-.sb-sublayers{max-height:0;overflow:hidden;transition:max-height .24s ease}
-.sb-sublayers.open{max-height:500px;padding-bottom:6px}
-.sb-row{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 8px 20px;cursor:pointer;font:400 10.5px/1.3 var(--b);color:var(--tx)}
-.sb-row:hover{background:rgba(255,255,255,0.03);color:var(--txh)}
-.sb-row.parent{padding-left:6px;font-weight:500;color:var(--txh)}
-.sb-dot{display:inline-block;width:9px;height:9px;margin-right:8px;vertical-align:middle}
-.sb-toggle{width:26px;height:14px;border:1px solid var(--ln1);background:rgba(255,255,255,0.03);position:relative;flex:0 0 26px;transition:background .15s,border-color .15s}
-.sb-toggle::after{content:'';position:absolute;top:1px;left:1px;width:10px;height:10px;background:var(--tx2,#3a3f47);transition:left .15s,background .15s}
-.sb-toggle.on{background:var(--acd);border-color:var(--acb)}
-.sb-toggle.on::after{left:13px;background:var(--ac)}
-
-/* Legend */
-#legend{position:fixed;bottom:16px;right:16px;background:rgba(10,11,13,0.92);backdrop-filter:blur(10px);border:1px solid var(--ln);padding:14px 16px;max-width:260px;z-index:50}
-#legend h3{font:600 9px/1 var(--bc);color:var(--ac);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px}
-.legend-row{display:flex;align-items:center;gap:8px;padding:3px 0;font:400 10px/1.2 var(--b);color:var(--tx)}
-.legend-swatch{width:10px;height:10px;flex:0 0 10px}
-.legend-swatch.line{height:2px;width:14px;flex:0 0 14px}
-
-/* Popup */
-.mapboxgl-popup-content{background:var(--bg1) !important;border:1px solid var(--ln1) !important;border-top:2px solid var(--ac) !important;padding:0 !important;max-width:340px !important;color:var(--tx)}
-.mapboxgl-popup-close-button{color:var(--tx1) !important;right:6px !important;top:4px !important;font-size:16px !important}
-.mapboxgl-popup-close-button:hover{color:var(--ac) !important}
-.mapboxgl-popup-tip{display:none}
-.popup-header{padding:10px 14px 8px;border-bottom:1px solid var(--ln);display:flex;align-items:center;gap:8px}
-.popup-dot-bar{width:4px;height:14px}
-.popup-actor{font:600 12px/1.1 var(--bc);color:var(--txh);letter-spacing:0.08em;text-transform:uppercase}
-.popup-body{padding:10px 14px}
-.popup-row{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}
-.popup-key{font:500 8px/1 var(--m);color:var(--tx1);letter-spacing:0.16em;text-transform:uppercase}
-.popup-val{font:400 11px/1.4 var(--b);color:var(--tx);white-space:pre-wrap}
-
-/* Responsive */
-@media (max-width:768px){
-  .hdr-brand p{display:none}
-  .hdr-badge{display:none}
-  #sidebar{width:88vw;max-width:360px}
-  #legend{bottom:10px;right:10px;padding:10px 12px;max-width:200px}
-}
+/* Mapbox bottom controls leger */
+.mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right { opacity: 0.4; }
+.mapboxgl-ctrl-bottom-left:hover, .mapboxgl-ctrl-bottom-right:hover { opacity: 1; }
 </style>
 </head>
 <body>
@@ -159,204 +77,355 @@ html,body{font-family:var(--m);background:var(--bg);color:var(--tx);height:100vh
   </div>
 </div>
 
+<!-- Header -->
 <div id="header" class="zone-gated">
-  <button id="btn-sidebar" onclick="toggleSidebar()">&#9776; Calques</button>
-  <a class="hdr-logo-link" href="../index.html" title="Retour selection">
-    <img src="algor_int_logo.jpg" class="hdr-logo" alt="Algor Int">
-    <div class="hdr-brand">
-      <h1>Afrique Maritime</h1>
-      <p>Flux · Ports · Piraterie · Presence navale</p>
-    </div>
-  </a>
+  <div id="header-left">
+    <button id="btn-sidebar" onclick="toggleSidebar()"><span class="hamburger">&#9776;</span> Menu</button>
+    <a href="../index.html" title="Retour a la selection" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <img src="algor_int_logo.jpg" alt="Algor Int">
+      <div>
+        <h1>Afrique Maritime</h1>
+        <p>Flux · Ports · Piraterie · Presence navale</p>
+      </div>
+    </a>
+  </div>
+  <div class="hdr-cell">
+    <span class="hdr-cell-label">Calques</span>
+    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/13</span>
+  </div>
+  <div class="hdr-cell">
+    <span class="hdr-cell-label">Features</span>
+    <span id="feature-count" style="font:500 10px/1 var(--m);color:var(--tx);letter-spacing:0.1em">—</span>
+  </div>
   <div class="hdr-spacer"></div>
-  <div class="hdr-badge">Classif <strong>UNCLASSIFIED</strong></div>
+  <div class="hdr-cell-sm">
+    <span>Classif <strong>UNCLASSIFIED</strong></span>
+  </div>
 </div>
 
+<!-- Map -->
 <div id="map" class="zone-gated"></div>
 
-<div id="sidebar-overlay" onclick="toggleSidebar()"></div>
-<div id="sidebar">
-  <button id="sidebar-close" onclick="toggleSidebar()">&times;</button>
-  <div class="sb-section">
+<!-- Sidebar overlay (mobile) -->
+<div id="sidebar-overlay" class="zone-gated" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<div id="sidebar" class="zone-gated">
+  <button id="sidebar-close-btn" onclick="toggleSidebar()">&times;</button>
+  <div class="sb-sections">
+
     <div class="sb-section-header" onclick="toggleSbSection(this)">
-      <span class="sb-section-title">Calques</span>
-      <span class="sb-section-arrow">&#x25B2;</span>
+      <span class="sb-section-title">Legende</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
     </div>
-    <div class="sb-section-body" id="layers-panel"></div>
-  </div>
-  <div class="sb-section">
-    <div class="sb-section-header" onclick="toggleSbSection(this)">
-      <span class="sb-section-title">A propos</span>
-      <span class="sb-section-arrow">&#x25B2;</span>
-    </div>
-    <div class="sb-section-body">
-      <div style="padding:14px 18px;font:400 10.5px/1.55 var(--b);color:var(--tx)">
-        Carte Afrique maritime. Flux commerciaux et strategiques, ports majeurs par vocation, zones de piraterie documentees (IMB, MDAT-GoG, ISS Africa), presence navale francaise, chinoise et americaine.
+    <div class="sb-section-body" id="sidebar-legend-body">
+      <div style="padding:14px 16px;font:400 11px/1.5 var(--b);color:var(--tx)">
+        Carte Afrique maritime. Flux commerciaux et strategiques, ports majeurs par vocation, zones de piraterie documentees (IMB, MDAT-GoG, ISS Africa), presence navale FR / CN / US.
         <br><br>
-        Sources croisees : IMO, UNCTAD, CSIS, Transnet, DP World, CMA CGM, ACLED, EU NAVFOR, UKMTO, AFRICOM, CFR.
+        <span style="font:500 8px/1 var(--m);color:var(--tx1);letter-spacing:0.16em;text-transform:uppercase">Sources croisees</span><br>
+        <span style="font:400 10px/1.4 var(--b);color:var(--tx1)">IMO · UNCTAD · CSIS · Transnet · DP World · CMA CGM · ACLED · EU NAVFOR · UKMTO · AFRICOM · CFR · Brookings</span>
       </div>
     </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Calques</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body">
+
+      <div class="sb-style-row">
+        <button class="sb-style-btn" onclick="toggleAll(true)">Tout activer</button>
+        <button class="sb-style-btn" onclick="toggleAll(false)">Tout enlever</button>
+      </div>
+
+      <!-- Group 1: FLUX MARITIMES -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'flux')">
+        <span>1. Flux maritimes <span class="sb-sub-badge" id="badge-flux">0/2</span></span>
+        <div class="sb-toggle" id="sb-master-flux" onclick="event.stopPropagation();toggleMaster('flux')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-flux">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b8862d"></span>Flux principaux (Suez-Ormuz, Cap)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-principal" onclick="toggleLayer('flux-principal')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#6b7079"></span>Cabotage + regional</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-secondaire" onclick="toggleLayer('flux-secondaire')"></div>
+        </div>
+      </div>
+
+      <!-- Group 2: PORTS -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'ports')">
+        <span>2. Ports <span class="sb-sub-badge" id="badge-ports">0/5</span></span>
+        <div class="sb-toggle" id="sb-master-ports" onclick="event.stopPropagation();toggleMaster('ports')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-ports">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c49a3c"></span>Commerciaux / conteneurs</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-com" onclick="toggleLayer('ports-com')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#7c4f9e"></span>Petroliers / LNG</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-oil" onclick="toggleLayer('ports-oil')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8d6e63"></span>Mineraliers / vrac</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-ore" onclick="toggleLayer('ports-ore')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>Peche industrielle</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-fish" onclick="toggleLayer('ports-fish')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Militaires (dual-use)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-mil" onclick="toggleLayer('ports-mil')"></div>
+        </div>
+      </div>
+
+      <!-- Group 3: PIRATERIE -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'piraterie')">
+        <span>3. Zones de piraterie <span class="sb-sub-badge" id="badge-piraterie">0/3</span></span>
+        <div class="sb-toggle" id="sb-master-piraterie" onclick="event.stopPropagation();toggleMaster('piraterie')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-piraterie">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Somalie / Bab el-Mandeb</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-pirate-somalie" onclick="toggleLayer('pirate-somalie')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Canal du Mozambique</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-pirate-mozambique" onclick="toggleLayer('pirate-mozambique')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Golfe de Guinee</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-pirate-guinee" onclick="toggleLayer('pirate-guinee')"></div>
+        </div>
+      </div>
+
+      <!-- Group 4: NAVALE -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'navale')">
+        <span>4. Presence navale militaire <span class="sb-sub-badge" id="badge-navale">0/3</span></span>
+        <div class="sb-toggle" id="sb-master-navale" onclick="event.stopPropagation();toggleMaster('navale')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-navale">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#1a4d7a"></span>France</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-fr" onclick="toggleLayer('nav-fr')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8b2e3c"></span>Chine</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-cn" onclick="toggleLayer('nav-cn')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#2e8b8b"></span>Etats-Unis</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-us" onclick="toggleLayer('nav-us')"></div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </div>
 
+<!-- Legende flottante bas-droit -->
 <div id="legend" class="zone-gated">
   <h3>Legende</h3>
   <div id="legend-body"></div>
 </div>
 
-<!-- Config catalogue -->
+<!-- ═════════════════════════════════════════════════════════════════
+     SCRIPTS
+     ═════════════════════════════════════════════════════════════════ -->
 <script>
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
-
-const CATALOG = [
-  { id:'flux', title:'1. Flux maritimes', type:'group', color:'#b8862d', children:[
-    { id:'flux-principal',  label:'Flux principaux (Suez-Ormuz + Cap)', file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'main'],      color:'#b8862d', defaultOn:true },
-    { id:'flux-secondaire', label:'Cabotage + regional',                file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'secondary'], color:'#6b7079', defaultOn:false },
-  ]},
-  { id:'ports', title:'2. Ports', type:'group', color:'#c49a3c', children:[
-    { id:'ports-com', label:'Commerciaux / conteneurs', file:'ports-commerciaux.geojson', kind:'port', color:'#c49a3c', defaultOn:true },
-    { id:'ports-oil', label:'Petroliers / LNG',          file:'ports-petroliers.geojson',  kind:'port', color:'#7c4f9e', defaultOn:false },
-    { id:'ports-ore', label:'Mineraliers / vrac',        file:'ports-mineraliers.geojson', kind:'port', color:'#8d6e63', defaultOn:false },
-    { id:'ports-fish',label:'Peche industrielle',        file:'ports-peche.geojson',       kind:'port', color:'#4fb8cc', defaultOn:false },
-    { id:'ports-mil', label:'Militaires (dual-use)',     file:'ports-militaires.geojson',  kind:'port', color:'#b4534b', defaultOn:false },
-  ]},
-  { id:'piraterie', title:'3. Zones de piraterie', type:'group', color:'#b4534b', children:[
-    { id:'pirate-somalie',    label:'Somalie / Bab el-Mandeb', file:'piraterie-somalie.geojson',    kind:'zone', color:'#b4534b', defaultOn:false },
-    { id:'pirate-mozambique', label:'Canal du Mozambique',     file:'piraterie-mozambique.geojson', kind:'zone', color:'#b4534b', defaultOn:false },
-    { id:'pirate-guinee',     label:'Golfe de Guinee',         file:'piraterie-guinee.geojson',     kind:'zone', color:'#b4534b', defaultOn:false },
-  ]},
-  { id:'navale', title:'4. Presence navale militaire', type:'group', color:'#1a4d7a', children:[
-    { id:'nav-fr', label:'France',       file:'navale-france.geojson', kind:'nav', color:'#1a4d7a', defaultOn:false },
-    { id:'nav-cn', label:'Chine',        file:'navale-chine.geojson',  kind:'nav', color:'#8b2e3c', defaultOn:false },
-    { id:'nav-us', label:'Etats-Unis',   file:'navale-usa.geojson',    kind:'nav', color:'#2e8b8b', defaultOn:false },
-  ]}
-];
-
-const PALETTE = {
-  land:'#ebe7e0', desert:'#e8d9b5', forest:'#dbe3d0', highland:'#dcd3c0',
-  oceanDeep:'#8fa8c2', oceanMid:'#b4cad8', oceanCoast:'#c8d9e3', oceanTropical:'#9abcbe',
-  border:'#bcb5a8', label:'#4a4540'
+/* ═════════ CATALOGUE DES CALQUES ═════════ */
+const CATALOG = {
+  flux: {
+    title: 'Flux maritimes',
+    children: [
+      { id:'flux-principal',  label:'Flux principaux', file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'main'],      color:'#b8862d', defaultOn:true },
+      { id:'flux-secondaire', label:'Cabotage regional', file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'secondary'], color:'#6b7079', defaultOn:false }
+    ]
+  },
+  ports: {
+    title: 'Ports',
+    children: [
+      { id:'ports-com',  label:'Commerciaux',  file:'ports-commerciaux.geojson', kind:'port', color:'#c49a3c', defaultOn:true },
+      { id:'ports-oil',  label:'Petroliers',   file:'ports-petroliers.geojson',  kind:'port', color:'#7c4f9e', defaultOn:false },
+      { id:'ports-ore',  label:'Mineraliers',  file:'ports-mineraliers.geojson', kind:'port', color:'#8d6e63', defaultOn:false },
+      { id:'ports-fish', label:'Peche',        file:'ports-peche.geojson',       kind:'port', color:'#4fb8cc', defaultOn:false },
+      { id:'ports-mil',  label:'Militaires',   file:'ports-militaires.geojson',  kind:'port', color:'#b4534b', defaultOn:false }
+    ]
+  },
+  piraterie: {
+    title: 'Piraterie',
+    children: [
+      { id:'pirate-somalie',    label:'Somalie',     file:'piraterie-somalie.geojson',    kind:'zone', color:'#b4534b', defaultOn:false },
+      { id:'pirate-mozambique', label:'Mozambique',  file:'piraterie-mozambique.geojson', kind:'zone', color:'#b4534b', defaultOn:false },
+      { id:'pirate-guinee',     label:'Guinee',      file:'piraterie-guinee.geojson',     kind:'zone', color:'#b4534b', defaultOn:false }
+    ]
+  },
+  navale: {
+    title: 'Presence navale',
+    children: [
+      { id:'nav-fr', label:'France',      file:'navale-france.geojson', kind:'nav', color:'#1a4d7a', defaultOn:false },
+      { id:'nav-cn', label:'Chine',       file:'navale-chine.geojson',  kind:'nav', color:'#8b2e3c', defaultOn:false },
+      { id:'nav-us', label:'Etats-Unis',  file:'navale-usa.geojson',    kind:'nav', color:'#2e8b8b', defaultOn:false }
+    ]
+  }
 };
 
-// ═════════════════════════════════════════════════════════════════
-// MAP INITIALISATION
-// ═════════════════════════════════════════════════════════════════
-mapboxgl.accessToken = MAPBOX_TOKEN;
+// Flat index
+const ALL_CHILDREN = {};
+Object.values(CATALOG).forEach(g => g.children.forEach(c => ALL_CHILDREN[c.id] = c));
+
+/* ═════════ MAP INIT ═════════ */
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+
 const map = new mapboxgl.Map({
-  container:'map',
-  style:'mapbox://styles/mapbox/light-v11',
-  center:[25, 8],
-  zoom:3.0,
-  minZoom:2.5,
-  maxZoom:10,
-  projection:'mercator'
+  container: 'map',
+  style: 'mapbox://styles/mapbox/light-v11',
+  center: [22, 8],
+  zoom: 3.0,
+  minZoom: 2.4,
+  maxZoom: 10,
+  projection: 'mercator',
+  attributionControl: true
 });
 window.map = map;
 
-// Applique la palette editoriale sur le style light-v11
+/* ═════════ STYLE EDITORIAL ═════════ */
+const PALETTE = {
+  land: '#ebe7e0',
+  desert: '#e8d9b5',
+  forest: '#dbe3d0',
+  oceanDeep: '#8fa8c2',
+  oceanMid: '#b4cad8',
+  oceanCoast: '#c8d9e3',
+  oceanTropical: '#9abcbe',
+  border: '#a09889',
+  label: '#4a4540',
+  countryLabel: '#2c2825'
+};
+
 map.on('style.load', () => {
-  // Water : degrade ocean → cotes (via 2 layers)
-  safeSetPaint('water', 'fill-color', PALETTE.oceanDeep);
-  safeSetPaint('water', 'fill-opacity', 1);
-  // Tenter de trouver les layers land / landcover
-  const styleLayers = map.getStyle().layers || [];
-  styleLayers.forEach(l => {
-    const id = l.id;
-    if (id === 'land') { safeSetPaint(id, 'background-color', PALETTE.land); }
-    if (id === 'landcover' || id === 'land-structure-polygon') {
-      safeSetPaint(id, 'fill-color', PALETTE.land);
-    }
-    if (id.indexOf('national-park') !== -1 || id.indexOf('landuse') !== -1) {
-      safeSetPaint(id, 'fill-color', PALETTE.forest);
-      safeSetPaint(id, 'fill-opacity', 0.5);
-    }
-    if (id.indexOf('admin') !== -1 && l.type === 'line') {
-      safeSetPaint(id, 'line-color', PALETTE.border);
-    }
-    if (l.type === 'symbol' && l.layout && l.layout['text-field']) {
-      safeSetPaint(id, 'text-color', PALETTE.label);
-      safeSetPaint(id, 'text-halo-color', 'rgba(255,255,255,0.85)');
-    }
-  });
-
-  // Halo ocean cotes : layer fill au-dessus de water avec data-driven par zoom
-  try {
-    map.addLayer({
-      id: 'ocean-gradient',
-      type: 'background',
-      paint: { 'background-color': PALETTE.oceanDeep, 'background-opacity': 0 }
-    });
-  } catch (e) {}
-
-  // Ajoute une couche surlignant les zones desertiques majeures
-  addDesertOverlay();
-  addTropicalSeaOverlay();
-
-  // Charge les calques du catalogue
-  initCatalog();
-
-  // Valorise les detroits cles (lignes or courtes)
-  addStraits();
+  applyEditorialStyle();
+  addGeographicOverlays();
+  initLayersCatalog();
 });
 
-function safeSetPaint(layerId, prop, value) {
-  try { if (map.getLayer(layerId)) map.setPaintProperty(layerId, prop, value); } catch (e) {}
-}
-function safeSetLayout(layerId, prop, value) {
-  try { if (map.getLayer(layerId)) map.setLayoutProperty(layerId, prop, value); } catch (e) {}
+function applyEditorialStyle() {
+  const style = map.getStyle();
+  (style.layers || []).forEach(l => {
+    const id = l.id;
+
+    // Water: uniforme puis overlays pour multi-teintes
+    if (id === 'water' || id.indexOf('water-') === 0) {
+      try { map.setPaintProperty(id, 'fill-color', PALETTE.oceanMid); } catch(e){}
+    }
+
+    // Masquer POIs, transit, routes locales
+    if (id.indexOf('poi') === 0 || id.indexOf('poi-') === 0
+      || id.indexOf('transit') !== -1
+      || id.indexOf('road-path') !== -1
+      || id.indexOf('road-label') !== -1
+      || id.indexOf('road-minor') !== -1
+      || id.indexOf('road-street') !== -1
+      || id.indexOf('road-simple') !== -1
+      || id.indexOf('bridge') !== -1
+      || id.indexOf('tunnel') !== -1) {
+      try { map.setLayoutProperty(id, 'visibility', 'none'); } catch(e){}
+      return;
+    }
+    // Masquer aussi autres roads secondaires
+    if (id.indexOf('road') === 0 && id.indexOf('major') === -1 && id.indexOf('motorway') === -1) {
+      try { map.setLayoutProperty(id, 'visibility', 'none'); } catch(e){}
+      return;
+    }
+    // Simplifier road major
+    if (id.indexOf('road') === 0 && l.type === 'line') {
+      try {
+        map.setPaintProperty(id, 'line-color', '#d6cfc0');
+        map.setPaintProperty(id, 'line-opacity', 0.6);
+      } catch(e){}
+    }
+
+    // Terres/landcover/landuse uniformes
+    if (id === 'land' || id === 'background') {
+      try { map.setPaintProperty(id, 'background-color', PALETTE.land); } catch(e){}
+    }
+    if (id === 'landcover' || id === 'land-structure-polygon' || id.indexOf('landuse') === 0) {
+      try { map.setPaintProperty(id, 'fill-color', PALETTE.land); map.setPaintProperty(id, 'fill-opacity', 0.8); } catch(e){}
+    }
+    if (id.indexOf('national-park') !== -1 || id.indexOf('national_park') !== -1 || id.indexOf('park') !== -1) {
+      try { map.setPaintProperty(id, 'fill-color', PALETTE.forest); map.setPaintProperty(id, 'fill-opacity', 0.5); } catch(e){}
+    }
+
+    // Frontieres administratives
+    if (id.indexOf('admin-0') !== -1 && l.type === 'line') {
+      try { map.setPaintProperty(id, 'line-color', PALETTE.border); map.setPaintProperty(id, 'line-width', 1.0); map.setPaintProperty(id, 'line-opacity', 0.7); } catch(e){}
+    }
+    if (id.indexOf('admin-1') !== -1 && l.type === 'line') {
+      try { map.setLayoutProperty(id, 'visibility', 'none'); } catch(e){}
+    }
+
+    // Symboles texte
+    if (l.type === 'symbol' && l.layout && l.layout['text-field']) {
+      if (id.indexOf('country') !== -1 || id === 'country-label') {
+        try { map.setPaintProperty(id, 'text-color', PALETTE.countryLabel); map.setPaintProperty(id, 'text-halo-color', 'rgba(255,255,255,0.85)'); } catch(e){}
+      } else if (id.indexOf('settlement') !== -1 || id.indexOf('place') !== -1) {
+        try { map.setPaintProperty(id, 'text-color', PALETTE.label); map.setPaintProperty(id, 'text-halo-color', 'rgba(255,255,255,0.9)'); } catch(e){}
+      } else {
+        try { map.setLayoutProperty(id, 'visibility', 'none'); } catch(e){}
+      }
+    }
+  });
 }
 
-// Surimpose un polygone pour les deserts majeurs (Sahara, Namib, Kalahari, Rub al-Khali, Corne)
-function addDesertOverlay() {
-  const desertPolygons = {
-    type: 'FeatureCollection',
-    features: [
-      { type:'Feature', properties:{n:'Sahara'}, geometry:{type:'Polygon',coordinates:[[[-17,15],[-3,15],[12,15],[26,18],[36,22],[36,30],[30,31],[10,32],[-5,31],[-13,28],[-17,22],[-17,15]]]} },
-      { type:'Feature', properties:{n:'Namib'},  geometry:{type:'Polygon',coordinates:[[[11,-17],[17,-17],[18,-28],[14,-29],[11,-26],[11,-17]]]} },
-      { type:'Feature', properties:{n:'Kalahari'},geometry:{type:'Polygon',coordinates:[[[19,-19],[26,-19],[28,-28],[21,-29],[19,-25],[19,-19]]]} },
-      { type:'Feature', properties:{n:'Corne'},   geometry:{type:'Polygon',coordinates:[[[41,3],[51,5],[51,12],[46,13],[41,11],[41,3]]]} },
-      { type:'Feature', properties:{n:'Arabie'},  geometry:{type:'Polygon',coordinates:[[[34,18],[55,18],[56,25],[48,30],[36,30],[34,25],[34,18]]]} }
-    ]
-  };
-  map.addSource('deserts', { type:'geojson', data: desertPolygons });
-  map.addLayer({ id:'deserts-fill', type:'fill', source:'deserts', paint: { 'fill-color': PALETTE.desert, 'fill-opacity': 0.55 } }, firstSymbolLayerId());
-}
+function addGeographicOverlays() {
+  // Deserts : Sahara, Namib, Kalahari, Corne de l'Afrique, Arabie
+  const deserts = { type:'FeatureCollection', features: [
+    { type:'Feature', properties:{n:'Sahara'}, geometry:{type:'Polygon',coordinates:[[[-17,15],[-3,15.5],[12,15.5],[26,18],[36,22],[36,30],[30,31],[10,32],[-5,31],[-13,28],[-17,22],[-17,15]]]} },
+    { type:'Feature', properties:{n:'Namib'},  geometry:{type:'Polygon',coordinates:[[[11,-17],[17,-17.5],[18,-28],[14,-29],[11,-26],[11,-17]]]} },
+    { type:'Feature', properties:{n:'Kalahari'},geometry:{type:'Polygon',coordinates:[[[19,-19],[26,-19.5],[28,-28],[21,-29],[19,-25],[19,-19]]]} },
+    { type:'Feature', properties:{n:'Corne'},   geometry:{type:'Polygon',coordinates:[[[41,3],[51,5],[51,12],[46,13.5],[41,11],[41,3]]]} },
+    { type:'Feature', properties:{n:'Arabie'},  geometry:{type:'Polygon',coordinates:[[[34,18],[55,18],[56,25],[48,30],[36,30],[34,25],[34,18]]]} }
+  ]};
+  map.addSource('deserts', { type:'geojson', data: deserts });
+  map.addLayer({ id:'deserts-fill', type:'fill', source:'deserts', paint: { 'fill-color': PALETTE.desert, 'fill-opacity': 0.75 } }, firstSymbolLayerId());
 
-function addTropicalSeaOverlay() {
-  const seas = {
-    type:'FeatureCollection',
-    features:[
-      { type:'Feature', properties:{n:'Mer Rouge'}, geometry:{type:'Polygon',coordinates:[[[32,28],[44,28],[44,12],[42,11.5],[32,22],[32,28]]]} },
-      { type:'Feature', properties:{n:'Golfe Persique'}, geometry:{type:'Polygon',coordinates:[[[48,30],[57,27],[57,23],[50,24],[48,26],[48,30]]]} },
-      { type:'Feature', properties:{n:'Canal Mozambique'}, geometry:{type:'Polygon',coordinates:[[[36,-10],[45,-12],[46,-26],[35,-26],[36,-10]]]} }
-    ]
-  };
+  // Mers tropicales: Rouge, Golfe Persique, Canal Mozambique
+  const seas = { type:'FeatureCollection', features:[
+    { type:'Feature', properties:{n:'Mer Rouge'}, geometry:{type:'Polygon',coordinates:[[[32,28],[44,28],[44,12.5],[42.5,11.7],[32,22],[32,28]]]} },
+    { type:'Feature', properties:{n:'Golfe Persique'}, geometry:{type:'Polygon',coordinates:[[[48,30],[57,27],[57,23],[50,24],[48,26],[48,30]]]} },
+    { type:'Feature', properties:{n:'Canal Mozambique'}, geometry:{type:'Polygon',coordinates:[[[36,-10],[45,-12],[46,-26],[35,-26],[36,-10]]]} }
+  ]};
   map.addSource('tropical-seas', { type:'geojson', data: seas });
   map.addLayer({ id:'tropical-seas-fill', type:'fill', source:'tropical-seas', paint: { 'fill-color': PALETTE.oceanTropical, 'fill-opacity': 0.55 } }, firstSymbolLayerId());
-}
 
-function addStraits() {
-  const straits = {
-    type:'FeatureCollection',
-    features:[
-      { type:'Feature', properties:{n:'Gibraltar'}, geometry:{type:'LineString',coordinates:[[-5.9,35.9],[-5.3,35.9]]} },
-      { type:'Feature', properties:{n:'Suez'}, geometry:{type:'LineString',coordinates:[[32.55,31.26],[32.33,29.95]]} },
-      { type:'Feature', properties:{n:'Bab el-Mandeb'}, geometry:{type:'LineString',coordinates:[[43.3,12.6],[43.3,12.0]]} },
-      { type:'Feature', properties:{n:'Ormuz'}, geometry:{type:'LineString',coordinates:[[56.3,27.0],[56.6,26.5]]} },
-      { type:'Feature', properties:{n:'Bonne-Esperance'}, geometry:{type:'LineString',coordinates:[[18.3,-34.4],[19.0,-34.9]]} }
-    ]
-  };
+  // Halo cote: ligne epaisse sur ocean pres des terres
+  map.addLayer({
+    id: 'coast-halo',
+    type: 'line',
+    source: { type:'vector', url:'mapbox://mapbox.mapbox-streets-v8' },
+    'source-layer': 'admin',
+    filter: ['all', ['==', ['get','admin_level'], 0], ['==', ['get','maritime'], true]],
+    paint: { 'line-color': PALETTE.oceanCoast, 'line-width': ['interpolate', ['linear'], ['zoom'], 2, 3, 6, 8], 'line-opacity': 0.55, 'line-blur': 3 }
+  }, firstSymbolLayerId());
+
+  // Detroits cles
+  const straits = { type:'FeatureCollection', features:[
+    { type:'Feature', properties:{n:'Gibraltar'}, geometry:{type:'LineString',coordinates:[[-5.9,35.9],[-5.3,35.9]]} },
+    { type:'Feature', properties:{n:'Suez'}, geometry:{type:'LineString',coordinates:[[32.55,31.26],[32.33,29.95]]} },
+    { type:'Feature', properties:{n:'Bab el-Mandeb'}, geometry:{type:'LineString',coordinates:[[43.3,12.6],[43.3,12.0]]} },
+    { type:'Feature', properties:{n:'Ormuz'}, geometry:{type:'LineString',coordinates:[[56.3,27.0],[56.6,26.5]]} },
+    { type:'Feature', properties:{n:'Bonne-Esperance'}, geometry:{type:'LineString',coordinates:[[18.3,-34.4],[19.0,-34.9]]} },
+    { type:'Feature', properties:{n:'Mozambique'}, geometry:{type:'LineString',coordinates:[[40.5,-16.0],[43.5,-16.0]]} }
+  ]};
   map.addSource('straits', { type:'geojson', data: straits });
-  map.addLayer({ id:'straits-line', type:'line', source:'straits',
-    paint: { 'line-color':'#c49a3c', 'line-width': 3, 'line-opacity': 0.85 }
-  });
+  map.addLayer({ id:'straits-line', type:'line', source:'straits', paint: { 'line-color':'#c49a3c', 'line-width': 3, 'line-opacity': 0.85 } });
   map.addLayer({ id:'straits-label', type:'symbol', source:'straits',
-    layout: {
-      'symbol-placement':'line','text-field':['get','n'],
-      'text-font':['Open Sans Semibold','Arial Unicode MS Bold'],
-      'text-size': 10, 'text-offset':[0,-1], 'text-letter-spacing':0.1
-    },
-    paint: { 'text-color':'#7d6320', 'text-halo-color':'rgba(255,255,255,0.9)', 'text-halo-width':2 }
+    layout: { 'symbol-placement':'line', 'text-field':['get','n'], 'text-font':['Open Sans Semibold','Arial Unicode MS Bold'], 'text-size': 10, 'text-offset':[0,-1.2], 'text-letter-spacing':0.12 },
+    paint: { 'text-color':'#6a5520', 'text-halo-color':'rgba(255,255,255,0.92)', 'text-halo-width':2 }
   });
 }
 
@@ -366,141 +435,115 @@ function firstSymbolLayerId() {
   return undefined;
 }
 
-// ═════════════════════════════════════════════════════════════════
-// LAYERS CATALOG : rendering + toggle
-// ═════════════════════════════════════════════════════════════════
-const layerState = {}; // id → { data, visible, addFn }
+/* ═════════ CATALOGUE RENDERING ═════════ */
+const layerState = {};
 
-function initCatalog() {
-  const panel = document.getElementById('layers-panel');
-  CATALOG.forEach(group => {
-    const g = document.createElement('div');
-    g.className = 'sb-group';
-    const defaultChildOn = group.children.filter(c => c.defaultOn).length;
-    g.innerHTML = `
-      <div class="sb-group-header" data-group="${group.id}">
-        <div class="sb-group-title">
-          <span class="sb-dot" style="background:${group.color}"></span>
-          ${group.title}
-          <span class="sb-badge">${defaultChildOn}/${group.children.length}</span>
-        </div>
-        <span class="sb-group-arrow">&#9658;</span>
-      </div>
-      <div class="sb-sublayers" id="sub-${group.id}">
-        ${group.children.map(c => `
-          <div class="sb-row" data-sublayer="${c.id}">
-            <span><span class="sb-dot" style="background:${c.color}"></span>${c.label}</span>
-            <div class="sb-toggle ${c.defaultOn ? 'on' : ''}" data-toggle="${c.id}"></div>
-          </div>
-        `).join('')}
-      </div>
-    `;
-    panel.appendChild(g);
-
-    // Group header toggles open/close
-    g.querySelector('.sb-group-header').addEventListener('click', () => {
-      const sub = g.querySelector('.sb-sublayers');
-      const arrow = g.querySelector('.sb-group-arrow');
-      sub.classList.toggle('open');
-      arrow.classList.toggle('open');
-    });
-
-    // Each child toggle
-    group.children.forEach(child => {
-      layerState[child.id] = { data: null, visible: false, addFn: null, cfg: child };
-      fetch('./' + child.file + '?v=' + Date.now())
-        .then(r => r.json())
-        .then(data => {
-          layerState[child.id].data = data;
-          if (child.defaultOn) toggleLayer(child.id);
-        })
-        .catch(e => console.warn('[afrique]', child.id, e));
-    });
-
-    // Bind toggle click
-    g.querySelectorAll('.sb-toggle').forEach(t => {
-      t.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        toggleLayer(t.dataset.toggle);
-      });
-    });
-    // Open group by default if any child is on
-    if (defaultChildOn > 0) {
-      g.querySelector('.sb-sublayers').classList.add('open');
-      g.querySelector('.sb-group-arrow').classList.add('open');
-    }
+function initLayersCatalog() {
+  // Prefetch all files
+  Object.values(ALL_CHILDREN).forEach(c => {
+    layerState[c.id] = { data: null, visible: false, cfg: c };
+    fetch('./' + c.file + '?v=' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        layerState[c.id].data = data;
+        if (c.defaultOn) toggleLayer(c.id);
+        updateFeatureCount();
+      })
+      .catch(err => console.warn('[afrique]', c.id, err));
   });
-
-  renderLegend();
 }
 
-function toggleLayer(id) {
-  const s = layerState[id];
-  if (!s) return;
+window.toggleLayer = function(id) {
+  const s = layerState[id]; if (!s) return;
   s.visible = !s.visible;
-  document.querySelector(`[data-toggle="${id}"]`)?.classList.toggle('on', s.visible);
+  const tEl = document.getElementById('sb-toggle-' + id);
+  if (tEl) tEl.classList.toggle('on', s.visible);
   if (!s.data) return;
-  if (s.visible) addSubLayer(id);
-  else removeSubLayer(id);
-  updateGroupBadges();
+  if (s.visible) addSubLayer(id); else removeSubLayer(id);
+  updateBadges();
+  updateMasters();
+  updateActiveCount();
   renderLegend();
-}
+  updateFeatureCount();
+};
+
+window.toggleMaster = function(group) {
+  const children = CATALOG[group].children;
+  const allOn = children.every(c => layerState[c.id]?.visible);
+  children.forEach(c => {
+    const s = layerState[c.id];
+    if (!s) return;
+    if (allOn && s.visible) window.toggleLayer(c.id);
+    else if (!allOn && !s.visible) window.toggleLayer(c.id);
+  });
+};
+
+window.toggleGroup = function(event, group) {
+  if (event && event.target && event.target.closest && event.target.closest('.sb-toggle')) return;
+  const sub = document.getElementById('sub-' + group);
+  if (sub) sub.classList.toggle('open');
+};
+
+window.toggleAll = function(on) {
+  Object.values(ALL_CHILDREN).forEach(c => {
+    const s = layerState[c.id];
+    if (!s) return;
+    if (on && !s.visible) window.toggleLayer(c.id);
+    else if (!on && s.visible) window.toggleLayer(c.id);
+  });
+};
 
 function addSubLayer(id) {
-  const s = layerState[id];
-  const c = s.cfg;
+  const s = layerState[id]; const c = s.cfg;
   const srcId = 'src-' + id;
-  if (!map.getSource(srcId)) {
-    map.addSource(srcId, { type: 'geojson', data: s.data });
-  }
+  if (!map.getSource(srcId)) { try { map.addSource(srcId, { type:'geojson', data: s.data }); } catch(e){ return; } }
   const layers = buildMapboxLayers(c, srcId);
   layers.forEach(def => {
-    if (!map.getLayer(def.id)) { try { map.addLayer(def); } catch (e) { console.warn('addLayer', def.id, e); } }
+    if (!map.getLayer(def.id)) { try { map.addLayer(def); } catch(e) { console.warn('[afrique] addLayer', def.id, e); } }
   });
   layers.forEach(def => {
-    if (def.type === 'circle' || def.type === 'fill') bindPopup(def.id, c.id);
+    if (['circle','fill','line'].indexOf(def.type) !== -1) bindPopup(def.id, id);
   });
 }
 
 function removeSubLayer(id) {
   const c = layerState[id].cfg;
   const layers = buildMapboxLayers(c, 'src-' + id);
-  layers.forEach(def => {
-    if (map.getLayer(def.id)) { try { map.removeLayer(def.id); } catch (e) {} }
-  });
-  if (map.getSource('src-' + id)) { try { map.removeSource('src-' + id); } catch (e) {} }
+  layers.forEach(def => { if (map.getLayer(def.id)) { try { map.removeLayer(def.id); } catch(e){} } });
+  if (map.getSource('src-' + id)) { try { map.removeSource('src-' + id); } catch(e){} }
 }
 
 function buildMapboxLayers(c, srcId) {
   const col = c.color;
   if (c.kind === 'flux') {
     const isMain = (c.id === 'flux-principal');
-    const width = isMain ? ['interpolate',['linear'],['zoom'], 3, 1.8, 5, 3, 7, 4.5] : ['interpolate',['linear'],['zoom'], 3, 1, 5, 1.5, 7, 2.5];
-    const opacity = isMain ? 0.9 : 0.65;
-    const glowWidth = isMain ? 10 : 5;
+    const width = isMain
+      ? ['interpolate',['linear'],['zoom'], 3, 2, 5, 3.5, 7, 5]
+      : ['interpolate',['linear'],['zoom'], 3, 1, 5, 1.6, 7, 2.8];
+    const op = isMain ? 0.92 : 0.6;
     const layers = [];
-    if (isMain) layers.push({ id:'flux-glow-' + c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col,'line-width':glowWidth,'line-opacity':0.12,'line-blur':4 } });
-    layers.push({ id:'flux-main-' + c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col,'line-width':width,'line-opacity':opacity } });
+    if (isMain) layers.push({ id:'flux-glow-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': 14, 'line-opacity': 0.10, 'line-blur': 6 } });
+    layers.push({ id:'flux-line-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': width, 'line-opacity': op } });
     return layers;
   }
   if (c.kind === 'port') {
     return [
-      { id:'port-halo-' + c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,6,6,12,9,18], 'circle-color':col, 'circle-opacity':0.1, 'circle-blur':1 } },
-      { id:'port-ring-' + c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3.5,6,6,9,9], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.2, 'circle-stroke-opacity':0.55 } },
-      { id:'port-dot-' + c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,2.2,6,3.5,9,5], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':0.8 } }
+      { id:'port-halo-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,5,6,11,9,18], 'circle-color':col, 'circle-opacity':0.12, 'circle-blur':1 } },
+      { id:'port-ring-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3,6,5.5,9,9], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.3, 'circle-stroke-opacity':0.6 } },
+      { id:'port-dot-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,2,6,3.5,9,5], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':0.9 } }
     ];
   }
   if (c.kind === 'zone') {
     return [
-      { id:'pirate-fill-' + c.id, type:'fill', source:srcId, paint:{ 'fill-color':col, 'fill-opacity':0.16 } },
-      { id:'pirate-line-' + c.id, type:'line', source:srcId, paint:{ 'line-color':col, 'line-width':1.4, 'line-opacity':0.7, 'line-dasharray':[3,2] } }
+      { id:'pirate-fill-'+c.id, type:'fill', source:srcId, paint:{ 'fill-color':col, 'fill-opacity':0.15 } },
+      { id:'pirate-line-'+c.id, type:'line', source:srcId, paint:{ 'line-color':col, 'line-width':1.5, 'line-opacity':0.75, 'line-dasharray':[3,2] } }
     ];
   }
   if (c.kind === 'nav') {
     return [
-      { id:'nav-halo-' + c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,10,6,18,9,26], 'circle-color':col, 'circle-opacity':0.12, 'circle-blur':1.2 } },
-      { id:'nav-ring-' + c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,5,6,8,9,12], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.4, 'circle-stroke-opacity':0.8 } },
-      { id:'nav-dot-' + c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3,6,4.5,9,6], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':1 } }
+      { id:'nav-halo-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,12,6,20,9,28], 'circle-color':col, 'circle-opacity':0.14, 'circle-blur':1.2 } },
+      { id:'nav-ring-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,5.5,6,8.5,9,12.5], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.5, 'circle-stroke-opacity':0.85 } },
+      { id:'nav-dot-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3,6,4.5,9,6.5], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':1 } }
     ];
   }
   return [];
@@ -509,10 +552,9 @@ function buildMapboxLayers(c, srcId) {
 function bindPopup(layerId, subId) {
   map.on('click', layerId, (e) => {
     if (!e.features || !e.features.length) return;
-    const f = e.features[0];
-    new mapboxgl.Popup({ closeButton: true, maxWidth: '340px' })
+    new mapboxgl.Popup({ closeButton:true, maxWidth:'360px', className:'algor-popup' })
       .setLngLat(e.lngLat)
-      .setHTML(makePopup(f.properties, subId))
+      .setHTML(makePopup(e.features[0].properties, subId))
       .addTo(map);
   });
   map.on('mouseenter', layerId, () => map.getCanvas().style.cursor = 'pointer');
@@ -520,20 +562,19 @@ function bindPopup(layerId, subId) {
 }
 
 function makePopup(props, subId) {
-  const color = layerState[subId]?.cfg?.color || '#c49a3c';
+  const color = ALL_CHILDREN[subId]?.color || '#c49a3c';
   const name = props.name || props.Name || 'Point';
   const skip = ['name','Name','sources','Sources','source'];
-  const order = ['type','pays','description','detail','volume','objet','rank','zone'];
-  const labelMap = { type:'Type', pays:'Pays', description:'Description', detail:'Detail', volume:'Volume', objet:'Objet', rank:'Niveau', zone:'Zone' };
-  let body = '';
+  const labelMap = { type:'Type', pays:'Pays', description:'Description', detail:'Detail', volume:'Volume', objet:'Objet', rank:'Niveau', zone:'Zone', evolution_15j:'Δ 15j', statut:'Statut', operateur:'Operateur', ville:'Ville' };
+  const order = ['type','pays','description','detail','volume','objet','rank','zone','evolution_15j','statut','operateur'];
   const seen = {};
+  let body = '';
   const renderRow = (k) => {
     if (skip.indexOf(k) !== -1 || seen[k]) return;
-    const v = (props[k] || '').toString().trim();
-    if (!v) return;
+    const v = (props[k] || '').toString().trim(); if (!v) return;
     seen[k] = true;
     const lbl = labelMap[k] || k.replace(/_/g,' ').replace(/^\w/, c => c.toUpperCase());
-    body += `<div class="popup-row"><span class="popup-key">${lbl}</span><span class="popup-val">${linkify(v)}</span></div>`;
+    body += `<div class="popup-row"><span class="popup-key">${lbl}</span><span class="popup-val">${escapeHtml(v)}</span></div>`;
   };
   order.forEach(renderRow);
   Object.keys(props).forEach(renderRow);
@@ -543,89 +584,107 @@ function makePopup(props, subId) {
     const linksHtml = sv.split(/\s+(?=[^\s|]+\|http)/).map(s => {
       const p = s.split('|');
       if (p.length === 2 && p[1].startsWith('http')) {
-        return `<a href="${p[1]}" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-size:10px;font-family:'JetBrains Mono',monospace;border:1px solid rgba(196,154,60,0.25);padding:1px 6px;letter-spacing:0.04em;margin-right:4px;display:inline-block;margin-bottom:3px;">${p[0]}</a>`;
+        return `<a href="${p[1]}" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-size:10px;font-family:'JetBrains Mono',monospace;border:1px solid rgba(196,154,60,0.25);padding:1px 6px;letter-spacing:0.04em;margin-right:4px;display:inline-block;margin-bottom:3px;">${escapeHtml(p[0])}</a>`;
       }
-      return `<span style="color:#999;font-size:10px;">${s}</span>`;
+      return `<span style="color:#999;font-size:10px;">${escapeHtml(s)}</span>`;
     }).join(' ');
     body += `<div style="margin-top:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);"><div class="popup-key" style="margin-bottom:4px">Sources</div>${linksHtml}</div>`;
   }
-  return `
-    <div class="popup-header"><div class="popup-dot-bar" style="background:${color}"></div><div class="popup-actor">${name}</div></div>
-    ${body ? `<div class="popup-body">${body}</div>` : ''}
-  `;
+  return `<div class="popup-header"><div class="popup-dot-bar" style="background:${color}"></div><div class="popup-actor">${escapeHtml(name)}</div></div>${body ? `<div class="popup-body">${body}</div>` : ''}`;
 }
 
-function linkify(t) {
-  return t.replace(/(https?:\/\/[^\s<>"']+)/g, (url) => {
-    let d = url.replace(/^https?:\/\//,'').replace(/\/$/,'');
-    if (d.length > 44) d = d.substring(0,41) + '...';
-    return `<a href="${url}" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:10px;border-bottom:1px solid rgba(196,154,60,0.3);">${d}</a>`;
+function escapeHtml(s) {
+  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function updateBadges() {
+  Object.keys(CATALOG).forEach(g => {
+    const total = CATALOG[g].children.length;
+    const on = CATALOG[g].children.filter(c => layerState[c.id]?.visible).length;
+    const badge = document.getElementById('badge-'+g);
+    if (badge) { badge.textContent = `${on}/${total}`; badge.classList.toggle('has-active', on > 0); }
   });
 }
-
-function updateGroupBadges() {
-  CATALOG.forEach(group => {
-    const active = group.children.filter(c => layerState[c.id]?.visible).length;
-    const header = document.querySelector(`[data-group="${group.id}"] .sb-badge`);
-    if (header) header.textContent = `${active}/${group.children.length}`;
+function updateMasters() {
+  Object.keys(CATALOG).forEach(g => {
+    const all = CATALOG[g].children.every(c => layerState[c.id]?.visible);
+    const any = CATALOG[g].children.some(c => layerState[c.id]?.visible);
+    const el = document.getElementById('sb-master-'+g);
+    if (el) el.classList.toggle('on', any);
   });
 }
-
+function updateActiveCount() {
+  let total = 0, on = 0;
+  Object.values(CATALOG).forEach(g => g.children.forEach(c => { total++; if (layerState[c.id]?.visible) on++; }));
+  const el = document.getElementById('active-count');
+  if (el) el.textContent = `${on}/${total}`;
+}
+function updateFeatureCount() {
+  let total = 0;
+  Object.values(ALL_CHILDREN).forEach(c => { const s = layerState[c.id]; if (s?.visible && s?.data?.features) total += s.data.features.length; });
+  const el = document.getElementById('feature-count');
+  if (el) el.textContent = total || '—';
+}
 function renderLegend() {
   const body = document.getElementById('legend-body');
   const items = [];
-  CATALOG.forEach(group => {
-    group.children.forEach(c => {
-      if (!layerState[c.id]?.visible) return;
-      const swatch = (c.kind === 'flux') ? `<span class="legend-swatch line" style="background:${c.color}"></span>` : `<span class="legend-swatch" style="background:${c.color}"></span>`;
-      items.push(`<div class="legend-row">${swatch}${c.label}</div>`);
-    });
-  });
+  Object.values(CATALOG).forEach(g => g.children.forEach(c => {
+    if (!layerState[c.id]?.visible) return;
+    const sw = (c.kind === 'flux') ? `<span class="legend-swatch line" style="background:${c.color}"></span>` : `<span class="legend-swatch" style="background:${c.color}"></span>`;
+    items.push(`<div class="legend-row">${sw}${c.label}</div>`);
+  }));
   if (!items.length) items.push('<div style="font:400 10px var(--b);color:var(--tx1)">Aucun calque actif</div>');
   body.innerHTML = items.join('');
 }
 
-// Sidebar toggle
-function toggleSidebar() {
+/* ═════════ SIDEBAR ═════════ */
+window.toggleSidebar = function() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebar-overlay').classList.toggle('open');
-}
-function toggleSbSection(h) {
-  h.querySelector('.sb-section-arrow').classList.toggle('collapsed');
+};
+window.toggleSbSection = function(h) {
+  h.querySelector('.sb-section-arrow').classList.toggle('open');
   h.nextElementSibling.classList.toggle('collapsed');
-}
+};
 
-// ═════════════════════════════════════════════════════════════════
-// AUTH GATE (Supabase)
-// ═════════════════════════════════════════════════════════════════
-import('../shared/zone-auth.js?v=20260423a').then(mod => {
-  const { initZoneAuth, zoneLogin } = mod;
-  initZoneAuth((profile) => {
-    document.getElementById('zone-login-overlay').style.display = 'none';
-    document.querySelectorAll('.zone-gated').forEach(el => el.classList.remove('zone-gated'));
-    map.resize();
-  }, (err) => {
-    if (err) {
-      const el = document.getElementById('zone-login-error');
-      el.textContent = err; el.style.display = 'block';
-    }
+/* Open sub-frontieres by default for visible groups */
+setTimeout(() => {
+  ['flux','ports'].forEach(g => {
+    const sub = document.getElementById('sub-'+g);
+    if (sub) sub.classList.add('open');
   });
-  document.getElementById('zone-login-btn').addEventListener('click', doLogin);
-  document.getElementById('zone-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') doLogin(); });
-  async function doLogin() {
-    const email = document.getElementById('zone-email').value.trim();
-    const password = document.getElementById('zone-password').value;
-    if (!email || !password) return;
-    try { await zoneLogin(email, password); } catch (e) {
-      const el = document.getElementById('zone-login-error');
-      el.textContent = e?.message || 'Echec de connexion'; el.style.display = 'block';
-    }
-  }
-}).catch(e => {
-  console.warn('[afrique] auth load failed', e);
-});
+}, 50);
 </script>
 
-<script type="module"></script>
+<!-- Auth gate (Supabase) — reuse shared module -->
+<script type="module">
+import { initZoneAuth, zoneLogin } from '../shared/zone-auth.js?v=20260423a';
+
+initZoneAuth((profile) => {
+  document.getElementById('zone-login-overlay').style.display = 'none';
+  document.querySelectorAll('.zone-gated').forEach(el => el.classList.remove('zone-gated'));
+  if (window.map && window.map.resize) window.map.resize();
+}, (err) => {
+  if (err) {
+    const el = document.getElementById('zone-login-error');
+    el.textContent = err; el.style.display = 'block';
+  }
+});
+
+document.getElementById('zone-login-btn').addEventListener('click', doLogin);
+document.getElementById('zone-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') doLogin(); });
+
+async function doLogin() {
+  const email = document.getElementById('zone-email').value.trim();
+  const password = document.getElementById('zone-password').value;
+  if (!email || !password) return;
+  try { await zoneLogin(email, password); }
+  catch (e) {
+    const el = document.getElementById('zone-login-error');
+    el.textContent = e?.message || 'Echec de connexion'; el.style.display = 'block';
+  }
+}
+</script>
+
 </body>
 </html>
