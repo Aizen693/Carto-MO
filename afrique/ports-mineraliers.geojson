@@ -1,0 +1,12 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[17.9437,-33.0265]},"properties":{"name":"Saldanha Bay","type":"Mineralier / Fer","pays":"Afrique du Sud","description":"1er port export fer d'Afrique. 60 Mt/an vers Chine. Corridor Sishen-Saldanha (Transnet).","sources":"Transnet_SA|https://www.transnet.net"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[32.0810,-28.7807]},"properties":{"name":"Richards Bay","type":"Mineralier / Charbon","pays":"Afrique du Sud","description":"1er port charbonnier mondial (75 Mtpa). Charbon thermique export vers Asie / Europe.","sources":"Richards_Bay_Coal|https://www.rbct.co.za"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-17.0347,20.9331]},"properties":{"name":"Nouadhibou","type":"Mineralier / Fer","pays":"Mauritanie","description":"Port mineralier SNIM (fer). 12 Mt/an. Liaison ferroviaire Zouerate (mine-port 700 km).","sources":"SNIM|https://www.snim.com"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[13.4597,-5.8166]},"properties":{"name":"Matadi","type":"Mineralier / Vrac","pays":"RDC","description":"Principal port du Kongo Central. Transit cuivre/cobalt Katanga via rail vers Atlantique. Alternative au corridor Lobito.","sources":"ONATRA_Congo|https://onatra.cd"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[13.0523,-5.8504]},"properties":{"name":"Boma","type":"Mineralier / Vrac","pays":"RDC","description":"Port fluvio-maritime RDC. Export bois, minerais. En aval de Matadi.","sources":"ONATRA_Congo|https://onatra.cd"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-13.5824,9.5170]},"properties":{"name":"Kamsar","type":"Mineralier / Bauxite","pays":"Guinee","description":"Principal port bauxite mondial (Compagnie des Bauxites de Guinee). Export vers raffineries alumine Chine/Europe.","sources":"CBG_Guinea|https://www.cbg-guinee.com"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-14.6410,9.7011]},"properties":{"name":"Conakry","type":"Mineralier / Vrac","pays":"Guinee","description":"Port multifonction, export bauxite et or. Hub CEDEAO ouest. Concede Bollore.","sources":"PAC_Guinea|https://pac.gov.gn"}}
+  ]
+}

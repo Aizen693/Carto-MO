@@ -1,0 +1,7 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[36.0,-10.0],[45.0,-10.0],[45.0,-27.0],[36.0,-27.0],[36.0,-10.0]]]},"properties":{"name":"Canal du Mozambique","type":"Piraterie","zone":"Canal du Mozambique","description":"Menace maritime croissante liee a ISIS-Mozambique (Cabo Delgado) + trafic heroine. Corridor strategique gaz (TotalEnergies) et route alternative au Cap.","sources":"ISS_Africa|https://issafrica.org IMB|https://www.icc-ccs.org/icc/imb"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[38.0,-10.0],[42.0,-10.0],[42.0,-13.5],[38.0,-13.5],[38.0,-10.0]]]},"properties":{"name":"Cabo Delgado (zone ISIS-Mozambique)","type":"Piraterie","zone":"Cabo Delgado","description":"Insurrection ISIS-Mozambique depuis 2017. Blocage TotalEnergies LNG. Attaques maritimes sur navires ravitaillement offshore.","sources":"CTC_West_Point|https://ctc.westpoint.edu/ ACLED|https://acleddata.com/ Crisis_Group|https://www.crisisgroup.org/"}}
+  ]
+}

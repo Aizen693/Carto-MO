@@ -1,0 +1,11 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-16.0324,18.0735]},"properties":{"name":"Nouakchott","type":"Peche industrielle","pays":"Mauritanie","description":"ZEE pelagique parmi les plus riches au monde. Accords UE + flottes chinoises (poulpe, thiof). Pression sur stocks.","sources":"FAO_Mauritania|https://www.fao.org/ EU_Fisheries|https://oceans-and-fisheries.ec.europa.eu/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-17.4437,14.6686]},"properties":{"name":"Dakar (Soumbedioune)","type":"Peche industrielle","pays":"Senegal","description":"Hub peche ouest-africaine. Concurrence flottes chinoises (IUU - peche illicite). Sujet politique majeur 2024-2026.","sources":"FAO_Senegal|https://www.fao.org/ Greenpeace_Africa|https://www.greenpeace.org/africa/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[55.4508,-4.6192]},"properties":{"name":"Victoria (Seychelles)","type":"Peche industrielle","pays":"Seychelles","description":"1er port thonier ocean Indien occidental. Flottes espagnoles/francaises/coreennes. Marche UE.","sources":"IOTC|https://www.iotc.org SFA_Seychelles|https://www.sfa.sc"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.2952,-12.2788]},"properties":{"name":"Antsiranana (Diego Suarez)","type":"Peche industrielle","pays":"Madagascar","description":"Port naturel nord Madagascar. Peche thoniere + crevettiere. Hub Canal du Mozambique.","sources":"SPAT_Madagascar|https://www.spat.mg/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[57.5012,-20.1619]},"properties":{"name":"Port Louis (Maurice)","type":"Peche industrielle","pays":"Maurice","description":"Hub thonier + conteneurs. Flottes UE + accords SIOFA. Zone economique strategique ocean Indien.","sources":"MPA_Mauritius|https://www.mauport.com"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[39.0983,-5.0696]},"properties":{"name":"Tanga","type":"Peche industrielle","pays":"Tanzanie","description":"Port secondaire nord Tanzanie. Peche cotiere + export vers Kenya.","sources":"TPA_Tanzania|https://ports.go.tz"}}
+  ]
+}

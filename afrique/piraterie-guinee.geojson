@@ -1,0 +1,7 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-8.0,7.0],[12.0,7.0],[12.0,-4.0],[-8.0,-4.0],[-8.0,7.0]]]},"properties":{"name":"Golfe de Guinee","type":"Piraterie","zone":"Golfe de Guinee","description":"Epicentre mondial des enlevements en mer (2018-2021). Baisse significative post-Deep Blue (Nigeria 2021) et presence ECOWAS. Sous-surveillance continue MDAT-GoG.","sources":"MDAT_GoG|https://mdat-gog.org/ IMB_Piracy|https://www.icc-ccs.org/icc/imb ISS_Africa|https://issafrica.org"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[2.0,5.5],[9.0,5.5],[9.0,2.0],[2.0,2.0],[2.0,5.5]]]},"properties":{"name":"Delta du Niger","type":"Piraterie","zone":"Niger Delta","description":"Zone historique MEND / Niger Delta Avengers. Vol de brut (oil bunkering), sabotage pipelines, enlevements. Menace en recul mais persistante.","sources":"Stakeholder_Democracy_Network|https://www.stakeholderdemocracy.org/ NNPC|https://www.nnpcgroup.com/"}}
+  ]
+}

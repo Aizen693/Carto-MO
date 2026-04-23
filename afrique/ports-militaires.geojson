@@ -1,0 +1,9 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[43.1460,11.5940]},"properties":{"name":"Port de Djibouti (dual-use)","type":"Militaire / Dual-use","pays":"Djibouti","description":"Port commercial abritant logistique de FFDj (FR), Camp Lemonnier (US), SLOC japonaise, UNITAF. Carrefour militaire mondial.","sources":"CSIS_Djibouti|https://www.csis.org/ DoD_AFRICOM|https://www.africom.mil/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[18.4312,-34.1934]},"properties":{"name":"Simon's Town","type":"Militaire","pays":"Afrique du Sud","description":"Base principale SA Navy. Cap de Bonne-Esperance, point de controle strategique. Reparations + entretien sous-marins.","sources":"SA_Navy|https://www.navy.mil.za/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-17.4437,14.6686]},"properties":{"name":"Dakar (base navale)","type":"Militaire","pays":"Senegal","description":"Base Marine senegalaise + escale Atlantique sud pour Marines alliees (FR/US). Element francais au Senegal.","sources":"Marine_Senegal|https://www.armee.sn/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[72.4110,-7.3132]},"properties":{"name":"Diego Garcia","type":"Militaire","pays":"Royaume-Uni / USA (BIOT)","description":"Base navale et aerienne strategique US/UK. Territoire britannique ocean Indien (BIOT). Controle SLOC Ormuz-Pacifique.","sources":"CSIS|https://www.csis.org DoD|https://www.defense.gov/"}}
+  ]
+}

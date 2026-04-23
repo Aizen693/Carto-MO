@@ -6,10 +6,10 @@
 <title>Algor Int — Geopolitical Intelligence Platform</title>
 <link rel="icon" type="image/jpeg" href="./favicon.jpg">
 <meta property="og:title" content="Algor Int — Plateforme de renseignement geopolitique">
-<meta property="og:description" content="Systeme de veille cartographique OSINT. 5 theatres : Moyen-Orient, Sahel, RDC, Madagascar, Asie du Sud.">
+<meta property="og:description" content="Systeme de veille cartographique OSINT. 6 theatres : Moyen-Orient, Sahel, Grands Lacs, Madagascar, Afrique Maritime, Asie du Sud.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://algoracces.fr/">
-<meta name="description" content="Algor Int — Plateforme OSINT cartographique. Analyse des conflits armes au Moyen-Orient, Sahel, RDC, Madagascar et Asie du Sud.">
+<meta name="description" content="Algor Int — Plateforme OSINT cartographique. Analyse des conflits armes et flux maritimes strategiques : Moyen-Orient, Sahel, Grands Lacs, Madagascar, Afrique Maritime, Asie du Sud.">
 <meta name="theme-color" content="#0a0b0d">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -725,7 +725,7 @@ html, body {
     <span class="ac">pour analystes.</span>
   </h1>
   <p class="hero-subtitle">
-    Veille OSINT sur les theatres de conflit armes. Cinq zones d'analyse,
+    Veille OSINT sur les theatres de conflit armes. Six zones d'analyse,
     evenements geolocalises, sources croisees ACLED et AfricaCenter.
   </p>
   <div class="hero-cta-group">
@@ -746,7 +746,7 @@ html, body {
 <div id="zones-panel">
   <div class="panel-header">
     <span class="panel-header-title">Theatres d'analyse</span>
-    <span class="panel-header-count">05 / 05</span>
+    <span class="panel-header-count">06 / 06</span>
   </div>
   <div class="zone-list">
 
@@ -874,10 +874,41 @@ html, body {
       </div>
     </a>
 
+    <!-- AFRIQUE MARITIME -->
+    <a class="zone-card" href="./afrique/index.html" data-zone="afrique">
+      <div class="zone-card-row1">
+        <span class="zone-card-index">ZONE 05</span>
+        <span class="zone-card-status restricted">Sur abonnement</span>
+      </div>
+      <div class="zone-card-name">Afrique Maritime</div>
+      <div class="zone-card-region">Flux · Ports · Piraterie · Presence navale</div>
+      <div class="zone-card-desc">
+        Cartographie des flux maritimes africains : Suez–Bab el-Mandeb–Ormuz, route du Cap, Golfe de Guinee, canal du Mozambique. Presence navale FR / CN / US.
+      </div>
+      <div class="zone-card-meta">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Calques</div>
+          <div class="meta-cell-value small">4 groupes</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Ports</div>
+          <div class="meta-cell-value">50</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Flux</div>
+          <div class="meta-cell-value">10</div>
+        </div>
+      </div>
+      <div class="zone-card-cta">
+        <span class="zone-cta-label subscribe">S'abonner</span>
+        <span class="zone-cta-arrow">→</span>
+      </div>
+    </a>
+
     <!-- ASIE DU SUD -->
     <a class="zone-card" href="./asie-sud/index.html" data-zone="asie">
       <div class="zone-card-row1">
-        <span class="zone-card-index">ZONE 05</span>
+        <span class="zone-card-index">ZONE 06</span>
         <span class="zone-card-status restricted">Sur abonnement</span>
       </div>
       <div class="zone-card-name">Asie du Sud</div>
@@ -939,10 +970,16 @@ html, body {
     <span>MDG-04</span>
   </div>
 </div>
+<div id="zone-label-afrique" class="zone-label" style="display:none">
+  <div class="zone-label-inner">
+    <span class="zone-label-dot"></span>
+    <span>AFR-05</span>
+  </div>
+</div>
 <div id="zone-label-asie" class="zone-label" style="display:none">
   <div class="zone-label-inner">
     <span class="zone-label-dot"></span>
-    <span>ASIE-05</span>
+    <span>ASIE-06</span>
   </div>
 </div>
 
@@ -976,11 +1013,12 @@ html, body {
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
 const ZONES = {
-  mo:         { name: 'Moyen-Orient', coords: [44.0, 33.0],  color: '#c49a3c' },
-  sahel:      { name: 'Sahel',        coords: [0.0, 16.0],   color: '#c49a3c' },
-  rdc:        { name: 'Grands Lacs',  coords: [29.2, -2.0],  color: '#c49a3c' },
-  madagascar: { name: 'Madagascar',   coords: [47.0, -19.0], color: '#c49a3c' },
-  asie:       { name: 'Asie du Sud',  coords: [71.0, 29.0],  color: '#c49a3c' }
+  mo:         { name: 'Moyen-Orient',     coords: [44.0, 33.0],  color: '#c49a3c' },
+  sahel:      { name: 'Sahel',            coords: [0.0, 16.0],   color: '#c49a3c' },
+  rdc:        { name: 'Grands Lacs',      coords: [29.2, -2.0],  color: '#c49a3c' },
+  madagascar: { name: 'Madagascar',       coords: [47.0, -19.0], color: '#c49a3c' },
+  afrique:    { name: 'Afrique Maritime', coords: [20.0, 5.0],   color: '#c49a3c' },
+  asie:       { name: 'Asie du Sud',      coords: [71.0, 29.0],  color: '#c49a3c' }
 };
 
 const map = new mapboxgl.Map({
@@ -1060,6 +1098,7 @@ map.on('style.load', () => {
   document.getElementById('zone-label-sahel').style.display = 'block';
   document.getElementById('zone-label-rdc').style.display = 'block';
   document.getElementById('zone-label-madagascar').style.display = 'block';
+  document.getElementById('zone-label-afrique').style.display = 'block';
   document.getElementById('zone-label-asie').style.display = 'block';
 
   positionLabels();

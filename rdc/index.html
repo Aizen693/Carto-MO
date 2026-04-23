@@ -184,7 +184,7 @@
       <span class="yr">2005</span>
       <div id="slider-inner">
         <div id="slider-label">2005-2006</div>
-        <input type="range" id="timeline-slider" min="0" max="9" value="0" step="1">
+        <input type="range" id="timeline-slider" min="0" max="5" value="0" step="1">
       </div>
       <span class="yr">2026</span>
     </div>
@@ -231,7 +231,14 @@ const ZONE_CONFIG = {
     };
     return MAP[n] !== undefined ? MAP[n] : n;
   },
-  PERIODS: [],
+  PERIODS: [
+    { label: 'Jan 01-15', file: '2026-jan-01-15.geojson' },
+    { label: 'Jan 16-31', file: '2026-jan-16-31.geojson' },
+    { label: 'Fev 01-14', file: '2026-fev-01-14.geojson' },
+    { label: 'Fev 15-28', file: '2026-fev-15-28.geojson' },
+    { label: 'Mars 01-15', file: '2026-mars-01-15.geojson' },
+    { label: 'Avril 01-15', file: '2026-avr-01-15.geojson' },
+  ],
   STYLES: {
     standard:  'mapbox://styles/mapbox/standard',
     satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
@@ -242,7 +249,7 @@ const ZONE_CONFIG = {
   MAP_BEARING: 0,
   SEARCH_BBOX: [20, -12, 45, 8],
   MAP_ZONES: {"type":"FeatureCollection","features":[]},
-  BADGE_ALL_TEXT: 'Toutes · 2023–2026',
+  BADGE_ALL_TEXT: 'Toutes · Jan–Avril 2026',
   TUTORIAL_KEY: 'algor-tutorial-seen'
 };
 </script>

@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[7.1722,4.4444]},"properties":{"name":"Bonny Island LNG","type":"Petrolier / LNG","pays":"Nigeria","description":"1er hub LNG africain (22 Mtpa). NLNG Ltd (Shell/Total/Eni/NNPC). Exportations Asie/Europe.","sources":"NLNG|https://www.nlng.com Shell_Nigeria|https://www.shell.com.ng/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[7.0498,4.8156]},"properties":{"name":"Port Harcourt / Bonny Oil","type":"Petrolier / LNG","pays":"Nigeria","description":"Terminal export brut Bonny Light. Zone d'insurrection Niger Delta historique (MEND).","sources":"NNPC|https://www.nnpcgroup.com"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[12.3695,-6.1349]},"properties":{"name":"Soyo LNG (Angola LNG)","type":"Petrolier / LNG","pays":"Angola","description":"Terminal LNG du delta du Congo. 5.2 Mtpa. Chevron/Sonangol/BP/Eni/Total.","sources":"Angola_LNG|https://www.angolalng.com"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[12.2000,-5.5500]},"properties":{"name":"Cabinda Oil Terminal","type":"Petrolier / LNG","pays":"Angola","description":"Principal terminal petrolier Angola. Enclave de Cabinda, insurrection FLEC active mais basse intensite.","sources":"Sonangol|https://www.sonangol.co.ao"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[32.3472,29.6006]},"properties":{"name":"Ain Sukhna","type":"Petrolier / LNG","pays":"Egypte","description":"Terminal du SuMed Pipeline (Red Sea - Alexandrie). Alternative au Canal de Suez pour bruts.","sources":"SuMed_Pipeline|https://sumed-pipeline.com"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[-0.3239,35.8522]},"properties":{"name":"Arzew GL1Z/GL2Z","type":"Petrolier / LNG","pays":"Algerie","description":"Principal complexe LNG algerien. Export Sonatrach vers Europe (exposee a la guerre Ukraine).","sources":"Sonatrach|https://www.sonatrach.dz"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[6.9072,36.8789]},"properties":{"name":"Skikda LNG","type":"Petrolier / LNG","pays":"Algerie","description":"Complexe LNG + raffinerie Skikda. Export brut et GNL vers Europe.","sources":"Sonatrach|https://www.sonatrach.dz"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[39.4570,-10.2500]},"properties":{"name":"Cabo Delgado LNG (Afungi)","type":"Petrolier / LNG","pays":"Mozambique","description":"Projet TotalEnergies 20 Mtpa, suspendu depuis attaque ISIS-Mozambique Palma mars 2021. Reprise annoncee 2025.","sources":"TotalEnergies|https://totalenergies.com/ CFR_Mozambique|https://www.cfr.org/"}}
+  ]
+}

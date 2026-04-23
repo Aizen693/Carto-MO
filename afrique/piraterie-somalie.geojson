@@ -1,0 +1,7 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[42.0,22.0],[62.0,22.0],[62.0,-2.0],[42.0,-2.0],[42.0,22.0]]]},"properties":{"name":"Zone HRA Ocean Indien nord","type":"Piraterie","zone":"Corne de l'Afrique","description":"High Risk Area (HRA) reconnue par l'IMO. Couvre Golfe d'Aden, Bab el-Mandeb, mer d'Arabie. Resurgence 2024-2026 avec captures MV Abdullah, MV Ruen.","sources":"IMB_Piracy|https://www.icc-ccs.org/icc/imb EU_NAVFOR|https://www.eunavfor.eu/ UKMTO|https://www.ukmto.org/"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[43.0,14.5],[46.0,14.5],[46.0,11.5],[43.0,11.5],[43.0,14.5]]]},"properties":{"name":"Bab el-Mandeb (attaques houthies)","type":"Piraterie","zone":"Bab el-Mandeb","description":"Zone d'attaques Ansar Allah (Houthis) depuis nov. 2023. Missiles anti-navire, drones, USV. Operation Prosperity Guardian (US-UK) + Aspides (UE).","sources":"CENTCOM|https://www.centcom.mil/ EU_ASPIDES|https://www.eeas.europa.eu/eeas/eunavfor-aspides_en ACLED|https://acleddata.com/"}}
+  ]
+}

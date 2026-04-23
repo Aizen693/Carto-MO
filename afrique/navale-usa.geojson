@@ -1,0 +1,10 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[43.1551,11.5471]},"properties":{"name":"Camp Lemonnier (Djibouti)","type":"Base navale","pays":"USA","description":"Principale base US permanente en Afrique (Combined Joint Task Force – Horn of Africa). 4500 militaires. Drones, C-130, patrouilles P-8 Poseidon. Contre-terrorisme Corne + SLOC.","sources":"DoD_AFRICOM|https://www.africom.mil/ CSIS_Lemonnier|https://www.csis.org/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[72.4110,-7.3132]},"properties":{"name":"Diego Garcia (BIOT)","type":"Base navale","pays":"USA / UK","description":"Base strategique US-UK dans l'ocean Indien. Bombardiers B-2, B-52, sous-marins SSBN. Gestion future contestee (Maurice-UK 2024 accord).","sources":"DoD|https://www.defense.gov/ UK_FCDO|https://www.gov.uk/government/organisations/foreign-commonwealth-development-office"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[40.9320,-2.2450]},"properties":{"name":"Manda Bay (Kenya)","type":"Point d'appui","pays":"USA","description":"Base avancee US au Kenya pour operations anti-Shabaab Somalie. Attaquee par al-Shabaab en janvier 2020 (3 Americains tues).","sources":"DoD_AFRICOM|https://www.africom.mil/ LongWarJournal|https://www.longwarjournal.org/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[13.3704,9.3386]},"properties":{"name":"Garoua (Cameroun)","type":"Point d'appui","pays":"USA","description":"Base aerienne support US pour ops anti-Boko Haram/ISWAP dans bassin du lac Tchad. Drones, ISR.","sources":"DoD_AFRICOM|https://www.africom.mil/ Brookings|https://www.brookings.edu/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[8.6753,1.7054]},"properties":{"name":"Sao Tome (ouverture)","type":"Projet","pays":"USA","description":"Accord d'acces US-Sao Tome 2024 pour missions cote Atlantique. Contrepoids a Bata (Chine).","sources":"US_State_Dept|https://www.state.gov/ CFR|https://www.cfr.org/"}}
+  ]
+}

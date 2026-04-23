@@ -1,0 +1,10 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[43.0806,11.6253]},"properties":{"name":"PLA Support Base (Djibouti)","type":"Base navale","pays":"Chine","description":"Ouverte aout 2017. 1re base militaire chinoise outre-mer. 2000 soldats. Quai permettant accueil porte-avions. Face a Camp Lemonnier (US).","sources":"CSIS_China_Power|https://chinapower.csis.org/ DoD_China_Report|https://www.defense.gov/ US_Naval_War_College|https://usnwc.edu/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[43.1169,11.7039]},"properties":{"name":"Doraleh Container Terminal","type":"Point d'appui","pays":"Chine","description":"Terminal conteneurs concede a CMHI (China Merchants). Dual-use potentiel. Enjeu souverainete Djibouti vs DP World (arbitrage 2018).","sources":"CSIS_Djibouti|https://www.csis.org/ Brookings|https://www.brookings.edu/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[14.5083,-22.9576]},"properties":{"name":"Walvis Bay (access rumored)","type":"Point d'appui","pays":"Chine","description":"Port elargi par China Harbour Engineering. Hypothese d'acces militaire chinois non confirmee. Pivot SADC Atlantique sud.","sources":"AIDDATA|https://www.aiddata.org/ ISS_Africa|https://issafrica.org"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[9.7701,1.8650]},"properties":{"name":"Bata (Guinee Equatoriale)","type":"Projet","pays":"Chine","description":"Projet de base militaire chinoise Atlantique rapporte 2021 (WSJ). Refute officiellement. Port elargi par CCCC, quai militarise potentiel.","sources":"WSJ|https://www.wsj.com/ CFR|https://www.cfr.org/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[32.5914,-25.9653]},"properties":{"name":"Maputo (appui portuaire)","type":"Point d'appui","pays":"Chine","description":"Investissements CCCC portuaires. Pas de base militaire confirmee. Interet chinois Canal Mozambique post-LNG Cabo Delgado.","sources":"AIDDATA|https://www.aiddata.org/ CFR_Mozambique|https://www.cfr.org/"}}
+  ]
+}
