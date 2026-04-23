@@ -3,72 +3,114 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [71.5249, 34.6859] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5249,
+          34.6859
+        ]
+      },
       "properties": {
         "name": "TTP",
         "type": "Attaque",
         "description": "Date: 16/02/2026\nPays: Pakistan (Bajaur, KP)\nEvenement: Attentat-suicide vehicule + assaut arme leger — Bajaur\nDetail: Un kamikaze precipite un vehicule piege sur un checkpoint de securite du district de Bajaur, immediatement suivi d'un assaut a l'arme legere. Les forces pakistanaises tuent 12 militants. Attribution TTP — cellules operant depuis l'Afghanistan selon Islamabad. Declenche l'escalade diplomatique des 18-19 fevrier.\nBilan: 11 membres des forces de securite et 1 enfant tues, 7 blesses, 12 militants TTP tues",
-        "sources": "Wikipedia 2026 Bajaur attack|https://en.wikipedia.org/wiki/2026_Bajaur_attack Times of Islamabad|https://timesofislamabad.com/16-02-2026/massive-vehicle-borne-suicide-attack-struck-a-security-official-compound-in-kp/ Crisis Group|https://www.crisisgroup.org/sites/default/files/2026-02/354-pakistan-militant-surge.pdf"
+        "sources": "Wikipedia_2026_Bajaur_attack|https://en.wikipedia.org/wiki/2026_Bajaur_attack Times_of_Islamabad|https://timesofislamabad.com/16-02-2026/massive-vehicle-borne-suicide-attack-struck-a-security-official-compound-in-kp/ Crisis_Group|https://www.crisisgroup.org/sites/default/files/2026-02/354-pakistan-militant-surge.pdf"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [73.0593, 33.7177] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.0593,
+          33.7177
+        ]
+      },
       "properties": {
         "name": "ISI",
         "type": "Crise diplomatique",
         "description": "Date: 19/02/2026\nPays: Pakistan (Islamabad)\nEvenement: Demarche diplomatique forte contre Kaboul\nDetail: Le ministere des Affaires etrangeres pakistanais convoque l'adjoint au chef de mission afghan et protest formellement contre l'utilisation du territoire afghan par les insurges. Prelude a l'offensive aerienne du 27 fevrier.\nBilan: escalade diplomatique, rappels d'ambassadeurs",
-        "sources": "Wikipedia 2026 Bajaur attack|https://en.wikipedia.org/wiki/2026_Bajaur_attack Wikipedia 2026 Afghanistan-Pakistan war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war Anadolu Agency|https://www.aa.com.tr/en/asia-pacific/timeline-how-pakistan-afghanistan-tensions-reached-a-breaking-point/3842132"
+        "sources": "Wikipedia_2026_Bajaur_attack|https://en.wikipedia.org/wiki/2026_Bajaur_attack Wikipedia_2026_Afghanistan-Pakistan_war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war Anadolu_Agency|https://www.aa.com.tr/en/asia-pacific/timeline-how-pakistan-afghanistan-tensions-reached-a-breaking-point/3842132"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [74.2556, 34.5107] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.2556,
+          34.5107
+        ]
+      },
       "properties": {
         "name": "Pakistan Army",
         "type": "Incident frontalier",
         "description": "Date: 20/02/2026\nPays: Ligne de Controle (Cachemire)\nEvenement: Violation de cessez-le-feu — secteur Nowgam, Kupwara\nDetail: Tirs pakistanais depuis les postes de la LoC cote AJK sur le secteur de Toot Mar Gali dans la zone de Nowgam, district de Kupwara. Premiere violation majeure documentee de 2026, rompant la trêve DGMO de mai 2025.\nBilan: ripostes indiennes, pas de victimes civiles confirmees cote indien",
-        "sources": "DD News|https://ddnews.gov.in/en/pakistan-violates-ceasefire-for-10th-consecutive-day-along-loc-in-jk/ Anadolu Agency|https://www.aa.com.tr/en/asia-pacific/india-pakistan-accuse-each-other-of-ceasefire-violations-along-kashmir-border/3557487 SATP J&K|https://www.satp.org/terrorist-activity/india-jammukashmir"
+        "sources": "DD_News|https://ddnews.gov.in/en/pakistan-violates-ceasefire-for-10th-consecutive-day-along-loc-in-jk/ Anadolu_Agency|https://www.aa.com.tr/en/asia-pacific/india-pakistan-accuse-each-other-of-ceasefire-violations-along-kashmir-border/3557487 SATP_J&K|https://www.satp.org/terrorist-activity/india-jammukashmir"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [71.3879, 34.1304] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.3879,
+          34.1304
+        ]
+      },
       "properties": {
         "name": "Afghan Taliban",
         "type": "Incident frontalier",
         "description": "Date: 24/02/2026\nPays: Ligne Durand (KP / Nangarhar)\nEvenement: Affrontements Pak-Afg a la frontiere — post airstrikes\nDetail: Nouveaux accrochages entre forces pakistanaises et talibanes afghanes a la frontiere, suite aux frappes. Echange de tirs d'artillerie. Al Jazeera rapporte des pertes des deux cotes.\nBilan: pertes bilaterales, intensification des tensions",
-        "sources": "Al Jazeera|https://www.aljazeera.com/news/2026/2/24/fresh-afghan-pakistani-border-clashes-follow-deadly-strikes Wikipedia Afghanistan-Pakistan border skirmishes|https://en.wikipedia.org/wiki/Afghanistan%E2%80%93Pakistan_clashes_(2024%E2%80%93present)"
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/2/24/fresh-afghan-pakistani-border-clashes-follow-deadly-strikes Wikipedia_Afghanistan-Pakistan_border_skirmishes|https://en.wikipedia.org/wiki/Afghanistan%E2%80%93Pakistan_clashes_(2024%E2%80%93present)"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [71.5249, 34.6859] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5249,
+          34.6859
+        ]
+      },
       "properties": {
         "name": "TTP",
         "type": "Attaque",
         "description": "Date: 25/02/2026\nPays: Pakistan (Bajaur, KP)\nEvenement: Tir sur patrouille police — 4 policiers tues\nDetail: Ouverture du feu sur une patrouille a Bajaur, 9 jours apres l'attentat-suicide du 16 fevrier. Phase de pression TTP maintenue contre les FC KP.\nBilan: 4 policiers martyrs",
-        "sources": "Pakistan Today|https://www.pakistantoday.com.pk/2026/02/25/four-policemen-martyred-as-armed-men-open-fire-on-police-patrol-in-bajaur"
+        "sources": "Pakistan_Today|https://www.pakistantoday.com.pk/2026/02/25/four-policemen-martyred-as-armed-men-open-fire-on-police-patrol-in-bajaur"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [69.1723, 34.5260] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.1723,
+          34.526
+        ]
+      },
       "properties": {
         "name": "Pakistan Air Force",
         "type": "Attaque",
         "description": "Date: 27/02/2026\nPays: Afghanistan (Kabul)\nEvenement: Frappes aeriennes PAF sur Kabul — \"guerre ouverte\"\nDetail: La Pakistan Air Force mene des frappes majeures sur Kabul et Kandahar. Pakistan declare la guerre ouverte au Taliban afghan. Al Jazeera parle de \"major casualties\" des deux cotes. Cibles revendiquees : 313 Corps, depots d'armes, camps d'entrainement TTP/ISKP.\nBilan: victimes civiles et combattants, 4 morts confirmes en version officielle, chiffres plus eleves cotes afghan",
-        "sources": "Al Jazeera|https://www.aljazeera.com/news/2026/2/27/air-attacks-on-kabul-push-pakistan-taliban-crisis-into-uncharted-territory Military.com|https://www.military.com/feature/2026/02/27/pakistan-declares-open-war-afghan-taliban-airstrikes-hammer-kabul-and-kandahar.html PBS|https://www.pbs.org/newshour/world/afghanistan-accuses-pakistan-of-carrying-out-airstrikes-that-killed-4-in-kabul Wikipedia 2026 Afghanistan-Pakistan war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war"
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/2/27/air-attacks-on-kabul-push-pakistan-taliban-crisis-into-uncharted-territory Military.com|https://www.military.com/feature/2026/02/27/pakistan-declares-open-war-afghan-taliban-airstrikes-hammer-kabul-and-kandahar.html PBS|https://www.pbs.org/newshour/world/afghanistan-accuses-pakistan-of-carrying-out-airstrikes-that-killed-4-in-kabul Wikipedia_2026_Afghanistan-Pakistan_war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [65.7100, 31.6100] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          65.71,
+          31.61
+        ]
+      },
       "properties": {
         "name": "Pakistan Air Force",
         "type": "Attaque",
         "description": "Date: 27/02/2026\nPays: Afghanistan (Kandahar)\nEvenement: Frappes sur centre d'entrainement Tarawo\nDetail: En parallele des frappes sur Kabul, la PAF cible le centre d'entrainement Tarawo et les infrastructures logistiques (depot de carburant) a Kandahar. Kam Air rapporte la destruction d'un de ses depots de carburant.\nBilan: infrastructures detruites, victimes cote Taliban",
-        "sources": "Military.com|https://www.military.com/feature/2026/02/27/pakistan-declares-open-war-afghan-taliban-airstrikes-hammer-kabul-and-kandahar.html Army Recognition|https://www.armyrecognition.com/news/aerospace-news/2026/pakistan-fighter-jets-strike-kabul-as-2026-war-with-afghanistan-escalates"
+        "sources": "Military.com|https://www.military.com/feature/2026/02/27/pakistan-declares-open-war-afghan-taliban-airstrikes-hammer-kabul-and-kandahar.html Army_Recognition|https://www.armyrecognition.com/news/aerospace-news/2026/pakistan-fighter-jets-strike-kabul-as-2026-war-with-afghanistan-escalates"
       }
     }
   ]

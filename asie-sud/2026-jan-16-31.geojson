@@ -3,92 +3,146 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [75.5423, 32.4816] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.5423,
+          32.4816
+        ]
+      },
       "properties": {
         "name": "Indian Army",
         "type": "Incursion",
         "description": "Date: 23/01/2026\nPays: Inde (Kathua, J&K)\nEvenement: Neutralisation d'un commandant Jaish-e-Mohammed a Billawar\nDetail: Les forces indiennes annoncent la mort de \"Usmaan\", cadre pakistanais du JeM, a Parhetar (village de Billawar, district de Kathua). Une operation coordonnee entre Indian Army et J&K Police.\nBilan: 1 cadre JeM neutralise, explosifs et armement saisis",
-        "sources": "SATP J&K Timeline 2026|https://www.satp.org/terrorist-activity/india-jammukashmir Hindustan Times|https://www.hindustantimes.com/india-news/kashmir-kathua"
+        "sources": "SATP_J&K_Timeline_2026|https://www.satp.org/terrorist-activity/india-jammukashmir Hindustan_Times|https://www.hindustantimes.com/india-news/kashmir-kathua"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [75.1148, 32.5608] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.1148,
+          32.5608
+        ]
+      },
       "properties": {
         "name": "BSF",
         "type": "Incident frontalier",
         "description": "Date: 25/01/2026\nPays: Inde (Samba, J&K)\nEvenement: Intrus pakistanais abattu sur la International Border\nDetail: La Border Security Force (BSF) intercepte un individu non identifie tentant de franchir l'IB (International Border) dans le secteur de Samba. Tir somme suivi de neutralisation.\nBilan: 1 intrus tue",
-        "sources": "SATP J&K 2026|https://www.satp.org/terrorist-activity/india-jammukashmir Times of India|https://timesofindia.indiatimes.com/india/samba-border"
+        "sources": "SATP_J&K_2026|https://www.satp.org/terrorist-activity/india-jammukashmir Times_of_India|https://timesofindia.indiatimes.com/india/samba-border"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [66.9936, 30.1798] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.9936,
+          30.1798
+        ]
+      },
       "properties": {
         "name": "BLA",
         "type": "Attaque",
         "description": "Date: 30/01/2026\nPays: Pakistan (Baloutchistan)\nEvenement: Attaques coordonnees BLA — Quetta\nDetail: Vers 03h00 (PKT), la Balochistan Liberation Army lance une offensive simultanee sur 9 districts. A Quetta, 3 postes de police incendies, assaut sur prison de haute securite, helicoptere militaire engage. Phase initiale de l'une des plus vastes operations BLA jamais menees.\nBilan: policiers et civils tues, assaillants neutralises partiellement",
-        "sources": "Wikipedia 2026 Balochistan attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Business Standard|https://www.business-standard.com/world-news/balochistan-liberation-army-pakistan-blast-quetta-126020100085_1.html DD News|https://ddnews.gov.in/en/who-is-the-baloch-liberation-army-behind-pakistans-balochistan-attacks/"
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Business_Standard|https://www.business-standard.com/world-news/balochistan-liberation-army-pakistan-blast-quetta-126020100085_1.html DD_News|https://ddnews.gov.in/en/who-is-the-baloch-liberation-army-behind-pakistans-balochistan-attacks/"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [62.3225, 25.1264] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          62.3225,
+          25.1264
+        ]
+      },
       "properties": {
         "name": "BLA",
         "type": "Attaque",
         "description": "Date: 30/01/2026\nPays: Pakistan (Gwadar, Baloutchistan)\nEvenement: Assaut BLA — cite ouvriere Gwadar\nDetail: Insurges attaquent une colonie de travailleurs (ouvriers de Khuzdar) dans le port strategique de Gwadar. Attentat-suicide dans le meme creneau. Message anti-CPEC adresse a la Chine.\nBilan: 5 ouvriers d'une meme famille tues",
-        "sources": "Wikipedia 2026 Balochistan attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Al Jazeera|https://www.aljazeera.com/news/2026/1/31/suspected-separatists-kill-8-pakistani-policemen-in-coordinated-attacks"
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Al_Jazeera|https://www.aljazeera.com/news/2026/1/31/suspected-separatists-kill-8-pakistani-policemen-in-coordinated-attacks"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [66.8439, 29.7992] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.8439,
+          29.7992
+        ]
+      },
       "properties": {
         "name": "BLA",
         "type": "Attaque",
         "description": "Date: 30/01/2026\nPays: Pakistan (Mastung, Baloutchistan)\nEvenement: Attentat-suicide — secteur Mastung\nDetail: Kamikaze BLA contre position de securite. Mastung est l'un des 9 districts cibles simultanement. L'attaque fait partie de l'offensive la plus vaste jamais conduite par la BLA.\nBilan: victimes multiples, bilan inclus dans le total 58 civils + 22 securite",
-        "sources": "Wikipedia 2026 Balochistan attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Organiser|https://organiser.org/2026/02/03/338276/world/baloch-army-locks-pakistan-as-complex-terrain-catalyses-strategic-edge-islamabad-kills-145-fighters-seeking-liberation/"
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Organiser|https://organiser.org/2026/02/03/338276/world/baloch-army-locks-pakistan-as-complex-terrain-catalyses-strategic-edge-islamabad-kills-145-fighters-seeking-liberation/"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [66.0251, 29.5527] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.0251,
+          29.5527
+        ]
+      },
       "properties": {
         "name": "BLA",
         "type": "Attaque",
         "description": "Date: 30/01/2026\nPays: Pakistan (Nushki, Baloutchistan)\nEvenement: Attentat-suicide et tirs sur centres administratifs\nDetail: Nushki touche dans le cadre de l'offensive multi-sites BLA. Banque, ecole, marche et postes de securite vises simultanement.\nBilan: victimes inclues dans bilan global de 274 morts sur 30 janvier – 5 fevrier",
-        "sources": "Wikipedia 2026 Balochistan attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Al Jazeera Features|https://www.aljazeera.com/features/2026/2/1/everyone-here-is-corrupt-what-fuels-the-balochistan-separatist-violence"
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Al_Jazeera_Features|https://www.aljazeera.com/features/2026/2/1/everyone-here-is-corrupt-what-fuels-the-balochistan-separatist-violence"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [63.4707, 25.2631] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          63.4707,
+          25.2631
+        ]
+      },
       "properties": {
         "name": "BLA",
         "type": "Attaque",
         "description": "Date: 30/01/2026\nPays: Pakistan (Pasni, Baloutchistan)\nEvenement: Assaut BLA sur infrastructures cotieres\nDetail: Pasni frappe dans l'offensive simultanee. Axe cotier Makran - un des couloirs strategiques du CPEC pour la Chine.\nBilan: degats materiels et victimes",
-        "sources": "Wikipedia 2026 Balochistan attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks DD News|https://www.newsonair.gov.in/baloch-liberation-army-launches-major-attack-in-balochistan/"
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks DD_News|https://www.newsonair.gov.in/baloch-liberation-army-launches-major-attack-in-balochistan/"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [65.4237, 28.5842] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          65.4237,
+          28.5842
+        ]
+      },
       "properties": {
         "name": "BLA",
         "type": "Attaque",
         "description": "Date: 30/01/2026\nPays: Pakistan (Kharan, Baloutchistan)\nEvenement: Attaque coordonnee — Kharan\nDetail: Kharan cible dans la vague d'attaques BLA. Armes legeres, grenades et gilets explosifs. Positions policieres et paramilitaires visees.\nBilan: victimes incluses dans total global",
-        "sources": "Wikipedia 2026 Balochistan attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks"
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [66.9936, 30.1798] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.9936,
+          30.1798
+        ]
+      },
       "properties": {
         "name": "BLA",
         "type": "Attaque",
         "description": "Date: 31/01/2026\nPays: Pakistan (Baloutchistan)\nEvenement: Suite des attaques coordonnees — 8 policiers tues\nDetail: Les insurges presumes separatistes prolongent l'offensive au lendemain du 30 janvier. Al Jazeera rapporte 8 policiers tues dans les attaques coordonnees.\nBilan: 8 policiers pakistanais tues, 33 morts total confirmes au 31/01",
-        "sources": "Al Jazeera 31 jan 2026|https://www.aljazeera.com/news/2026/1/31/suspected-separatists-kill-8-pakistani-policemen-in-coordinated-attacks"
+        "sources": "Al_Jazeera_31_jan_2026|https://www.aljazeera.com/news/2026/1/31/suspected-separatists-kill-8-pakistani-policemen-in-coordinated-attacks"
       }
     }
   ]

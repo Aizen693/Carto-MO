@@ -3,52 +3,82 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [71.5249, 34.0151] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5249,
+          34.0151
+        ]
+      },
       "properties": {
         "name": "Pakistan Army",
         "type": "Siege",
         "description": "Date: 08/03/2026\nPays: Pakistan (KP)\nEvenement: Intelligence-based operations — 13 terroristes tues\nDetail: Operations de renseignement menees a travers le Khyber Pakhtunkhwa. Pakistan Today rapporte 13 terroristes neutralises en un jour. Continuite de la pression post-frappes de fevrier.\nBilan: 13 militants tues",
-        "sources": "Pakistan Today|https://www.pakistantoday.com.pk/2026/03/08/security-forces-kill-13-terrorists-in-intelligence-based-operations-across-khyber-pakhtunkhwa"
+        "sources": "Pakistan_Today|https://www.pakistantoday.com.pk/2026/03/08/security-forces-kill-13-terrorists-in-intelligence-based-operations-across-khyber-pakhtunkhwa"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [69.2795, 34.5553] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.2795,
+          34.5553
+        ]
+      },
       "properties": {
         "name": "TTP",
         "type": "Geopolitique",
         "description": "Date: 10/03/2026\nPays: Afghanistan / Pakistan\nEvenement: TTP annonce l'offensive de printemps \"Khyber\"\nDetail: Le Tehrik-e-Taliban Pakistan annonce officiellement l'operation \"Khyber\", offensive de printemps contre les forces pakistanaises. Declaration relayee par les chaines TTP et repercutee par Shamshad News.\nBilan: signalement strategique — montee en intensite annoncee",
-        "sources": "Shamshad News|https://shamshadnews.com/en/2026/03/10/ttp-announces-spring-offensive-khyber-against-pakistani-forces/ Wikipedia Insurgency in KP|https://en.wikipedia.org/wiki/Insurgency_in_Khyber_Pakhtunkhwa"
+        "sources": "Shamshad_News|https://shamshadnews.com/en/2026/03/10/ttp-announces-spring-offensive-khyber-against-pakistani-forces/ Wikipedia_Insurgency_in_KP|https://en.wikipedia.org/wiki/Insurgency_in_Khyber_Pakhtunkhwa"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [69.1723, 34.5260] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.1723,
+          34.526
+        ]
+      },
       "properties": {
         "name": "Pakistan Air Force",
         "type": "Attaque",
         "description": "Date: 13/03/2026\nPays: Afghanistan (Kabul, Kandahar, Paktia, Paktika)\nEvenement: Seconde vague de frappes PAF\nDetail: La PAF mene une serie de frappes aeriennes sur 4 provinces afghanes. Cibles revendiquees : 313 Corps (Kabul), depot d'armes, centre d'entrainement Tarawo (Kandahar), depot de carburant Kam Air, camp Sher-e-Nau (Paktia). Kaboul accuse Islamabad de viser civils et infrastructures civiles.\nBilan: victimes multiples, tension aerienne maximale",
-        "sources": "Al Jazeera|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan Wikipedia 2026 Pakistani airstrikes|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan Army Recognition|https://www.armyrecognition.com/news/aerospace-news/2026/pakistan-fighter-jets-strike-kabul-as-2026-war-with-afghanistan-escalates"
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan Wikipedia_2026_Pakistani_airstrikes|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan Army_Recognition|https://www.armyrecognition.com/news/aerospace-news/2026/pakistan-fighter-jets-strike-kabul-as-2026-war-with-afghanistan-escalates"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [69.5394, 33.7000] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.5394,
+          33.7
+        ]
+      },
       "properties": {
         "name": "Pakistan Air Force",
         "type": "Attaque",
         "description": "Date: 13/03/2026\nPays: Afghanistan (Paktia)\nEvenement: Frappe sur camp Sher-e-Nau\nDetail: Frappe ciblee sur un camp presume de militants dans la province de Paktia, dans le cadre de la serie du 13 mars. Pakistan identifie Sher-e-Nau comme camp militant ; Kaboul conteste.\nBilan: victimes cote Taliban et combattants locaux",
-        "sources": "Wikipedia 2026 Pakistani airstrikes|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan"
+        "sources": "Wikipedia_2026_Pakistani_airstrikes|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan"
       }
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [65.7100, 31.6100] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          65.71,
+          31.61
+        ]
+      },
       "properties": {
         "name": "Pakistan Air Force",
         "type": "Attaque",
         "description": "Date: 13/03/2026\nPays: Afghanistan (Kandahar)\nEvenement: Frappe sur depot de carburant Kam Air\nDetail: La PAF confirme avoir cible des \"infrastructures logistiques, incluant un depot de carburant\" a Kandahar. La compagnie aerienne afghane Kam Air rapporte la destruction d'un de ses depots.\nBilan: destruction d'infrastructure civile selon Kam Air",
-        "sources": "Al Jazeera|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan Wikipedia|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan"
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan Wikipedia|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan"
       }
     }
   ]
