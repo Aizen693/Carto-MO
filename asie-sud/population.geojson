@@ -1,0 +1,187 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [77.2090, 28.6139] },
+      "properties": {
+        "name": "Delhi (NCT)",
+        "type": "Metropole",
+        "personnes": "33500000",
+        "description": "National Capital Territory. Aire metropolitaine ~33.5M hab (2026 est.). Cible des complots ISI d'avril 2026 (hotels Delhi-NCR).",
+        "ville": "Delhi",
+        "pays": "Inde",
+        "sources": "UN DESA World Urbanization Prospects|https://population.un.org/wup/ Tribune India|https://www.tribuneindia.com/news/delhi/2-isi-operatives-arrested-for-planning-targeted-killings-grenade-attacks-in-delhi-punjab/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [72.8777, 19.0760] },
+      "properties": {
+        "name": "Mumbai",
+        "type": "Metropole",
+        "personnes": "21300000",
+        "description": "Capitale economique indienne. Cible historique (attentats 2008 LeT). Siege de la Navy indienne.",
+        "ville": "Mumbai",
+        "pays": "Inde",
+        "sources": "UN DESA|https://population.un.org/wup/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [67.0011, 24.8607] },
+      "properties": {
+        "name": "Karachi",
+        "type": "Metropole",
+        "personnes": "17200000",
+        "description": "Plus grande metropole pakistanaise. Capitale du Sind. Siege de la Pakistan Navy. Zones sensibles Muhajir / Baloutche.",
+        "ville": "Karachi",
+        "pays": "Pakistan",
+        "sources": "UN DESA|https://population.un.org/wup/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [74.3587, 31.5204] },
+      "properties": {
+        "name": "Lahore",
+        "type": "Metropole",
+        "personnes": "14500000",
+        "description": "Capitale culturelle du Pakistan et du Pendjab pakistanais. A 25 km de la frontiere indienne (Wagah).",
+        "ville": "Lahore",
+        "pays": "Pakistan",
+        "sources": "UN DESA|https://population.un.org/wup/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [73.0479, 33.6007] },
+      "properties": {
+        "name": "Rawalpindi + Islamabad",
+        "type": "Metropole",
+        "personnes": "3600000",
+        "description": "Capitale federale (Islamabad) + ville militaire (Rawalpindi, GHQ). Cibles de l'attentat ISKP du 6 fevrier 2026.",
+        "ville": "Islamabad / Rawalpindi",
+        "pays": "Pakistan",
+        "sources": "UN DESA|https://population.un.org/wup/ CNN|https://www.cnn.com/2026/02/06/asia/islamabad-pakistan-mosque-explosion-intl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [71.5249, 34.0151] },
+      "properties": {
+        "name": "Peshawar",
+        "type": "Ville principale",
+        "personnes": "2400000",
+        "description": "Capitale du Khyber Pakhtunkhwa. Porte d'entree vers l'Afghanistan (passage Torkham a 55 km). Epicentre des operations anti-TTP.",
+        "ville": "Peshawar",
+        "pays": "Pakistan",
+        "sources": "Pakistan Bureau of Statistics|https://www.pbs.gov.pk/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [66.9936, 30.1798] },
+      "properties": {
+        "name": "Quetta",
+        "type": "Ville principale",
+        "personnes": "1100000",
+        "description": "Capitale du Baloutchistan. Cible des attaques BLA du 30 janvier 2026. Minorite hazara persecutee.",
+        "ville": "Quetta",
+        "pays": "Pakistan",
+        "sources": "Wikipedia 2026 Balochistan attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [69.2075, 34.5553] },
+      "properties": {
+        "name": "Kabul",
+        "type": "Metropole",
+        "personnes": "4500000",
+        "description": "Capitale afghane (Taliban). Cible majeure des frappes PAF du 27/02 et 13/03/2026. Hopital Omar Addiction frappe le 16/03 (bilan 400 morts revendique).",
+        "ville": "Kabul",
+        "pays": "Afghanistan",
+        "sources": "Al Jazeera|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan Wikipedia|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [65.7100, 31.6100] },
+      "properties": {
+        "name": "Kandahar",
+        "type": "Ville principale",
+        "personnes": "650000",
+        "description": "Berceau des Taliban, seconde ville afghane. Cible PAF 27/02 (Tarawo) et 13/03/2026 (depot carburant Kam Air).",
+        "ville": "Kandahar",
+        "pays": "Afghanistan",
+        "sources": "Al Jazeera|https://www.aljazeera.com/news/2026/2/27/air-attacks-on-kabul-push-pakistan-taliban-crisis-into-uncharted-territory"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [74.7973, 34.0837] },
+      "properties": {
+        "name": "Srinagar",
+        "type": "Ville principale",
+        "personnes": "1550000",
+        "description": "Capitale d'ete du J&K (Inde). QG 15e Corps (Chinar Corps). Epicentre de l'insurrection cachemirie depuis 1989.",
+        "ville": "Srinagar",
+        "pays": "Inde",
+        "sources": "Census India|https://censusindia.gov.in/ SATP J&K|https://www.satp.org/terrorist-activity/india-jammukashmir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [90.4125, 23.8103] },
+      "properties": {
+        "name": "Dhaka",
+        "type": "Metropole",
+        "personnes": "23000000",
+        "description": "Capitale du Bangladesh. Zone exposee aux flux Rohingyas (Cox's Bazar 200 km SE) et dynamiques islamistes regionales.",
+        "ville": "Dhaka",
+        "pays": "Bangladesh",
+        "sources": "UN DESA|https://population.un.org/wup/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [92.0000, 21.4500] },
+      "properties": {
+        "name": "Camps de refugies Rohingyas (Cox's Bazar)",
+        "type": "Camp refugies",
+        "personnes": "950000",
+        "description": "Plus grand camp de refugies au monde (Kutupalong / Balukhali / Nayapara). ~950 000 Rohingyas fuyant le Myanmar. Zone sensible aux reseaux de trafic.",
+        "ville": "Cox's Bazar",
+        "pays": "Bangladesh",
+        "sources": "UNHCR Rohingya|https://www.unhcr.org/rohingya-emergency.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [71.0990, 34.1300] },
+      "properties": {
+        "name": "Camps IDP Khyber / Nord-Waziristan",
+        "type": "Deplaces internes",
+        "personnes": "285000",
+        "description": "Deplaces internes cumulatifs KP (TTP, Zarb-e-Azb, operations post-2024). Pression humanitaire accrue par fermetures de Torkham.",
+        "ville": "Peshawar / Bannu",
+        "pays": "Pakistan",
+        "sources": "UNHCR Pakistan|https://www.unhcr.org/pk/ IOM|https://www.iom.int/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [68.7500, 31.2500] },
+      "properties": {
+        "name": "Refugies afghans Pakistan (expulsions)",
+        "type": "Camp refugies",
+        "personnes": "2100000",
+        "description": "Refugies afghans historiques au Pakistan. Campagne d'expulsion massive depuis nov. 2023, poursuivie en 2026. Tensions frontalieres croissantes.",
+        "ville": "KP / Balochistan",
+        "pays": "Pakistan",
+        "sources": "UNHCR Pakistan|https://www.unhcr.org/pk/ IOM Afghanistan|https://afghanistan.iom.int/"
+      }
+    }
+  ]
+}

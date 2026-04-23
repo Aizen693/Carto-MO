@@ -1,0 +1,15 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[48.20,-18.90]},"properties":{"name":"Ambatovy","type":"Mine industrielle","mineral":"Nickel / Cobalt","operateur":"Sherritt / Sumitomo / Korea Resources","statut":"Active","volume":"~60 000 t Ni/an","sources":"USGS|https://www.usgs.gov/centers/national-minerals-information-center/nickel-statistics-and-information Mining.com|https://www.mining.com/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.99,-25.04]},"properties":{"name":"QMM Fort-Dauphin","type":"Mine industrielle","mineral":"Ilmenite / Zircon","operateur":"Rio Tinto (QMM)","statut":"Active","volume":"~650 000 t ilmenite/an","sources":"Rio Tinto|https://www.riotinto.com/operations/madagascar/qmm"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[45.15,-22.70]},"properties":{"name":"Ilakaka","type":"Mine artisanale","mineral":"Saphir","operateur":"Artisanat informel","statut":"Active","volume":"Plus grand gisement saphir mondial depuis 1998","sources":"Gemological Institute|https://www.gia.edu"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[43.71,-23.37]},"properties":{"name":"Base Toliara","type":"Mine industrielle","mineral":"Ilmenite","operateur":"Base Resources","statut":"Suspendu depuis 2019","sources":"Base Resources|https://baseresources.com.au"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[45.35,-16.10]},"properties":{"name":"Soalala (Bemolanga)","type":"Mine industrielle","mineral":"Fer","operateur":"Wisco (Chine)","statut":"Gel du projet","sources":"Global Witness|https://www.globalwitness.org"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.33,-17.50]},"properties":{"name":"Kraomita Malagasy","type":"Mine industrielle","mineral":"Chrome","operateur":"KRAOMA","statut":"Active","sources":"EITI Madagascar|https://eiti.org/countries/madagascar"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.83,-16.95]},"properties":{"name":"Maevatanana","type":"Orpaillage artisanal","mineral":"Or alluvial","operateur":"Artisanat informel","statut":"Active","volume":"Non declare (contrebande)","sources":"Global Initiative|https://globalinitiative.net/ WWF|https://www.wwf.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.29,-13.18]},"properties":{"name":"Betsiaka","type":"Orpaillage artisanal","mineral":"Or","operateur":"Artisanat informel","statut":"Active","sources":"Crisis Group|https://www.crisisgroup.org"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.75,-24.55]},"properties":{"name":"Andranondambo","type":"Mine artisanale","mineral":"Saphir","operateur":"Artisanat informel","statut":"Active","sources":"Gemological Institute|https://www.gia.edu"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[48.42,-18.93]},"properties":{"name":"Molo Graphite","type":"Mine industrielle","mineral":"Graphite","operateur":"NextSource Materials","statut":"Production 2023+","sources":"NextSource|https://www.nextsourcematerials.com"}}
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [69.2075, 34.5513] },
+      "properties": {
+        "name": "Pakistan Air Force",
+        "type": "Attaque",
+        "description": "Date: 16/03/2026\nPays: Afghanistan (Kabul)\nEvenement: Frappe sur Omar Addiction Treatment Hospital — Kabul\nDetail: L'Afghanistan accuse Pakistan d'une frappe aerienne sur l'hopital de traitement des addictions Omar (2000 lits), visant selon Kaboul patients et personnel. L'attaque a eu lieu vers 21h heure locale et a detruit de larges sections de l'etablissement. Pakistan nie et affirme n'avoir cible que des installations militaires a Kabul et Nangarhar.\nBilan: 400 morts revendiques par Kaboul (chiffre conteste par Islamabad), enfants parmi les victimes",
+        "sources": "Al Jazeera|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan Al Jazeera — 400 morts|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan PBS|https://www.pbs.org/newshour/world/afghanistan-accuses-pakistan-of-carrying-out-airstrikes-that-killed-hundreds-in-kabul"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [73.0479, 33.5651] },
+      "properties": {
+        "name": "ISI",
+        "type": "Geopolitique",
+        "description": "Date: 20/03/2026\nPays: Pakistan / Afghanistan\nEvenement: Trêve temporaire pour l'Aid al-Fitr\nDetail: Une trêve informelle est observee a l'occasion de l'Aid al-Fitr (20-21 mars). Les operations militaires pakistanaises sur l'Afghanistan sont suspendues. Reprise annoncee apres les festivites.\nBilan: pause temporaire, tensions diplomatiques maintenues",
+        "sources": "Prism News|https://www.prismnews.com/news/pakistan-resumes-military-operations-in-afghanistan-after Anadolu Agency|https://www.aa.com.tr/en/asia-pacific/timeline-how-pakistan-afghanistan-tensions-reached-a-breaking-point/3842132"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [74.8087, 34.0700] },
+      "properties": {
+        "name": "J&K Police",
+        "type": "Siege",
+        "description": "Date: 28/03/2026\nPays: Inde (Jammu-et-Cachemire)\nEvenement: Bilan trimestriel — 10 fatalites terroristes au J&K\nDetail: Le South Asia Terrorism Portal (SATP) comptabilise au moins 10 fatalites terroristes / associees en Jammu-et-Cachemire pour le premier trimestre 2026. Intensite en baisse comparee aux pics de 2025, mais continuite operationnelle des groupes transfrontaliers.\nBilan: 10 morts cumul jan-mars au J&K (SATP)",
+        "sources": "SATP J&K 2026|https://www.satp.org/terrorist-activity/india-jammukashmir Sri Lanka Guardian|https://slguardian.org/jk-lingering-threat/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [71.5249, 34.0151] },
+      "properties": {
+        "name": "TTP",
+        "type": "Attaque",
+        "description": "Date: 29/03/2026\nPays: Pakistan (KP)\nEvenement: Reprise des attaques post-Ramadan — operation Khyber\nDetail: Apres la trêve d'Aid al-Fitr, le TTP intensifie l'offensive de printemps \"Khyber\" annoncee le 10 mars. Frappes sporadiques sur postes avances et convois dans plusieurs districts du KP.\nBilan: victimes cote securite, pressions sur les axes logistiques",
+        "sources": "Shamshad News|https://shamshadnews.com/en/2026/03/10/ttp-announces-spring-offensive-khyber-against-pakistani-forces/ SATP Pakistan|https://www.satp.org/terrorist-activity/pakistan"
+      }
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [75.3245, 33.7275] },
+      "properties": {
+        "name": "LeT",
+        "type": "Attaque",
+        "description": "22/04/2025 — Attaque de Pahalgam (J&K). 5 terroristes LeT tuent 26 civils (majoritairement touristes hindous). Declenche Operation Sindoor (7-10 mai 2025), 4 jours de guerre Inde-Pakistan et ceasefire DGMO le 10 mai 2025. Evenement pivot ayant faconne la periode 2026.",
+        "sources": "Wikipedia 2025 Pahalgam attack|https://en.wikipedia.org/wiki/2025_Pahalgam_attack CFR|https://www.cfr.org/expert-brief/latest-attack-kashmir-escalates-india-pakistan-tensions Britannica|https://www.britannica.com/question/What-was-the-Pahalgam-attack"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [66.9936, 30.1798] },
+      "properties": {
+        "name": "BLA",
+        "type": "Siege",
+        "description": "30-31/01/2026 — Attaques coordonnees majeures BLA sur 9 districts (Quetta, Gwadar, Mastung, Nushki, Pasni, Kharan, Kalat, Bolan, Khuzdar). Plus vaste operation BLA jamais menee. Bilan officiel (05/02): 22 securite + 36 civils tues; 216 militants tues en counter-ops. Total 274 morts.",
+        "sources": "Wikipedia 2026 Balochistan attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Al Jazeera|https://www.aljazeera.com/news/2026/2/2/pakistani-forces-kill-145-fighters-in-balochistan-after-deadly-attacks Organiser|https://organiser.org/2026/02/03/338276/world/baloch-army-locks-pakistan-as-complex-terrain-catalyses-strategic-edge-islamabad-kills-145-fighters-seeking-liberation/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [73.0593, 33.7177] },
+      "properties": {
+        "name": "ISKP",
+        "type": "Attaque",
+        "description": "06/02/2026 — Attentat-suicide sur mosquee chiite a Islamabad (priere du vendredi). 32 morts, 160+ blesses. Revendication EI via Telegram. Operatif afghan arrete. Planifie en Afghanistan.",
+        "sources": "CNN|https://www.cnn.com/2026/02/06/asia/islamabad-pakistan-mosque-explosion-intl Al Jazeera|https://www.aljazeera.com/news/2026/2/7/thousands-mourn-32-victims-of-islamabad-shia-mosque-bombing-in-pakistan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [71.5249, 34.6859] },
+      "properties": {
+        "name": "TTP",
+        "type": "Attaque",
+        "description": "16/02/2026 — Attentat-suicide vehicule + assaut arme a Bajaur (KP). 11 securite + 1 enfant tues, 7 blesses; 12 militants TTP neutralises. Cite par Islamabad comme casus belli majeur pour la riposte aerienne du 27/02 sur Kabul/Kandahar.",
+        "sources": "Wikipedia 2026 Bajaur attack|https://en.wikipedia.org/wiki/2026_Bajaur_attack Crisis Group|https://www.crisisgroup.org/sites/default/files/2026-02/354-pakistan-militant-surge.pdf"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [69.1723, 34.5260] },
+      "properties": {
+        "name": "Pakistan Air Force",
+        "type": "Attaque",
+        "description": "27/02/2026 — Frappes PAF sur Kabul et Kandahar (\"Open War\"). Pakistan declare la guerre ouverte au Taliban afghan. Cibles: 313 Corps, depots d'armes, camp Tarawo. Debut du 2026 Afghanistan-Pakistan war.",
+        "sources": "Al Jazeera|https://www.aljazeera.com/news/2026/2/27/air-attacks-on-kabul-push-pakistan-taliban-crisis-into-uncharted-territory Military.com|https://www.military.com/feature/2026/02/27/pakistan-declares-open-war-afghan-taliban-airstrikes-hammer-kabul-and-kandahar.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [69.2075, 34.5513] },
+      "properties": {
+        "name": "Pakistan Air Force",
+        "type": "Attaque",
+        "description": "16/03/2026 — Frappe sur hopital Omar (Kabul). Afghanistan accuse Pakistan d'avoir frappe l'Omar Addiction Treatment Hospital (2000 lits). Bilan revendique cote afghan: 400 morts, enfants inclus. Pakistan nie avoir cible des civils.",
+        "sources": "Al Jazeera|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan PBS|https://www.pbs.org/newshour/world/afghanistan-accuses-pakistan-of-carrying-out-airstrikes-that-killed-hundreds-in-kabul"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [74.2556, 34.5107] },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Incident frontalier",
+        "description": "20/02/2026 — Violation majeure de ceasefire Kupwara (J&K). Tirs pakistanais depuis l'AJK sur le secteur Nowgam (Toot Mar Gali). Premiere violation significative de 2026, rompant la trêve DGMO de mai 2025.",
+        "sources": "DD News|https://ddnews.gov.in/en/pakistan-violates-ceasefire-for-10th-consecutive-day-along-loc-in-jk/ Anadolu Agency|https://www.aa.com.tr/en/asia-pacific/india-pakistan-accuse-each-other-of-ceasefire-violations-along-kashmir-border/3557487"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [76.8173, 30.6434] },
+      "properties": {
+        "name": "ISI (proxies)",
+        "type": "Attaque",
+        "description": "11/04/2026 — Tentative d'attaque ISI-proxies a Zirakpur (Pendjab). Module Rajveer/Banjara (operatifs Shahzad Bhatti) tente une fusillade sur club, arme en panne. Arrestation Delhi Police Special Cell. Cible plus large: hotels Delhi-NCR.",
+        "sources": "Tribune India|https://www.tribuneindia.com/news/delhi/2-isi-operatives-arrested-for-planning-targeted-killings-grenade-attacks-in-delhi-punjab/"
+      }
+    }
+  ]
+}

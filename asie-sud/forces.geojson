@@ -1,0 +1,170 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [77.2090, 28.6139] },
+      "properties": {
+        "name": "South Block — Delhi (QG Indian Army)",
+        "force": "Indian Army",
+        "type": "QG",
+        "description": "Quartier general strategique de l'armee indienne (Army HQ), integrant le Chief of Army Staff. Centre de commandement des operations conventionnelles et contre-insurrectionnelles.",
+        "sources": "IISS Military Balance 2026|https://www.iiss.org/publications/the-military-balance/ Indian Army|https://www.indianarmy.nic.in/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [74.8087, 34.0837] },
+      "properties": {
+        "name": "15e Corps — Srinagar (Chinar Corps)",
+        "force": "Indian Army",
+        "type": "QG Corps",
+        "description": "Chinar Corps — commandement du theatre Vallee du Cachemire. Operations anti-infiltration LoC secteur nord. Badami Bagh Cantonment.",
+        "sources": "IISS Military Balance 2026|https://www.iiss.org/publications/the-military-balance/ SATP|https://www.satp.org/terrorist-activity/india-jammukashmir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [74.8570, 32.7266] },
+      "properties": {
+        "name": "16e Corps — Nagrota (White Knight Corps)",
+        "force": "Indian Army",
+        "type": "QG Corps",
+        "description": "White Knight Corps — secteur Jammu et plaines de Kathua. Deploye sur la International Border et la LoC sud.",
+        "sources": "IISS Military Balance 2026|https://www.iiss.org/publications/the-military-balance/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [77.5860, 34.1526] },
+      "properties": {
+        "name": "14e Corps — Leh (Fire and Fury Corps)",
+        "force": "Indian Army",
+        "type": "QG Corps",
+        "description": "Fire and Fury Corps — secteur Ladakh, LAC (Line of Actual Control) sino-indienne + glacier de Siachen. Operations en haute altitude.",
+        "sources": "IISS Military Balance 2026|https://www.iiss.org/publications/the-military-balance/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [75.1240, 32.5700] },
+      "properties": {
+        "name": "BSF HQ Western Command — Jammu (Samba)",
+        "force": "BSF",
+        "type": "QG frontalier",
+        "description": "Border Security Force — commandement ouest, controle de l'International Border Inde-Pakistan (secteur Jammu-Samba-Kathua).",
+        "sources": "BSF India|https://www.bsf.gov.in/ SATP|https://www.satp.org/terrorist-activity/india-jammukashmir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [74.8570, 32.7266] },
+      "properties": {
+        "name": "CRPF Jammu — QG contre-insurrectionnel",
+        "force": "CRPF",
+        "type": "QG paramilitaire",
+        "description": "Central Reserve Police Force — deploiement massif J&K pour contre-insurrection urbaine. Coordination avec Indian Army et J&K Police.",
+        "sources": "CRPF India|https://www.crpf.gov.in/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [73.0479, 33.6007] },
+      "properties": {
+        "name": "GHQ Rawalpindi — Pakistan Army",
+        "force": "Pakistan Army",
+        "type": "QG",
+        "description": "General Headquarters de l'armee pakistanaise. Centre strategique, commandement nucleaire et des operations conventionnelles.",
+        "sources": "IISS Military Balance 2026|https://www.iiss.org/publications/the-military-balance/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [72.9875, 33.6145] },
+      "properties": {
+        "name": "Air HQ — Islamabad (PAF)",
+        "force": "Pakistan Air Force",
+        "type": "QG aerien",
+        "description": "Quartier general de la Pakistan Air Force. Commande les frappes de fevrier/mars 2026 sur Kabul, Kandahar, Paktia, Paktika.",
+        "sources": "IISS Military Balance 2026|https://www.iiss.org/publications/the-military-balance/ Al Jazeera|https://www.aljazeera.com/news/2026/2/27/air-attacks-on-kabul-push-pakistan-taliban-crisis-into-uncharted-territory"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [71.5249, 34.0151] },
+      "properties": {
+        "name": "11e Corps — Peshawar (FC KP)",
+        "force": "FC KP",
+        "type": "QG Corps",
+        "description": "Peshawar Corps — commandement theatre Khyber Pakhtunkhwa. Couvre les operations anti-TTP et la Ligne Durand nord.",
+        "sources": "IISS Military Balance 2026|https://www.iiss.org/publications/the-military-balance/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [66.9936, 30.1798] },
+      "properties": {
+        "name": "12e Corps — Quetta (FC Balochistan)",
+        "force": "FC Balochistan",
+        "type": "QG Corps",
+        "description": "Quetta Corps — theatre Baloutchistan. Face aux attaques BLA de janvier-avril 2026 et securite du CPEC.",
+        "sources": "IISS Military Balance 2026|https://www.iiss.org/publications/the-military-balance/ Wikipedia 2026 Balochistan attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [73.0479, 33.6007] },
+      "properties": {
+        "name": "ISI HQ — Aabpara, Islamabad",
+        "force": "ISI",
+        "type": "QG renseignement",
+        "description": "Directorate of Inter-Services Intelligence. Services de renseignement militaires pakistanais, accuses de soutien aux proxies anti-Inde (LeT, JeM) et gestion des relations avec Afghan Taliban.",
+        "sources": "DNI NCTC|https://www.dni.gov/nctc/terrorist_groups/isis_khorasan.html CSIS|https://www.csis.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [69.1723, 34.5260] },
+      "properties": {
+        "name": "Ministere de la Defense afghan (Taliban)",
+        "force": "Afghan Taliban",
+        "type": "QG",
+        "description": "Ministere de la Defense du gouvernement Taliban. Abrite structures de commandement, dont le 313 Corps cible par les frappes PAF du 27 fevrier et 13 mars 2026.",
+        "sources": "Wikipedia 2026 Pakistani airstrikes|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan Al Jazeera|https://www.aljazeera.com/news/2026/2/27/air-attacks-on-kabul-push-pakistan-taliban-crisis-into-uncharted-territory"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [71.0956, 34.1314] },
+      "properties": {
+        "name": "Base Torkham (passage Pak-Afg)",
+        "force": "FC KP",
+        "type": "Base frontaliere",
+        "description": "Base FC KP au point de passage strategique Torkham (Khyber-Nangarhar). Ferme depuis les frappes de fevrier 2026.",
+        "sources": "Logical Indian|https://thelogicalindian.com/pakistan-afghanistan-border-clashes-escalate-dozens-killed-amid-torkham-and-chaman-closures/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [66.4669, 30.9239] },
+      "properties": {
+        "name": "Base Chaman (passage Pak-Afg)",
+        "force": "FC Balochistan",
+        "type": "Base frontaliere",
+        "description": "Base FC Balochistan au passage Chaman (Spin Boldak/Kandahar). Ferme depuis fevrier 2026, paralysant le commerce regional.",
+        "sources": "Logical Indian|https://thelogicalindian.com/pakistan-afghanistan-border-clashes-escalate-dozens-killed-amid-torkham-and-chaman-closures/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [77.1025, 28.7041] },
+      "properties": {
+        "name": "Delhi Police Special Cell — QG",
+        "force": "J&K Police",
+        "type": "QG contre-terrorisme",
+        "description": "Unite specialisee de la police de Delhi. Demantelle les complots ISI, dont le module Rajveer/Banjara d'avril 2026.",
+        "sources": "Tribune India|https://www.tribuneindia.com/news/delhi/2-isi-operatives-arrested-for-planning-targeted-killings-grenade-attacks-in-delhi-punjab/"
+      }
+    }
+  ]
+}

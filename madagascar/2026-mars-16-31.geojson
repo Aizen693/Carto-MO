@@ -1,0 +1,9 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[42.50,-20.00]},"properties":{"name":"Piraterie canal Mozambique","Date":"2026-03-18","Pays + Lieu":"Madagascar - large canal Mozambique","type":"Attaque","detail":"Pattern : attaques sur chalutiers et boutres. Reseaux transnationaux.","rank":"B3","sources":"IMB Piracy Reporting Centre|https://www.icc-ccs.org/piracy-reporting-centre"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.29,-13.18]},"properties":{"name":"Orpailleurs illegaux","Date":"2026-03-20","Pays + Lieu":"Madagascar - Betsiaka (Nord)","type":"Incursion","detail":"Pattern : orpaillage illicite nord. Transit or via boutres vers Comores.","rank":"B2","sources":"Global Initiative|https://globalinitiative.net/ Crisis Group|https://www.crisisgroup.org/africa/southern-africa/madagascar"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[44.00,-26.00]},"properties":{"name":"Peche INN flottes etrangeres","Date":"2026-03-22","Pays + Lieu":"Madagascar - ZEE sud","type":"Incident","detail":"Pattern : presence de chalutiers asiatiques hors autorisations (AIS eteint). Surveillance insuffisante.","rank":"A2","sources":"Global Fishing Watch|https://globalfishingwatch.org/ Greenpeace|https://www.greenpeace.org/africa/en/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.85,-24.72]},"properties":{"name":"Dahalo","Date":"2026-03-25","Pays + Lieu":"Madagascar - Anosy / Betroka","type":"Attaque","detail":"Pattern : operation gendarmerie vs dahalo. Terrain tres etendu, effectifs limites.","rank":"B3","sources":"Crisis Group|https://www.crisisgroup.org/africa/southern-africa/madagascar"}}
+  ]
+}

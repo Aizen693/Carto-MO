@@ -1,0 +1,55 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [75.3412, 34.0151] },
+      "properties": {
+        "name": "Indian Army",
+        "type": "Incident frontalier",
+        "description": "Date: 18/04/2026\nPays: Inde (secteur Kupwara / Uri)\nEvenement: Operations anti-infiltration renforcees — approche commemoration Pahalgam\nDetail: A l'approche du premier anniversaire de l'attaque de Pahalgam (22 avril 2025), l'armee indienne renforce les patrouilles anti-infiltration le long de la LoC. Deploiements supplementaires dans les secteurs de Kupwara, Uri et Poonch.\nBilan: dispositif preventif, pas d'accrochage majeur",
+        "sources": "Business Standard — 1 year Pahalgam|https://www.business-standard.com/india-news/pahalgam-terror-attack-anniversary-let-kashmir-2025-recap-126042200475_1.html SATP J&K|https://www.satp.org/terrorist-activity/india-jammukashmir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [71.5249, 34.0151] },
+      "properties": {
+        "name": "TTP",
+        "type": "Attaque",
+        "description": "Date: 19/04/2026\nPays: Pakistan (KP)\nEvenement: Attaque sur base FC — district non specifie\nDetail: Suite de l'operation \"Khyber\" annoncee le 10 mars. Attaque coordonnee sur une base du Frontier Corps dans le Khyber Pakhtunkhwa. Attribution TTP.\nBilan: victimes cote FC KP, contre-attaque pakistanaise",
+        "sources": "SATP Pakistan|https://www.satp.org/terrorist-activity/pakistan Wikipedia Terrorist incidents 2026|https://en.wikipedia.org/wiki/Terrorist_incidents_in_Pakistan_in_2026"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [75.3245, 33.7275] },
+      "properties": {
+        "name": "J&K Police",
+        "type": "Geopolitique",
+        "description": "Date: 22/04/2026\nPays: Inde (Pahalgam, J&K)\nEvenement: Premier anniversaire de l'attaque de Pahalgam\nDetail: Ceremonies de commemoration du 22 avril 2025 (26 civils, majoritairement touristes hindous, tues par 5 terroristes LeT). Renforcement de la securite au Cachemire, alertes ISI publiees, hommage officiel par le PM et le gouverneur.\nBilan: securite renforcee sur tout le territoire J&K, pas d'incident immediat signale",
+        "sources": "Business Standard|https://www.business-standard.com/india-news/pahalgam-terror-attack-anniversary-let-kashmir-2025-recap-126042200475_1.html Wikipedia 2025 Pahalgam attack|https://en.wikipedia.org/wiki/2025_Pahalgam_attack Britannica|https://www.britannica.com/question/What-was-the-Pahalgam-attack"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [66.9936, 30.1798] },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 22/04/2026\nPays: Pakistan (Baloutchistan)\nEvenement: Embuscade sur convoi a proximite de Quetta\nDetail: Continuite des operations BLA apres la campagne de fin janvier. Embuscade IED + armes legeres sur un convoi paramilitaire dans la peripherie de Quetta.\nBilan: victimes cote securite, reponse operationnelle pakistanaise",
+        "sources": "SATP Pakistan|https://www.satp.org/terrorist-activity/pakistan Wikipedia Insurgency in Balochistan|https://en.wikipedia.org/wiki/Insurgency_in_Balochistan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [71.1383, 34.1688] },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Crise diplomatique",
+        "description": "Date: 23/04/2026\nPays: Pakistan / Afghanistan (Torkham)\nEvenement: Poursuite de la fermeture des passages de Torkham et Chaman\nDetail: Les points de passage strategiques Torkham (Khyber) et Chaman (Balouchistan) restent fermes depuis les frappes de fevrier. Impact humanitaire et commercial majeur. Les pourparlers de Pekin n'ont pas debouche sur une reouverture.\nBilan: paralysie commerciale, tension humanitaire sur les communautes frontalieres",
+        "sources": "Logical Indian|https://thelogicalindian.com/pakistan-afghanistan-border-clashes-escalate-dozens-killed-amid-torkham-and-chaman-closures/ Arab News|https://www.arabnews.com/node/2624966/pakistan ABC News|https://abcnews.go.com/International/wireStory/overnight-exchange-fire-afghan-pakistan-border-kills-5-128168281"
+      }
+    }
+  ]
+}

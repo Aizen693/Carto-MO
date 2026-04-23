@@ -6,10 +6,10 @@
 <title>Algor Int — Geopolitical Intelligence Platform</title>
 <link rel="icon" type="image/jpeg" href="./favicon.jpg">
 <meta property="og:title" content="Algor Int — Plateforme de renseignement geopolitique">
-<meta property="og:description" content="Systeme de veille cartographique OSINT. 3 theatres : Moyen-Orient, Sahel, RDC.">
+<meta property="og:description" content="Systeme de veille cartographique OSINT. 5 theatres : Moyen-Orient, Sahel, RDC, Madagascar, Asie du Sud.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://algoracces.fr/">
-<meta name="description" content="Algor Int — Plateforme OSINT cartographique. Analyse des conflits armes au Moyen-Orient, Sahel et RDC.">
+<meta name="description" content="Algor Int — Plateforme OSINT cartographique. Analyse des conflits armes au Moyen-Orient, Sahel, RDC, Madagascar et Asie du Sud.">
 <meta name="theme-color" content="#0a0b0d">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -638,7 +638,7 @@ html, body {
   </h2>
   <p class="hero-subtitle">
     Plateforme de veille cartographique dediee aux theatres de conflit armes.
-    Trois zones d'analyse, sept couches de donnees, des milliers d'evenements geolocalises et sources croisees.
+    Cinq zones d'analyse, neuf couches de donnees, des milliers d'evenements geolocalises et sources croisees.
   </p>
 </div>
 
@@ -646,7 +646,7 @@ html, body {
 <div id="zones-panel">
   <div class="panel-header">
     <span class="panel-header-title">Theatres d'analyse</span>
-    <span class="panel-header-count">03 / 03</span>
+    <span class="panel-header-count">05 / 05</span>
   </div>
   <div class="zone-list">
 
@@ -743,6 +743,68 @@ html, body {
       </div>
     </a>
 
+    <!-- MADAGASCAR -->
+    <a class="zone-card" href="./madagascar/index.html" data-zone="madagascar">
+      <div class="zone-card-row1">
+        <span class="zone-card-index">ZONE 04</span>
+        <span class="zone-card-status restricted">Sur abonnement</span>
+      </div>
+      <div class="zone-card-name">Madagascar</div>
+      <div class="zone-card-region">Grand Sud · SAVA · Analamanga · Canal Mozambique</div>
+      <div class="zone-card-desc">
+        Transition politique post-Rajoelina, dahalo, trafics (vanille, bois de rose, or, saphir), piraterie maritime. Neuf calques dont parcs nationaux et zones maritimes.
+      </div>
+      <div class="zone-card-meta">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Periode</div>
+          <div class="meta-cell-value small">Jan–Avril 26</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Evenements</div>
+          <div class="meta-cell-value" id="madagascar-event-count">—</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Acteurs</div>
+          <div class="meta-cell-value" id="madagascar-actor-count">—</div>
+        </div>
+      </div>
+      <div class="zone-card-cta">
+        <span class="zone-cta-label subscribe">S'abonner</span>
+        <span class="zone-cta-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- ASIE DU SUD -->
+    <a class="zone-card" href="./asie-sud/index.html" data-zone="asie">
+      <div class="zone-card-row1">
+        <span class="zone-card-index">ZONE 05</span>
+        <span class="zone-card-status restricted">Sur abonnement</span>
+      </div>
+      <div class="zone-card-name">Asie du Sud</div>
+      <div class="zone-card-region">Inde · Pakistan · Afghanistan · Cachemire · Baloutchistan</div>
+      <div class="zone-card-desc">
+        Conflit indo-pakistanais, insurrections TTP / BLA / ISKP, guerre Pak-Afg. Huit calques couvrant Jan–Avril 2026.
+      </div>
+      <div class="zone-card-meta">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Periode</div>
+          <div class="meta-cell-value small">Jan–Avril 26</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Evenements</div>
+          <div class="meta-cell-value" id="asie-event-count">—</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Acteurs</div>
+          <div class="meta-cell-value" id="asie-actor-count">—</div>
+        </div>
+      </div>
+      <div class="zone-card-cta">
+        <span class="zone-cta-label subscribe">S'abonner</span>
+        <span class="zone-cta-arrow">→</span>
+      </div>
+    </a>
+
   </div>
 </div>
 
@@ -763,6 +825,18 @@ html, body {
   <div class="zone-label-inner">
     <span class="zone-label-dot"></span>
     <span>RDC-03</span>
+  </div>
+</div>
+<div id="zone-label-madagascar" class="zone-label" style="display:none">
+  <div class="zone-label-inner">
+    <span class="zone-label-dot"></span>
+    <span>MDG-04</span>
+  </div>
+</div>
+<div id="zone-label-asie" class="zone-label" style="display:none">
+  <div class="zone-label-inner">
+    <span class="zone-label-dot"></span>
+    <span>ASIE-05</span>
   </div>
 </div>
 
@@ -796,9 +870,11 @@ html, body {
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
 const ZONES = {
-  mo:    { name: 'Moyen-Orient', coords: [44.0, 33.0],  color: '#c49a3c' },
-  sahel: { name: 'Sahel',        coords: [0.0, 16.0],   color: '#c49a3c' },
-  rdc:   { name: 'RDC',          coords: [27.5, -2.0],  color: '#c49a3c' }
+  mo:         { name: 'Moyen-Orient', coords: [44.0, 33.0],   color: '#c49a3c' },
+  sahel:      { name: 'Sahel',        coords: [0.0, 16.0],    color: '#c49a3c' },
+  rdc:        { name: 'RDC',          coords: [27.5, -2.0],   color: '#c49a3c' },
+  madagascar: { name: 'Madagascar',   coords: [47.0, -19.0],  color: '#c49a3c' },
+  asie:       { name: 'Asie du Sud',  coords: [71.0, 29.0],   color: '#c49a3c' }
 };
 
 const map = new mapboxgl.Map({
@@ -877,6 +953,8 @@ map.on('style.load', () => {
   document.getElementById('zone-label-mo').style.display = 'block';
   document.getElementById('zone-label-sahel').style.display = 'block';
   document.getElementById('zone-label-rdc').style.display = 'block';
+  document.getElementById('zone-label-madagascar').style.display = 'block';
+  document.getElementById('zone-label-asie').style.display = 'block';
 
   positionLabels();
   startRotation();
@@ -908,7 +986,24 @@ const CITIES = {
   goma:      [29.2218, -1.6779],
   bukavu:    [28.8608, -2.5095],
   bunia:     [29.6225, 1.5655],
-  beni:      [29.4730, 0.4908]
+  beni:      [29.4730, 0.4908],
+  /* Madagascar */
+  tananarive:   [47.5162, -18.8792],
+  toamasina:    [49.4073, -18.1499],
+  mahajanga:    [46.3236, -15.7167],
+  toliara:      [43.6843, -23.3557],
+  antsiranana:  [49.2952, -12.2788],
+  fianarantsoa: [47.0856, -21.4536],
+  sambava:      [50.1671, -14.2667],
+  /* Asie du Sud */
+  delhi:     [77.2090, 28.6139],
+  islamabad: [73.0479, 33.6007],
+  srinagar:  [74.7973, 34.0837],
+  peshawar:  [71.5249, 34.0151],
+  kabul:     [69.1723, 34.5260],
+  quetta:    [66.9936, 30.1798],
+  gwadar:    [62.3225, 25.1264],
+  kandahar:  [65.7100, 31.6100]
 };
 
 /* Flux INTRA-ZONE uniquement — conflits locaux */
@@ -929,7 +1024,22 @@ const FLOWS = [
   { from: 'kinshasa', to: 'goma' },
   { from: 'goma',     to: 'bukavu' },
   { from: 'goma',     to: 'beni' },
-  { from: 'beni',     to: 'bunia' }
+  { from: 'beni',     to: 'bunia' },
+  /* MADAGASCAR — axes trafics & dahalo */
+  { from: 'tananarive',  to: 'toamasina' },
+  { from: 'tananarive',  to: 'mahajanga' },
+  { from: 'tananarive',  to: 'toliara' },
+  { from: 'tananarive',  to: 'fianarantsoa' },
+  { from: 'toamasina',   to: 'antsiranana' },
+  { from: 'antsiranana', to: 'sambava' },
+  /* ASIE DU SUD — axes conflictuels */
+  { from: 'delhi',     to: 'srinagar' },
+  { from: 'srinagar',  to: 'islamabad' },
+  { from: 'islamabad', to: 'peshawar' },
+  { from: 'peshawar',  to: 'kabul' },
+  { from: 'kabul',     to: 'kandahar' },
+  { from: 'kandahar',  to: 'quetta' },
+  { from: 'quetta',    to: 'gwadar' }
 ];
 
 const FLOW_COLOR = '#c49a3c';  /* or militaire, coherent design */
@@ -1188,19 +1298,14 @@ document.getElementById('year').textContent = new Date().getFullYear();
 window.addEventListener('resize', positionLabels);
 
 /* ═══════════════════════════════════════════════════════════
-   Dynamic Sahel stats
+   Dynamic stats (Sahel + Asie du Sud)
    ═══════════════════════════════════════════════════════════ */
-(async () => {
-  const files = [
-    '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
-    '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
-    '2026-mars-01-15.geojson','2026-mars-16-31.geojson'
-  ];
+async function loadZoneStats(base, files, evId, acId) {
   let total = 0;
   const actors = new Set();
   await Promise.all(files.map(async f => {
     try {
-      const res = await fetch('./sahel/' + f);
+      const res = await fetch(base + f);
       if (!res.ok) return;
       const data = await res.json();
       if (data.features) {
@@ -1212,11 +1317,31 @@ window.addEventListener('resize', positionLabels);
       }
     } catch (_) {}
   }));
-  const ev = document.getElementById('sahel-event-count');
-  const ac = document.getElementById('sahel-actor-count');
+  const ev = document.getElementById(evId);
+  const ac = document.getElementById(acId);
   if (ev) ev.textContent = total || '—';
   if (ac) ac.textContent = actors.size || '—';
-})();
+}
+
+loadZoneStats('./sahel/', [
+  '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
+  '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
+  '2026-mars-01-15.geojson','2026-mars-16-31.geojson'
+], 'sahel-event-count', 'sahel-actor-count');
+
+loadZoneStats('./asie-sud/', [
+  '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
+  '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
+  '2026-mars-01-15.geojson','2026-mars-16-31.geojson',
+  '2026-avril-01-15.geojson','2026-avril-16-23.geojson'
+], 'asie-event-count', 'asie-actor-count');
+
+loadZoneStats('./madagascar/', [
+  '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
+  '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
+  '2026-mars-01-15.geojson','2026-mars-16-31.geojson',
+  '2026-avr-01-15.geojson','2026-avr-16-21.geojson'
+], 'madagascar-event-count', 'madagascar-actor-count');
 </script>
 </body>
 </html>
