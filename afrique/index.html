@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="../shared/styles.css?v=20260423a">
 <style>
 /* === AFRIQUE — style editorial overrides === */
-#map { background: #b4cad8; }
+#map { background: #97b0c8; }
 .hdr-cell-sm { display: flex; align-items: center; padding: 0 12px; border-right: 1px solid var(--ln); }
 .hdr-cell-sm span { font: 500 9px/1 var(--m); color: var(--tx1); letter-spacing: 0.18em; text-transform: uppercase; }
 .hdr-cell-sm strong { color: var(--ac); font-weight: 600; }
@@ -28,12 +28,11 @@
 #zone-login-error { display:none;font:400 9px/1.3 var(--m);color:#ef4444;padding:6px 0;margin-bottom:6px; }
 .zone-gated { display:none !important; }
 
-/* Legende compacte */
-#legend { position: fixed; bottom: 14px; right: 14px; background: rgba(10,11,13,0.92); backdrop-filter: blur(10px); border: 1px solid var(--ln); padding: 12px 14px; min-width: 220px; max-width: 280px; z-index: 50; }
-#legend h3 { font:600 9px/1 var(--bc); color: var(--ac); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 8px; }
-.legend-row { display:flex; align-items:center; gap:8px; padding:2px 0; font:400 10px/1.25 var(--b); color: var(--tx); }
-.legend-swatch { width:10px; height:10px; flex:0 0 10px; }
-.legend-swatch.line { height: 2px; width: 16px; flex: 0 0 16px; }
+/* Legende dans sidebar */
+#sidebar-legend-body .legend-row { display:flex; align-items:center; gap:10px; padding:4px 16px; font:400 10.5px/1.3 var(--b); color: var(--tx); }
+#sidebar-legend-body .legend-swatch { width:12px; height:12px; flex:0 0 12px; }
+#sidebar-legend-body .legend-swatch.line { height: 2px; width: 18px; flex: 0 0 18px; }
+#sidebar-legend-body .legend-empty { padding: 12px 16px; font:400 10px/1.4 var(--b); color: var(--tx2); font-style: italic; }
 
 /* Popup dark-or coherent Sahel */
 .mapboxgl-popup-content { background: var(--bg1) !important; border: 1px solid var(--ln) !important; border-top: 2px solid var(--ac) !important; padding: 0 !important; max-width: 360px !important; color: var(--tx); box-shadow: 0 6px 24px rgba(0,0,0,0.35) !important; }
@@ -119,11 +118,18 @@
       <span class="sb-section-arrow open">&#x25B2;</span>
     </div>
     <div class="sb-section-body" id="sidebar-legend-body">
-      <div style="padding:14px 16px;font:400 11px/1.5 var(--b);color:var(--tx)">
-        Carte Afrique maritime. Flux commerciaux et strategiques, ports majeurs par vocation, zones de piraterie documentees (IMB, MDAT-GoG, ISS Africa), presence navale FR / CN / US.
+      <div class="legend-empty">Aucun calque actif</div>
+    </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Sources</span>
+      <span class="sb-section-arrow">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body collapsed">
+      <div style="padding:12px 16px;font:400 10px/1.55 var(--b);color:var(--tx1)">
+        Carte Afrique maritime. Flux commerciaux et strategiques, ports majeurs par vocation, zones de piraterie documentees, presence navale FR / CN / US.
         <br><br>
-        <span style="font:500 8px/1 var(--m);color:var(--tx1);letter-spacing:0.16em;text-transform:uppercase">Sources croisees</span><br>
-        <span style="font:400 10px/1.4 var(--b);color:var(--tx1)">IMO · UNCTAD · CSIS · Transnet · DP World · CMA CGM · ACLED · EU NAVFOR · UKMTO · AFRICOM · CFR · Brookings</span>
+        <span style="color:var(--tx)">IMO · UNCTAD · CSIS · Transnet · DP World · CMA CGM · ACLED · EU NAVFOR · UKMTO · AFRICOM · CFR · Brookings · IMB · MDAT-GoG · ISS Africa</span>
       </div>
     </div>
 
@@ -227,12 +233,6 @@
   </div>
 </div>
 
-<!-- Legende flottante bas-droit -->
-<div id="legend" class="zone-gated">
-  <h3>Legende</h3>
-  <div id="legend-body"></div>
-</div>
-
 <!-- ═════════════════════════════════════════════════════════════════
      SCRIPTS
      ═════════════════════════════════════════════════════════════════ -->
@@ -298,10 +298,11 @@ const PALETTE = {
   land: '#ebe7e0',
   desert: '#e8d9b5',
   forest: '#dbe3d0',
-  oceanDeep: '#8fa8c2',
-  oceanMid: '#b4cad8',
-  oceanCoast: '#c8d9e3',
-  oceanTropical: '#9abcbe',
+  oceanDeep: '#6d8ba8',
+  oceanMid: '#97b0c8',
+  oceanCoast: '#c2d3dd',
+  oceanTropical: '#9fc1c0',
+  oceanRed: '#b8c9b8',
   border: '#a09889',
   label: '#4a4540',
   countryLabel: '#2c2825'
@@ -382,35 +383,73 @@ function applyEditorialStyle() {
 }
 
 function addGeographicOverlays() {
-  // Deserts : Sahara, Namib, Kalahari, Corne de l'Afrique, Arabie
-  const deserts = { type:'FeatureCollection', features: [
-    { type:'Feature', properties:{n:'Sahara'}, geometry:{type:'Polygon',coordinates:[[[-17,15],[-3,15.5],[12,15.5],[26,18],[36,22],[36,30],[30,31],[10,32],[-5,31],[-13,28],[-17,22],[-17,15]]]} },
-    { type:'Feature', properties:{n:'Namib'},  geometry:{type:'Polygon',coordinates:[[[11,-17],[17,-17.5],[18,-28],[14,-29],[11,-26],[11,-17]]]} },
-    { type:'Feature', properties:{n:'Kalahari'},geometry:{type:'Polygon',coordinates:[[[19,-19],[26,-19.5],[28,-28],[21,-29],[19,-25],[19,-19]]]} },
-    { type:'Feature', properties:{n:'Corne'},   geometry:{type:'Polygon',coordinates:[[[41,3],[51,5],[51,12],[46,13.5],[41,11],[41,3]]]} },
-    { type:'Feature', properties:{n:'Arabie'},  geometry:{type:'Polygon',coordinates:[[[34,18],[55,18],[56,25],[48,30],[36,30],[34,25],[34,18]]]} }
+  // 1) DEEP OCEAN overlay — assombrit les oceans profonds loin des cotes
+  const deepOcean = { type:'FeatureCollection', features:[
+    // Atlantique central-sud (largeur des eaux africaines)
+    { type:'Feature', properties:{n:'Atlantique profond'}, geometry:{type:'Polygon',coordinates:[[
+      [-27,15],[-30,5],[-32,-10],[-30,-25],[-28,-38],[-20,-40],[-10,-38],[-5,-30],[-8,-18],[-12,-8],[-18,-3],[-22,5],[-27,15]
+    ]]}},
+    // Ocean Indien profond
+    { type:'Feature', properties:{n:'Indien profond'}, geometry:{type:'Polygon',coordinates:[[
+      [52,-3],[62,-5],[75,-8],[88,-12],[95,-20],[95,-35],[80,-40],[60,-40],[45,-38],[38,-32],[36,-26],[39,-17],[48,-9],[52,-3]
+    ]]}}
   ]};
-  map.addSource('deserts', { type:'geojson', data: deserts });
-  map.addLayer({ id:'deserts-fill', type:'fill', source:'deserts', paint: { 'fill-color': PALETTE.desert, 'fill-opacity': 0.75 } }, firstSymbolLayerId());
+  map.addSource('deep-ocean', { type:'geojson', data: deepOcean });
+  map.addLayer({ id:'deep-ocean-fill', type:'fill', source:'deep-ocean', paint:{ 'fill-color': PALETTE.oceanDeep, 'fill-opacity': 0.45 } }, firstSymbolLayerId());
 
-  // Mers tropicales: Rouge, Golfe Persique, Canal Mozambique
-  const seas = { type:'FeatureCollection', features:[
-    { type:'Feature', properties:{n:'Mer Rouge'}, geometry:{type:'Polygon',coordinates:[[[32,28],[44,28],[44,12.5],[42.5,11.7],[32,22],[32,28]]]} },
-    { type:'Feature', properties:{n:'Golfe Persique'}, geometry:{type:'Polygon',coordinates:[[[48,30],[57,27],[57,23],[50,24],[48,26],[48,30]]]} },
-    { type:'Feature', properties:{n:'Canal Mozambique'}, geometry:{type:'Polygon',coordinates:[[[36,-10],[45,-12],[46,-26],[35,-26],[36,-10]]]} }
+  // 2) TROPICAL SEAS — mer Rouge, Golfe Persique, Canal Mozambique
+  const tropicalSeas = { type:'FeatureCollection', features:[
+    // Mer Rouge (forme naturelle etroite)
+    { type:'Feature', properties:{n:'Mer Rouge'}, geometry:{type:'Polygon',coordinates:[[
+      [32.3,30.0],[33.5,28.0],[35.5,25.0],[37.5,22.5],[39.5,19.5],[41.5,16.5],[42.8,13.5],[43.3,12.3],[42.5,13.0],[41.0,15.5],[38.5,19.0],[36.0,22.5],[34.0,26.0],[32.8,29.0],[32.3,30.0]
+    ]]}},
+    // Golfe Persique
+    { type:'Feature', properties:{n:'Golfe Persique'}, geometry:{type:'Polygon',coordinates:[[
+      [48.0,30.5],[49.5,30.3],[52.5,29.0],[55.5,26.5],[56.8,26.3],[56.3,25.3],[54.5,25.0],[52.0,25.2],[49.5,26.8],[48.3,28.5],[48.0,30.5]
+    ]]}},
+    // Canal Mozambique (entre Mozambique et Madagascar, forme concave)
+    { type:'Feature', properties:{n:'Canal Mozambique'}, geometry:{type:'Polygon',coordinates:[[
+      [36.0,-11.0],[38.0,-12.5],[40.0,-14.0],[41.5,-16.0],[42.8,-18.0],[43.5,-21.0],[43.2,-24.0],[42.0,-26.0],[40.0,-26.5],[37.5,-26.0],[35.0,-24.0],[33.5,-21.5],[33.5,-18.0],[34.0,-15.0],[34.8,-13.0],[36.0,-11.0]
+    ]]}}
   ]};
-  map.addSource('tropical-seas', { type:'geojson', data: seas });
-  map.addLayer({ id:'tropical-seas-fill', type:'fill', source:'tropical-seas', paint: { 'fill-color': PALETTE.oceanTropical, 'fill-opacity': 0.55 } }, firstSymbolLayerId());
+  map.addSource('tropical-seas', { type:'geojson', data: tropicalSeas });
+  map.addLayer({ id:'tropical-seas-fill', type:'fill', source:'tropical-seas', paint:{ 'fill-color': PALETTE.oceanTropical, 'fill-opacity': 0.55 } }, firstSymbolLayerId());
 
-  // Halo cote: ligne epaisse sur ocean pres des terres
+  // 3) COASTAL HALO — bande claire pres des cotes
   map.addLayer({
     id: 'coast-halo',
     type: 'line',
     source: { type:'vector', url:'mapbox://mapbox.mapbox-streets-v8' },
     'source-layer': 'admin',
     filter: ['all', ['==', ['get','admin_level'], 0], ['==', ['get','maritime'], true]],
-    paint: { 'line-color': PALETTE.oceanCoast, 'line-width': ['interpolate', ['linear'], ['zoom'], 2, 3, 6, 8], 'line-opacity': 0.55, 'line-blur': 3 }
+    paint: { 'line-color': PALETTE.oceanCoast, 'line-width': ['interpolate', ['linear'], ['zoom'], 2, 4, 5, 10, 8, 16], 'line-opacity': 0.5, 'line-blur': 4 }
   }, firstSymbolLayerId());
+
+  // 4) DESERTS — formes organiques multi-points
+  const deserts = { type:'FeatureCollection', features: [
+    // Sahara (forme organique suivant les contours naturels)
+    { type:'Feature', properties:{n:'Sahara'}, geometry:{type:'Polygon',coordinates:[[
+      [-17.0,14.5],[-14.0,15.5],[-11.0,16.0],[-7.0,16.5],[-3.0,17.5],[1.0,18.5],[5.0,19.5],[9.0,20.5],[13.0,21.5],[17.0,22.5],[21.0,23.5],[25.0,23.5],[29.0,22.0],[32.5,22.5],[35.0,24.0],[36.0,27.0],[34.0,30.5],[30.0,31.5],[24.0,31.5],[18.0,32.0],[13.0,32.5],[8.0,33.0],[3.0,33.0],[-2.0,33.5],[-7.0,33.0],[-10.5,31.5],[-13.0,29.0],[-15.0,26.0],[-16.5,22.0],[-17.0,18.0],[-17.0,14.5]
+    ]]}},
+    // Namib (cote namibienne, long et etroit)
+    { type:'Feature', properties:{n:'Namib'}, geometry:{type:'Polygon',coordinates:[[
+      [11.8,-16.5],[12.5,-18.0],[13.2,-20.0],[13.8,-22.5],[14.5,-25.0],[15.5,-27.5],[17.0,-28.8],[17.8,-28.5],[16.8,-27.0],[15.5,-25.0],[14.5,-22.5],[13.5,-20.0],[12.8,-18.0],[12.0,-17.0],[11.8,-16.5]
+    ]]}},
+    // Kalahari (interieur Botswana/Namibie est/SA nord)
+    { type:'Feature', properties:{n:'Kalahari'}, geometry:{type:'Polygon',coordinates:[[
+      [19.5,-19.5],[22.0,-19.0],[25.0,-19.5],[27.5,-21.0],[28.2,-23.5],[27.8,-26.0],[25.5,-27.5],[22.5,-28.0],[20.0,-27.0],[19.2,-24.5],[19.3,-22.0],[19.5,-19.5]
+    ]]}},
+    // Corne de l'Afrique / Danakil
+    { type:'Feature', properties:{n:'Corne'}, geometry:{type:'Polygon',coordinates:[[
+      [40.5,3.5],[42.5,4.0],[45.0,4.5],[48.0,5.0],[50.5,7.0],[51.3,10.0],[51.2,11.8],[49.5,12.0],[47.0,12.5],[44.5,12.5],[42.5,13.5],[41.0,13.0],[40.0,11.5],[39.3,9.0],[39.5,6.5],[40.5,3.5]
+    ]]}},
+    // Arabie (desert peninsulaire Rub al-Khali + Nefud)
+    { type:'Feature', properties:{n:'Arabie'}, geometry:{type:'Polygon',coordinates:[[
+      [34.5,18.5],[37.0,17.8],[41.0,17.0],[45.0,16.3],[49.0,17.0],[52.5,18.5],[55.0,20.0],[56.5,22.5],[56.0,25.5],[54.5,27.0],[51.5,28.5],[48.0,30.0],[44.0,30.5],[40.5,30.0],[37.5,29.0],[35.0,27.5],[34.5,24.0],[34.5,18.5]
+    ]]}}
+  ]};
+  map.addSource('deserts', { type:'geojson', data: deserts });
+  map.addLayer({ id:'deserts-fill', type:'fill', source:'deserts', paint: { 'fill-color': PALETTE.desert, 'fill-opacity': 0.72 } }, firstSymbolLayerId());
 
   // Detroits cles
   const straits = { type:'FeatureCollection', features:[
@@ -626,14 +665,15 @@ function updateFeatureCount() {
   if (el) el.textContent = total || '—';
 }
 function renderLegend() {
-  const body = document.getElementById('legend-body');
+  const body = document.getElementById('sidebar-legend-body');
+  if (!body) return;
   const items = [];
   Object.values(CATALOG).forEach(g => g.children.forEach(c => {
     if (!layerState[c.id]?.visible) return;
     const sw = (c.kind === 'flux') ? `<span class="legend-swatch line" style="background:${c.color}"></span>` : `<span class="legend-swatch" style="background:${c.color}"></span>`;
     items.push(`<div class="legend-row">${sw}${c.label}</div>`);
   }));
-  if (!items.length) items.push('<div style="font:400 10px var(--b);color:var(--tx1)">Aucun calque actif</div>');
+  if (!items.length) { body.innerHTML = '<div class="legend-empty">Aucun calque actif</div>'; return; }
   body.innerHTML = items.join('');
 }
 

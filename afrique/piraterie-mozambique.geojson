@@ -1,7 +1,39 @@
 {
   "type": "FeatureCollection",
   "features": [
-    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[36.0,-10.0],[45.0,-10.0],[45.0,-27.0],[36.0,-27.0],[36.0,-10.0]]]},"properties":{"name":"Canal du Mozambique","type":"Piraterie","zone":"Canal du Mozambique","description":"Menace maritime croissante liee a ISIS-Mozambique (Cabo Delgado) + trafic heroine. Corridor strategique gaz (TotalEnergies) et route alternative au Cap.","sources":"ISS_Africa|https://issafrica.org IMB|https://www.icc-ccs.org/icc/imb"}},
-    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[38.0,-10.0],[42.0,-10.0],[42.0,-13.5],[38.0,-13.5],[38.0,-10.0]]]},"properties":{"name":"Cabo Delgado (zone ISIS-Mozambique)","type":"Piraterie","zone":"Cabo Delgado","description":"Insurrection ISIS-Mozambique depuis 2017. Blocage TotalEnergies LNG. Attaques maritimes sur navires ravitaillement offshore.","sources":"CTC_West_Point|https://ctc.westpoint.edu/ ACLED|https://acleddata.com/ Crisis_Group|https://www.crisisgroup.org/"}}
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[
+      [35.0, -10.5],
+      [37.5, -11.0],
+      [40.0, -11.5],
+      [42.5, -12.5],
+      [44.5, -13.5],
+      [45.8, -15.0],
+      [46.5, -17.0],
+      [47.0, -20.0],
+      [46.8, -23.0],
+      [45.5, -25.0],
+      [43.0, -26.5],
+      [40.0, -27.0],
+      [37.0, -27.0],
+      [34.5, -26.0],
+      [33.5, -24.0],
+      [33.5, -20.0],
+      [34.0, -16.0],
+      [34.5, -13.0],
+      [35.0, -10.5]
+    ]]},"properties":{"name":"Canal du Mozambique","type":"Piraterie","zone":"Canal du Mozambique","description":"Menace maritime croissante liee a ISIS-Mozambique (Cabo Delgado) + trafic heroine. Corridor strategique gaz (TotalEnergies) et route alternative au Cap.","sources":"ISS_Africa|https://issafrica.org IMB|https://www.icc-ccs.org/icc/imb"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[
+      [39.5, -10.3],
+      [40.5, -10.5],
+      [41.5, -11.0],
+      [42.0, -11.8],
+      [41.8, -12.8],
+      [40.8, -13.5],
+      [39.8, -13.3],
+      [38.8, -12.5],
+      [38.5, -11.5],
+      [39.0, -10.5],
+      [39.5, -10.3]
+    ]]},"properties":{"name":"Cabo Delgado (ISIS-Mozambique)","type":"Piraterie","zone":"Cabo Delgado","description":"Insurrection ISIS-Mozambique depuis 2017. Blocage TotalEnergies LNG. Attaques maritimes sur navires ravitaillement offshore.","sources":"CTC_West_Point|https://ctc.westpoint.edu/ ACLED|https://acleddata.com/ Crisis_Group|https://www.crisisgroup.org/"}}
   ]
 }
