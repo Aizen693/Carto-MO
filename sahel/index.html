@@ -9,7 +9,7 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
-<link rel="stylesheet" href="../shared/styles.css?v=20260420b">
+<link rel="stylesheet" href="../shared/styles.css?v=20260420h">
 <style>
 #zone-login-overlay {
   position:fixed;inset:0;z-index:9999;background:rgba(10,11,13,0.97);
@@ -175,21 +175,29 @@
         <div class="sb-toggle" id="sb-toggle-flux" onclick="toggleLayer('flux')"></div>
       </div>
       <div class="sb-layer-row sb-layer-parent" onclick="toggleFrontieresSection(event)">
-        <span>8. Frontieres <span class="sb-sub-badge" id="sb-frontieres-badge">0/3</span></span>
+        <span>8. Frontieres Ouest <span class="sb-sub-badge" id="sb-frontieres-badge">0/5</span></span>
         <div class="sb-toggle" id="sb-toggle-frontieres" onclick="event.stopPropagation();toggleFrontieresMaster()"></div>
       </div>
       <div class="sb-sublayers" id="sb-frontieres-sub">
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#29b6f6"></span>Senegal · Guinee</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-ouest" onclick="toggleFrontieresGroup('ouest')"></div>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#29b6f6"></span>Mauritanie · Sahara occ.</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mrt-esh" onclick="toggleFrontieresGroup('mrt-esh')"></div>
         </div>
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e07c5a"></span>Mauritanie · Algerie</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-nord" onclick="toggleFrontieresGroup('nord')"></div>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#ab47bc"></span>Mauritanie · Algerie</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mrt-dza" onclick="toggleFrontieresGroup('mrt-dza')"></div>
         </div>
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#d4a017"></span>Mali · Mauritanie · Algerie</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-centre" onclick="toggleFrontieresGroup('centre')"></div>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e07c5a"></span>Mauritanie · Mali</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mrt-mli" onclick="toggleFrontieresGroup('mrt-mli')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#ff5252"></span>Mali · Senegal</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mli-sen" onclick="toggleFrontieresGroup('mli-sen')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#d4a017"></span>Mali · Guinee</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-fr-mli-gin" onclick="toggleFrontieresGroup('mli-gin')"></div>
         </div>
       </div>
 
@@ -320,7 +328,7 @@ const ZONE_CONFIG = {
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js?v=20260420b"></script>
+<script src="../shared/engine.js?v=20260422b"></script>
 <script>
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
 (function() {
@@ -830,15 +838,25 @@ window.focusGeocoder = function() {
 /* ── CALQUE FRONTIERES (sous-calques par groupes de pays) ── */
 (function() {
   var FRONTIERES_SOURCE_ID = 'frontieres-countries';
+  // Chaque sous-calque = une paire de pays. Le bbox cadre etroitement la bande
+  // frontaliere (pas le pays entier) pour zoomer sur la frontiere elle-meme,
+  // la ou sont concentrees les attaques (sources ACLED / AfricaCenter dans
+  // la couche 6. Evenements securitaires).
   var GROUPS = {
-    ouest:  { iso: ['SEN','GIN'],       color: '#29b6f6', label: 'Senegal · Guinee',
-              bbox: [-17.6, 7.1, -7.5, 16.8] },
-    nord:   { iso: ['MRT','DZA'],       color: '#e07c5a', label: 'Mauritanie · Algerie',
-              bbox: [-17.1, 14.7, 12.0, 37.1] },
-    centre: { iso: ['MLI','MRT','DZA'], color: '#d4a017', label: 'Mali · Mauritanie · Algerie',
-              bbox: [-17.1, 10.2, 12.0, 37.1] }
+    'mrt-esh': { iso: ['MRT','ESH'], color: '#29b6f6', label: 'Mauritanie · Sahara occ.',
+                 bbox: [-17.1, 20.8, -8.5, 23.2] }, // cote atlantique -> tri-point DZA
+    'mrt-dza': { iso: ['MRT','DZA'], color: '#ab47bc', label: 'Mauritanie · Algerie',
+                 bbox: [-9.0, 24.8, -4.5, 27.5] }, // segment court nord-est (tri-points ESH/MLI)
+    'mrt-mli': { iso: ['MRT','MLI'], color: '#e07c5a', label: 'Mauritanie · Mali',
+                 bbox: [-11.8, 14.8, -4.7, 17.2] }, // Hodh ech Chargui / Kayes nord
+    'mli-sen': { iso: ['MLI','SEN'], color: '#ff5252', label: 'Mali · Senegal',
+                 bbox: [-12.5, 12.2, -10.3, 15.1] }, // Kayes / Bakel
+    'mli-gin': { iso: ['MLI','GIN'], color: '#d4a017', label: 'Mali · Guinee',
+                 bbox: [-11.6, 10.3, -7.8, 12.9] }  // Yanfolila / Siguiri
   };
-  var state = { master: false, groups: { ouest: false, nord: false, centre: false } };
+  var state = { master: false, groups: {
+    'mrt-esh': false, 'mrt-dza': false, 'mrt-mli': false, 'mli-sen': false, 'mli-gin': false
+  } };
 
   function ensureSource() {
     if (map.getSource(FRONTIERES_SOURCE_ID)) return true;
@@ -899,10 +917,11 @@ window.focusGeocoder = function() {
   }
 
   function updateBadge() {
+    var total = Object.keys(GROUPS).length;
     var activeCount = Object.keys(state.groups).filter(function(k) { return state.groups[k]; }).length;
     var badge = document.getElementById('sb-frontieres-badge');
     if (badge) {
-      badge.textContent = activeCount + '/3';
+      badge.textContent = activeCount + '/' + total;
       badge.classList.toggle('has-active', activeCount > 0);
     }
     var masterEl = document.getElementById('sb-toggle-frontieres');
@@ -923,29 +942,31 @@ window.focusGeocoder = function() {
     return bbox;
   }
 
-  // Vue globale "Sahel vue d'ensemble" — utilisee quand les 3 groupes sont actifs
-  var GLOBAL_SAHEL_BBOX = [-17.5, 10.0, 12.0, 27.0];
+  // Vue globale "Sahel ouest + arc saharien" — utilisee quand toutes les paires sont actives
+  var GLOBAL_SAHEL_BBOX = [-17.5, 9.8, -4.3, 27.7];
 
   function zoomToActive() {
     var activeKeys = Object.keys(state.groups).filter(function(k) { return state.groups[k]; });
     if (!state.master || !activeKeys.length) return;
     var bbox;
+    // Zoom serre sur la bande frontaliere : si une seule paire active, on
+    // zoome au plus pres (jusqu'a 7.5). Si plusieurs paires, on calcule l'union
+    // mais on reste raisonnable. Si toutes actives, vue globale Sahel.
     if (activeKeys.length === Object.keys(GROUPS).length) {
-      // Tous actifs -> vue globale Sahel (cadre fixe, pas l'union brute qui
-      // irait jusqu'au nord de l'Algerie et provoquerait un dezoom mondial)
       bbox = GLOBAL_SAHEL_BBOX;
     } else {
       bbox = unionBbox(activeKeys);
     }
     if (!bbox) return;
+    var maxZ = activeKeys.length === 1 ? 7.5 : (activeKeys.length === 2 ? 6.2 : 5.5);
     try {
       map.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]], {
-        padding: 60,
+        padding: 40,
         duration: 1400,
         pitch: 0,
         bearing: ZONE_CONFIG.MAP_BEARING,
         essential: true,
-        maxZoom: 6
+        maxZoom: maxZ
       });
     } catch (e) {}
   }
@@ -968,17 +989,19 @@ window.focusGeocoder = function() {
 
   window.toggleFrontieresMaster = function() {
     state.master = !state.master;
-    // Quand on active le master pour la 1re fois, on active tous les groupes pour
-    // une vue globale (et respecte la regle "2 pays minimum")
     if (state.master) {
+      // Activation du master : si aucun sous-calque n'est coche, on les active
+      // tous pour donner une vue globale des tensions frontalieres ouest.
       var activeCount = Object.keys(state.groups).filter(function(k) { return state.groups[k]; }).length;
-      if (activeCount < 2) {
-        state.groups.ouest = true;
-        state.groups.nord = true;
-        state.groups.centre = true;
+      if (activeCount < 1) {
+        Object.keys(state.groups).forEach(function(k) { state.groups[k] = true; });
       }
       var sub = document.getElementById('sb-frontieres-sub');
       if (sub) sub.classList.add('open');
+    } else {
+      // Desactivation du master : on eteint aussi tous les curseurs des paires
+      // pour que l'etat UI soit coherent (plus aucun toggle dore visible).
+      Object.keys(state.groups).forEach(function(k) { state.groups[k] = false; });
     }
     refresh();
     if (state.master) zoomToActive();
@@ -1066,17 +1089,23 @@ window.focusGeocoder = function() {
   <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;max-width:480px;padding:32px">
     <div style="font:700 18px/1.2 'JetBrains Mono',monospace;letter-spacing:0.1em;color:#00e5ff;text-transform:uppercase;margin-bottom:28px">Hand Tracking</div>
     <div style="display:grid;grid-template-columns:56px 1fr;gap:16px 16px;text-align:left;align-items:center">
-      <div style="font-size:36px;text-align:center">&#x1F90F;</div>
+      <div style="text-align:center" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="2.5"/><circle cx="16" cy="12" r="2.5"/><path d="M10.5 12h3"/></svg>
+      </div>
       <div>
         <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;margin-bottom:6px">PINCER + GLISSER</div>
         <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.6)">Deplacer la carte</div>
       </div>
-      <div style="font-size:36px;text-align:center">&#x1F90F;&#x1F90F;</div>
+      <div style="text-align:center" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2"/><circle cx="10" cy="12" r="2"/><path d="M6.5 12h2"/><circle cx="14" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><path d="M15.5 12h2"/></svg>
+      </div>
       <div>
         <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;margin-bottom:6px">DOUBLE PINCEMENT</div>
         <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.6)">Pincer, relacher, pincer — ouvre le popup du point</div>
       </div>
-      <div style="font-size:36px;text-align:center">&#x1F91A;</div>
+      <div style="text-align:center" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v8"/><path d="M10 3v10"/><path d="M14 3v10"/><path d="M18 5v8"/><path d="M6 12c0 5 3 8 6 8s6-3 6-8"/></svg>
+      </div>
       <div>
         <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;margin-bottom:6px">MAIN OUVERTE</div>
         <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.6)">Monter = zoomer, descendre = dezoomer</div>
@@ -1086,11 +1115,10 @@ window.focusGeocoder = function() {
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js" crossorigin="anonymous"></script>
+<!-- MediaPipe Hands (~2 Mo) : charge UNIQUEMENT a l'activation du hand tracking (P3 perf) -->
 <script>
 /* =========================================================
-   HAND TRACKING v4 — ultra-lean
+   HAND TRACKING v4 — ultra-lean (+ lazy-load MediaPipe P3)
    - Pinch distance RAW (pas de filtre) = detection instantanee
    - Seuils tres espaces (0.08 / 0.14) = pas d'ambiguite
    - Throttle 100ms = leger meme avec tous calques
@@ -1165,9 +1193,38 @@ window.focusGeocoder = function() {
     if(w!==cW||h!==cH){cW=w;cH=h;hc.width=cW;hc.height=cH}
   }
 
+  /* ── Lazy-load MediaPipe libs (2 Mo) uniquement sur activation ── */
+  var libsLoaded=false, libsLoading=null;
+  function loadLibs(){
+    if(libsLoaded) return Promise.resolve();
+    if(libsLoading) return libsLoading;
+    function inject(src){
+      return new Promise(function(resolve, reject){
+        var s=document.createElement('script');
+        s.src=src; s.crossOrigin='anonymous';
+        s.onload=resolve; s.onerror=reject;
+        document.head.appendChild(s);
+      });
+    }
+    libsLoading = inject('https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js')
+      .then(function(){ return inject('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js'); })
+      .then(function(){ libsLoaded=true; });
+    return libsLoading;
+  }
+
   window.toggleHandTrack=function(){if(active)stop();else start()};
 
   function start(){
+    // Charge MediaPipe a la demande (pas au boot de la page)
+    showB('CHARGEMENT · MediaPipe');
+    document.getElementById('btn-handtrack').style.color='#00e5ff';
+    loadLibs().then(function(){ _startCore(); }).catch(function(){
+      showB('Chargement · echec · reessayer');
+      document.getElementById('btn-handtrack').style.color='';
+    });
+  }
+
+  function _startCore(){
     active=true;ctx=hc.getContext('2d');sync();
     fCX.reset();fCY.reset();fWY.reset();
     st=IDLE;panLX=null;relTime=0;openSince=0;zAnchor=null;zTarget=null;
@@ -1333,7 +1390,7 @@ window.focusGeocoder = function() {
 
 <!-- AUTH GATE -->
 <script type="module">
-import { initZoneAuth, zoneLogin } from '../shared/zone-auth.js';
+import { initZoneAuth, zoneLogin } from '../shared/zone-auth.js?v=20260420d';
 
 const overlay = document.getElementById('zone-login-overlay');
 const errEl = document.getElementById('zone-login-error');
@@ -1363,8 +1420,12 @@ async function doLogin() {
   const email = document.getElementById('zone-email').value.trim();
   const pw = document.getElementById('zone-password').value;
   errEl.style.display = 'none';
-  if (!email || !pw) { errEl.textContent = 'Email et mot de passe requis'; errEl.style.display = 'block'; return; }
-  try { await zoneLogin(email, pw); } catch (e) { errEl.textContent = 'Identifiants invalides'; errEl.style.display = 'block'; }
+  if (!email || !pw) { errEl.textContent = 'Auth · email et mot de passe requis'; errEl.style.display = 'block'; return; }
+  try { await zoneLogin(email, pw); } catch (e) {
+    var code = (e && (e.status || e.code)) || 401;
+    errEl.textContent = 'Auth · code ' + code + ' · identifiants invalides';
+    errEl.style.display = 'block';
+  }
 }
 </script>
 </body>
