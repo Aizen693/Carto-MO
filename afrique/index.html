@@ -91,7 +91,7 @@
   </div>
   <div class="hdr-cell">
     <span class="hdr-cell-label">Calques</span>
-    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/17</span>
+    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/21</span>
   </div>
   <div class="hdr-cell">
     <span class="hdr-cell-label">Features</span>
@@ -154,21 +154,37 @@
 
       <!-- Group 1: FLUX MARITIMES -->
       <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'flux')">
-        <span>1. Flux maritimes <span class="sb-sub-badge" id="badge-flux">0/3</span></span>
+        <span>1. Flux maritimes <span class="sb-sub-badge" id="badge-flux">0/7</span></span>
         <div class="sb-toggle" id="sb-master-flux" onclick="event.stopPropagation();toggleMaster('flux')"></div>
       </div>
       <div class="sb-sublayers" id="sub-flux">
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c49a3c"></span>Flux principaux (Suez-Ormuz, Cap)</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-principal" onclick="toggleLayer('flux-principal')"></div>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e0b452"></span>Conteneurs (Cap, Suez)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-containers" onclick="toggleLayer('flux-containers')"></div>
         </div>
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#5fc4d6"></span>Cabotage regional (Ouest + Est)</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-cabotage" onclick="toggleLayer('flux-cabotage')"></div>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#a065c4"></span>Hydrocarbures (brut)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-oil" onclick="toggleLayer('flux-oil')"></div>
         </div>
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8e96a2"></span>Escales &amp; ramifications</span>
-          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-secondaire" onclick="toggleLayer('flux-secondaire')"></div>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>GNL (gaz liquefie)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-lng" onclick="toggleLayer('flux-lng')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c08a5a"></span>Vrac sec (fer, charbon)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-bulk" onclick="toggleLayer('flux-bulk')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#5fc4d6"></span>Cabotage regional</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-regional" onclick="toggleLayer('flux-regional')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8e96a2"></span>Bypass &amp; alternatifs</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-bypass" onclick="toggleLayer('flux-bypass')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e0b452;border-radius:0;outline:1px solid #e0b452;outline-offset:1px"></span>Noeuds strategiques</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-noeuds" onclick="toggleLayer('flux-noeuds')"></div>
         </div>
       </div>
 
@@ -274,9 +290,13 @@ const CATALOG = {
   flux: {
     title: 'Flux maritimes',
     children: [
-      { id:'flux-principal',  label:'Flux principaux',          file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'main'], color:'#c49a3c', defaultOn:true },
-      { id:'flux-cabotage',   label:'Cabotage regional',        file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','category'],'cabotage'], color:'#5fc4d6', defaultOn:true },
-      { id:'flux-secondaire', label:'Escales & ramifications',  file:'flux-maritimes.geojson', kind:'flux', filter:['all',['==',['get','rank'],'secondary'],['!=',['get','category'],'cabotage']], color:'#8e96a2', defaultOn:false }
+      { id:'flux-containers', label:'Conteneurs (Cap, Suez)',   file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'containers'], color:'#e0b452', defaultOn:true },
+      { id:'flux-oil',        label:'Hydrocarbures (brut)',     file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'oil'],        color:'#a065c4', defaultOn:false },
+      { id:'flux-lng',        label:'GNL (gaz liquefie)',       file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'lng'],        color:'#4fb8cc', defaultOn:false },
+      { id:'flux-bulk',       label:'Vrac sec (fer, charbon)',  file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'bulk'],       color:'#c08a5a', defaultOn:false },
+      { id:'flux-regional',   label:'Cabotage regional',        file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'regional'],   color:'#5fc4d6', defaultOn:true },
+      { id:'flux-bypass',     label:'Bypass & alternatifs',     file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'bypass'],     color:'#8e96a2', defaultOn:false },
+      { id:'flux-noeuds',     label:'Noeuds strategiques',      file:'flux-noeuds.geojson',    kind:'noeud', color:'#e0b452', defaultOn:true }
     ]
   },
   ports: {
@@ -444,32 +464,68 @@ function removeSubLayer(id) {
 
 function buildMapboxLayers(c, srcId) {
   const col = c.color;
-  if (c.kind === 'flux') {
-    const isMain = (c.id === 'flux-principal');
-    const isCabotage = (c.id === 'flux-cabotage');
-    const width = isMain
-      ? ['interpolate',['linear'],['zoom'], 3, 2, 5, 3.5, 7, 5]
-      : isCabotage
-        ? ['interpolate',['linear'],['zoom'], 3, 1.6, 5, 2.4, 7, 3.6]
-        : ['interpolate',['linear'],['zoom'], 3, 1, 5, 1.6, 7, 2.8];
-    const op = isMain ? 0.85 : isCabotage ? 0.85 : 0.55;
+  if (c.kind === 'flux2') {
+    // Rendu data-driven: epaisseur/opacite selon volume_tier, glow selon pressure
+    const f = c.filter || ['==',1,1];
+    // Mapbox v3.3 line-width ne supporte ni data-expr ni zoom+data:
+    // on cree 3 layers par tier (chacun avec line-width fixe et filter additionnel)
+    const opacityByTier = ['match', ['get','volume_tier'], 1, 0.92, 2, 0.72, 3, 0.50, 0.65];
+    const glowOpacity = ['match', ['get','pressure'], 'high', 0.20, 'medium', 0.12, 'low', 0.07, 0.10];
     const layers = [];
-    if (isMain) {
-      layers.push({ id:'flux-glow-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': 12, 'line-opacity': 0.12, 'line-blur': 5 } });
-    }
-    if (isCabotage) {
-      // Glow cyan plus discret pour mettre en lumière le cabotage
-      layers.push({ id:'flux-glow-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': 8, 'line-opacity': 0.18, 'line-blur': 4 } });
-    }
-    layers.push({ id:'flux-line-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': width, 'line-opacity': op } });
-    if (isMain) {
-      layers.push({ id:'flux-dash-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'butt','line-join':'round'}, paint:{ 'line-color':'#fff5d6', 'line-width':['interpolate',['linear'],['zoom'], 3, 1, 7, 2], 'line-opacity':0.85, 'line-dasharray':[0, 4, 3] } });
-    }
-    if (isCabotage) {
-      // Dash cyan-clair anime pour suggerer le mouvement du cabotage (plus discret que main)
-      layers.push({ id:'flux-dash-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'butt','line-join':'round'}, paint:{ 'line-color':'#cdf0f5', 'line-width':['interpolate',['linear'],['zoom'], 3, 0.8, 7, 1.6], 'line-opacity':0.7, 'line-dasharray':[0, 5, 4] } });
-    }
+    const tierConfigs = [
+      { tier:1, glow:14, line:5.0 },
+      { tier:2, glow: 9, line:2.8 },
+      { tier:3, glow: 5, line:1.4 }
+    ];
+    tierConfigs.forEach(({tier, glow, line}) => {
+      const tf = ['all', f, ['==',['get','volume_tier'], tier]];
+      layers.push({ id:`flux-glow-${c.id}-t${tier}`, type:'line', source:srcId, filter:tf,
+        layout:{'line-cap':'round','line-join':'round'},
+        paint:{ 'line-color':col, 'line-width':glow, 'line-opacity':glowOpacity, 'line-blur':5 }
+      });
+      layers.push({ id:`flux-line-${c.id}-t${tier}`, type:'line', source:srcId, filter:tf,
+        layout:{'line-cap':'round','line-join':'round'},
+        paint:{ 'line-color':col, 'line-width':line, 'line-opacity':opacityByTier }
+      });
+      if (tier <= 2) {
+        layers.push({ id:`flux-dash-${c.id}-t${tier}`, type:'line', source:srcId, filter:tf,
+          layout:{'line-cap':'butt','line-join':'round'},
+          paint:{
+            'line-color': '#ffffff',
+            'line-width': tier === 1 ? 1.6 : 1.0,
+            'line-opacity': tier === 1 ? 0.85 : 0.55,
+            'line-dasharray':[0, 4, 3]
+          }
+        });
+      }
+    });
     return layers;
+  }
+  if (c.kind === 'noeud') {
+    // Choke points strategiques : croix lumineuse + label uppercase or
+    return [
+      { id:'noeud-glow-'+c.id, type:'circle', source:srcId,
+        paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,12,7,22], 'circle-color':col, 'circle-opacity':0.20, 'circle-blur':1.5 }
+      },
+      { id:'noeud-ring-'+c.id, type:'circle', source:srcId,
+        paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,5,7,9], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.5, 'circle-stroke-opacity':0.95 }
+      },
+      { id:'noeud-dot-'+c.id, type:'circle', source:srcId,
+        paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,2,7,4], 'circle-color':col, 'circle-stroke-color':'rgba(255,255,255,0.8)', 'circle-stroke-width':0.7 }
+      },
+      { id:'noeud-label-'+c.id, type:'symbol', source:srcId,
+        layout:{
+          'text-field': ['get','label'],
+          'text-font': ['Open Sans Bold','Arial Unicode MS Bold'],
+          'text-size': ['interpolate',['linear'],['zoom'], 3, 8, 5, 10, 7, 12],
+          'text-letter-spacing': 0.22,
+          'text-offset': [0, 1.6],
+          'text-anchor': 'top',
+          'text-allow-overlap': false
+        },
+        paint:{ 'text-color': col, 'text-halo-color': 'rgba(0,0,0,0.85)', 'text-halo-width': 2 }
+      }
+    ];
   }
   if (c.kind === 'port') {
     return [
@@ -607,22 +663,31 @@ setTimeout(() => {
   });
 }, 50);
 
-/* Flux maritime — animation subtile du dash (sens commerce maritime) */
+/* Flux maritime — animation differentielle par categorie (cadence narrative) */
 let _fluxStart = null;
+const FLUX_CADENCES = [
+  // [base_layer_id_prefix, speed (ms/phase), dashSum]
+  ['flux-dash-flux-containers', 55, 7],   // Containers : tempo soutenu (commerce mondial)
+  ['flux-dash-flux-oil',        70, 7],   // Brut : VLCC plus lents
+  ['flux-dash-flux-lng',        65, 7],   // GNL : cadence intermediaire
+  ['flux-dash-flux-bulk',       80, 7],   // Vrac : Capesize tres lents
+  ['flux-dash-flux-regional',   95, 9],   // Cabotage : tempo regional
+  ['flux-dash-flux-bypass',    110, 9],   // Bypass : opportuniste
+];
 function tickFlux(t) {
   if (!_fluxStart) _fluxStart = t;
   const dt = t - _fluxStart;
-  // Flux principaux : dash dore qui defile (cycle ~1.6s, dasharray total 7)
-  const dashId = 'flux-dash-flux-principal';
-  if (map.getLayer(dashId)) {
-    const phase = (dt / 60) % 7;
-    try { map.setPaintProperty(dashId, 'line-dasharray', [0, 4 - (phase % 4), 3, (phase % 4)]); } catch(e){}
-  }
-  // Cabotage regional : dash cyan plus lent (cycle ~2.4s, dasharray total 9)
-  const cabId = 'flux-dash-flux-cabotage';
-  if (map.getLayer(cabId)) {
-    const phase = (dt / 90) % 9;
-    try { map.setPaintProperty(cabId, 'line-dasharray', [0, 5 - (phase % 5), 4, (phase % 5)]); } catch(e){}
+  for (const [prefix, speed, sum] of FLUX_CADENCES) {
+    const phase = (dt / speed) % sum;
+    const half = sum / 2;
+    // 3 layers possibles par categorie (tiers 1, 2 — tier 3 pas anime)
+    [1, 2].forEach(tier => {
+      const id = `${prefix}-t${tier}`;
+      if (!map.getLayer(id)) return;
+      try {
+        map.setPaintProperty(id, 'line-dasharray', [0, half - (phase % half), Math.floor(half), (phase % half)]);
+      } catch(e){}
+    });
   }
   requestAnimationFrame(tickFlux);
 }
