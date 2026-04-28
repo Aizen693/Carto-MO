@@ -255,6 +255,17 @@ html, body {
 .sb-style-btn:hover { color: var(--tx1); border-color: var(--tx2); }
 .sb-style-btn.active { color: var(--ac); border-color: var(--ac); background: rgba(196,154,60,0.08); }
 
+/* Label de categorie dans la sidebar (Style carte, Outils, etc.) */
+.sb-cat-label {
+  padding: 8px 12px 3px;
+  font: 600 7px/1 var(--bc);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx2);
+  border-top: 1px solid var(--ln);
+}
+.sb-cat-label:first-child { border-top: none; }
+
 /* Outils rows */
 .sb-tool-row {
   display: flex; align-items: center; gap: 8px;
