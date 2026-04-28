@@ -444,9 +444,17 @@ function buildMapboxLayers(c, srcId) {
     const width = isMain
       ? ['interpolate',['linear'],['zoom'], 3, 2, 5, 3.5, 7, 5]
       : ['interpolate',['linear'],['zoom'], 3, 1, 5, 1.6, 7, 2.8];
-    return [
-      { id:'flux-line-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': width, 'line-opacity': isMain ? 0.9 : 0.6 } }
-    ];
+    const layers = [];
+    if (isMain) {
+      // Glow leger derriere le flux principal
+      layers.push({ id:'flux-glow-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': 12, 'line-opacity': 0.12, 'line-blur': 5 } });
+    }
+    layers.push({ id:'flux-line-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': width, 'line-opacity': isMain ? 0.85 : 0.6 } });
+    if (isMain) {
+      // Dash anime par-dessus pour suggerer le sens du flux (subtil, clair sur fond colore)
+      layers.push({ id:'flux-dash-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'butt','line-join':'round'}, paint:{ 'line-color':'#fff5d6', 'line-width':['interpolate',['linear'],['zoom'], 3, 1, 7, 2], 'line-opacity':0.85, 'line-dasharray':[0, 4, 3] } });
+    }
+    return layers;
   }
   if (c.kind === 'port') {
     return [
@@ -583,6 +591,23 @@ setTimeout(() => {
     if (sub) sub.classList.add('open');
   });
 }, 50);
+
+/* Flux maritime — animation subtile du dash (sens commerce maritime) */
+let _fluxStart = null;
+function tickFlux(t) {
+  if (!_fluxStart) _fluxStart = t;
+  const dt = t - _fluxStart;
+  const dashId = 'flux-dash-flux-principal';
+  if (map.getLayer(dashId)) {
+    // Cycle complet sur ~1.6s, dasharray total = 7
+    const phase = (dt / 60) % 7;
+    try {
+      map.setPaintProperty(dashId, 'line-dasharray', [0, 4 - (phase % 4), 3, (phase % 4)]);
+    } catch(e){}
+  }
+  requestAnimationFrame(tickFlux);
+}
+requestAnimationFrame(tickFlux);
 
 </script>
 
