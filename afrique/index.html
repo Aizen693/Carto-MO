@@ -9,21 +9,20 @@
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <link rel="stylesheet" href="../shared/styles.css?v=20260428a">
 <style>
-/* === AFRIQUE — style command-center dark === */
-#map { background: #060810; }
+/* === AFRIQUE — base + modes basique / sombre / satellite === */
+#map { background: #e8eaed; position: relative; }
+#map.mode-dark { background: #060810; }
+#map.mode-satellite { background: #0a0a0a; }
 
-/* Vignette cinematique + scanline subtile pour ambiance OSINT */
-#map::after {
+/* Vignette cinematique uniquement en mode sombre */
+#map.mode-dark::after {
   content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2;
   background:
     radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%),
     repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 3px);
   mix-blend-mode: multiply;
 }
-#map { position: relative; }
-
-/* Glow doux derriere les zones piraterie / navales */
-.mapboxgl-canvas-container { filter: saturate(1.05); }
+#map.mode-dark .mapboxgl-canvas-container { filter: saturate(1.05); }
 
 .hdr-cell-sm { display: flex; align-items: center; padding: 0 12px; border-right: 1px solid var(--ln); }
 .hdr-cell-sm span { font: 500 9px/1 var(--m); color: var(--tx1); letter-spacing: 0.18em; text-transform: uppercase; }
@@ -156,6 +155,13 @@
       <div class="sb-style-row">
         <button class="sb-style-btn" onclick="toggleAll(true)">Tout activer</button>
         <button class="sb-style-btn" onclick="toggleAll(false)">Tout enlever</button>
+      </div>
+
+      <div class="sb-cat-label">Style carte</div>
+      <div class="sb-style-row">
+        <button class="sb-style-btn active" onclick="setStyle('standard')" id="sb-standard">Standard</button>
+        <button class="sb-style-btn" onclick="setStyle('satellite')" id="sb-satellite">Satellite</button>
+        <button class="sb-style-btn" onclick="setStyle('dark')" id="sb-dark">Sombre</button>
       </div>
 
       <!-- Group 1: FLUX MARITIMES -->
@@ -295,9 +301,16 @@ Object.values(CATALOG).forEach(g => g.children.forEach(c => ALL_CHILDREN[c.id] =
 /* ═════════ MAP INIT ═════════ */
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
+const STYLES = {
+  standard:  'mapbox://styles/mapbox/standard',
+  satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+  dark:      'mapbox://styles/mapbox/dark-v11'
+};
+let currentMode = 'standard';
+
 const map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/mapbox/dark-v11',
+  style: STYLES[currentMode],
   center: [22, 8],
   zoom: 3.0,
   minZoom: 2.4,
@@ -306,6 +319,7 @@ const map = new mapboxgl.Map({
   attributionControl: true
 });
 window.map = map;
+document.getElementById('map').classList.add('mode-' + currentMode);
 
 /* ═════════ PALETTE COMMAND-CENTER DARK ═════════ */
 const PALETTE = {
@@ -323,11 +337,39 @@ const PALETTE = {
   countryLabel:   '#c49a3c'
 };
 
+let _catalogInitialized = false;
 map.on('style.load', () => {
-  applyEditorialStyle();
-  addGeographicOverlays();
-  initLayersCatalog();
+  if (currentMode === 'dark') {
+    applyEditorialStyle();
+    addGeographicOverlays();
+  }
+  if (!_catalogInitialized) {
+    initLayersCatalog();
+    _catalogInitialized = true;
+  } else {
+    // Re-injecter les sub-layers actives apres changement de style
+    Object.keys(layerState).forEach(id => {
+      const s = layerState[id];
+      if (s.visible && s.data) addSubLayer(id);
+    });
+  }
 });
+
+window.setStyle = function(mode) {
+  if (!STYLES[mode] || mode === currentMode) return;
+  currentMode = mode;
+  // UI : bouton actif
+  document.querySelectorAll('.sb-style-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('sb-' + mode);
+  if (btn) btn.classList.add('active');
+  // CSS : vignette + bg
+  const mapEl = document.getElementById('map');
+  mapEl.classList.remove('mode-standard','mode-satellite','mode-dark');
+  mapEl.classList.add('mode-' + mode);
+  // Mapbox style
+  map.setStyle(STYLES[mode]);
+  // Le handler style.load reapplique les overrides + re-injecte les calques
+};
 
 function applyEditorialStyle() {
   const style = map.getStyle();
