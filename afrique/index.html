@@ -91,7 +91,7 @@
   </div>
   <div class="hdr-cell">
     <span class="hdr-cell-label">Calques</span>
-    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/16</span>
+    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/17</span>
   </div>
   <div class="hdr-cell">
     <span class="hdr-cell-label">Features</span>
@@ -154,16 +154,20 @@
 
       <!-- Group 1: FLUX MARITIMES -->
       <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'flux')">
-        <span>1. Flux maritimes <span class="sb-sub-badge" id="badge-flux">0/2</span></span>
+        <span>1. Flux maritimes <span class="sb-sub-badge" id="badge-flux">0/3</span></span>
         <div class="sb-toggle" id="sb-master-flux" onclick="event.stopPropagation();toggleMaster('flux')"></div>
       </div>
       <div class="sb-sublayers" id="sub-flux">
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b8862d"></span>Flux principaux (Suez-Ormuz, Cap)</span>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c49a3c"></span>Flux principaux (Suez-Ormuz, Cap)</span>
           <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-principal" onclick="toggleLayer('flux-principal')"></div>
         </div>
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#6b7079"></span>Cabotage + regional</span>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#5fc4d6"></span>Cabotage regional (Ouest + Est)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-cabotage" onclick="toggleLayer('flux-cabotage')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8e96a2"></span>Escales &amp; ramifications</span>
           <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-secondaire" onclick="toggleLayer('flux-secondaire')"></div>
         </div>
       </div>
@@ -270,8 +274,9 @@ const CATALOG = {
   flux: {
     title: 'Flux maritimes',
     children: [
-      { id:'flux-principal',  label:'Flux principaux',   file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'main'],      color:'#c49a3c', defaultOn:true },
-      { id:'flux-secondaire', label:'Cabotage regional', file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'secondary'], color:'#8e96a2', defaultOn:false }
+      { id:'flux-principal',  label:'Flux principaux',          file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'main'], color:'#c49a3c', defaultOn:true },
+      { id:'flux-cabotage',   label:'Cabotage regional',        file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','category'],'cabotage'], color:'#5fc4d6', defaultOn:true },
+      { id:'flux-secondaire', label:'Escales & ramifications',  file:'flux-maritimes.geojson', kind:'flux', filter:['all',['==',['get','rank'],'secondary'],['!=',['get','category'],'cabotage']], color:'#8e96a2', defaultOn:false }
     ]
   },
   ports: {
@@ -441,18 +446,28 @@ function buildMapboxLayers(c, srcId) {
   const col = c.color;
   if (c.kind === 'flux') {
     const isMain = (c.id === 'flux-principal');
+    const isCabotage = (c.id === 'flux-cabotage');
     const width = isMain
       ? ['interpolate',['linear'],['zoom'], 3, 2, 5, 3.5, 7, 5]
-      : ['interpolate',['linear'],['zoom'], 3, 1, 5, 1.6, 7, 2.8];
+      : isCabotage
+        ? ['interpolate',['linear'],['zoom'], 3, 1.6, 5, 2.4, 7, 3.6]
+        : ['interpolate',['linear'],['zoom'], 3, 1, 5, 1.6, 7, 2.8];
+    const op = isMain ? 0.85 : isCabotage ? 0.85 : 0.55;
     const layers = [];
     if (isMain) {
-      // Glow leger derriere le flux principal
       layers.push({ id:'flux-glow-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': 12, 'line-opacity': 0.12, 'line-blur': 5 } });
     }
-    layers.push({ id:'flux-line-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': width, 'line-opacity': isMain ? 0.85 : 0.6 } });
+    if (isCabotage) {
+      // Glow cyan plus discret pour mettre en lumière le cabotage
+      layers.push({ id:'flux-glow-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': 8, 'line-opacity': 0.18, 'line-blur': 4 } });
+    }
+    layers.push({ id:'flux-line-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': width, 'line-opacity': op } });
     if (isMain) {
-      // Dash anime par-dessus pour suggerer le sens du flux (subtil, clair sur fond colore)
       layers.push({ id:'flux-dash-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'butt','line-join':'round'}, paint:{ 'line-color':'#fff5d6', 'line-width':['interpolate',['linear'],['zoom'], 3, 1, 7, 2], 'line-opacity':0.85, 'line-dasharray':[0, 4, 3] } });
+    }
+    if (isCabotage) {
+      // Dash cyan-clair anime pour suggerer le mouvement du cabotage (plus discret que main)
+      layers.push({ id:'flux-dash-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'butt','line-join':'round'}, paint:{ 'line-color':'#cdf0f5', 'line-width':['interpolate',['linear'],['zoom'], 3, 0.8, 7, 1.6], 'line-opacity':0.7, 'line-dasharray':[0, 5, 4] } });
     }
     return layers;
   }
@@ -597,13 +612,17 @@ let _fluxStart = null;
 function tickFlux(t) {
   if (!_fluxStart) _fluxStart = t;
   const dt = t - _fluxStart;
+  // Flux principaux : dash dore qui defile (cycle ~1.6s, dasharray total 7)
   const dashId = 'flux-dash-flux-principal';
   if (map.getLayer(dashId)) {
-    // Cycle complet sur ~1.6s, dasharray total = 7
     const phase = (dt / 60) % 7;
-    try {
-      map.setPaintProperty(dashId, 'line-dasharray', [0, 4 - (phase % 4), 3, (phase % 4)]);
-    } catch(e){}
+    try { map.setPaintProperty(dashId, 'line-dasharray', [0, 4 - (phase % 4), 3, (phase % 4)]); } catch(e){}
+  }
+  // Cabotage regional : dash cyan plus lent (cycle ~2.4s, dasharray total 9)
+  const cabId = 'flux-dash-flux-cabotage';
+  if (map.getLayer(cabId)) {
+    const phase = (dt / 90) % 9;
+    try { map.setPaintProperty(cabId, 'line-dasharray', [0, 5 - (phase % 5), 4, (phase % 5)]); } catch(e){}
   }
   requestAnimationFrame(tickFlux);
 }
