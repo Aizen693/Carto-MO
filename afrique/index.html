@@ -91,7 +91,7 @@
   </div>
   <div class="hdr-cell">
     <span class="hdr-cell-label">Calques</span>
-    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/13</span>
+    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/16</span>
   </div>
   <div class="hdr-cell">
     <span class="hdr-cell-label">Features</span>
@@ -236,6 +236,26 @@
         </div>
       </div>
 
+      <!-- Group 5: HUBS & ENTREPOTS (Mali / Burkina / Mauritanie) -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'hubs')">
+        <span>5. Hubs &amp; entrepots <span class="sb-sub-badge" id="badge-hubs">0/3</span></span>
+        <div class="sb-toggle" id="sb-master-hubs" onclick="event.stopPropagation();toggleMaster('hubs')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-hubs">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>Humanitaire (WFP)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-hubs-humanitaire" onclick="toggleLayer('hubs-humanitaire')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e07c5a"></span>Carburant / hydrocarbures</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-hubs-carburant" onclick="toggleLayer('hubs-carburant')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c49a3c"></span>Logistique / multimodal</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-hubs-logistique" onclick="toggleLayer('hubs-logistique')"></div>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -278,6 +298,14 @@ const CATALOG = {
       { id:'nav-fr', label:'France',      file:'navale-france.geojson', kind:'nav', color:'#1a4d7a', defaultOn:false },
       { id:'nav-cn', label:'Chine',       file:'navale-chine.geojson',  kind:'nav', color:'#8b2e3c', defaultOn:false },
       { id:'nav-us', label:'Etats-Unis',  file:'navale-usa.geojson',    kind:'nav', color:'#2e8b8b', defaultOn:false }
+    ]
+  },
+  hubs: {
+    title: 'Hubs & entrepots',
+    children: [
+      { id:'hubs-humanitaire', label:'Humanitaire (WFP)',          file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'humanitaire'], color:'#4fb8cc', defaultOn:false },
+      { id:'hubs-carburant',   label:'Carburant / hydrocarbures',  file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'carburant'],   color:'#e07c5a', defaultOn:false },
+      { id:'hubs-logistique',  label:'Logistique / multimodal',    file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'logistique'],  color:'#c49a3c', defaultOn:false }
     ]
   }
 };
@@ -436,6 +464,14 @@ function buildMapboxLayers(c, srcId) {
     return [
       { id:'nav-ring-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,5.5,6,8.5,9,12.5], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.5, 'circle-stroke-opacity':0.85 } },
       { id:'nav-dot-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3,6,4.5,9,6.5], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':1 } }
+    ];
+  }
+  if (c.kind === 'hub') {
+    // Hubs intérieurs : marqueur carré (rayon double) pour différencier visuellement des ports cotiers
+    const f = c.filter || ['==',1,1];
+    return [
+      { id:'hub-square-'+c.id, type:'circle', source:srcId, filter:f, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,4,6,6,9,9], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':1.2, 'circle-stroke-opacity':0.9 } },
+      { id:'hub-ring-'+c.id,   type:'circle', source:srcId, filter:f, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,7,6,10,9,14], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':0.8, 'circle-stroke-opacity':0.5 } }
     ];
   }
   return [];

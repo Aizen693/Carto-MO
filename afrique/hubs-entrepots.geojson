@@ -1,0 +1,341 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.9602,
+          18.077
+        ]
+      },
+      "properties": {
+        "name": "SMH Nouakchott Oil Depot",
+        "type": "Depot hydrocarbures / carburant",
+        "category": "carburant",
+        "pays": "Mauritanie",
+        "ville": "Nouakchott",
+        "operateur": "Societe Mauritanienne des Hydrocarbures (SMH) / Goumin",
+        "volume": "100000 m3 + extension",
+        "description": "Depot d'hydrocarbures central de Nouakchott, agrandi en 2025; role principal de stockage de carburant pour la capitale et le pays [web:160][web:162]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.9894,
+          18.0714
+        ]
+      },
+      "properties": {
+        "name": "Port de Nouakchott (Gue de l'Or)",
+        "type": "Port / hub logistique (general, conteneurs, hydrocarbures)",
+        "category": "carburant",
+        "pays": "Mauritanie",
+        "ville": "Nouakchott",
+        "operateur": "Port autonome de Nouakchott",
+        "volume": "Infrastructure portuaire de 10 berths, 800000 TEU an, 1000000 t oil, 150000000 t bulk",
+        "description": "Port principal de Nouakchott, terminal petrolier, conteneurs, vrac, frigorifique [web:161][web:163]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.973,
+          18.098
+        ]
+      },
+      "properties": {
+        "name": "Goumin port oil terminal",
+        "type": "Terminal petrolier de stockage",
+        "category": "carburant",
+        "pays": "Mauritanie",
+        "ville": "Goumin/Nouakchott",
+        "operateur": "Goumin",
+        "volume": "Partie du reseau petrolier de Nouakchott",
+        "description": "Plateforme de stockage petrolier situee a Goumin, a l'est de Nouakchott, qui approvisionne SMH et d'autres depots [web:160][web:162]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.0029,
+          12.6392
+        ]
+      },
+      "properties": {
+        "name": "Hub logistique WFP Bamako",
+        "type": "Hub humanitaire & logistique",
+        "category": "humanitaire",
+        "pays": "Mali",
+        "ville": "Bamako",
+        "operateur": "WFP / OCHA",
+        "volume": "Non precise",
+        "description": "Hub principal logistique du WFP pour le Mali, stockage de vivres, non-perissables, equipements [web:169]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.2,
+          14.52
+        ]
+      },
+      "properties": {
+        "name": "Hub logistique WFP Mopti",
+        "type": "Hub humanitaire",
+        "category": "humanitaire",
+        "pays": "Mali",
+        "ville": "Mopti",
+        "operateur": "WFP / OCHA",
+        "volume": "Non precise",
+        "description": "Hub regional pour Mopti, Gao, region du fleuve Niger [web:169]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.05,
+          16.2667
+        ]
+      },
+      "properties": {
+        "name": "Hub logistique WFP Gao",
+        "type": "Hub humanitaire",
+        "category": "humanitaire",
+        "pays": "Mali",
+        "ville": "Gao",
+        "operateur": "WFP / OCHA",
+        "volume": "Non precise",
+        "description": "Hub logistique pour le nord du Mali et Gao [web:169]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.4167,
+          18.4333
+        ]
+      },
+      "properties": {
+        "name": "Hub logistique WFP Kidal",
+        "type": "Hub humanitaire",
+        "category": "humanitaire",
+        "pays": "Mali",
+        "ville": "Kidal",
+        "operateur": "WFP / OCHA",
+        "volume": "Non precise",
+        "description": "Hub logistique pour la region de Kidal [web:169]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.0029,
+          12.6392
+        ]
+      },
+      "properties": {
+        "name": "Depot carburant Bamako",
+        "type": "Stockage carburant",
+        "category": "carburant",
+        "pays": "Mali",
+        "ville": "Bamako",
+        "operateur": "Gouvernement / societes petrolieres (Total, Shell, local chains)",
+        "volume": "Non precise",
+        "description": "Reseau de depots et stations-service de Bamako, affecte par le blocage du carburant depuis la frontiere avec le Burkina [web:166][web:20]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.5,
+          13.55
+        ]
+      },
+      "properties": {
+        "name": "Corridor logistique Bamako-Kayes-Nioro",
+        "type": "Convois de carburant, hubs de transbordement",
+        "category": "carburant",
+        "pays": "Mali",
+        "ville": "Corridor Bamako-Kayes-Nioro",
+        "operateur": "Gouvernement / societes petrolieres",
+        "volume": "Non precise",
+        "description": "Axe principal pour le carburant provenant de l'au-dela de la frontiere; axes vulnerables aux attaques de convoys [web:166][web:65]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.32,
+          11.1793
+        ]
+      },
+      "properties": {
+        "name": "Port sec de Bobo-Dioulasso",
+        "type": "Port sec multimodal (conteneurs, cereales, produits industriels)",
+        "category": "logistique",
+        "pays": "Burkina Faso",
+        "ville": "Bobo-Dioulasso",
+        "operateur": "BOAD / Gouvernement du Burkina Faso",
+        "volume": "117000 t / an cereales, 113000 t engrais, 111000 t produits industriels; 11 stands frigorifiques",
+        "description": "Port sec multimodal finance par la BOAD, premiere phase de 5.2 hectares, concu comme hub de transbordement pour le trafic de conteneurs et de marchandises [web:173]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.52,
+          12.37
+        ]
+      },
+      "properties": {
+        "name": "Hub logistique WFP Ouagadougou",
+        "type": "Hub humanitaire",
+        "category": "humanitaire",
+        "pays": "Burkina Faso",
+        "ville": "Ouagadougou",
+        "operateur": "WFP / OCHA",
+        "volume": "Non precise",
+        "description": "Hub principal pour le Burkina, stockage de vivres et equipements logistiques [web:169]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.2,
+          10.9
+        ]
+      },
+      "properties": {
+        "name": "Hub logistique WFP Diebougou / Bobo",
+        "type": "Hub regional pour le Sud-Ouest",
+        "category": "humanitaire",
+        "pays": "Burkina Faso",
+        "ville": "Diebougou / Bobo-Dioulasso",
+        "operateur": "WFP / OCHA",
+        "volume": "Non precise",
+        "description": "Hub de soutien logistique pour le Sud-Ouest burkinabe [web:169]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.52,
+          12.37
+        ]
+      },
+      "properties": {
+        "name": "Depot carburant Ouagadougou",
+        "type": "Stockage carburant",
+        "category": "carburant",
+        "pays": "Burkina Faso",
+        "ville": "Ouagadougou",
+        "operateur": "Gouvernement / societes petrolieres",
+        "volume": "Non precise",
+        "description": "Depots de carburant alimentant la capitale, situes a l'exterieur de Ouagadougou, affectes par la securite des axes de transport [web:169][web:114]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.1,
+          11.4
+        ]
+      },
+      "properties": {
+        "name": "Depot hydrocarbures Peni, SONABHY",
+        "type": "Hydrocarbures (essence, diesel, mazout)",
+        "category": "carburant",
+        "pays": "Burkina Faso",
+        "ville": "Peni",
+        "operateur": "SONABHY",
+        "volume": "104000 m³",
+        "description": "Nouveau depot inaugure en janvier 2025 pres de Bobo-Dioulasso, 104000 m³, alimente tout le territoire burkinabe [web:180][web:182][web:188]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.015,
+          5.663
+        ]
+      },
+      "properties": {
+        "name": "Depot hydrocarbures Tema (Ghana, gere par SONABHY)",
+        "type": "Hydrocarbures liquides",
+        "category": "carburant",
+        "pays": "Burkina Faso",
+        "ville": "Tema, Ghana",
+        "operateur": "SONABHY",
+        "volume": "Volume non precisé, infrastructure majeure",
+        "description": "Acquisition en 2025 d’un depot à Tema pour sécuriser l’approvisionnement du Burkina [web:184][web:186]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.0029,
+          12.6392
+        ]
+      },
+      "properties": {
+        "name": "Depot principal Star Oil Bamako",
+        "type": "Carburant (essence, diesel, aviation)",
+        "category": "carburant",
+        "pays": "Mali",
+        "ville": "Bamako",
+        "operateur": "Star Oil",
+        "volume": "16000 m³",
+        "description": "Dépôt principal de Star Oil à Bamako, 16000 m³, desservant la ville et le réseau de distribution [web:179]",
+        "sources": "Veille Sahel HUMINT"
+      }
+    }
+  ]
+}
