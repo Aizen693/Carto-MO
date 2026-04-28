@@ -578,7 +578,7 @@ window.toggleSbSection = function(h) {
 
 /* Open all sub-layer groups by default so users see what they can toggle */
 setTimeout(() => {
-  ['flux','ports','piraterie','navale'].forEach(g => {
+  ['flux','ports','piraterie','navale','hubs'].forEach(g => {
     const sub = document.getElementById('sub-'+g);
     if (sub) sub.classList.add('open');
   });
