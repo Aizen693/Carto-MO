@@ -1,19 +1,243 @@
 {
   "type": "FeatureCollection",
   "features": [
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[17.9437,-33.0265]},"properties":{"name":"Saldanha Bay","type":"Mineralier / Fer","pays":"Afrique du Sud","description":"1er port export fer d'Afrique. 60 Mt/an vers Chine. Corridor Sishen-Saldanha (Transnet).","sources":"Transnet_SA|https://www.transnet.net"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[32.0810,-28.7807]},"properties":{"name":"Richards Bay","type":"Mineralier / Charbon","pays":"Afrique du Sud","description":"1er port charbonnier mondial (75 Mtpa). Charbon thermique export vers Asie / Europe.","sources":"Richards_Bay_Coal|https://www.rbct.co.za"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[-17.0347,20.9331]},"properties":{"name":"Nouadhibou","type":"Mineralier / Fer","pays":"Mauritanie","description":"Port mineralier SNIM (fer). 12 Mt/an. Liaison ferroviaire Zouerate 700 km.","sources":"SNIM|https://www.snim.com"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[-16.5350,14.2500]},"properties":{"name":"Kayar / Dakar Phosphates","type":"Mineralier / Phosphate","pays":"Senegal","description":"Terminal export phosphates ICS (Industries Chimiques du Senegal).","sources":"ICS_Senegal|https://www.ics.sn"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[13.4597,-5.8166]},"properties":{"name":"Matadi","type":"Mineralier / Vrac","pays":"RDC","description":"Principal port Kongo Central. Transit cuivre/cobalt Katanga via rail vers Atlantique.","sources":"ONATRA_Congo|https://onatra.cd"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[13.0523,-5.8504]},"properties":{"name":"Boma","type":"Mineralier / Vrac","pays":"RDC","description":"Port fluvio-maritime RDC. Export bois, minerais. En aval de Matadi.","sources":"ONATRA_Congo|https://onatra.cd"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[-13.5824,9.5170]},"properties":{"name":"Kamsar","type":"Mineralier / Bauxite","pays":"Guinee","description":"1er port bauxite mondial (CBG - Compagnie Bauxites de Guinee). Alumine Chine/Europe.","sources":"CBG_Guinea|https://www.cbg-guinee.com"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[-13.8060,10.9130]},"properties":{"name":"Rio Kogon (SMB Winning)","type":"Mineralier / Bauxite","pays":"Guinee","description":"Nouveau terminal consortium chinois SMB Winning (2016+). Mine Simandou phase 2.","sources":"SMB_Winning|https://smbwinning.com/"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[-14.6410,9.7011]},"properties":{"name":"Conakry","type":"Mineralier / Vrac","pays":"Guinee","description":"Port multifonction, export bauxite et or. Hub CEDEAO ouest.","sources":"PAC_Guinea|https://pac.gov.gn"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[40.6825,-14.5395]},"properties":{"name":"Nacala (Moatize coal)","type":"Mineralier / Charbon","pays":"Mozambique","description":"Corridor charbon Moatize-Nacala (Vale -> Jindal). 18 Mtpa potentiel.","sources":"Vale_Mozambique|https://www.vale.com/ CDN_Mozambique|https://cdn.mozambique.pt"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[13.5450,-12.3447]},"properties":{"name":"Lobito (cuivre Zambie/RDC)","type":"Mineralier / Cuivre","pays":"Angola","description":"Reactivation 2024: cuivre/cobalt Lualaba/Kolwezi/Kabwe. Financement G7.","sources":"US_State_Dept|https://www.state.gov/ Corridor_Lobito|https://corredordelobito.ao"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[32.5732,-25.9692]},"properties":{"name":"Maputo (chrome/ferro)","type":"Mineralier / Vrac","pays":"Mozambique","description":"Export chrome et ferrochrome Zimbabwe. Corridor Maputo-Harare.","sources":"Maputo_Port|https://www.portmaputo.com"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[17.2203,-22.7000]},"properties":{"name":"Walvis Bay (uranium)","type":"Mineralier / Uranium","pays":"Namibie","description":"Export uranium Rossing/Husab (CNNC/CGN chinois). 10% production mondiale.","sources":"World_Nuclear|https://world-nuclear.org/ NamPort|https://www.namport.com.na"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[-1.7560,4.9181]},"properties":{"name":"Takoradi (manganese/bauxite)","type":"Mineralier / Vrac","pays":"Ghana","description":"Export manganese (Ghana Manganese Co) et bauxite. Liaison rail interieur.","sources":"GPHA_Ghana|https://ghanaports.gov.gh"}}
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.99,
+          -32.945
+        ]
+      },
+      "properties": {
+        "name": "Saldanha Bay",
+        "type": "Mineralier / Fer",
+        "pays": "Afrique du Sud",
+        "description": "1er port export fer d'Afrique. 60 Mt/an vers Chine. Corridor Sishen-Saldanha (Transnet).",
+        "sources": "Transnet_SA|https://www.transnet.net"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.085,
+          -28.782
+        ]
+      },
+      "properties": {
+        "name": "Richards Bay",
+        "type": "Mineralier / Charbon",
+        "pays": "Afrique du Sud",
+        "description": "1er port charbonnier mondial (75 Mtpa). Charbon thermique export vers Asie / Europe.",
+        "sources": "Richards_Bay_Coal|https://www.rbct.co.za"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -17.051,
+          20.905
+        ]
+      },
+      "properties": {
+        "name": "Nouadhibou",
+        "type": "Mineralier / Fer",
+        "pays": "Mauritanie",
+        "description": "Port mineralier SNIM (fer). 12 Mt/an. Liaison ferroviaire Zouerate 700 km.",
+        "sources": "SNIM|https://www.snim.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -17.119,
+          14.918
+        ]
+      },
+      "properties": {
+        "name": "Kayar / Dakar Phosphates",
+        "type": "Mineralier / Phosphate",
+        "pays": "Senegal",
+        "description": "Terminal export phosphates ICS (Industries Chimiques du Senegal).",
+        "sources": "ICS_Senegal|https://www.ics.sn"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.45,
+          -5.82
+        ]
+      },
+      "properties": {
+        "name": "Matadi",
+        "type": "Mineralier / Vrac",
+        "pays": "RDC",
+        "description": "Principal port Kongo Central. Transit cuivre/cobalt Katanga via rail vers Atlantique.",
+        "sources": "ONATRA_Congo|https://onatra.cd"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.05,
+          -5.85
+        ]
+      },
+      "properties": {
+        "name": "Boma",
+        "type": "Mineralier / Vrac",
+        "pays": "RDC",
+        "description": "Port fluvio-maritime RDC. Export bois, minerais. En aval de Matadi.",
+        "sources": "ONATRA_Congo|https://onatra.cd"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14.616,
+          10.65
+        ]
+      },
+      "properties": {
+        "name": "Kamsar",
+        "type": "Mineralier / Bauxite",
+        "pays": "Guinee",
+        "description": "1er port bauxite mondial (CBG - Compagnie Bauxites de Guinee). Alumine Chine/Europe.",
+        "sources": "CBG_Guinea|https://www.cbg-guinee.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14.55,
+          10.75
+        ]
+      },
+      "properties": {
+        "name": "Rio Kogon (SMB Winning)",
+        "type": "Mineralier / Bauxite",
+        "pays": "Guinee",
+        "description": "Nouveau terminal consortium chinois SMB Winning (2016+). Mine Simandou phase 2.",
+        "sources": "SMB_Winning|https://smbwinning.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -13.7122,
+          9.5092
+        ]
+      },
+      "properties": {
+        "name": "Conakry",
+        "type": "Mineralier / Vrac",
+        "pays": "Guinee",
+        "description": "Port multifonction, export bauxite et or. Hub CEDEAO ouest.",
+        "sources": "PAC_Guinea|https://pac.gov.gn"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.692,
+          -14.545
+        ]
+      },
+      "properties": {
+        "name": "Nacala (Moatize coal)",
+        "type": "Mineralier / Charbon",
+        "pays": "Mozambique",
+        "description": "Corridor charbon Moatize-Nacala (Vale -> Jindal). 18 Mtpa potentiel.",
+        "sources": "Vale_Mozambique|https://www.vale.com/ CDN_Mozambique|https://cdn.mozambique.pt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.545,
+          -12.347
+        ]
+      },
+      "properties": {
+        "name": "Lobito (cuivre Zambie/RDC)",
+        "type": "Mineralier / Cuivre",
+        "pays": "Angola",
+        "description": "Reactivation 2024: cuivre/cobalt Lualaba/Kolwezi/Kabwe. Financement G7.",
+        "sources": "US_State_Dept|https://www.state.gov/ Corridor_Lobito|https://corredordelobito.ao"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.575,
+          -25.97
+        ]
+      },
+      "properties": {
+        "name": "Maputo (chrome/ferro)",
+        "type": "Mineralier / Vrac",
+        "pays": "Mozambique",
+        "description": "Export chrome et ferrochrome Zimbabwe. Corridor Maputo-Harare.",
+        "sources": "Maputo_Port|https://www.portmaputo.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.507,
+          -22.959
+        ]
+      },
+      "properties": {
+        "name": "Walvis Bay (uranium)",
+        "type": "Mineralier / Uranium",
+        "pays": "Namibie",
+        "description": "Export uranium Rossing/Husab (CNNC/CGN chinois). 10% production mondiale.",
+        "sources": "World_Nuclear|https://world-nuclear.org/ NamPort|https://www.namport.com.na"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.756,
+          4.886
+        ]
+      },
+      "properties": {
+        "name": "Takoradi (manganese/bauxite)",
+        "type": "Mineralier / Vrac",
+        "pays": "Ghana",
+        "description": "Export manganese (Ghana Manganese Co) et bauxite. Liaison rail interieur.",
+        "sources": "GPHA_Ghana|https://ghanaports.gov.gh"
+      }
+    }
   ]
 }

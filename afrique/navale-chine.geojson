@@ -1,13 +1,141 @@
 {
   "type": "FeatureCollection",
   "features": [
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[43.0806,11.6253]},"properties":{"name":"PLA Support Base (Djibouti)","type":"Base navale","pays":"Chine","description":"Ouverte aout 2017. 1re base militaire chinoise outre-mer. 2000 soldats. Quai pour porte-avions. Face a Camp Lemonnier.","sources":"CSIS_China_Power|https://chinapower.csis.org/ DoD_China_Report|https://www.defense.gov/"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[43.1169,11.7039]},"properties":{"name":"Doraleh Container Terminal","type":"Point d'appui","pays":"Chine","description":"Terminal conteneurs concede a CMHI (China Merchants). Dual-use potentiel. Arbitrage DP World 2018.","sources":"CSIS_Djibouti|https://www.csis.org/ Brookings|https://www.brookings.edu/"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[14.5083,-22.9576]},"properties":{"name":"Walvis Bay (access rumored)","type":"Point d'appui","pays":"Chine","description":"Port elargi par China Harbour Engineering. Hypothese acces militaire chinois non confirmee.","sources":"AIDDATA|https://www.aiddata.org/ ISS_Africa|https://issafrica.org"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[9.7701,1.8650]},"properties":{"name":"Bata (Guinee Equatoriale)","type":"Projet","pays":"Chine","description":"Projet de base militaire chinoise Atlantique rapporte 2021 (WSJ). Port elargi par CCCC.","sources":"WSJ|https://www.wsj.com/ CFR|https://www.cfr.org/"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[32.5914,-25.9653]},"properties":{"name":"Maputo (appui portuaire)","type":"Point d'appui","pays":"Chine","description":"Investissements CCCC portuaires. Interet Canal Mozambique post-LNG Cabo Delgado.","sources":"AIDDATA|https://www.aiddata.org/ CFR_Mozambique|https://www.cfr.org/"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[3.3707,6.4474]},"properties":{"name":"Lagos (investissements CCCC)","type":"Point d'appui","pays":"Chine","description":"Lekki Deep Sea Port (China Harbour). Acces commercial + potentielle logistique Marine PLA.","sources":"AIDDATA|https://www.aiddata.org/ Lekki_Deep_Sea_Port|https://www.lekkiport.com/"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[9.9080,4.0167]},"properties":{"name":"Kribi (CCCC)","type":"Point d'appui","pays":"Chine","description":"Port construction CCCC 2018. 85% financement Exim Bank China. Dual-use potentiel.","sources":"AIDDATA|https://www.aiddata.org/ PAK_Cameroon|https://portdekribi.cm"}},
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[34.8389,-19.8436]},"properties":{"name":"Beira (projet CCCC)","type":"Point d'appui","pays":"Chine","description":"Reparations+extension financees CCCC. Corridor regional. Interet chinois.","sources":"AIDDATA|https://www.aiddata.org/ Reuters|https://www.reuters.com/"}}
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.064,
+          11.599
+        ]
+      },
+      "properties": {
+        "name": "PLA Support Base (Djibouti)",
+        "type": "Base navale",
+        "pays": "Chine",
+        "description": "Ouverte aout 2017. 1re base militaire chinoise outre-mer. 2000 soldats. Quai pour porte-avions. Face a Camp Lemonnier.",
+        "sources": "CSIS_China_Power|https://chinapower.csis.org/ DoD_China_Report|https://www.defense.gov/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.064,
+          11.599
+        ]
+      },
+      "properties": {
+        "name": "Doraleh Container Terminal",
+        "type": "Point d'appui",
+        "pays": "Chine",
+        "description": "Terminal conteneurs concede a CMHI (China Merchants). Dual-use potentiel. Arbitrage DP World 2018.",
+        "sources": "CSIS_Djibouti|https://www.csis.org/ Brookings|https://www.brookings.edu/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.507,
+          -22.959
+        ]
+      },
+      "properties": {
+        "name": "Walvis Bay (access rumored)",
+        "type": "Point d'appui",
+        "pays": "Chine",
+        "description": "Port elargi par China Harbour Engineering. Hypothese acces militaire chinois non confirmee.",
+        "sources": "AIDDATA|https://www.aiddata.org/ ISS_Africa|https://issafrica.org"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.77,
+          1.85
+        ]
+      },
+      "properties": {
+        "name": "Bata (Guinee Equatoriale)",
+        "type": "Projet",
+        "pays": "Chine",
+        "description": "Projet de base militaire chinoise Atlantique rapporte 2021 (WSJ). Port elargi par CCCC.",
+        "sources": "WSJ|https://www.wsj.com/ CFR|https://www.cfr.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.575,
+          -25.97
+        ]
+      },
+      "properties": {
+        "name": "Maputo (appui portuaire)",
+        "type": "Point d'appui",
+        "pays": "Chine",
+        "description": "Investissements CCCC portuaires. Interet Canal Mozambique post-LNG Cabo Delgado.",
+        "sources": "AIDDATA|https://www.aiddata.org/ CFR_Mozambique|https://www.cfr.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.403,
+          6.45
+        ]
+      },
+      "properties": {
+        "name": "Lagos (investissements CCCC)",
+        "type": "Point d'appui",
+        "pays": "Chine",
+        "description": "Lekki Deep Sea Port (China Harbour). Acces commercial + potentielle logistique Marine PLA.",
+        "sources": "AIDDATA|https://www.aiddata.org/ Lekki_Deep_Sea_Port|https://www.lekkiport.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.913,
+          2.943
+        ]
+      },
+      "properties": {
+        "name": "Kribi (CCCC)",
+        "type": "Point d'appui",
+        "pays": "Chine",
+        "description": "Port construction CCCC 2018. 85% financement Exim Bank China. Dual-use potentiel.",
+        "sources": "AIDDATA|https://www.aiddata.org/ PAK_Cameroon|https://portdekribi.cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.835,
+          -19.839
+        ]
+      },
+      "properties": {
+        "name": "Beira (projet CCCC)",
+        "type": "Point d'appui",
+        "pays": "Chine",
+        "description": "Reparations+extension financees CCCC. Corridor regional. Interet chinois.",
+        "sources": "AIDDATA|https://www.aiddata.org/ Reuters|https://www.reuters.com/"
+      }
+    }
   ]
 }
