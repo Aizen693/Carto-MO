@@ -7,22 +7,10 @@
 <link rel="icon" type="image/jpeg" href="../favicon.jpg">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
-<link rel="stylesheet" href="../shared/styles.css?v=20260428a">
+<link rel="stylesheet" href="../shared/styles.css?v=20260428b">
 <style>
-/* === AFRIQUE — base + modes basique / sombre / satellite === */
-#map { background: #e8eaed; position: relative; }
-#map.mode-dark { background: #060810; }
-#map.mode-satellite { background: #0a0a0a; }
-
-/* Vignette cinematique uniquement en mode sombre */
-#map.mode-dark::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2;
-  background:
-    radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%),
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 3px);
-  mix-blend-mode: multiply;
-}
-#map.mode-dark .mapboxgl-canvas-container { filter: saturate(1.05); }
+/* === AFRIQUE — styles minimaux, modes geres par Mapbox === */
+#map { background: #e8eaed; }
 
 .hdr-cell-sm { display: flex; align-items: center; padding: 0 12px; border-right: 1px solid var(--ln); }
 .hdr-cell-sm span { font: 500 9px/1 var(--m); color: var(--tx1); letter-spacing: 0.18em; text-transform: uppercase; }
@@ -262,34 +250,34 @@ const CATALOG = {
   flux: {
     title: 'Flux maritimes',
     children: [
-      { id:'flux-principal',  label:'Flux principaux',   file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'main'],      color:'#e0b452', defaultOn:true },
-      { id:'flux-secondaire', label:'Cabotage regional', file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'secondary'], color:'#7a8190', defaultOn:false }
+      { id:'flux-principal',  label:'Flux principaux',   file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'main'],      color:'#c49a3c', defaultOn:true },
+      { id:'flux-secondaire', label:'Cabotage regional', file:'flux-maritimes.geojson', kind:'flux', filter:['==',['get','rank'],'secondary'], color:'#8e96a2', defaultOn:false }
     ]
   },
   ports: {
     title: 'Ports',
     children: [
       { id:'ports-com',  label:'Commerciaux',  file:'ports-commerciaux.geojson', kind:'port', color:'#c49a3c', defaultOn:true },
-      { id:'ports-oil',  label:'Petroliers',   file:'ports-petroliers.geojson',  kind:'port', color:'#a065c4', defaultOn:false },
-      { id:'ports-ore',  label:'Mineraliers',  file:'ports-mineraliers.geojson', kind:'port', color:'#c08a5a', defaultOn:false },
-      { id:'ports-fish', label:'Peche',        file:'ports-peche.geojson',       kind:'port', color:'#5fc4d6', defaultOn:false },
-      { id:'ports-mil',  label:'Militaires',   file:'ports-militaires.geojson',  kind:'port', color:'#d76060', defaultOn:false }
+      { id:'ports-oil',  label:'Petroliers',   file:'ports-petroliers.geojson',  kind:'port', color:'#ab47bc', defaultOn:false },
+      { id:'ports-ore',  label:'Mineraliers',  file:'ports-mineraliers.geojson', kind:'port', color:'#8d6e63', defaultOn:false },
+      { id:'ports-fish', label:'Peche',        file:'ports-peche.geojson',       kind:'port', color:'#29b6f6', defaultOn:false },
+      { id:'ports-mil',  label:'Militaires',   file:'ports-militaires.geojson',  kind:'port', color:'#e63946', defaultOn:false }
     ]
   },
   piraterie: {
     title: 'Piraterie',
     children: [
-      { id:'pirate-somalie',    label:'Somalie',     file:'piraterie-somalie.geojson',    kind:'zone', color:'#d76060', defaultOn:false },
-      { id:'pirate-mozambique', label:'Mozambique',  file:'piraterie-mozambique.geojson', kind:'zone', color:'#d76060', defaultOn:false },
-      { id:'pirate-guinee',     label:'Guinee',      file:'piraterie-guinee.geojson',     kind:'zone', color:'#d76060', defaultOn:false }
+      { id:'pirate-somalie',    label:'Somalie',     file:'piraterie-somalie.geojson',    kind:'zone', color:'#e63946', defaultOn:false },
+      { id:'pirate-mozambique', label:'Mozambique',  file:'piraterie-mozambique.geojson', kind:'zone', color:'#e63946', defaultOn:false },
+      { id:'pirate-guinee',     label:'Guinee',      file:'piraterie-guinee.geojson',     kind:'zone', color:'#e63946', defaultOn:false }
     ]
   },
   navale: {
     title: 'Presence navale',
     children: [
-      { id:'nav-fr', label:'France',      file:'navale-france.geojson', kind:'nav', color:'#4a86d8', defaultOn:false },
-      { id:'nav-cn', label:'Chine',       file:'navale-chine.geojson',  kind:'nav', color:'#c84a5e', defaultOn:false },
-      { id:'nav-us', label:'Etats-Unis',  file:'navale-usa.geojson',    kind:'nav', color:'#3fb8a5', defaultOn:false }
+      { id:'nav-fr', label:'France',      file:'navale-france.geojson', kind:'nav', color:'#1a4d7a', defaultOn:false },
+      { id:'nav-cn', label:'Chine',       file:'navale-chine.geojson',  kind:'nav', color:'#8b2e3c', defaultOn:false },
+      { id:'nav-us', label:'Etats-Unis',  file:'navale-usa.geojson',    kind:'nav', color:'#2e8b8b', defaultOn:false }
     ]
   }
 };
@@ -319,30 +307,9 @@ const map = new mapboxgl.Map({
   attributionControl: true
 });
 window.map = map;
-document.getElementById('map').classList.add('mode-' + currentMode);
-
-/* ═════════ PALETTE COMMAND-CENTER DARK ═════════ */
-const PALETTE = {
-  land:           '#14171c',  // continent neutre profond
-  landDeep:       '#0f1216',  // ombre interieure
-  desert:         '#2a2418',  // ocre eteint Sahara/Arabie
-  desertGlow:     '#3a2f1c',
-  forest:         '#15201a',  // bassin equatorial
-  oceanDeep:      '#04070d',  // abysse
-  oceanMid:       '#08111c',  // mer ouverte
-  oceanCoast:     '#0e1a2a',  // plateau continental
-  oceanTropical:  '#101e2a',  // mer Rouge / Mozambique / Persique
-  border:         'rgba(196,154,60,0.20)',
-  label:          '#7a8190',
-  countryLabel:   '#c49a3c'
-};
 
 let _catalogInitialized = false;
 map.on('style.load', () => {
-  if (currentMode === 'dark') {
-    applyEditorialStyle();
-    addGeographicOverlays();
-  }
   if (!_catalogInitialized) {
     initLayersCatalog();
     _catalogInitialized = true;
@@ -358,196 +325,11 @@ map.on('style.load', () => {
 window.setStyle = function(mode) {
   if (!STYLES[mode] || mode === currentMode) return;
   currentMode = mode;
-  // UI : bouton actif
   document.querySelectorAll('.sb-style-btn').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById('sb-' + mode);
   if (btn) btn.classList.add('active');
-  // CSS : vignette + bg
-  const mapEl = document.getElementById('map');
-  mapEl.classList.remove('mode-standard','mode-satellite','mode-dark');
-  mapEl.classList.add('mode-' + mode);
-  // Mapbox style
   map.setStyle(STYLES[mode]);
-  // Le handler style.load reapplique les overrides + re-injecte les calques
 };
-
-function applyEditorialStyle() {
-  const style = map.getStyle();
-  (style.layers || []).forEach(l => {
-    const id = l.id;
-
-    // Eau : abysses uniformes, overlays geographiques apportent la nuance
-    if (id === 'water' || id.indexOf('water-') === 0) {
-      try { map.setPaintProperty(id, 'fill-color', PALETTE.oceanMid); } catch(e){}
-    }
-
-    // Masquer POIs, transit, routes locales — clean OSINT
-    if (id.indexOf('poi') === 0 || id.indexOf('poi-') === 0
-      || id.indexOf('transit') !== -1
-      || id.indexOf('road-path') !== -1
-      || id.indexOf('road-label') !== -1
-      || id.indexOf('road-minor') !== -1
-      || id.indexOf('road-street') !== -1
-      || id.indexOf('road-simple') !== -1
-      || id.indexOf('bridge') !== -1
-      || id.indexOf('tunnel') !== -1) {
-      try { map.setLayoutProperty(id, 'visibility', 'none'); } catch(e){}
-      return;
-    }
-    // Masquer toutes les routes — distractions
-    if (id.indexOf('road') === 0) {
-      try { map.setLayoutProperty(id, 'visibility', 'none'); } catch(e){}
-      return;
-    }
-
-    // Terres : continent gris foncé profond
-    if (id === 'land' || id === 'background') {
-      try { map.setPaintProperty(id, 'background-color', PALETTE.land); } catch(e){}
-    }
-    if (id === 'landcover' || id === 'land-structure-polygon' || id.indexOf('landuse') === 0) {
-      try { map.setPaintProperty(id, 'fill-color', PALETTE.landDeep); map.setPaintProperty(id, 'fill-opacity', 0.55); } catch(e){}
-    }
-    if (id.indexOf('national-park') !== -1 || id.indexOf('national_park') !== -1 || id.indexOf('park') !== -1) {
-      try { map.setPaintProperty(id, 'fill-color', PALETTE.forest); map.setPaintProperty(id, 'fill-opacity', 0.4); } catch(e){}
-    }
-
-    // Frontières : tracé or à 20% — Palantir grid
-    if (id.indexOf('admin-0') !== -1 && l.type === 'line') {
-      try {
-        map.setPaintProperty(id, 'line-color', PALETTE.border);
-        map.setPaintProperty(id, 'line-width', ['interpolate',['linear'],['zoom'], 2, 0.4, 5, 0.9, 8, 1.4]);
-        map.setPaintProperty(id, 'line-opacity', 0.85);
-      } catch(e){}
-    }
-    if (id.indexOf('admin-1') !== -1 && l.type === 'line') {
-      try { map.setLayoutProperty(id, 'visibility', 'none'); } catch(e){}
-    }
-
-    // Labels : pays en or signature, villes en gris bleuté discret
-    if (l.type === 'symbol' && l.layout && l.layout['text-field']) {
-      if (id.indexOf('country') !== -1 || id === 'country-label') {
-        try {
-          map.setPaintProperty(id, 'text-color', PALETTE.countryLabel);
-          map.setPaintProperty(id, 'text-halo-color', 'rgba(0,0,0,0.85)');
-          map.setPaintProperty(id, 'text-halo-width', 1.6);
-          map.setLayoutProperty(id, 'text-letter-spacing', 0.18);
-        } catch(e){}
-      } else if (id.indexOf('settlement') !== -1 || id.indexOf('place') !== -1) {
-        try {
-          map.setPaintProperty(id, 'text-color', PALETTE.label);
-          map.setPaintProperty(id, 'text-halo-color', 'rgba(0,0,0,0.7)');
-          map.setPaintProperty(id, 'text-halo-width', 1.2);
-        } catch(e){}
-      } else {
-        try { map.setLayoutProperty(id, 'visibility', 'none'); } catch(e){}
-      }
-    }
-  });
-}
-
-function addGeographicOverlays() {
-  // 1) DEEP OCEAN overlay — assombrit les oceans profonds loin des cotes
-  const deepOcean = { type:'FeatureCollection', features:[
-    // Atlantique central-sud (largeur des eaux africaines)
-    { type:'Feature', properties:{n:'Atlantique profond'}, geometry:{type:'Polygon',coordinates:[[
-      [-27,15],[-30,5],[-32,-10],[-30,-25],[-28,-38],[-20,-40],[-10,-38],[-5,-30],[-8,-18],[-12,-8],[-18,-3],[-22,5],[-27,15]
-    ]]}},
-    // Ocean Indien profond
-    { type:'Feature', properties:{n:'Indien profond'}, geometry:{type:'Polygon',coordinates:[[
-      [52,-3],[62,-5],[75,-8],[88,-12],[95,-20],[95,-35],[80,-40],[60,-40],[45,-38],[38,-32],[36,-26],[39,-17],[48,-9],[52,-3]
-    ]]}}
-  ]};
-  map.addSource('deep-ocean', { type:'geojson', data: deepOcean });
-  map.addLayer({ id:'deep-ocean-fill', type:'fill', source:'deep-ocean', paint:{ 'fill-color': PALETTE.oceanDeep, 'fill-opacity': 0.85 } }, firstSymbolLayerId());
-
-  // 2) TROPICAL SEAS — mer Rouge, Golfe Persique, Canal Mozambique
-  const tropicalSeas = { type:'FeatureCollection', features:[
-    // Mer Rouge (forme naturelle etroite)
-    { type:'Feature', properties:{n:'Mer Rouge'}, geometry:{type:'Polygon',coordinates:[[
-      [32.3,30.0],[33.5,28.0],[35.5,25.0],[37.5,22.5],[39.5,19.5],[41.5,16.5],[42.8,13.5],[43.3,12.3],[42.5,13.0],[41.0,15.5],[38.5,19.0],[36.0,22.5],[34.0,26.0],[32.8,29.0],[32.3,30.0]
-    ]]}},
-    // Golfe Persique
-    { type:'Feature', properties:{n:'Golfe Persique'}, geometry:{type:'Polygon',coordinates:[[
-      [48.0,30.5],[49.5,30.3],[52.5,29.0],[55.5,26.5],[56.8,26.3],[56.3,25.3],[54.5,25.0],[52.0,25.2],[49.5,26.8],[48.3,28.5],[48.0,30.5]
-    ]]}},
-    // Canal Mozambique (entre Mozambique et Madagascar, forme concave)
-    { type:'Feature', properties:{n:'Canal Mozambique'}, geometry:{type:'Polygon',coordinates:[[
-      [36.0,-11.0],[38.0,-12.5],[40.0,-14.0],[41.5,-16.0],[42.8,-18.0],[43.5,-21.0],[43.2,-24.0],[42.0,-26.0],[40.0,-26.5],[37.5,-26.0],[35.0,-24.0],[33.5,-21.5],[33.5,-18.0],[34.0,-15.0],[34.8,-13.0],[36.0,-11.0]
-    ]]}}
-  ]};
-  map.addSource('tropical-seas', { type:'geojson', data: tropicalSeas });
-  map.addLayer({ id:'tropical-seas-fill', type:'fill', source:'tropical-seas', paint:{ 'fill-color': PALETTE.oceanTropical, 'fill-opacity': 0.7 } }, firstSymbolLayerId());
-
-  // 3) COASTAL HALO — bande lumineuse subtile or pres des cotes (city-glow effect)
-  map.addLayer({
-    id: 'coast-halo',
-    type: 'line',
-    source: { type:'vector', url:'mapbox://mapbox.mapbox-streets-v8' },
-    'source-layer': 'admin',
-    filter: ['all', ['==', ['get','admin_level'], 0], ['==', ['get','maritime'], true]],
-    paint: { 'line-color': '#c49a3c', 'line-width': ['interpolate', ['linear'], ['zoom'], 2, 1.2, 5, 2.5, 8, 4], 'line-opacity': 0.16, 'line-blur': 3 }
-  }, firstSymbolLayerId());
-  // Trait cotier net par-dessus pour lisibilite
-  map.addLayer({
-    id: 'coast-line',
-    type: 'line',
-    source: { type:'vector', url:'mapbox://mapbox.mapbox-streets-v8' },
-    'source-layer': 'admin',
-    filter: ['all', ['==', ['get','admin_level'], 0], ['==', ['get','maritime'], true]],
-    paint: { 'line-color': '#1e2a3c', 'line-width': ['interpolate', ['linear'], ['zoom'], 2, 0.4, 5, 0.7, 8, 1], 'line-opacity': 0.9 }
-  }, firstSymbolLayerId());
-
-  // 4) DESERTS — formes organiques multi-points
-  const deserts = { type:'FeatureCollection', features: [
-    // Sahara (forme organique suivant les contours naturels)
-    { type:'Feature', properties:{n:'Sahara'}, geometry:{type:'Polygon',coordinates:[[
-      [-17.0,14.5],[-14.0,15.5],[-11.0,16.0],[-7.0,16.5],[-3.0,17.5],[1.0,18.5],[5.0,19.5],[9.0,20.5],[13.0,21.5],[17.0,22.5],[21.0,23.5],[25.0,23.5],[29.0,22.0],[32.5,22.5],[35.0,24.0],[36.0,27.0],[34.0,30.5],[30.0,31.5],[24.0,31.5],[18.0,32.0],[13.0,32.5],[8.0,33.0],[3.0,33.0],[-2.0,33.5],[-7.0,33.0],[-10.5,31.5],[-13.0,29.0],[-15.0,26.0],[-16.5,22.0],[-17.0,18.0],[-17.0,14.5]
-    ]]}},
-    // Namib (cote namibienne, long et etroit)
-    { type:'Feature', properties:{n:'Namib'}, geometry:{type:'Polygon',coordinates:[[
-      [11.8,-16.5],[12.5,-18.0],[13.2,-20.0],[13.8,-22.5],[14.5,-25.0],[15.5,-27.5],[17.0,-28.8],[17.8,-28.5],[16.8,-27.0],[15.5,-25.0],[14.5,-22.5],[13.5,-20.0],[12.8,-18.0],[12.0,-17.0],[11.8,-16.5]
-    ]]}},
-    // Kalahari (interieur Botswana/Namibie est/SA nord)
-    { type:'Feature', properties:{n:'Kalahari'}, geometry:{type:'Polygon',coordinates:[[
-      [19.5,-19.5],[22.0,-19.0],[25.0,-19.5],[27.5,-21.0],[28.2,-23.5],[27.8,-26.0],[25.5,-27.5],[22.5,-28.0],[20.0,-27.0],[19.2,-24.5],[19.3,-22.0],[19.5,-19.5]
-    ]]}},
-    // Corne de l'Afrique / Danakil
-    { type:'Feature', properties:{n:'Corne'}, geometry:{type:'Polygon',coordinates:[[
-      [40.5,3.5],[42.5,4.0],[45.0,4.5],[48.0,5.0],[50.5,7.0],[51.3,10.0],[51.2,11.8],[49.5,12.0],[47.0,12.5],[44.5,12.5],[42.5,13.5],[41.0,13.0],[40.0,11.5],[39.3,9.0],[39.5,6.5],[40.5,3.5]
-    ]]}},
-    // Arabie (desert peninsulaire Rub al-Khali + Nefud)
-    { type:'Feature', properties:{n:'Arabie'}, geometry:{type:'Polygon',coordinates:[[
-      [34.5,18.5],[37.0,17.8],[41.0,17.0],[45.0,16.3],[49.0,17.0],[52.5,18.5],[55.0,20.0],[56.5,22.5],[56.0,25.5],[54.5,27.0],[51.5,28.5],[48.0,30.0],[44.0,30.5],[40.5,30.0],[37.5,29.0],[35.0,27.5],[34.5,24.0],[34.5,18.5]
-    ]]}}
-  ]};
-  map.addSource('deserts', { type:'geojson', data: deserts });
-  // Lueur ocre tres tres subtile, juste pour suggerer la geographie
-  map.addLayer({ id:'deserts-glow', type:'fill', source:'deserts', paint: { 'fill-color': PALETTE.desertGlow, 'fill-opacity': 0.22 } }, firstSymbolLayerId());
-  map.addLayer({ id:'deserts-fill', type:'fill', source:'deserts', paint: { 'fill-color': PALETTE.desert, 'fill-opacity': 0.16 } }, firstSymbolLayerId());
-
-  // Detroits cles — choke points strategiques (or signature, halo + trait)
-  const straits = { type:'FeatureCollection', features:[
-    { type:'Feature', properties:{n:'Gibraltar'}, geometry:{type:'LineString',coordinates:[[-5.9,35.9],[-5.3,35.9]]} },
-    { type:'Feature', properties:{n:'Suez'}, geometry:{type:'LineString',coordinates:[[32.55,31.26],[32.33,29.95]]} },
-    { type:'Feature', properties:{n:'Bab el-Mandeb'}, geometry:{type:'LineString',coordinates:[[43.3,12.6],[43.3,12.0]]} },
-    { type:'Feature', properties:{n:'Ormuz'}, geometry:{type:'LineString',coordinates:[[56.3,27.0],[56.6,26.5]]} },
-    { type:'Feature', properties:{n:'Bonne-Esperance'}, geometry:{type:'LineString',coordinates:[[18.3,-34.4],[19.0,-34.9]]} },
-    { type:'Feature', properties:{n:'Mozambique'}, geometry:{type:'LineString',coordinates:[[40.5,-16.0],[43.5,-16.0]]} }
-  ]};
-  map.addSource('straits', { type:'geojson', data: straits });
-  map.addLayer({ id:'straits-glow', type:'line', source:'straits', layout:{'line-cap':'round'}, paint: { 'line-color':'#c49a3c', 'line-width': 14, 'line-opacity': 0.18, 'line-blur': 6 } });
-  map.addLayer({ id:'straits-line', type:'line', source:'straits', layout:{'line-cap':'round'}, paint: { 'line-color':'#e0b452', 'line-width': 3.2, 'line-opacity': 0.95 } });
-  map.addLayer({ id:'straits-label', type:'symbol', source:'straits',
-    layout: { 'symbol-placement':'line', 'text-field':['upcase',['get','n']], 'text-font':['Open Sans Bold','Arial Unicode MS Bold'], 'text-size': 9.5, 'text-offset':[0,-1.4], 'text-letter-spacing':0.22 },
-    paint: { 'text-color':'#e0b452', 'text-halo-color':'rgba(0,0,0,0.85)', 'text-halo-width':2 }
-  });
-}
-
-function firstSymbolLayerId() {
-  const layers = map.getStyle().layers || [];
-  for (const l of layers) { if (l.type === 'symbol') return l.id; }
-  return undefined;
-}
 
 /* ═════════ CATALOGUE RENDERING ═════════ */
 const layerState = {};
@@ -632,49 +414,28 @@ function buildMapboxLayers(c, srcId) {
   if (c.kind === 'flux') {
     const isMain = (c.id === 'flux-principal');
     const width = isMain
-      ? ['interpolate',['linear'],['zoom'], 3, 2.4, 5, 4, 7, 5.5]
-      : ['interpolate',['linear'],['zoom'], 3, 1.1, 5, 1.8, 7, 3];
-    const layers = [];
-    // Glow ample
-    layers.push({ id:'flux-glow-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': isMain ? 18 : 10, 'line-opacity': isMain ? 0.18 : 0.08, 'line-blur': 8 } });
-    // Trait de base
-    layers.push({ id:'flux-line-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': width, 'line-opacity': isMain ? 0.85 : 0.55 } });
-    // Couche dash animee par-dessus pour le sens du flux
-    if (isMain) {
-      layers.push({ id:'flux-dash-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'butt','line-join':'round'}, paint:{ 'line-color':'#ffe9a8', 'line-width': ['interpolate',['linear'],['zoom'], 3, 1.2, 7, 2.4], 'line-opacity': 0.95, 'line-dasharray': [0, 4, 3] } });
-    }
-    return layers;
+      ? ['interpolate',['linear'],['zoom'], 3, 2, 5, 3.5, 7, 5]
+      : ['interpolate',['linear'],['zoom'], 3, 1, 5, 1.6, 7, 2.8];
+    return [
+      { id:'flux-line-'+c.id, type:'line', source:srcId, filter:c.filter||['==',1,1], layout:{'line-cap':'round','line-join':'round'}, paint:{ 'line-color':col, 'line-width': width, 'line-opacity': isMain ? 0.9 : 0.6 } }
+    ];
   }
   if (c.kind === 'port') {
     return [
-      // Glow lumineux ample
-      { id:'port-halo-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,7,6,14,9,22], 'circle-color':col, 'circle-opacity':0.22, 'circle-blur':1.3 } },
-      // Ring brille
-      { id:'port-ring-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3.2,6,6,9,9.5], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.4, 'circle-stroke-opacity':0.85 } },
-      // Coeur lumineux
-      { id:'port-dot-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,2,6,3.6,9,5], 'circle-color':col, 'circle-stroke-color':'rgba(255,255,255,0.85)', 'circle-stroke-width':0.6, 'circle-stroke-opacity':0.9 } }
+      { id:'port-ring-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3,6,5.5,9,9], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.3, 'circle-stroke-opacity':0.7 } },
+      { id:'port-dot-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,2,6,3.5,9,5], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':0.9 } }
     ];
   }
   if (c.kind === 'zone') {
     return [
-      // Halo rouge diffus
-      { id:'pirate-glow-'+c.id, type:'fill', source:srcId, paint:{ 'fill-color':col, 'fill-opacity':0.10 } },
-      // Trace de bordure pulsante en pointilles
-      { id:'pirate-line-'+c.id, type:'line', source:srcId, layout:{'line-cap':'round'}, paint:{ 'line-color':col, 'line-width':1.8, 'line-opacity':0.9, 'line-dasharray':[2,2] } },
-      // Glow externe
-      { id:'pirate-blur-'+c.id, type:'line', source:srcId, paint:{ 'line-color':col, 'line-width':10, 'line-opacity':0.18, 'line-blur':6 } }
+      { id:'pirate-fill-'+c.id, type:'fill', source:srcId, paint:{ 'fill-color':col, 'fill-opacity':0.15 } },
+      { id:'pirate-line-'+c.id, type:'line', source:srcId, paint:{ 'line-color':col, 'line-width':1.5, 'line-opacity':0.75, 'line-dasharray':[3,2] } }
     ];
   }
   if (c.kind === 'nav') {
     return [
-      // Halo large effet "zone d'influence"
-      { id:'nav-halo-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,16,6,26,9,36], 'circle-color':col, 'circle-opacity':0.16, 'circle-blur':1.4 } },
-      // Anneau radar
-      { id:'nav-ring-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,7,6,11,9,16], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.6, 'circle-stroke-opacity':0.95 } },
-      // Cible interieure
-      { id:'nav-cross-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3.5,6,5,9,7], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1, 'circle-stroke-opacity':0.7 } },
-      // Coeur lumineux
-      { id:'nav-dot-'+c.id,   type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,2.4,6,3.5,9,5], 'circle-color':col, 'circle-stroke-color':'rgba(255,255,255,0.9)', 'circle-stroke-width':0.7 } }
+      { id:'nav-ring-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,5.5,6,8.5,9,12.5], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.5, 'circle-stroke-opacity':0.85 } },
+      { id:'nav-dot-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3,6,4.5,9,6.5], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':1 } }
     ];
   }
   return [];
@@ -787,43 +548,6 @@ setTimeout(() => {
   });
 }, 50);
 
-/* ═════════ ANIMATIONS — flux maritimes (dash mobile) + zones piraterie (pulse) ═════════ */
-let _animStart = null;
-function tickAnimations(t) {
-  if (!_animStart) _animStart = t;
-  const dt = t - _animStart;
-
-  // Flux principaux : dash qui defile (sens du commerce maritime)
-  const dashLayerId = 'flux-dash-flux-principal';
-  if (map.getLayer(dashLayerId)) {
-    // cycle lent : 1 phase / 800ms
-    const phase = (dt / 22) % 8;  // 8 = somme du dasharray total
-    try {
-      map.setPaintProperty(dashLayerId, 'line-dasharray', [0, 4 - (phase % 4), 3, (phase % 4)]);
-    } catch(e){}
-  }
-
-  // Zones piraterie : opacite pulsee sur le glow externe (1 cycle / 2.4s)
-  const pulse = 0.5 + 0.5 * Math.sin(dt / 380);
-  ['pirate-somalie','pirate-mozambique','pirate-guinee'].forEach(id => {
-    const blurId = 'pirate-blur-' + id;
-    if (map.getLayer(blurId)) {
-      try { map.setPaintProperty(blurId, 'line-opacity', 0.10 + 0.18 * pulse); } catch(e){}
-    }
-  });
-
-  // Navale : anneau radar qui respire
-  const navPulse = 0.5 + 0.5 * Math.sin(dt / 520);
-  ['nav-fr','nav-cn','nav-us'].forEach(id => {
-    const haloId = 'nav-halo-' + id;
-    if (map.getLayer(haloId)) {
-      try { map.setPaintProperty(haloId, 'circle-opacity', 0.10 + 0.14 * navPulse); } catch(e){}
-    }
-  });
-
-  requestAnimationFrame(tickAnimations);
-}
-requestAnimationFrame(tickAnimations);
 </script>
 
 <!-- Auth gate (Supabase) — reuse shared module -->
