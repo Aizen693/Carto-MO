@@ -1,0 +1,328 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.1722,
+          4.4444
+        ]
+      },
+      "properties": {
+        "name": "Bonny Island LNG",
+        "type": "Petrolier / LNG",
+        "pays": "Nigeria",
+        "description": "1er hub LNG africain (22 Mtpa). NLNG Ltd (Shell/Total/Eni/NNPC). Exports Asie/Europe.",
+        "sources": "NLNG|https://www.nlng.com Shell_Nigeria|https://www.shell.com.ng/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.042,
+          4.78
+        ]
+      },
+      "properties": {
+        "name": "Port Harcourt / Bonny Oil",
+        "type": "Petrolier / LNG",
+        "pays": "Nigeria",
+        "description": "Terminal export brut Bonny Light. Zone d'insurrection Niger Delta (MEND).",
+        "sources": "NNPC|https://www.nnpcgroup.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.4,
+          5.35
+        ]
+      },
+      "properties": {
+        "name": "Forcados Terminal",
+        "type": "Petrolier / LNG",
+        "pays": "Nigeria",
+        "description": "Terminal export brut Forcados. Operator Shell. Attaques MEND historiques.",
+        "sources": "Shell_Nigeria|https://www.shell.com.ng/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.17,
+          5.55
+        ]
+      },
+      "properties": {
+        "name": "Escravos Terminal",
+        "type": "Petrolier / LNG",
+        "pays": "Nigeria",
+        "description": "Terminal Chevron. Export brut + GTL. Zone d'incidents securitaires.",
+        "sources": "Chevron|https://www.chevron.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.37,
+          -6.134
+        ]
+      },
+      "properties": {
+        "name": "Soyo LNG (Angola LNG)",
+        "type": "Petrolier / LNG",
+        "pays": "Angola",
+        "description": "Terminal LNG du delta du Congo. 5.2 Mtpa. Chevron/Sonangol/BP/Eni/Total.",
+        "sources": "Angola_LNG|https://www.angolalng.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.2,
+          -5.55
+        ]
+      },
+      "properties": {
+        "name": "Cabinda Oil Terminal",
+        "type": "Petrolier / LNG",
+        "pays": "Angola",
+        "description": "Principal terminal Angola. Enclave Cabinda, insurrection FLEC active mais basse intensite.",
+        "sources": "Sonangol|https://www.sonangol.co.ao"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.347,
+          29.601
+        ]
+      },
+      "properties": {
+        "name": "Ain Sukhna",
+        "type": "Petrolier / LNG",
+        "pays": "Egypte",
+        "description": "Terminal du SuMed Pipeline (Red Sea - Alexandrie). Alternative au Canal de Suez.",
+        "sources": "SuMed_Pipeline|https://sumed-pipeline.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          29.7,
+          30.95
+        ]
+      },
+      "properties": {
+        "name": "Sidi Kerir",
+        "type": "Petrolier / LNG",
+        "pays": "Egypte",
+        "description": "Terminal ouest du SuMed. Raffinerie MIDOR + exports Mediterranee.",
+        "sources": "MIDOR|https://www.midor.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.3239,
+          35.8522
+        ]
+      },
+      "properties": {
+        "name": "Arzew GL1Z/GL2Z",
+        "type": "Petrolier / LNG",
+        "pays": "Algerie",
+        "description": "Principal complexe LNG algerien. Export Sonatrach vers Europe.",
+        "sources": "Sonatrach|https://www.sonatrach.dz"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.9072,
+          36.8789
+        ]
+      },
+      "properties": {
+        "name": "Skikda LNG",
+        "type": "Petrolier / LNG",
+        "pays": "Algerie",
+        "description": "Complexe LNG + raffinerie Skikda. Export brut et GNL vers Europe.",
+        "sources": "Sonatrach|https://www.sonatrach.dz"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.083,
+          36.753
+        ]
+      },
+      "properties": {
+        "name": "Bejaia",
+        "type": "Petrolier / LNG",
+        "pays": "Algerie",
+        "description": "Terminal petrolier HH-BRN sur la cote kabyle. Transit brut Hassi Messaoud.",
+        "sources": "Sonatrach|https://www.sonatrach.dz"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.078,
+          34.298
+        ]
+      },
+      "properties": {
+        "name": "Skhira",
+        "type": "Petrolier / LNG",
+        "pays": "Tunisie",
+        "description": "Terminal petrolier ETAP/Sonatrach pipeline transtunisien. Export brut algerien.",
+        "sources": "ETAP|https://www.etap.com.tn"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.575,
+          30.407
+        ]
+      },
+      "properties": {
+        "name": "Marsa el-Brega",
+        "type": "Petrolier / LNG",
+        "pays": "Libye",
+        "description": "Terminal LNG + raffinerie. Cible conflits GNA/LNA recurrents.",
+        "sources": "NOC_Libya|https://noc.ly/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.55,
+          30.508
+        ]
+      },
+      "properties": {
+        "name": "Ras Lanuf",
+        "type": "Petrolier / LNG",
+        "pays": "Libye",
+        "description": "Principal hub petrolier libyen. Occupe/libere x fois (Haftar vs GNA) 2017-2024.",
+        "sources": "NOC_Libya|https://noc.ly/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.63,
+          30.645
+        ]
+      },
+      "properties": {
+        "name": "Es Sider",
+        "type": "Petrolier / LNG",
+        "pays": "Libye",
+        "description": "Terminal export brut libyen. Cote cyrenaique.",
+        "sources": "NOC_Libya|https://noc.ly/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.54,
+          -10.79
+        ]
+      },
+      "properties": {
+        "name": "Cabo Delgado LNG (Afungi)",
+        "type": "Petrolier / LNG",
+        "pays": "Mozambique",
+        "description": "Projet TotalEnergies 20 Mtpa, suspendu depuis attaque ISIS-Moz Palma mars 2021. Reprise 2025.",
+        "sources": "TotalEnergies|https://totalenergies.com/ CFR_Mozambique|https://www.cfr.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.672,
+          -4.059
+        ]
+      },
+      "properties": {
+        "name": "KPRL Mombasa",
+        "type": "Petrolier / LNG",
+        "pays": "Kenya",
+        "description": "Kenya Petroleum Refineries. Raffinerie convertie en storage. Import hub Afrique Est.",
+        "sources": "KPRL|https://www.kprl.co.ke"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.835,
+          -19.839
+        ]
+      },
+      "properties": {
+        "name": "Beira fuel terminal",
+        "type": "Petrolier / LNG",
+        "pays": "Mozambique",
+        "description": "Pipeline Beira-Feruka (Zimbabwe). Approvisionnement SADC.",
+        "sources": "CPMZ|https://www.cpmz.co.mz"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.735,
+          3.752
+        ]
+      },
+      "properties": {
+        "name": "Bioko / Punta Europa LNG",
+        "type": "Petrolier / LNG",
+        "pays": "Guinee equatoriale",
+        "description": "Complexe LNG + methanol. Marathon Oil (US). Exports Europe/Amerique latine.",
+        "sources": "Marathon_Oil|https://www.marathonoil.com/"
+      }
+    }
+  ]
+}

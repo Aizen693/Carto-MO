@@ -1,0 +1,101 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.3883,
+          39.9042
+        ]
+      },
+      "properties": {
+        "name": "ISI",
+        "type": "Crise diplomatique",
+        "description": "Date: 03/04/2026\nPays: Chine (Pekin) — mediation Pak/Afg\nEvenement: Nouvelle ronde de pourparlers de paix Pakistan-Afghanistan\nDetail: NPR rapporte qu'une nouvelle ronde de negociations de paix entre Islamabad et Kaboul est en cours a Pekin, sous mediation chinoise. Suit les appels a la retenue du Qatar et de l'Arabie Saoudite.\nBilan: aucune percee immediate, poursuite des frappes intermittentes",
+        "sources": "NPR|https://www.npr.org/2026/04/03/g-s1-116299/pakistan-says-a-new-round-of-peace-talks-with-afghanistan-is-underway-in-china Logical_Indian|https://thelogicalindian.com/pakistan-afghanistan-border-clashes-escalate-dozens-killed-amid-torkham-and-chaman-closures/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.0909,
+          32.9731
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Incident frontalier",
+        "description": "Date: 05/04/2026\nPays: Pakistan (Nord-Waziristan)\nEvenement: Echange d'artillerie pres de Zoram Fort\nDetail: Pakistan et forces afghanes echangent des tirs d'artillerie dans le secteur de Zoram Fort, Nord-Waziristan. Premier accrochage majeur post-trêve d'Aid al-Fitr.\nBilan: pertes bilaterales non specifiees officiellement",
+        "sources": "Wikipedia_2026_Afghanistan-Pakistan_war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war Anadolu_Agency|https://www.aa.com.tr/en/asia-pacific/timeline-how-pakistan-afghanistan-tensions-reached-a-breaking-point/3842132"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.0909,
+          32.9731
+        ]
+      },
+      "properties": {
+        "name": "Afghan Taliban",
+        "type": "Incident frontalier",
+        "description": "Date: 06/04/2026\nPays: Afghanistan (Khost / Nangarhar)\nEvenement: Affrontements prolonges Zoram Fort\nDetail: Suite de l'echange d'artillerie du 5 avril. Le ministere de la Defense afghan declare que les affrontements ont tue 32 soldats pakistanais et blesse plusieurs dizaines d'autres dans les provinces frontalieres Nangarhar / Paktia / Khost / Kandahar (chiffres contestes).\nBilan: 32 soldats pakistanais tues selon Kaboul, chiffres contestes par Islamabad",
+        "sources": "Wikipedia_2026_Afghanistan-Pakistan_war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war Al_Jazeera|https://www.aljazeera.com/news/2026/2/24/fresh-afghan-pakistani-border-clashes-follow-deadly-strikes"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.8723,
+          31.634
+        ]
+      },
+      "properties": {
+        "name": "Delhi Police Special Cell",
+        "type": "Siege",
+        "description": "Date: 09/04/2026\nPays: Inde (Amritsar, Pendjab)\nEvenement: Remise d'armes a 2 operatifs ISI presumes — Amritsar\nDetail: Sur instruction du gangster pakistanais Shahzad Bhatti (proxy ISI), les operatifs Rajveer et Vivek Banjara (residents de Dabra, Gwalior MP) se rendent a Amritsar ou ils recoivent 1 pistolet, 15-20 cartouches et 20000 roupies. Module destine a des frappes sur hotels Delhi-NCR et club de Zirakpur.\nBilan: prelude a la tentative du 11 avril a Zirakpur, arrestations par Delhi Police Special Cell",
+        "sources": "Tribune_India|https://www.tribuneindia.com/news/delhi/2-isi-operatives-arrested-for-planning-targeted-killings-grenade-attacks-in-delhi-punjab/ SATP_India|https://www.satp.org/terrorist-activity/india"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.8173,
+          30.6434
+        ]
+      },
+      "properties": {
+        "name": "ISI (proxies)",
+        "type": "Attaque",
+        "description": "Date: 11/04/2026\nPays: Inde (Zirakpur, Pendjab)\nEvenement: Tentative de fusillade sur club — Zirakpur\nDetail: Rajveer tente d'ouvrir le feu sur un club de Zirakpur, mais l'arme s'enraie (probleme mecanique). Vivek Banjara filme la tentative pour l'envoyer au commanditaire. Complot dejoue par le Delhi Police Special Cell.\nBilan: echec technique, 2 arrestations, armes et preuves saisies",
+        "sources": "Tribune_India|https://www.tribuneindia.com/news/delhi/2-isi-operatives-arrested-for-planning-targeted-killings-grenade-attacks-in-delhi-punjab/ SATP_India|https://www.satp.org/terrorist-activity/india"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.536,
+          34.0151
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Siege",
+        "description": "Date: 14/04/2026\nPays: Pakistan (KP / Baloutchistan)\nEvenement: Operations post-Eid — 34 militants tues sur la semaine\nDetail: Pakistan reprend les operations apres la trêve de l'Aid al-Fitr. Arab News rapporte que les forces de securite ont tue 34 militants dans le sud-ouest (Baloutchistan) et le nord-ouest (KP) — dont 26 TTP et 8 insurges baloutches.\nBilan: 34 militants tues (26 TTP + 8 Baloutches)",
+        "sources": "Arab_News|https://www.arabnews.com/node/2634421/amp Prism_News|https://www.prismnews.com/news/pakistan-resumes-military-operations-in-afghanistan-after"
+      }
+    }
+  ]
+}

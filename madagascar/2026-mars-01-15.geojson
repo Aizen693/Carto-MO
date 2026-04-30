@@ -1,0 +1,9 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[45.15,-22.70]},"properties":{"name":"Reseaux saphir (Ilakaka)","Date":"2026-03-05","Pays + Lieu":"Madagascar - Ilakaka / Ihosy","type":"Incident","detail":"Pattern : rixes et conflits entre orpailleurs artisanaux et acheteurs etrangers (circuits sri lankais, thailandais). Absence d'encadrement etatique.","rank":"B3","sources":"Global Initiative|https://globalinitiative.net/ Gemological Institute|https://www.gia.edu/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.07,-25.17]},"properties":{"name":"Dahalo","Date":"2026-03-08","Pays + Lieu":"Madagascar - Androy / Ambovombe","type":"Attaque","detail":"Pattern : razzia dahalo recurrente. Moyenne = 1-2 incidents signales par semaine (sous-reporting massif).","rank":"B3","sources":"Crisis Group|https://www.crisisgroup.org/africa/southern-africa/madagascar Amnesty International|https://www.amnesty.org/en/location/africa/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.48,-18.79]},"properties":{"name":"Reseaux vanille (SAVA)","Date":"2026-03-10","Pays + Lieu":"Madagascar - aeroport Ivato","type":"Economique","detail":"Pattern : saisies vanille d'origine douteuse a l'export (Ivato). Circuits hors traçabilite Fairtrade.","rank":"B2","sources":"Fairtrade|https://www.fairtrade.net/product/vanilla Mongabay|https://fr.mongabay.com/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.52,-18.92]},"properties":{"name":"Transition Randrianirina","Date":"2026-03-12","Pays + Lieu":"Madagascar - Antananarivo","type":"Geopolitique","detail":"Negociations calendrier electoral. Pression UA / SADC / FMI sur un retour constitutionnel.","rank":"B2","sources":"Union africaine|https://au.int/ FMI|https://www.imf.org/fr/Countries/MDG Reuters|https://www.reuters.com/world/africa/"}}
+  ]
+}

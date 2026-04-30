@@ -1,0 +1,9 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.52,-18.92]},"properties":{"name":"AU / UA","Date":"2026-02-18","Pays + Lieu":"Madagascar - Antananarivo (diplomatique)","type":"Geopolitique","detail":"Reunion sous-regionale SADC / UA sur le calendrier de la transition. Pressions pour des elections dans un delai contraint.","rank":"B2","sources":"Union africaine|https://au.int/ SADC|https://www.sadc.int/ Reuters|https://www.reuters.com/world/africa/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.07,-25.17]},"properties":{"name":"Reseaux tortues / lemuriens","Date":"2026-02-20","Pays + Lieu":"Madagascar - Androy / cote sud","type":"Incursion","detail":"Pattern : trafic tortues radiees (astrochelys radiata) vers Asie. Saisies recurrentes par douanes.","rank":"A2","sources":"TRAFFIC|https://www.traffic.org/ CITES|https://cites.org/fra Turtle Survival Alliance|https://turtlesurvival.org/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.80,-15.45]},"properties":{"name":"Reseaux bois de rose (SAVA / Masoala)","Date":"2026-02-22","Pays + Lieu":"Madagascar - Maroantsetra","type":"Incursion","detail":"Pattern : incursions dans parc Masoala, abattage bois de rose et palissandre. Filiere export Chine via boutres.","rank":"A2","sources":"EIA|https://eia-international.org/forests/ UNESCO|https://whc.unesco.org/fr/list/1257"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.08,-19.85]},"properties":{"name":"Gen Z Madagascar","Date":"2026-02-25","Pays + Lieu":"Madagascar - Antsirabe","type":"Geopolitique","detail":"Extension du mouvement Gen Z hors capitale. Demandes sociales : eau, electricite, emplois.","rank":"B3","sources":"RFI|https://www.rfi.fr/fr/afrique/ Jeune Afrique|https://www.jeuneafrique.com/"}}
+  ]
+}

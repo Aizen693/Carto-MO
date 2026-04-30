@@ -6,10 +6,10 @@
 <title>Algor Int — Geopolitical Intelligence Platform</title>
 <link rel="icon" type="image/jpeg" href="./favicon.jpg">
 <meta property="og:title" content="Algor Int — Plateforme de renseignement geopolitique">
-<meta property="og:description" content="Systeme de veille cartographique OSINT. 3 theatres : Moyen-Orient, Sahel, RDC.">
+<meta property="og:description" content="Systeme de veille cartographique OSINT. 6 theatres : Moyen-Orient, Sahel, Grands Lacs, Madagascar, Afrique Maritime, Asie du Sud.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://algoracces.fr/">
-<meta name="description" content="Algor Int — Plateforme OSINT cartographique. Analyse des conflits armes au Moyen-Orient, Sahel et RDC.">
+<meta name="description" content="Algor Int — Plateforme OSINT cartographique. Analyse des conflits armes et flux maritimes strategiques : Moyen-Orient, Sahel, Grands Lacs, Madagascar, Afrique Maritime, Asie du Sud.">
 <meta name="theme-color" content="#0a0b0d">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,6 +42,24 @@
   --bc:     'Barlow Condensed', 'Arial Narrow', sans-serif;
   --b:      'Barlow', system-ui, sans-serif;
   --m:      'JetBrains Mono', 'Courier New', monospace;
+
+  /* Motion (sync avec shared/tokens.css) */
+  --mo-fast:  .1s;
+  --mo-base:  .2s;
+  --mo-slow:  .3s;
+
+  /* Spacing (4px scale) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+
+  /* Line-heights */
+  --lh-tight: 1;
+  --lh-snug:  1.2;
+  --lh-base:  1.5;
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -84,6 +102,42 @@ html, body {
     linear-gradient(90deg, rgba(196,154,60,0.025) 1px, transparent 1px);
   background-size: 60px 60px;
   opacity: 0.6;
+}
+
+/* ═══ Subtle CRT scanlines (very low opacity, full screen) ═══ */
+#scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(196,154,60,0.018) 0px,
+    rgba(196,154,60,0.018) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+/* ═══ Subtle bloom around the globe center ═══ */
+#globe-bloom {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 90vmin;
+  height: 90vmin;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at center,
+    rgba(196,154,60,0.045) 0%,
+    rgba(196,154,60,0.018) 35%,
+    transparent 70%
+  );
+  filter: blur(8px);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -173,6 +227,15 @@ html, body {
 .bracket.bl { bottom: 48px; left: 16px; border-right: none; border-top: none; }
 .bracket.br { bottom: 48px; right: 16px; border-left: none; border-top: none; }
 
+/* Brackets pulsing glow */
+.bracket {
+  animation: bracket-pulse 4s ease-in-out infinite;
+}
+@keyframes bracket-pulse {
+  0%, 100% { opacity: 0.35; box-shadow: 0 0 0 0 rgba(196,154,60,0); }
+  50%      { opacity: 0.55; box-shadow: 0 0 12px -2px rgba(196,154,60,0.35); }
+}
+
 /* ═══════════════════════════════════════════════════════════
    HERO PANEL (left)
    ═══════════════════════════════════════════════════════════ */
@@ -221,7 +284,77 @@ html, body {
   color: var(--tx);
   line-height: 1.55;
   max-width: 380px;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
+}
+
+/* ═══ HERO CTAs (P1 — une seule CTA primaire) ═══ */
+.hero-cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  pointer-events: all;
+  margin-bottom: 26px;
+}
+.hero-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--m);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--ac);
+  border: 1px solid var(--ac);
+  padding: 13px 24px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--mo-base), transform var(--mo-fast);
+}
+.hero-cta-primary:hover { background: var(--ach); border-color: var(--ach); }
+.hero-cta-primary:active { transform: translateY(1px); }
+.hero-cta-primary .arrow { transition: transform var(--mo-base); }
+.hero-cta-primary:hover .arrow { transform: translateX(3px); }
+.hero-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--m);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx1);
+  text-decoration: none;
+  transition: color var(--mo-fast);
+}
+.hero-cta-secondary:hover { color: var(--ach); }
+
+/* ═══ TRUST BAND (P1 — signaux de confiance honnetes sous le hero) ═══ */
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  pointer-events: all;
+  max-width: 420px;
+}
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--m);
+  font-size: 9px;
+  color: var(--tx1);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.trust-badge::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background: var(--ac);
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -280,7 +413,7 @@ html, body {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background var(--mo-fast) ease;
   position: relative;
 }
 .zone-card:hover { background: var(--bg2); }
@@ -414,7 +547,7 @@ html, body {
   font-family: var(--m);
   font-size: 14px;
   color: var(--tx1);
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform var(--mo-base) ease, color var(--mo-base) ease;
 }
 .zone-card:hover .zone-cta-arrow {
   transform: translateX(4px);
@@ -454,7 +587,7 @@ html, body {
 }
 .sb-cell.accent strong { color: var(--ac); }
 .sb-cell.cyan strong { color: var(--cyan); }
-.sb-admin { color: var(--tx1); text-decoration: none; cursor: pointer; transition: color .12s, background .12s; }
+.sb-admin { color: var(--tx1); text-decoration: none; cursor: pointer; transition: color var(--mo-fast), background var(--mo-fast); }
 .sb-admin:hover { color: var(--ac); background: rgba(196,154,60,0.06); }
 .sb-spacer { flex: 1; border-right: 1px solid var(--ln); }
 
@@ -589,13 +722,74 @@ html, body {
 .mapboxgl-ctrl-bottom-left:hover, .mapboxgl-ctrl-bottom-right:hover {
   opacity: 1;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   BOOT SEQUENCE — fade-up entrance animations
+   ═══════════════════════════════════════════════════════════ */
+@keyframes boot-fade-up {
+  0%   { opacity: 0; transform: translateY(8px); filter: blur(2px); }
+  100% { opacity: 1; transform: translateY(0);    filter: blur(0);  }
+}
+@keyframes boot-fade {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes boot-bracket-in {
+  0%   { opacity: 0; transform: scale(0.5); }
+  100% { opacity: 0.35; transform: scale(1); }
+}
+
+#header        { animation: boot-fade 0.5s ease-out 0.05s both; }
+.bracket       { animation: boot-bracket-in 0.6s ease-out 0.3s both, bracket-pulse 4s ease-in-out 1s infinite; }
+#hero          { animation: boot-fade-up 0.7s cubic-bezier(.2,.8,.2,1) 0.4s both; }
+#zones-panel   { animation: boot-fade-up 0.7s cubic-bezier(.2,.8,.2,1) 0.55s both; }
+.zone-card     { animation: boot-fade-up 0.5s cubic-bezier(.2,.8,.2,1) both; }
+.zone-card:nth-of-type(1) { animation-delay: 0.65s; }
+.zone-card:nth-of-type(2) { animation-delay: 0.74s; }
+.zone-card:nth-of-type(3) { animation-delay: 0.83s; }
+.zone-card:nth-of-type(4) { animation-delay: 0.92s; }
+.zone-card:nth-of-type(5) { animation-delay: 1.01s; }
+.zone-card:nth-of-type(6) { animation-delay: 1.10s; }
+#status-bar    { animation: boot-fade 0.5s ease-out 1.2s both; }
+#globe         { animation: boot-fade 1.2s ease-out both; }
+#grid-overlay  { animation: boot-fade 1.5s ease-out 0.3s both; }
+#globe-bloom   { animation: boot-fade 2s ease-out 0.5s both; }
+#scanlines     { animation: boot-fade 1s ease-out 0.8s both; }
+
+/* ═══ Zone card hover boost ═══ */
+.zone-card {
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1),
+              border-color 0.25s ease,
+              box-shadow 0.35s ease,
+              background 0.25s ease;
+  position: relative;
+}
+.zone-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(196,154,60,0) 0%, rgba(196,154,60,0.06) 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.zone-card:hover {
+  border-color: var(--acb);
+  box-shadow:
+    inset 0 0 0 1px var(--acb),
+    0 8px 28px -10px rgba(196,154,60,0.25);
+  transform: translateY(-1px);
+}
+.zone-card:hover::after { opacity: 1; }
 </style>
 </head>
 <body>
 
 <!-- ═══════════════════════════════ GLOBE ═══════════════════════════════ -->
 <div id="globe"></div>
+<div id="globe-bloom"></div>
 <div id="grid-overlay"></div>
+<div id="scanlines"></div>
 
 <!-- Corner brackets (HUD style) -->
 <div class="bracket tl"></div>
@@ -631,22 +825,34 @@ html, body {
 <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
 <div id="hero">
   <div class="hero-tag">OSINT · Cartography · 2026</div>
-  <h2 class="hero-title">
-    Geopolitical<br>
-    intelligence<br>
-    <span class="ac">platform.</span>
-  </h2>
+  <h1 class="hero-title">
+    Renseignement<br>
+    cartographique<br>
+    <span class="ac">pour analystes.</span>
+  </h1>
   <p class="hero-subtitle">
-    Plateforme de veille cartographique dediee aux theatres de conflit armes.
-    Trois zones d'analyse, sept couches de donnees, des milliers d'evenements geolocalises et sources croisees.
+    Veille OSINT sur les theatres de conflit armes. Six zones d'analyse,
+    evenements geolocalises, sources croisees ACLED et AfricaCenter.
   </p>
+  <div class="hero-cta-group">
+    <a class="hero-cta-primary" href="./moyen-orient/index.html">
+      Voir la demo · Moyen-Orient <span class="arrow">&rarr;</span>
+    </a>
+    <a class="hero-cta-secondary" href="#zones-panel">Zones payantes &middot; Sahel &middot; RDC &rarr;</a>
+  </div>
+  <div class="hero-trust" aria-label="Signaux de confiance">
+    <span class="trust-badge">Donnees UE</span>
+    <span class="trust-badge">TLS 1.3 &middot; Acces par role</span>
+    <span class="trust-badge">Mapbox open-source</span>
+    <span class="trust-badge">Sources &middot; ACLED &middot; AfricaCenter</span>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════ ZONES PANEL ═══════════════════════════════ -->
 <div id="zones-panel">
   <div class="panel-header">
     <span class="panel-header-title">Theatres d'analyse</span>
-    <span class="panel-header-count">03 / 03</span>
+    <span class="panel-header-count">06 / 06</span>
   </div>
   <div class="zone-list">
 
@@ -695,15 +901,15 @@ html, body {
       <div class="zone-card-meta">
         <div class="meta-cell">
           <div class="meta-cell-label">Periode</div>
-          <div class="meta-cell-value small">Jan–Mar 26</div>
+          <div class="meta-cell-value">—</div>
         </div>
         <div class="meta-cell">
           <div class="meta-cell-label">Evenements</div>
-          <div class="meta-cell-value" id="sahel-event-count">—</div>
+          <div class="meta-cell-value">—</div>
         </div>
         <div class="meta-cell">
           <div class="meta-cell-label">Acteurs</div>
-          <div class="meta-cell-value" id="sahel-actor-count">—</div>
+          <div class="meta-cell-value">—</div>
         </div>
       </div>
       <div class="zone-card-cta">
@@ -718,15 +924,15 @@ html, body {
         <span class="zone-card-index">ZONE 03</span>
         <span class="zone-card-status restricted">Sur abonnement</span>
       </div>
-      <div class="zone-card-name">RDC</div>
-      <div class="zone-card-region">Nord-Kivu · Sud-Kivu · Ituri</div>
+      <div class="zone-card-name">Grands Lacs</div>
+      <div class="zone-card-region">RDC Est · Rwanda · Burundi · Ouganda · Tanzanie</div>
       <div class="zone-card-desc">
-        Conflits armes en Republique Democratique du Congo. Suivi M23, Wazalendo, FARDC. Six periodes 2023–2026.
+        Conflits armes region des Grands Lacs africains. Suivi M23, Wazalendo, FARDC, Forces rwandaises. Six periodes 2023–2026.
       </div>
       <div class="zone-card-meta">
         <div class="meta-cell">
           <div class="meta-cell-label">Periode</div>
-          <div class="meta-cell-value small">2023–26</div>
+          <div class="meta-cell-value">—</div>
         </div>
         <div class="meta-cell">
           <div class="meta-cell-label">Evenements</div>
@@ -735,6 +941,99 @@ html, body {
         <div class="meta-cell">
           <div class="meta-cell-label">Acteurs</div>
           <div class="meta-cell-value">—</div>
+        </div>
+      </div>
+      <div class="zone-card-cta">
+        <span class="zone-cta-label subscribe">S'abonner</span>
+        <span class="zone-cta-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- MADAGASCAR -->
+    <a class="zone-card" href="./madagascar/index.html" data-zone="madagascar">
+      <div class="zone-card-row1">
+        <span class="zone-card-index">ZONE 04</span>
+        <span class="zone-card-status restricted">Sur abonnement</span>
+      </div>
+      <div class="zone-card-name">Madagascar</div>
+      <div class="zone-card-region">Grand Sud · SAVA · Analamanga · Canal Mozambique</div>
+      <div class="zone-card-desc">
+        Transition politique post-Rajoelina, dahalo, trafics (vanille, bois de rose, or, saphir), piraterie maritime. Neuf calques dont parcs nationaux et zones maritimes.
+      </div>
+      <div class="zone-card-meta">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Periode</div>
+          <div class="meta-cell-value small">Jan–Avril 26</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Evenements</div>
+          <div class="meta-cell-value" id="madagascar-event-count">—</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Acteurs</div>
+          <div class="meta-cell-value" id="madagascar-actor-count">—</div>
+        </div>
+      </div>
+      <div class="zone-card-cta">
+        <span class="zone-cta-label subscribe">S'abonner</span>
+        <span class="zone-cta-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- AFRIQUE MARITIME -->
+    <a class="zone-card" href="./afrique/index.html" data-zone="afrique">
+      <div class="zone-card-row1">
+        <span class="zone-card-index">ZONE 05</span>
+        <span class="zone-card-status restricted">Sur abonnement</span>
+      </div>
+      <div class="zone-card-name">Afrique Maritime</div>
+      <div class="zone-card-region">Flux · Ports · Piraterie · Presence navale</div>
+      <div class="zone-card-desc">
+        Cartographie des flux maritimes africains : Suez–Bab el-Mandeb–Ormuz, route du Cap, Golfe de Guinee, canal du Mozambique. Presence navale FR / CN / US.
+      </div>
+      <div class="zone-card-meta">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Calques</div>
+          <div class="meta-cell-value small">4 groupes</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Ports</div>
+          <div class="meta-cell-value">50</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Flux</div>
+          <div class="meta-cell-value">10</div>
+        </div>
+      </div>
+      <div class="zone-card-cta">
+        <span class="zone-cta-label subscribe">S'abonner</span>
+        <span class="zone-cta-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- ASIE DU SUD -->
+    <a class="zone-card" href="./asie-sud/index.html" data-zone="asie">
+      <div class="zone-card-row1">
+        <span class="zone-card-index">ZONE 06</span>
+        <span class="zone-card-status restricted">Sur abonnement</span>
+      </div>
+      <div class="zone-card-name">Asie du Sud</div>
+      <div class="zone-card-region">Inde · Pakistan · Afghanistan · Cachemire · Baloutchistan</div>
+      <div class="zone-card-desc">
+        Conflit indo-pakistanais, insurrections TTP / BLA / ISKP, guerre Pak-Afg. Huit calques couvrant Jan–Avril 2026.
+      </div>
+      <div class="zone-card-meta">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Periode</div>
+          <div class="meta-cell-value small">Jan–Avril 26</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Evenements</div>
+          <div class="meta-cell-value" id="asie-event-count">—</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Acteurs</div>
+          <div class="meta-cell-value" id="asie-actor-count">—</div>
         </div>
       </div>
       <div class="zone-card-cta">
@@ -762,7 +1061,31 @@ html, body {
 <div id="zone-label-rdc" class="zone-label" style="display:none">
   <div class="zone-label-inner">
     <span class="zone-label-dot"></span>
-    <span>RDC-03</span>
+    <span>LACS-03</span>
+  </div>
+</div>
+<div id="zone-label-madagascar" class="zone-label" style="display:none">
+  <div class="zone-label-inner">
+    <span class="zone-label-dot"></span>
+    <span>MDG-04</span>
+  </div>
+</div>
+<div id="zone-label-madagascar" class="zone-label" style="display:none">
+  <div class="zone-label-inner">
+    <span class="zone-label-dot"></span>
+    <span>MDG-04</span>
+  </div>
+</div>
+<div id="zone-label-afrique" class="zone-label" style="display:none">
+  <div class="zone-label-inner">
+    <span class="zone-label-dot"></span>
+    <span>AFR-05</span>
+  </div>
+</div>
+<div id="zone-label-asie" class="zone-label" style="display:none">
+  <div class="zone-label-inner">
+    <span class="zone-label-dot"></span>
+    <span>ASIE-06</span>
   </div>
 </div>
 
@@ -796,9 +1119,12 @@ html, body {
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
 const ZONES = {
-  mo:    { name: 'Moyen-Orient', coords: [44.0, 33.0],  color: '#c49a3c' },
-  sahel: { name: 'Sahel',        coords: [0.0, 16.0],   color: '#c49a3c' },
-  rdc:   { name: 'RDC',          coords: [27.5, -2.0],  color: '#c49a3c' }
+  mo:         { name: 'Moyen-Orient',     coords: [44.0, 33.0],  color: '#c49a3c' },
+  sahel:      { name: 'Sahel',            coords: [0.0, 16.0],   color: '#c49a3c' },
+  rdc:        { name: 'Grands Lacs',      coords: [29.2, -2.0],  color: '#c49a3c' },
+  madagascar: { name: 'Madagascar',       coords: [47.0, -19.0], color: '#c49a3c' },
+  afrique:    { name: 'Afrique Maritime', coords: [20.0, 5.0],   color: '#c49a3c' },
+  asie:       { name: 'Asie du Sud',      coords: [71.0, 29.0],  color: '#c49a3c' }
 };
 
 const map = new mapboxgl.Map({
@@ -807,18 +1133,56 @@ const map = new mapboxgl.Map({
   projection: 'globe',
   center: [15, 15],
   zoom: 1.8,
-  pitch: 0,
+  pitch: 18,
+  bearing: 0,
   interactive: false,
-  attributionControl: true
+  attributionControl: true,
+  antialias: true
 });
 
 map.on('style.load', () => {
+  /* ═══ 3D TERRAIN — relief reel sur le globe ═══ */
+  if (!map.getSource('mapbox-dem')) {
+    map.addSource('mapbox-dem', {
+      type: 'raster-dem',
+      url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+      tileSize: 512,
+      maxzoom: 14
+    });
+  }
+  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.6 });
+
+  /* ═══ HILLSHADE — ombres dorees pour texturer le relief ═══ */
+  map.addLayer({
+    id: 'hillshade-gold',
+    type: 'hillshade',
+    source: 'mapbox-dem',
+    layout: { visibility: 'visible' },
+    paint: {
+      'hillshade-exaggeration': 0.65,
+      'hillshade-shadow-color': 'rgba(20, 12, 4, 0.85)',
+      'hillshade-highlight-color': 'rgba(196, 154, 60, 0.35)',
+      'hillshade-accent-color': 'rgba(196, 154, 60, 0.18)',
+      'hillshade-illumination-direction': 315,
+      'hillshade-illumination-anchor': 'viewport'
+    }
+  }, 'water');
+
+  /* ═══ LUMIERE DIRECTIONNELLE — sun-like glow dore ═══ */
+  map.setLight({
+    anchor: 'viewport',
+    color: '#ffd87a',
+    intensity: 0.55,
+    position: [1.5, 200, 50]
+  });
+
+  /* ═══ FOG amplifie — horizon dore, espace plus profond ═══ */
   map.setFog({
-    'color': 'rgba(10,11,13,0.8)',
-    'high-color': 'rgba(30,40,55,0.5)',
-    'horizon-blend': 0.08,
-    'space-color': '#050608',
-    'star-intensity': 0.25
+    'color': 'rgba(10,11,13,0.9)',
+    'high-color': 'rgba(120,90,30,0.55)',
+    'horizon-blend': 0.14,
+    'space-color': '#030405',
+    'star-intensity': 0.5
   });
 
   /* Add zone markers as pulsing dots */
@@ -870,6 +1234,25 @@ map.on('style.load', () => {
     }
   });
 
+  /* ═══ ZONE SONAR PINGS — 3 expanding rings staggered ═══ */
+  for (let i = 1; i <= 3; i++) {
+    map.addLayer({
+      id: 'zones-ping-' + i,
+      type: 'circle',
+      source: 'zones',
+      paint: {
+        'circle-radius': 4,
+        'circle-color': 'transparent',
+        'circle-stroke-width': 1.2,
+        'circle-stroke-color': '#c49a3c',
+        'circle-stroke-opacity': 0
+      }
+    });
+  }
+
+  /* ═══ CROSS-ZONE ARCS — toutes paires entre les 6 theatres ═══ */
+  addCrossZoneArcs();
+
   /* ═══ DYNAMIC FLOWS — conflits & actions sur les 3 zones ═══ */
   addFlows();
 
@@ -877,11 +1260,127 @@ map.on('style.load', () => {
   document.getElementById('zone-label-mo').style.display = 'block';
   document.getElementById('zone-label-sahel').style.display = 'block';
   document.getElementById('zone-label-rdc').style.display = 'block';
+  document.getElementById('zone-label-madagascar').style.display = 'block';
+  document.getElementById('zone-label-afrique').style.display = 'block';
+  document.getElementById('zone-label-asie').style.display = 'block';
 
   positionLabels();
   startRotation();
   startFlowAnimation();
+  startZonePings();
+  startCrossZonePulse();
 });
+
+/* ═══ Zone sonar pings — 3 expanding rings, staggered, infinite ═══ */
+function startZonePings() {
+  const PERIOD = 2800;
+  const RING_COUNT = 3;
+  const start = performance.now();
+  function tick(now) {
+    const elapsed = now - start;
+    for (let i = 1; i <= RING_COUNT; i++) {
+      const layer = 'zones-ping-' + i;
+      if (!map.getLayer(layer)) continue;
+      const t = ((elapsed + (i - 1) * (PERIOD / RING_COUNT)) % PERIOD) / PERIOD;
+      const radius = 4 + t * 36;
+      const opacity = (1 - t) * 0.5;
+      map.setPaintProperty(layer, 'circle-radius', radius);
+      map.setPaintProperty(layer, 'circle-stroke-opacity', opacity);
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ═══ Cross-zone arcs — toutes paires entre les 6 zones ═══ */
+let crossZoneArcs = [];
+function addCrossZoneArcs() {
+  const ids = Object.keys(ZONES);
+  const pairs = [];
+  for (let i = 0; i < ids.length; i++) {
+    for (let j = i + 1; j < ids.length; j++) {
+      pairs.push([ZONES[ids[i]].coords, ZONES[ids[j]].coords]);
+    }
+  }
+  crossZoneArcs = pairs.map(([a, b]) => ({
+    coords: greatCircle(a, b, 96),
+    length: 97
+  }));
+  map.addSource('cross-zone-arcs', {
+    type: 'geojson',
+    data: { type: 'FeatureCollection', features: crossZoneArcs.map(a => ({
+      type: 'Feature',
+      geometry: { type: 'LineString', coordinates: a.coords }
+    }))}
+  });
+  map.addLayer({
+    id: 'cross-zone-arcs-line',
+    type: 'line',
+    source: 'cross-zone-arcs',
+    layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: {
+      'line-color': '#c49a3c',
+      'line-width': 0.8,
+      'line-opacity': 0.14,
+      'line-dasharray': [2, 3]
+    }
+  });
+  map.addSource('cross-zone-pulse', {
+    type: 'geojson',
+    data: { type: 'FeatureCollection', features: [] }
+  });
+  map.addLayer({
+    id: 'cross-zone-pulse-glow',
+    type: 'circle',
+    source: 'cross-zone-pulse',
+    paint: {
+      'circle-radius': 8,
+      'circle-color': '#c49a3c',
+      'circle-opacity': 0.25,
+      'circle-blur': 1.4
+    }
+  });
+  map.addLayer({
+    id: 'cross-zone-pulse-dot',
+    type: 'circle',
+    source: 'cross-zone-pulse',
+    paint: {
+      'circle-radius': 2.4,
+      'circle-color': '#ffe8a8',
+      'circle-opacity': 1
+    }
+  });
+}
+
+function startCrossZonePulse() {
+  let t = 0;
+  const SPEED = 0.0022;
+  function tick() {
+    t = (t + SPEED) % 1;
+    const features = [];
+    crossZoneArcs.forEach((arc, i) => {
+      const offset = (i * 0.137) % 1;
+      const p = (t + offset) % 1;
+      const idx = Math.floor(p * (arc.length - 1));
+      const frac = p * (arc.length - 1) - idx;
+      const a = arc.coords[idx];
+      const b = arc.coords[Math.min(idx + 1, arc.length - 1)];
+      const lng = a[0] + (b[0] - a[0]) * frac;
+      const lat = a[1] + (b[1] - a[1]) * frac;
+      const fadeIn  = Math.min(1, p * 8);
+      const fadeOut = Math.min(1, (1 - p) * 8);
+      features.push({
+        type: 'Feature',
+        properties: { opacity: Math.min(fadeIn, fadeOut) },
+        geometry: { type: 'Point', coordinates: [lng, lat] }
+      });
+    });
+    const src = map.getSource('cross-zone-pulse');
+    if (src) src.setData({ type: 'FeatureCollection', features });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
 
 /* ═══════════════════════════════════════════════════════════
    DYNAMIC CONFLICT FLOWS
@@ -908,7 +1407,24 @@ const CITIES = {
   goma:      [29.2218, -1.6779],
   bukavu:    [28.8608, -2.5095],
   bunia:     [29.6225, 1.5655],
-  beni:      [29.4730, 0.4908]
+  beni:      [29.4730, 0.4908],
+  /* Madagascar */
+  tananarive:   [47.5162, -18.8792],
+  toamasina:    [49.4073, -18.1499],
+  mahajanga:    [46.3236, -15.7167],
+  toliara:      [43.6843, -23.3557],
+  antsiranana:  [49.2952, -12.2788],
+  fianarantsoa: [47.0856, -21.4536],
+  sambava:      [50.1671, -14.2667],
+  /* Asie du Sud */
+  delhi:     [77.2090, 28.6139],
+  islamabad: [73.0479, 33.6007],
+  srinagar:  [74.7973, 34.0837],
+  peshawar:  [71.5249, 34.0151],
+  kabul:     [69.1723, 34.5260],
+  quetta:    [66.9936, 30.1798],
+  gwadar:    [62.3225, 25.1264],
+  kandahar:  [65.7100, 31.6100]
 };
 
 /* Flux INTRA-ZONE uniquement — conflits locaux */
@@ -929,7 +1445,22 @@ const FLOWS = [
   { from: 'kinshasa', to: 'goma' },
   { from: 'goma',     to: 'bukavu' },
   { from: 'goma',     to: 'beni' },
-  { from: 'beni',     to: 'bunia' }
+  { from: 'beni',     to: 'bunia' },
+  /* MADAGASCAR — axes trafics & dahalo */
+  { from: 'tananarive',  to: 'toamasina' },
+  { from: 'tananarive',  to: 'mahajanga' },
+  { from: 'tananarive',  to: 'toliara' },
+  { from: 'tananarive',  to: 'fianarantsoa' },
+  { from: 'toamasina',   to: 'antsiranana' },
+  { from: 'antsiranana', to: 'sambava' },
+  /* ASIE DU SUD — axes conflictuels */
+  { from: 'delhi',     to: 'srinagar' },
+  { from: 'srinagar',  to: 'islamabad' },
+  { from: 'islamabad', to: 'peshawar' },
+  { from: 'peshawar',  to: 'kabul' },
+  { from: 'kabul',     to: 'kandahar' },
+  { from: 'kandahar',  to: 'quetta' },
+  { from: 'quetta',    to: 'gwadar' }
 ];
 
 const FLOW_COLOR = '#c49a3c';  /* or militaire, coherent design */
@@ -1152,15 +1683,21 @@ updateClock();
 setInterval(updateClock, 1000);
 
 function updateCoords() {
-  if (!map || !map.loaded()) return;
-  const c = map.getCenter();
-  const ns = c.lat >= 0 ? 'N' : 'S';
-  const ew = c.lng >= 0 ? 'E' : 'W';
-  const lat = Math.abs(c.lat).toFixed(3).padStart(7, '0');
-  const lng = Math.abs(c.lng).toFixed(3).padStart(7, '0');
-  document.getElementById('coords').textContent = `${lat}° ${ns}, ${lng}° ${ew}`;
+  if (!map) return;
+  try {
+    const c = map.getCenter();
+    const ns = c.lat >= 0 ? 'N' : 'S';
+    const ew = c.lng >= 0 ? 'E' : 'W';
+    const lat = Math.abs(c.lat).toFixed(3).padStart(7, '0');
+    const lng = Math.abs(c.lng).toFixed(3).padStart(7, '0');
+    document.getElementById('coords').textContent = `${lat}° ${ns}, ${lng}° ${ew}`;
+  } catch (_) {}
 }
 setInterval(updateCoords, 200);
+// MAJ immediate a chaque mouvement (drag / rotation globe / fly)
+if (typeof map !== 'undefined' && map && map.on) {
+  map.on('move', updateCoords);
+}
 
 /* ═══ Zone card hover → fly globe to that zone ═══ */
 document.querySelectorAll('.zone-card').forEach(card => {
@@ -1188,19 +1725,14 @@ document.getElementById('year').textContent = new Date().getFullYear();
 window.addEventListener('resize', positionLabels);
 
 /* ═══════════════════════════════════════════════════════════
-   Dynamic Sahel stats
+   Dynamic stats (Sahel + Madagascar + Asie du Sud)
    ═══════════════════════════════════════════════════════════ */
-(async () => {
-  const files = [
-    '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
-    '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
-    '2026-mars-01-15.geojson','2026-mars-16-31.geojson'
-  ];
+async function loadZoneStats(base, files, evId, acId) {
   let total = 0;
   const actors = new Set();
   await Promise.all(files.map(async f => {
     try {
-      const res = await fetch('./sahel/' + f);
+      const res = await fetch(base + f);
       if (!res.ok) return;
       const data = await res.json();
       if (data.features) {
@@ -1212,11 +1744,31 @@ window.addEventListener('resize', positionLabels);
       }
     } catch (_) {}
   }));
-  const ev = document.getElementById('sahel-event-count');
-  const ac = document.getElementById('sahel-actor-count');
+  const ev = document.getElementById(evId);
+  const ac = document.getElementById(acId);
   if (ev) ev.textContent = total || '—';
   if (ac) ac.textContent = actors.size || '—';
-})();
+}
+
+loadZoneStats('./sahel/', [
+  '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
+  '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
+  '2026-mars-01-15.geojson','2026-mars-16-31.geojson'
+], 'sahel-event-count', 'sahel-actor-count');
+
+loadZoneStats('./asie-sud/', [
+  '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
+  '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
+  '2026-mars-01-15.geojson','2026-mars-16-31.geojson',
+  '2026-avril-01-15.geojson','2026-avril-16-23.geojson'
+], 'asie-event-count', 'asie-actor-count');
+
+loadZoneStats('./madagascar/', [
+  '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
+  '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
+  '2026-mars-01-15.geojson','2026-mars-16-31.geojson',
+  '2026-avr-01-15.geojson','2026-avr-16-21.geojson'
+], 'madagascar-event-count', 'madagascar-actor-count');
 </script>
 </body>
 </html>

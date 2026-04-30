@@ -1,0 +1,233 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9875,
+          33.6145
+        ]
+      },
+      "properties": {
+        "name": "Kahuta — Khan Research Laboratories",
+        "type": "Site nucleaire",
+        "statut": "Active",
+        "operateur": "Pakistan (KRL)",
+        "pays": "Pakistan",
+        "description": "Principale installation d'enrichissement d'uranium du Pakistan. Developpee sous A.Q. Khan, base du programme d'armes nucleaires pakistanais.",
+        "sources": "SIPRI_Yearbook|https://www.sipri.org/yearbook Federation_of_American_Scientists|https://fas.org/issues/nuclear-weapons/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.6803,
+          33.8353
+        ]
+      },
+      "properties": {
+        "name": "Complexe Khushab (reacteurs plutonium)",
+        "type": "Site nucleaire",
+        "statut": "Active",
+        "operateur": "Pakistan (PAEC)",
+        "pays": "Pakistan",
+        "description": "4 reacteurs a eau lourde pour production de plutonium militaire. Piliers de la triade nucleaire pakistanaise. Localises dans le Pendjab, pres de Joharabad.",
+        "sources": "SIPRI|https://www.sipri.org/ Nuclear_Threat_Initiative|https://www.nti.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.92,
+          19.0111
+        ]
+      },
+      "properties": {
+        "name": "Trombay BARC (Mumbai)",
+        "type": "Site nucleaire",
+        "statut": "Active",
+        "operateur": "Inde (BARC)",
+        "pays": "Inde",
+        "description": "Bhabha Atomic Research Centre. Principal centre de recherche nucleaire indien, reacteurs Cirus/Dhruva, production de plutonium militaire.",
+        "sources": "BARC_India|http://www.barc.gov.in/ SIPRI|https://www.sipri.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.6412,
+          12.82
+        ]
+      },
+      "properties": {
+        "name": "Rare Materials Plant — Yelahanka (Bangalore)",
+        "type": "Site nucleaire",
+        "statut": "Active",
+        "operateur": "Inde (DAE)",
+        "pays": "Inde",
+        "description": "Centrifugation d'uranium pour sous-marins nucleaires (INS Arihant). Composante strategique de la dissuasion mer-sous-mer indienne.",
+        "sources": "IDSA_India|https://www.idsa.in/ FAS|https://fas.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          62.3225,
+          25.1264
+        ]
+      },
+      "properties": {
+        "name": "Port de Gwadar (CPEC)",
+        "type": "Strategique",
+        "statut": "Active",
+        "operateur": "China Overseas Ports Holding Company",
+        "pays": "Pakistan",
+        "description": "Port en eau profonde, tete de pont du CPEC (corridor economique Chine-Pakistan, 62 Mds USD). Cible d'attaques BLA recurrentes, dont l'assaut du 30 janvier 2026.",
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks CSIS|https://www.csis.org/analysis/china-pakistan-economic-corridor"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.19,
+          27.99
+        ]
+      },
+      "properties": {
+        "name": "Mine de cuivre-or de Saindak",
+        "type": "Cuivre / Or",
+        "statut": "Active",
+        "operateur": "MCC (Chine) — Pakistan",
+        "pays": "Pakistan",
+        "description": "Une des plus grandes mines de cuivre-or du Baloutchistan (Chagai). Operee par China Metallurgical Corp. Cible symbolique des greviances anti-chinoises BLA.",
+        "sources": "Reuters|https://www.reuters.com/markets/commodities/ Mining_Weekly|https://www.miningweekly.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          64.777,
+          29.038
+        ]
+      },
+      "properties": {
+        "name": "Reko Diq (cuivre / or)",
+        "type": "Cuivre / Or",
+        "statut": "Pre-production",
+        "operateur": "Barrick Gold (50%) / Pakistan (50%)",
+        "pays": "Pakistan",
+        "description": "L'un des plus grands gisements mondiaux de cuivre-or non exploites. Projet relance 2023. Enjeu majeur pour financer l'economie pakistanaise et cible potentielle BLA.",
+        "sources": "Barrick_Gold|https://www.barrick.com/ Reuters|https://www.reuters.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          68.31,
+          35.37
+        ]
+      },
+      "properties": {
+        "name": "Complexe Aynak (cuivre)",
+        "type": "Cuivre",
+        "statut": "En developpement",
+        "operateur": "MCC (Chine)",
+        "pays": "Afghanistan",
+        "description": "Gisement de cuivre de Mes Aynak (Logar). 2e plus grand au monde par reserves. Concede a MCC sous Taliban, developpement fragilise par instabilite.",
+        "sources": "USGS_Afghanistan_Minerals|https://www.usgs.gov/ Reuters|https://www.reuters.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.467,
+          36.69
+        ]
+      },
+      "properties": {
+        "name": "Lapis-lazuli de Sar-e-Sang (Badakhshan)",
+        "type": "Lapis-lazuli",
+        "statut": "Active (informelle)",
+        "operateur": "Taliban (controle de facto)",
+        "pays": "Afghanistan",
+        "description": "Mine historique de lapis-lazuli (5000 ans). Sous controle Taliban, alimente financement insurrectionnel (Global Witness). Route d'exportation vers Pakistan puis Emirats.",
+        "sources": "Global_Witness|https://www.globalwitness.org/en/campaigns/conflict-minerals/ USGS|https://www.usgs.gov/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.2075,
+          34.5513
+        ]
+      },
+      "properties": {
+        "name": "Gisements de terres rares — Khanneshin",
+        "type": "Terres rares",
+        "statut": "Non exploite",
+        "operateur": "Aucun (reserves Taliban)",
+        "pays": "Afghanistan",
+        "description": "Reserves estimees a 1-3 trillions USD selon USGS/US Pentagon. Enjeu strategique mondial face au quasi-monopole chinois sur les terres rares.",
+        "sources": "USGS|https://www.usgs.gov/ Pentagon_Inspector_General_Reports|https://media.defense.gov/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.5,
+          32.8
+        ]
+      },
+      "properties": {
+        "name": "Glacier de Siachen",
+        "type": "Strategique",
+        "statut": "Militarise",
+        "operateur": "Inde (Indian Army) vs Pakistan",
+        "pays": "Inde / Zone disputee",
+        "description": "Plus haut champ de bataille du monde (5400+ m). Controle indien depuis Operation Meghdoot 1984. Pas de ceasefire formel. 14e Corps indien deploye.",
+        "sources": "IDSA_India|https://www.idsa.in/ Britannica_Siachen|https://www.britannica.com/place/Siachen-Glacier"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.15,
+          34.75
+        ]
+      },
+      "properties": {
+        "name": "Aksai Chin",
+        "type": "Strategique",
+        "statut": "Controle chinois, revendique par Inde",
+        "operateur": "Chine (PLA)",
+        "pays": "Zone disputee (CHN/IND)",
+        "description": "Plateau de 38 000 km2 controle par la Chine depuis 1962. Inclus dans l'ancien Etat du J&K selon l'Inde. Route G219 traverse la zone.",
+        "sources": "Britannica_Aksai_Chin|https://www.britannica.com/place/Aksai-Chin MEA_India|https://www.mea.gov.in/"
+      }
+    }
+  ]
+}

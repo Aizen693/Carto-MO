@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.52,-18.92]},"properties":{"name":"Antananarivo","personnes":3500000,"ville":"Antananarivo","pays":"Madagascar","detail":"Capitale, region Analamanga, densite la plus forte du pays","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.39,-18.15]},"properties":{"name":"Toamasina","personnes":460000,"ville":"Toamasina","pays":"Madagascar","detail":"2e ville, principal port","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.31,-15.72]},"properties":{"name":"Mahajanga","personnes":280000,"ville":"Mahajanga","pays":"Madagascar","detail":"Port ouest","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.87,-21.45]},"properties":{"name":"Fianarantsoa","personnes":220000,"ville":"Fianarantsoa","pays":"Madagascar","detail":"Chef-lieu Hautes Terres sud","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[43.69,-23.35]},"properties":{"name":"Toliara","personnes":180000,"ville":"Toliara","pays":"Madagascar","detail":"Port sud-ouest","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.28,-12.28]},"properties":{"name":"Antsiranana (Diego Suarez)","personnes":120000,"ville":"Antsiranana","pays":"Madagascar","detail":"Pointe nord, base navale","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[48.45,-20.25]},"properties":{"name":"Antsirabe","personnes":260000,"ville":"Antsirabe","pays":"Madagascar","detail":"Industrie, textile","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.98,-25.03]},"properties":{"name":"Fort-Dauphin (Taolagnaro)","personnes":75000,"ville":"Taolagnaro","pays":"Madagascar","detail":"QMM, Anosy","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.07,-25.17]},"properties":{"name":"Ambovombe","personnes":68000,"ville":"Ambovombe","pays":"Madagascar","detail":"Capitale Androy, crise alimentaire chronique Grand Sud","sources":"PAM|https://www.wfp.org OCHA|https://www.unocha.org"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[50.27,-14.67]},"properties":{"name":"Sambava","personnes":45000,"ville":"Sambava","pays":"Madagascar","detail":"Capitale vanille SAVA","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[50.20,-14.88]},"properties":{"name":"Antalaha","personnes":44000,"ville":"Antalaha","pays":"Madagascar","detail":"Vanille + port export","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[45.39,-22.55]},"properties":{"name":"Ihosy","personnes":40000,"ville":"Ihosy","pays":"Madagascar","detail":"Carrefour RN7/RN13, zone Bara","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[48.31,-13.31]},"properties":{"name":"Nosy Be","personnes":95000,"ville":"Nosy Be","pays":"Madagascar","detail":"Ile touristique, trafic international","sources":"INSTAT|https://www.instat.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[45.37,-22.42]},"properties":{"name":"Ilakaka","personnes":65000,"ville":"Ilakaka","pays":"Madagascar","detail":"Ville-boom saphir, creation 1998","sources":"Gemological Institute|https://www.gia.edu"}}
+  ]
+}

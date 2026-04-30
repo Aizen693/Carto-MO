@@ -1,0 +1,85 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5249,
+          34.0151
+        ]
+      },
+      "properties": {
+        "name": "TTP",
+        "type": "Attaque",
+        "description": "Date: 04/01/2026\nPays: Pakistan (KP)\nEvenement: Attaque coordonnee sur convoi militaire, district de Peshawar\nDetail: Embuscade et tirs nourris contre un convoi des Frontier Corps sur l'axe Peshawar–Landi Kotal. Revendication TTP dans le cadre de la campagne hivernale annoncee fin decembre 2025.\nBilan: plusieurs morts et blesses cote FC KP",
+        "sources": "South_Asia_Terrorism_Portal|https://www.satp.org/terrorist-activity/pakistan Wikipedia_Terrorist_incidents_in_Pakistan_2026|https://en.wikipedia.org/wiki/Terrorist_incidents_in_Pakistan_in_2026"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.1065,
+          32.9731
+        ]
+      },
+      "properties": {
+        "name": "TTP",
+        "type": "Embuscades",
+        "description": "Date: 07/01/2026\nPays: Pakistan (Nord-Waziristan)\nEvenement: IED puis assaut sur poste avance\nDetail: Dispositif explosif improvise sur la route menant a Miranshah, suivi de tirs sur une patrouille de l'armee pakistanaise. Zone revendiquee par la Wilayat Gulzar Imam Shaheed du TTP.\nBilan: soldats pakistanais tues, armement recupere par le TTP",
+        "sources": "SATP_Pakistan|https://www.satp.org/terrorist-activity/pakistan Dawn|https://www.dawn.com/news/waziristan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.9936,
+          30.1798
+        ]
+      },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 12/01/2026\nPays: Pakistan (Baloutchistan)\nEvenement: Attaque de la Majeed Brigade contre un convoi de securite a Quetta\nDetail: Attentat-suicide suivi de tirs d'assaut contre un convoi du Frontier Corps dans la peripherie est de Quetta. La BLA annonce la preparation d'une offensive majeure a venir.\nBilan: officiers FC tues, insurges abattus, prelude aux attaques du 30 janvier",
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Al_Jazeera|https://www.aljazeera.com/news/2026/2/2/pakistani-forces-kill-145-fighters-in-balochistan-after-deadly-attacks"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.3587,
+          34.0837
+        ]
+      },
+      "properties": {
+        "name": "Indian Army",
+        "type": "Incursion",
+        "description": "Date: 09/01/2026\nPays: Inde (Jammu-et-Cachemire)\nEvenement: Operation anti-infiltration secteur Kupwara\nDetail: Operation conjointe Indian Army / J&K Police dans la foret de Nowgam apres detection de mouvements suspects cote LoC. Engagement bref, pas de victimes cote indien confirme.\nBilan: infiltre presume neutralise, armes saisies",
+        "sources": "SATP_J&K_2026|https://www.satp.org/terrorist-activity/india-jammukashmir The_Hindu|https://www.thehindu.com/news/national/jammu-and-kashmir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.5394,
+          32.254
+        ]
+      },
+      "properties": {
+        "name": "ISKP",
+        "type": "Attaque",
+        "description": "Date: 14/01/2026\nPays: Pakistan / Afghanistan (frontiere Paktika)\nEvenement: Embuscade sur patrouille Taliban afghane\nDetail: Cellule presumee de l'Etat islamique-Khorasan revendique une attaque sur une patrouille des forces talibanes pres de la frontiere pakistanaise. Confirme la reactivation de l'ISKP sur l'axe Paktika-Khost.\nBilan: plusieurs combattants talibans tues",
+        "sources": "Al_Jazeera_Afghanistan|https://www.aljazeera.com/news/afghanistan Long_War_Journal|https://www.longwarjournal.org/tags/iskp"
+      }
+    }
+  ]
+}

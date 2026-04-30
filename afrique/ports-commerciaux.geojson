@@ -1,0 +1,872 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.5057,
+          35.8941
+        ]
+      },
+      "properties": {
+        "name": "Tanger Med",
+        "type": "Commercial / Conteneurs",
+        "pays": "Maroc",
+        "description": "1er port conteneurs d'Afrique et de Mediterranee (9.4 M EVP 2024). Hub de transhipment CMA CGM / Maersk.",
+        "sources": "Port_Tanger_Med|https://www.tangermed.ma Lloyds_List|https://lloydslist.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.6147,
+          33.6062
+        ]
+      },
+      "properties": {
+        "name": "Casablanca",
+        "type": "Commercial / Conteneurs",
+        "pays": "Maroc",
+        "description": "Principal port marocain capacite conteneurs domestiques + vrac. 38 Mt/an.",
+        "sources": "ANP_Maroc|https://www.anp.org.ma"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.6275,
+          30.4198
+        ]
+      },
+      "properties": {
+        "name": "Agadir",
+        "type": "Commercial / Conteneurs",
+        "pays": "Maroc",
+        "description": "Port sud du Maroc. Peche + agrumes + conteneurs. Zone franche Souss-Massa.",
+        "sources": "ANP_Maroc|https://www.anp.org.ma"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          29.8939,
+          31.209
+        ]
+      },
+      "properties": {
+        "name": "Alexandrie",
+        "type": "Commercial / Conteneurs",
+        "pays": "Egypte",
+        "description": "1er port egyptien. 40% du commerce exterieur. Hub Sidi Kerir + terminal conteneurs.",
+        "sources": "APA_Egypt|https://www.apa.gov.eg Lloyds_List|https://lloydslist.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.3018,
+          31.2653
+        ]
+      },
+      "properties": {
+        "name": "Port-Said (Suez)",
+        "type": "Commercial / Conteneurs",
+        "pays": "Egypte",
+        "description": "Entree nord Canal de Suez. ~12% du commerce mondial y transite. Cible houthie 2024-2026.",
+        "sources": "Suez_Canal_Authority|https://www.suezcanal.gov.eg UNCTAD|https://unctad.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.5509,
+          29.9668
+        ]
+      },
+      "properties": {
+        "name": "Port Tewfik (Suez)",
+        "type": "Commercial / Conteneurs",
+        "pays": "Egypte",
+        "description": "Entree sud du Canal de Suez. Terminal conteneurs + petrolier.",
+        "sources": "Suez_Canal_Authority|https://www.suezcanal.gov.eg"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.181,
+          32.902
+        ]
+      },
+      "properties": {
+        "name": "Tripoli (port)",
+        "type": "Commercial / Conteneurs",
+        "pays": "Libye",
+        "description": "Principal port libyen. Exposition aux instabilites Tripolitaine/GNA-LNA.",
+        "sources": "Libyan_Ports_Co|https://lpc.ly"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.042,
+          32.37
+        ]
+      },
+      "properties": {
+        "name": "Misrata",
+        "type": "Commercial / Conteneurs",
+        "pays": "Libye",
+        "description": "2e port libyen, zone franche 1999. Route vers Benghazi/Tobrouk. Stabilite relative.",
+        "sources": "Libyan_Ports_Co|https://lpc.ly"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.268,
+          36.777
+        ]
+      },
+      "properties": {
+        "name": "Rades (Tunis)",
+        "type": "Commercial / Conteneurs",
+        "pays": "Tunisie",
+        "description": "Principal port conteneurs tunisien. 80% des imports/exports. Concedee 2019.",
+        "sources": "OMMP_Tunisia|https://www.ommp.nat.tn"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.874,
+          37.274
+        ]
+      },
+      "properties": {
+        "name": "Bizerte",
+        "type": "Commercial / Conteneurs",
+        "pays": "Tunisie",
+        "description": "Port nord de la Tunisie. Zone industrielle + petrolier Skhira.",
+        "sources": "OMMP_Tunisia|https://www.ommp.nat.tn"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.078,
+          36.782
+        ]
+      },
+      "properties": {
+        "name": "Alger",
+        "type": "Commercial / Conteneurs",
+        "pays": "Algerie",
+        "description": "Principal port algerien en valeur. Terminal conteneurs concede DP World jusqu'en 2040.",
+        "sources": "EPAL_Algeria|https://www.portalger.com.dz DP_World|https://www.dpworld.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.6478,
+          35.7053
+        ]
+      },
+      "properties": {
+        "name": "Oran",
+        "type": "Commercial / Conteneurs",
+        "pays": "Algerie",
+        "description": "2e port algerien. Hub du Maghreb occidental. Concession DP World 2009.",
+        "sources": "EPO_Algeria|https://www.portoran.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.3674,
+          6.441
+        ]
+      },
+      "properties": {
+        "name": "Apapa (Lagos)",
+        "type": "Commercial / Conteneurs",
+        "pays": "Nigeria",
+        "description": "Plus grand port d'Afrique de l'Ouest. Congestion chronique, 1er marche conteneurs CEDEAO.",
+        "sources": "NPA_Nigeria|https://nigerianports.gov.ng"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.337,
+          6.4393
+        ]
+      },
+      "properties": {
+        "name": "Tin Can Island (Lagos)",
+        "type": "Commercial / Conteneurs",
+        "pays": "Nigeria",
+        "description": "Port conteneurs + ro-ro, complementaire d'Apapa. Concede ENL/Ports_and_Cargo.",
+        "sources": "NPA_Nigeria|https://nigerianports.gov.ng"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.162,
+          4.698
+        ]
+      },
+      "properties": {
+        "name": "Onne",
+        "type": "Commercial / Conteneurs",
+        "pays": "Nigeria",
+        "description": "Port oil & gas specialise. Base logistique offshore Niger Delta.",
+        "sources": "NPA_Nigeria|https://nigerianports.gov.ng"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.426,
+          6.354
+        ]
+      },
+      "properties": {
+        "name": "Cotonou",
+        "type": "Commercial / Conteneurs",
+        "pays": "Benin",
+        "description": "1er port du Benin. Transit Niger + Burkina. Concession MSC/Bollore.",
+        "sources": "PAC_Benin|https://www.paccotonou.bj"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.288,
+          6.124
+        ]
+      },
+      "properties": {
+        "name": "Lome",
+        "type": "Commercial / Conteneurs",
+        "pays": "Togo",
+        "description": "Hub transhipment ouest-africain. Concede Bollore+MSC. Terminal LCT.",
+        "sources": "PAL_Togo|https://www.togoport.tg"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.005,
+          5.628
+        ]
+      },
+      "properties": {
+        "name": "Tema",
+        "type": "Commercial / Conteneurs",
+        "pays": "Ghana",
+        "description": "Principal port ghaneen. Proche Accra. Meridian Port Services (APM Terminals/Bollore).",
+        "sources": "GPHA_Ghana|https://ghanaports.gov.gh"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.756,
+          4.886
+        ]
+      },
+      "properties": {
+        "name": "Takoradi",
+        "type": "Commercial / Conteneurs",
+        "pays": "Ghana",
+        "description": "Port ouest Ghana. Hub cacao + hub petrolier offshore Jubilee.",
+        "sources": "GPHA_Ghana|https://ghanaports.gov.gh"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.009,
+          5.278
+        ]
+      },
+      "properties": {
+        "name": "Abidjan",
+        "type": "Commercial / Conteneurs",
+        "pays": "Cote d'Ivoire",
+        "description": "1er port francophone d'Afrique (30 Mt). Hub regional CEDEAO.",
+        "sources": "PAA_Abidjan|https://www.portabidjan.ci"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.632,
+          4.75
+        ]
+      },
+      "properties": {
+        "name": "San Pedro",
+        "type": "Commercial / Conteneurs",
+        "pays": "Cote d'Ivoire",
+        "description": "2e port ivoirien. 1er port cacao mondial. Concedee APMT/Bollore.",
+        "sources": "PASP|https://www.sanpedro-port.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.798,
+          6.351
+        ]
+      },
+      "properties": {
+        "name": "Monrovia",
+        "type": "Commercial / Conteneurs",
+        "pays": "Liberia",
+        "description": "Principal port liberien. Transit fer Nimba + caoutchouc. Concede APMT.",
+        "sources": "NPA_Liberia|https://npa.gov.lr"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -13.227,
+          8.488
+        ]
+      },
+      "properties": {
+        "name": "Freetown (Queen Elizabeth II Quay)",
+        "type": "Commercial / Conteneurs",
+        "pays": "Sierra Leone",
+        "description": "Principal port Sierra Leone. Concedee Bollore. Exports bauxite + diamants + cacao.",
+        "sources": "NRA_SL|https://www.nra.gov.sl"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.581,
+          13.453
+        ]
+      },
+      "properties": {
+        "name": "Banjul",
+        "type": "Commercial / Conteneurs",
+        "pays": "Gambie",
+        "description": "Port unique gambien. Transit regional Senegal-Gambie. Projet expansion Albreda.",
+        "sources": "GPA_Gambia|https://gambiaports.gov.gm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -17.418,
+          14.68
+        ]
+      },
+      "properties": {
+        "name": "Dakar",
+        "type": "Commercial / Conteneurs",
+        "pays": "Senegal",
+        "description": "Hub regional Afrique de l'Ouest. Projet mega-port Ndayane (DP World).",
+        "sources": "PAD_Dakar|https://www.portdakar.sn DP_World|https://www.dpworld.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.272,
+          12.566
+        ]
+      },
+      "properties": {
+        "name": "Ziguinchor",
+        "type": "Commercial / Conteneurs",
+        "pays": "Senegal",
+        "description": "Port de Casamance. Transit regional vers Guinee-Bissau.",
+        "sources": "PAD_Dakar|https://www.portdakar.sn"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.598,
+          11.86
+        ]
+      },
+      "properties": {
+        "name": "Bissau",
+        "type": "Commercial / Conteneurs",
+        "pays": "Guinee-Bissau",
+        "description": "Port unique Guinee-Bissau. Zone fragile (transit stupefiants).",
+        "sources": "APGB|https://www.apgb.gw"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -13.7122,
+          9.5092
+        ]
+      },
+      "properties": {
+        "name": "Conakry",
+        "type": "Commercial / Conteneurs",
+        "pays": "Guinee",
+        "description": "Port multifonction, export bauxite + or. Concede Bollore.",
+        "sources": "PAC_Guinea|https://pac.gov.gn"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.145,
+          11.601
+        ]
+      },
+      "properties": {
+        "name": "Djibouti Multi-Purpose",
+        "type": "Commercial / Conteneurs",
+        "pays": "Djibouti",
+        "description": "Porte d'entree maritime de l'Ethiopie. Hub Bab el-Mandeb. 90% commerce ethiopien.",
+        "sources": "DCT|https://dpfza.gov.dj CSIS_Djibouti|https://www.csis.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.217,
+          19.616
+        ]
+      },
+      "properties": {
+        "name": "Port Sudan",
+        "type": "Commercial / Conteneurs",
+        "pays": "Soudan",
+        "description": "Unique port maritime du Soudan. Exposition a la guerre RSF/SAF 2023-2026.",
+        "sources": "Sea_Ports_Corp_Sudan|https://spc.gov.sd/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.453,
+          15.608
+        ]
+      },
+      "properties": {
+        "name": "Massawa",
+        "type": "Commercial / Conteneurs",
+        "pays": "Erythree",
+        "description": "Port erythreen mer Rouge. Cle de desenclavement Ethiopie alternative.",
+        "sources": "PMoT_Eritrea|http://www.shabait.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.744,
+          13.008
+        ]
+      },
+      "properties": {
+        "name": "Assab",
+        "type": "Commercial / Conteneurs",
+        "pays": "Erythree",
+        "description": "Port sud erythreen, base EAU operations Yemen 2015-2021. Reprise activite 2024.",
+        "sources": "ISS_Africa|https://issafrica.org"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.672,
+          -4.059
+        ]
+      },
+      "properties": {
+        "name": "Mombasa",
+        "type": "Commercial / Conteneurs",
+        "pays": "Kenya",
+        "description": "1er port Afrique de l'Est. Hub Kenya, Ouganda, Rwanda, RDC Est, Sud-Soudan.",
+        "sources": "KPA_Kenya|https://www.kpa.co.ke"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.296,
+          -6.817
+        ]
+      },
+      "properties": {
+        "name": "Dar es Salaam",
+        "type": "Commercial / Conteneurs",
+        "pays": "Tanzanie",
+        "description": "Corridor Central africain (Tanzanie, Burundi, RDC, Malawi, Zambie). Concede DP World 2023.",
+        "sources": "TPA_Tanzania|https://ports.go.tz"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.19,
+          -6.161
+        ]
+      },
+      "properties": {
+        "name": "Zanzibar",
+        "type": "Commercial / Conteneurs",
+        "pays": "Tanzanie",
+        "description": "Port d'ile Zanzibar. Hub touristique + export epices.",
+        "sources": "ZPCA|https://www.zpc.go.tz"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.047,
+          -29.87
+        ]
+      },
+      "properties": {
+        "name": "Durban",
+        "type": "Commercial / Conteneurs",
+        "pays": "Afrique du Sud",
+        "description": "Plus grand port d'Afrique subsaharienne (89 Mt/an). Hub conteneurs austral.",
+        "sources": "Transnet_SA|https://www.transnet.net"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.67,
+          -33.803
+        ]
+      },
+      "properties": {
+        "name": "Ngqura (Port Elizabeth)",
+        "type": "Commercial / Conteneurs",
+        "pays": "Afrique du Sud",
+        "description": "Port a conteneurs vraquier automobile. Expansion Coega SEZ.",
+        "sources": "Transnet_SA|https://www.transnet.net"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.435,
+          -33.9
+        ]
+      },
+      "properties": {
+        "name": "Cape Town",
+        "type": "Commercial / Conteneurs",
+        "pays": "Afrique du Sud",
+        "description": "Port mixte conteneurs + peche + reparation navale. Controle Cap de Bonne-Esperance.",
+        "sources": "Transnet_SA|https://www.transnet.net"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.233,
+          -8.782
+        ]
+      },
+      "properties": {
+        "name": "Luanda",
+        "type": "Commercial / Conteneurs",
+        "pays": "Angola",
+        "description": "Principal port angolais. Corridor Lobito relance 2024 (US-EU).",
+        "sources": "APL_Angola|https://www.portodeluanda.co.ao"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.545,
+          -12.347
+        ]
+      },
+      "properties": {
+        "name": "Lobito",
+        "type": "Commercial / Conteneurs",
+        "pays": "Angola",
+        "description": "Corridor Lobito-Benguela reactivé: cuivre/cobalt RDC-Zambie-Angola. Financement G7.",
+        "sources": "Corridor_Lobito|https://corredordelobito.ao US_State_Dept|https://www.state.gov/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.148,
+          -15.196
+        ]
+      },
+      "properties": {
+        "name": "Namibe",
+        "type": "Commercial / Conteneurs",
+        "pays": "Angola",
+        "description": "Port sud angolais. Expansion prevue 2024 pour desenclaver Zambie.",
+        "sources": "APN_Angola|https://portosdeangola.co.ao"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.834,
+          -4.796
+        ]
+      },
+      "properties": {
+        "name": "Pointe-Noire",
+        "type": "Commercial / Conteneurs",
+        "pays": "Congo",
+        "description": "Port en eau profonde bassin du Congo. Concedee Bollore/MSC. Hub petrolier.",
+        "sources": "PAPN_Congo|https://www.portdepointenoire.cg"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.498,
+          0.296
+        ]
+      },
+      "properties": {
+        "name": "Libreville-Owendo",
+        "type": "Commercial / Conteneurs",
+        "pays": "Gabon",
+        "description": "Principal port gabonais. Terminal conteneurs + bois tropical. Concede GSEZ.",
+        "sources": "OPRAG_Gabon|https://www.oprag.ga"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.7,
+          4.05
+        ]
+      },
+      "properties": {
+        "name": "Douala",
+        "type": "Commercial / Conteneurs",
+        "pays": "Cameroun",
+        "description": "1er port camerounais. Transit Tchad + RCA + Soudan-Sud (corridor nord). Concede Bollore.",
+        "sources": "PAD_Cameroon|https://www.pad.cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.913,
+          2.943
+        ]
+      },
+      "properties": {
+        "name": "Kribi",
+        "type": "Commercial / Conteneurs",
+        "pays": "Cameroun",
+        "description": "Port en eau profonde 2018. Doublon Douala. Concede ICTSI + CCCC (Chine).",
+        "sources": "PAK_Cameroon|https://portdekribi.cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.507,
+          -22.959
+        ]
+      },
+      "properties": {
+        "name": "Walvis Bay",
+        "type": "Commercial / Conteneurs",
+        "pays": "Namibie",
+        "description": "Port de la SADC ouest. Expansion chinoise (China Harbour). Alt Durban.",
+        "sources": "NamPort|https://www.namport.com.na"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.835,
+          -19.839
+        ]
+      },
+      "properties": {
+        "name": "Beira",
+        "type": "Commercial / Conteneurs",
+        "pays": "Mozambique",
+        "description": "Corridor Beira-Harare (Zimbabwe, Zambie, Malawi). Reparations post-Idai 2019.",
+        "sources": "CFM_Mozambique|https://www.portmaputo.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.575,
+          -25.97
+        ]
+      },
+      "properties": {
+        "name": "Maputo",
+        "type": "Commercial / Conteneurs",
+        "pays": "Mozambique",
+        "description": "Porte d'entree Afrique australe Sud. Concedee DP World 2033.",
+        "sources": "Maputo_Port|https://www.portmaputo.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.692,
+          -14.545
+        ]
+      },
+      "properties": {
+        "name": "Nacala",
+        "type": "Commercial / Conteneurs",
+        "pays": "Mozambique",
+        "description": "Port en eau profonde. Corridor charbon Moatize (Vale). Concedee par Mota-Engil.",
+        "sources": "CDN_Mozambique|https://cdn.mozambique.pt"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.409,
+          -18.148
+        ]
+      },
+      "properties": {
+        "name": "Toamasina",
+        "type": "Commercial / Conteneurs",
+        "pays": "Madagascar",
+        "description": "1er port de Madagascar. 80% imports. Concedee ICTSI 2005.",
+        "sources": "SPAT_Madagascar|https://www.spat.mg/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          46.314,
+          -15.716
+        ]
+      },
+      "properties": {
+        "name": "Mahajanga",
+        "type": "Commercial / Conteneurs",
+        "pays": "Madagascar",
+        "description": "Port nord-ouest Madagascar. Canal Mozambique. Export vanille + bois.",
+        "sources": "SPAT_Madagascar|https://www.spat.mg/"
+      }
+    }
+  ]
+}

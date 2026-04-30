@@ -1,0 +1,158 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.167,
+          11.547
+        ]
+      },
+      "properties": {
+        "name": "Camp Lemonnier (Djibouti)",
+        "type": "Base navale",
+        "pays": "USA",
+        "description": "Principale base US permanente en Afrique (CJTF-HOA). 4500 militaires. Drones, C-130, P-8 Poseidon.",
+        "sources": "DoD_AFRICOM|https://www.africom.mil/ CSIS_Lemonnier|https://www.csis.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.452,
+          -7.349
+        ]
+      },
+      "properties": {
+        "name": "Diego Garcia (BIOT)",
+        "type": "Base navale",
+        "pays": "USA / UK",
+        "description": "Base strategique US-UK ocean Indien. B-2, B-52, SSBN. Gestion future contestee (Maurice-UK 2024).",
+        "sources": "DoD|https://www.defense.gov/ UK_FCDO|https://www.gov.uk/government/organisations/foreign-commonwealth-development-office"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.9,
+          -2.25
+        ]
+      },
+      "properties": {
+        "name": "Manda Bay (Kenya)",
+        "type": "Point d'appui",
+        "pays": "USA",
+        "description": "Base avancee US anti-Shabaab Somalie. Attaquee al-Shabaab janv 2020 (3 US tues).",
+        "sources": "DoD_AFRICOM|https://www.africom.mil/ LongWarJournal|https://www.longwarjournal.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.37,
+          9.33
+        ]
+      },
+      "properties": {
+        "name": "Garoua (Cameroun)",
+        "type": "Point d'appui",
+        "pays": "USA",
+        "description": "Base aerienne support US ops anti-Boko Haram/ISWAP bassin du lac Tchad. Drones, ISR.",
+        "sources": "DoD_AFRICOM|https://www.africom.mil/ Brookings|https://www.brookings.edu/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.734,
+          0.336
+        ]
+      },
+      "properties": {
+        "name": "Sao Tome (acces)",
+        "type": "Point d'appui",
+        "pays": "USA",
+        "description": "Accord d'acces US-Sao Tome 2024 pour missions Atlantique. Contrepoids a Bata (Chine).",
+        "sources": "US_State_Dept|https://www.state.gov/ CFR|https://www.cfr.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.997,
+          16.961
+        ]
+      },
+      "properties": {
+        "name": "Air Base 201 Agadez (Niger — retrait 2024)",
+        "type": "Point d'appui",
+        "pays": "USA",
+        "description": "Base drones US Niger. Retrait force aout 2024 apres coup 2023. Symbol perte d'influence US Sahel.",
+        "sources": "DoD_AFRICOM|https://www.africom.mil/ NYT|https://www.nytimes.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          55.453,
+          -4.619
+        ]
+      },
+      "properties": {
+        "name": "Seychelles (drones MQ-9)",
+        "type": "Point d'appui",
+        "pays": "USA",
+        "description": "Operations drones MQ-9 Reaper anti-piraterie et ISR. Base depuis 2009.",
+        "sources": "DoD|https://www.defense.gov/ LongWarJournal|https://www.longwarjournal.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.165,
+          36.806
+        ]
+      },
+      "properties": {
+        "name": "Cooperation Tunisie",
+        "type": "Point d'appui",
+        "pays": "USA",
+        "description": "Base aerienne Remada + acces Bizerte. Cooperation bilaterale anti-terroriste Sahel.",
+        "sources": "State_Dept|https://www.state.gov/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -17.418,
+          14.68
+        ]
+      },
+      "properties": {
+        "name": "Dakar (APS - African Partnership Station)",
+        "type": "Point d'appui",
+        "pays": "USA",
+        "description": "Base logistique periodique US Navy. Exercices anti-piraterie Obangame + Phoenix Express.",
+        "sources": "US_Navy|https://www.navy.mil/"
+      }
+    }
+  ]
+}

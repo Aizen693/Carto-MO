@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.39,-18.15]},"properties":{"name":"Port de Toamasina","type":"Port","detail":"Principal port du pays, 80% du commerce exterieur","statut":"Operationnel","sources":"SPAT|https://www.portdetoamasina.com"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.31,-15.72]},"properties":{"name":"Port de Mahajanga","type":"Port","detail":"Facade ouest, zone de pecherie","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[43.69,-23.35]},"properties":{"name":"Port de Toliara","type":"Port","detail":"Sud-ouest, mineraux + peche","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.28,-12.28]},"properties":{"name":"Port d'Antsiranana (Diego Suarez)","type":"Port","detail":"Base navale FADM + commerce nord","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.98,-25.03]},"properties":{"name":"Port d'Ehoala (Fort-Dauphin)","type":"Port","detail":"Port Rio Tinto QMM","statut":"Operationnel","sources":"Rio Tinto|https://www.riotinto.com"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.48,-18.79]},"properties":{"name":"Aeroport Ivato (Antananarivo)","type":"Aeroport","detail":"Hub international principal","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[48.31,-13.31]},"properties":{"name":"Aeroport Fascene (Nosy Be)","type":"Aeroport","detail":"Tourisme + trafic international","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.39,-18.11]},"properties":{"name":"Aeroport Toamasina","type":"Aeroport","detail":"Regional","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.35,-15.67]},"properties":{"name":"Aeroport Mahajanga Amborovy","type":"Aeroport","detail":"Regional","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[43.73,-23.38]},"properties":{"name":"Aeroport Toliara","type":"Aeroport","detail":"Regional","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[48.21,-18.81]},"properties":{"name":"Centrale hydro Andekaleka","type":"Energie","detail":"92 MW, alimente Antananarivo","statut":"Operationnel","sources":"JIRAMA"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.83,-18.97]},"properties":{"name":"Centrale hydro Mandraka","type":"Energie","detail":"24 MW","statut":"Operationnel","sources":"JIRAMA"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.58,-18.92]},"properties":{"name":"Centrale thermique Ambohimanambola","type":"Energie","detail":"Tana, backup diesel","statut":"Operationnel","sources":"JIRAMA"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[47.52,-18.92],[47.20,-18.80],[46.50,-18.65],[45.55,-18.32]]},"properties":{"name":"RN1 Antananarivo-Tsiroanomandidy","type":"Route nationale","detail":"Axe ouest-centre","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[47.52,-18.92],[47.80,-18.85],[48.42,-18.93],[48.85,-18.60],[49.35,-18.15]]},"properties":{"name":"RN2 Antananarivo-Toamasina","type":"Route nationale","detail":"Axe economique majeur","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[47.52,-18.92],[47.10,-18.10],[46.80,-17.00],[46.35,-15.72]]},"properties":{"name":"RN4 Antananarivo-Mahajanga","type":"Route nationale","detail":"Axe nord-ouest","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[46.35,-15.72],[47.50,-14.25],[48.80,-13.20],[49.30,-12.30]]},"properties":{"name":"RN6 Mahajanga-Antsiranana","type":"Route nationale","detail":"Axe nord, troncons degrades en saison des pluies","statut":"Troncons a risque"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[47.52,-18.92],[47.08,-19.85],[47.12,-20.60],[46.85,-21.45],[45.85,-22.10],[45.35,-22.65],[44.30,-22.95],[43.70,-23.35]]},"properties":{"name":"RN7 Antananarivo-Toliara","type":"Route nationale","detail":"Axe sud, touristique","statut":"Operationnel"}},
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[46.10,-22.30],[45.50,-23.40],[46.00,-24.80],[46.98,-25.03]]},"properties":{"name":"RN13 Ihosy-Fort-Dauphin","type":"Route nationale","detail":"Axe sud-est, zone dahalo, insecurite chronique","statut":"Tres degraddee"}}
+  ]
+}

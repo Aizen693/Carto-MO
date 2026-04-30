@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algor Int — Afrique Maritime</title>
+<link rel="icon" type="image/jpeg" href="../favicon.jpg">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<link rel="stylesheet" href="../shared/styles.css?v=20260428c">
+<style>
+/* === AFRIQUE — styles minimaux, modes geres par Mapbox === */
+#map { background: #e8eaed; }
+
+.hdr-cell-sm { display: flex; align-items: center; padding: 0 12px; border-right: 1px solid var(--ln); }
+.hdr-cell-sm span { font: 500 9px/1 var(--m); color: var(--tx1); letter-spacing: 0.18em; text-transform: uppercase; }
+.hdr-cell-sm strong { color: var(--ac); font-weight: 600; }
+
+/* Login gate (reuse Sahel pattern) */
+#zone-login-overlay { position:fixed;inset:0;z-index:9999;background:rgba(10,11,13,0.97);display:flex;align-items:center;justify-content:center; }
+#zone-login-box { background:var(--bg1);border:1px solid var(--ln);border-top:2px solid var(--ac);padding:32px 36px;width:340px;max-width:90vw; }
+.zl-brand { display:flex;align-items:center;gap:10px;margin-bottom:20px; }
+.zl-title { font:600 14px/1 var(--bc);color:var(--txh);letter-spacing:0.06em;text-transform:uppercase; }
+.zl-sub { font:400 8px/1 var(--m);color:var(--tx1);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px; }
+#zone-login-box input { display:block;width:100%;box-sizing:border-box;margin-bottom:10px;padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--ln);color:var(--txh);font:400 11px/1.4 var(--m);outline:none; }
+#zone-login-box input:focus { border-color:var(--ac); }
+#zone-login-btn { width:100%;padding:9px;background:rgba(196,154,60,0.12);border:1px solid rgba(196,154,60,0.35);color:var(--ac);font:500 8px/1 var(--bc);letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;margin-top:4px; }
+#zone-login-btn:hover { background:rgba(196,154,60,0.2); }
+#zone-login-error { display:none;font:400 9px/1.3 var(--m);color:#ef4444;padding:6px 0;margin-bottom:6px; }
+.zone-gated { display:none !important; }
+
+/* Legende dans sidebar */
+#sidebar-legend-body .legend-row { display:flex; align-items:center; gap:10px; padding:4px 16px; font:400 10.5px/1.3 var(--b); color: var(--tx); }
+#sidebar-legend-body .legend-swatch { width:12px; height:12px; flex:0 0 12px; }
+#sidebar-legend-body .legend-swatch.line { height: 2px; width: 18px; flex: 0 0 18px; }
+#sidebar-legend-body .legend-empty { padding: 12px 16px; font:400 10px/1.4 var(--b); color: var(--tx2); font-style: italic; }
+
+/* Popup dark-or coherent Sahel */
+.mapboxgl-popup-content { background: var(--bg1) !important; border: 1px solid var(--ln) !important; border-top: 2px solid var(--ac) !important; padding: 0 !important; max-width: 360px !important; color: var(--tx); box-shadow: 0 6px 24px rgba(0,0,0,0.35) !important; }
+.mapboxgl-popup-close-button { color: var(--tx1) !important; right: 6px !important; top: 4px !important; font-size: 16px !important; }
+.mapboxgl-popup-close-button:hover { color: var(--ac) !important; }
+.mapboxgl-popup-tip { display: none; }
+.popup-header { padding: 10px 14px 8px; border-bottom: 1px solid var(--ln); display: flex; align-items: center; gap: 8px; }
+.popup-dot-bar { width: 4px; height: 14px; }
+.popup-actor { font: 600 12px/1.1 var(--bc); color: var(--txh); letter-spacing: 0.08em; text-transform: uppercase; }
+.popup-body { padding: 10px 14px; }
+.popup-row { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
+.popup-key { font: 500 8px/1 var(--m); color: var(--tx1); letter-spacing: 0.16em; text-transform: uppercase; }
+.popup-val { font: 400 11px/1.45 var(--b); color: var(--tx); white-space: pre-wrap; }
+
+/* Sidebar close btn mobile */
+#sidebar-close-btn { position:absolute; top:10px; right:10px; background:transparent; border:none; color:var(--tx1); font-size: 22px; cursor:pointer; z-index:5; line-height:1; display:none; }
+#sidebar-close-btn:hover { color: var(--ac); }
+@media (max-width: 900px) { #sidebar-close-btn { display: block; } }
+
+/* Mapbox bottom controls leger */
+.mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right { opacity: 0.4; }
+.mapboxgl-ctrl-bottom-left:hover, .mapboxgl-ctrl-bottom-right:hover { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- Login gate -->
+<div id="zone-login-overlay">
+  <div id="zone-login-box">
+    <div class="zl-brand">
+      <img src="algor_int_logo.jpg" alt="" style="height:28px;opacity:0.6">
+      <div>
+        <div class="zl-title">Algor Int</div>
+        <div class="zl-sub">Acces restreint -- Afrique Maritime</div>
+      </div>
+    </div>
+    <div id="zone-login-error"></div>
+    <input type="email" id="zone-email" placeholder="Email" autocomplete="email">
+    <input type="password" id="zone-password" placeholder="Mot de passe" autocomplete="current-password">
+    <button id="zone-login-btn">Connexion</button>
+  </div>
+</div>
+
+<!-- Header -->
+<div id="header" class="zone-gated">
+  <div id="header-left">
+    <button id="btn-sidebar" onclick="toggleSidebar()"><span class="hamburger">&#9776;</span> Menu</button>
+    <a href="../index.html" title="Retour a la selection" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <img src="algor_int_logo.jpg" alt="Algor Int">
+      <div>
+        <h1>Afrique Maritime</h1>
+        <p>Flux · Ports · Piraterie · Presence navale</p>
+      </div>
+    </a>
+  </div>
+  <div class="hdr-cell">
+    <span class="hdr-cell-label">Calques</span>
+    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/21</span>
+  </div>
+  <div class="hdr-cell">
+    <span class="hdr-cell-label">Features</span>
+    <span id="feature-count" style="font:500 10px/1 var(--m);color:var(--tx);letter-spacing:0.1em">—</span>
+  </div>
+  <div class="hdr-spacer"></div>
+  <div class="hdr-cell-sm">
+    <span>Classif <strong>UNCLASSIFIED</strong></span>
+  </div>
+</div>
+
+<!-- Map -->
+<div id="map" class="zone-gated"></div>
+
+<!-- Sidebar overlay (mobile) -->
+<div id="sidebar-overlay" class="zone-gated" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<div id="sidebar" class="zone-gated">
+  <button id="sidebar-close-btn" onclick="toggleSidebar()">&times;</button>
+  <div class="sb-sections">
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Legende</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body" id="sidebar-legend-body">
+      <div class="legend-empty">Aucun calque actif</div>
+    </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Sources</span>
+      <span class="sb-section-arrow">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body collapsed">
+      <div style="padding:12px 16px;font:400 10px/1.55 var(--b);color:var(--tx1)">
+        Carte Afrique maritime. Flux commerciaux et strategiques, ports majeurs par vocation, zones de piraterie documentees, presence navale FR / CN / US.
+        <br><br>
+        <span style="color:var(--tx)">IMO · UNCTAD · CSIS · Transnet · DP World · CMA CGM · ACLED · EU NAVFOR · UKMTO · AFRICOM · CFR · Brookings · IMB · MDAT-GoG · ISS Africa</span>
+      </div>
+    </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Calques</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body">
+
+      <div class="sb-style-row">
+        <button class="sb-style-btn" onclick="toggleAll(true)">Tout activer</button>
+        <button class="sb-style-btn" onclick="toggleAll(false)">Tout enlever</button>
+      </div>
+
+      <div class="sb-cat-label">Style carte</div>
+      <div class="sb-style-row">
+        <button class="sb-style-btn active" onclick="setStyle('standard')" id="sb-standard">Standard</button>
+        <button class="sb-style-btn" onclick="setStyle('satellite')" id="sb-satellite">Satellite</button>
+        <button class="sb-style-btn" onclick="setStyle('dark')" id="sb-dark">Sombre</button>
+      </div>
+
+      <!-- Group 1: FLUX MARITIMES -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'flux')">
+        <span>1. Flux maritimes <span class="sb-sub-badge" id="badge-flux">0/7</span></span>
+        <div class="sb-toggle" id="sb-master-flux" onclick="event.stopPropagation();toggleMaster('flux')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-flux">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e0b452"></span>Conteneurs (Cap, Suez)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-containers" onclick="toggleLayer('flux-containers')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#a065c4"></span>Hydrocarbures (brut)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-oil" onclick="toggleLayer('flux-oil')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>GNL (gaz liquefie)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-lng" onclick="toggleLayer('flux-lng')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c08a5a"></span>Vrac sec (fer, charbon)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-bulk" onclick="toggleLayer('flux-bulk')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#5fc4d6"></span>Cabotage regional</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-regional" onclick="toggleLayer('flux-regional')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8e96a2"></span>Bypass &amp; alternatifs</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-bypass" onclick="toggleLayer('flux-bypass')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e0b452;border-radius:0;outline:1px solid #e0b452;outline-offset:1px"></span>Noeuds strategiques</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-noeuds" onclick="toggleLayer('flux-noeuds')"></div>
+        </div>
+      </div>
+
+      <!-- Group 2: PORTS -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'ports')">
+        <span>2. Ports <span class="sb-sub-badge" id="badge-ports">0/5</span></span>
+        <div class="sb-toggle" id="sb-master-ports" onclick="event.stopPropagation();toggleMaster('ports')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-ports">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c49a3c"></span>Commerciaux / conteneurs</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-com" onclick="toggleLayer('ports-com')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#7c4f9e"></span>Petroliers / LNG</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-oil" onclick="toggleLayer('ports-oil')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8d6e63"></span>Mineraliers / vrac</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-ore" onclick="toggleLayer('ports-ore')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>Peche industrielle</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-fish" onclick="toggleLayer('ports-fish')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Militaires (dual-use)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-mil" onclick="toggleLayer('ports-mil')"></div>
+        </div>
+      </div>
+
+      <!-- Group 3: PIRATERIE -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'piraterie')">
+        <span>3. Zones de piraterie <span class="sb-sub-badge" id="badge-piraterie">0/3</span></span>
+        <div class="sb-toggle" id="sb-master-piraterie" onclick="event.stopPropagation();toggleMaster('piraterie')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-piraterie">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Somalie / Bab el-Mandeb</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-pirate-somalie" onclick="toggleLayer('pirate-somalie')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Canal du Mozambique</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-pirate-mozambique" onclick="toggleLayer('pirate-mozambique')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Golfe de Guinee</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-pirate-guinee" onclick="toggleLayer('pirate-guinee')"></div>
+        </div>
+      </div>
+
+      <!-- Group 4: NAVALE -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'navale')">
+        <span>4. Presence navale militaire <span class="sb-sub-badge" id="badge-navale">0/3</span></span>
+        <div class="sb-toggle" id="sb-master-navale" onclick="event.stopPropagation();toggleMaster('navale')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-navale">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#1a4d7a"></span>France</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-fr" onclick="toggleLayer('nav-fr')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8b2e3c"></span>Chine</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-cn" onclick="toggleLayer('nav-cn')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#2e8b8b"></span>Etats-Unis</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-us" onclick="toggleLayer('nav-us')"></div>
+        </div>
+      </div>
+
+      <!-- Group 5: HUBS & ENTREPOTS (Mali / Burkina / Mauritanie) -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'hubs')">
+        <span>5. Hubs &amp; entrepots <span class="sb-sub-badge" id="badge-hubs">0/3</span></span>
+        <div class="sb-toggle" id="sb-master-hubs" onclick="event.stopPropagation();toggleMaster('hubs')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-hubs">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>Humanitaire (WFP)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-hubs-humanitaire" onclick="toggleLayer('hubs-humanitaire')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e07c5a"></span>Carburant / hydrocarbures</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-hubs-carburant" onclick="toggleLayer('hubs-carburant')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c49a3c"></span>Logistique / multimodal</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-hubs-logistique" onclick="toggleLayer('hubs-logistique')"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════════
+     SCRIPTS
+     ═════════════════════════════════════════════════════════════════ -->
+<script>
+/* ═════════ CATALOGUE DES CALQUES ═════════ */
+const CATALOG = {
+  flux: {
+    title: 'Flux maritimes',
+    children: [
+      { id:'flux-containers', label:'Conteneurs (Cap, Suez)',   file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'containers'], color:'#e0b452', defaultOn:true },
+      { id:'flux-oil',        label:'Hydrocarbures (brut)',     file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'oil'],        color:'#a065c4', defaultOn:false },
+      { id:'flux-lng',        label:'GNL (gaz liquefie)',       file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'lng'],        color:'#4fb8cc', defaultOn:false },
+      { id:'flux-bulk',       label:'Vrac sec (fer, charbon)',  file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'bulk'],       color:'#c08a5a', defaultOn:false },
+      { id:'flux-regional',   label:'Cabotage regional',        file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'regional'],   color:'#5fc4d6', defaultOn:true },
+      { id:'flux-bypass',     label:'Bypass & alternatifs',     file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'bypass'],     color:'#8e96a2', defaultOn:false },
+      { id:'flux-noeuds',     label:'Noeuds strategiques',      file:'flux-noeuds.geojson',    kind:'noeud', color:'#e0b452', defaultOn:true }
+    ]
+  },
+  ports: {
+    title: 'Ports',
+    children: [
+      { id:'ports-com',  label:'Commerciaux',  file:'ports-commerciaux.geojson', kind:'port', color:'#c49a3c', defaultOn:true },
+      { id:'ports-oil',  label:'Petroliers',   file:'ports-petroliers.geojson',  kind:'port', color:'#ab47bc', defaultOn:false },
+      { id:'ports-ore',  label:'Mineraliers',  file:'ports-mineraliers.geojson', kind:'port', color:'#8d6e63', defaultOn:false },
+      { id:'ports-fish', label:'Peche',        file:'ports-peche.geojson',       kind:'port', color:'#29b6f6', defaultOn:false },
+      { id:'ports-mil',  label:'Militaires',   file:'ports-militaires.geojson',  kind:'port', color:'#e63946', defaultOn:false }
+    ]
+  },
+  piraterie: {
+    title: 'Piraterie',
+    children: [
+      { id:'pirate-somalie',    label:'Somalie',     file:'piraterie-somalie.geojson',    kind:'zone', color:'#e63946', defaultOn:false },
+      { id:'pirate-mozambique', label:'Mozambique',  file:'piraterie-mozambique.geojson', kind:'zone', color:'#e63946', defaultOn:false },
+      { id:'pirate-guinee',     label:'Guinee',      file:'piraterie-guinee.geojson',     kind:'zone', color:'#e63946', defaultOn:false }
+    ]
+  },
+  navale: {
+    title: 'Presence navale',
+    children: [
+      { id:'nav-fr', label:'France',      file:'navale-france.geojson', kind:'nav', color:'#1a4d7a', defaultOn:false },
+      { id:'nav-cn', label:'Chine',       file:'navale-chine.geojson',  kind:'nav', color:'#8b2e3c', defaultOn:false },
+      { id:'nav-us', label:'Etats-Unis',  file:'navale-usa.geojson',    kind:'nav', color:'#2e8b8b', defaultOn:false }
+    ]
+  },
+  hubs: {
+    title: 'Hubs & entrepots',
+    children: [
+      { id:'hubs-humanitaire', label:'Humanitaire (WFP)',          file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'humanitaire'], color:'#4fb8cc', defaultOn:false },
+      { id:'hubs-carburant',   label:'Carburant / hydrocarbures',  file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'carburant'],   color:'#e07c5a', defaultOn:false },
+      { id:'hubs-logistique',  label:'Logistique / multimodal',    file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'logistique'],  color:'#c49a3c', defaultOn:false }
+    ]
+  }
+};
+
+// Flat index
+const ALL_CHILDREN = {};
+Object.values(CATALOG).forEach(g => g.children.forEach(c => ALL_CHILDREN[c.id] = c));
+
+/* ═════════ MAP INIT ═════════ */
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+
+const STYLES = {
+  standard:  'mapbox://styles/mapbox/standard',
+  satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+  dark:      'mapbox://styles/mapbox/dark-v11'
+};
+let currentMode = 'standard';
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: STYLES[currentMode],
+  center: [22, 8],
+  zoom: 3.0,
+  minZoom: 2.4,
+  maxZoom: 10,
+  projection: 'mercator',
+  attributionControl: true
+});
+window.map = map;
+
+let _catalogInitialized = false;
+map.on('style.load', () => {
+  if (!_catalogInitialized) {
+    initLayersCatalog();
+    _catalogInitialized = true;
+  } else {
+    // Re-injecter les sub-layers actives apres changement de style
+    Object.keys(layerState).forEach(id => {
+      const s = layerState[id];
+      if (s.visible && s.data) addSubLayer(id);
+    });
+  }
+});
+
+window.setStyle = function(mode) {
+  if (!STYLES[mode] || mode === currentMode) return;
+  currentMode = mode;
+  document.querySelectorAll('.sb-style-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('sb-' + mode);
+  if (btn) btn.classList.add('active');
+  map.setStyle(STYLES[mode]);
+};
+
+/* ═════════ CATALOGUE RENDERING ═════════ */
+const layerState = {};
+
+function initLayersCatalog() {
+  // Prefetch all files
+  Object.values(ALL_CHILDREN).forEach(c => {
+    layerState[c.id] = { data: null, visible: false, cfg: c };
+    fetch('./' + c.file + '?v=' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        layerState[c.id].data = data;
+        if (c.defaultOn) toggleLayer(c.id);
+        updateFeatureCount();
+      })
+      .catch(err => console.warn('[afrique]', c.id, err));
+  });
+}
+
+window.toggleLayer = function(id) {
+  const s = layerState[id]; if (!s) return;
+  s.visible = !s.visible;
+  const tEl = document.getElementById('sb-toggle-' + id);
+  if (tEl) tEl.classList.toggle('on', s.visible);
+  if (!s.data) return;
+  if (s.visible) addSubLayer(id); else removeSubLayer(id);
+  updateBadges();
+  updateMasters();
+  updateActiveCount();
+  renderLegend();
+  updateFeatureCount();
+};
+
+window.toggleMaster = function(group) {
+  const children = CATALOG[group].children;
+  const allOn = children.every(c => layerState[c.id]?.visible);
+  children.forEach(c => {
+    const s = layerState[c.id];
+    if (!s) return;
+    if (allOn && s.visible) window.toggleLayer(c.id);
+    else if (!allOn && !s.visible) window.toggleLayer(c.id);
+  });
+};
+
+window.toggleGroup = function(event, group) {
+  if (event && event.target && event.target.closest && event.target.closest('.sb-toggle')) return;
+  const sub = document.getElementById('sub-' + group);
+  if (sub) sub.classList.toggle('open');
+};
+
+window.toggleAll = function(on) {
+  Object.values(ALL_CHILDREN).forEach(c => {
+    const s = layerState[c.id];
+    if (!s) return;
+    if (on && !s.visible) window.toggleLayer(c.id);
+    else if (!on && s.visible) window.toggleLayer(c.id);
+  });
+};
+
+function addSubLayer(id) {
+  const s = layerState[id]; const c = s.cfg;
+  const srcId = 'src-' + id;
+  if (!map.getSource(srcId)) { try { map.addSource(srcId, { type:'geojson', data: s.data, lineMetrics: true }); } catch(e){ return; } }
+  const layers = buildMapboxLayers(c, srcId);
+  layers.forEach(def => {
+    if (!map.getLayer(def.id)) { try { map.addLayer(def); } catch(e) { console.warn('[afrique] addLayer', def.id, e); } }
+  });
+  layers.forEach(def => {
+    if (['circle','fill','line'].indexOf(def.type) !== -1) bindPopup(def.id, id);
+  });
+}
+
+function removeSubLayer(id) {
+  const c = layerState[id].cfg;
+  const layers = buildMapboxLayers(c, 'src-' + id);
+  layers.forEach(def => { if (map.getLayer(def.id)) { try { map.removeLayer(def.id); } catch(e){} } });
+  if (map.getSource('src-' + id)) { try { map.removeSource('src-' + id); } catch(e){} }
+}
+
+function buildMapboxLayers(c, srcId) {
+  const col = c.color;
+  if (c.kind === 'flux2') {
+    // Rendu data-driven: epaisseur/opacite selon volume_tier, glow selon pressure
+    const f = c.filter || ['==',1,1];
+    // Mapbox v3.3 line-width ne supporte ni data-expr ni zoom+data:
+    // on cree 3 layers par tier (chacun avec line-width fixe et filter additionnel)
+    const opacityByTier = ['match', ['get','volume_tier'], 1, 0.92, 2, 0.72, 3, 0.50, 0.65];
+    const glowOpacity = ['match', ['get','pressure'], 'high', 0.20, 'medium', 0.12, 'low', 0.07, 0.10];
+    const layers = [];
+    const tierConfigs = [
+      { tier:1, glow:14, line:5.0 },
+      { tier:2, glow: 9, line:2.8 },
+      { tier:3, glow: 5, line:1.4 }
+    ];
+    tierConfigs.forEach(({tier, glow, line}) => {
+      const tf = ['all', f, ['==',['get','volume_tier'], tier]];
+      layers.push({ id:`flux-glow-${c.id}-t${tier}`, type:'line', source:srcId, filter:tf,
+        layout:{'line-cap':'round','line-join':'round'},
+        paint:{ 'line-color':col, 'line-width':glow, 'line-opacity':glowOpacity, 'line-blur':5 }
+      });
+      layers.push({ id:`flux-line-${c.id}-t${tier}`, type:'line', source:srcId, filter:tf,
+        layout:{'line-cap':'round','line-join':'round'},
+        paint:{ 'line-color':col, 'line-width':line, 'line-opacity':opacityByTier }
+      });
+      if (tier <= 2) {
+        // Pulse lumineux glissant (comet trail) — rendu GPU via line-gradient sur line-progress
+        // line-gradient sera mis a jour par tickFlux a chaque frame
+        layers.push({ id:`flux-pulse-${c.id}-t${tier}`, type:'line', source:srcId, filter:tf,
+          layout:{'line-cap':'round','line-join':'round'},
+          paint:{
+            'line-width': tier === 1 ? 3.2 : 2.0,
+            'line-gradient': ['interpolate', ['linear'], ['line-progress'],
+              0, 'rgba(255,255,255,0)',
+              1, 'rgba(255,255,255,0)'
+            ]
+          }
+        });
+      }
+    });
+    return layers;
+  }
+  if (c.kind === 'noeud') {
+    // Choke points strategiques : croix lumineuse + label uppercase or
+    return [
+      { id:'noeud-glow-'+c.id, type:'circle', source:srcId,
+        paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,12,7,22], 'circle-color':col, 'circle-opacity':0.20, 'circle-blur':1.5 }
+      },
+      { id:'noeud-ring-'+c.id, type:'circle', source:srcId,
+        paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,5,7,9], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.5, 'circle-stroke-opacity':0.95 }
+      },
+      { id:'noeud-dot-'+c.id, type:'circle', source:srcId,
+        paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,2,7,4], 'circle-color':col, 'circle-stroke-color':'rgba(255,255,255,0.8)', 'circle-stroke-width':0.7 }
+      },
+      { id:'noeud-label-'+c.id, type:'symbol', source:srcId,
+        layout:{
+          'text-field': ['get','label'],
+          'text-font': ['Open Sans Bold','Arial Unicode MS Bold'],
+          'text-size': ['interpolate',['linear'],['zoom'], 3, 8, 5, 10, 7, 12],
+          'text-letter-spacing': 0.22,
+          'text-offset': [0, 1.6],
+          'text-anchor': 'top',
+          'text-allow-overlap': false
+        },
+        paint:{ 'text-color': col, 'text-halo-color': 'rgba(0,0,0,0.85)', 'text-halo-width': 2 }
+      }
+    ];
+  }
+  if (c.kind === 'port') {
+    return [
+      { id:'port-ring-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3,6,5.5,9,9], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.3, 'circle-stroke-opacity':0.7 } },
+      { id:'port-dot-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,2,6,3.5,9,5], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':0.9 } }
+    ];
+  }
+  if (c.kind === 'zone') {
+    return [
+      { id:'pirate-fill-'+c.id, type:'fill', source:srcId, paint:{ 'fill-color':col, 'fill-opacity':0.15 } },
+      { id:'pirate-line-'+c.id, type:'line', source:srcId, paint:{ 'line-color':col, 'line-width':1.5, 'line-opacity':0.75, 'line-dasharray':[3,2] } }
+    ];
+  }
+  if (c.kind === 'nav') {
+    return [
+      { id:'nav-ring-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,5.5,6,8.5,9,12.5], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.5, 'circle-stroke-opacity':0.85 } },
+      { id:'nav-dot-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3,6,4.5,9,6.5], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':1 } }
+    ];
+  }
+  if (c.kind === 'hub') {
+    // Hubs intérieurs : marqueur carré (rayon double) pour différencier visuellement des ports cotiers
+    const f = c.filter || ['==',1,1];
+    return [
+      { id:'hub-square-'+c.id, type:'circle', source:srcId, filter:f, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,4,6,6,9,9], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':1.2, 'circle-stroke-opacity':0.9 } },
+      { id:'hub-ring-'+c.id,   type:'circle', source:srcId, filter:f, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,7,6,10,9,14], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':0.8, 'circle-stroke-opacity':0.5 } }
+    ];
+  }
+  return [];
+}
+
+function bindPopup(layerId, subId) {
+  map.on('click', layerId, (e) => {
+    if (!e.features || !e.features.length) return;
+    new mapboxgl.Popup({ closeButton:true, maxWidth:'360px', className:'algor-popup' })
+      .setLngLat(e.lngLat)
+      .setHTML(makePopup(e.features[0].properties, subId))
+      .addTo(map);
+  });
+  map.on('mouseenter', layerId, () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave', layerId, () => map.getCanvas().style.cursor = '');
+}
+
+function makePopup(props, subId) {
+  const color = ALL_CHILDREN[subId]?.color || '#c49a3c';
+  const name = props.name || props.Name || 'Point';
+  const skip = ['name','Name','sources','Sources','source'];
+  const labelMap = { type:'Type', pays:'Pays', description:'Description', detail:'Detail', volume:'Volume', objet:'Objet', rank:'Niveau', zone:'Zone', evolution_15j:'Δ 15j', statut:'Statut', operateur:'Operateur', ville:'Ville' };
+  const order = ['type','pays','description','detail','volume','objet','rank','zone','evolution_15j','statut','operateur'];
+  const seen = {};
+  let body = '';
+  const renderRow = (k) => {
+    if (skip.indexOf(k) !== -1 || seen[k]) return;
+    const v = (props[k] || '').toString().trim(); if (!v) return;
+    seen[k] = true;
+    const lbl = labelMap[k] || k.replace(/_/g,' ').replace(/^\w/, c => c.toUpperCase());
+    body += `<div class="popup-row"><span class="popup-key">${lbl}</span><span class="popup-val">${escapeHtml(v)}</span></div>`;
+  };
+  order.forEach(renderRow);
+  Object.keys(props).forEach(renderRow);
+
+  const sv = (props.sources || props.Sources || props.source || '').toString().trim();
+  if (sv) {
+    const linksHtml = sv.split(/\s+(?=[^\s|]+\|http)/).map(s => {
+      const p = s.split('|');
+      if (p.length === 2 && p[1].startsWith('http')) {
+        return `<a href="${p[1]}" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-size:10px;font-family:'JetBrains Mono',monospace;border:1px solid rgba(196,154,60,0.25);padding:1px 6px;letter-spacing:0.04em;margin-right:4px;display:inline-block;margin-bottom:3px;">${escapeHtml(p[0])}</a>`;
+      }
+      return `<span style="color:#999;font-size:10px;">${escapeHtml(s)}</span>`;
+    }).join(' ');
+    body += `<div style="margin-top:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);"><div class="popup-key" style="margin-bottom:4px">Sources</div>${linksHtml}</div>`;
+  }
+  return `<div class="popup-header"><div class="popup-dot-bar" style="background:${color}"></div><div class="popup-actor">${escapeHtml(name)}</div></div>${body ? `<div class="popup-body">${body}</div>` : ''}`;
+}
+
+function escapeHtml(s) {
+  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function updateBadges() {
+  Object.keys(CATALOG).forEach(g => {
+    const total = CATALOG[g].children.length;
+    const on = CATALOG[g].children.filter(c => layerState[c.id]?.visible).length;
+    const badge = document.getElementById('badge-'+g);
+    if (badge) { badge.textContent = `${on}/${total}`; badge.classList.toggle('has-active', on > 0); }
+  });
+}
+function updateMasters() {
+  Object.keys(CATALOG).forEach(g => {
+    const all = CATALOG[g].children.every(c => layerState[c.id]?.visible);
+    const any = CATALOG[g].children.some(c => layerState[c.id]?.visible);
+    const el = document.getElementById('sb-master-'+g);
+    if (el) el.classList.toggle('on', any);
+  });
+}
+function updateActiveCount() {
+  let total = 0, on = 0;
+  Object.values(CATALOG).forEach(g => g.children.forEach(c => { total++; if (layerState[c.id]?.visible) on++; }));
+  const el = document.getElementById('active-count');
+  if (el) el.textContent = `${on}/${total}`;
+}
+function updateFeatureCount() {
+  let total = 0;
+  Object.values(ALL_CHILDREN).forEach(c => { const s = layerState[c.id]; if (s?.visible && s?.data?.features) total += s.data.features.length; });
+  const el = document.getElementById('feature-count');
+  if (el) el.textContent = total || '—';
+}
+function renderLegend() {
+  const body = document.getElementById('sidebar-legend-body');
+  if (!body) return;
+  const items = [];
+  Object.values(CATALOG).forEach(g => g.children.forEach(c => {
+    if (!layerState[c.id]?.visible) return;
+    const sw = (c.kind === 'flux') ? `<span class="legend-swatch line" style="background:${c.color}"></span>` : `<span class="legend-swatch" style="background:${c.color}"></span>`;
+    items.push(`<div class="legend-row">${sw}${c.label}</div>`);
+  }));
+  if (!items.length) { body.innerHTML = '<div class="legend-empty">Aucun calque actif</div>'; return; }
+  body.innerHTML = items.join('');
+}
+
+/* ═════════ SIDEBAR ═════════ */
+window.toggleSidebar = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+};
+window.toggleSbSection = function(h) {
+  h.querySelector('.sb-section-arrow').classList.toggle('open');
+  h.nextElementSibling.classList.toggle('collapsed');
+};
+
+/* Open all sub-layer groups by default so users see what they can toggle */
+setTimeout(() => {
+  ['flux','ports','piraterie','navale','hubs'].forEach(g => {
+    const sub = document.getElementById('sub-'+g);
+    if (sub) sub.classList.add('open');
+  });
+}, 50);
+
+/* ═════════ Flux maritimes — pulses lumineux glissant (line-gradient sur line-progress) ═════════
+   Remplace l'ancien dash blanc rigide par 3 comètes lumineuses fadées par catégorie.
+   Rendu GPU continu (pas de re-validation), fluide, premium.
+   Couleur du pulse = teinte claire de la catégorie (cohérence visuelle avec le trait de base).
+   Cadence narrative : containers rapide (commerce mondial), bulk lent (Capesize). */
+let _fluxStart = null;
+
+// [category, ms pour traverser 100% de la ligne, RGB du pulse, intensite peak]
+const PULSE_CADENCES = [
+  ['containers',  9000, '255,235,180', 0.95],  // Or pâle, tempo rapide
+  ['lng',        10500, '180,232,238', 0.90],  // Bleu glacier
+  ['oil',        12000, '210,180,230', 0.90],  // Lavande / violet pâle
+  ['bulk',       14000, '230,200,165', 0.85],  // Cuivre pâle
+  ['regional',   13000, '200,235,240', 0.80],  // Cyan pâle (cabotage)
+  ['bypass',     16000, '210,215,220', 0.65],  // Gris-blanc (opportuniste, discret)
+];
+const PULSE_COUNT = 3;       // 3 comètes par ligne, equireparties
+const PULSE_HALF  = 0.040;   // Largeur du pulse (en fraction de ligne)
+const PULSE_TAIL  = 0.10;    // Trainée (pre-pulse fade-in plus long que post-pulse)
+
+function buildPulseGradient(t, totalMs, rgb, peakAlpha, tier) {
+  const speed = 1 / totalMs;
+  const peak = tier === 1 ? peakAlpha : peakAlpha * 0.7;
+  const tail = PULSE_TAIL * (tier === 1 ? 1 : 0.7);
+  const half = PULSE_HALF * (tier === 1 ? 1 : 0.85);
+  // Positions des 3 comettes (defilement homogene)
+  const positions = [];
+  for (let i = 0; i < PULSE_COUNT; i++) {
+    let p = (t * speed + i / PULSE_COUNT) % 1;
+    if (p < 0) p += 1;
+    positions.push(p);
+  }
+  positions.sort((a, b) => a - b);
+  // Construction des stops
+  const expr = ['interpolate', ['linear'], ['line-progress']];
+  const transparent = `rgba(${rgb},0)`;
+  expr.push(0, transparent);
+  let last = 0;
+  for (const p of positions) {
+    // Pre-pulse fade-in (tail plus long que la pointe pour effet comete)
+    const fadeStart = Math.max(last + 0.0005, p - tail);
+    const peakPos = Math.max(fadeStart + 0.0005, Math.min(0.9990, p));
+    const fadeEnd = Math.min(0.9995, peakPos + half);
+    if (fadeStart > last + 0.0005) expr.push(fadeStart, transparent);
+    expr.push(peakPos, `rgba(${rgb},${peak.toFixed(3)})`);
+    expr.push(fadeEnd, transparent);
+    last = fadeEnd;
+  }
+  if (last < 1) expr.push(1, transparent);
+  return expr;
+}
+
+function tickFlux(t) {
+  if (!_fluxStart) _fluxStart = t;
+  const dt = t - _fluxStart;
+  for (const [category, totalMs, rgb, peak] of PULSE_CADENCES) {
+    [1, 2].forEach(tier => {
+      const id = `flux-pulse-flux-${category}-t${tier}`;
+      if (!map.getLayer(id)) return;
+      // Tier 2 leg`erement decale en phase pour eviter la synchronisation visuelle
+      const ms = tier === 2 ? totalMs * 1.15 : totalMs;
+      const phaseShift = tier === 2 ? totalMs * 0.5 : 0;
+      try {
+        map.setPaintProperty(id, 'line-gradient',
+          buildPulseGradient(dt + phaseShift, ms, rgb, peak, tier));
+      } catch(e){}
+    });
+  }
+  requestAnimationFrame(tickFlux);
+}
+requestAnimationFrame(tickFlux);
+
+</script>
+
+<!-- Auth gate (Supabase) — reuse shared module -->
+<script type="module">
+import { initZoneAuth, zoneLogin } from '../shared/zone-auth.js?v=20260423a';
+
+initZoneAuth((profile) => {
+  document.getElementById('zone-login-overlay').style.display = 'none';
+  document.querySelectorAll('.zone-gated').forEach(el => el.classList.remove('zone-gated'));
+  if (window.map && window.map.resize) window.map.resize();
+}, (err) => {
+  if (err) {
+    const el = document.getElementById('zone-login-error');
+    el.textContent = err; el.style.display = 'block';
+  }
+});
+
+document.getElementById('zone-login-btn').addEventListener('click', doLogin);
+document.getElementById('zone-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') doLogin(); });
+
+async function doLogin() {
+  const email = document.getElementById('zone-email').value.trim();
+  const password = document.getElementById('zone-password').value;
+  if (!email || !password) return;
+  try { await zoneLogin(email, password); }
+  catch (e) {
+    const el = document.getElementById('zone-login-error');
+    el.textContent = e?.message || 'Echec de connexion'; el.style.display = 'block';
+  }
+}
+</script>
+
+</body>
+</html>

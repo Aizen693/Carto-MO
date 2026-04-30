@@ -1,0 +1,329 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-5.50,35.95],[-6.0,35.4],[-6.8,34.5],[-7.7,33.4],[-9.2,32.0],[-10.8,30.0],[-12.5,27.5],[-14.0,25.0],[-15.5,22.5],[-17.0,19.5],[-18.0,16.5],[-18.5,13.5],[-19.0,10.5],[-19.0,7.5],[-18.5,4.5],[-17.5,1.5],[-15.5,-1.5],[-13.0,-4.5],[-9.5,-7.5],[-5.5,-10.5],[-1.0,-13.5],[3.0,-15.5],[6.5,-18.0],[9.5,-20.5],[11.5,-23.5],[12.8,-26.5],[13.8,-29.5],[15.3,-32.0],[16.8,-33.5],[17.7,-34.4],[18.5,-35.0],[19.5,-35.2],[20.3,-35.3],[22.0,-35.4],[24.0,-35.3],[26.0,-35.0],[28.5,-34.3],[30.5,-32.5],[32.0,-30.0],[33.5,-27.5],[35.0,-24.0],[36.5,-20.5],[38.0,-16.5],[39.8,-12.5],[41.3,-8.0],[42.8,-3.5],[44.0,1.0],[44.8,5.5],[44.5,9.0],[44.0,11.0],[43.5,11.8]
+        ]
+      },
+      "properties": {
+        "name": "Cape Route — Tanger → Cape of Good Hope → Bab el-Mandeb",
+        "category": "containers",
+        "volume_tier": 1,
+        "pressure": "high",
+        "direction": "bidirectional",
+        "type": "Route principale conteneurs (contournement Suez)",
+        "rank": "main",
+        "volume": "10-12 Mt/jour devie de Suez (UNCTAD RMT 2024)",
+        "objet": "Conteneurs Asie ↔ Europe / Mediterranee",
+        "detail": "Route majeure depuis crise houthie nov. 2023 (60-70% deviation). 50 waypoints AIS-coherents. Passage explicite par Cape Point puis Cape Agulhas. +30% transit, +40% cout/TEU vs Suez.",
+        "sources": "Lloyds_List|https://www.lloydslist.com/ UNCTAD_RMT_2024|https://unctad.org/publication/review-maritime-transport-2024 MarineTraffic|https://www.marinetraffic.com/ Drewry|https://www.drewry.co.uk/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [32.302,31.265],[32.55,30.5],[32.6,29.95],[32.9,28.5],[34.0,26.0],[35.5,23.0],[37.5,20.0],[39.5,17.5],[41.5,15.0],[43.0,13.0],[43.3,12.0],[43.8,11.7],[45.5,11.9],[48.0,12.8],[51.0,13.5],[54.0,15.5],[56.0,18.0],[56.4,22.0],[56.5,26.0],[56.4,26.6]
+        ]
+      },
+      "properties": {
+        "name": "Suez Express — Mediterranee → Bab el-Mandeb → Ormuz",
+        "category": "containers",
+        "volume_tier": 1,
+        "pressure": "high",
+        "direction": "bidirectional",
+        "type": "Route principale conteneurs + petrole",
+        "rank": "main",
+        "volume": "~12% commerce mondial (avant Houthis)",
+        "objet": "Conteneurs Asie-Europe + petrole Golfe-Europe",
+        "detail": "Cible attaques houthies depuis nov. 2023. Trafic en chute libre (-65%) au profit du Cap. Pression militaire UE Aspides + USA Prosperity Guardian.",
+        "sources": "EU_NAVFOR_Aspides|https://eunavfor.eu/ UKMTO|https://www.ukmto.org/ Suez_Canal_Authority|https://www.suezcanal.gov.eg"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[-0.32,35.85],[1.0,37.5],[3.5,38.5],[6.0,40.0],[8.5,41.5],[10.5,42.5]]
+      },
+      "properties": {
+        "name": "GNL Algerie → Europe Sud",
+        "category": "lng",
+        "volume_tier": 1,
+        "pressure": "low",
+        "direction": "S-N",
+        "type": "Flux GNL methaniers + pipeline TransMed/Medgaz",
+        "rank": "main",
+        "volume": "~50 Gm³/an (GNL + pipeline)",
+        "objet": "Arzew/Skikda → Espagne/Italie",
+        "detail": "Pilier energetique Sud-Europe post-2022 (substitution Russie). Sonatrach + Eni + Naturgy. Capacite GNL en hausse 2025-2026.",
+        "sources": "Sonatrach|https://www.sonatrach.dz IEA|https://www.iea.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[7.17,4.44],[6.5,2.0],[5.5,-2.0],[4.5,-7.0],[5.5,-15.0],[8.0,-22.0],[12.0,-30.0],[16.0,-36.0],[20.0,-37.0],[28.0,-37.5],[40.0,-32.5],[55.0,-21.0],[75.0,-6.0],[95.0,4.0],[110.0,14.0],[121.5,25.0]]
+      },
+      "properties": {
+        "name": "GNL Nigeria → Asie (NLNG Bonny → Japon/Coree/Chine)",
+        "category": "lng",
+        "volume_tier": 2,
+        "pressure": "medium",
+        "direction": "W-E",
+        "type": "Methaniers Atlantique → Pacifique via Cap",
+        "rank": "secondary",
+        "volume": "~22 Mtpa Nigeria LNG (Bonny)",
+        "objet": "GNL Nigeria → Japon, Coree, Chine, Inde",
+        "detail": "Contournement Cap depuis 2024 (mer Rouge). +15-20j de transit. NLNG (Shell + Total + Eni + NNPC). Train 7 (8 Mtpa) en construction.",
+        "sources": "NLNG|https://www.nlng.com Shell_Nigeria|https://www.shell.com.ng/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[12.20,-5.55],[10.5,-7.0],[8.0,-10.0],[3.0,-15.0],[-2.0,-22.0],[-8.0,-32.0],[-15.0,-40.0],[-25.0,-44.0],[-40.0,-40.0]]
+      },
+      "properties": {
+        "name": "Brut Cabinda/Soyo → USA / Atlantique",
+        "category": "oil",
+        "volume_tier": 2,
+        "pressure": "low",
+        "direction": "E-W",
+        "type": "Petroliers Atlantique Sud",
+        "rank": "secondary",
+        "volume": "~8-10 Mtpa brut Cabinda",
+        "objet": "Brut Cabinda + Angola LNG → USA Gulf / Europe",
+        "detail": "Chevron / Sonangol / Eni / TotalEnergies. Production stable malgre insurrection FLEC basse intensite. Diversification post-OPEC.",
+        "sources": "Sonangol|https://www.sonangol.co.ao Chevron|https://www.chevron.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[17.99,-32.95],[18.5,-36.0],[22.0,-37.5],[28.0,-38.0],[40.0,-38.0],[60.0,-30.0],[85.0,-15.0],[105.0,5.0],[121.5,30.0]]
+      },
+      "properties": {
+        "name": "Fer Saldanha → Asie (Anglo-American Kumba)",
+        "category": "bulk",
+        "volume_tier": 1,
+        "pressure": "low",
+        "direction": "W-E",
+        "type": "Capesize bulkers fer",
+        "rank": "main",
+        "volume": "60 Mtpa minerai de fer",
+        "objet": "Fer Sishen-Saldanha → acieries chinoises",
+        "detail": "12% des besoins en fer de la Chine. Concession Transnet. Goulet d'etranglement rail Sishen-Saldanha (limit 64 Mtpa). 2 Mtpa export Chinese MoU.",
+        "sources": "Anglo_American|https://www.angloamerican.com Transnet|https://www.transnet.net/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[32.085,-28.782],[34.0,-32.0],[38.0,-37.0],[50.0,-38.0],[70.0,-28.0],[95.0,-5.0],[115.0,15.0],[121.5,25.0]]
+      },
+      "properties": {
+        "name": "Charbon Richards Bay → Asie",
+        "category": "bulk",
+        "volume_tier": 2,
+        "pressure": "medium",
+        "direction": "W-E",
+        "type": "Capesize coal carriers",
+        "rank": "secondary",
+        "volume": "70 Mtpa coal export",
+        "objet": "Charbon thermique RBCT → Inde, Pakistan, Vietnam",
+        "detail": "1er terminal charbonnier d'Afrique. Dependance Eskom + 13 mines actionnaires (Anglo, Glencore, Thungela). Reorientation Inde post-EU coal ban 2022.",
+        "sources": "RBCT|https://www.rbct.co.za/ S&P_Platts|https://www.spglobal.com/commodityinsights/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[28.5,-12.8],[25.0,-12.5],[21.0,-12.0],[16.5,-12.0],[13.545,-12.347],[11.5,-23.5]]
+      },
+      "properties": {
+        "name": "Corridor Lobito (cuivre/cobalt RDC-Zambie)",
+        "category": "bulk",
+        "volume_tier": 2,
+        "pressure": "medium",
+        "direction": "E-W",
+        "type": "Vrac mineralier corridor multimodal",
+        "rank": "secondary",
+        "volume": "Vise 1.5 Mtpa cuivre + 200 ktpa cobalt (2027)",
+        "objet": "Cuivre/cobalt RDC + Zambie → Atlantique",
+        "detail": "Rail Lobito-Benguela reactive 2024. Financement G7 + EU Global Gateway contre influence chinoise (Belt & Road). Concurrence directe TAZARA (Chine).",
+        "sources": "US_State_Dept|https://www.state.gov/lobito-corridor/ EU_Global_Gateway|https://international-partnerships.ec.europa.eu/ Africa_Confidential|https://www.africa-confidential.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[-17.418,14.68],[-17.5,12.5],[-16.0,10.5],[-13.7,9.5],[-11.0,7.5],[-7.5,6.0],[-4.0,5.3],[-1.0,5.2],[1.3,6.1],[3.4,6.4],[6.0,5.0],[8.5,4.2],[9.7,4.05],[11.8,-4.8],[13.2,-8.8]]
+      },
+      "properties": {
+        "name": "Cabotage ouest-africain (Dakar-Abidjan-Lagos-Luanda)",
+        "category": "regional",
+        "volume_tier": 2,
+        "pressure": "medium",
+        "direction": "bidirectional",
+        "type": "Cabotage CEDEAO + bassin Congo",
+        "rank": "secondary",
+        "volume": "20-30 Mt/an",
+        "objet": "Conteneurs feeders + vrac + cabotage hydrocarbures",
+        "detail": "Lagos-Abidjan-Dakar pivot du commerce CEDEAO. Points chauds piraterie golfe de Guinee (MDAT-GoG). Flottes africaines (Bollore Africa Logistics) + MSC/CMA CGM feeders.",
+        "sources": "IMB|https://www.icc-ccs.org/icc/imb MDAT_GoG|https://mdat-gog.org/ CMA_CGM|https://www.cma-cgm.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[43.145,11.6],[43.5,9.0],[44.5,5.0],[45.0,1.0],[44.5,-3.0],[43.5,-6.5],[41.5,-9.0],[39.7,-4.1],[39.3,-6.8],[40.0,-12.0],[40.5,-16.0],[36.0,-22.0],[31.0,-29.9],[34.0,-26.0],[34.8,-19.8]]
+      },
+      "properties": {
+        "name": "Cabotage est-africain (Djibouti-Mombasa-Dar-Beira-Durban)",
+        "category": "regional",
+        "volume_tier": 2,
+        "pressure": "high",
+        "direction": "bidirectional",
+        "type": "Cabotage corne Afrique + ocean Indien Ouest",
+        "rank": "secondary",
+        "volume": "~60 Mt/an",
+        "objet": "Conteneurs, vrac, hydrocarbures regionaux",
+        "detail": "Exposition piraterie somalienne en hausse 2024 (1ere reactivation depuis 2017). Canal Mozambique tendu (insurrection Cabo Delgado). Ports en concurrence Djibouti-Berbera.",
+        "sources": "IMO|https://www.imo.org/ MDAT_GoG|https://mdat-gog.org/ CTC_Sentinel|https://ctc.westpoint.edu/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[42.8,-3.5],[50.0,-10.0],[55.0,-15.0],[57.50,-20.15]]
+      },
+      "properties": {
+        "name": "Bunker Maurice (Port Louis) — soutage VLCC",
+        "category": "regional",
+        "volume_tier": 3,
+        "pressure": "low",
+        "direction": "bidirectional",
+        "type": "Escale bunker hydrocarbures",
+        "rank": "secondary",
+        "volume": "~3 Mt/an bunker",
+        "objet": "Soutage VLCC + feeders Cap-Asie",
+        "detail": "Hub bunker discret entre Cap et Malacca. Faible cout taxe. Concurrence directe Singapour pour transit Cap.",
+        "sources": "MPA_Mauritius|https://www.mauport.com/ Bunker_Index|https://bunkerindex.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[39.296,-6.817],[42.0,-8.0],[46.0,-9.5],[55.0,-7.0],[65.0,-7.5],[72.45,-7.35]]
+      },
+      "properties": {
+        "name": "SLOC US Navy → Diego Garcia",
+        "category": "military",
+        "volume_tier": 3,
+        "pressure": "medium",
+        "direction": "bidirectional",
+        "type": "Sea Lines of Communication militaires",
+        "rank": "secondary",
+        "volume": "Non quantifie (militaire + appui logistique)",
+        "objet": "USN/USAF Diego Garcia + Camp Lemonnier appui",
+        "detail": "Axe surveille par renseignement chinois (Djibouti PLA Support Base). Diego Garcia : base logistique majeure post-US BIOT. Peche thoniere IOTC en parallele.",
+        "sources": "DoD|https://www.defense.gov/ IOTC|https://www.iotc.org/ CSIS|https://www.csis.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[32.347,29.601],[32.0,30.0],[31.0,30.6],[30.2,30.9],[29.7,30.95]]
+      },
+      "properties": {
+        "name": "SuMed bypass (pipeline brut)",
+        "category": "bypass",
+        "volume_tier": 3,
+        "pressure": "low",
+        "direction": "S-N",
+        "type": "Pipeline + cabotage brut",
+        "rank": "secondary",
+        "volume": "~2.5 Mb/j capacite",
+        "objet": "Brut Golfe Persique → Mediterranee",
+        "detail": "Alternative pour VLCC trop grands pour Suez. Ain Sukhna (RedSea) → Sidi Kerir (Med) via pipeline. Liaison cle pour bruts saudien et iraqi.",
+        "sources": "SuMed|https://sumed-pipeline.com/ EIA|https://www.eia.gov/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[20.3,-35.3],[24.0,-36.5],[30.0,-37.0],[40.0,-30.0],[50.0,-20.0],[57.0,-10.0],[65.0,-3.0],[80.0,5.0]]
+      },
+      "properties": {
+        "name": "Madagascar bypass (alternative est-Mada)",
+        "category": "bypass",
+        "volume_tier": 3,
+        "pressure": "low",
+        "direction": "W-E",
+        "type": "Route alternative VLCC est-Madagascar",
+        "rank": "secondary",
+        "volume": "Trafic opportuniste (5-10% des VLCC Cap-Asie)",
+        "objet": "Evite congestion canal Mozambique + tensions Cabo Delgado",
+        "detail": "Detournement par l'est de Madagascar pour les ULCC/VLCC sensibles aux tensions ISIS-Moz et a la piraterie regionale. +1-2j de transit.",
+        "sources": "MarineTraffic|https://www.marinetraffic.com/ ICC_IMB|https://www.icc-ccs.org/icc/imb"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[32.575,-25.97],[34.835,-19.839],[40.692,-14.545],[43.5,-12.5],[46.0,-15.7],[49.4,-18.15]]
+      },
+      "properties": {
+        "name": "Canal Mozambique (Maputo-Beira-Nacala-Mada)",
+        "category": "regional",
+        "volume_tier": 3,
+        "pressure": "high",
+        "direction": "bidirectional",
+        "type": "Cabotage canal Mozambique",
+        "rank": "secondary",
+        "volume": "~15 Mt/an",
+        "objet": "Cabotage intra-canal + connection Madagascar",
+        "detail": "Zone tendue : insurrection ISIS-Moz Cabo Delgado (depuis 2017, projet TotalEnergies LNG suspendu). Reprise activite 2024-2025. Piraterie reactivee 2024.",
+        "sources": "ACLED|https://acleddata.com/ ISS_Africa|https://issafrica.org/ TotalEnergies|https://totalenergies.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[56.4,26.6],[60.0,24.0],[68.0,21.0],[78.0,14.0],[88.0,8.0],[98.0,4.0],[103.5,1.5]]
+      },
+      "properties": {
+        "name": "Brut Ormuz → Singapour (Asie)",
+        "category": "oil",
+        "volume_tier": 1,
+        "pressure": "high",
+        "direction": "W-E",
+        "type": "VLCC brut golfe Persique",
+        "rank": "main",
+        "volume": "~17 Mb/j (1/3 du brut maritime mondial)",
+        "objet": "Brut Saudi/Iraq/UAE/Iran → Asie",
+        "detail": "Goulet strategique majeur. Iran controle eaux nord, USA 5e flotte controle eaux sud. Risque crise Iran-Israel : fermeture potentielle = +30% prix petrole mondial.",
+        "sources": "EIA|https://www.eia.gov/ IEA|https://www.iea.org/ US_5th_Fleet|https://www.cusnc.navy.mil/"
+      }
+    }
+  ]
+}

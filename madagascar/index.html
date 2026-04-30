@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algor Int — Madagascar · Securite &amp; trafics 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
+<link rel="stylesheet" href="../shared/styles.css?v=20260420h">
+<style>
+#zone-login-overlay {
+  position:fixed;inset:0;z-index:9999;background:rgba(10,11,13,0.97);
+  display:flex;align-items:center;justify-content:center;
+}
+#zone-login-box {
+  background:var(--bg1,#16181c);border:1px solid rgba(255,255,255,0.06);
+  border-top:2px solid #c49a3c;padding:32px 36px;width:340px;max-width:90vw;
+}
+#zone-login-box .zl-brand {
+  display:flex;align-items:center;gap:10px;margin-bottom:20px;
+}
+#zone-login-box .zl-title {
+  font:600 14px/1 'Barlow Condensed',sans-serif;color:#e8e6e1;letter-spacing:0.06em;text-transform:uppercase;
+}
+#zone-login-box .zl-sub {
+  font:400 8px/1 'JetBrains Mono',monospace;color:#727a87;letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;
+}
+#zone-login-box input {
+  display:block;width:100%;box-sizing:border-box;margin-bottom:10px;padding:8px 10px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#e8e6e1;
+  font:400 11px/1.4 'JetBrains Mono',monospace;outline:none;
+}
+#zone-login-box input:focus { border-color:#c49a3c; }
+#zone-login-btn {
+  width:100%;padding:9px;background:rgba(196,154,60,0.12);border:1px solid rgba(196,154,60,0.35);
+  color:#c49a3c;font:500 8px/1 'Barlow Condensed',sans-serif;letter-spacing:0.14em;
+  text-transform:uppercase;cursor:pointer;margin-top:4px;
+}
+#zone-login-btn:hover { background:rgba(196,154,60,0.2); }
+#zone-login-error {
+  display:none;font:400 9px/1.3 'JetBrains Mono',monospace;color:#ef4444;
+  padding:6px 0;margin-bottom:6px;
+}
+.zone-gated { display:none !important; }
+.sb-cat-label {
+  padding:8px 12px 3px;
+  font:600 7px/1 var(--bc,sans-serif);
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--tx2,#3e444e);
+  border-top:1px solid var(--ln,rgba(255,255,255,0.07));
+}
+.sb-cat-label:first-child { border-top:none; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div id="zone-login-overlay">
+  <div id="zone-login-box">
+    <div class="zl-brand">
+      <img src="algor_int_logo.jpg" alt="" style="height:28px;opacity:0.6">
+      <div>
+        <div class="zl-title">Algor Int</div>
+        <div class="zl-sub">Acces restreint -- Madagascar</div>
+      </div>
+    </div>
+    <div id="zone-login-error"></div>
+    <input type="email" id="zone-email" placeholder="Email" autocomplete="email">
+    <input type="password" id="zone-password" placeholder="Mot de passe" autocomplete="current-password">
+    <button id="zone-login-btn">Connexion</button>
+  </div>
+</div>
+
+<div id="header" class="zone-gated">
+  <div id="header-left">
+    <button id="btn-sidebar" onclick="toggleSidebar()"><span class="hamburger">&#9776;</span> Menu</button>
+    <a href="../index.html" title="Retour à la sélection" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <img src="algor_int_logo.jpg" alt="Algor Int" style="height:28px;opacity:0.7;">
+      <div>
+        <h1>Madagascar — Securite &amp; trafics</h1>
+        <p>Cartographie d'acteurs · 2026</p>
+      </div>
+    </a>
+  </div>
+  <div class="hdr-cell">
+    <span class="hdr-cell-label">Période</span>
+    <span id="period-badge">Aucune période</span>
+  </div>
+  <div class="hdr-cell">
+    <span id="event-counter"></span>
+  </div>
+  <div class="hdr-controls"></div>
+</div>
+
+<div id="progress-bar" class="zone-gated"><div id="progress-fill"></div></div>
+
+<div id="map-container" class="zone-gated">
+  <div id="map"><div id="loader" style="display:none">Chargement...</div></div>
+  <div id="map2"></div>
+  <div id="split-label-1"></div>
+  <div id="split-label-2"></div>
+</div>
+
+<div id="search-box" class="zone-gated">
+  <span id="search-icon">⌕</span>
+  <input type="text" id="search-input" placeholder="Rechercher un lieu, acteur, événement...">
+  <div id="search-results"></div>
+</div>
+
+<div id="hover-tooltip" class="zone-gated"></div>
+
+<div id="btn-center-madagascar" class="zone-gated" onclick="centerMap()" title="Recentrer sur Madagascar" style="
+  position: absolute; bottom: 60px; left: 12px; z-index: 6;
+  background: rgba(17,18,20,0.97); border: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid #c49a3c; padding: 6px 11px; cursor: pointer;
+  font: 500 8px/1 'JetBrains Mono', monospace; color: #727a87;
+  letter-spacing: 0.14em; text-transform: uppercase; user-select: none;
+  transition: color var(--mo-fast), background var(--mo-fast); white-space: nowrap;
+" onmouseover="this.style.color='#e0b452';this.style.background='rgba(196,154,60,0.09)'"
+   onmouseout="this.style.color='#727a87';this.style.background='rgba(17,18,20,0.97)'">
+  Recentrer Madagascar
+</div>
+
+<div id="sidebar-overlay" class="zone-gated" onclick="toggleSidebar()"></div>
+<div id="sidebar" class="zone-gated">
+  <button id="sidebar-close" onclick="toggleSidebar()">&times;</button>
+  <div class="sb-sections">
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Legende</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body" id="sidebar-legend-body">
+      <div id="legend-items"><div style="font-size:11px;color:#6b7280;padding:4px 14px">Selectionne une periode</div></div>
+    </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Calques</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body">
+      <div class="sb-style-row">
+        <button class="sb-style-btn" onclick="toggleAllLayers(true)">Tout activer</button>
+        <button class="sb-style-btn" onclick="toggleAllLayers(false)">Tout enlever</button>
+      </div>
+      <div class="sb-layer-row">
+        <span>1. Ethnies &amp; sous-groupes</span>
+        <div class="sb-toggle" id="sb-toggle-ethnies" onclick="toggleLayer('ethnies')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>2. Forces en presence</span>
+        <div class="sb-toggle" id="sb-toggle-forces" onclick="toggleLayer('forces')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>3. Population &amp; mobilites</span>
+        <div class="sb-toggle" id="sb-toggle-population" onclick="toggleLayer('population')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>4. Ressources minieres</span>
+        <div class="sb-toggle" id="sb-toggle-mines" onclick="toggleLayer('mines')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>5. Infrastructures &amp; axes</span>
+        <div class="sb-toggle" id="sb-toggle-infrastructures" onclick="toggleLayer('infrastructures')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>6. Evenements securitaires</span>
+        <div class="sb-toggle" id="sb-toggle-evenements" onclick="toggleLayer('evenements')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>7. Flux &amp; trafics</span>
+        <div class="sb-toggle" id="sb-toggle-flux" onclick="toggleLayer('flux')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>8. Parcs nationaux</span>
+        <div class="sb-toggle" id="sb-toggle-parcs" onclick="toggleLayer('parcs')"></div>
+      </div>
+      <div class="sb-layer-row">
+        <span>9. Zones maritimes</span>
+        <div class="sb-toggle" id="sb-toggle-zones-maritimes" onclick="toggleLayer('zones-maritimes')"></div>
+      </div>
+
+      <div class="sb-cat-label">Style carte</div>
+      <div class="sb-style-row">
+        <button class="sb-style-btn active" onclick="setStyle('standard')" id="sb-standard">Standard</button>
+        <button class="sb-style-btn" onclick="setStyle('satellite')" id="sb-satellite">Satellite</button>
+        <button class="sb-style-btn" onclick="setStyle('dark')" id="sb-dark">Sombre</button>
+      </div>
+    </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Outils</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body">
+      <div class="sb-tool-row" onclick="toggleHeatmap();toggleSidebar()"><span class="sb-tool-icon">&#x25D1;</span> Heatmap</div>
+      <div class="sb-tool-row" onclick="toggleComparePanel();toggleSidebar()"><span class="sb-tool-icon">&#x25EB;</span> Comparer</div>
+      <div class="sb-tool-row" onclick="focusGeocoder();toggleSidebar()"><span class="sb-tool-icon">&#x2315;</span> Rechercher</div>
+      <div class="sb-tool-row" onclick="exportMap();toggleSidebar()"><span class="sb-tool-icon">&#x25A3;</span> Export PNG</div>
+      <div class="sb-tool-row" id="btn-handtrack" onclick="toggleHandTrack();toggleSidebar()"><span class="sb-tool-icon">&#x270B;</span> Hand tracking</div>
+      <a class="sb-tool-row" href="./rapport.html" style="text-decoration:none;color:var(--ac)"><span class="sb-tool-icon">&#x25C7;</span> Rapports</a>
+    </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Evenements <span id="sb-chart-count" style="color:var(--ac);margin-left:4px">—</span></span>
+      <span class="sb-section-arrow">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body collapsed" id="sb-chart-body"></div>
+  </div>
+</div>
+
+
+<div id="compare-panel" class="zone-gated">
+  <h4>Comparer deux périodes</h4>
+  <p style="font-size:10px;color:#6b7280;margin-bottom:8px">Sélectionne la 2e période</p>
+  <div class="compare-select" id="compare-select"></div>
+  <button id="compare-close" onclick="closeCompare()">Fermer</button>
+</div>
+
+<div id="controls" class="zone-gated">
+  <div id="period-buttons"></div>
+  <div id="btn-row">
+    <button id="btn-play" onclick="togglePlay()">Play</button>
+    <div id="slider-wrap">
+      <span class="yr">Jan</span>
+      <div id="slider-inner">
+        <div id="slider-label">Jan 01-15</div>
+        <input type="range" id="timeline-slider" min="0" max="5" value="0" step="1">
+      </div>
+      <span class="yr">Mars</span>
+    </div>
+    <button id="btn-all" onclick="toggleAll()">TOUT</button>
+  </div>
+</div>
+
+<!-- ZONE CONFIG -->
+<script>
+const ZONE_CONFIG = {
+  ZONE_ID: 'madagascar',
+  OTAN_DATA: {},
+  ACTOR_GROUPS: {
+    'Forces étatiques': [
+      'FADM', 'Gendarmerie nationale', 'Police nationale',
+      'CAPSAT', 'DGSP', 'FIGN', 'Commandos marins'
+    ],
+    'Banditisme & groupes armés': [
+      'Dahalo', 'Malaso', 'Reseaux dahalo Androy', 'Reseaux dahalo Anosy',
+      'Gangs urbains Antananarivo', 'Reseaux kidnapping Karana'
+    ],
+    'Mouvements politiques': [
+      'Transition Randrianirina', 'Gen Z Madagascar', 'Mouvement Hery Vaovao',
+      'TGV (ex-Rajoelina)', 'HVM (Ravalomanana)', 'Opposition civile'
+    ],
+    'Trafics & reseaux criminels': [
+      'Reseaux bois de rose (SAVA / Masoala)', 'Reseaux vanille (SAVA)',
+      'Orpailleurs illegaux', 'Reseaux saphir (Ilakaka)',
+      'Reseaux tortues / lemuriens', 'Piraterie canal Mozambique',
+      'Peche INN flottes etrangeres'
+    ],
+    'International': [
+      'AU / UA', 'SADC', 'ONU', 'France', 'UE', 'FMI', 'Banque mondiale', 'USA'
+    ]
+  },
+  ACTOR_COLORS: {
+    'FADM':'#2e7d32','Gendarmerie nationale':'#33691e','Police nationale':'#558b2f',
+    'CAPSAT':'#1b5e20','DGSP':'#4caf50','FIGN':'#388e3c','Commandos marins':'#66bb6a',
+    'Dahalo':'#e63946','Malaso':'#c1121f','Reseaux dahalo Androy':'#9d0208',
+    'Reseaux dahalo Anosy':'#dc2f02','Gangs urbains Antananarivo':'#ff4d6d',
+    'Reseaux kidnapping Karana':'#ff6b35',
+    'Transition Randrianirina':'#6a1b9a','Gen Z Madagascar':'#ab47bc',
+    'Mouvement Hery Vaovao':'#ba68c8','TGV (ex-Rajoelina)':'#ce93d8',
+    'HVM (Ravalomanana)':'#8e24aa','Opposition civile':'#9c27b0',
+    'Reseaux bois de rose (SAVA / Masoala)':'#a07800','Reseaux vanille (SAVA)':'#d4a017',
+    'Orpailleurs illegaux':'#c9a227','Reseaux saphir (Ilakaka)':'#4fc3f7',
+    'Reseaux tortues / lemuriens':'#8b6914','Piraterie canal Mozambique':'#29b6f6',
+    'Peche INN flottes etrangeres':'#0288d1',
+    'AU / UA':'#95d5b2','SADC':'#52b788','ONU':'#74c69d','France':'#40916c',
+    'UE':'#2d6a4f','FMI':'#1b4332','Banque mondiale':'#081c15','USA':'#6c757d'
+  },
+  normalizeName: function(raw) {
+    if (!raw) return null;
+    const n = raw.trim();
+    if (!n || /^\d{4}-\d{4}$/.test(n)) return null;
+    const MAP = {
+      'Armee malgache': 'FADM',
+      'Armee FADM': 'FADM',
+      'Gendarmerie': 'Gendarmerie nationale',
+      'Police': 'Police nationale'
+    };
+    return MAP[n] !== undefined ? MAP[n] : n;
+  },
+  PERIODS: [
+    { label: 'Jan 01-15', file: '2026-jan-01-15.geojson' },
+    { label: 'Jan 16-31', file: '2026-jan-16-31.geojson' },
+    { label: 'Fev 01-14', file: '2026-fev-01-14.geojson' },
+    { label: 'Fev 15-28', file: '2026-fev-15-28.geojson' },
+    { label: 'Mars 01-15', file: '2026-mars-01-15.geojson' },
+    { label: 'Mars 16-31', file: '2026-mars-16-31.geojson' },
+    { label: 'Avr 01-15', file: '2026-avr-01-15.geojson' },
+    { label: 'Avr 16-21', file: '2026-avr-16-21.geojson' },
+  ],
+  STYLES: {
+    standard:  'mapbox://styles/mapbox/standard',
+    satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+    dark:      'mapbox://styles/mapbox/dark-v11'
+  },
+  MAP_CENTER: [47.0, -19.0],
+  MAP_ZOOM: 5.5,
+  MAP_BEARING: 0,
+  MAP_ZONES: null,
+  SEARCH_BBOX: [41, -27, 52, -10],
+  BADGE_ALL_TEXT: 'Toutes · Jan–Avr 2026',
+  TUTORIAL_KEY: 'algor-tutorial-madagascar-seen'
+};
+</script>
+<script type="module" src="../shared/firebase-loader.js"></script>
+<script src="../shared/engine.js?v=20260422b"></script>
+<script>
+/* ── FACTORY CALQUES SUPERPOSABLES ── */
+(function() {
+  const layerRegistry = {};
+  const calques3D = []; // track calques with 3D layers for pitch updates
+
+  // Calque popup color map
+  var calqueColors = { ethnies: '#e07c5a', forces: '#e63946', 'points-eau': '#29b6f6', population: '#ab47bc', mines: '#d4a017', infrastructures: '#66bb6a', evenements: '#ff5252', flux: '#ff9800', parcs: '#2e7d32', 'zones-maritimes': '#29b6f6' };
+
+  function linkifyText(text) {
+    return text.replace(/(https?:\/\/[^\s<>"']+)/g, function(url) {
+      var display = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+      if (display.length > 40) display = display.substring(0, 37) + '...';
+      return '<a href="' + url + '" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-family:\'JetBrains Mono\',monospace;font-size:9px;border-bottom:1px solid rgba(196,154,60,0.3);">' + display + '</a>';
+    });
+  }
+
+  function makeCalquePopup(props, calqueId) {
+    var color = calqueColors[calqueId] || '#888';
+    var name = props.name || props.Name || props.nom || props.Nom || 'Point';
+    var header = '<div class="popup-header"><div class="popup-dot-bar" style="background:' + color + '"></div><div class="popup-actor">' + name + '</div></div>';
+    var body = '';
+    var sourcesVal = '';
+    var skip = ['name','Name','nom','Nom','_color','_casualties','_period','sources','Sources','source','Coordonnée','type'];
+    var labelMap = { 'evolution_15j': 'Δ 15 jours', 'volume': 'Volume', 'objet': 'Objet', 'detail': 'Detail', 'description': 'Description', 'rank': 'Niveau', 'force': 'Force', 'personnes': 'Personnes', 'ville': 'Ville', 'pays': 'Pays' };
+    var order = ['volume', 'evolution_15j', 'objet', 'description', 'detail', 'rank', 'force', 'personnes', 'ville', 'pays'];
+    var seen = {};
+    function renderRow(k) {
+      if (skip.indexOf(k) !== -1 || seen[k]) return;
+      var v = (props[k] || '').toString().trim();
+      if (!v) return;
+      seen[k] = true;
+      var label = labelMap[k] || k.replace(/_/g, ' ').replace(/^\w/, function(c) { return c.toUpperCase(); });
+      var valHtml = linkifyText(v);
+      // Highlight evolution percentages
+      if (k === 'evolution_15j') {
+        var color2 = v.indexOf('+') === 0 ? '#ff5252' : v.indexOf('-') === 0 ? '#66bb6a' : '#c49a3c';
+        valHtml = '<span style="color:' + color2 + ';font-weight:600">' + v + '</span>';
+      }
+      body += '<div class="popup-row"><span class="popup-key">' + label + '</span><span class="popup-val">' + valHtml + '</span></div>';
+    }
+    order.forEach(renderRow);
+    Object.keys(props).forEach(renderRow);
+    // Sources always last — clickable hyperlinks
+    sourcesVal = (props.sources || props.Sources || props.source || '').toString().trim();
+    if (sourcesVal) {
+      var linksHtml = sourcesVal.split(/\s+(?=[^\s|]+\|http)/).map(function(s) {
+        var parts = s.split('|');
+        if (parts.length === 2 && parts[1].startsWith('http')) {
+          return '<a href="' + parts[1] + '" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-size:10px;font-family:\'JetBrains Mono\',monospace;border:1px solid rgba(196,154,60,0.25);padding:1px 6px;letter-spacing:0.04em;">' + parts[0] + '</a>';
+        }
+        return '<span style="color:#999;font-size:10px;">' + s + '</span>';
+      }).join(' ');
+      body += '<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="popup-key" style="color:#888;margin-right:2px;">Sources</span>' + linksHtml + '</div>';
+    }
+    return header + (body ? '<div class="popup-body">' + body + '</div>' : '');
+  }
+
+  /* ── 3D SHAPE GENERATORS ── */
+  function shapePolygon(c, r, sides, rot) {
+    var coords = [], rKm = r / 1000;
+    for (var i = 0; i <= sides; i++) {
+      var a = (i / sides) * 2 * Math.PI + (rot || 0);
+      var dx = rKm / 111.32, dy = rKm / (111.32 * Math.cos(c[1] * Math.PI / 180));
+      coords.push([c[0] + dy * Math.cos(a), c[1] + dx * Math.sin(a)]);
+    }
+    return [coords];
+  }
+  function shapeCircle(c, r) { return [createCircleMeters(c, r, 32)]; }
+  function shapeHex(c, r) { return shapePolygon(c, r, 6, Math.PI / 6); }
+  function shapePentagon(c, r) { return shapePolygon(c, r, 5, -Math.PI / 2); }
+  function shapeDiamond(c, r) { return shapePolygon(c, r, 4, 0); }
+  function shapeSquare(c, r) { return shapePolygon(c, r, 4, Math.PI / 4); }
+  function shapeOctagon(c, r) { return shapePolygon(c, r, 8, Math.PI / 8); }
+  function shapeStar(c, outerR, innerR, pts) {
+    var coords = [], roKm = outerR / 1000, riKm = innerR / 1000;
+    for (var i = 0; i <= pts * 2; i++) {
+      var a = (i / (pts * 2)) * 2 * Math.PI - Math.PI / 2;
+      var r = (i % 2 === 0) ? roKm : riKm;
+      var dx = r / 111.32, dy = r / (111.32 * Math.cos(c[1] * Math.PI / 180));
+      coords.push([c[0] + dy * Math.cos(a), c[1] + dx * Math.sin(a)]);
+    }
+    return [coords];
+  }
+
+  function makeShape(c, r, type) {
+    switch (type) {
+      case 'star': return shapeStar(c, r, r * 0.42, 5);
+      case 'hex': return shapeHex(c, r);
+      case 'pentagon': return shapePentagon(c, r);
+      case 'diamond': return shapeDiamond(c, r);
+      case 'square': return shapeSquare(c, r);
+      case 'octagon': return shapeOctagon(c, r);
+      default: return shapeCircle(c, r);
+    }
+  }
+
+  /* ── 3D TYPE PROFILES ── */
+  var TYPE_3D = {
+    aeroport:  { shape: 'star',     baseR: 16000, bodyR: 9000,  h: 120000, color: '#4fc3f7', accent: '#b3e5fc', glow: '#0288d1' },
+    port:      { shape: 'hex',      baseR: 14000, bodyR: 8000,  h: 80000,  color: '#26a69a', accent: '#80cbc4', glow: '#00897b' },
+    hub:       { shape: 'octagon',  baseR: 13000, bodyR: 7500,  h: 60000,  color: '#66bb6a', accent: '#a5d6a7', glow: '#2e7d32' },
+    depot:     { shape: 'square',   baseR: 11000, bodyR: 6500,  h: 50000,  color: '#ffa726', accent: '#ffe0b2', glow: '#e65100' },
+    pont:      { shape: 'diamond',  baseR: 10000, bodyR: 5500,  h: 40000,  color: '#8d6e63', accent: '#bcaaa4', glow: '#4e342e' },
+    corridor:  { shape: 'circle',   baseR: 9000,  bodyR: 5000,  h: 35000,  color: '#78909c', accent: '#b0bec5', glow: '#37474f' },
+    qg:        { shape: 'star',     baseR: 18000, bodyR: 10000, h: 130000, color: '#c62828', accent: '#ef9a9a', glow: '#b71c1c' },
+    base:      { shape: 'pentagon', baseR: 15000, bodyR: 8500,  h: 100000, color: '#e53935', accent: '#ef9a9a', glow: '#c62828' },
+    garnison:  { shape: 'hex',      baseR: 12000, bodyR: 7000,  h: 70000,  color: '#ff7043', accent: '#ffab91', glow: '#d84315' },
+    milice:    { shape: 'diamond',  baseR: 10000, bodyR: 5500,  h: 45000,  color: '#fdd835', accent: '#fff9c4', glow: '#f9a825' },
+    camp:      { shape: 'circle',   baseR: 12000, bodyR: 7000,  h: 55000,  color: '#ab47bc', accent: '#ce93d8', glow: '#7b1fa2' },
+    attaque:   { shape: 'diamond',  baseR: 10000, bodyR: 6000,  h: 60000,  color: '#ff1744', accent: '#ff8a80', glow: '#d50000' },
+    incident:  { shape: 'circle',   baseR: 9000,  bodyR: 5000,  h: 40000,  color: '#ff6d00', accent: '#ffab40', glow: '#e65100' },
+    _default:  { shape: 'circle',   baseR: 10000, bodyR: 6000,  h: 50000,  color: '#bdbdbd', accent: '#e0e0e0', glow: '#616161' }
+  };
+
+  function detect3DType(props) {
+    var t = ((props.type || '') + ' ' + (props.name || '') + ' ' + (props.description || '')).toLowerCase();
+    if (t.indexOf('aeroport') !== -1 || t.indexOf('base aer') !== -1) return TYPE_3D.aeroport;
+    if ((t.indexOf('port') !== -1 && t.indexOf('aero') === -1) || t.indexOf('terminal') !== -1) return TYPE_3D.port;
+    if (t.indexOf('hub') !== -1 || t.indexOf('entrepot') !== -1 || t.indexOf('logistique') !== -1) return TYPE_3D.hub;
+    if (t.indexOf('depot') !== -1 || t.indexOf('stockage') !== -1 || t.indexOf('carburant') !== -1 || t.indexOf('hydrocarbure') !== -1) return TYPE_3D.depot;
+    if (t.indexOf('pont') !== -1) return TYPE_3D.pont;
+    if (t.indexOf('corridor') !== -1) return TYPE_3D.corridor;
+    if (t.indexOf('qg') !== -1) return TYPE_3D.qg;
+    if (t.indexOf('base') !== -1 && t.indexOf('aero') === -1) return TYPE_3D.base;
+    if (t.indexOf('garnison') !== -1) return TYPE_3D.garnison;
+    if (t.indexOf('milice') !== -1 || t.indexOf('vdp') !== -1) return TYPE_3D.milice;
+    if (t.indexOf('camp') !== -1 || t.indexOf('refugi') !== -1 || t.indexOf('deplac') !== -1) return TYPE_3D.camp;
+    if (t.indexOf('attaque') !== -1 || t.indexOf('embuscade') !== -1 || t.indexOf('siege') !== -1) return TYPE_3D.attaque;
+    if (t.indexOf('incident') !== -1 || t.indexOf('crise') !== -1) return TYPE_3D.incident;
+    return TYPE_3D._default;
+  }
+
+  // Build 7-layer 3D feature sets
+  function build3DFeatureSets(features) {
+    var S = { base: [], body: [], mid: [], cap: [], beacon: [], glow: [], label: [] };
+    features.forEach(function(f) {
+      if (!f.geometry || f.geometry.type !== 'Point') return;
+      var c = f.geometry.coordinates, tp = detect3DType(f.properties);
+      var p = Object.assign({}, f.properties, { _c: tp.color, _a: tp.accent, _g: tp.glow, _h: tp.h });
+      // Extrusion polygons
+      S.base.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.baseR, tp.shape) } });
+      S.body.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.bodyR, tp.shape) } });
+      S.mid.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.bodyR * 1.2, tp.shape) } });
+      S.cap.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: makeShape(c, tp.bodyR * 1.08, tp.shape) } });
+      S.beacon.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: shapeCircle(c, tp.bodyR * 0.22) } });
+      // Ground glow ring (wide, very low, transparent)
+      S.glow.push({ type: 'Feature', properties: p, geometry: { type: 'Polygon', coordinates: shapeCircle(c, tp.baseR * 1.6) } });
+      // Floating label (Point for symbol layer)
+      S.label.push({ type: 'Feature', properties: p, geometry: { type: 'Point', coordinates: c } });
+    });
+    return S;
+  }
+
+  var PARTS_3D = ['glow', 'base', 'body', 'mid', 'cap', 'beacon'];
+
+  function createLayerToggle(cfg) {
+    let data = null;
+    let visible = false;
+    const srcId = cfg.id + '-src';
+
+    fetch('./' + cfg.file + '?v=' + Date.now())
+      .then(r => r.json())
+      .then(d => { if (d && d.features && d.features.length) data = d; })
+      .catch(() => {});
+
+    function addLayers() {
+      if (!data || map.getSource(srcId)) return;
+      try {
+        map.addSource(srcId, { type: 'geojson', data: data });
+      } catch (e) { console.warn('[calque ' + cfg.id + '] addSource error:', e.message); return; }
+
+      // ── 3D: build multi-layer sources ──
+      if (cfg.use3D) {
+        try {
+          var sets = build3DFeatureSets(data.features);
+          PARTS_3D.forEach(function(k) {
+            if (sets[k].length) map.addSource(cfg.id + '-3d-' + k, { type: 'geojson', data: { type: 'FeatureCollection', features: sets[k] } });
+          });
+          // Label source (Point geometry for symbol layer)
+          if (sets.label.length) map.addSource(cfg.id + '-3d-label', { type: 'geojson', data: { type: 'FeatureCollection', features: sets.label } });
+        } catch (e) { console.warn('[calque ' + cfg.id + '] 3D sources error:', e.message); }
+      }
+
+      // Disable terrain temporarily to avoid DEM RangeError
+      var prevTerrain = null;
+      try { prevTerrain = map.getTerrain(); if (prevTerrain) map.setTerrain(null); } catch(e) {}
+
+      // Add 2D layers
+      cfg.layers.forEach(function(l) {
+        var layerDef = {
+          id: l.id, type: l.type, source: srcId,
+          paint: l.paint,
+          layout: Object.assign({ visibility: visible ? 'visible' : 'none' }, l.layout || {})
+        };
+        if (l.minzoom) layerDef.minzoom = l.minzoom;
+        if (l.filter) layerDef.filter = l.filter;
+        try { map.addLayer(layerDef); } catch (e) { console.warn('[calque ' + cfg.id + '] addLayer ' + l.id + ' error:', e.message); }
+      });
+
+      // ── 3D: add 7-layer extrusion system ──
+      if (cfg.use3D) {
+        var vis3 = (visible && is3DMode) ? 'visible' : 'none';
+        var sp = cfg.id + '-3d-';
+
+        // 0. Ground glow — wide halo at ground level
+        if (map.getSource(sp + 'glow')) try { map.addLayer({
+          id: sp + 'glow', type: 'fill-extrusion', source: sp + 'glow',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': ['get', '_g'], 'fill-extrusion-height': ['*', ['get', '_h'], 0.015], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.25 }
+        }); } catch(e) {}
+
+        // 1. Base platform — wide, low
+        if (map.getSource(sp + 'base')) try { map.addLayer({
+          id: sp + 'base', type: 'fill-extrusion', source: sp + 'base',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': ['get', '_g'], 'fill-extrusion-height': ['*', ['get', '_h'], 0.07], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.6,
+            'fill-extrusion-ambient-occlusion-intensity': 0.5, 'fill-extrusion-ambient-occlusion-radius': 4 }
+        }); } catch(e) {}
+
+        // 2. Main body — gradient via vertical-gradient
+        if (map.getSource(sp + 'body')) try { map.addLayer({
+          id: sp + 'body', type: 'fill-extrusion', source: sp + 'body',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': ['get', '_c'], 'fill-extrusion-height': ['get', '_h'], 'fill-extrusion-base': 0, 'fill-extrusion-opacity': 0.9,
+            'fill-extrusion-vertical-gradient': true,
+            'fill-extrusion-ambient-occlusion-intensity': 0.6, 'fill-extrusion-ambient-occlusion-radius': 6 }
+        }); } catch(e) {}
+
+        // 3. Mid-ring — decorative band at 45-52%
+        if (map.getSource(sp + 'mid')) try { map.addLayer({
+          id: sp + 'mid', type: 'fill-extrusion', source: sp + 'mid',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': ['get', '_a'], 'fill-extrusion-height': ['*', ['get', '_h'], 0.53], 'fill-extrusion-base': ['*', ['get', '_h'], 0.46], 'fill-extrusion-opacity': 0.75 }
+        }); } catch(e) {}
+
+        // 4. Top cap — bright crown
+        if (map.getSource(sp + 'cap')) try { map.addLayer({
+          id: sp + 'cap', type: 'fill-extrusion', source: sp + 'cap',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': ['get', '_a'], 'fill-extrusion-height': ['*', ['get', '_h'], 1.05], 'fill-extrusion-base': ['*', ['get', '_h'], 0.97], 'fill-extrusion-opacity': 1 }
+        }); } catch(e) {}
+
+        // 5. Beacon spire — white antenna
+        if (map.getSource(sp + 'beacon')) try { map.addLayer({
+          id: sp + 'beacon', type: 'fill-extrusion', source: sp + 'beacon',
+          layout: { visibility: vis3 },
+          paint: { 'fill-extrusion-color': '#ffffff', 'fill-extrusion-height': ['*', ['get', '_h'], 1.4], 'fill-extrusion-base': ['*', ['get', '_h'], 1.05], 'fill-extrusion-opacity': 0.92,
+            'fill-extrusion-vertical-gradient': true }
+        }); } catch(e) {}
+
+        // 6. Floating 3D label above beacon
+        if (map.getSource(sp + 'label')) try { map.addLayer({
+          id: sp + 'label', type: 'symbol', source: sp + 'label',
+          layout: {
+            visibility: vis3,
+            'text-field': ['get', 'name'],
+            'text-font': ['DIN Pro Bold', 'Arial Unicode MS Bold'],
+            'text-size': ['interpolate', ['linear'], ['zoom'], 4, 9, 7, 12, 10, 15],
+            'text-transform': 'uppercase',
+            'text-letter-spacing': 0.12,
+            'text-offset': [0, -3.5],
+            'text-anchor': 'bottom',
+            'text-max-width': 12,
+            'text-allow-overlap': false,
+            'text-padding': 8
+          },
+          paint: {
+            'text-color': ['get', '_a'],
+            'text-halo-color': 'rgba(0,0,0,0.92)',
+            'text-halo-width': 2,
+            'text-halo-blur': 1
+          }
+        }); } catch(e) {}
+      }
+
+      // Restore terrain after layers added
+      try { if (prevTerrain) map.setTerrain(prevTerrain); } catch(e) {}
+
+      // Click popup on 2D layers
+      var clickableTypes = ['circle', 'fill', 'line'];
+      cfg.layers.forEach(function(l) {
+        if (clickableTypes.indexOf(l.type) === -1) return;
+        if (l.id.indexOf('-glow') !== -1 || l.id.indexOf('-casing') !== -1 || l.id.indexOf('-ring') !== -1 || l.id.indexOf('-pulse') !== -1) return;
+        map.on('click', l.id, function(e) {
+          if (!e.features || !e.features.length) return;
+          new mapboxgl.Popup({ closeButton: true, maxWidth: '340px', className: 'algor-popup' })
+            .setLngLat(e.lngLat).setHTML(makeCalquePopup(e.features[0].properties, cfg.id)).addTo(map);
+        });
+        map.on('mouseenter', l.id, function() { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', l.id, function() { map.getCanvas().style.cursor = ''; });
+      });
+
+      // Click popup on 3D extrusion + label layers
+      if (cfg.use3D) {
+        PARTS_3D.concat(['label']).forEach(function(k) {
+          var lid = cfg.id + '-3d-' + k;
+          if (!map.getLayer(lid)) return;
+          map.on('click', lid, function(e) {
+            if (!e.features || !e.features.length) return;
+            new mapboxgl.Popup({ closeButton: true, maxWidth: '340px', className: 'algor-popup' })
+              .setLngLat(e.lngLat).setHTML(makeCalquePopup(e.features[0].properties, cfg.id)).addTo(map);
+          });
+          map.on('mouseenter', lid, function() { map.getCanvas().style.cursor = 'pointer'; });
+          map.on('mouseleave', lid, function() { map.getCanvas().style.cursor = ''; });
+        });
+      }
+    }
+
+    function toggle() {
+      visible = !visible;
+      var el = document.getElementById('sb-toggle-' + cfg.id);
+      if (el) el.classList.toggle('on', visible);
+      if (!data) return;
+      if (!map.getSource(srcId)) { addLayers(); return; }
+      var vis = visible ? 'visible' : 'none';
+      cfg.layers.forEach(function(l) {
+        if (map.getLayer(l.id)) map.setLayoutProperty(l.id, 'visibility', vis);
+      });
+      if (cfg.use3D) {
+        if (visible) update3DVisibility(cfg); else set3DVisibility(cfg, 'none');
+      }
+    }
+
+    if (cfg.use3D) {
+      calques3D.push({ cfg: cfg, isVisible: function() { return visible; } });
+    }
+
+    layerRegistry[cfg.id] = { addLayers: addLayers, getData: function() { return data; }, getSrcId: function() { return srcId; } };
+    window.toggleLayer = window.toggleLayer || function(id) { layerRegistry[id] && layerRegistry[id].toggle && layerRegistry[id].toggle(); };
+    layerRegistry[cfg.id].toggle = toggle;
+  }
+
+  function set3DVisibility(cfg, vis) {
+    PARTS_3D.concat(['label']).forEach(function(k) {
+      var lid = cfg.id + '-3d-' + k;
+      if (map.getLayer(lid)) map.setLayoutProperty(lid, 'visibility', vis);
+    });
+  }
+
+  function update3DVisibility(cfg) {
+    // 3D mode: hide 2D dots, show extrusions — 2D mode: inverse
+    var dotIds = cfg.layers.filter(function(l) { return l.type === 'circle'; }).map(function(l) { return l.id; });
+    dotIds.forEach(function(id) {
+      if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', is3DMode ? 'none' : 'visible');
+    });
+    set3DVisibility(cfg, is3DMode ? 'visible' : 'none');
+  }
+
+  map.on('pitch', function() {
+    calques3D.forEach(function(entry) {
+      if (entry.isVisible()) update3DVisibility(entry.cfg);
+    });
+  });
+
+  // ── ANIMATED BEACON PULSE ──
+  var beaconPhase = 0;
+  setInterval(function() {
+    beaconPhase = (beaconPhase + 1) % 60;
+    var pulse = 0.55 + 0.45 * Math.sin(beaconPhase * Math.PI / 30); // 0.1 → 1.0
+    calques3D.forEach(function(entry) {
+      if (!entry.isVisible() || !is3DMode) return;
+      var lid = entry.cfg.id + '-3d-beacon';
+      if (map.getLayer(lid)) {
+        try { map.setPaintProperty(lid, 'fill-extrusion-opacity', pulse); } catch(e) {}
+      }
+    });
+  }, 50);
+
+  // Expose toggleLayer globally
+  window.toggleLayer = function(id) {
+    if (layerRegistry[id] && layerRegistry[id].toggle) layerRegistry[id].toggle();
+  };
+
+  // Bulk toggle all 7 layers
+  window.toggleAllLayers = function(on) {
+    ['ethnies','forces','population','mines','infrastructures','evenements','flux','parcs','zones-maritimes'].forEach(function(id) {
+      var el = document.getElementById('sb-toggle-' + id);
+      if (!el) return;
+      var isOn = el.classList.contains('on');
+      if (on && !isOn) window.toggleLayer(id);
+      else if (!on && isOn) window.toggleLayer(id);
+    });
+  };
+
+  /* ── CALQUE : Ethnies & sous-groupes (Madagascar) ── */
+  var ethniesColorExpr = ['match', ['get', 'name'],
+    'Merina', '#c49a3c',
+    'Betsileo', '#e07c5a',
+    'Sakalava', '#4fc3f7',
+    'Tsimihety', '#66bb6a',
+    'Betsimisaraka', '#81c784',
+    'Antandroy', '#e63946',
+    'Antanosy', '#ff6b35',
+    'Bara', '#d4a017',
+    'Sihanaka', '#26a69a',
+    'Antemoro', '#ab47bc',
+    'Antakarana', '#29b6f6',
+    'Mahafaly', '#a0887a',
+    'Vezo', '#4db6ac',
+    'Antaisaka', '#9575cd',
+    '#888888'];
+  createLayerToggle({
+    id: 'ethnies',
+    file: 'ethnies.geojson',
+    layers: [
+      { id: 'ethnies-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 10, 8, 16, 12, 22], 'circle-color': ethniesColorExpr, 'circle-opacity': 0.12, 'circle-blur': 1.1 } },
+      { id: 'ethnies-dot', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 6, 12, 9], 'circle-color': ethniesColorExpr, 'circle-stroke-width': 0.8, 'circle-stroke-color': '#0d1117', 'circle-opacity': 0.9 } },
+      { id: 'ethnies-label', type: 'symbol', paint: { 'text-color': 'rgba(255,255,255,0.85)', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 10, 6, 12, 10, 15], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-transform': 'uppercase', 'text-letter-spacing': 0.15, 'text-offset': [0, 1.2], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-padding': 10 } }
+    ]
+  });
+
+  /* ── CALQUE : Forces en presence ── */
+  createLayerToggle({
+    id: 'forces',
+    file: 'forces.geojson',
+    use3D: true,
+    color3D: '#e63946',
+    layers: [
+      { id: 'forces-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': ['match', ['get', 'force'], 'FAMA', '#2e7d32', 'FAMA / Wagner', '#6c757d', 'FAN', '#558b2f', 'ANA', '#33691e', 'VDP', '#ccaa00', 'Dan Nan Ambassagou', '#d4a017', 'ANT', '#7cb342', '#e63946'], 'circle-opacity': 0.07, 'circle-blur': 1.2 } },
+      { id: 'forces-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': ['match', ['get', 'force'], 'FAMA', '#2e7d32', 'FAMA / Wagner', '#6c757d', 'FAN', '#558b2f', 'ANA', '#33691e', 'VDP', '#ccaa00', 'Dan Nan Ambassagou', '#d4a017', 'ANT', '#7cb342', '#e63946'], 'circle-stroke-opacity': 0.35 } },
+      { id: 'forces-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 8, 4, 12, 6], 'circle-color': ['match', ['get', 'force'], 'FAMA', '#2e7d32', 'FAMA / Wagner', '#6c757d', 'FAN', '#558b2f', 'ANA', '#33691e', 'VDP', '#ccaa00', 'Dan Nan Ambassagou', '#d4a017', 'ANT', '#7cb342', '#e63946'], 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
+    ]
+  });
+
+  /* Calque points-eau supprime — non pertinent pour analyse trafics/flux */
+
+  /* ── CALQUE : Population & mobilites ── */
+  createLayerToggle({
+    id: 'population',
+    file: 'population.geojson',
+    use3D: true,
+    color3D: '#e040fb',
+    layers: [
+      { id: 'population-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 8, 100000, 12, 500000, 18, 2000000, 28], 8, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 14, 100000, 20, 500000, 28, 2000000, 40]], 'circle-color': '#e040fb', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
+      { id: 'population-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 4, 100000, 6, 500000, 9, 2000000, 14], 8, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 7, 100000, 10, 500000, 14, 2000000, 22]], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#e040fb', 'circle-stroke-opacity': 0.3 } },
+      { id: 'population-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 2, 100000, 3, 500000, 4.5, 2000000, 7], 8, ['interpolate', ['linear'], ['coalesce', ['to-number', ['get', 'personnes']], 0], 0, 3.5, 100000, 5, 500000, 7, 2000000, 11]], 'circle-color': '#e040fb', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
+    ]
+  });
+
+  /* ── CALQUE : Ressources minieres ── */
+  createLayerToggle({
+    id: 'mines',
+    file: 'mines.geojson',
+    layers: [
+      { id: 'mines-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 10, 8, 16, 12, 22], 'circle-color': '#d4a017', 'circle-opacity': 0.08, 'circle-blur': 1.2 } },
+      { id: 'mines-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 5, 8, 8, 12, 12], 'circle-color': 'transparent', 'circle-stroke-width': 1, 'circle-stroke-color': '#d4a017', 'circle-stroke-opacity': 0.4 } },
+      { id: 'mines-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 8, 4, 12, 6], 'circle-color': '#d4a017', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#1a1a1a' } }
+    ]
+  });
+
+  /* ── CALQUE : Infrastructures & axes ── */
+  createLayerToggle({
+    id: 'infrastructures',
+    file: 'infrastructures.geojson',
+    use3D: true,
+    color3D: '#66bb6a',
+    layers: [
+      { id: 'infra-lines', type: 'line', paint: { 'line-color': ['match', ['get', 'type'], 'Route coupee', '#ef5350', 'Route a risque', '#ff9800', 'Voie ferree', '#78909c', '#8d6e63'], 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1, 8, 1.8, 12, 2.5], 'line-opacity': 0.45, 'line-dasharray': ['match', ['get', 'type'], 'Voie ferree', ['literal', [1, 2]], ['literal', [4, 2]]] } },
+      { id: 'infra-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': '#8d6e63', 'circle-opacity': 0.06, 'circle-blur': 1.2 } },
+      { id: 'infra-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#8d6e63', 'circle-stroke-opacity': 0.35 } },
+      { id: 'infra-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3.5, 12, 5], 'circle-color': '#8d6e63', 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
+    ]
+  });
+
+  /* ── CALQUE : Evenements securitaires ── */
+  createLayerToggle({
+    id: 'evenements',
+    file: 'evenements.geojson',
+    use3D: true,
+    color3D: '#ff5252',
+    layers: [
+      { id: 'events-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 14, 12, 20], 'circle-color': ['match', ['get', 'type'], 'Attaque', '#ff1744', 'Embuscades', '#ff1744', 'Incursion', '#ff1744', 'Siege', '#d50000', 'Incident frontalier', '#ff6d00', 'Crise diplomatique', '#ff6d00', 'Economique', '#ffd740', 'Geopolitique', '#ab47bc', '#ff5252'], 'circle-opacity': 0.07, 'circle-blur': 1.2 } },
+      { id: 'events-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 7, 12, 10], 'circle-color': 'transparent', 'circle-stroke-width': 0.8, 'circle-stroke-color': ['match', ['get', 'type'], 'Attaque', '#ff1744', 'Embuscades', '#ff1744', 'Incursion', '#ff1744', 'Siege', '#d50000', 'Incident frontalier', '#ff6d00', 'Crise diplomatique', '#ff6d00', 'Economique', '#ffd740', 'Geopolitique', '#ab47bc', '#ff5252'], 'circle-stroke-opacity': 0.35 } },
+      { id: 'events-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 8, 4, 12, 6], 'circle-color': ['match', ['get', 'type'], 'Attaque', '#ff1744', 'Embuscades', '#ff1744', 'Incursion', '#ff1744', 'Siege', '#d50000', 'Incident frontalier', '#ff6d00', 'Crise diplomatique', '#ff6d00', 'Economique', '#ffd740', 'Geopolitique', '#ab47bc', '#ff5252'], 'circle-stroke-width': 0.6, 'circle-stroke-color': '#0d1117' } }
+    ]
+  });
+
+  /* ── CALQUE : Flux & trafics ── */
+  var fluxColorExpr = ['match', ['get', 'type'], 'Narcotrafic', '#c62828', 'Trafic d\'armes', '#bf360c', 'Migration', '#8d6e63', 'Contrebande or', '#f9a825', 'Contrebande', '#8e24aa', 'Trafic medicaments', '#8e24aa', '#e65100'];
+  createLayerToggle({
+    id: 'flux',
+    file: 'flux.geojson',
+    layers: [
+      { id: 'flux-main-glow', type: 'line', filter: ['==', ['get', 'rank'], 'main'], paint: { 'line-color': fluxColorExpr, 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 10, 8, 18, 12, 28], 'line-opacity': 0.08, 'line-blur': 5 }, layout: { 'line-cap': 'round', 'line-join': 'round' } },
+      { id: 'flux-main-casing', type: 'line', filter: ['==', ['get', 'rank'], 'main'], paint: { 'line-color': fluxColorExpr, 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 6, 12, 9], 'line-opacity': 0.2 }, layout: { 'line-cap': 'round', 'line-join': 'round' } },
+      { id: 'flux-main-lines', type: 'line', filter: ['==', ['get', 'rank'], 'main'], paint: { 'line-color': fluxColorExpr, 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3, 12, 4.5], 'line-opacity': 0.85 }, layout: { 'line-cap': 'round', 'line-join': 'round' } },
+      { id: 'flux-sec-lines', type: 'line', filter: ['==', ['get', 'rank'], 'secondary'], paint: { 'line-color': fluxColorExpr, 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1, 8, 1.5, 12, 2.5], 'line-opacity': 0.55 }, layout: { 'line-cap': 'round', 'line-join': 'round' } },
+      { id: 'flux-arrows', type: 'symbol', paint: { 'text-color': fluxColorExpr, 'text-opacity': 0.9 }, layout: { 'symbol-placement': 'line', 'symbol-spacing': ['interpolate', ['linear'], ['zoom'], 4, 60, 8, 80, 12, 100], 'text-field': '\u25B6', 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 12, 12, 16], 'text-rotation-alignment': 'map', 'text-allow-overlap': true, 'text-font': ['DIN Pro Bold', 'Arial Unicode MS Bold'] } },
+      { id: 'flux-label', type: 'symbol', paint: { 'text-color': '#e8e6e1', 'text-halo-color': 'rgba(0,0,0,0.95)', 'text-halo-width': 2 }, layout: { 'symbol-placement': 'line-center', 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 5, 7, 8, 9, 12, 11], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-max-angle': 25, 'text-anchor': 'center', 'text-offset': [0, -1.2], 'text-optional': true }, minzoom: 6 }
+    ]
+  });
+
+  /* ── CALQUE : Parcs nationaux (points vert forestier) ── */
+  createLayerToggle({
+    id: 'parcs',
+    file: 'parcs.geojson',
+    layers: [
+      { id: 'parcs-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 14, 12, 20], 'circle-color': '#2e7d32', 'circle-opacity': 0.12, 'circle-blur': 1.2 } },
+      { id: 'parcs-dot', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 6, 12, 9], 'circle-color': '#2e7d32', 'circle-stroke-width': 0.8, 'circle-stroke-color': '#66bb6a', 'circle-opacity': 0.9 } },
+      { id: 'parcs-label', type: 'symbol', paint: { 'text-color': '#a5d6a7', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 11, 12, 14], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-transform': 'uppercase', 'text-letter-spacing': 0.12, 'text-offset': [0, 1.2], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-padding': 10 } }
+    ]
+  });
+
+  /* ── CALQUE : Zones maritimes (points seulement, pas de polygones) ── */
+  var zonesMaritimesColorExpr = ['match', ['get', 'type'],
+    'Piraterie', '#e63946',
+    'Peche INN', '#ff9800',
+    'Port', '#c49a3c',
+    '#4fc3f7'];
+  createLayerToggle({
+    id: 'zones-maritimes',
+    file: 'zones-maritimes.geojson',
+    layers: [
+      { id: 'zm-glow', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 11, 8, 18, 12, 26], 'circle-color': zonesMaritimesColorExpr, 'circle-opacity': 0.10, 'circle-blur': 1.2 } },
+      { id: 'zm-ring', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 5, 8, 8, 12, 12], 'circle-color': 'transparent', 'circle-stroke-width': 1, 'circle-stroke-color': zonesMaritimesColorExpr, 'circle-stroke-opacity': 0.45 } },
+      { id: 'zm-dots', type: 'circle', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 3, 8, 5, 12, 8], 'circle-color': zonesMaritimesColorExpr, 'circle-stroke-width': 0.8, 'circle-stroke-color': '#0d1117' } },
+      { id: 'zm-label', type: 'symbol', paint: { 'text-color': 'rgba(220,240,255,0.85)', 'text-halo-color': 'rgba(0,0,0,0.9)', 'text-halo-width': 1.5 }, layout: { 'text-field': ['get', 'name'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 11, 12, 13], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-letter-spacing': 0.06, 'text-offset': [0, 1.2], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-padding': 10 } }
+    ]
+  });
+
+
+  // Re-add all layers on style change
+  var _prevSetStyle = setStyle;
+  setStyle = function(s) {
+    _prevSetStyle(s);
+    map.once('style.load', function() {
+      Object.keys(layerRegistry).forEach(function(id) {
+        var entry = layerRegistry[id];
+        if (entry.getData() && !map.getSource(entry.getSrcId())) entry.addLayers();
+      });
+    });
+  };
+})();
+
+/* ── FOCUS RECHERCHE UNIFIEE ── */
+window.focusGeocoder = function() {
+  var input = document.getElementById('search-input');
+  if (input) { input.focus(); input.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+};
+
+/* Zone Madagascar : pas de calque Frontieres (ile).
+   Les deux nouveaux calques Parcs nationaux et Zones maritimes sont de simples
+   calques geojson fetches par le factory superposable ci-dessus. */
+</script>
+
+<!-- TUTORIEL -->
+<div id="tutorial-overlay" style="display:none">
+  <div id="tutorial-box">
+    <button id="tutorial-skip" onclick="closeTutorial()">Passer</button>
+    <h2 class="tuto-main-title">Madagascar<br>Securite &amp; trafics — 2026</h2>
+    <p class="subtitle">Cartographie d'acteurs · Transition Randrianirina · Dahalo · Trafics (vanille, bois de rose, or, saphir)</p>
+    <div class="tuto-step">
+      <div class="tuto-icon">⊡</div>
+      <div>
+        <div class="tuto-title">Sélectionner une période</div>
+        <div class="tuto-desc">Choisissez une période bimensuelle (Jan 01-15, Jan 16-31…) ou utilisez le slider. Le bouton Play anime toutes les périodes chronologiquement.</div>
+      </div>
+    </div>
+    <div class="tuto-step">
+      <div class="tuto-icon">◉</div>
+      <div>
+        <div class="tuto-title">Les points</div>
+        <div class="tuto-desc">Chaque point représente un événement. La couleur indique l'acteur (rouge = banditisme / dahalo, vert = force étatique FADM / Gendarmerie, jaune = trafics, violet = politique). La taille reflète le nombre de victimes.</div>
+      </div>
+    </div>
+    <div class="tuto-step">
+      <div class="tuto-icon">◇</div>
+      <div>
+        <div class="tuto-title">Cotation du renseignement OTAN</div>
+        <div class="tuto-desc">Chaque événement est évalué selon la grille OTAN. La lettre indique la fiabilité de la source, le chiffre la véracité du contenu.<span class="otan-grades">A1 = totalement fiable / corroboré · B2 = probable · C3 = peut-être vrai · F6 = non estimable</span></div>
+      </div>
+    </div>
+    <div class="tuto-step">
+      <div class="tuto-icon">◈</div>
+      <div>
+        <div class="tuto-title">Outils avancés</div>
+        <div class="tuto-desc">HEATMAP — zones les plus actives · COMPARER — deux périodes côte à côte · PNG — exporter la carte · Vue 3D avec clic droit + glisser.</div>
+      </div>
+    </div>
+    <button id="tutorial-close" onclick="closeTutorial()">OK — Commencer</button>
+  </div>
+</div>
+
+<!-- HAND TRACKING v4 — ultra-lean, double-pinch fiable -->
+<video id="ht-webcam" autoplay playsinline style="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none"></video>
+<canvas id="ht-canvas" style="position:fixed;inset:0;z-index:9998;pointer-events:none"></canvas>
+<div id="ht-badge" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9998;font:600 15px/1 'JetBrains Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:#00e5ff;padding:12px 26px;background:rgba(6,8,15,0.85);border:1px solid rgba(0,229,255,0.4);border-radius:6px;backdrop-filter:blur(6px);opacity:0;transition:opacity 0.18s;pointer-events:none"></div>
+<button id="ht-home-btn" onclick="if(window.map&&window.ZONE_CONFIG){map.flyTo({center:ZONE_CONFIG.MAP_CENTER,zoom:ZONE_CONFIG.MAP_ZOOM,bearing:ZONE_CONFIG.MAP_BEARING,pitch:0,duration:1000})}" style="display:none;position:fixed;bottom:24px;left:24px;z-index:9999;font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:#00e5ff;background:rgba(6,8,15,0.85);border:1px solid rgba(0,229,255,0.35);border-radius:6px;padding:10px 16px;cursor:pointer;backdrop-filter:blur(4px)">HOME</button>
+
+<!-- Gesture guide -->
+<div id="ht-guide" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(4,6,12,0.92);backdrop-filter:blur(8px);pointer-events:all">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;max-width:480px;padding:32px">
+    <div style="font:700 18px/1.2 'JetBrains Mono',monospace;letter-spacing:0.1em;color:#00e5ff;text-transform:uppercase;margin-bottom:28px">Hand Tracking</div>
+    <div style="display:grid;grid-template-columns:56px 1fr;gap:16px 16px;text-align:left;align-items:center">
+      <div style="text-align:center" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="2.5"/><circle cx="16" cy="12" r="2.5"/><path d="M10.5 12h3"/></svg>
+      </div>
+      <div>
+        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;margin-bottom:6px">PINCER + GLISSER</div>
+        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.6)">Deplacer la carte</div>
+      </div>
+      <div style="text-align:center" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2"/><circle cx="10" cy="12" r="2"/><path d="M6.5 12h2"/><circle cx="14" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><path d="M15.5 12h2"/></svg>
+      </div>
+      <div>
+        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;margin-bottom:6px">DOUBLE PINCEMENT</div>
+        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.6)">Pincer, relacher, pincer — ouvre le popup du point</div>
+      </div>
+      <div style="text-align:center" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v8"/><path d="M10 3v10"/><path d="M14 3v10"/><path d="M18 5v8"/><path d="M6 12c0 5 3 8 6 8s6-3 6-8"/></svg>
+      </div>
+      <div>
+        <div style="font:600 13px/1 'JetBrains Mono',monospace;color:#00e5ff;margin-bottom:6px">MAIN OUVERTE</div>
+        <div style="font:400 12px/1.5 'JetBrains Mono',monospace;color:rgba(255,255,255,0.6)">Monter = zoomer, descendre = dezoomer</div>
+      </div>
+    </div>
+    <button id="ht-guide-close" style="margin-top:28px;font:600 12px/1 'JetBrains Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:#06080f;background:#00e5ff;border:none;padding:12px 32px;border-radius:4px;cursor:pointer">Compris</button>
+  </div>
+</div>
+
+<!-- MediaPipe Hands (~2 Mo) : charge UNIQUEMENT a l'activation du hand tracking (P3 perf) -->
+<script>
+/* =========================================================
+   HAND TRACKING v4 — ultra-lean (+ lazy-load MediaPipe P3)
+   - Pinch distance RAW (pas de filtre) = detection instantanee
+   - Seuils tres espaces (0.08 / 0.14) = pas d'ambiguite
+   - Throttle 100ms = leger meme avec tous calques
+   - Curseur = 1 seul point, rien d'autre
+   - Home button = HTML (zero canvas ops)
+   ========================================================= */
+(function(){
+  var vid=document.getElementById('ht-webcam');
+  var hc=document.getElementById('ht-canvas');
+  var badge=document.getElementById('ht-badge');
+  var guide=document.getElementById('ht-guide');
+  var homeBtn=document.getElementById('ht-home-btn');
+  var ctx=null,detector=null,active=false;
+  var cW=0,cH=0,guideShown=false;
+
+  /* ── OneEuro Filter (cursor only) ── */
+  function OE(freq,minCut,beta,dCut){
+    this.f=freq;this.mc=minCut;this.b=beta;this.dc=dCut;
+    this.xp=null;this.dp=0;this.tp=null;
+  }
+  OE.prototype.a=function(c){var te=1/this.f;return 1/(1+1/(2*Math.PI*c*te))};
+  OE.prototype.run=function(x,t){
+    if(this.xp===null){this.xp=x;this.tp=t;return x}
+    var dt=t-this.tp;if(dt>0)this.f=1/dt;this.tp=t;
+    var dx=(x-this.xp)*this.f;
+    var a1=this.a(this.dc);dx=a1*dx+(1-a1)*this.dp;this.dp=dx;
+    var a2=this.a(this.mc+this.b*Math.abs(dx));
+    var o=a2*x+(1-a2)*this.xp;this.xp=o;return o;
+  };
+  OE.prototype.reset=function(){this.xp=null;this.dp=0;this.tp=null};
+
+  /* Only filter cursor X/Y and wrist Y (3 filters, was 6) */
+  var fCX=new OE(12,1.5,0.007,1.0);
+  var fCY=new OE(12,1.5,0.007,1.0);
+  var fWY=new OE(12,0.8,0.003,1.0);
+
+  /* ── Config ── */
+  var PINCH_ON=0.08;          // easy to trigger
+  var PINCH_OFF=0.14;         // must clearly open to release (big gap!)
+  var PAN_SENS=2.5;
+  var PAN_DEAD=1.5;
+  var DOUBLE_PINCH_MS=1500;   // 1.5 second window — very generous
+  var ZOOM_Y_DEAD=0.025;
+  var ZOOM_Y_SCALE=8;
+  var ZOOM_LERP=0.06;
+  var OPEN_DEBOUNCE=250;
+  var SELECT_COOLDOWN=1200;
+  var LOST_HAND_GRACE=400;
+  var BOUNDS=[[-25,-2],[32,37]];
+
+  /* ── State ── */
+  var IDLE=0,POINT=1,PINCH=2,ZOOM=3;
+  var st=IDLE;
+  var panLX=null,panLY=null;
+  var relTime=0;              // last pinch release timestamp
+  var openSince=0;
+  var zAnchor=null,zTarget=null;
+  var lastSel=0,lastHand=0,fTime=0;
+  var cx=0,cy=0;              // cursor screen pos
+
+  /* ── Zoom loop ── */
+  (function zl(){
+    if(active&&zTarget!==null&&window.map){
+      var c=map.getZoom(),d=zTarget-c;
+      if(Math.abs(d)>0.004)map.setZoom(c+d*ZOOM_LERP);else zTarget=null;
+    }
+    requestAnimationFrame(zl);
+  })();
+
+  function sync(){
+    var w=window.innerWidth,h=window.innerHeight;
+    if(w!==cW||h!==cH){cW=w;cH=h;hc.width=cW;hc.height=cH}
+  }
+
+  /* ── Lazy-load MediaPipe libs (2 Mo) uniquement sur activation ── */
+  var libsLoaded=false, libsLoading=null;
+  function loadLibs(){
+    if(libsLoaded) return Promise.resolve();
+    if(libsLoading) return libsLoading;
+    function inject(src){
+      return new Promise(function(resolve, reject){
+        var s=document.createElement('script');
+        s.src=src; s.crossOrigin='anonymous';
+        s.onload=resolve; s.onerror=reject;
+        document.head.appendChild(s);
+      });
+    }
+    libsLoading = inject('https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js')
+      .then(function(){ return inject('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js'); })
+      .then(function(){ libsLoaded=true; });
+    return libsLoading;
+  }
+
+  window.toggleHandTrack=function(){if(active)stop();else start()};
+
+  function start(){
+    // Charge MediaPipe a la demande (pas au boot de la page)
+    showB('CHARGEMENT · MediaPipe');
+    document.getElementById('btn-handtrack').style.color='#00e5ff';
+    loadLibs().then(function(){ _startCore(); }).catch(function(){
+      showB('Chargement · echec · reessayer');
+      document.getElementById('btn-handtrack').style.color='';
+    });
+  }
+
+  function _startCore(){
+    active=true;ctx=hc.getContext('2d');sync();
+    fCX.reset();fCY.reset();fWY.reset();
+    st=IDLE;panLX=null;relTime=0;openSince=0;zAnchor=null;zTarget=null;
+    document.getElementById('btn-handtrack').style.color='#00e5ff';
+    homeBtn.style.display='block';
+
+    if(window.map){map.setMaxBounds(BOUNDS);map.setMinZoom(3.5);map.setMaxZoom(12)}
+
+    if(!guideShown){
+      guideShown=true;guide.style.display='block';
+      document.getElementById('ht-guide-close').onclick=function(){guide.style.display='none'};
+    }
+
+    detector=new Hands({locateFile:function(f){return 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/'+f}});
+    detector.setOptions({maxNumHands:1,modelComplexity:0,minDetectionConfidence:0.5,minTrackingConfidence:0.4});
+    detector.onResults(onRes);
+
+    var busy=false,last=0;
+    var cam=new Camera(vid,{
+      onFrame:function(){
+        if(!active||busy)return;
+        var n=performance.now();if(n-last<100)return;  // 10fps max
+        last=n;busy=true;
+        return detector.send({image:vid}).then(function(){busy=false}).catch(function(){busy=false});
+      },
+      width:320,height:240,facingMode:'user'
+    });
+    cam.start();window._htCam=cam;
+    showB('HAND TRACKING ACTIF');
+  }
+
+  function stop(){
+    active=false;
+    if(ctx)ctx.clearRect(0,0,cW,cH);
+    document.getElementById('btn-handtrack').style.color='';
+    homeBtn.style.display='none';
+    st=IDLE;panLX=null;relTime=0;zAnchor=null;zTarget=null;
+    fCX.reset();fCY.reset();fWY.reset();
+    if(window.map){map.setMaxBounds(null);map.setMinZoom(0);map.setMaxZoom(22)}
+    showB('HAND TRACKING OFF');
+  }
+
+  /* ── Frame handler ── */
+  function onRes(res){
+    if(!ctx||!active)return;
+    sync();fTime=performance.now()/1000;
+    ctx.clearRect(0,0,cW,cH);
+
+    var h=res.multiHandLandmarks;
+    if(!h||!h.length){
+      if(performance.now()-lastHand>LOST_HAND_GRACE){st=IDLE;panLX=null;zAnchor=null;openSince=0}
+      return;
+    }
+    lastHand=performance.now();
+    var lm=h[0],t=fTime,now=performance.now();
+
+    /* Filter cursor position (smooth) */
+    cx=fCX.run(1-lm[8].x,t)*cW;
+    cy=fCY.run(lm[8].y,t)*cH;
+
+    /* RAW pinch distance — no filter for instant detection */
+    var pd=Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y);
+    var open=isOpen(lm);
+
+    /* ── State machine ── */
+    if(!window.map)return;
+
+    switch(st){
+    case IDLE:
+    case POINT:
+      if(pd<PINCH_ON){
+        /* PINCH START — check double-pinch first */
+        if(relTime>0&&now-relTime<DOUBLE_PINCH_MS&&now-lastSel>SELECT_COOLDOWN){
+          doSelect(cx,cy);lastSel=now;relTime=0;
+          st=PINCH;return;
+        }
+        st=PINCH;panLX=cx;panLY=cy;
+        return;
+      }
+      if(open){
+        if(!openSince)openSince=now;
+        if(now-openSince>=OPEN_DEBOUNCE){
+          st=ZOOM;zAnchor=fWY.run(lm[0].y,t);
+          showB('ZOOM');return;
+        }
+      }else openSince=0;
+      st=POINT;break;
+
+    case PINCH:
+      if(pd>PINCH_OFF){
+        /* RELEASE — record for double-pinch */
+        relTime=now;st=POINT;panLX=null;hideB();return;
+      }
+      /* PAN */
+      if(panLX!==null){
+        var dx=cx-panLX,dy=cy-panLY;
+        if(Math.abs(dx)>PAN_DEAD||Math.abs(dy)>PAN_DEAD){
+          map.panBy([-dx,-dy],{duration:0});showB('DEPLACEMENT');
+        }
+      }
+      panLX=cx;panLY=cy;break;
+
+    case ZOOM:
+      if(!open){st=POINT;zAnchor=null;openSince=0;hideB();return}
+      if(pd<PINCH_ON){st=PINCH;panLX=cx;panLY=cy;zAnchor=null;openSince=0;return}
+      var wy=fWY.run(lm[0].y,t);
+      if(zAnchor!==null){
+        var dY=wy-zAnchor;
+        if(Math.abs(dY)>ZOOM_Y_DEAD){
+          var c=zTarget!==null?zTarget:map.getZoom();
+          zTarget=Math.max(3.5,Math.min(12,c-dY*ZOOM_Y_SCALE*0.3));
+          zAnchor=zAnchor*0.97+wy*0.03;
+          showB(dY<0?'ZOOM +':'ZOOM \u2212');
+        }
+      }else zAnchor=wy;
+      break;
+    }
+
+    /* Draw single cursor dot */
+    ctx.beginPath();ctx.arc(cx,cy,st===PINCH?10:7,0,Math.PI*2);
+    ctx.fillStyle=st===PINCH?'rgba(0,229,255,0.85)':'rgba(0,229,255,0.45)';
+    ctx.fill();
+  }
+
+  function isOpen(lm){
+    if(Math.hypot(lm[4].x-lm[8].x,lm[4].y-lm[8].y)<0.11)return false;
+    var e=0;
+    if(lm[8].y<lm[6].y)e++;if(lm[12].y<lm[10].y)e++;
+    if(lm[16].y<lm[14].y)e++;if(lm[20].y<lm[18].y)e++;
+    return e>=2;
+  }
+
+  function doSelect(sx,sy){
+    /* Defer to next tick so detection frame isn't blocked */
+    var _sx=sx,_sy=sy;
+    setTimeout(function(){
+      try{
+        var mc=map.getCanvas(),r=mc.getBoundingClientRect();
+        var px=_sx-r.left,py=_sy-r.top,tol=20; // small bbox = fast query
+        var feats=map.queryRenderedFeatures([[px-tol,py-tol],[px+tol,py+tol]]);
+        var skip=['glow','ring','casing','pulse','3d-','arrows','label','fill','outline'];
+        var hit=feats.filter(function(f){
+          var id=f.layer.id||'';
+          for(var i=0;i<skip.length;i++)if(id.indexOf(skip[i])!==-1)return false;
+          return true;
+        });
+        if(hit.length){
+          var f=hit[0];
+          var ll=f.geometry.type==='Point'?{lng:f.geometry.coordinates[0],lat:f.geometry.coordinates[1]}:map.unproject([px,py]);
+          map.fire('click',{point:{x:px,y:py},lngLat:ll,originalEvent:{preventDefault:function(){}}});
+          showB('SELECTION');
+        }else showB('AUCUN POINT');
+      }catch(e){}
+    },0);
+  }
+
+  var bT=null;
+  function showB(t){badge.textContent=t;badge.style.opacity='1';clearTimeout(bT);bT=setTimeout(hideB,1800)}
+  function hideB(){badge.style.opacity='0'}
+  window.addEventListener('resize',sync);
+})();
+</script>
+
+<!-- AUTH GATE -->
+<script type="module">
+import { initZoneAuth, zoneLogin } from '../shared/zone-auth.js?v=20260420d';
+
+const overlay = document.getElementById('zone-login-overlay');
+const errEl = document.getElementById('zone-login-error');
+const gated = document.querySelectorAll('.zone-gated');
+
+function unlock() {
+  overlay.style.display = 'none';
+  gated.forEach(el => el.classList.remove('zone-gated'));
+  // Mapbox needs to recalculate size after container becomes visible
+  setTimeout(() => { if (window.map) map.resize(); }, 100);
+}
+
+initZoneAuth(
+  () => unlock(),
+  (msg) => {
+    overlay.style.display = 'flex';
+    if (msg) { errEl.textContent = msg; errEl.style.display = 'block'; }
+  }
+);
+
+document.getElementById('zone-login-btn').addEventListener('click', doLogin);
+document.getElementById('zone-password').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin() {
+  const email = document.getElementById('zone-email').value.trim();
+  const pw = document.getElementById('zone-password').value;
+  errEl.style.display = 'none';
+  if (!email || !pw) { errEl.textContent = 'Auth · email et mot de passe requis'; errEl.style.display = 'block'; return; }
+  try { await zoneLogin(email, pw); } catch (e) {
+    var code = (e && (e.status || e.code)) || 401;
+    errEl.textContent = 'Auth · code ' + code + ' · identifiants invalides';
+    errEl.style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>
