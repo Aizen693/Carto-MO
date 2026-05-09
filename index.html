@@ -3,1220 +3,1105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Algor Int — Geopolitical Intelligence Platform</title>
+<title>Carto-MO — Algor·Int</title>
 <link rel="icon" type="image/jpeg" href="./favicon.jpg">
-<meta property="og:title" content="Algor Int — Plateforme de renseignement geopolitique">
-<meta property="og:description" content="Systeme de veille cartographique OSINT. 3 theatres : Moyen-Orient, Sahel, RDC.">
+<meta property="og:title" content="Algor Int — Algoracces · Plateforme OSINT cartographique">
+<meta property="og:description" content="Trois théâtres d'analyse : Moyen-Orient, Sahel, RDC. Imagerie, ACLED, GDELT, OSINT.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://algoracces.fr/">
-<meta name="description" content="Algor Int — Plateforme OSINT cartographique. Analyse des conflits armes au Moyen-Orient, Sahel et RDC.">
-<meta name="theme-color" content="#0a0b0d">
-
+<meta name="description" content="Algor Int — Algoracces. Plateforme OSINT cartographique pour analystes en renseignement géopolitique.">
+<meta name="theme-color" content="#0b0c0e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <style>
-:root {
-  --bg:     #0a0b0d;
-  --bg1:    #0f1114;
-  --bg2:    #14171b;
-  --bg3:    #1a1e23;
-  --ln:     rgba(255,255,255,0.06);
-  --ln1:    rgba(255,255,255,0.10);
-  --ln2:    rgba(255,255,255,0.18);
-  --tx:     #b8bec7;
-  --tx1:    #6b7280;
-  --tx2:    #3a3f47;
-  --txh:    #e8ecf2;
-  --ac:     #c49a3c;
-  --ach:    #e0b452;
-  --acd:    rgba(196,154,60,0.08);
-  --acb:    rgba(196,154,60,0.22);
-  --cyan:   #4fb8cc;
-  --cyand:  rgba(79,184,204,0.10);
-  --red:    #c94a4a;
-  --green:  #5a9a5f;
-  --bc:     'Barlow Condensed', 'Arial Narrow', sans-serif;
-  --b:      'Barlow', system-ui, sans-serif;
-  --m:      'JetBrains Mono', 'Courier New', monospace;
-}
-
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-html, body {
-  font-family: var(--m);
-  background: var(--bg);
-  color: var(--tx);
-  height: 100vh;
-  overflow: hidden;
-  -webkit-font-smoothing: antialiased;
-  user-select: none;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   GLOBE BACKGROUND
-   ═══════════════════════════════════════════════════════════ */
-#globe {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-}
-#globe::after {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse at center, transparent 0%, rgba(10,11,13,0.4) 70%, var(--bg) 100%);
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Grid overlay on globe */
-#grid-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(196,154,60,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196,154,60,0.025) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.6;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   HEADER
-   ═══════════════════════════════════════════════════════════ */
-#header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 48px;
-  background: rgba(10,11,13,0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--ln);
-  display: flex;
-  align-items: stretch;
-  z-index: 100;
-}
-.hdr-section {
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  border-right: 1px solid var(--ln);
-  gap: 12px;
-}
-.hdr-section:last-child { border-right: none; }
-.hdr-logo {
-  height: 24px; width: 24px;
-  opacity: 0.85;
-  object-fit: contain;
-}
-.hdr-brand {
-  display: flex; flex-direction: column; gap: 2px;
-}
-.hdr-brand h1 {
-  font-family: var(--bc);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--txh);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  line-height: 1;
-}
-.hdr-brand p {
-  font-family: var(--m);
-  font-size: 8px;
-  color: var(--tx1);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  line-height: 1;
-}
-.hdr-spacer { flex: 1; }
-.hdr-meta {
-  font-family: var(--m);
-  font-size: 9px;
-  color: var(--tx1);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-.hdr-meta strong {
-  color: var(--tx);
-  font-weight: 500;
-}
-.hdr-status-dot {
-  width: 6px; height: 6px;
-  background: var(--green);
-  box-shadow: 0 0 8px rgba(90,154,95,0.6);
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   CORNER BRACKETS (Palantir-style HUD)
-   ═══════════════════════════════════════════════════════════ */
-.bracket {
-  position: fixed;
-  width: 14px;
-  height: 14px;
-  border: 1px solid var(--ac);
-  opacity: 0.35;
-  z-index: 50;
-  pointer-events: none;
-}
-.bracket.tl { top: 64px; left: 16px; border-right: none; border-bottom: none; }
-.bracket.tr { top: 64px; right: 16px; border-left: none; border-bottom: none; }
-.bracket.bl { bottom: 48px; left: 16px; border-right: none; border-top: none; }
-.bracket.br { bottom: 48px; right: 16px; border-left: none; border-top: none; }
-
-/* ═══════════════════════════════════════════════════════════
-   HERO PANEL (left)
-   ═══════════════════════════════════════════════════════════ */
-#hero {
-  position: fixed;
-  top: 72px;
-  left: 32px;
-  z-index: 40;
-  max-width: 420px;
-  pointer-events: none;
-}
-.hero-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--m);
-  font-size: 9px;
-  color: var(--ac);
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  padding: 6px 10px;
-  border: 1px solid var(--acb);
-  background: var(--acd);
-  margin-bottom: 20px;
-}
-.hero-tag::before {
-  content: '';
-  width: 5px; height: 5px;
-  background: var(--ac);
-}
-.hero-title {
-  font-family: var(--bc);
-  font-size: 44px;
-  font-weight: 600;
-  color: var(--txh);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  line-height: 1;
-  margin-bottom: 14px;
-}
-.hero-title .ac { color: var(--ac); }
-.hero-subtitle {
-  font-family: var(--b);
-  font-size: 14px;
-  font-weight: 300;
-  color: var(--tx);
-  line-height: 1.55;
-  max-width: 380px;
-  margin-bottom: 28px;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   ZONES PANEL (right)
-   ═══════════════════════════════════════════════════════════ */
-#zones-panel {
-  position: fixed;
-  top: 72px;
-  right: 32px;
-  bottom: 56px;
-  width: 420px;
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  pointer-events: auto;
-}
-.panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
-  background: rgba(15,17,20,0.88);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--ln);
-  border-bottom: none;
-}
-.panel-header-title {
-  font-family: var(--m);
-  font-size: 10px;
-  color: var(--tx);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-.panel-header-count {
-  font-family: var(--m);
-  font-size: 9px;
-  color: var(--ac);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.zone-list {
-  flex: 1;
-  overflow-y: auto;
-  background: rgba(15,17,20,0.88);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--ln);
-}
-.zone-list::-webkit-scrollbar { width: 0; }
-
-.zone-card {
-  display: block;
-  padding: 20px 20px 18px 20px;
-  border-bottom: 1px solid var(--ln);
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  transition: background 0.15s ease;
-  position: relative;
-}
-.zone-card:hover { background: var(--bg2); }
-.zone-card:last-child { border-bottom: none; }
-
-.zone-card-row1 {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 10px;
-}
-.zone-card-index {
-  font-family: var(--m);
-  font-size: 10px;
-  color: var(--tx1);
-  letter-spacing: 0.2em;
-  font-weight: 500;
-}
-.zone-card-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--m);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 4px 8px;
-  border: 1px solid;
-}
-.zone-card-status.operational {
-  color: var(--green);
-  border-color: rgba(90,154,95,0.35);
-  background: rgba(90,154,95,0.06);
-}
-.zone-card-status.operational::before {
-  content: '';
-  width: 5px; height: 5px;
-  background: var(--green);
-  box-shadow: 0 0 6px rgba(90,154,95,0.5);
-}
-.zone-card-status.restricted {
-  color: var(--ac);
-  border-color: var(--acb);
-  background: var(--acd);
-}
-.zone-card-status.restricted::before {
-  content: '';
-  width: 5px; height: 5px;
-  background: var(--ac);
-}
-
-.zone-card-name {
-  font-family: var(--bc);
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--txh);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  line-height: 1;
-  margin-bottom: 8px;
-}
-.zone-card-region {
-  font-family: var(--m);
-  font-size: 9px;
-  color: var(--tx1);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-
-.zone-card-desc {
-  font-family: var(--b);
-  font-size: 12px;
-  font-weight: 300;
-  color: var(--tx);
-  line-height: 1.55;
-  margin-bottom: 14px;
-}
-
-.zone-card-meta {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1px;
-  background: var(--ln);
-  border: 1px solid var(--ln);
-  margin-bottom: 14px;
-}
-.meta-cell {
-  background: rgba(10,11,13,0.5);
-  padding: 8px 10px;
-}
-.meta-cell-label {
-  font-family: var(--m);
-  font-size: 7px;
-  color: var(--tx1);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.meta-cell-value {
-  font-family: var(--bc);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--txh);
-  letter-spacing: 0.02em;
-  line-height: 1;
-}
-.meta-cell-value.small { font-size: 13px; }
-
-.zone-card-cta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 12px;
-  border-top: 1px solid var(--ln);
-}
-.zone-cta-label {
-  font-family: var(--m);
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-.zone-cta-label.access {
-  color: var(--cyan);
-}
-.zone-cta-label.subscribe {
-  color: var(--ac);
-}
-.zone-cta-arrow {
-  font-family: var(--m);
-  font-size: 14px;
-  color: var(--tx1);
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-.zone-card:hover .zone-cta-arrow {
-  transform: translateX(4px);
-  color: var(--ach);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   BOTTOM STATUS BAR
-   ═══════════════════════════════════════════════════════════ */
-#status-bar {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: 36px;
-  background: rgba(10,11,13,0.9);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid var(--ln);
-  display: flex;
-  align-items: stretch;
-  z-index: 100;
-}
-.sb-cell {
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  gap: 8px;
-  border-right: 1px solid var(--ln);
-  font-family: var(--m);
-  font-size: 9px;
-  color: var(--tx1);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-.sb-cell:last-child { border-right: none; }
-.sb-cell strong {
-  color: var(--tx);
-  font-weight: 500;
-}
-.sb-cell.accent strong { color: var(--ac); }
-.sb-cell.cyan strong { color: var(--cyan); }
-.sb-admin { color: var(--tx1); text-decoration: none; cursor: pointer; transition: color .12s, background .12s; }
-.sb-admin:hover { color: var(--ac); background: rgba(196,154,60,0.06); }
-.sb-spacer { flex: 1; border-right: 1px solid var(--ln); }
-
-/* ═══════════════════════════════════════════════════════════
-   ZONE MARKERS ON GLOBE (floating labels)
-   ═══════════════════════════════════════════════════════════ */
-.zone-label {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 30;
-  font-family: var(--m);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.zone-label-inner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 10px;
-  background: rgba(10,11,13,0.85);
-  border: 1px solid var(--acb);
-  color: var(--ac);
-  backdrop-filter: blur(6px);
-}
-.zone-label-dot {
-  width: 6px; height: 6px;
-  background: var(--ac);
-  box-shadow: 0 0 8px rgba(196,154,60,0.6);
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-.zone-label-line {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 1px;
-  height: 24px;
-  background: linear-gradient(180deg, var(--ac), transparent);
-  transform: translateX(-50%);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════════════════════════ */
-@media (max-width: 1100px) {
-  #hero { max-width: 340px; }
-  .hero-title { font-size: 36px; }
-  #zones-panel { width: 380px; }
-  .zone-card-name { font-size: 24px; }
-}
-@media (max-width: 900px) {
-  #hero { display: none; }
-  #zones-panel { width: calc(100% - 32px); max-width: 420px; right: 16px; }
-}
-
-/* ═══ Mobile ≤ 768px ═══ */
-@media (max-width: 768px) {
-  /* Header compact */
-  #header { height: 42px; }
-  .hdr-section { padding: 0 12px; gap: 8px; }
-  .hdr-logo { height: 20px; width: 20px; }
-  .hdr-brand h1 { font-size: 12px; letter-spacing: 0.08em; }
-  .hdr-brand p { font-size: 7px; letter-spacing: 0.18em; }
-  .hdr-meta { font-size: 8px; letter-spacing: 0.12em; }
-  .hdr-section:nth-child(2), .hdr-section:nth-child(3) { display: none; }
-
-  /* Brackets plus petits */
-  .bracket { width: 10px; height: 10px; }
-  .bracket.tl { top: 54px; left: 10px; }
-  .bracket.tr { top: 54px; right: 10px; }
-  .bracket.bl { bottom: 42px; left: 10px; }
-  .bracket.br { bottom: 42px; right: 10px; }
-
-  /* Zones panel = sheet en bas */
-  #zones-panel {
-    top: auto; right: 0; left: 0; bottom: 0;
-    width: 100%; max-width: none;
-    height: 62vh;
-    border-top-left-radius: 0;
+  :root {
+    --bg:        #0b0c0e;
+    --s1:        #14161a;
+    --s2:        #1c1f24;
+    --tx1:       #ededee;
+    --tx2:       #8a8d93;
+    --tx3:       #4a4d52;
+    --gold:      #b8954a;
+    --hi:        #d4d6da;
+    --line:      rgba(255,255,255,0.06);
+    --line2:     rgba(255,255,255,0.10);
+    --sans:      'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --serif:     'Instrument Serif', Georgia, serif;
+    --mono:      'JetBrains Mono', ui-monospace, Menlo, monospace;
+    --pad-x:     112px;
   }
-  .panel-header {
-    padding: 12px 16px;
-    border-left: none; border-right: none;
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { background: var(--bg); }
+
+  /* ─────────────────────────────────────── Starfield (background) */
+  #stars {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 30%, rgba(184,149,74,0.025), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 20% 80%, rgba(90,143,168,0.02), transparent 60%),
+      var(--bg);
   }
-  .zone-card { padding: 16px 16px 14px 16px; }
-  .zone-card-name { font-size: 22px; }
-  .zone-card-desc { font-size: 11.5px; }
-  .zone-card-meta { grid-template-columns: 1fr 1fr 1fr; }
-  .meta-cell { padding: 7px 8px; }
-  .meta-cell-value { font-size: 14px; }
-  .meta-cell-value.small { font-size: 12px; }
-  .zone-cta-label { font-size: 9px; }
+  #stars canvas { display: block; width: 100%; height: 100%; }
+  .top, main, .foot { position: relative; z-index: 1; }
+  body {
+    font-family: var(--sans);
+    font-weight: 400;
+    color: var(--tx1);
+    background: var(--bg);
+    font-size: 15px;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  ::selection { background: rgba(184, 149, 74, 0.35); color: var(--tx1); }
+  a { color: inherit; text-decoration: none; }
 
-  /* Status bar simplifie */
-  #status-bar { height: 28px; }
-  .sb-cell { padding: 0 10px; font-size: 8px; letter-spacing: 0.12em; }
-  .sb-cell:nth-child(2), .sb-cell:nth-child(3) { display: none; }
-  .sb-cell.cyan { display: none; }
+  /* ─────────────────────────────────────── Header */
+  .top {
+    position: relative;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px var(--pad-x) 0;
+    z-index: 5;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .brand .logo {
+    width: 38px; height: 38px; border-radius: 6px;
+    object-fit: cover; display: block;
+    background: var(--s1);
+    box-shadow: 0 0 0 1px var(--line2);
+  }
+  .brand .stack {
+    display: flex; flex-direction: column; line-height: 1.18;
+  }
+  .brand .stack .l1 {
+    font-size: 15px; font-weight: 600; color: var(--tx1);
+    letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .brand .stack .l2 {
+    font-family: var(--mono);
+    font-size: 10.5px; font-weight: 400; color: var(--tx2);
+    letter-spacing: 0.18em; margin-top: 4px; text-transform: uppercase;
+  }
+  .brand .stack .l2 em {
+    font-family: var(--mono); font-style: normal;
+    color: var(--tx2); font-size: 10.5px;
+  }
 
-  /* Zone labels plus petits */
-  .zone-label { font-size: 8px; letter-spacing: 0.12em; }
-  .zone-label-inner { padding: 3px 7px; gap: 5px; }
-  .zone-label-dot { width: 4px; height: 4px; }
-}
+  .top-right {
+    display: flex; align-items: center; gap: 28px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--tx2);
+    font-weight: 400;
+  }
+  .sysstat { display: inline-flex; align-items: center; gap: 8px; }
+  .sysstat .led {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #6ea077;
+    box-shadow: 0 0 0 3px rgba(110,160,119,0.10);
+  }
+  .top-right .clock { color: var(--tx1); font-weight: 500; }
+  .top-right .clock .z { color: var(--tx3); margin-left: 4px; }
 
-/* ═══ Mobile ≤ 480px ═══ */
-@media (max-width: 480px) {
-  #header { height: 40px; }
-  .hdr-brand p { display: none; }
-  .hdr-section:last-child { display: none; } /* masque coords */
-  .panel-header-title { font-size: 9px; }
-  .panel-header-count { font-size: 8px; }
-  .zone-card { padding: 14px 14px 12px 14px; }
-  .zone-card-name { font-size: 19px; }
-  .zone-card-index { font-size: 9px; }
-  .zone-card-status { font-size: 8px; padding: 3px 6px; }
-  .zone-card-region { font-size: 9px; letter-spacing: 0.16em; margin-bottom: 10px; }
-  .zone-card-desc { font-size: 11px; margin-bottom: 10px; }
-  .meta-cell-label { font-size: 6px; }
-  .meta-cell-value { font-size: 13px; }
-  .meta-cell-value.small { font-size: 11px; }
-  #status-bar { height: 24px; }
-  .sb-cell { font-size: 7px; }
-}
+  /* ─────────────────────────────────────── Hero (split) */
+  main {
+    padding-inline: var(--pad-x);
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 64px;
+    align-items: center;
+    padding: 96px 0 88px;
+    position: relative;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--tx3);
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .eyebrow .bar { width: 18px; height: 1px; background: var(--tx3); display: inline-block; }
 
-/* Hide mapbox attribution but keep it accessible */
-.mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right {
-  opacity: 0.3;
-}
-.mapboxgl-ctrl-bottom-left:hover, .mapboxgl-ctrl-bottom-right:hover {
-  opacity: 1;
-}
+  .lobby-pill {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--tx2); letter-spacing: 0.02em;
+    padding: 5px 11px 5px 9px;
+    border: 1px solid var(--line2);
+    border-radius: 100px;
+    margin-bottom: 28px;
+  }
+  .lobby-pill .dotg {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 3px rgba(184,149,74,0.10);
+  }
+  .lobby-pill .sep { color: var(--tx3); }
+  .lobby-pill .pub { color: var(--tx3); }
+
+  h1.title {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: clamp(40px, 4.4vw, 60px);
+    line-height: 1.04;
+    letter-spacing: -0.022em;
+    color: var(--tx1);
+    margin: 0 0 28px;
+    max-width: 14ch;
+    text-wrap: pretty;
+  }
+  h1.title em {
+    font-family: inherit;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: inherit;
+    color: var(--tx1);
+  }
+
+  .intro {
+    color: var(--tx2);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 44ch;
+    margin: 0 0 22px;
+    font-weight: 300;
+  }
+  .intro strong { color: var(--tx1); font-weight: 400; }
+
+  .gateline {
+    color: var(--tx3);
+    font-size: 13.5px;
+    line-height: 1.5;
+    max-width: 44ch;
+    margin: 0 0 36px;
+    font-weight: 300;
+    padding-left: 14px;
+    border-left: 1px solid var(--line2);
+  }
+  .gateline em {
+    font-family: var(--mono); font-style: normal;
+    color: var(--tx1); font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 0 1px;
+  }
+
+  .cta-row { display: flex; align-items: center; gap: 28px; }
+  .cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 500;
+    color: var(--tx1);
+    padding: 11px 16px 11px 18px;
+    border: 1px solid var(--line2);
+    border-radius: 3px;
+    background: transparent;
+    transition: background .18s ease, border-color .18s ease;
+  }
+  .cta:hover { background: var(--s1); border-color: rgba(255,255,255,0.18); }
+  .cta .arr { color: var(--gold); font-weight: 400; transition: transform .18s ease; }
+  .cta:hover .arr { transform: translateX(3px); }
+
+  .ghost {
+    font-size: 14px; color: var(--tx2);
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: color .18s ease;
+  }
+  .ghost:hover { color: var(--tx1); }
+  .ghost .arr { color: var(--tx3); }
+
+  .sub-links {
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 36px;
+    font-size: 13px; color: var(--tx2);
+    font-weight: 400;
+  }
+  .sub-links a {
+    transition: color .18s ease;
+    color: var(--tx2);
+  }
+  .sub-links a:hover { color: var(--gold); }
+  .sub-links .midpt { color: var(--tx3); user-select: none; }
+
+  /* ─────────────────────────────────────── Globe */
+  .globe-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    max-width: 580px;
+    margin-left: auto;
+    width: 100%;
+  }
+  .globe-wrap canvas { display: block; width: 100%; height: 100%; }
+
+  .globe-meta {
+    position: absolute; left: 0; right: 0; bottom: -8px;
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--tx3); letter-spacing: 0.02em;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  .globe-meta .lg {
+    display: grid; grid-template-columns: 10px 1fr; column-gap: 9px; row-gap: 4px;
+    padding-right: 14px;
+  }
+  .globe-meta .lg + .lg { border-left: 1px solid var(--line); padding-left: 16px; padding-right: 0; }
+  .globe-meta .lg .sw {
+    width: 6px; height: 6px; border-radius: 50%;
+    align-self: center; justify-self: center;
+    margin-top: 5px;
+  }
+  .globe-meta .lg .sw-land { background: var(--gold); box-shadow: 0 0 0 2px rgba(184,149,74,0.10); }
+  .globe-meta .lg .sw-sea  { background: #5a8fa8; box-shadow: 0 0 0 2px rgba(90,143,168,0.10); }
+  .globe-meta .lg .ttl { color: var(--tx2); font-weight: 500; }
+  .globe-meta .lg .ttl .ct { color: var(--tx3); font-weight: 400; margin-left: 6px; }
+  .globe-meta .lg .desc { grid-column: 2; color: var(--tx3); line-height: 1.45; }
+  .globe-meta .lg .desc em {
+    font-family: var(--mono); font-style: normal;
+    font-size: 10.5px; color: var(--tx1);
+    letter-spacing: 0.04em;
+  }
+
+  /* ─────────────────────────────────────── Theaters */
+  .theaters {
+    padding: 32px 0 80px;
+    border-top: 1px solid var(--line);
+  }
+  .th-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 18px 0 36px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--tx3); letter-spacing: 0.02em;
+  }
+  .th-head .lbl { color: var(--tx2); }
+  .th-head .right { display: flex; gap: 24px; }
+  .th-head .right span strong { color: var(--tx1); font-weight: 500; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .card {
+    position: relative;
+    padding: 32px 32px 28px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-rows: auto auto 1fr auto auto;
+    gap: 18px;
+    transition: background .25s ease;
+    cursor: pointer;
+    min-height: 320px;
+  }
+  .card:nth-child(3n) { border-right: none; }
+  .card:nth-last-child(-n+3) { border-bottom: none; }
+  .card:hover { background: rgba(255,255,255,0.012); }
+  .card:hover .c-cta { color: var(--tx1); }
+  .card:hover .c-cta .arr { transform: translateX(3px); }
+
+  .c-row {
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--tx3); letter-spacing: 0.02em;
+  }
+  .c-row .ix { color: var(--tx2); }
+
+  .c-name {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 1.05;
+    letter-spacing: -0.022em;
+    color: var(--tx1);
+    margin: 0;
+  }
+  .c-sub {
+    font-size: 13.5px;
+    color: var(--tx2);
+    font-weight: 300;
+    margin-top: -10px;
+  }
+  .c-sub .sep { color: var(--tx3); padding: 0 5px; }
+
+  .c-spark {
+    width: 100%; height: 44px; display: block;
+    margin-top: 4px;
+  }
+
+  .c-stat {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .c-stat .num {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--tx1);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .c-stat .num .delta {
+    font-size: 11px; color: var(--tx2); margin-left: 8px; font-weight: 400;
+  }
+  .c-stat .lbl {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--tx3);
+    letter-spacing: 0.02em;
+  }
+
+  .c-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13.5px; font-weight: 500;
+    color: var(--tx2);
+    transition: color .18s ease;
+  }
+  .c-cta .arr { color: inherit; transition: transform .18s ease; display: inline-block; }
+  .c-cta.muted { color: var(--tx3); }
+  .c-cta.muted:hover { color: var(--tx2); }
+
+  .c-availability {
+    position: absolute; top: 28px; right: 32px;
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--tx3); letter-spacing: 0.02em;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .c-availability .pin {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--tx2); opacity: 0.55;
+  }
+  .c-availability.live .pin { background: #6ea077; opacity: 1; }
+  .c-availability.sub  .pin { background: var(--tx3); }
+
+  /* ─────────────────────────────────────── Footer */
+  .foot {
+    padding: 18px var(--pad-x) 22px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--tx3); letter-spacing: 0.02em;
+  }
+  .foot .left, .foot .right { display: flex; gap: 24px; align-items: center; }
+  .foot .right span strong { color: var(--tx2); font-weight: 400; }
+  .foot a.admin {
+    color: var(--tx3);
+    transition: color .18s ease;
+  }
+  .foot a.admin:hover { color: var(--gold); }
+
+  /* ─────────────────────────────────────── Responsive (graceful collapse) */
+  @media (max-width: 1100px) {
+    :root { --pad-x: 56px; }
+    .hero { grid-template-columns: 1fr; gap: 56px; padding: 64px 0; }
+    .globe-wrap { max-width: 460px; margin: 0 auto; }
+    .cards { grid-template-columns: 1fr; }
+    .card,
+    .card:nth-child(3n) { border-right: none; }
+    .card,
+    .card:nth-last-child(-n+3) { border-bottom: 1px solid var(--line); }
+    .card:last-child { border-bottom: none; }
+  }
+  @media (max-width: 640px) {
+    :root { --pad-x: 24px; }
+    .top { padding-top: 18px; }
+    .top-right { gap: 16px; }
+    h1.title { font-size: 38px; }
+  }
 </style>
 </head>
-<body>
+<body data-screen-label="Carto-MO · Lobby">
 
-<!-- ═══════════════════════════════ GLOBE ═══════════════════════════════ -->
-<div id="globe"></div>
-<div id="grid-overlay"></div>
+  <!-- ─────────────────────────────────────── Starfield -->
+  <div id="stars" aria-hidden="true"><canvas id="sky"></canvas></div>
 
-<!-- Corner brackets (HUD style) -->
-<div class="bracket tl"></div>
-<div class="bracket tr"></div>
-<div class="bracket bl"></div>
-<div class="bracket br"></div>
-
-<!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
-<div id="header">
-  <div class="hdr-section">
-    <img src="./favicon.jpg" class="hdr-logo" alt="Algor Int">
-    <div class="hdr-brand">
-      <h1>Algor Int</h1>
-      <p>Geopolitical Intelligence</p>
+  <!-- ─────────────────────────────────────── Header -->
+  <header class="top">
+    <div class="brand">
+      <img class="logo" src="./favicon.jpg" alt="Algor Int">
+      <div class="stack">
+        <span class="l1">Algor Int</span>
+        <span class="l2">Geopolitical Intelligence</span>
+      </div>
     </div>
-  </div>
-  <div class="hdr-section">
-    <span class="hdr-status-dot"></span>
-    <span class="hdr-meta">System <strong>Online</strong></span>
-  </div>
-  <div class="hdr-section">
-    <span class="hdr-meta">Build <strong>v2.6.0</strong></span>
-  </div>
-  <div class="hdr-spacer"></div>
-  <div class="hdr-section">
-    <span class="hdr-meta">UTC <strong id="clock">--:--:--</strong></span>
-  </div>
-  <div class="hdr-section">
-    <span class="hdr-meta"><strong id="coords">00.000° N, 00.000° E</strong></span>
-  </div>
-</div>
+    <div class="top-right">
+      <span class="sysstat"><span class="led"></span>Système opérationnel</span>
+      <span class="clock"><span id="clock">14:32</span><span class="z"> UTC</span></span>
+    </div>
+  </header>
 
-<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
-<div id="hero">
-  <div class="hero-tag">OSINT · Cartography · 2026</div>
-  <h2 class="hero-title">
-    Geopolitical<br>
-    intelligence<br>
-    <span class="ac">platform.</span>
-  </h2>
-  <p class="hero-subtitle">
-    Plateforme de veille cartographique dediee aux theatres de conflit armes.
-    Trois zones d'analyse, sept couches de donnees, des milliers d'evenements geolocalises et sources croisees.
-  </p>
-</div>
+  <main>
 
-<!-- ═══════════════════════════════ ZONES PANEL ═══════════════════════════════ -->
-<div id="zones-panel">
-  <div class="panel-header">
-    <span class="panel-header-title">Theatres d'analyse</span>
-    <span class="panel-header-count">03 / 03</span>
-  </div>
-  <div class="zone-list">
+    <!-- ─────────────────────────────────────── Hero -->
+    <section class="hero">
+      <div class="lead">
+        <span class="lobby-pill"><span class="dotg"></span>Lobby<span class="sep">·</span><span class="pub">accès public</span></span>
+        <div class="eyebrow"><span class="bar"></span>OSINT · Cartographie · 2026</div>
+        <h1 class="title">
+          Renseignement cartographique <em>pour analystes.</em>
+        </h1>
+        <p class="intro">
+          Algoracces fédère trois théâtres d'analyse — Moyen-Orient, Sahel, République démocratique du Congo. Imagerie satellite, ACLED, GDELT, presse d'État, OSINT social et flux Telegram sont agrégés sur une carte unique, sourcée, datée et auditable événement par événement.
+        </p>
+        <p class="gateline">
+          Vous êtes <em>à l'entrée.</em> Sélectionnez un théâtre d'analyse pour accéder à la plateforme complète.
+        </p>
+        <div class="cta-row">
+          <a class="cta" href="#theaters">Ouvrir un théâtre <span class="arr">→</span></a>
+          <a class="ghost" href="#methodologie">Notre méthodologie <span class="arr">↗</span></a>
+        </div>
+        <div class="sub-links">
+          <a href="#methodologie">Méthodologie</a>
+          <span class="midpt">·</span>
+          <a href="#sources">Sources</a>
+          <span class="midpt">·</span>
+          <a href="#about">À propos</a>
+          <span class="midpt">·</span>
+          <a href="#demo">Démo guidée</a>
+        </div>
+      </div>
 
-    <!-- MOYEN-ORIENT -->
-    <a class="zone-card" href="./moyen-orient/index.html" data-zone="mo">
-      <div class="zone-card-row1">
-        <span class="zone-card-index">ZONE 01</span>
-        <span class="zone-card-status operational">Operational</span>
-      </div>
-      <div class="zone-card-name">Moyen-Orient</div>
-      <div class="zone-card-region">Iraq · Syria · Lebanon · Yemen</div>
-      <div class="zone-card-desc">
-        Attaques chiites/sunnites et insurrections djihadistes. Dix periodes de 2 ans couvrant 2005–2026.
-      </div>
-      <div class="zone-card-meta">
-        <div class="meta-cell">
-          <div class="meta-cell-label">Periode</div>
-          <div class="meta-cell-value small">2005–26</div>
-        </div>
-        <div class="meta-cell">
-          <div class="meta-cell-label">Evenements</div>
-          <div class="meta-cell-value">173</div>
-        </div>
-        <div class="meta-cell">
-          <div class="meta-cell-label">Acteurs</div>
-          <div class="meta-cell-value">22</div>
+      <div class="globe-wrap" aria-hidden="true">
+        <canvas id="globe"></canvas>
+        <div class="globe-meta">
+          <div class="lg">
+            <span class="sw sw-land"></span>
+            <span class="ttl">Flux terrestres<span class="ct">50 trajets</span></span>
+            <span class="desc">Axes de conflit, corridors trafic et liaisons capitales — Damas, Téhéran, Bamako, Kigali, Tana, <em>Khyber, Karachi.</em></span>
+          </div>
+          <div class="lg">
+            <span class="sw sw-sea"></span>
+            <span class="ttl">Flux maritimes<span class="ct">35 trajets</span></span>
+            <span class="desc">Détroits, cabotage, lacs et océan Indien — <em>Ormuz, Bab-el-Mandeb,</em> Suez, Mozambique, Bengal, CPEC.</span>
+          </div>
         </div>
       </div>
-      <div class="zone-card-cta">
-        <span class="zone-cta-label access">Acces libre</span>
-        <span class="zone-cta-arrow">→</span>
-      </div>
-    </a>
+    </section>
 
-    <!-- SAHEL -->
-    <a class="zone-card" href="./sahel/index.html" data-zone="sahel">
-      <div class="zone-card-row1">
-        <span class="zone-card-index">ZONE 02</span>
-        <span class="zone-card-status restricted">Sur abonnement</span>
+    <!-- ─────────────────────────────────────── Theaters -->
+    <section class="theaters" id="theaters">
+      <div class="th-head">
+        <span class="lbl">Théâtres couverts</span>
+        <span class="right">
+          <span><strong>6</strong> zones</span>
+          <span><strong>1 028</strong> événements / 24 h</span>
+          <span>dernière sync. <strong>14:31:47</strong></span>
+        </span>
       </div>
-      <div class="zone-card-name">Sahel</div>
-      <div class="zone-card-region">Mali · Burkina · Niger · Tchad · Mauritanie</div>
-      <div class="zone-card-desc">
-        Analyse multicouche du theatre sahelien. Sept calques : ethnies, forces, mines, infrastructures, population, evenements, flux.
-      </div>
-      <div class="zone-card-meta">
-        <div class="meta-cell">
-          <div class="meta-cell-label">Periode</div>
-          <div class="meta-cell-value small">Jan–Mar 26</div>
-        </div>
-        <div class="meta-cell">
-          <div class="meta-cell-label">Evenements</div>
-          <div class="meta-cell-value" id="sahel-event-count">—</div>
-        </div>
-        <div class="meta-cell">
-          <div class="meta-cell-label">Acteurs</div>
-          <div class="meta-cell-value" id="sahel-actor-count">—</div>
-        </div>
-      </div>
-      <div class="zone-card-cta">
-        <span class="zone-cta-label subscribe">S'abonner</span>
-        <span class="zone-cta-arrow">→</span>
-      </div>
-    </a>
 
-    <!-- RDC -->
-    <a class="zone-card" href="./rdc/index.html" data-zone="rdc">
-      <div class="zone-card-row1">
-        <span class="zone-card-index">ZONE 03</span>
-        <span class="zone-card-status restricted">Sur abonnement</span>
-      </div>
-      <div class="zone-card-name">RDC</div>
-      <div class="zone-card-region">Nord-Kivu · Sud-Kivu · Ituri</div>
-      <div class="zone-card-desc">
-        Conflits armes en Republique Democratique du Congo. Suivi M23, Wazalendo, FARDC. Six periodes 2023–2026.
-      </div>
-      <div class="zone-card-meta">
-        <div class="meta-cell">
-          <div class="meta-cell-label">Periode</div>
-          <div class="meta-cell-value small">2023–26</div>
-        </div>
-        <div class="meta-cell">
-          <div class="meta-cell-label">Evenements</div>
-          <div class="meta-cell-value">—</div>
-        </div>
-        <div class="meta-cell">
-          <div class="meta-cell-label">Acteurs</div>
-          <div class="meta-cell-value">—</div>
-        </div>
-      </div>
-      <div class="zone-card-cta">
-        <span class="zone-cta-label subscribe">S'abonner</span>
-        <span class="zone-cta-arrow">→</span>
-      </div>
-    </a>
+      <div class="cards">
 
-  </div>
-</div>
+        <!-- ── Card 01 · Moyen-Orient -->
+        <a class="card" href="./moyen-orient/index.html">
+          <span class="c-availability live"><span class="pin"></span>en ligne</span>
+          <div class="c-row"><span class="ix">01 / 06</span><span>MO-01</span></div>
+          <h2 class="c-name">Moyen-Orient</h2>
+          <div class="c-sub">Iraq<span class="sep">·</span>Syrie<span class="sep">·</span>Liban<span class="sep">·</span>Yémen</div>
+          <svg class="c-spark" viewBox="0 0 280 44" preserveAspectRatio="none">
+            <path d="M0,32 L20,28 L40,30 L60,22 L80,24 L100,18 L120,20 L140,12 L160,16 L180,10 L200,14 L220,8 L240,12 L260,6 L280,10"
+                  fill="none" stroke="#5e6066" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M0,32 L20,28 L40,30 L60,22 L80,24 L100,18 L120,20 L140,12 L160,16 L180,10 L200,14 L220,8 L240,12 L260,6 L280,10 L280,44 L0,44 Z"
+                  fill="rgba(212,214,218,0.04)"/>
+            <circle cx="280" cy="10" r="2.5" fill="#d4d6da"/>
+          </svg>
+          <div class="c-stat">
+            <span class="num">173<span class="delta">+12 / 24h</span></span>
+            <span class="lbl">événements</span>
+          </div>
+          <span class="c-cta">Consulter <span class="arr">→</span></span>
+        </a>
 
-<!-- ═══════════════════════════════ ZONE LABELS (floating on globe) ═══════════════════════════════ -->
-<div id="zone-label-mo" class="zone-label" style="display:none">
-  <div class="zone-label-inner">
-    <span class="zone-label-dot"></span>
-    <span>MO-01</span>
-  </div>
-</div>
-<div id="zone-label-sahel" class="zone-label" style="display:none">
-  <div class="zone-label-inner">
-    <span class="zone-label-dot"></span>
-    <span>SAHEL-02</span>
-  </div>
-</div>
-<div id="zone-label-rdc" class="zone-label" style="display:none">
-  <div class="zone-label-inner">
-    <span class="zone-label-dot"></span>
-    <span>RDC-03</span>
-  </div>
-</div>
+        <!-- ── Card 02 · Sahel -->
+        <a class="card" href="./sahel/index.html">
+          <span class="c-availability sub"><span class="pin"></span>sur abonnement</span>
+          <div class="c-row"><span class="ix">02 / 06</span><span>SAHEL-02</span></div>
+          <h2 class="c-name">Sahel</h2>
+          <div class="c-sub">Mali<span class="sep">·</span>Burkina<span class="sep">·</span>Niger<span class="sep">·</span>Tchad<span class="sep">·</span>Mauritanie</div>
+          <svg class="c-spark" viewBox="0 0 280 44" preserveAspectRatio="none">
+            <path d="M0,28 L20,30 L40,24 L60,26 L80,18 L100,22 L120,16 L140,18 L160,10 L180,14 L200,8 L220,12 L240,6 L260,10 L280,4"
+                  fill="none" stroke="#5e6066" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M0,28 L20,30 L40,24 L60,26 L80,18 L100,22 L120,16 L140,18 L160,10 L180,14 L200,8 L220,12 L240,6 L260,10 L280,4 L280,44 L0,44 Z"
+                  fill="rgba(212,214,218,0.04)"/>
+            <circle cx="280" cy="4" r="2.5" fill="#d4d6da"/>
+          </svg>
+          <div class="c-stat">
+            <span class="num">214<span class="delta">+38 / 24h</span></span>
+            <span class="lbl">événements</span>
+          </div>
+          <span class="c-cta muted">Demander l'accès <span class="arr">→</span></span>
+        </a>
 
-<!-- ═══════════════════════════════ STATUS BAR ═══════════════════════════════ -->
-<div id="status-bar">
-  <div class="sb-cell accent">
-    <span>Classif <strong>UNCLASSIFIED // FOR ANALYST USE</strong></span>
-  </div>
-  <div class="sb-cell">
-    <span>Source <strong>OSINT</strong></span>
-  </div>
-  <div class="sb-cell">
-    <span>Projection <strong>Mercator / Globe</strong></span>
-  </div>
-  <div class="sb-spacer"></div>
-  <div class="sb-cell cyan">
-    <span>Feed <strong>LIVE</strong></span>
-  </div>
-  <a class="sb-cell sb-admin" href="./admin/">
-    <span>Admin</span>
-  </a>
-  <div class="sb-cell">
-    <span>© Algor Int <strong id="year">2026</strong></span>
-  </div>
-</div>
+        <!-- ── Card 03 · Grands Lacs -->
+        <a class="card" href="./rdc/index.html">
+          <span class="c-availability sub"><span class="pin"></span>sur abonnement</span>
+          <div class="c-row"><span class="ix">03 / 06</span><span>LACS-03</span></div>
+          <h2 class="c-name">Grands Lacs</h2>
+          <div class="c-sub">RDC Est<span class="sep">·</span>Rwanda<span class="sep">·</span>Burundi<span class="sep">·</span>Ouganda<span class="sep">·</span>Tanzanie</div>
+          <svg class="c-spark" viewBox="0 0 280 44" preserveAspectRatio="none">
+            <path d="M0,18 L20,20 L40,14 L60,22 L80,18 L100,24 L120,20 L140,26 L160,22 L180,28 L200,24 L220,30 L240,26 L260,32 L280,28"
+                  fill="none" stroke="#5e6066" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M0,18 L20,20 L40,14 L60,22 L80,18 L100,24 L120,20 L140,26 L160,22 L180,28 L200,24 L220,30 L240,26 L260,32 L280,28 L280,44 L0,44 Z"
+                  fill="rgba(212,214,218,0.04)"/>
+            <circle cx="280" cy="28" r="2.5" fill="#d4d6da"/>
+          </svg>
+          <div class="c-stat">
+            <span class="num">96<span class="delta">−4 / 24h</span></span>
+            <span class="lbl">événements</span>
+          </div>
+          <span class="c-cta muted">Demander l'accès <span class="arr">→</span></span>
+        </a>
+
+        <!-- ── Card 04 · Madagascar -->
+        <a class="card" href="./madagascar/index.html">
+          <span class="c-availability sub"><span class="pin"></span>sur abonnement</span>
+          <div class="c-row"><span class="ix">04 / 06</span><span>MDG-04</span></div>
+          <h2 class="c-name">Madagascar</h2>
+          <div class="c-sub">Grand Sud<span class="sep">·</span>SAVA<span class="sep">·</span>Analamanga<span class="sep">·</span>Canal Mozambique</div>
+          <svg class="c-spark" viewBox="0 0 280 44" preserveAspectRatio="none">
+            <path d="M0,36 L20,32 L40,34 L60,28 L80,30 L100,24 L120,26 L140,20 L160,22 L180,16 L200,18 L220,12 L240,14 L260,10 L280,12"
+                  fill="none" stroke="#5e6066" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M0,36 L20,32 L40,34 L60,28 L80,30 L100,24 L120,26 L140,20 L160,22 L180,16 L200,18 L220,12 L240,14 L260,10 L280,12 L280,44 L0,44 Z"
+                  fill="rgba(212,214,218,0.04)"/>
+            <circle cx="280" cy="12" r="2.5" fill="#d4d6da"/>
+          </svg>
+          <div class="c-stat">
+            <span class="num">31<span class="delta">+5 / 24h</span></span>
+            <span class="lbl">événements</span>
+          </div>
+          <span class="c-cta muted">Demander l'accès <span class="arr">→</span></span>
+        </a>
+
+        <!-- ── Card 05 · Afrique Maritime -->
+        <a class="card" href="./afrique/index.html">
+          <span class="c-availability sub"><span class="pin"></span>sur abonnement</span>
+          <div class="c-row"><span class="ix">05 / 06</span><span>AFR-05</span></div>
+          <h2 class="c-name">Afrique Maritime</h2>
+          <div class="c-sub">Suez<span class="sep">·</span>Bab-el-Mandeb<span class="sep">·</span>Ormuz<span class="sep">·</span>Cap<span class="sep">·</span>Golfe de Guinée</div>
+          <svg class="c-spark" viewBox="0 0 280 44" preserveAspectRatio="none">
+            <path d="M0,22 L20,18 L40,24 L60,20 L80,16 L100,22 L120,18 L140,14 L160,20 L180,16 L200,12 L220,18 L240,14 L260,10 L280,16"
+                  fill="none" stroke="#5e6066" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M0,22 L20,18 L40,24 L60,20 L80,16 L100,22 L120,18 L140,14 L160,20 L180,16 L200,12 L220,18 L240,14 L260,10 L280,16 L280,44 L0,44 Z"
+                  fill="rgba(212,214,218,0.04)"/>
+            <circle cx="280" cy="16" r="2.5" fill="#d4d6da"/>
+          </svg>
+          <div class="c-stat">
+            <span class="num">372<span class="delta">flux / 24h</span></span>
+            <span class="lbl">passages maritimes</span>
+          </div>
+          <span class="c-cta muted">Demander l'accès <span class="arr">→</span></span>
+        </a>
+
+        <!-- ── Card 06 · Asie du Sud -->
+        <a class="card" href="./asie-sud/index.html">
+          <span class="c-availability sub"><span class="pin"></span>sur abonnement</span>
+          <div class="c-row"><span class="ix">06 / 06</span><span>ASIE-06</span></div>
+          <h2 class="c-name">Asie du Sud</h2>
+          <div class="c-sub">Inde<span class="sep">·</span>Pakistan<span class="sep">·</span>Afghanistan<span class="sep">·</span>Cachemire<span class="sep">·</span>Baloutchistan</div>
+          <svg class="c-spark" viewBox="0 0 280 44" preserveAspectRatio="none">
+            <path d="M0,30 L20,26 L40,32 L60,24 L80,28 L100,18 L120,22 L140,14 L160,18 L180,8 L200,12 L220,6 L240,10 L260,4 L280,8"
+                  fill="none" stroke="#5e6066" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M0,30 L20,26 L40,32 L60,24 L80,28 L100,18 L120,22 L140,14 L160,18 L180,8 L200,12 L220,6 L240,10 L260,4 L280,8 L280,44 L0,44 Z"
+                  fill="rgba(212,214,218,0.04)"/>
+            <circle cx="280" cy="8" r="2.5" fill="#d4d6da"/>
+          </svg>
+          <div class="c-stat">
+            <span class="num">142<span class="delta">+21 / 24h</span></span>
+            <span class="lbl">événements</span>
+          </div>
+          <span class="c-cta muted">Demander l'accès <span class="arr">→</span></span>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ─────────────────────────────────────── Footer -->
+  <footer class="foot">
+    <div class="left">
+      <span>© Algor·Int <span id="year">2026</span></span>
+      <span>Build v2.6.0</span>
+    </div>
+    <div class="right">
+      <span>Usage analyste — diffusion restreinte</span>
+      <a class="admin" href="./admin/">Admin</a>
+    </div>
+  </footer>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
-   MAPBOX GLOBE — continuous rotation
-   ═══════════════════════════════════════════════════════════ */
-mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+/* ─────────────────────────────────────── Starfield — ciel étoilé sobre */
+(function(){
+  const c = document.getElementById('sky');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0, stars = [];
 
-const ZONES = {
-  mo:    { name: 'Moyen-Orient', coords: [44.0, 33.0],  color: '#c49a3c' },
-  sahel: { name: 'Sahel',        coords: [0.0, 16.0],   color: '#c49a3c' },
-  rdc:   { name: 'RDC',          coords: [27.5, -2.0],  color: '#c49a3c' }
-};
+  function rand(min, max) { return Math.random() * (max - min) + min; }
 
-const map = new mapboxgl.Map({
-  container: 'globe',
-  style: 'mapbox://styles/mapbox/dark-v11',
-  projection: 'globe',
-  center: [15, 15],
-  zoom: 1.8,
-  pitch: 0,
-  interactive: false,
-  attributionControl: true
-});
-
-map.on('style.load', () => {
-  map.setFog({
-    'color': 'rgba(10,11,13,0.8)',
-    'high-color': 'rgba(30,40,55,0.5)',
-    'horizon-blend': 0.08,
-    'space-color': '#050608',
-    'star-intensity': 0.25
-  });
-
-  /* Add zone markers as pulsing dots */
-  map.addSource('zones', {
-    type: 'geojson',
-    data: {
-      type: 'FeatureCollection',
-      features: Object.entries(ZONES).map(([id, z]) => ({
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: z.coords },
-        properties: { id, name: z.name }
-      }))
-    }
-  });
-
-  map.addLayer({
-    id: 'zones-glow',
-    type: 'circle',
-    source: 'zones',
-    paint: {
-      'circle-radius': 24,
-      'circle-color': '#c49a3c',
-      'circle-opacity': 0.12,
-      'circle-blur': 1
-    }
-  });
-
-  map.addLayer({
-    id: 'zones-ring',
-    type: 'circle',
-    source: 'zones',
-    paint: {
-      'circle-radius': 10,
-      'circle-color': 'transparent',
-      'circle-stroke-width': 1.5,
-      'circle-stroke-color': '#c49a3c',
-      'circle-stroke-opacity': 0.6
-    }
-  });
-
-  map.addLayer({
-    id: 'zones-dot',
-    type: 'circle',
-    source: 'zones',
-    paint: {
-      'circle-radius': 4,
-      'circle-color': '#c49a3c',
-      'circle-opacity': 0.95
-    }
-  });
-
-  /* ═══ DYNAMIC FLOWS — conflits & actions sur les 3 zones ═══ */
-  addFlows();
-
-  /* Show zone labels */
-  document.getElementById('zone-label-mo').style.display = 'block';
-  document.getElementById('zone-label-sahel').style.display = 'block';
-  document.getElementById('zone-label-rdc').style.display = 'block';
-
-  positionLabels();
-  startRotation();
-  startFlowAnimation();
-});
-
-/* ═══════════════════════════════════════════════════════════
-   DYNAMIC CONFLICT FLOWS
-   ═══════════════════════════════════════════════════════════ */
-/* Intra-zone seulement — mouvements locaux de conflit */
-const CITIES = {
-  /* Moyen-Orient */
-  bagdad:    [44.3661, 33.3152],
-  damas:     [36.2765, 33.5138],
-  beyrouth:  [35.5018, 33.8938],
-  sanaa:     [44.191,  15.3694],
-  aden:      [45.0186, 12.7855],
-  mossoul:   [43.1482, 36.3350],
-  alep:      [37.1343, 36.2021],
-  /* Sahel */
-  bamako:    [-8.0029, 12.6392],
-  niamey:    [2.1254,  13.5115],
-  ouaga:     [-1.5197, 12.3714],
-  ndjamena:  [15.0502, 12.1191],
-  agadez:    [7.9889,  16.9742],
-  gao:       [-0.0236, 16.2717],
-  /* RDC */
-  kinshasa:  [15.2663, -4.4419],
-  goma:      [29.2218, -1.6779],
-  bukavu:    [28.8608, -2.5095],
-  bunia:     [29.6225, 1.5655],
-  beni:      [29.4730, 0.4908]
-};
-
-/* Flux INTRA-ZONE uniquement — conflits locaux */
-const FLOWS = [
-  /* MOYEN-ORIENT — axes conflictuels */
-  { from: 'damas',    to: 'beyrouth' },
-  { from: 'damas',    to: 'alep' },
-  { from: 'bagdad',   to: 'damas' },
-  { from: 'bagdad',   to: 'mossoul' },
-  { from: 'sanaa',    to: 'aden' },
-  /* SAHEL — corridors djihadistes */
-  { from: 'bamako',   to: 'gao' },
-  { from: 'bamako',   to: 'ouaga' },
-  { from: 'ouaga',    to: 'niamey' },
-  { from: 'niamey',   to: 'agadez' },
-  { from: 'agadez',   to: 'ndjamena' },
-  /* RDC — front Est */
-  { from: 'kinshasa', to: 'goma' },
-  { from: 'goma',     to: 'bukavu' },
-  { from: 'goma',     to: 'beni' },
-  { from: 'beni',     to: 'bunia' }
-];
-
-const FLOW_COLOR = '#c49a3c';  /* or militaire, coherent design */
-
-/* Great-circle interpolation (sphere slerp) */
-function greatCircle(from, to, steps = 48) {
-  const [lo1, la1] = from.map(x => x * Math.PI / 180);
-  const [lo2, la2] = to.map(x => x * Math.PI / 180);
-  const d = 2 * Math.asin(Math.sqrt(
-    Math.pow(Math.sin((la1 - la2) / 2), 2) +
-    Math.cos(la1) * Math.cos(la2) * Math.pow(Math.sin((lo1 - lo2) / 2), 2)
-  ));
-  if (!isFinite(d) || d === 0) return [from, to];
-  const pts = [];
-  for (let i = 0; i <= steps; i++) {
-    const f = i / steps;
-    const A = Math.sin((1 - f) * d) / Math.sin(d);
-    const B = Math.sin(f * d) / Math.sin(d);
-    const x = A * Math.cos(la1) * Math.cos(lo1) + B * Math.cos(la2) * Math.cos(lo2);
-    const y = A * Math.cos(la1) * Math.sin(lo1) + B * Math.cos(la2) * Math.sin(lo2);
-    const z = A * Math.sin(la1) + B * Math.sin(la2);
-    const lat = Math.atan2(z, Math.sqrt(x * x + y * y)) * 180 / Math.PI;
-    const lon = Math.atan2(y, x) * 180 / Math.PI;
-    pts.push([lon, lat]);
-  }
-  return pts;
-}
-
-/* Precompute arc geometries + particles positions */
-let flowArcs = [];  /* [{coords: [...pts], length}] */
-
-function addFlows() {
-  if (!map) { console.warn('[flows] map missing'); return; }
-
-  try {
-    /* Build arcs */
-    flowArcs = FLOWS
-      .filter(f => CITIES[f.from] && CITIES[f.to])
-      .map(f => {
-        const coords = greatCircle(CITIES[f.from], CITIES[f.to], 64);
-        return { coords, length: coords.length };
-      });
-
-    /* Endpoint cities — static gold dots with subtle glow */
-    const endpointCoords = new Set();
-    FLOWS.forEach(f => {
-      if (!CITIES[f.from] || !CITIES[f.to]) return;
-      endpointCoords.add(CITIES[f.from].join(','));
-      endpointCoords.add(CITIES[f.to].join(','));
-    });
-    const endpoints = Array.from(endpointCoords).map(s => {
-      const [lng, lat] = s.split(',').map(Number);
-      return { type: 'Feature', geometry: { type: 'Point', coordinates: [lng, lat] } };
-    });
-
-    map.addSource('flow-endpoints', {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features: endpoints }
-    });
-    map.addLayer({
-      id: 'flow-endpoints-glow',
-      type: 'circle',
-      source: 'flow-endpoints',
-      paint: {
-        'circle-radius': 7,
-        'circle-color': FLOW_COLOR,
-        'circle-opacity': 0.15,
-        'circle-blur': 1.5
-      }
-    });
-    map.addLayer({
-      id: 'flow-endpoints-dot',
-      type: 'circle',
-      source: 'flow-endpoints',
-      paint: {
-        'circle-radius': 2.5,
-        'circle-color': FLOW_COLOR,
-        'circle-opacity': 0.9
-      }
-    });
-
-    /* Static arc background (thin gold lines) */
-    const arcFeatures = flowArcs.map(a => ({
-      type: 'Feature',
-      geometry: { type: 'LineString', coordinates: a.coords }
-    }));
-    map.addSource('flow-arcs', {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features: arcFeatures }
-    });
-    map.addLayer({
-      id: 'flow-arcs-bg',
-      type: 'line',
-      source: 'flow-arcs',
-      layout: { 'line-cap': 'round', 'line-join': 'round' },
-      paint: {
-        'line-color': FLOW_COLOR,
-        'line-width': 0.8,
-        'line-opacity': 0.25
-      }
-    });
-
-    /* Moving particles — one travelling dot per arc */
-    map.addSource('flow-particles', {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features: [] }
-    });
-    /* Glow behind particle */
-    map.addLayer({
-      id: 'flow-particles-glow',
-      type: 'circle',
-      source: 'flow-particles',
-      paint: {
-        'circle-radius': 8,
-        'circle-color': FLOW_COLOR,
-        'circle-opacity': 0.35,
-        'circle-blur': 1.2
-      }
-    });
-    /* Solid core */
-    map.addLayer({
-      id: 'flow-particles-dot',
-      type: 'circle',
-      source: 'flow-particles',
-      paint: {
-        'circle-radius': 2.2,
-        'circle-color': '#ffe8a8',
-        'circle-opacity': 1
-      }
-    });
-
-    console.log('[flows] ok', flowArcs.length, 'arcs');
-  } catch (e) {
-    console.error('[flows] error:', e);
-  }
-}
-
-/* Animated particles traveling along each arc */
-function startFlowAnimation() {
-  let t = 0;
-  const SPEED = 0.006;  /* progress per frame (~0-1 per arc) */
-
-  function tick() {
-    t = (t + SPEED) % 1;
-    const features = [];
-    for (const arc of flowArcs) {
-      /* 2 particles per arc, offset by 0.5 for continuous flow */
-      for (const offset of [0, 0.5]) {
-        const p = (t + offset) % 1;
-        const idx = Math.floor(p * (arc.length - 1));
-        const frac = p * (arc.length - 1) - idx;
-        const a = arc.coords[idx];
-        const b = arc.coords[Math.min(idx + 1, arc.length - 1)];
-        /* Linear interp between two adjacent great-circle points (ok for short segments) */
-        const lng = a[0] + (b[0] - a[0]) * frac;
-        const lat = a[1] + (b[1] - a[1]) * frac;
-        /* Fade particle at extremities for smooth entry/exit */
-        const fadeIn = Math.min(1, p * 10);
-        const fadeOut = Math.min(1, (1 - p) * 10);
-        const opacity = Math.min(fadeIn, fadeOut);
-        features.push({
-          type: 'Feature',
-          properties: { opacity },
-          geometry: { type: 'Point', coordinates: [lng, lat] }
-        });
-      }
-    }
-    const src = map.getSource('flow-particles');
-    if (src) src.setData({ type: 'FeatureCollection', features });
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
-
-/* ═══ Continuous rotation ═══ */
-let rotationPaused = false;
-const ROTATION_SPEED = 0.2; // ~35s tour complet, pace calme
-
-function startRotation() {
-  function tick() {
-    if (!rotationPaused) {
-      const current = map.getCenter();
-      /* setCenter is faster than jumpTo for a simple longitude shift */
-      map.setCenter([current.lng + ROTATION_SPEED, current.lat]);
-      positionLabels();
-    }
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
-
-/* ═══ Position floating zone labels ═══ */
-function positionLabels() {
-  for (const [id, z] of Object.entries(ZONES)) {
-    const el = document.getElementById('zone-label-' + id);
-    if (!el) continue;
-    const p = map.project(z.coords);
-    /* Only show if on visible hemisphere (approximate) */
-    const center = map.getCenter();
-    const lngDiff = Math.abs(((z.coords[0] - center.lng + 540) % 360) - 180);
-    if (lngDiff > 85) {
-      el.style.opacity = '0';
-    } else {
-      el.style.opacity = '1';
-      el.style.left = (p.x) + 'px';
-      el.style.top = (p.y - 28) + 'px';
+  function build(){
+    const r = c.getBoundingClientRect();
+    W = r.width; H = r.height;
+    c.width = W * DPR; c.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    // density tuned for editorial restraint
+    const N = Math.round((W * H) / 5200);
+    stars = new Array(N);
+    for (let i = 0; i < N; i++) {
+      stars[i] = {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: rand(0.25, 1.05),
+        a: rand(0.10, 0.55),
+        // twinkle params
+        ph: Math.random() * Math.PI * 2,
+        sp: rand(0.0006, 0.0018),
+        warm: Math.random() < 0.06   // a few warm/gold motes
+      };
     }
   }
-}
 
-/* ═══ Clock & coords readout ═══ */
-function updateClock() {
-  const now = new Date();
-  const h = String(now.getUTCHours()).padStart(2, '0');
-  const m = String(now.getUTCMinutes()).padStart(2, '0');
-  const s = String(now.getUTCSeconds()).padStart(2, '0');
-  document.getElementById('clock').textContent = `${h}:${m}:${s}`;
-}
-updateClock();
-setInterval(updateClock, 1000);
-
-function updateCoords() {
-  if (!map || !map.loaded()) return;
-  const c = map.getCenter();
-  const ns = c.lat >= 0 ? 'N' : 'S';
-  const ew = c.lng >= 0 ? 'E' : 'W';
-  const lat = Math.abs(c.lat).toFixed(3).padStart(7, '0');
-  const lng = Math.abs(c.lng).toFixed(3).padStart(7, '0');
-  document.getElementById('coords').textContent = `${lat}° ${ns}, ${lng}° ${ew}`;
-}
-setInterval(updateCoords, 200);
-
-/* ═══ Zone card hover → fly globe to that zone ═══ */
-document.querySelectorAll('.zone-card').forEach(card => {
-  card.addEventListener('mouseenter', () => {
-    const id = card.dataset.zone;
-    if (!ZONES[id]) return;
-    rotationPaused = true;
-    map.easeTo({
-      center: ZONES[id].coords,
-      zoom: 2.4,
-      duration: 1800,
-      essential: true
-    });
-  });
-  card.addEventListener('mouseleave', () => {
-    map.easeTo({ zoom: 1.8, duration: 1400 });
-    setTimeout(() => { rotationPaused = false; }, 1400);
-  });
-});
-
-/* ═══ Year auto-update ═══ */
-document.getElementById('year').textContent = new Date().getFullYear();
-
-/* ═══ Reposition labels on resize ═══ */
-window.addEventListener('resize', positionLabels);
-
-/* ═══════════════════════════════════════════════════════════
-   Dynamic Sahel stats
-   ═══════════════════════════════════════════════════════════ */
-(async () => {
-  const files = [
-    '2026-jan-01-15.geojson','2026-jan-16-31.geojson',
-    '2026-fev-01-14.geojson','2026-fev-15-28.geojson',
-    '2026-mars-01-15.geojson','2026-mars-16-31.geojson'
-  ];
-  let total = 0;
-  const actors = new Set();
-  await Promise.all(files.map(async f => {
-    try {
-      const res = await fetch('./sahel/' + f);
-      if (!res.ok) return;
-      const data = await res.json();
-      if (data.features) {
-        total += data.features.length;
-        data.features.forEach(ft => {
-          const a = ft.properties && (ft.properties.name || ft.properties.acteur || ft.properties.actor);
-          if (a) actors.add(a);
-        });
+  function paint(t){
+    ctx.clearRect(0, 0, W, H);
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      const tw = (Math.sin(t * s.sp + s.ph) + 1) / 2; // 0..1
+      const a = s.a * (0.55 + 0.45 * tw);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      if (s.warm) {
+        ctx.fillStyle = `rgba(184,149,74,${(a * 0.85).toFixed(3)})`;
+      } else {
+        ctx.fillStyle = `rgba(212,214,218,${a.toFixed(3)})`;
       }
-    } catch (_) {}
-  }));
-  const ev = document.getElementById('sahel-event-count');
-  const ac = document.getElementById('sahel-actor-count');
-  if (ev) ev.textContent = total || '—';
-  if (ac) ac.textContent = actors.size || '—';
+      ctx.fill();
+      // tiny halo on the brightest
+      if (s.r > 0.85) {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r * 2.4, 0, Math.PI * 2);
+        ctx.fillStyle = s.warm
+          ? `rgba(184,149,74,${(a * 0.10).toFixed(3)})`
+          : `rgba(212,214,218,${(a * 0.10).toFixed(3)})`;
+        ctx.fill();
+      }
+    }
+  }
+
+  build();
+  paint(performance.now());
+
+  if (window.ResizeObserver) {
+    try { new ResizeObserver(() => { build(); paint(performance.now()); }).observe(c); } catch (_) {}
+  }
+  window.addEventListener('resize', () => { build(); paint(performance.now()); });
+
+  function loop(now){ paint(now); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+  setInterval(() => { if (document.hidden) paint(performance.now()); }, 1000 / 18);
 })();
 </script>
+
+<script>
+/* ─────────────────────────────────────── Globe interactif (D3 orthographique) */
+(function(){
+  const canvas = document.getElementById('globe');
+  if (!canvas || !window.d3 || !window.topojson) return;
+  const ctx = canvas.getContext('2d');
+
+  // — projection (initialize with safe defaults so first paint never has scale<=0)
+  const proj = d3.geoOrthographic()
+    .clipAngle(90)
+    .rotate([-25, -10, 0])
+    .translate([280, 280])
+    .scale(260);
+  const path = d3.geoPath(proj, ctx);
+
+  // — sizing with DPR (defensive: floors W/H, no negative scale)
+  let W = 560, H = 560, baseScale = 260;
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    W = Math.max(120, r.width  || canvas.clientWidth  || 560);
+    H = Math.max(120, r.height || canvas.clientHeight || 560);
+    canvas.width  = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    baseScale = Math.max(40, Math.min(W,H)/2 - 6);
+    proj.translate([W/2, H/2]).scale(baseScale);
+  }
+  resize();
+  if (window.ResizeObserver) {
+    try { new ResizeObserver(resize).observe(canvas); } catch (_) {}
+  }
+  window.addEventListener('resize', resize);
+
+  // — load world topology asynchronously; sphere/graticule render immediately
+  let land = null, borders = null;
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+    .then(r => r.json())
+    .then(topo => {
+      land    = topojson.feature(topo, topo.objects.countries);
+      borders = topojson.mesh(topo, topo.objects.countries, (a, b) => a !== b);
+    })
+    .catch(() => { /* sphere-only fallback is acceptable */ });
+  const graticule = d3.geoGraticule10();
+  const sphere = { type: 'Sphere' };
+
+  // — anchors (theaters)
+  const anchors = [
+    { id: 'MO-01',    lon:  44,   lat:  33,   label: 'MO-01 · Moyen-Orient' },
+    { id: 'SAHEL-02', lon:   0,   lat:  16,   label: 'SAHEL-02 · Sahel' },
+    { id: 'LACS-03',  lon:  29,   lat:  -2,   label: 'LACS-03 · Grands Lacs' },
+    { id: 'MDG-04',   lon:  47,   lat: -19,   label: 'MDG-04 · Madagascar' },
+    { id: 'AFR-05',   lon:  43,   lat:  12,   label: 'AFR-05 · Afrique Maritime' },
+    { id: 'ASIE-06',  lon:  74,   lat:  30,   label: 'ASIE-06 · Asie du Sud' }
+  ];
+
+  // — flow definitions (50 terrestres + 35 maritimes — sélection OSINT pertinente)
+  const T = (a,b) => ({ a, b, kind: 'land' });
+  const M = (a,b) => ({ a, b, kind: 'sea'  });
+  const arcs = [
+    /* ───────────── TERRESTRES ───────────── */
+    // Moyen-Orient (12) — axes chiites/sunnites, fronts Syrie/Iraq, axe Iran
+    T([36.30, 33.50], [35.50, 33.90]), // Damas–Beyrouth
+    T([36.30, 33.50], [37.16, 36.20]), // Damas–Alep
+    T([44.40, 33.30], [36.30, 33.50]), // Bagdad–Damas
+    T([44.40, 33.30], [43.13, 36.34]), // Bagdad–Mossoul
+    T([44.20, 15.40], [45.03, 12.78]), // Sanaa–Aden
+    T([44.40, 33.30], [51.42, 35.70]), // Bagdad–Téhéran (axe chiite)
+    T([51.42, 35.70], [59.61, 36.30]), // Téhéran–Mashhad
+    T([44.00, 36.20], [43.13, 36.34]), // Erbil–Mossoul (Kurdistan)
+    T([35.50, 33.90], [35.20, 33.27]), // Beyrouth–Tyr (Hezbollah / front sud)
+    T([51.42, 35.70], [46.30, 38.08]), // Téhéran–Tabriz
+    T([59.61, 36.30], [62.20, 34.34]), // Mashhad–Herat (axe Iran-Afghanistan)
+    T([45.03, 12.78], [49.13, 14.55]), // Aden–Mukallah (Yémen côte sud)
+    // Sahel (12) — corridors djihadistes JNIM/ISWAP, Boko Haram
+    T([-8.00, 12.65], [-0.04, 16.27]), // Bamako–Gao
+    T([-8.00, 12.65], [-1.52, 12.37]), // Bamako–Ouaga
+    T([-1.52, 12.37], [ 2.11, 13.51]), // Ouaga–Niamey
+    T([ 2.11, 13.51], [ 7.99, 16.97]), // Niamey–Agadez
+    T([ 7.99, 16.97], [15.05, 12.13]), // Agadez–Ndjamena
+    T([-2.99, 16.77], [-0.04, 16.27]), // Tombouctou–Gao (front nord)
+    T([-4.18, 14.50], [-8.00, 12.65]), // Mopti–Bamako (Mali central)
+    T([12.61, 13.31], [13.16, 11.85]), // Diffa–Maiduguri (Boko Haram)
+    T([ 2.11, 13.51], [12.61, 13.31]), // Niamey–Diffa (Niger est)
+    T([-1.52, 12.37], [-4.30, 11.18]), // Ouaga–Bobo-Dioulasso
+    T([-8.00, 12.65], [-4.18, 14.50]), // Bamako–Mopti (Mali central S→N)
+    T([ 1.41, 18.44], [ 1.05, 20.20]), // Kidal–Tessalit (extrême nord)
+    // Grands Lacs (10) — front M23, Wazalendo, FARDC
+    T([15.31, -4.32], [29.22, -1.68]), // Kinshasa–Goma
+    T([29.22, -1.68], [28.86, -2.50]), // Goma–Bukavu
+    T([29.22, -1.68], [29.47,  0.49]), // Goma–Beni
+    T([29.47,  0.49], [30.25,  1.56]), // Beni–Bunia
+    T([30.06, -1.94], [29.22, -1.68]), // Kigali–Goma (axe Rwanda)
+    T([29.36, -3.38], [28.86, -2.50]), // Bujumbura–Bukavu (Burundi)
+    T([32.58,  0.32], [30.25,  1.56]), // Kampala–Bunia (Ouganda)
+    T([28.86, -2.50], [29.13, -3.40]), // Bukavu–Uvira (sud-Kivu)
+    T([29.47,  0.49], [29.28,  0.13]), // Beni–Butembo (front nord)
+    T([15.31, -4.32], [27.49,-11.66]), // Kinshasa–Lubumbashi (Katanga)
+    // Madagascar (8) — axes Tana + Grand Sud + côte est
+    T([47.51,-18.91], [49.40,-18.15]), // Tana–Toamasina
+    T([47.51,-18.91], [46.32,-15.72]), // Tana–Mahajanga
+    T([47.51,-18.91], [43.68,-23.35]), // Tana–Toliara
+    T([47.51,-18.91], [47.08,-21.45]), // Tana–Fianarantsoa
+    T([43.68,-23.35], [46.99,-25.03]), // Toliara–Fort-Dauphin (Grand Sud)
+    T([46.32,-15.72], [49.29,-12.32]), // Mahajanga–Antsiranana (nord)
+    T([49.40,-18.15], [50.17,-14.27]), // Toamasina–Sambava (SAVA est)
+    T([43.68,-23.35], [47.08,-21.45]), // Toliara–Fianarantsoa (axe sud)
+    // Asie du Sud (8) — axes Cachemire, AfPak, BLA/TTP, Pendjab
+    T([67.00, 24.86], [74.36, 31.55]), // Karachi–Lahore
+    T([74.36, 31.55], [73.05, 33.69]), // Lahore–Islamabad
+    T([73.05, 33.69], [69.18, 34.53]), // Islamabad–Kaboul (Khyber)
+    T([69.18, 34.53], [65.71, 31.62]), // Kaboul–Kandahar
+    T([74.79, 34.08], [77.21, 28.61]), // Srinagar–Delhi
+    T([77.21, 28.61], [72.83, 18.98]), // Delhi–Mumbai
+    T([65.71, 31.62], [66.99, 30.18]), // Kandahar–Quetta (BLA/TTP)
+    T([66.99, 30.18], [67.00, 24.86]), // Quetta–Karachi (Baloutchistan-mer)
+
+    /* ───────────── MARITIMES ───────────── */
+    // Moyen-Orient (6) — détroits stratégiques
+    M([56.27, 27.18], [58.00, 24.00]), // Bandar Abbas → Mer d'Oman (Ormuz)
+    M([45.03, 12.78], [43.15, 11.60]), // Aden → Djibouti (Bab-el-Mandeb)
+    M([35.78, 35.52], [35.50, 33.90]), // Lattaquié → Beyrouth
+    M([39.17, 21.49], [37.22, 19.62]), // Jeddah → Port-Soudan (Mer Rouge)
+    M([45.03, 12.78], [49.13, 14.55]), // Aden → Mukallah (cabotage Yémen)
+    M([35.50, 33.90], [35.00, 32.83]), // Beyrouth → Haïfa (Levant)
+    // Afrique de l'Ouest (5) — Atlantique
+    M([ 3.40,  6.50], [-4.00,  5.30]), // Lagos → Abidjan
+    M([-4.00,  5.30], [-17.40, 14.70]),// Abidjan → Dakar
+    M([-17.00, 20.90],[-15.40, 28.00]),// Nouadhibou → Las Palmas
+    M([-17.40, 14.70], [-7.59, 33.60]),// Dakar → Casablanca
+    M([-17.40, 14.70], [-23.51, 14.93]),// Dakar → Praia (Cap-Vert)
+    // Grands Lacs (3) — lacs intérieurs
+    M([29.20, -5.95], [29.13, -3.40]), // Kalemie → Uvira (Tanganyika nord)
+    M([29.22, -1.68], [28.86, -2.50]), // Goma → Bukavu (Kivu)
+    M([29.63, -4.88], [31.10, -8.77]), // Kigoma → Mpulungu (Tanganyika sud)
+    // Afrique Maritime (8) — cabotage et océan Indien
+    M([18.42,-33.92], [39.28, -6.82]), // Le Cap → Dar-es-Salaam
+    M([ 3.40,  6.50], [11.85, -4.78]), // Lagos → Pointe-Noire
+    M([32.55, 29.97], [33.04, 34.71]), // Suez → Limassol
+    M([39.66, -4.04], [43.15, 11.60]), // Mombasa → Djibouti
+    M([31.04,-29.86], [57.50,-20.16]), // Durban → Maurice
+    M([18.42,-33.92], [14.51,-22.95]), // Le Cap → Walvis Bay
+    M([ 3.40,  6.50], [13.23, -8.84]), // Lagos → Luanda
+    M([45.32,  2.04], [39.66, -4.04]), // Mogadiscio → Mombasa (Corne)
+    // Madagascar (5) — flux insulaires
+    M([49.40,-18.15], [49.29,-12.32]), // Toamasina → Antsiranana
+    M([46.32,-15.72], [43.27,-11.70]), // Mahajanga → Moroni (Comores)
+    M([49.40,-18.15], [57.50,-20.16]), // Toamasina → Maurice
+    M([49.40,-18.15], [55.45,-20.88]), // Toamasina → La Réunion
+    M([43.68,-23.35], [32.57,-25.97]), // Toliara → Maputo (canal Mozambique)
+    // Asie du Sud (8) — CPEC, Indo-Pacifique, Bengal
+    M([67.00, 24.86], [72.83, 18.98]), // Karachi → Mumbai
+    M([72.83, 18.98], [79.85,  6.93]), // Mumbai → Colombo
+    M([67.00, 24.86], [62.32, 25.12]), // Karachi → Gwadar
+    M([62.32, 25.12], [56.27, 27.18]), // Gwadar → Bandar Abbas (CPEC-Iran)
+    M([72.83, 18.98], [73.51,  4.18]), // Mumbai → Malé (Maldives)
+    M([79.85,  6.93], [91.81, 22.34]), // Colombo → Chittagong (Bengal)
+    M([72.83, 18.98], [55.27, 25.20]), // Mumbai → Dubai
+    M([67.00, 24.86], [55.27, 25.20])  // Karachi → Dubai
+  ];
+
+  arcs.forEach((arc, i) => {
+    arc.interp = d3.geoInterpolate(arc.a, arc.b);
+    arc.dur    = (arc.kind === 'sea' ? 7200 : 5200) + (i % 5) * 380;
+    arc.offset = (i * 730) % arc.dur;
+    // terrestrial = comet (head + 3 trail dots), maritime = paired ferry dots
+    arc.np     = arc.kind === 'sea' ? 2 : 4;
+    arc.trail  = arc.kind === 'sea' ? 0.06 : 0.10; // phase delta between trail dots
+  });
+
+  // — visibility test against current rotation (orthographic back-face cull)
+  function visible(coord){
+    const r = proj.rotate();
+    const cl = -r[0] * Math.PI/180, cp = -r[1] * Math.PI/180;
+    const lo =  coord[0] * Math.PI/180, la = coord[1] * Math.PI/180;
+    return Math.cos(la)*Math.cos(cp)*Math.cos(lo - cl) + Math.sin(la)*Math.sin(cp) > 0.02;
+  }
+
+  // — palette
+  const C = {
+    ocean:    '#0f1114',
+    land:     '#191c20',
+    border:   'rgba(255,255,255,0.07)',
+    grat:     'rgba(255,255,255,0.035)',
+    rim:      'rgba(255,255,255,0.10)',
+    gold:     '184,149,74',
+    cyan:     '90,143,168'
+  };
+
+  function draw(t){
+    ctx.clearRect(0, 0, W, H);
+
+    // sphere fill (ocean)
+    ctx.beginPath(); path(sphere);
+    ctx.fillStyle = C.ocean; ctx.fill();
+
+    // graticule
+    ctx.beginPath(); path(graticule);
+    ctx.strokeStyle = C.grat; ctx.lineWidth = 0.55; ctx.stroke();
+
+    // land
+    if (land) {
+      ctx.beginPath(); path(land);
+      ctx.fillStyle = C.land; ctx.fill();
+      ctx.beginPath(); path(borders);
+      ctx.strokeStyle = C.border; ctx.lineWidth = 0.45; ctx.stroke();
+    }
+
+    // sphere rim
+    ctx.beginPath(); path(sphere);
+    ctx.strokeStyle = C.rim; ctx.lineWidth = 0.75; ctx.stroke();
+
+    // arc traces (back drop, very fine)
+    arcs.forEach(arc => {
+      if (!visible(arc.a) && !visible(arc.b)) return;
+      const isSea = arc.kind === 'sea';
+      ctx.beginPath();
+      path({ type: 'LineString', coordinates: [arc.a, arc.b] });
+      ctx.setLineDash(isSea ? [1.4, 2.6] : []);
+      ctx.strokeStyle = isSea
+        ? `rgba(${C.cyan},0.24)`
+        : `rgba(${C.gold},0.22)`;
+      ctx.lineWidth = isSea ? 0.55 : 0.65;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
+
+    // endpoint pins (city dots) — adds detail to where flux starts/ends
+    arcs.forEach(arc => {
+      const isSea = arc.kind === 'sea';
+      [arc.a, arc.b].forEach(pt => {
+        if (!visible(pt)) return;
+        const xy = proj(pt); if (!xy) return;
+        ctx.beginPath();
+        ctx.arc(xy[0], xy[1], isSea ? 0.9 : 1.1, 0, Math.PI * 2);
+        ctx.fillStyle = isSea
+          ? `rgba(${C.cyan},0.55)`
+          : `rgba(${C.gold},0.55)`;
+        ctx.fill();
+      });
+    });
+
+    // arc particles (great-circle) — terrestrial = comet w/ trail, maritime = paired dots
+    arcs.forEach(arc => {
+      const isSea = arc.kind === 'sea';
+      const palette = isSea ? C.cyan : C.gold;
+      // 1 head per running cycle for terrestrial, 2 for maritime (ferries)
+      const heads = isSea ? 2 : 1;
+      for (let h = 0; h < heads; h++) {
+        const headPhase = (((t + arc.offset + h * arc.dur / heads) % arc.dur) + arc.dur) % arc.dur / arc.dur;
+        // draw head + (np-1) trail dots stepping backward along the arc
+        for (let i = 0; i < arc.np; i++) {
+          let phase = headPhase - i * arc.trail;
+          if (phase < 0) continue; // trail not yet emerged at start of cycle
+          if (phase > 1) continue;
+          const p = arc.interp(phase);
+          if (!visible(p)) continue;
+          const xy = proj(p); if (!xy) continue;
+
+          const fade = Math.sin(phase * Math.PI);
+          // trail decay: head bright, tail fades
+          const decay = Math.pow(1 - i / arc.np, 1.8);
+          const baseOp = (isSea ? 0.70 : 0.92) * fade * decay;
+          const baseR  = (isSea ? 0.85 : 1.40) * (i === 0 ? 1 : (1 - i*0.18));
+
+          // soft halo on head only
+          if (i === 0) {
+            ctx.beginPath();
+            ctx.arc(xy[0], xy[1], baseR * (isSea ? 2.4 : 3.0), 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${palette},${(baseOp*0.18).toFixed(3)})`;
+            ctx.fill();
+          }
+          // core
+          ctx.beginPath();
+          ctx.arc(xy[0], xy[1], Math.max(0.4, baseR), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${palette},${baseOp.toFixed(3)})`;
+          ctx.fill();
+        }
+      }
+    });
+
+    // anchors (pulsing)
+    anchors.forEach((a, i) => {
+      if (!visible([a.lon, a.lat])) return;
+      const xy = proj([a.lon, a.lat]);
+      if (!xy) return;
+      const pulse = (Math.sin(t / 900 + i * 1.7) + 1) / 2;
+      // outer halo
+      ctx.beginPath();
+      ctx.arc(xy[0], xy[1], 9 + pulse * 5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${C.gold},${(0.05 + pulse*0.10).toFixed(3)})`;
+      ctx.fill();
+      // ring
+      ctx.beginPath();
+      ctx.arc(xy[0], xy[1], 6, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(${C.gold},0.45)`;
+      ctx.lineWidth = 0.75;
+      ctx.stroke();
+      // core (3px)
+      ctx.beginPath();
+      ctx.arc(xy[0], xy[1], 2.6, 0, Math.PI * 2);
+      ctx.fillStyle = '#b8954a';
+      ctx.fill();
+      // label
+      ctx.font = '500 10.5px JetBrains Mono, ui-monospace, monospace';
+      ctx.fillStyle = '#8a8d93';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(a.label, xy[0] + 11, xy[1] + 0.5);
+    });
+  }
+
+  // — animation loop, slow longitude rotation (30s/tour ~= 0.2°/frame à 60fps) + zoom au hover des cards
+  let last = performance.now();
+  const period = 30000;
+  let zoomTarget = null; // { lon, lat, scaleMul } quand une card est survolée
+
+  function step(now){
+    const dt = Math.min(now - last, 80); last = now;
+    const r = proj.rotate();
+
+    if (zoomTarget) {
+      // Easing vers la zone cible — chemin le plus court en longitude
+      const ease = 0.06;
+      const targetLon = -zoomTarget.lon;
+      const targetLat = -zoomTarget.lat;
+      const dLon = ((targetLon - r[0] + 540) % 360) - 180;
+      proj.rotate([ r[0] + dLon * ease, r[1] + (targetLat - r[1]) * ease, 0 ]);
+      const targetScale = baseScale * zoomTarget.scaleMul;
+      const cs = proj.scale();
+      proj.scale(cs + (targetScale - cs) * ease);
+    } else {
+      // Rotation auto + retour smooth à la scale de base
+      proj.rotate([ r[0] + (dt / period) * 360, r[1] + (0 - r[1]) * 0.04, 0 ]);
+      const cs = proj.scale();
+      if (Math.abs(cs - baseScale) > 0.4) {
+        proj.scale(cs + (baseScale - cs) * 0.06);
+      }
+    }
+    draw(now);
+  }
+  function frame(now){ step(now); requestAnimationFrame(frame); }
+
+  // — Zoom-to-zone au hover des cartes théâtres
+  const ZONE_TARGETS = {
+    'moyen-orient': { lon: 44, lat: 33,  scaleMul: 1.55 },
+    'sahel':        { lon:  0, lat: 16,  scaleMul: 1.45 },
+    'rdc':          { lon: 29, lat: -2,  scaleMul: 1.55 },
+    'madagascar':   { lon: 47, lat: -19, scaleMul: 1.65 },
+    'afrique':      { lon: 18, lat: -2,  scaleMul: 1.05 },
+    'asie-sud':     { lon: 74, lat: 30,  scaleMul: 1.55 }
+  };
+  document.querySelectorAll('.card').forEach(card => {
+    const href = card.getAttribute('href') || '';
+    const m = href.match(/\.\/([^/]+)\//);
+    const target = m && ZONE_TARGETS[m[1]];
+    if (!target) return;
+    card.addEventListener('mouseenter', () => { zoomTarget = target; });
+    card.addEventListener('mouseleave', () => { zoomTarget = null; });
+    card.addEventListener('focus',     () => { zoomTarget = target; });
+    card.addEventListener('blur',      () => { zoomTarget = null; });
+  });
+
+  // First paint synchronously so the globe is visible even if rAF is throttled
+  draw(performance.now());
+  // Repaint as soon as topojson lands (independent of rAF)
+  (function pollTopo(){
+    if (land) { draw(performance.now()); return; }
+    setTimeout(pollTopo, 120);
+  })();
+
+  // rAF-driven smooth rotation when visible
+  requestAnimationFrame(frame);
+  // Fallback ticker so rotation still progresses when the iframe is hidden / rAF throttled
+  setInterval(() => { if (document.hidden) step(performance.now()); }, 1000 / 24);
+})();
+
+/* ─────────────────────────────────────── UTC clock */
+(function(){
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    const n = new Date();
+    const el = document.getElementById('clock');
+    if (el) el.textContent = `${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}`;
+  }
+  tick(); setInterval(tick, 30 * 1000);
+  const y = document.getElementById('year'); if (y) y.textContent = new Date().getUTCFullYear();
+})();
+</script>
+
 </body>
 </html>

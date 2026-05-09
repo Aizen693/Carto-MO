@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
   --bg:    #111214;
@@ -18,9 +18,10 @@
   --acd:   rgba(196,154,60,0.09);
   --acb:   rgba(196,154,60,0.20);
   --err:   #a84040;
-  --bc:  'Barlow Condensed', 'Arial Narrow', sans-serif;
-  --b:   'Barlow', system-ui, sans-serif;
+  --bc:  'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --b:   'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --m:   'JetBrains Mono', 'Courier New', monospace;
+  --serif: 'Instrument Serif', Georgia, serif;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
