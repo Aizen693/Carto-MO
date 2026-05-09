@@ -1,0 +1,551 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              67.0,
+              37.0
+            ],
+            [
+              72.5,
+              37.0
+            ],
+            [
+              73.0,
+              32.0
+            ],
+            [
+              70.5,
+              30.0
+            ],
+            [
+              66.0,
+              31.0
+            ],
+            [
+              61.5,
+              33.0
+            ],
+            [
+              62.0,
+              35.5
+            ],
+            [
+              64.5,
+              37.0
+            ],
+            [
+              67.0,
+              37.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Pachtounes",
+        "description": "Groupe ethnolinguistique iranien (langue pachto). Plus de 60 millions de locuteurs. Principale base sociale des Taliban afghans et du TTP. Tribus majeures: Yousafzai, Mahsud, Wazir, Durrani, Ghilzai. S'etend sur l'Afghanistan (est/sud) et Khyber Pakhtunkhwa / Baloutchistan nord (Pakistan).",
+        "sources": "CIA_World_Factbook|https://www.cia.gov/the-world-factbook/ Britannica_Pashtun|https://www.britannica.com/topic/Pashtun"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              61.0,
+              30.5
+            ],
+            [
+              67.5,
+              30.5
+            ],
+            [
+              68.5,
+              27.0
+            ],
+            [
+              67.0,
+              24.5
+            ],
+            [
+              63.0,
+              24.5
+            ],
+            [
+              60.5,
+              26.0
+            ],
+            [
+              60.5,
+              29.5
+            ],
+            [
+              61.0,
+              30.5
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Baloutches",
+        "description": "Peuple iranique (langue baloutche). Environ 15 millions, repartis entre Pakistan (Baloutchistan), Iran (Sistan-Balouchistan) et sud-Afghanistan. Base socio-politique de la BLA / BLF / BRAS. Mouvement nationaliste seculier, greviances anti-CPEC et anti-Islamabad.",
+        "sources": "Minority_Rights_Group|https://minorityrights.org/minorities/baloch/ Britannica_Baluchistan|https://www.britannica.com/place/Balochistan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.0,
+              32.5
+            ],
+            [
+              76.0,
+              32.5
+            ],
+            [
+              76.5,
+              29.5
+            ],
+            [
+              74.5,
+              28.5
+            ],
+            [
+              71.5,
+              29.0
+            ],
+            [
+              71.0,
+              31.0
+            ],
+            [
+              72.0,
+              32.5
+            ],
+            [
+              73.0,
+              32.5
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Punjabi",
+        "description": "Groupe indo-aryen (langue punjabi). Plus de 130 millions, divises entre Pakistan (Pendjab pakistanais, environ 60% de la population totale du pays) et Inde (Pendjab indien, majorite sikh). Dominent l'armee pakistanaise et le pouvoir politique.",
+        "sources": "Ethnologue_Punjabi|https://www.ethnologue.com/language/pan Britannica_Punjab|https://www.britannica.com/place/Punjab-state-India"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              66.5,
+              28.5
+            ],
+            [
+              71.0,
+              28.5
+            ],
+            [
+              71.0,
+              24.0
+            ],
+            [
+              67.0,
+              23.0
+            ],
+            [
+              66.0,
+              25.0
+            ],
+            [
+              66.5,
+              28.5
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sindhi",
+        "description": "Groupe indo-aryen (langue sindhi). Environ 35 millions, concentres dans la province du Sind (Pakistan) — Karachi, Hyderabad. Identite distincte, mouvement nationaliste Sindhudesh minoritaire.",
+        "sources": "Ethnologue_Sindhi|https://www.ethnologue.com/language/snd Britannica_Sindh|https://www.britannica.com/place/Sindh"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.5,
+              34.5
+            ],
+            [
+              76.0,
+              34.5
+            ],
+            [
+              76.0,
+              32.5
+            ],
+            [
+              73.5,
+              32.5
+            ],
+            [
+              73.5,
+              34.5
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Cachemiris",
+        "description": "Peuple indo-aryen de la Vallee du Cachemire (langue kashmiri). Environ 8 millions. Majoritairement musulmans sunnites dans la Vallee, hindous (Pandits) historiques. Au centre du conflit Indo-Pakistanais depuis 1947.",
+        "sources": "Britannica_Kashmir|https://www.britannica.com/place/Kashmir-region-Indian-subcontinent Minority_Rights_Group|https://minorityrights.org/minorities/kashmiris/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              65.5,
+              35.0
+            ],
+            [
+              68.5,
+              35.0
+            ],
+            [
+              68.5,
+              32.5
+            ],
+            [
+              65.5,
+              32.5
+            ],
+            [
+              65.5,
+              35.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Hazaras",
+        "description": "Peuple persophone (dari-hazaragi), majoritairement chiite duodecimain. Environ 4-6 millions en Afghanistan (Hazarajat central), minorite significative a Quetta (Pakistan). Persecutes historiquement par Taliban et ISKP.",
+        "sources": "Minority_Rights_Group|https://minorityrights.org/minorities/hazaras/ Britannica_Hazara|https://www.britannica.com/topic/Hazara"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              67.0,
+              38.5
+            ],
+            [
+              71.5,
+              38.5
+            ],
+            [
+              72.5,
+              36.0
+            ],
+            [
+              68.0,
+              35.5
+            ],
+            [
+              66.5,
+              37.0
+            ],
+            [
+              67.0,
+              38.5
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Tadjiks",
+        "description": "Peuple iranique (langue dari/farsi). Environ 25% de la population afghane, concentres dans le nord-est (Panjshir, Badakhshan). Base du Front de Resistance Nationale (NRF) anti-Taliban.",
+        "sources": "CIA_Factbook_Afghanistan|https://www.cia.gov/the-world-factbook/countries/afghanistan/ Britannica_Tajik|https://www.britannica.com/topic/Tajik"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              65.0,
+              38.5
+            ],
+            [
+              68.5,
+              38.5
+            ],
+            [
+              69.0,
+              36.5
+            ],
+            [
+              65.5,
+              36.0
+            ],
+            [
+              64.5,
+              37.5
+            ],
+            [
+              65.0,
+              38.5
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Ouzbeks",
+        "description": "Peuple turcophone. Environ 9% de la population afghane, concentres dans le nord (Mazar-i-Sharif, Jawzjan, Faryab). Ataliks historiques de l'Alliance du Nord (contre Taliban).",
+        "sources": "CIA_Factbook_Afghanistan|https://www.cia.gov/the-world-factbook/countries/afghanistan/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.0,
+              35.0
+            ],
+            [
+              74.0,
+              35.0
+            ],
+            [
+              74.5,
+              33.5
+            ],
+            [
+              71.5,
+              33.0
+            ],
+            [
+              71.5,
+              34.5
+            ],
+            [
+              72.0,
+              35.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Hindko",
+        "description": "Groupe indo-aryen (langue hindko). Environ 3-5 millions au KP (Peshawar, Abbottabad, Hazara) et Pendjab pakistanais. Communautes urbaines mercantiles, distinctes des Pachtounes.",
+        "sources": "Ethnologue_Hindko|https://www.ethnologue.com/language/hno"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.5,
+              35.5
+            ],
+            [
+              77.5,
+              35.5
+            ],
+            [
+              78.0,
+              34.0
+            ],
+            [
+              75.5,
+              34.0
+            ],
+            [
+              75.5,
+              35.5
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Gilgiti / Balti",
+        "description": "Peuples tibeto-birmans et dardes du Gilgit-Baltistan (administree par Pakistan). Langues shina, balti, burushaski. Zone contestee par l'Inde (territoire du J&K pre-1947).",
+        "sources": "Britannica_Gilgit-Baltistan|https://www.britannica.com/place/Gilgit-Baltistan Minority_Rights_Group|https://minorityrights.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.5,
+              35.0
+            ],
+            [
+              79.5,
+              35.0
+            ],
+            [
+              79.5,
+              32.5
+            ],
+            [
+              76.5,
+              32.5
+            ],
+            [
+              76.5,
+              35.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Ladakhi / Bhoti",
+        "description": "Peuples tibetains de l'Union Territory du Ladakh (Inde). Bouddhisme tibetain majoritaire. Zone strategique de la LAC sino-indienne et du glacier de Siachen.",
+        "sources": "Britannica_Ladakh|https://www.britannica.com/place/Ladakh"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.0,
+              33.0
+            ],
+            [
+              76.0,
+              33.0
+            ],
+            [
+              76.0,
+              31.5
+            ],
+            [
+              73.0,
+              31.5
+            ],
+            [
+              73.0,
+              33.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sikh",
+        "description": "Communaute religio-culturelle nee au Pendjab XVe siecle. Majoritairement au Pendjab indien (18 millions). Historique de mouvements separatistes (Khalistan). Cibles ISI dans les complots Delhi-NCR d'avril 2026.",
+        "sources": "Britannica_Sikhism|https://www.britannica.com/topic/Sikhism Tribune_India|https://www.tribuneindia.com/news/delhi/2-isi-operatives-arrested-for-planning-targeted-killings-grenade-attacks-in-delhi-punjab/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.0,
+              26.5
+            ],
+            [
+              92.5,
+              26.5
+            ],
+            [
+              92.5,
+              21.0
+            ],
+            [
+              88.0,
+              21.0
+            ],
+            [
+              88.0,
+              26.5
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Bengalis",
+        "description": "Plus de 270 millions de locuteurs bengalis. Republique du Bangladesh + Bengale-Occidental indien. Zone exposee aux spillovers de l'insurrection nord-est indienne et aux flux Rohingyas.",
+        "sources": "Ethnologue_Bengali|https://www.ethnologue.com/language/ben"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              92.0,
+              22.0
+            ],
+            [
+              93.5,
+              22.0
+            ],
+            [
+              93.5,
+              20.0
+            ],
+            [
+              92.0,
+              20.0
+            ],
+            [
+              92.0,
+              22.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Rohingyas",
+        "description": "Musulmans d'Arakan (Myanmar). Apatrides de facto, environ 1 million en refuge au Bangladesh (camp de Cox's Bazar). Communautes secondaires en Inde et Pakistan. Vulnerabilite aux reseaux de trafic humain.",
+        "sources": "UNHCR_Rohingya|https://www.unhcr.org/rohingya-emergency.html Minority_Rights_Group|https://minorityrights.org/minorities/muslims-and-rohingya/"
+      }
+    }
+  ]
+}

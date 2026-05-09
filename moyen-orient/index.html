@@ -16,7 +16,7 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
-<link rel="stylesheet" href="../shared/styles.css">
+<link rel="stylesheet" href="../shared/styles.css?v=20260420h">
 </head>
 <body>
 
@@ -152,7 +152,7 @@ const ZONE_CONFIG = {
   ACTOR_GROUPS: {
     'Milices chiites': ['Hezbollah','Asaib Ahl al-Haq','IRGC-Qods Force','IRGC-Qods Force+Basij','Kataib Hezbollah','Basij','Kataib Sayyid al-Shuhada','Harakat Hezbollah al-Nujaba','Fatemiyoun Brigade','Zainebiyoun Brigade','PMF / Hashd al-Shaabi','PMF / Hashd al-Shaabi+Kataib Hezbollah','IRGC Ground Forces','Houthis'],
     'Djihadistes sunnites': ['Daesh','Daesh + Armées Irakiennes'],
-    'Coalitions & États': ['Coalition Internationale','USA, Force Delta','Armées Irakiennes','Armées Irakiennes + Peshmergas vs. Daesh'],
+    'Coalitions & États': ['Coalition Internationale','USA','USA, Force Delta','Israel / IDF','Armées Irakiennes','Armées Irakiennes + Peshmergas vs. Daesh'],
     'Kurdes & FDS': ['Peshmergas','Forces Démocratiques Syriennes']
   },
   ACTOR_COLORS: {
@@ -163,7 +163,7 @@ const ZONE_CONFIG = {
     'PMF / Hashd al-Shaabi+Kataib Hezbollah':'#e76f51','IRGC Ground Forces':'#ae2012',
     'Zainebiyoun Brigade':'#bb3e03','Houthis':'#7b2d8b','Daesh':'#555555',
     'Daesh + Armées Irakiennes':'#777777','Coalition Internationale':'#1d7ed8',
-    'USA, Force Delta':'#0077b6','Peshmergas':'#ccaa00','Armées Irakiennes':'#2d6a4f',
+    'USA':'#0077b6','USA, Force Delta':'#023e8a','Israel / IDF':'#1a5f7a','Peshmergas':'#ccaa00','Armées Irakiennes':'#2d6a4f',
     'Armées Irakiennes + Peshmergas vs. Daesh':'#40916c','Forces Démocratiques Syriennes':'#48cae4'
   },
   normalizeName: function(raw) {
@@ -214,7 +214,7 @@ fetch("./otan-data.json").then(r => r.json()).then(d => { ZONE_CONFIG.OTAN_DATA 
 fetch("./map-zones.json").then(r => r.json()).then(d => { ZONE_CONFIG.MAP_ZONES = d; }).catch(() => console.warn("MAP_ZONES data not loaded"));
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js"></script>
+<script src="../shared/engine.js?v=20260422b"></script>
 
 <!-- MO-SPECIFIC: Daesh territory zones + auto-toggle -->
 <script>

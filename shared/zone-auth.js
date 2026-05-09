@@ -48,12 +48,13 @@ export function initZoneAuth(onGranted, onDenied) {
     fetchProfile(session.user.id, session.access_token).then(profile => {
       if (!profile) {
         supabase.auth.signOut();
-        onDenied('Acces restreint. Contactez un administrateur.');
+        onDenied('Acces refuse · profil non autorise · contacter admin');
         return;
       }
       onGranted({ email: session.user.email, role: profile.role });
-    }).catch(() => {
-      onDenied('Erreur de verification. Reessayez.');
+    }).catch(err => {
+      var code = (err && (err.status || err.code)) || 'network';
+      onDenied('Verification · code ' + code + ' · reessayer');
     });
   });
 }

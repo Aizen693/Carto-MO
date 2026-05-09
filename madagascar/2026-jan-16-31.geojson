@@ -1,0 +1,9 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.52,-18.92]},"properties":{"name":"Gen Z Madagascar","Date":"2026-01-20","Pays + Lieu":"Madagascar - Antananarivo","type":"Geopolitique","detail":"Mouvement Gen Z : reunions et manifestations post-transition, pressions pour le calendrier electoral. Demande : retour constitutionnel sous 18 mois.","rank":"B2","sources":"RFI|https://www.rfi.fr/fr/afrique/ France 24|https://www.france24.com/fr/afrique/ Reuters|https://www.reuters.com/world/africa/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.85,-24.72]},"properties":{"name":"Dahalo","Date":"2026-01-22","Pays + Lieu":"Madagascar - Anosy / Betroka","type":"Attaque","detail":"Pattern : zone dahalo Anosy. Raids de vol de zebus, tensions entre villages, absence de gendarmerie dans de vastes zones rurales.","rank":"B3","sources":"Crisis Group|https://www.crisisgroup.org/africa/southern-africa/madagascar"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[50.27,-14.67]},"properties":{"name":"Reseaux bois de rose (SAVA / Masoala)","Date":"2026-01-25","Pays + Lieu":"Madagascar - SAVA / Sambava","type":"Incursion","detail":"Pattern : saisie recurrente de stocks bois de rose lors de tentatives de sortie par Sambava / Antalaha. Sorties maritimes vers Chine.","rank":"A2","sources":"EIA|https://eia-international.org/forests/ Mongabay|https://fr.mongabay.com/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[42.50,-20.00]},"properties":{"name":"Piraterie canal Mozambique","Date":"2026-01-28","Pays + Lieu":"Madagascar - Canal Mozambique (large)","type":"Attaque","detail":"Pattern : attaques sur thoniers et boutres dans le canal. Reseaux mixtes Somalie / Mozambique / Comores.","rank":"B3","sources":"IMB Piracy Reporting Centre|https://www.icc-ccs.org/piracy-reporting-centre UNODC|https://www.unodc.org/unodc/en/piracy/"}}
+  ]
+}
