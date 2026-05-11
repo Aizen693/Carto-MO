@@ -286,6 +286,99 @@
     letter-spacing: 0.04em;
   }
 
+  /* ─────────────────────────────────────── Demo (video) */
+  .demo {
+    padding: 32px 0 64px;
+    border-top: 1px solid var(--line);
+  }
+  .demo-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 18px 0 28px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--tx3); letter-spacing: 0.02em;
+  }
+  .demo-head .lbl { color: var(--tx2); }
+  .demo-head .right { color: var(--tx3); }
+  .demo-head .right strong { color: var(--tx1); font-weight: 500; }
+  .demo-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 56px;
+    align-items: center;
+  }
+  .demo-copy h2 {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: clamp(28px, 2.6vw, 38px);
+    line-height: 1.1;
+    letter-spacing: -0.018em;
+    color: var(--tx1);
+    margin: 0 0 18px;
+    max-width: 18ch;
+  }
+  .demo-copy h2 em {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    color: var(--tx1);
+  }
+  .demo-copy p {
+    color: var(--tx2);
+    font-size: 14.5px; line-height: 1.6;
+    max-width: 42ch;
+    margin: 0 0 14px;
+    font-weight: 300;
+  }
+  .demo-copy p strong { color: var(--tx1); font-weight: 400; }
+  .demo-meta {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--line);
+    max-width: 420px;
+  }
+  .demo-meta .cell {
+    padding: 14px 14px 12px;
+    border-right: 1px solid var(--line);
+  }
+  .demo-meta .cell:last-child { border-right: none; }
+  .demo-meta .cell .k {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--tx3); letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .demo-meta .cell .v {
+    font-size: 14px; color: var(--tx1); font-weight: 500;
+  }
+  .demo-player {
+    position: relative;
+    background: var(--s1);
+    border: 1px solid var(--line2);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+  .demo-player video {
+    width: 100%; height: 100%;
+    display: block;
+    object-fit: cover;
+    background: #000;
+  }
+  .demo-player::after {
+    content: '';
+    position: absolute; inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  .demo-caption {
+    margin-top: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--tx3); letter-spacing: 0.04em;
+  }
+  .demo-caption .left em {
+    font-style: normal; color: var(--tx2);
+  }
+
   /* ─────────────────────────────────────── Theaters */
   .theaters {
     padding: 32px 0 80px;
@@ -503,6 +596,8 @@
     .card,
     .card:nth-last-child(-n+3) { border-bottom: 1px solid var(--line); }
     .card:last-child { border-bottom: none; }
+    .demo-grid { grid-template-columns: 1fr; gap: 36px; }
+    .demo-meta { max-width: none; }
   }
   @media (max-width: 640px) {
     :root { --pad-x: 24px; }
@@ -573,6 +668,53 @@
             <span class="sw sw-sea"></span>
             <span class="ttl">Flux maritimes<span class="ct">35 trajets</span></span>
             <span class="desc">Détroits, cabotage, lacs et océan Indien — <em>Ormuz, Bab-el-Mandeb,</em> Suez, Mozambique, Bengal, CPEC.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────── Demo (video explicative) -->
+    <section class="demo" id="demo">
+      <div class="demo-head">
+        <span class="lbl">Vidéo de présentation</span>
+        <span class="right">durée <strong>00:50</strong> · son recommandé</span>
+      </div>
+      <div class="demo-grid">
+        <div class="demo-copy">
+          <h2>Voir la plateforme <em>en mouvement.</em></h2>
+          <p>
+            Cinquante secondes pour parcourir les trois théâtres d'analyse : globe d'entrée, cartographie chiite/sunnite au Moyen-Orient, calques superposés au Sahel — <strong>ethnies, forces, mines, infrastructures, frontières.</strong>
+          </p>
+          <p>
+            Aucune donnée propriétaire affichée. La démo illustre la <strong>méthodologie</strong>, pas le contenu opérationnel.
+          </p>
+          <div class="demo-meta">
+            <div class="cell">
+              <div class="k">Format</div>
+              <div class="v">1920×1080</div>
+            </div>
+            <div class="cell">
+              <div class="k">Durée</div>
+              <div class="v">00:50</div>
+            </div>
+            <div class="cell">
+              <div class="k">Diffusion</div>
+              <div class="v">Restreinte</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="demo-player">
+            <video
+              src="./shared/video/teaser.mp4"
+              poster="./shared/video/teaser-poster.jpg"
+              controls
+              preload="metadata"
+              playsinline></video>
+          </div>
+          <div class="demo-caption">
+            <span class="left"><em>algoracces.fr</em> · cartographie OSINT</span>
+            <span class="right">FOR PROSPECT REVIEW · DO NOT REDISTRIBUTE</span>
           </div>
         </div>
       </div>
