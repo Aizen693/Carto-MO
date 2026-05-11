@@ -11,8 +11,14 @@
  *   exportZoneAsHTML({ zoneName: 'Sahel', map: window.algorMap });
  */
 
-const TILE_URL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-const TILE_ATTR = '&copy; OpenStreetMap contributors &copy; CARTO';
+// Mapbox raster tile endpoint for the dark-v11 style — same look as the live site.
+// The access token is read from the page (`mapboxgl.accessToken`) at export time
+// and embedded in the deliverable so the file works standalone.
+const MAPBOX_STYLE = 'mapbox/dark-v11';
+const MAPBOX_TILE_TPL = 'https://api.mapbox.com/styles/v1/{STYLE}/tiles/{z}/{x}/{y}{r}?access_token={TOKEN}';
+const MAPBOX_ATTR = '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+const FALLBACK_TILE_URL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+const FALLBACK_TILE_ATTR = '&copy; OpenStreetMap contributors &copy; CARTO';
 const LEAFLET_CSS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 const LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
 
@@ -123,6 +129,8 @@ export async function exportZoneAsHTML(opts = {}) {
       fillOpacity,
       opacity,
       legendEntries,
+      // expression kept verbatim so the exported HTML can re-evaluate it per zoom
+      radiusExpr: isExpressionArray(radiusExpr) ? radiusExpr : null,
       data: { type: data.type, features },
     });
   }
@@ -136,6 +144,8 @@ export async function exportZoneAsHTML(opts = {}) {
   const bounds = map.getBounds();
   const today = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const filename = `algorint-${slug(zoneName)}-${slug(today.replace(/\//g, '-'))}.html`;
+  // Read the Mapbox access token used by the live page so the export uses the same tiles
+  const mapboxToken = (window.mapboxgl && window.mapboxgl.accessToken) || '';
   const html = buildHTML({
     title: `Algor Int — ${zoneName}`,
     zone: zoneName,
@@ -148,12 +158,17 @@ export async function exportZoneAsHTML(opts = {}) {
       [bounds.getNorth(), bounds.getEast()],
     ],
     datasets,
+    mapboxToken,
   });
   triggerDownload(filename, html);
   return { filename, size: html.length, datasets: datasets.length };
 }
 
 // ────────────────────────────────────────────────────────── helpers
+
+function isExpressionArray(v) {
+  return Array.isArray(v) && typeof v[0] === 'string';
+}
 
 function numericPaint(paint, key, fallback) {
   const v = paint[key];
@@ -331,7 +346,14 @@ function evalExpr(expr, ctx) {
 
 // ────────────────────────────────────────────────────────── HTML template
 
-function buildHTML({ title, zone, subtitle, today, center, zoom, bounds, datasets }) {
+function buildHTML({ title, zone, subtitle, today, center, zoom, bounds, datasets, mapboxToken }) {
+  const tileUrl = mapboxToken
+    ? MAPBOX_TILE_TPL.replace('{STYLE}', MAPBOX_STYLE).replace('{TOKEN}', mapboxToken)
+    : FALLBACK_TILE_URL;
+  const tileAttr = mapboxToken ? MAPBOX_ATTR : FALLBACK_TILE_ATTR;
+  const tileOpts = mapboxToken
+    ? `{ attribution: ${JSON.stringify(tileAttr)}, maxZoom: 19, tileSize: 512, zoomOffset: -1, detectRetina: true }`
+    : `{ attribution: ${JSON.stringify(tileAttr)}, subdomains: 'abcd', maxZoom: 19 }`;
   // Strip transient helper props that would clutter popups
   const exportData = datasets.map(d => ({
     id: d.id,
@@ -341,6 +363,7 @@ function buildHTML({ title, zone, subtitle, today, center, zoom, bounds, dataset
     opacity: d.opacity,
     legendEntries: d.legendEntries,
     color: d.color,
+    radiusExpr: d.radiusExpr,
     data: d.data,
   }));
 
@@ -524,10 +547,68 @@ const SKIP_PROPS = ${JSON.stringify(Array.from(SKIP_PROPS))};
 
 const map = L.map('map', { zoomControl: true, attributionControl: true })
   .setView([${center[0]}, ${center[1]}], ${zoom});
-L.tileLayer(${JSON.stringify(TILE_URL)}, {
-  attribution: ${JSON.stringify(TILE_ATTR)},
-  subdomains: 'abcd', maxZoom: 19,
-}).addTo(map);
+L.tileLayer(${JSON.stringify(tileUrl)}, ${tileOpts}).addTo(map);
+
+// Mapbox expression evaluator (mirrors the one in exporter.js) — used to recompute
+// circle radii on zoom change so points scale exactly like on the live site.
+function evalExpr(expr, ctx) {
+  if (expr == null) return null;
+  const t = typeof expr;
+  if (t === 'string' || t === 'number' || t === 'boolean') return expr;
+  if (!Array.isArray(expr)) return null;
+  const op = expr[0];
+  const e = (i) => evalExpr(expr[i], ctx);
+  switch (op) {
+    case 'literal': return expr[1];
+    case 'get': return ctx.props ? ctx.props[expr[1]] : null;
+    case 'zoom': return ctx.zoom;
+    case 'coalesce':
+      for (let i = 1; i < expr.length; i++) { const v = e(i); if (v != null && !(typeof v === 'number' && isNaN(v))) return v; }
+      return null;
+    case 'to-number': { const n = Number(e(1)); return isFinite(n) ? n : 0; }
+    case '+': case '-': case '*': case '/': {
+      let acc = Number(e(1)) || 0;
+      for (let i = 2; i < expr.length; i++) {
+        const v = Number(e(i)) || 0;
+        if (op === '+') acc += v; else if (op === '-') acc -= v;
+        else if (op === '*') acc *= v; else acc /= (v || 1);
+      }
+      return acc;
+    }
+    case 'match': {
+      const input = e(1);
+      for (let i = 2; i < expr.length - 1; i += 2) {
+        const labels = Array.isArray(expr[i]) ? expr[i] : [expr[i]];
+        if (labels.includes(input)) return evalExpr(expr[i + 1], ctx);
+      }
+      return e(expr.length - 1);
+    }
+    case 'interpolate': {
+      const input = Number(e(2));
+      if (!isFinite(input)) return evalExpr(expr[4], ctx);
+      const stops = [];
+      for (let i = 3; i < expr.length; i += 2) {
+        stops.push([Number(evalExpr(expr[i], ctx)), evalExpr(expr[i + 1], ctx)]);
+      }
+      stops.sort((a, b) => a[0] - b[0]);
+      if (input <= stops[0][0]) return stops[0][1];
+      if (input >= stops[stops.length - 1][0]) return stops[stops.length - 1][1];
+      for (let i = 0; i < stops.length - 1; i++) {
+        if (input >= stops[i][0] && input <= stops[i + 1][0]) {
+          const a = stops[i], b = stops[i + 1];
+          if (typeof a[1] === 'number' && typeof b[1] === 'number') {
+            const tt = (input - a[0]) / (b[0] - a[0]);
+            return a[1] + tt * (b[1] - a[1]);
+          }
+          return a[1];
+        }
+      }
+      return stops[0][1];
+    }
+    default: return null;
+  }
+}
+function clampR(v, min, max, fb) { const n = Number(v); return !isFinite(n) ? fb : Math.max(min, Math.min(max, n)); }
 
 function escHtml(s) {
   return String(s == null ? '' : s)
@@ -568,34 +649,46 @@ DATASETS.forEach(ds => {
     const haloGroup = L.layerGroup();
     const ringGroup = L.layerGroup();
     const dotGroup = L.layerGroup();
+    const triplets = []; // [{halo, ring, dot, props}] for zoom updates
+    const radiusFor = (props, zoomLvl) => {
+      const v = evalExpr(ds.radiusExpr, { props, zoom: zoomLvl });
+      return clampR(v, 2, 14, props._exportRadius || 5);
+    };
     ds.data.features.forEach(feat => {
       const p = feat.properties || {};
       const ll = pointLatLng(feat.geometry);
       if (!ll) return;
       const color = p._exportFill || ds.color || '#c49a3c';
-      const base = p._exportRadius || 5;
-      L.circleMarker(ll, {
-        radius: base * 3,
-        fillColor: color, fillOpacity: 0.07,
+      const base = ds.radiusExpr ? radiusFor(p, map.getZoom()) : (p._exportRadius || 5);
+      const halo = L.circleMarker(ll, {
+        radius: base * 3, fillColor: color, fillOpacity: 0.07,
         stroke: false, interactive: false,
       }).addTo(haloGroup);
-      L.circleMarker(ll, {
-        radius: base * 1.7,
-        fillOpacity: 0,
-        color: color, weight: 1, opacity: 0.40,
-        interactive: false,
+      const ring = L.circleMarker(ll, {
+        radius: base * 1.7, fillOpacity: 0,
+        color: color, weight: 1, opacity: 0.40, interactive: false,
       }).addTo(ringGroup);
       const dot = L.circleMarker(ll, {
-        radius: base,
-        fillColor: color, fillOpacity: 0.95,
+        radius: base, fillColor: color, fillOpacity: 0.95,
         color: '#0a0b0d', weight: 1, opacity: 1,
       });
       dot.bindPopup(buildPopup(p), { maxWidth: 360 });
       dot.addTo(dotGroup);
+      triplets.push({ halo, ring, dot, props: p });
     });
-    haloGroup.addTo(map);
-    ringGroup.addTo(map);
-    dotGroup.addTo(map);
+    haloGroup.addTo(map); ringGroup.addTo(map); dotGroup.addTo(map);
+    // Zoom-driven resize so points match the live site's behavior at every zoom level
+    if (ds.radiusExpr) {
+      map.on('zoomend', () => {
+        const z = map.getZoom();
+        for (const t of triplets) {
+          const r = radiusFor(t.props, z);
+          t.halo.setRadius(r * 3);
+          t.ring.setRadius(r * 1.7);
+          t.dot.setRadius(r);
+        }
+      });
+    }
   } else {
     // Polygons + lines via L.geoJSON
     L.geoJSON(ds.data, {
