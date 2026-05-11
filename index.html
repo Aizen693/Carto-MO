@@ -474,8 +474,8 @@
         </div>
       </div>
 
-      <div class="globe-wrap" aria-hidden="true">
-        <canvas id="globe"></canvas>
+      <div class="globe-wrap">
+        <canvas id="globe" role="img" aria-label="Globe interactif — cliquez sur un théâtre pour y accéder"></canvas>
         <div class="globe-meta">
           <div class="lg">
             <span class="sw sw-land"></span>
@@ -1074,6 +1074,59 @@
     card.addEventListener('mouseleave', () => { zoomTarget = null; });
     card.addEventListener('focus',     () => { zoomTarget = target; });
     card.addEventListener('blur',      () => { zoomTarget = null; });
+  });
+
+  // — Markers cliquables sur le globe → ouvre la page de la zone
+  const ANCHOR_META = {
+    'MO-01':    { href: './moyen-orient/index.html', target: ZONE_TARGETS['moyen-orient'] },
+    'SAHEL-02': { href: './sahel/index.html',        target: ZONE_TARGETS['sahel']        },
+    'LACS-03':  { href: './rdc/index.html',          target: ZONE_TARGETS['rdc']          },
+    'MDG-04':   { href: './madagascar/index.html',   target: ZONE_TARGETS['madagascar']   },
+    'AFR-05':   { href: './afrique/index.html',      target: ZONE_TARGETS['afrique']      },
+    'ASIE-06':  { href: './asie-sud/index.html',     target: ZONE_TARGETS['asie-sud']     }
+  };
+
+  function findAnchorAt(x, y, hitRadius){
+    const r = hitRadius || 22;
+    for (const a of anchors) {
+      if (!visible([a.lon, a.lat])) continue;
+      const xy = proj([a.lon, a.lat]);
+      if (!xy) continue;
+      const dx = xy[0] - x, dy = xy[1] - y;
+      if (Math.sqrt(dx*dx + dy*dy) <= r) return a;
+    }
+    return null;
+  }
+
+  canvas.style.cursor = 'default';
+
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const hit = findAnchorAt(x, y);
+    if (hit) {
+      canvas.style.cursor = 'pointer';
+      const meta = ANCHOR_META[hit.id];
+      if (meta) zoomTarget = meta.target;
+    } else {
+      canvas.style.cursor = 'default';
+    }
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    canvas.style.cursor = 'default';
+    zoomTarget = null;
+  });
+
+  canvas.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const hit = findAnchorAt(x, y);
+    if (hit && ANCHOR_META[hit.id]) {
+      window.location.href = ANCHOR_META[hit.id].href;
+    }
   });
 
   // First paint synchronously so the globe is visible even if rAF is throttled
