@@ -106,6 +106,10 @@ const map = new mapboxgl.Map({
   maxPitch: 85,
   antialias: true
 });
+// Expose the Mapbox instance globally so external tools (exporter, etc.) can
+// reach it. `window.map` is shadowed by the <div id="map"> element on every
+// zone page, so we use a dedicated name.
+window.algorMap = map;
 map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
 map.addControl(new mapboxgl.ScaleControl({ maxWidth: 120, unit: 'metric' }), 'bottom-right');
 map.addControl(new mapboxgl.FullscreenControl(), 'top-right');

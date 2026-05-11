@@ -43,7 +43,11 @@
   <div class="hdr-cell">
     <span id="event-counter"></span>
   </div>
-  <div class="hdr-controls"></div>
+  <div class="hdr-controls">
+    <button class="hbtn" id="btn-export-html" onclick="exportLivrable()" title="Exporter les calques visibles dans un fichier HTML autonome (Leaflet, sans token)">
+      <span style="font-size:10px;line-height:1">⬇</span> Exporter HTML
+    </button>
+  </div>
 </div>
 
 <div id="progress-bar"><div id="progress-fill"></div></div>
@@ -1283,5 +1287,26 @@ window.focusGeocoder = function() {
 })();
 </script>
 
+<!-- Exporter HTML standalone (Leaflet) -->
+<script type="module">
+import { exportZoneAsHTML } from '../shared/exporter.js?v=20260511a';
+window.exportLivrable = async function() {
+  const btn = document.getElementById('btn-export-html');
+  const old = btn?.innerHTML;
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span style="font-size:10px">⏳</span> Export…'; }
+  try {
+    const period = document.getElementById('period-badge')?.textContent?.trim();
+    const subtitle = period && period !== 'Aucune période' ? ('Période ' + period) : '';
+    await exportZoneAsHTML({ zoneName: 'Asie du Sud', subtitle, map: window.algorMap || window.map });
+  } catch (e) {
+    console.error('[export]', e);
+    alert("Echec de l'export : " + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = old; }
+  }
+};
+</script>
+
 </body>
+
 </html>
