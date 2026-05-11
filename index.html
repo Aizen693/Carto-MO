@@ -198,6 +198,12 @@
     letter-spacing: 0.04em;
     padding: 0 1px;
   }
+  .gateline a {
+    color: var(--tx2);
+    border-bottom: 1px solid var(--line2);
+    transition: color .18s ease, border-color .18s ease;
+  }
+  .gateline a:hover { color: var(--gold); border-color: var(--gold); }
 
   .cta-row { display: flex; align-items: center; gap: 28px; }
   .cta {
@@ -540,7 +546,7 @@
           Algoracces fédère six théâtres d'analyse — Moyen-Orient, Sahel, Grands Lacs, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'État, OSINT social et flux Telegram sont agrégés sur une carte unique, sourcée, datée et auditable événement par événement.
         </p>
         <p class="gateline">
-          Vous êtes <em>à l'entrée.</em> Le théâtre <em>Moyen-Orient</em> est en accès libre — explorez l'outil sans inscription. Les cinq autres zones sont accessibles sur abonnement analyste.
+          Vous êtes <em>à l'entrée.</em> Le théâtre <em>Moyen-Orient</em> est en accès libre — explorez l'outil sans inscription. <a href="#demo">En savoir plus dans la Démo guidée.</a>
         </p>
         <div class="cta-row">
           <a class="cta" href="#theaters">Ouvrir un théâtre <span class="arr">→</span></a>
@@ -1318,36 +1324,43 @@
     },
     'demo': {
       eyebrow: 'Démo guidée',
-      title: 'Découvrez Algoracces en 30 minutes',
+      title: 'Le théâtre Moyen-Orient — votre démo en accès libre',
       body: `
-        <p>Une démo personnalisée avec un analyste Algor Int. Sans engagement, en français ou en anglais.</p>
-        <h3>Ce que la démo couvre</h3>
+        <p>Le théâtre <strong>Moyen-Orient</strong> est <em>ouvert sans inscription</em>. Cliquez sur la carte 01 et explorez immédiatement la plateforme — c'est exactement ce que reçoivent les analystes abonnés sur les cinq autres zones.</p>
+
+        <h3>Ce que vous découvrez</h3>
         <ul>
-          <li>Présentation des six théâtres et de leurs calques</li>
-          <li>Cas d'usage typiques — suivi de front, alerte précoce, analyse rétrospective</li>
-          <li>Outils analystes — heatmap, comparaison de périodes, export GeoJSON et CSV</li>
-          <li>Workflow d'enquête type sur un événement réel</li>
-          <li>Questions ouvertes sur vos besoins spécifiques</li>
+          <li><strong>22 ans de données</strong> — Iraq, Syrie, Liban, Yémen sur 2005–2026, dix périodes de deux ans navigables</li>
+          <li><strong>173 événements géolocalisés</strong> — embuscades, attentats, frappes, raids, tirs de missiles, avec date, pertes et sources citées</li>
+          <li><strong>22 acteurs traqués</strong> — Hezbollah, Daech, Houthis, AQPA, Quds Force, milices proxy iraniennes, FAS, coalition</li>
+          <li><strong>Outils analystes complets</strong> — heatmap de densité, comparaison de périodes, export GeoJSON et CSV, popup sourcé pour chaque événement</li>
         </ul>
-        <h3>Format</h3>
+
+        <h3>Ce qui distingue Algoracces</h3>
         <ul>
-          <li>Visio de 30 minutes — Meet, Zoom ou Teams</li>
-          <li>Partage d'écran live, démonstration sur données réelles</li>
-          <li>Q&A continue</li>
-          <li>Suivi écrit sous 24h</li>
+          <li><strong>Sources croisées systématiquement</strong> — minimum deux sources indépendantes par événement</li>
+          <li><strong>Cotation type OTAN</strong> (A à F) sur la fiabilité de chaque entrée</li>
+          <li><strong>Auditable</strong> — chaque popup renvoie aux sources d'origine, lien direct</li>
+          <li><strong>Cycle de mise à jour continu</strong> — pas une snapshot statique, le théâtre évolue avec l'actualité</li>
         </ul>
-        <h3>Demander une démo</h3>
-        <p>Deux canaux directs — réponse sous 24 heures ouvrées :</p>
+
+        <h3>Et ensuite ?</h3>
+        <p>Si la démo Moyen-Orient vous convainc, les <strong>cinq autres zones</strong> sont accessibles sur abonnement analyste :</p>
+        <ul>
+          <li>Sahel — Mali, Burkina, Niger, Tchad, Mauritanie · sept calques · corridors JNIM/ISWAP</li>
+          <li>Grands Lacs — RDC Est, Rwanda, Burundi, Ouganda, Tanzanie · M23, Wazalendo, FARDC</li>
+          <li>Madagascar — Grand Sud, SAVA, Canal Mozambique · neuf calques · piraterie maritime</li>
+          <li>Afrique Maritime — Suez, Bab-el-Mandeb, Ormuz, Cap, Golfe de Guinée · présence navale FR/CN/US</li>
+          <li>Asie du Sud — Inde, Pakistan, Afghanistan, Cachemire, Baloutchistan · TTP, BLA, ISKP</li>
+        </ul>
+
+        <h3>Démo personnalisée en visio</h3>
+        <p>Vous préférez un tour guidé par un analyste sur vos zones d'intérêt ? Trente minutes en visio, démonstration sur données réelles, Q&A continu, sans engagement.</p>
         <ul>
           <li>Email — <a href="mailto:contact@algorint.fr?subject=Demande%20de%20demo%20Algoracces">contact@algorint.fr</a></li>
           <li>Téléphone — <a href="tel:+33676753641">06 76 75 36 41</a></li>
         </ul>
-        <p>Précisez dans votre message :</p>
-        <ul>
-          <li>Votre fonction et structure</li>
-          <li>Zones d'intérêt prioritaires</li>
-          <li>Disponibilités sur les deux prochaines semaines</li>
-        </ul>
+        <p>Réponse sous 24 heures ouvrées.</p>
       `
     }
   };
