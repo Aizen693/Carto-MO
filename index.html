@@ -550,12 +550,10 @@
         </p>
         <div class="cta-row">
           <a class="cta" href="#theaters">Ouvrir un théâtre <span class="arr">→</span></a>
-          <a class="ghost" href="#methodologie">Méthodologie <span class="arr">↗</span></a>
+          <a class="ghost" href="./admin/">Console admin <span class="arr">↗</span></a>
         </div>
         <div class="sub-links">
           <a href="#sources">Sources</a>
-          <span class="midpt">·</span>
-          <a href="./admin/">Admin</a>
         </div>
       </div>
 
@@ -1241,31 +1239,6 @@
 /* ─────────────────────────────────────── Modal info (méthodologie · sources · à propos · démo) */
 (function(){
   const MODAL = {
-    'methodologie': {
-      eyebrow: 'Méthodologie',
-      title: 'Protocole de collecte et de validation',
-      body: `
-        <p>Référentiel interne : sources mobilisées, règles de validation, cycles de mise à jour. Document de référence pour la production des notes d'analyse.</p>
-        <h3>Collecte</h3>
-        <ul>
-          <li><strong>Imagerie satellite</strong> — Copernicus Sentinel-2, Planet Labs, Maxar (événements stratégiques)</li>
-          <li><strong>Bases d'événements</strong> — ACLED, GDELT, UCDP, Kivu Security Tracker</li>
-          <li><strong>Presse régionale</strong> — Reuters, AFP, presse d'État (Iran, Russie, Chine, Inde), médias locaux</li>
-          <li><strong>OSINT social</strong> — X, Telegram (canaux djihadistes, étatiques, milices), forums spécialisés</li>
-          <li><strong>Think tanks</strong> — ISW, ICG, Bellingcat, ECFR, IFRI, RUSI</li>
-        </ul>
-        <h3>Validation</h3>
-        <p>Chaque événement est croisé avec <em>au moins deux sources indépendantes</em>. Cotation OTAN (A à F) appliquée à la fiabilité de la source primaire. Date, lieu et acteur vérifiés par geocoding et corroboration.</p>
-        <h3>Cycle de mise à jour</h3>
-        <ul>
-          <li>Sahel, Grands Lacs, Madagascar, Afrique Maritime, Asie du Sud — <em>bi-mensuelle</em> (cycles 15 jours)</li>
-          <li>Moyen-Orient — <em>par période</em> de 2 ans, sur 2005–2026</li>
-          <li>Événements à haute valeur — insertion en temps réel</li>
-        </ul>
-        <h3>Limites connues</h3>
-        <p>Couverture OSINT dépendante de l'accès aux sources. Zones contestées (Sahel rural, RDC Est, Baloutchistan) sous-déclarées. Biais documentés zone par zone, consultables depuis chaque rapport.</p>
-      `
-    },
     'sources': {
       eyebrow: 'Sources',
       title: 'Sources ouvertes, citées et auditables',
@@ -1345,7 +1318,7 @@
   }
 
   // Lie tous les liens vers les ancres reconnues — y compris le CTA "Notre méthodologie"
-  const KEYS = ['methodologie', 'sources', 'about'];
+  const KEYS = ['sources', 'about'];
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     const href = a.getAttribute('href').replace('#', '');
     if (!KEYS.includes(href)) return;
