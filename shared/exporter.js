@@ -550,35 +550,70 @@ function buildPopup(props) {
   return '<div class="popup"><div class="p-title">' + escHtml(title) + '</div>' + rows + '</div>';
 }
 
+// Helpers to read feature coords for point renderings
+function pointLatLng(geom) {
+  if (!geom) return null;
+  if (geom.type === 'Point') return L.latLng(geom.coordinates[1], geom.coordinates[0]);
+  if (geom.type === 'MultiPoint' && geom.coordinates[0]) return L.latLng(geom.coordinates[0][1], geom.coordinates[0][0]);
+  return null;
+}
+
 DATASETS.forEach(ds => {
-  const layer = L.geoJSON(ds.data, {
-    pointToLayer: (feat, latlng) => {
+  const isPoint   = ds.geometryType === 'point';
+  const isPolygon = ds.geometryType === 'polygon';
+  const isLine    = ds.geometryType === 'line';
+
+  if (isPoint) {
+    // 3-layer radar render: halo (large, low-opacity fill) + ring (stroke-only) + dot
+    const haloGroup = L.layerGroup();
+    const ringGroup = L.layerGroup();
+    const dotGroup = L.layerGroup();
+    ds.data.features.forEach(feat => {
       const p = feat.properties || {};
-      return L.circleMarker(latlng, {
-        radius: p._exportRadius || 6,
-        fillColor: p._exportFill || ds.color,
-        color: '#0a0b0d',
-        weight: 1,
-        fillOpacity: 0.92,
-        opacity: 1,
+      const ll = pointLatLng(feat.geometry);
+      if (!ll) return;
+      const color = p._exportFill || ds.color || '#c49a3c';
+      const base = p._exportRadius || 5;
+      L.circleMarker(ll, {
+        radius: base * 3,
+        fillColor: color, fillOpacity: 0.07,
+        stroke: false, interactive: false,
+      }).addTo(haloGroup);
+      L.circleMarker(ll, {
+        radius: base * 1.7,
+        fillOpacity: 0,
+        color: color, weight: 1, opacity: 0.40,
+        interactive: false,
+      }).addTo(ringGroup);
+      const dot = L.circleMarker(ll, {
+        radius: base,
+        fillColor: color, fillOpacity: 0.95,
+        color: '#0a0b0d', weight: 1, opacity: 1,
       });
-    },
-    style: (feat) => {
-      const p = feat.properties || {};
-      const isLine = feat.geometry && (feat.geometry.type === 'LineString' || feat.geometry.type === 'MultiLineString');
-      return {
-        color: p._exportStroke || p._exportFill || ds.color,
-        weight: p._exportWeight || (isLine ? 2 : 1.5),
-        opacity: ds.opacity != null ? ds.opacity : 0.85,
-        fillColor: p._exportFill || ds.color,
-        fillOpacity: ds.fillOpacity != null ? ds.fillOpacity : 0.18,
-      };
-    },
-    onEachFeature: (feat, lyr) => {
-      lyr.bindPopup(buildPopup(feat.properties), { maxWidth: 360 });
-    },
-  });
-  layer.addTo(map);
+      dot.bindPopup(buildPopup(p), { maxWidth: 360 });
+      dot.addTo(dotGroup);
+    });
+    haloGroup.addTo(map);
+    ringGroup.addTo(map);
+    dotGroup.addTo(map);
+  } else {
+    // Polygons + lines via L.geoJSON
+    L.geoJSON(ds.data, {
+      style: (feat) => {
+        const p = feat.properties || {};
+        return {
+          color: p._exportStroke || p._exportFill || ds.color,
+          weight: p._exportWeight || (isLine ? 2.2 : 1.6),
+          opacity: ds.opacity != null ? ds.opacity : 0.85,
+          fillColor: p._exportFill || ds.color,
+          fillOpacity: ds.fillOpacity != null ? ds.fillOpacity : 0.22,
+        };
+      },
+      onEachFeature: (feat, lyr) => {
+        lyr.bindPopup(buildPopup(feat.properties), { maxWidth: 360 });
+      },
+    }).addTo(map);
+  }
 });
 
 // Render legend
