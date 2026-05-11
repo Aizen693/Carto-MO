@@ -11,40 +11,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
 <link rel="stylesheet" href="../shared/styles.css?v=20260420b">
 <style>
-#zone-login-overlay {
-  position:fixed;inset:0;z-index:9999;background:rgba(10,11,13,0.97);
-  display:flex;align-items:center;justify-content:center;
-}
-#zone-login-box {
-  background:var(--bg1,#16181c);border:1px solid rgba(255,255,255,0.06);
-  border-top:2px solid #c49a3c;padding:32px 36px;width:340px;max-width:90vw;
-}
-#zone-login-box .zl-brand {
-  display:flex;align-items:center;gap:10px;margin-bottom:20px;
-}
-#zone-login-box .zl-title {
-  font:600 14px/1 'Inter',sans-serif;color:#e8e6e1;letter-spacing:0.06em;text-transform:uppercase;
-}
-#zone-login-box .zl-sub {
-  font:400 8px/1 'JetBrains Mono',monospace;color:#727a87;letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;
-}
-#zone-login-box input {
-  display:block;width:100%;box-sizing:border-box;margin-bottom:10px;padding:8px 10px;
-  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#e8e6e1;
-  font:400 11px/1.4 'JetBrains Mono',monospace;outline:none;
-}
-#zone-login-box input:focus { border-color:#c49a3c; }
-#zone-login-btn {
-  width:100%;padding:9px;background:rgba(196,154,60,0.12);border:1px solid rgba(196,154,60,0.35);
-  color:#c49a3c;font:500 8px/1 'Inter',sans-serif;letter-spacing:0.14em;
-  text-transform:uppercase;cursor:pointer;margin-top:4px;
-}
-#zone-login-btn:hover { background:rgba(196,154,60,0.2); }
-#zone-login-error {
-  display:none;font:400 9px/1.3 'JetBrains Mono',monospace;color:#ef4444;
-  padding:6px 0;margin-bottom:6px;
-}
-.zone-gated { display:none !important; }
 .sb-cat-label {
   padding:8px 12px 3px;
   font:600 7px/1 var(--bc,sans-serif);
@@ -58,24 +24,7 @@
 </head>
 <body>
 
-<!-- LOGIN GATE -->
-<div id="zone-login-overlay">
-  <div id="zone-login-box">
-    <div class="zl-brand">
-      <img src="algor_int_logo.jpg" alt="" style="height:28px;opacity:0.6">
-      <div>
-        <div class="zl-title">Algor Int</div>
-        <div class="zl-sub">Acces restreint -- Asie du Sud</div>
-      </div>
-    </div>
-    <div id="zone-login-error"></div>
-    <input type="email" id="zone-email" placeholder="Email" autocomplete="email">
-    <input type="password" id="zone-password" placeholder="Mot de passe" autocomplete="current-password">
-    <button id="zone-login-btn">Connexion</button>
-  </div>
-</div>
-
-<div id="header" class="zone-gated">
+<div id="header">
   <div id="header-left">
     <button id="btn-sidebar" onclick="toggleSidebar()"><span class="hamburger">&#9776;</span> Menu</button>
     <a href="../index.html" title="Retour à la sélection" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
@@ -96,24 +45,24 @@
   <div class="hdr-controls"></div>
 </div>
 
-<div id="progress-bar" class="zone-gated"><div id="progress-fill"></div></div>
+<div id="progress-bar"><div id="progress-fill"></div></div>
 
-<div id="map-container" class="zone-gated">
+<div id="map-container">
   <div id="map"><div id="loader" style="display:none">Chargement...</div></div>
   <div id="map2"></div>
   <div id="split-label-1"></div>
   <div id="split-label-2"></div>
 </div>
 
-<div id="search-box" class="zone-gated">
+<div id="search-box">
   <span id="search-icon">⌕</span>
   <input type="text" id="search-input" placeholder="Rechercher un lieu, acteur, événement...">
   <div id="search-results"></div>
 </div>
 
-<div id="hover-tooltip" class="zone-gated"></div>
+<div id="hover-tooltip"></div>
 
-<div id="btn-center-asie" class="zone-gated" onclick="centerMap()" title="Recentrer sur l'Asie du Sud" style="
+<div id="btn-center-asie" onclick="centerMap()" title="Recentrer sur l'Asie du Sud" style="
   position: absolute; bottom: 60px; left: 12px; z-index: 6;
   background: rgba(17,18,20,0.97); border: 1px solid rgba(255,255,255,0.07);
   border-top: 1px solid #c49a3c; padding: 6px 11px; cursor: pointer;
@@ -125,8 +74,8 @@
   Recentrer Asie du Sud
 </div>
 
-<div id="sidebar-overlay" class="zone-gated" onclick="toggleSidebar()"></div>
-<div id="sidebar" class="zone-gated">
+<div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+<div id="sidebar">
   <button id="sidebar-close" onclick="toggleSidebar()">&times;</button>
   <div class="sb-sections">
     <div class="sb-section-header" onclick="toggleSbSection(this)">
@@ -222,15 +171,14 @@
   </div>
 </div>
 
-
-<div id="compare-panel" class="zone-gated">
+<div id="compare-panel">
   <h4>Comparer deux périodes</h4>
   <p style="font-size:10px;color:#6b7280;margin-bottom:8px">Sélectionne la 2e période</p>
   <div class="compare-select" id="compare-select"></div>
   <button id="compare-close" onclick="closeCompare()">Fermer</button>
 </div>
 
-<div id="controls" class="zone-gated">
+<div id="controls">
   <div id="period-buttons"></div>
   <div id="btn-row">
     <button id="btn-play" onclick="togglePlay()">Play</button>
@@ -812,8 +760,6 @@ const ZONE_CONFIG = {
     ]
   });
 
-
-
   // Re-add all layers on style change
   var _prevSetStyle = setStyle;
   setStyle = function(s) {
@@ -1336,41 +1282,5 @@ window.focusGeocoder = function() {
 })();
 </script>
 
-<!-- AUTH GATE -->
-<script type="module">
-import { initZoneAuth, zoneLogin } from '../shared/zone-auth.js';
-
-const overlay = document.getElementById('zone-login-overlay');
-const errEl = document.getElementById('zone-login-error');
-const gated = document.querySelectorAll('.zone-gated');
-
-function unlock() {
-  overlay.style.display = 'none';
-  gated.forEach(el => el.classList.remove('zone-gated'));
-  // Mapbox needs to recalculate size after container becomes visible
-  setTimeout(() => { if (window.map) map.resize(); }, 100);
-}
-
-initZoneAuth(
-  () => unlock(),
-  (msg) => {
-    overlay.style.display = 'flex';
-    if (msg) { errEl.textContent = msg; errEl.style.display = 'block'; }
-  }
-);
-
-document.getElementById('zone-login-btn').addEventListener('click', doLogin);
-document.getElementById('zone-password').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') doLogin();
-});
-
-async function doLogin() {
-  const email = document.getElementById('zone-email').value.trim();
-  const pw = document.getElementById('zone-password').value;
-  errEl.style.display = 'none';
-  if (!email || !pw) { errEl.textContent = 'Email et mot de passe requis'; errEl.style.display = 'block'; return; }
-  try { await zoneLogin(email, pw); } catch (e) { errEl.textContent = 'Identifiants invalides'; errEl.style.display = 'block'; }
-}
-</script>
 </body>
 </html>

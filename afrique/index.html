@@ -16,19 +16,6 @@
 .hdr-cell-sm span { font: 500 9px/1 var(--m); color: var(--tx1); letter-spacing: 0.18em; text-transform: uppercase; }
 .hdr-cell-sm strong { color: var(--ac); font-weight: 600; }
 
-/* Login gate (reuse Sahel pattern) */
-#zone-login-overlay { position:fixed;inset:0;z-index:9999;background:rgba(10,11,13,0.97);display:flex;align-items:center;justify-content:center; }
-#zone-login-box { background:var(--bg1);border:1px solid var(--ln);border-top:2px solid var(--ac);padding:32px 36px;width:340px;max-width:90vw; }
-.zl-brand { display:flex;align-items:center;gap:10px;margin-bottom:20px; }
-.zl-title { font:600 14px/1 var(--bc);color:var(--txh);letter-spacing:0.06em;text-transform:uppercase; }
-.zl-sub { font:400 8px/1 var(--m);color:var(--tx1);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px; }
-#zone-login-box input { display:block;width:100%;box-sizing:border-box;margin-bottom:10px;padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--ln);color:var(--txh);font:400 11px/1.4 var(--m);outline:none; }
-#zone-login-box input:focus { border-color:var(--ac); }
-#zone-login-btn { width:100%;padding:9px;background:rgba(196,154,60,0.12);border:1px solid rgba(196,154,60,0.35);color:var(--ac);font:500 8px/1 var(--bc);letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;margin-top:4px; }
-#zone-login-btn:hover { background:rgba(196,154,60,0.2); }
-#zone-login-error { display:none;font:400 9px/1.3 var(--m);color:#ef4444;padding:6px 0;margin-bottom:6px; }
-.zone-gated { display:none !important; }
-
 /* Legende dans sidebar */
 #sidebar-legend-body .legend-row { display:flex; align-items:center; gap:10px; padding:4px 16px; font:400 10.5px/1.3 var(--b); color: var(--tx); }
 #sidebar-legend-body .legend-swatch { width:12px; height:12px; flex:0 0 12px; }
@@ -60,25 +47,8 @@
 </head>
 <body>
 
-<!-- Login gate -->
-<div id="zone-login-overlay">
-  <div id="zone-login-box">
-    <div class="zl-brand">
-      <img src="algor_int_logo.jpg" alt="" style="height:28px;opacity:0.6">
-      <div>
-        <div class="zl-title">Algor Int</div>
-        <div class="zl-sub">Acces restreint -- Afrique Maritime</div>
-      </div>
-    </div>
-    <div id="zone-login-error"></div>
-    <input type="email" id="zone-email" placeholder="Email" autocomplete="email">
-    <input type="password" id="zone-password" placeholder="Mot de passe" autocomplete="current-password">
-    <button id="zone-login-btn">Connexion</button>
-  </div>
-</div>
-
 <!-- Header -->
-<div id="header" class="zone-gated">
+<div id="header">
   <div id="header-left">
     <button id="btn-sidebar" onclick="toggleSidebar()"><span class="hamburger">&#9776;</span> Menu</button>
     <a href="../index.html" title="Retour a la selection" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
@@ -104,13 +74,13 @@
 </div>
 
 <!-- Map -->
-<div id="map" class="zone-gated"></div>
+<div id="map"></div>
 
 <!-- Sidebar overlay (mobile) -->
-<div id="sidebar-overlay" class="zone-gated" onclick="toggleSidebar()"></div>
+<div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 <!-- Sidebar -->
-<div id="sidebar" class="zone-gated">
+<div id="sidebar">
   <button id="sidebar-close-btn" onclick="toggleSidebar()">&times;</button>
   <div class="sb-sections">
 
@@ -738,36 +708,6 @@ function tickFlux(t) {
 }
 requestAnimationFrame(tickFlux);
 
-</script>
-
-<!-- Auth gate (Supabase) — reuse shared module -->
-<script type="module">
-import { initZoneAuth, zoneLogin } from '../shared/zone-auth.js?v=20260423a';
-
-initZoneAuth((profile) => {
-  document.getElementById('zone-login-overlay').style.display = 'none';
-  document.querySelectorAll('.zone-gated').forEach(el => el.classList.remove('zone-gated'));
-  if (window.map && window.map.resize) window.map.resize();
-}, (err) => {
-  if (err) {
-    const el = document.getElementById('zone-login-error');
-    el.textContent = err; el.style.display = 'block';
-  }
-});
-
-document.getElementById('zone-login-btn').addEventListener('click', doLogin);
-document.getElementById('zone-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') doLogin(); });
-
-async function doLogin() {
-  const email = document.getElementById('zone-email').value.trim();
-  const password = document.getElementById('zone-password').value;
-  if (!email || !password) return;
-  try { await zoneLogin(email, password); }
-  catch (e) {
-    const el = document.getElementById('zone-login-error');
-    el.textContent = e?.message || 'Echec de connexion'; el.style.display = 'block';
-  }
-}
 </script>
 
 </body>
