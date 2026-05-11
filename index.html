@@ -528,7 +528,7 @@
     </div>
     <div class="top-right">
       <span class="sysstat"><span class="led"></span>Système opérationnel</span>
-      <span class="clock"><span id="clock">14:32</span><span class="z"> UTC</span></span>
+      <span class="clock"><span id="clock">14:32</span><span class="z"> Paris</span></span>
     </div>
   </header>
 
@@ -1401,16 +1401,20 @@
   });
 })();
 
-/* ─────────────────────────────────────── UTC clock */
+/* ─────────────────────────────────────── Horloge Paris (Europe/Paris, gère CET/CEST auto) */
 (function(){
-  function pad(n){ return String(n).padStart(2,'0'); }
   function tick(){
-    const n = new Date();
     const el = document.getElementById('clock');
-    if (el) el.textContent = `${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}`;
+    if (!el) return;
+    el.textContent = new Date().toLocaleTimeString('fr-FR', {
+      timeZone: 'Europe/Paris',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
   tick(); setInterval(tick, 30 * 1000);
-  const y = document.getElementById('year'); if (y) y.textContent = new Date().getUTCFullYear();
+  const y = document.getElementById('year');
+  if (y) y.textContent = new Date().toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris', year: 'numeric' });
 })();
 </script>
 
