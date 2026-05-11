@@ -393,6 +393,83 @@
   .c-availability.live .pin { background: #6ea077; opacity: 1; }
   .c-availability.sub  .pin { background: var(--tx3); }
 
+  /* ─────────────────────────────────────── Modal info (méthodologie, sources, etc.) */
+  #modal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(11,12,14,0.86);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .22s ease;
+  }
+  #modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal {
+    background: var(--s1);
+    border: 1px solid var(--line2);
+    border-radius: 3px;
+    max-width: 720px;
+    width: 100%;
+    max-height: 84vh;
+    overflow-y: auto;
+    padding: 48px 56px 52px;
+    position: relative;
+    transform: translateY(8px);
+    transition: transform .22s ease;
+  }
+  #modal-overlay.open .modal { transform: translateY(0); }
+  .modal-close {
+    position: absolute; top: 18px; right: 18px;
+    background: transparent; border: none;
+    color: var(--tx2); cursor: pointer;
+    font: 400 22px/1 var(--sans);
+    padding: 8px 12px;
+    transition: color .15s ease;
+  }
+  .modal-close:hover { color: var(--tx1); }
+  .modal-eyebrow {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.14em; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 14px;
+  }
+  .modal-h {
+    font-family: var(--sans); font-weight: 500;
+    font-size: 30px; line-height: 1.1;
+    letter-spacing: -0.022em;
+    color: var(--tx1); margin: 0;
+  }
+  .modal-body {
+    font-size: 14.5px; line-height: 1.65;
+    color: var(--tx2);
+    margin-top: 22px;
+    font-weight: 300;
+  }
+  .modal-body h3 {
+    font-family: var(--sans); font-weight: 500;
+    font-size: 15px; color: var(--tx1);
+    letter-spacing: -0.005em;
+    margin: 26px 0 8px;
+  }
+  .modal-body p { margin: 0 0 14px; }
+  .modal-body ul { padding-left: 16px; margin: 0 0 14px; list-style: none; }
+  .modal-body li { margin-bottom: 6px; position: relative; padding-left: 12px; }
+  .modal-body li::before {
+    content: '·'; position: absolute; left: 0; color: var(--gold); font-weight: 500;
+  }
+  .modal-body strong { color: var(--tx1); font-weight: 500; }
+  .modal-body em {
+    font-family: var(--mono); font-style: normal;
+    color: var(--tx1); font-size: 13.5px; letter-spacing: 0.04em;
+  }
+  .modal-body a {
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid rgba(184,149,74,0.35);
+    transition: border-color .15s ease;
+  }
+  .modal-body a:hover { border-color: var(--gold); }
+  body.modal-open { overflow: hidden; }
+
   /* ─────────────────────────────────────── Footer */
   .foot {
     padding: 18px var(--pad-x) 22px;
@@ -634,6 +711,16 @@
     </section>
 
   </main>
+
+  <!-- ─────────────────────────────────────── Modal d'information (méthodologie, sources, etc.) -->
+  <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <button class="modal-close" aria-label="Fermer">×</button>
+      <div class="modal-eyebrow"></div>
+      <h2 id="modal-title" class="modal-h"></h2>
+      <div class="modal-body"></div>
+    </div>
+  </div>
 
   <!-- ─────────────────────────────────────── Footer -->
   <footer class="foot">
@@ -1147,6 +1234,161 @@
   requestAnimationFrame(frame);
   // Fallback ticker so rotation still progresses when the iframe is hidden / rAF throttled
   setInterval(() => { if (document.hidden) step(performance.now()); }, 1000 / 24);
+})();
+
+/* ─────────────────────────────────────── Modal info (méthodologie · sources · à propos · démo) */
+(function(){
+  const MODAL = {
+    'methodologie': {
+      eyebrow: 'Méthodologie',
+      title: 'Comment Algoracces fabrique sa carto',
+      body: `
+        <p>Algoracces consolide des sources hétérogènes en une cartographie unique — sourcée, datée et auditable événement par événement.</p>
+        <h3>Collecte</h3>
+        <ul>
+          <li><strong>Imagerie satellite</strong> — Copernicus Sentinel-2, Planet Labs, Maxar (sur événements stratégiques)</li>
+          <li><strong>Bases d'événements</strong> — ACLED, GDELT, UCDP, Kivu Security Tracker</li>
+          <li><strong>Presse régionale</strong> — Reuters, AFP, presse d'État (Iran, Russie, Chine, Inde), médias locaux</li>
+          <li><strong>OSINT social</strong> — X, Telegram (canaux djihadistes, étatiques, milices), forums spécialisés</li>
+          <li><strong>Think tanks</strong> — ISW, ICG, Bellingcat, ECFR, IFRI, RUSI</li>
+        </ul>
+        <h3>Validation</h3>
+        <p>Chaque événement est croisé avec <em>au moins deux sources indépendantes</em>. Une cotation type OTAN (A à F) est appliquée selon la fiabilité de la source primaire. Date, lieu et acteur sont vérifiés par geocoding et corroboration.</p>
+        <h3>Cycle de mise à jour</h3>
+        <ul>
+          <li>Sahel, Grands Lacs, Madagascar, Afrique Maritime, Asie du Sud — <em>bi-mensuelle</em> (cycles 15 jours)</li>
+          <li>Moyen-Orient — <em>par période</em> de 2 ans, sur 2005–2026</li>
+          <li>Événements à haute valeur — insertion en temps réel</li>
+        </ul>
+        <h3>Limites</h3>
+        <p>La couverture OSINT dépend de l'accès aux sources. Les zones contestées (Sahel rural, RDC Est, Baloutchistan) souffrent de sous-déclaration. Les biais sont documentés zone par zone, accessibles depuis chaque rapport.</p>
+      `
+    },
+    'sources': {
+      eyebrow: 'Sources',
+      title: 'Sources ouvertes, citées et auditables',
+      body: `
+        <p>Algoracces s'appuie sur un écosystème de sources publiques. Toutes les sources sont citées dans le popup de chaque événement.</p>
+        <h3>Imagerie & géospatial</h3>
+        <ul>
+          <li>Copernicus Sentinel-2, Planet Labs, Maxar Skywatch</li>
+          <li>Mapbox Streets, OpenStreetMap</li>
+        </ul>
+        <h3>Bases d'événements</h3>
+        <ul>
+          <li>ACLED — Armed Conflict Location and Event Data</li>
+          <li>GDELT Project — Global Database of Events, Language and Tone</li>
+          <li>UCDP — Uppsala Conflict Data Program</li>
+          <li>Kivu Security Tracker, Bellingcat investigations</li>
+        </ul>
+        <h3>Médias & presse</h3>
+        <ul>
+          <li>Agences mondiales — AFP, Reuters, AP</li>
+          <li>Presse d'État — IRNA (Iran), TASS (Russie), Xinhua (Chine), PTI (Inde)</li>
+          <li>Presse régionale — Al Jazeera, France 24, Africa Intelligence, The Hindu, Daily Sabah</li>
+        </ul>
+        <h3>OSINT social</h3>
+        <ul>
+          <li>X — réseaux militaires, journalistes terrain, analystes</li>
+          <li>Telegram — canaux JNIM, ISWAP, Wazalendo, étatiques, milices</li>
+          <li>Forums spécialisés — Oryx, ISW updates, OSINTtechnical</li>
+        </ul>
+        <h3>Think tanks & instituts</h3>
+        <ul>
+          <li>Institute for the Study of War (ISW)</li>
+          <li>International Crisis Group (ICG)</li>
+          <li>Brookings, RUSI, ECFR, IFRI, Carnegie Endowment</li>
+        </ul>
+      `
+    },
+    'about': {
+      eyebrow: 'À propos',
+      title: 'Algor Int · renseignement OSINT indépendant',
+      body: `
+        <p><strong>Algor Int</strong> est une structure indépendante spécialisée en renseignement géopolitique et veille OSINT cartographique. <strong>Algoracces</strong> est notre produit dédié aux analystes professionnels.</p>
+        <h3>Notre approche</h3>
+        <p>Le renseignement public mérite la même rigueur que le renseignement classifié — croisement systématique, datation, sourcage, cotation. Notre plateforme rend ce travail consultable, comparable dans le temps et auditable événement par événement.</p>
+        <h3>Public cible</h3>
+        <ul>
+          <li>Analystes en renseignement — institutionnels et privés</li>
+          <li>Journalistes d'investigation et rédactions internationales</li>
+          <li>Officiers d'état-major et attachés de défense</li>
+          <li>ONG opérant en zones de conflit</li>
+          <li>Chercheurs en sécurité internationale</li>
+        </ul>
+        <h3>Indépendance</h3>
+        <p>Aucun lien d'allégeance avec un État, un acteur militaire ou un parti politique. Financement par abonnement analyste. Aucune donnée utilisateur revendue ou cédée à un tiers.</p>
+        <h3>Contact</h3>
+        <p>Pour toute question éditoriale, commerciale ou partenariat presse — <a href="mailto:gapcimadomo@gmail.com">gapcimadomo@gmail.com</a></p>
+      `
+    },
+    'demo': {
+      eyebrow: 'Démo guidée',
+      title: 'Découvrez Algoracces en 30 minutes',
+      body: `
+        <p>Une démo personnalisée avec un analyste Algor Int. Sans engagement, en français ou en anglais.</p>
+        <h3>Ce que la démo couvre</h3>
+        <ul>
+          <li>Présentation des six théâtres et de leurs calques</li>
+          <li>Cas d'usage typiques — suivi de front, alerte précoce, analyse rétrospective</li>
+          <li>Outils analystes — heatmap, comparaison de périodes, export GeoJSON et CSV</li>
+          <li>Workflow d'enquête type sur un événement réel</li>
+          <li>Questions ouvertes sur vos besoins spécifiques</li>
+        </ul>
+        <h3>Format</h3>
+        <ul>
+          <li>Visio de 30 minutes — Meet, Zoom ou Teams</li>
+          <li>Partage d'écran live, démonstration sur données réelles</li>
+          <li>Q&A continue</li>
+          <li>Suivi écrit sous 24h</li>
+        </ul>
+        <h3>Demander une démo</h3>
+        <p>Envoyez un email à <a href="mailto:gapcimadomo@gmail.com?subject=Demande%20de%20demo%20Algoracces">gapcimadomo@gmail.com</a> en précisant :</p>
+        <ul>
+          <li>Votre fonction et structure</li>
+          <li>Zones d'intérêt prioritaires</li>
+          <li>Disponibilités sur les deux prochaines semaines</li>
+        </ul>
+        <p>Réponse sous 24 heures ouvrées.</p>
+      `
+    }
+  };
+
+  const overlay = document.getElementById('modal-overlay');
+  if (!overlay) return;
+  const titleEl = overlay.querySelector('.modal-h');
+  const bodyEl = overlay.querySelector('.modal-body');
+  const eyebrowEl = overlay.querySelector('.modal-eyebrow');
+  const closeBtn = overlay.querySelector('.modal-close');
+
+  function open(key){
+    const c = MODAL[key];
+    if (!c) return;
+    eyebrowEl.textContent = c.eyebrow;
+    titleEl.textContent = c.title;
+    bodyEl.innerHTML = c.body;
+    overlay.classList.add('open');
+    document.body.classList.add('modal-open');
+    closeBtn.focus();
+  }
+  function close(){
+    overlay.classList.remove('open');
+    document.body.classList.remove('modal-open');
+  }
+
+  // Lie tous les liens vers les ancres reconnues — y compris le CTA "Notre méthodologie"
+  const KEYS = ['methodologie', 'sources', 'about', 'demo'];
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    const href = a.getAttribute('href').replace('#', '');
+    if (!KEYS.includes(href)) return;
+    a.addEventListener('click', (e) => { e.preventDefault(); open(href); });
+  });
+
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) close();
+  });
 })();
 
 /* ─────────────────────────────────────── UTC clock */
