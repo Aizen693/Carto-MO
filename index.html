@@ -243,7 +243,13 @@
     margin-left: auto;
     width: 100%;
   }
-  .globe-wrap canvas { display: block; width: 100%; height: 100%; }
+  .globe-wrap canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    /* Masque tout dessin qui depasse de la sphere quand on zoom — pas de carre visible */
+  }
 
   .globe-meta {
     position: absolute; left: 0; right: 0; bottom: -8px;
