@@ -286,99 +286,6 @@
     letter-spacing: 0.04em;
   }
 
-  /* ─────────────────────────────────────── Demo (video) */
-  .demo {
-    padding: 32px 0 64px;
-    border-top: 1px solid var(--line);
-  }
-  .demo-head {
-    display: flex; align-items: baseline; justify-content: space-between;
-    padding: 18px 0 28px;
-    font-family: var(--mono); font-size: 11px;
-    color: var(--tx3); letter-spacing: 0.02em;
-  }
-  .demo-head .lbl { color: var(--tx2); }
-  .demo-head .right { color: var(--tx3); }
-  .demo-head .right strong { color: var(--tx1); font-weight: 500; }
-  .demo-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: 56px;
-    align-items: center;
-  }
-  .demo-copy h2 {
-    font-family: var(--sans);
-    font-weight: 500;
-    font-size: clamp(28px, 2.6vw, 38px);
-    line-height: 1.1;
-    letter-spacing: -0.018em;
-    color: var(--tx1);
-    margin: 0 0 18px;
-    max-width: 18ch;
-  }
-  .demo-copy h2 em {
-    font-family: var(--serif); font-style: italic; font-weight: 400;
-    color: var(--tx1);
-  }
-  .demo-copy p {
-    color: var(--tx2);
-    font-size: 14.5px; line-height: 1.6;
-    max-width: 42ch;
-    margin: 0 0 14px;
-    font-weight: 300;
-  }
-  .demo-copy p strong { color: var(--tx1); font-weight: 400; }
-  .demo-meta {
-    margin-top: 22px;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0;
-    border-top: 1px solid var(--line);
-    max-width: 420px;
-  }
-  .demo-meta .cell {
-    padding: 14px 14px 12px;
-    border-right: 1px solid var(--line);
-  }
-  .demo-meta .cell:last-child { border-right: none; }
-  .demo-meta .cell .k {
-    font-family: var(--mono); font-size: 10px;
-    color: var(--tx3); letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  .demo-meta .cell .v {
-    font-size: 14px; color: var(--tx1); font-weight: 500;
-  }
-  .demo-player {
-    position: relative;
-    background: var(--s1);
-    border: 1px solid var(--line2);
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-  }
-  .demo-player video {
-    width: 100%; height: 100%;
-    display: block;
-    object-fit: cover;
-    background: #000;
-  }
-  .demo-player::after {
-    content: '';
-    position: absolute; inset: 0;
-    pointer-events: none;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
-  }
-  .demo-caption {
-    margin-top: 14px;
-    display: flex; justify-content: space-between; align-items: center;
-    font-family: var(--mono); font-size: 10.5px;
-    color: var(--tx3); letter-spacing: 0.04em;
-  }
-  .demo-caption .left em {
-    font-style: normal; color: var(--tx2);
-  }
-
   /* ─────────────────────────────────────── Theaters */
   .theaters {
     padding: 32px 0 80px;
@@ -596,8 +503,6 @@
     .card,
     .card:nth-last-child(-n+3) { border-bottom: 1px solid var(--line); }
     .card:last-child { border-bottom: none; }
-    .demo-grid { grid-template-columns: 1fr; gap: 36px; }
-    .demo-meta { max-width: none; }
   }
   @media (max-width: 640px) {
     :root { --pad-x: 24px; }
@@ -666,53 +571,6 @@
             <span class="sw sw-sea"></span>
             <span class="ttl">Flux maritimes<span class="ct">35 trajets</span></span>
             <span class="desc">Détroits, cabotage, lacs et océan Indien — <em>Ormuz, Bab-el-Mandeb,</em> Suez, Mozambique, Bengal, CPEC.</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─────────────────────────────────────── Demo (video explicative) -->
-    <section class="demo" id="demo">
-      <div class="demo-head">
-        <span class="lbl">Vidéo de présentation</span>
-        <span class="right">durée <strong>00:50</strong> · son recommandé</span>
-      </div>
-      <div class="demo-grid">
-        <div class="demo-copy">
-          <h2>Voir la plateforme <em>en mouvement.</em></h2>
-          <p>
-            Cinquante secondes pour parcourir les théâtres d'analyse : globe d'entrée, cartographie chiite/sunnite au Moyen-Orient, calques superposés au Sahel — <strong>ethnies, forces, mines, infrastructures, frontières.</strong>
-          </p>
-          <p>
-            Support pour brief interne et présentation de la <strong>méthodologie</strong> aux clients-livrables (notes d'analyse).
-          </p>
-          <div class="demo-meta">
-            <div class="cell">
-              <div class="k">Format</div>
-              <div class="v">1920×1080</div>
-            </div>
-            <div class="cell">
-              <div class="k">Durée</div>
-              <div class="v">00:50</div>
-            </div>
-            <div class="cell">
-              <div class="k">Usage</div>
-              <div class="v">Interne</div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="demo-player">
-            <video
-              src="./shared/video/teaser.mp4"
-              poster="./shared/video/teaser-poster.jpg"
-              controls
-              preload="metadata"
-              playsinline></video>
-          </div>
-          <div class="demo-caption">
-            <span class="left"><em>algoracces.fr</em> · console interne</span>
-            <span class="right">USAGE ANALYSTE · DIFFUSION RESTREINTE</span>
           </div>
         </div>
       </div>
@@ -1385,27 +1243,27 @@
   const MODAL = {
     'methodologie': {
       eyebrow: 'Méthodologie',
-      title: 'Comment Algoracces fabrique sa carto',
+      title: 'Protocole de collecte et de validation',
       body: `
-        <p>Algoracces consolide des sources hétérogènes en une cartographie unique — sourcée, datée et auditable événement par événement.</p>
+        <p>Référentiel interne : sources mobilisées, règles de validation, cycles de mise à jour. Document de référence pour la production des notes d'analyse.</p>
         <h3>Collecte</h3>
         <ul>
-          <li><strong>Imagerie satellite</strong> — Copernicus Sentinel-2, Planet Labs, Maxar (sur événements stratégiques)</li>
+          <li><strong>Imagerie satellite</strong> — Copernicus Sentinel-2, Planet Labs, Maxar (événements stratégiques)</li>
           <li><strong>Bases d'événements</strong> — ACLED, GDELT, UCDP, Kivu Security Tracker</li>
           <li><strong>Presse régionale</strong> — Reuters, AFP, presse d'État (Iran, Russie, Chine, Inde), médias locaux</li>
           <li><strong>OSINT social</strong> — X, Telegram (canaux djihadistes, étatiques, milices), forums spécialisés</li>
           <li><strong>Think tanks</strong> — ISW, ICG, Bellingcat, ECFR, IFRI, RUSI</li>
         </ul>
         <h3>Validation</h3>
-        <p>Chaque événement est croisé avec <em>au moins deux sources indépendantes</em>. Une cotation type OTAN (A à F) est appliquée selon la fiabilité de la source primaire. Date, lieu et acteur sont vérifiés par geocoding et corroboration.</p>
+        <p>Chaque événement est croisé avec <em>au moins deux sources indépendantes</em>. Cotation OTAN (A à F) appliquée à la fiabilité de la source primaire. Date, lieu et acteur vérifiés par geocoding et corroboration.</p>
         <h3>Cycle de mise à jour</h3>
         <ul>
           <li>Sahel, Grands Lacs, Madagascar, Afrique Maritime, Asie du Sud — <em>bi-mensuelle</em> (cycles 15 jours)</li>
           <li>Moyen-Orient — <em>par période</em> de 2 ans, sur 2005–2026</li>
           <li>Événements à haute valeur — insertion en temps réel</li>
         </ul>
-        <h3>Limites</h3>
-        <p>La couverture OSINT dépend de l'accès aux sources. Les zones contestées (Sahel rural, RDC Est, Baloutchistan) souffrent de sous-déclaration. Les biais sont documentés zone par zone, accessibles depuis chaque rapport.</p>
+        <h3>Limites connues</h3>
+        <p>Couverture OSINT dépendante de l'accès aux sources. Zones contestées (Sahel rural, RDC Est, Baloutchistan) sous-déclarées. Biais documentés zone par zone, consultables depuis chaque rapport.</p>
       `
     },
     'sources': {
