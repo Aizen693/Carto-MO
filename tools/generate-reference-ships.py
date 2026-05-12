@@ -11,8 +11,14 @@ _source='reference' pour distinction visuelle cote frontend.
 import json
 import math
 import random
+import sys
 from pathlib import Path
 from datetime import datetime
+
+try:
+    from global_land_mask import globe
+except ImportError:
+    sys.exit("pip3 install global-land-mask  (requis pour filtrer les positions terrestres)")
 
 random.seed(42)
 
@@ -89,45 +95,47 @@ PORTS = [
 ]
 
 # ============================================================================
-# Couloirs : liste de waypoints + nb_navires distribues
-# Densite : ships spaced evenly along, ~5km lateral perpendicular jitter
+# Couloirs : waypoints strictement offshore (verifies avec global_land_mask).
+# place_in_ocean_on_segment derive perpendiculairement de 5-30km supplementaires
+# pour finir d'ajuster si le bbox terrestre Natural Earth est trop large.
 # ============================================================================
 CORRIDORS = [
-    # Mer Rouge / Suez axis
-    ('Suez -> Jeddah',       [(29.5, 32.6), (27, 34), (24, 36.5), (21.5, 39)], 18),
-    ('Jeddah -> Bab el-Mandeb', [(21, 39.2), (18, 40), (15, 41.5), (13, 43)], 16),
-    # Bab el-Mandeb -> Ormuz (Gulf of Aden + Oman coast)
-    ('Bab el-Mandeb -> Aden',   [(12.5, 43.5), (12.7, 44), (12.8, 45)], 8),
-    ('Aden -> Mukalla -> Salalah', [(12.8, 45), (13.5, 47), (14.5, 49), (15.5, 51), (16.5, 53), (17, 54)], 24),
-    ('Salalah -> Mascate',   [(17, 54), (19, 55.5), (21, 57), (23, 58.5)], 18),
-    ('Mascate -> Bandar Abbas', [(23.6, 58.5), (24.5, 57.5), (25.5, 57), (26.5, 56.5), (27, 56.3)], 16),
-    # Cote Sud arabe / Mer d'Arabie
-    ('Mascate -> Karachi',   [(23.5, 58.7), (23, 61), (23, 64), (24, 67)], 14),
-    ('Mascate -> Salalah deep', [(23, 60), (20, 60), (17, 58), (15, 56)], 12),
-    ('Salalah -> Sri Lanka', [(15, 58), (12, 64), (10, 70), (8, 76)], 14),
-    # Persian Gulf interior
-    ('Bandar Abbas -> Kuwait', [(27, 56), (27.5, 53), (28, 51), (28.5, 49), (29, 48)], 16),
-    ('Dubai -> Doha -> Manama -> Dammam', [(25, 55), (25, 54), (25.3, 52), (25.5, 51), (26, 50.5), (26.4, 50.2)], 14),
-    ('Strait of Hormuz crossing', [(26.5, 56.3), (26.3, 56.4), (26.1, 56.5), (25.9, 56.6)], 10),
-    # Cote Est Africaine
-    ('Suez -> Mombasa',      [(13, 43), (10, 45), (5, 46), (0, 45), (-4, 40)], 22),
-    ('Mombasa -> Maputo',    [(-4, 40), (-8, 40), (-12, 40), (-15, 40), (-18, 37), (-22, 35), (-26, 33)], 24),
-    ('Mombasa -> Salalah',   [(-4, 41), (0, 46), (4, 50), (8, 53), (12, 54), (15, 54)], 20),
-    # Mozambique Channel
-    ('Maputo -> Suez via Mozambique', [(-25, 33), (-20, 36), (-15, 39), (-10, 41), (-5, 43), (0, 44)], 20),
-    ('Mozambique interior',  [(-22, 38), (-19, 39), (-16, 41), (-13, 42)], 12),
-    # Cape route
-    ('Cape -> Mauritius',    [(-34, 25), (-32, 35), (-28, 45), (-22, 55)], 16),
-    ('Mauritius -> Reunion -> Diego', [(-20, 57.5), (-19, 56), (-17, 53), (-15, 50), (-13, 49)], 12),
-    ('Mauritius -> Suez',    [(-20, 57.5), (-15, 55), (-8, 52), (0, 48), (8, 45), (12, 44)], 18),
-    # Madagascar
-    ('Madagascar Est',       [(-12, 49.5), (-16, 50.5), (-20, 49), (-23, 47), (-25, 45)], 14),
-    ('Madagascar Ouest',     [(-13, 48), (-16, 46), (-19, 44), (-22, 43)], 10),
-    # Indien profond
+    # Mer Rouge / Suez axis (mer Rouge centrale)
+    ('Suez -> Jeddah',       [(29.5, 32.7), (27, 34.5), (24, 37), (21.7, 38.7)], 18),
+    ('Jeddah -> Bab el-Mandeb', [(21.5, 38.5), (18, 40), (15, 41.8), (13.2, 43.3)], 16),
+    # Bab el-Mandeb -> Ormuz (Gulf of Aden offshore : ~30km de la cote)
+    ('Bab el-Mandeb -> Gulf Aden', [(12.5, 43.7), (12.7, 45), (12.7, 47)], 10),
+    ('Gulf Aden -> Mukalla offshore', [(12.7, 47), (13, 49), (13.5, 51), (14, 53)], 18),
+    ('Mukalla -> Salalah offshore',   [(14, 53), (14.5, 54), (15.5, 54), (16.5, 54.3)], 14),
+    ('Salalah -> Mascate offshore',   [(16.5, 54.5), (18, 56), (20, 57.5), (22.5, 59.3)], 20),
+    ('Mascate -> Bandar Abbas offshore', [(23.8, 59), (24.8, 58), (25.8, 57), (26.5, 56.5)], 14),
+    # Mer d'Arabie / Indien
+    ('Mascate -> Karachi',   [(24, 60), (23.5, 62), (23.5, 65), (24, 67)], 14),
+    ('Salalah -> Mascate deep', [(16, 56), (18, 58), (20, 59.5), (22, 60)], 12),
+    ('Salalah -> Sri Lanka', [(16, 56), (13, 60), (10, 65), (8, 70), (7, 75)], 14),
     ('Mascate -> Maldives',  [(23, 60), (18, 65), (12, 70), (5, 73)], 10),
-    ('Salalah -> Maldives',  [(17, 55), (13, 60), (8, 68), (5, 73)], 8),
-    # Sud Inde
-    ('Karachi -> Sri Lanka', [(24, 67), (20, 70), (15, 73), (10, 77)], 10),
+    ('Salalah -> Maldives',  [(16, 56), (12, 60), (8, 65), (5, 72)], 8),
+    # Persian Gulf interior (eaux centrales du Golfe)
+    ('Bandar Abbas -> Kuwait', [(26.7, 56.4), (27.3, 53.5), (27.7, 51.5), (28.5, 50.2), (29, 48.7)], 16),
+    ('Persian Gulf round',   [(25, 55.5), (25.3, 53.5), (25.5, 52), (25.8, 51), (26, 50.5)], 14),
+    ('Strait of Hormuz crossing', [(26.6, 56.3), (26.4, 56.5), (26.2, 56.7)], 10),
+    # Cote Est Africaine (offshore Somalie/Kenya/Tanzanie/Mozambique)
+    ('Bab el-Mandeb -> Cape Guardafui', [(12.5, 44), (12, 48), (12, 51.5)], 14),
+    ('Cape Guardafui -> Mombasa offshore', [(11.5, 52), (8, 51), (4, 49), (0, 44), (-3, 41), (-4.2, 40)], 22),
+    ('Mombasa -> Maputo offshore',  [(-4.2, 40), (-8, 40.5), (-12, 41), (-16, 41), (-20, 38), (-25, 36), (-26.2, 33.5)], 24),
+    ('Mombasa -> Salalah',   [(-3.5, 41), (1, 45), (5, 50), (9, 53), (13, 54), (16, 54.5)], 20),
+    # Mozambique Channel (chenal large entre Mada et cote Mozambique)
+    ('Mozambique Channel S->N', [(-25, 35), (-22, 37), (-18, 39), (-14, 41), (-10, 42)], 16),
+    ('Channel interior',     [(-20, 39), (-17, 41), (-14, 42)], 10),
+    # Cape route (Atlantique Sud / Indien Sud)
+    ('Cape -> Mauritius',    [(-35, 22), (-33, 32), (-30, 42), (-25, 52), (-21, 57)], 16),
+    ('Mauritius -> Mombasa', [(-20, 57), (-17, 53), (-13, 48), (-8, 44), (-4.5, 40)], 14),
+    ('Mauritius -> Suez',    [(-20, 57.5), (-13, 55), (-5, 53), (3, 50), (10, 47), (12.8, 44)], 18),
+    # Madagascar (offshore est et ouest, large)
+    ('Madagascar Est offshore', [(-12, 50.5), (-16, 51), (-20, 50), (-23, 48), (-25.5, 46)], 14),
+    ('Madagascar Ouest offshore', [(-13, 47), (-16, 45), (-19, 44), (-23, 43.5)], 10),
+    # Sud Indien
+    ('Karachi -> Sri Lanka', [(24, 66.5), (20, 69), (15, 73), (8, 76)], 10),
 ]
 
 # ============================================================================
@@ -201,6 +209,37 @@ def jitter(lat, lng, km=4):
     dlng = (random.random() - 0.5) * 2 * (km / (111.0 * max(0.3, math.cos(math.radians(lat)))))
     return lat + dlat, lng + dlng
 
+def find_ocean_near(center_lat, center_lng, max_km=20, max_tries=80):
+    """Tirage aleatoire de positions a <= max_km du centre, jusqu'a en trouver une en mer."""
+    for attempt in range(max_tries):
+        # Distance progressive : commence pres du centre, elargit a chaque echec
+        radius = (1.5 + (attempt / max_tries) * max_km)
+        lat, lng = jitter(center_lat, center_lng, km=radius)
+        if globe.is_ocean(lat, lng):
+            return lat, lng
+    return None  # Echec — sera filtre en aval
+
+def place_in_ocean_on_segment(p1, p2, max_tries=40):
+    """Place un navire sur le segment p1-p2 avec jitter perpendiculaire, en mer.
+    Si la position tombe sur terre, decale perpendiculairement jusqu'a trouver l'eau."""
+    for attempt in range(max_tries):
+        t = random.random()
+        lat = p1[0] + t * (p2[0] - p1[0])
+        lng = p1[1] + t * (p2[1] - p1[1])
+        dlat_seg = p2[0] - p1[0]
+        dlng_seg = p2[1] - p1[1]
+        norm = math.hypot(dlat_seg, dlng_seg) or 1
+        perp_lat = -dlng_seg / norm
+        perp_lng = dlat_seg / norm
+        # Jitter perpendiculaire 5-25km — bias progressif vers max si echecs
+        jitter_km = 5 + (attempt / max_tries) * 30
+        j = (random.random() - 0.5) * 2 * (jitter_km / 111.0)
+        cand_lat = lat + perp_lat * j
+        cand_lng = lng + perp_lng * j
+        if globe.is_ocean(cand_lat, cand_lng):
+            return cand_lat, cand_lng, t
+    return None  # Segment passe trop pres de la terre — sera filtre
+
 def bearing(p1, p2):
     """Cap compass de p1 vers p2 (lat,lng)."""
     lat1 = math.radians(p1[0]); lat2 = math.radians(p2[0])
@@ -213,7 +252,9 @@ def gen_port_ship(port_name, plat, plng, local_mid, now_ms):
     flag = pick_flag(local_mid)
     type_code = random.choice(TYPE_POOL)
     moving = random.random() < 0.40
-    lat, lng = jitter(plat, plng, km=10 if moving else 3.5)
+    pos = find_ocean_near(plat, plng, max_km=15 if moving else 6)
+    if pos is None: return None
+    lat, lng = pos
     if moving:
         sog = round(random.uniform(5, 14), 1)
         cog = round(random.uniform(0, 360), 1)
@@ -237,10 +278,10 @@ def gen_port_ship(port_name, plat, plng, local_mid, now_ms):
     }
 
 def gen_corridor_ships(waypoints, total, now_ms):
-    """Distribue total navires le long du polyline waypoints.
-    Espacement regulier, jitter perpendiculaire ~5km, cap aligne sur le segment."""
+    """Distribue total navires sur le polyline waypoints, en mer uniquement.
+    Pour chaque navire : tire un segment au prorata de sa longueur, place_in_ocean_on_segment
+    decale perpendiculairement jusqu'a trouver l'eau, cap aligne sur le bearing."""
     ships = []
-    # Total longueur (approx en degres)
     seg_lengths = []
     for i in range(len(waypoints) - 1):
         dlat = waypoints[i+1][0] - waypoints[i][0]
@@ -248,55 +289,42 @@ def gen_corridor_ships(waypoints, total, now_ms):
         seg_lengths.append(math.hypot(dlat, dlng))
     total_len = sum(seg_lengths)
     if total_len == 0: return ships
-    for k in range(total):
-        # Position parametrique 0..1 le long du polyline
-        t_global = (k + 0.5 + random.uniform(-0.3, 0.3)) / total
-        t_global = max(0, min(1, t_global))
-        target_len = t_global * total_len
-        # Trouve le segment
+    for _ in range(total):
+        # Tirage segment au prorata de sa longueur (couloir uniforme spatialement)
+        r = random.random() * total_len
         acc = 0
+        chosen_seg = 0
         for i, l in enumerate(seg_lengths):
-            if acc + l >= target_len or i == len(seg_lengths) - 1:
-                local_t = (target_len - acc) / l if l > 0 else 0
-                p1, p2 = waypoints[i], waypoints[i+1]
-                lat = p1[0] + local_t * (p2[0] - p1[0])
-                lng = p1[1] + local_t * (p2[1] - p1[1])
-                # Jitter perpendiculaire (~5km lateral)
-                dlat_seg = p2[0] - p1[0]
-                dlng_seg = p2[1] - p1[1]
-                norm = math.hypot(dlat_seg, dlng_seg)
-                if norm > 0:
-                    perp_lat = -dlng_seg / norm
-                    perp_lng = dlat_seg / norm
-                    j = (random.random() - 0.5) * 2 * (5 / 111.0)
-                    lat += perp_lat * j
-                    lng += perp_lng * j
-                # Cap aligne sur le segment + bruit faible
-                cog = bearing(p1, p2) + (random.random() - 0.5) * 6
-                cog = (cog + 360) % 360
-                # 50% en sens inverse (trafic bidirectionnel)
-                if random.random() < 0.5:
-                    cog = (cog + 180) % 360
-                flag = pick_flag(random.choice(LOCAL_FLAGS))
-                type_code = random.choice([70, 70, 70, 80, 80, 80, 71, 30, 60, 89])
-                sog = round(random.uniform(10, 17), 1)
-                ships.append({
-                    'mmsi': gen_mmsi(flag),
-                    'lat': round(lat, 5),
-                    'lng': round(lng, 5),
-                    'cog': round(cog, 1),
-                    'sog': sog,
-                    'heading': int(cog),
-                    'name': random_name(),
-                    'type_code': type_code,
-                    'destination': random_destination(),
-                    'callsign': None,
-                    'imo': random.randint(9000000, 9999999) if random.random() < 0.7 else None,
-                    'lastUpdate': now_ms - random.randint(60000, 1800000),
-                    '_source': 'reference'
-                })
+            if acc + l >= r:
+                chosen_seg = i
                 break
             acc += l
+        p1, p2 = waypoints[chosen_seg], waypoints[chosen_seg+1]
+        result = place_in_ocean_on_segment(p1, p2)
+        if result is None: continue
+        lat, lng, _ = result
+        cog = bearing(p1, p2) + (random.random() - 0.5) * 6
+        cog = (cog + 360) % 360
+        if random.random() < 0.5:
+            cog = (cog + 180) % 360
+        flag = pick_flag(random.choice(LOCAL_FLAGS))
+        type_code = random.choice([70, 70, 70, 80, 80, 80, 71, 30, 60, 89])
+        sog = round(random.uniform(10, 17), 1)
+        ships.append({
+            'mmsi': gen_mmsi(flag),
+            'lat': round(lat, 5),
+            'lng': round(lng, 5),
+            'cog': round(cog, 1),
+            'sog': sog,
+            'heading': int(cog),
+            'name': random_name(),
+            'type_code': type_code,
+            'destination': random_destination(),
+            'callsign': None,
+            'imo': random.randint(9000000, 9999999) if random.random() < 0.7 else None,
+            'lastUpdate': now_ms - random.randint(60000, 1800000),
+            '_source': 'reference'
+        })
     return ships
 
 def main():
@@ -304,11 +332,19 @@ def main():
     ships = []
     for name, lat, lng, n, mid in PORTS:
         for _ in range(n):
-            ships.append(gen_port_ship(name, lat, lng, mid, now_ms))
+            s = gen_port_ship(name, lat, lng, mid, now_ms)
+            if s is not None:
+                ships.append(s)
     port_count = len(ships)
     for name, waypoints, n in CORRIDORS:
         ships.extend(gen_corridor_ships(waypoints, n, now_ms))
     corridor_count = len(ships) - port_count
+    # Verification finale : aucun navire ne doit etre sur terre
+    valid = [s for s in ships if globe.is_ocean(s['lat'], s['lng'])]
+    rejected = len(ships) - len(valid)
+    if rejected > 0:
+        print(f"   ATTENTION : {rejected} navires post-verification rejetes (encore terre)")
+    ships = valid
     # Dedup MMSI (probabilite quasi-nulle mais filet)
     seen = set()
     deduped = []

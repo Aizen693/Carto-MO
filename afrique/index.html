@@ -1156,7 +1156,7 @@ aisLoadStaticSnapshot();
    navire pour distinction visuelle et popup adapte. Ces positions ne sont jamais
    ecrasees par le live (un MMSI live arrivant a la meme valeur reste prioritaire). */
 function aisLoadReferenceDataset() {
-  fetch('./ais-reference.json?v=' + (window._aisReferenceV || '20260512b'))
+  fetch('./ais-reference.json?v=' + (window._aisReferenceV || '20260512c'))
     .then(r => r.ok ? r.json() : null)
     .then(data => {
       if (!data || !Array.isArray(data.ships)) return;
