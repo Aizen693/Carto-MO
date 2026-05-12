@@ -921,12 +921,17 @@ const AIS_CATEGORIES = {
   military:  { label:'Militaire', color:'#e63946', types:[35,55] }
 };
 const AIS_KEY_STORAGE = 'aisstream_api_key_v1';
+const AIS_BUFFER_STORAGE = 'aisstream_buffer_v1';
 const AIS_WS_URL = 'wss://stream.aisstream.io/v0/stream';
 // Cle API embarquee (compte Algor Int). L'utilisateur peut l'overrider via localStorage.
 const AIS_DEFAULT_KEY = '74f3a2c9bf38cfa3db1c187fba5bcde6d0dc6e7c';
 // BBOX format AISStream: [[[lat_SW, lng_SW], [lat_NE, lng_NE]]]
-// Couverture maximale Afrique : Atlantique W, Cap, Mozambique, Indian, Mer Rouge, Golfe Persique, Med Sud
-const AIS_BBOX = [[[-45, -25], [40, 75]]];
+// Couverture MAXIMALE Afrique maritime : Atlantique W (-35°), Mer Noire/Caspienne (+45°N),
+// jusqu'a Bangladesh/Sumatra (+100°E) — englobe toute la route Suez-Asie + cabotage
+const AIS_BBOX = [[[-55, -35], [45, 100]]];
+const AIS_STALE_MS = 6 * 60 * 60 * 1000;   // 6h : un navire reste affiche meme sans MAJ recente
+const AIS_BUFFER_SAVE_MS = 8000;           // persistance localStorage toutes les 8s
+const AIS_BUFFER_MAX = 12000;              // cap pour rester sous la limite 5MB localStorage
 
 const aisShips = new Map();  // mmsi -> ship state
 const aisState = {
@@ -973,15 +978,68 @@ function aisHandleToggle() {
   }
 }
 
+/* Persistance localStorage : sauve le buffer toutes les 8s, restaure au boot.
+   Objectif : a la 2e visite, l'user demarre deja avec 3000-6000 navires. */
+function aisRestoreBuffer() {
+  try {
+    const raw = localStorage.getItem(AIS_BUFFER_STORAGE);
+    if (!raw) return 0;
+    const buf = JSON.parse(raw);
+    if (!buf || !Array.isArray(buf.ships)) return 0;
+    const cutoff = Date.now() - AIS_STALE_MS;
+    let restored = 0;
+    for (const s of buf.ships) {
+      if (!s || !s.mmsi) continue;
+      if ((s.lastUpdate || 0) < cutoff) continue;
+      aisShips.set(String(s.mmsi), s);
+      restored++;
+    }
+    return restored;
+  } catch(e) { console.warn('[ais] restore buffer error', e); return 0; }
+}
+
+function aisSaveBuffer() {
+  try {
+    let ships = [];
+    for (const s of aisShips.values()) {
+      if (typeof s.lat === 'number' && typeof s.lng === 'number') ships.push(s);
+    }
+    if (ships.length > AIS_BUFFER_MAX) {
+      ships.sort((a,b) => (b.lastUpdate||0) - (a.lastUpdate||0));
+      ships.length = AIS_BUFFER_MAX;
+    }
+    localStorage.setItem(AIS_BUFFER_STORAGE, JSON.stringify({ savedAt: Date.now(), ships }));
+  } catch(e) {
+    // Quota exceeded — on retire les plus vieux
+    if (e && /quota/i.test(String(e.name || e.message))) {
+      const ships = Array.from(aisShips.values())
+        .filter(s => typeof s.lat === 'number')
+        .sort((a,b) => (b.lastUpdate||0) - (a.lastUpdate||0))
+        .slice(0, Math.floor(AIS_BUFFER_MAX / 2));
+      try { localStorage.setItem(AIS_BUFFER_STORAGE, JSON.stringify({ savedAt: Date.now(), ships })); } catch(_){}
+    }
+  }
+}
+
+// Restore au boot
+const _aisRestored = aisRestoreBuffer();
+if (_aisRestored > 0) console.log('[ais] buffer restaure depuis derniere session:', _aisRestored, 'navires');
+
+// Save periodique
+setInterval(aisSaveBuffer, AIS_BUFFER_SAVE_MS);
+// Save aussi avant fermeture/navigation
+window.addEventListener('beforeunload', aisSaveBuffer);
+window.addEventListener('pagehide', aisSaveBuffer);
+
 /* Pre-chauffe : ouvre la WebSocket et accumule les navires en arriere-plan
    des le chargement de la page, pour que le toggle affiche instantanement
-   tous les navires deja recus (200-700 navires en 10-30s d'ecoute). */
+   tous les navires deja recus + ceux restaures depuis le buffer. */
 function aisPreWarm() {
   if (aisState.ws || aisState.status === 'connected' || aisState.status === 'connecting') return;
   const key = aisState.apiKey || localStorage.getItem(AIS_KEY_STORAGE) || AIS_DEFAULT_KEY;
   if (!key) return;
   aisState.apiKey = key;
-  console.log('[ais] pre-chauffe WebSocket pour reactivation instantanee');
+  console.log('[ais] pre-chauffe WebSocket — buffer restaure =', _aisRestored, 'navires');
   aisConnect(key);
 }
 // Lance la pre-chauffe 2s apres le load (laisse la map terminer son init)
@@ -1276,7 +1334,7 @@ function aisBuildFeatures() {
   const features = [];
   const enabled = new Set(aisEnabledCategories());
   if (!enabled.size) return features;
-  const cutoff = Date.now() - 30 * 60 * 1000;  // 30 min stale
+  const cutoff = Date.now() - AIS_STALE_MS;  // 6h stale (constante en haut)
   for (const ship of aisShips.values()) {
     if (typeof ship.lat !== 'number' || typeof ship.lng !== 'number') continue;
     if (ship.lat < -90 || ship.lat > 90) continue;
