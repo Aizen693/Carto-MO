@@ -12,8 +12,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
 <link rel="stylesheet" href="../shared/styles.css?v=20260420h">
 <style>
-/* Pas encore de donnees pour Grands Lacs : masquer les controles de periode */
-#controls, #progress-bar, .hdr-cell { display:none !important; }
+/* Mode CALQUES_ONLY : engine.js masque period-buttons + btn-all + period-badge.
+   On garde slider + bouton Play visibles pour le timeline-helper (HUMINT). */
+#progress-bar { display:none !important; }
 
 /* Search box sous le header (meme en desktop), plus large */
 #search-box { top: 52px !important; width: 420px !important; }
@@ -95,6 +96,10 @@
       <span class="sb-section-arrow open">&#x25B2;</span>
     </div>
     <div class="sb-section-body">
+      <div class="sb-layer-row">
+        <span>Renseignement HUMINT</span>
+        <div class="sb-toggle on" id="sb-toggle-humint" onclick="toggleHumintLayer()"></div>
+      </div>
       <div style="padding:6px 12px 2px"><div style="font:600 7px/1 var(--bc);letter-spacing:0.12em;text-transform:uppercase;color:var(--tx2);margin-bottom:6px">Style carte</div></div>
       <div class="sb-style-row">
         <button class="sb-style-btn active" onclick="setStyle('standard')" id="sb-standard">Standard</button>
@@ -184,15 +189,8 @@ const ZONE_CONFIG = {
     };
     return MAP[n] !== undefined ? MAP[n] : n;
   },
-  PERIODS: [
-    { label: 'Jan 01-15', file: '2026-jan-01-15.geojson' },
-    { label: 'Jan 16-31', file: '2026-jan-16-31.geojson' },
-    { label: 'Fev 01-14', file: '2026-fev-01-14.geojson' },
-    { label: 'Fev 15-28', file: '2026-fev-15-28.geojson' },
-    { label: 'Mars 01-15', file: '2026-mars-01-15.geojson' },
-    { label: 'Avril 01-15', file: '2026-avr-01-15.geojson' },
-    { label: 'HUMINT', file: 'humint.geojson' },
-  ],
+  // Pas de periodes — les donnees passent par le calque HUMINT (slider sur dates).
+  PERIODS: [],
   STYLES: {
     standard:  'mapbox://styles/mapbox/standard',
     satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
@@ -204,11 +202,102 @@ const ZONE_CONFIG = {
   SEARCH_BBOX: [20, -12, 45, 8],
   MAP_ZONES: {"type":"FeatureCollection","features":[]},
   BADGE_ALL_TEXT: 'Toutes · Jan–Avril 2026',
-  TUTORIAL_KEY: 'algor-tutorial-seen'
+  TUTORIAL_KEY: 'algor-tutorial-seen',
+  // Pas de points isoles par periode — slider/play pilote par les dates des calques
+  CALQUES_ONLY: true
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
 <script src="../shared/engine.js?v=20260422b"></script>
+
+<!-- CALQUE : Renseignement HUMINT (points colores par auteur, popup riche) -->
+<script>
+(function() {
+  var humintColorExpr = ['match', ['get', 'name'],
+    'M23', '#d32f2f', 'AFC/M23', '#d32f2f', 'RDF', '#b71c1c',
+    'FARDC', '#2e7d32', 'Wazalendo', '#558b2f', 'FDLR', '#7cb342',
+    'MONUSCO', '#0288d1', 'ONU', '#0288d1', 'UN', '#0288d1', 'EAC', '#1565c0',
+    'CIVILS', '#c49a3c', 'CIVIL INT', '#c49a3c',
+    '#ff9800'
+  ];
+
+  var humintVisible = true;
+  var humintAdded = false;
+
+  function addHumint() {
+    if (humintAdded) return;
+    fetch('./humint.geojson?v=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data || !data.features) return;
+        if (window.algorMap.getSource('humint-src')) return;
+        window.algorMap.addSource('humint-src', { type: 'geojson', data: data });
+        var vis = humintVisible ? 'visible' : 'none';
+        window.algorMap.addLayer({ id: 'humint-glow', type: 'circle', source: 'humint-src',
+          layout: { visibility: vis },
+          paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 6, 8, 11, 12, 16],
+            'circle-color': humintColorExpr, 'circle-opacity': 0.06, 'circle-blur': 1.2 } });
+        window.algorMap.addLayer({ id: 'humint-ring', type: 'circle', source: 'humint-src',
+          layout: { visibility: vis },
+          paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 3, 8, 5, 12, 8],
+            'circle-color': 'transparent', 'circle-stroke-color': humintColorExpr,
+            'circle-stroke-width': 0.7, 'circle-stroke-opacity': 0.5 } });
+        window.algorMap.addLayer({ id: 'humint-dots', type: 'circle', source: 'humint-src',
+          layout: { visibility: vis },
+          paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 1.8, 8, 3, 12, 4.5],
+            'circle-color': humintColorExpr, 'circle-stroke-color': '#0d1117',
+            'circle-stroke-width': 0.5 } });
+
+        window.algorMap.on('click', 'humint-dots', function(e) {
+          if (!e.features || !e.features.length) return;
+          var p = e.features[0].properties;
+          var desc = (p.description || '').replace(/\n/g, '<br>');
+          var html = '<div class="popup-header"><div class="popup-actor">' +
+            (p.name || 'Point') + '</div></div>' +
+            '<div class="popup-body" style="white-space:pre-line">' + desc + '</div>';
+          new mapboxgl.Popup({ closeButton: true, maxWidth: '340px', className: 'algor-popup' })
+            .setLngLat(e.lngLat).setHTML(html).addTo(window.algorMap);
+        });
+        window.algorMap.on('mouseenter', 'humint-dots', function() {
+          window.algorMap.getCanvas().style.cursor = 'pointer';
+        });
+        window.algorMap.on('mouseleave', 'humint-dots', function() {
+          window.algorMap.getCanvas().style.cursor = '';
+        });
+        humintAdded = true;
+      });
+  }
+
+  window.toggleHumintLayer = function() {
+    humintVisible = !humintVisible;
+    document.getElementById('sb-toggle-humint').classList.toggle('on', humintVisible);
+    if (!humintAdded) { addHumint(); return; }
+    var vis = humintVisible ? 'visible' : 'none';
+    ['humint-glow', 'humint-ring', 'humint-dots'].forEach(function(id) {
+      if (window.algorMap.getLayer(id)) window.algorMap.setLayoutProperty(id, 'visibility', vis);
+    });
+  };
+
+  // Auto-add quand la carte est prete
+  if (window.algorMap) {
+    if (window.algorMap.loaded()) addHumint();
+    else window.algorMap.on('load', addHumint);
+    // Re-add apres changement de style
+    window.algorMap.on('style.load', function() { humintAdded = false; addHumint(); });
+  }
+})();
+</script>
+
+<!-- SLIDER DATES (CALQUES_ONLY) -->
+<script src="../shared/calque-timeline.js?v=20260512a"></script>
+<script>
+AlgorCalqueTimeline.init({
+  sources: [
+    { file: 'humint.geojson', sourceId: 'humint-src',
+      layers: ['humint-glow', 'humint-ring', 'humint-dots'] }
+  ]
+});
+</script>
 
 <!-- TUTORIEL -->
 <div id="tutorial-overlay">

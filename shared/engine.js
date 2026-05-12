@@ -12,6 +12,9 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjb
 
 // ── DESTRUCTURATION ZONE_CONFIG ──────────────────────────────────────
 const { OTAN_DATA, ACTOR_GROUPS, ACTOR_COLORS, PERIODS, STYLES, MAP_ZONES, ZONE_ID } = ZONE_CONFIG;
+// Mode "calques only" : pas de points par periode (kml-dots), slider/play
+// pilote par les dates des points des calques. Defini par chaque zone.
+const CALQUES_ONLY = ZONE_CONFIG.CALQUES_ONLY === true;
 
 function getColor(n) { return ACTOR_COLORS[n] || '#888888'; }
 function normalizeName(raw) { return ZONE_CONFIG.normalizeName(raw); }
@@ -116,28 +119,42 @@ map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
 
 // ── BOUTONS PERIODES ─────────────────────────────────────────────────
 const btnContainer = document.getElementById('period-buttons');
-PERIODS.forEach((p, i) => {
-  const btn = document.createElement('button');
-  btn.className = 'period-btn'; btn.textContent = p.label; btn.id = 'pbtn-' + i;
-  btn.onclick = () => togglePeriod(i);
-  btnContainer.appendChild(btn);
-});
+if (!CALQUES_ONLY) {
+  PERIODS.forEach((p, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'period-btn'; btn.textContent = p.label; btn.id = 'pbtn-' + i;
+    btn.onclick = () => togglePeriod(i);
+    btnContainer.appendChild(btn);
+  });
+} else {
+  // Masque l'UI dependante des periodes (le zone-script gere slider/play sur dates).
+  if (btnContainer) btnContainer.style.display = 'none';
+  const btnAll = document.getElementById('btn-all');
+  if (btnAll) btnAll.style.display = 'none';
+  const pBadge = document.getElementById('period-badge');
+  if (pBadge && pBadge.parentElement && pBadge.parentElement.classList.contains('hdr-cell')) {
+    pBadge.parentElement.style.display = 'none';
+  }
+}
 
 // ── SLIDER ───────────────────────────────────────────────────────────
 const slider = document.getElementById('timeline-slider');
 const sliderLabel = document.getElementById('slider-label');
-slider.max = PERIODS.length - 1;
 
 function updateSliderLabel(i) {
+  if (!PERIODS.length) return;
   const pct = i / (PERIODS.length - 1), tw = slider.offsetWidth;
   sliderLabel.style.left = (pct * (tw - 16) + 8) + 'px';
   sliderLabel.textContent = PERIODS[i].label;
 }
-slider.addEventListener('input', function () {
-  const i = parseInt(this.value); updateSliderLabel(i);
-  if (!isPlaying) togglePeriod(i); else jumpTo(i);
-});
-window.addEventListener('resize', () => updateSliderLabel(parseInt(slider.value)));
+if (!CALQUES_ONLY) {
+  slider.max = PERIODS.length - 1;
+  slider.addEventListener('input', function () {
+    const i = parseInt(this.value); updateSliderLabel(i);
+    if (!isPlaying) togglePeriod(i); else jumpTo(i);
+  });
+  window.addEventListener('resize', () => updateSliderLabel(parseInt(slider.value)));
+}
 
 function centerMap() {
   map.flyTo({ center: ZONE_CONFIG.MAP_CENTER, zoom: ZONE_CONFIG.MAP_ZOOM, pitch: 0, bearing: ZONE_CONFIG.MAP_BEARING, duration: 1500, essential: true });
@@ -820,11 +837,13 @@ map.on('load', async () => {
   setupMapLayersOn(map);
   mapReady = true;
   document.getElementById('loader').style.display = 'none';
-  updateSliderLabel(0);
-  // Prechargement en arriere-plan
-  for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
-  // Restauration etat depuis URL ou auto-selection premiere periode
-  if (!restoreStateFromURL()) togglePeriod(0);
+  if (!CALQUES_ONLY) {
+    updateSliderLabel(0);
+    // Prechargement en arriere-plan
+    for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
+    // Restauration etat depuis URL ou auto-selection premiere periode
+    if (!restoreStateFromURL()) togglePeriod(0);
+  }
   // Show tutorial AFTER everything is loaded (if not already seen)
   var tutKey = ZONE_CONFIG.TUTORIAL_KEY;
   if (tutKey && !localStorage.getItem(tutKey)) {

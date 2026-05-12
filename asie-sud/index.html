@@ -275,7 +275,9 @@ const ZONE_CONFIG = {
   MAP_ZONES: null,
   SEARCH_BBOX: [60, 8, 97, 38],
   BADGE_ALL_TEXT: 'Toutes · Jan–Avril 2026',
-  TUTORIAL_KEY: 'algor-tutorial-asie-sud-seen'
+  TUTORIAL_KEY: 'algor-tutorial-asie-sud-seen',
+  // Pas de points isoles par periode — slider/play pilote par les dates des calques
+  CALQUES_ONLY: true
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
@@ -971,6 +973,21 @@ window.focusGeocoder = function() {
     });
   });
 })();
+</script>
+
+<!-- SLIDER DATES (CALQUES_ONLY) -->
+<script src="../shared/calque-timeline.js?v=20260512a"></script>
+<script>
+AlgorCalqueTimeline.init({
+  sources: [
+    { file: 'evenements.geojson', sourceId: 'evenements-src', layers: [
+      'events-glow', 'events-ring', 'events-dots',
+      'evenements-3d-glow', 'evenements-3d-base', 'evenements-3d-body',
+      'evenements-3d-mid', 'evenements-3d-cap', 'evenements-3d-beacon',
+      'evenements-3d-label'
+    ]}
+  ]
+});
 </script>
 
 <!-- TUTORIEL -->
