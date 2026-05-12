@@ -189,8 +189,14 @@ const ZONE_CONFIG = {
     };
     return MAP[n] !== undefined ? MAP[n] : n;
   },
-  // Pas de periodes — les donnees passent par le calque HUMINT (slider sur dates).
-  PERIODS: [],
+  PERIODS: [
+    { label: 'Jan 01-15', file: '2026-jan-01-15.geojson' },
+    { label: 'Jan 16-31', file: '2026-jan-16-31.geojson' },
+    { label: 'Fev 01-14', file: '2026-fev-01-14.geojson' },
+    { label: 'Fev 15-28', file: '2026-fev-15-28.geojson' },
+    { label: 'Mars 01-15', file: '2026-mars-01-15.geojson' },
+    { label: 'Avril 01-15', file: '2026-avr-01-15.geojson' },
+  ],
   STYLES: {
     standard:  'mapbox://styles/mapbox/standard',
     satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
@@ -208,7 +214,7 @@ const ZONE_CONFIG = {
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js?v=20260512b"></script>
+<script src="../shared/engine.js?v=20260512c"></script>
 
 <!-- CALQUE : Renseignement HUMINT (points colores par auteur, popup riche) -->
 <script>
@@ -289,7 +295,7 @@ const ZONE_CONFIG = {
 </script>
 
 <!-- SLIDER DATES (CALQUES_ONLY) -->
-<script src="../shared/calque-timeline.js?v=20260512a"></script>
+<script src="../shared/calque-timeline.js?v=20260512c"></script>
 <script>
 AlgorCalqueTimeline.init({
   sources: [

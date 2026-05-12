@@ -119,27 +119,17 @@ map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
 
 // ── BOUTONS PERIODES ─────────────────────────────────────────────────
 const btnContainer = document.getElementById('period-buttons');
-if (!CALQUES_ONLY) {
-  PERIODS.forEach((p, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'period-btn'; btn.textContent = p.label; btn.id = 'pbtn-' + i;
-    btn.onclick = () => togglePeriod(i);
-    btnContainer.appendChild(btn);
-  });
-} else {
-  // Masque l'UI dependante des periodes (le zone-script gere slider/play sur dates).
-  if (btnContainer) btnContainer.style.display = 'none';
-  const btnAll = document.getElementById('btn-all');
-  if (btnAll) btnAll.style.display = 'none';
-  const pBadge = document.getElementById('period-badge');
-  if (pBadge && pBadge.parentElement && pBadge.parentElement.classList.contains('hdr-cell')) {
-    pBadge.parentElement.style.display = 'none';
-  }
-}
+PERIODS.forEach((p, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'period-btn'; btn.textContent = p.label; btn.id = 'pbtn-' + i;
+  btn.onclick = () => togglePeriod(i);
+  btnContainer.appendChild(btn);
+});
 
 // ── SLIDER ───────────────────────────────────────────────────────────
 const slider = document.getElementById('timeline-slider');
 const sliderLabel = document.getElementById('slider-label');
+slider.max = PERIODS.length - 1;
 
 function updateSliderLabel(i) {
   if (!PERIODS.length) return;
@@ -147,14 +137,11 @@ function updateSliderLabel(i) {
   sliderLabel.style.left = (pct * (tw - 16) + 8) + 'px';
   sliderLabel.textContent = PERIODS[i].label;
 }
-if (!CALQUES_ONLY) {
-  slider.max = PERIODS.length - 1;
-  slider.addEventListener('input', function () {
-    const i = parseInt(this.value); updateSliderLabel(i);
-    if (!isPlaying) togglePeriod(i); else jumpTo(i);
-  });
-  window.addEventListener('resize', () => updateSliderLabel(parseInt(slider.value)));
-}
+slider.addEventListener('input', function () {
+  const i = parseInt(this.value); updateSliderLabel(i);
+  if (!isPlaying) togglePeriod(i); else jumpTo(i);
+});
+window.addEventListener('resize', () => updateSliderLabel(parseInt(slider.value)));
 
 function centerMap() {
   map.flyTo({ center: ZONE_CONFIG.MAP_CENTER, zoom: ZONE_CONFIG.MAP_ZOOM, pitch: 0, bearing: ZONE_CONFIG.MAP_BEARING, duration: 1500, essential: true });
@@ -433,7 +420,16 @@ async function renderAll() {
   ['kml-dots-glow', 'kml-dots', 'kml-pulse', 'kml-cylinders', 'kml-cylinders-top', 'kml-points-labels', 'kml-lines', 'kml-fill', 'kml-fill-outline'].forEach(id => { if (map.getLayer(id)) map.removeLayer(id); });
   if (map.getSource('kml-circles')) map.removeSource('kml-circles');
   if (map.getSource('kml-current')) map.removeSource('kml-current');
+
+  // Hook : informe les zone-scripts (calque-timeline) du changement de periodes
+  if (typeof window.onActivePeriodsChange === 'function') {
+    try { window.onActivePeriodsChange([...activePeriods], PERIODS, showAll); } catch (e) {}
+  }
+
   if (!activePeriods.size) { updateLegend({}); updateChart([]); return; }
+
+  // Mode calques-only : pas de kml-dots, le filtrage est fait par calque-timeline.js
+  if (CALQUES_ONLY) { updateChart([]); return; }
 
   const activeLabels = new Set([...activePeriods].map(i => PERIODS[i].label));
   const allFeatures = [];
@@ -837,13 +833,13 @@ map.on('load', async () => {
   setupMapLayersOn(map);
   mapReady = true;
   document.getElementById('loader').style.display = 'none';
+  updateSliderLabel(0);
+  // CALQUES_ONLY : pas de prechargement KML (les calques chargent leurs propres fichiers)
   if (!CALQUES_ONLY) {
-    updateSliderLabel(0);
-    // Prechargement en arriere-plan
     for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
-    // Restauration etat depuis URL ou auto-selection premiere periode
-    if (!restoreStateFromURL()) togglePeriod(0);
   }
+  // Restauration etat depuis URL ou auto-selection premiere periode
+  if (!restoreStateFromURL()) togglePeriod(0);
   // Show tutorial AFTER everything is loaded (if not already seen)
   var tutKey = ZONE_CONFIG.TUTORIAL_KEY;
   if (tutKey && !localStorage.getItem(tutKey)) {
