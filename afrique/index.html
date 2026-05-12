@@ -44,6 +44,116 @@
 /* Mapbox bottom controls leger */
 .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right { opacity: 0.4; }
 .mapboxgl-ctrl-bottom-left:hover, .mapboxgl-ctrl-bottom-right:hover { opacity: 1; }
+
+/* ═════════ AIS — Bateaux temps reel ═════════ */
+#ais-stats {
+  position: fixed;
+  top: 56px; right: 12px;
+  z-index: 30;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  background: rgba(15,17,20,0.92);
+  border: 1px solid var(--ln1);
+  border-top: 2px solid var(--ac);
+  backdrop-filter: blur(10px);
+  font: 500 10px/1 var(--m);
+  color: var(--tx);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+#ais-stats.on { display: inline-flex; }
+#ais-stats .ais-live-dot {
+  width: 6px; height: 6px;
+  background: #5a9a5f;
+  box-shadow: 0 0 8px rgba(90,154,95,0.7);
+  animation: ais-pulse 1.4s ease-in-out infinite;
+}
+#ais-stats.connecting .ais-live-dot { background: var(--ac); box-shadow: 0 0 8px rgba(196,154,60,0.7); }
+#ais-stats.disconnected .ais-live-dot { background: #c94a4a; box-shadow: 0 0 8px rgba(201,74,74,0.7); animation: none; }
+#ais-stats .ais-count { color: var(--ac); font-weight: 600; font-size: 11px; letter-spacing: 0.1em; }
+#ais-stats .ais-reset { color: var(--tx1); cursor: pointer; padding-left: 8px; border-left: 1px solid var(--ln); margin-left: 2px; }
+#ais-stats .ais-reset:hover { color: var(--ac); }
+@keyframes ais-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Modale cle API */
+#ais-key-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5,6,8,0.78);
+  backdrop-filter: blur(6px);
+}
+#ais-key-modal.open { display: flex; }
+#ais-key-modal .modal-box {
+  width: min(480px, calc(100% - 32px));
+  background: var(--bg1);
+  border: 1px solid var(--ln1);
+  border-top: 2px solid var(--ac);
+  padding: 24px 28px 20px;
+  font-family: var(--b);
+  color: var(--tx);
+}
+#ais-key-modal h3 {
+  font: 600 14px/1.1 var(--bc);
+  color: var(--txh);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+#ais-key-modal .modal-sub {
+  font: 500 9px/1 var(--m);
+  color: var(--ac);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+#ais-key-modal p {
+  font: 400 12px/1.55 var(--b);
+  color: var(--tx);
+  margin-bottom: 14px;
+}
+#ais-key-modal p a {
+  color: var(--ac);
+  text-decoration: none;
+  border-bottom: 1px solid var(--acb);
+}
+#ais-key-modal p a:hover { color: var(--ach); border-color: var(--ach); }
+#ais-key-modal input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--ln1);
+  color: var(--txh);
+  font: 400 12px/1 var(--m);
+  letter-spacing: 0.04em;
+  outline: none;
+  margin-bottom: 14px;
+}
+#ais-key-modal input[type="text"]:focus { border-color: var(--acb); background: rgba(196,154,60,0.04); }
+#ais-key-modal .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+#ais-key-modal button {
+  padding: 9px 16px;
+  background: transparent;
+  border: 1px solid var(--ln1);
+  color: var(--tx);
+  font: 500 10px/1 var(--m);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+#ais-key-modal button:hover { border-color: var(--ln2); color: var(--txh); }
+#ais-key-modal button.primary { background: var(--acd); border-color: var(--acb); color: var(--ac); }
+#ais-key-modal button.primary:hover { background: rgba(196,154,60,0.16); color: var(--ach); border-color: var(--ach); }
+#ais-key-modal .modal-error { color: #c94a4a; font: 400 11px/1.4 var(--b); margin-bottom: 10px; display: none; }
+#ais-key-modal .modal-error.show { display: block; }
 </style>
 </head>
 <body>
@@ -62,7 +172,7 @@
   </div>
   <div class="hdr-cell">
     <span class="hdr-cell-label">Calques</span>
-    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/21</span>
+    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/27</span>
   </div>
   <div class="hdr-cell">
     <span class="hdr-cell-label">Features</span>
@@ -252,8 +362,70 @@
         </div>
       </div>
 
+      <!-- Group 6: BATEAUX TEMPS REEL (AIS) -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'ais')">
+        <span>6. Bateaux temps reel (AIS) <span class="sb-sub-badge" id="badge-ais">0/6</span></span>
+        <div class="sb-toggle" id="sb-master-ais" onclick="event.stopPropagation();toggleMaster('ais')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-ais">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e0b452"></span>Cargo (conteneurs, vrac)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-cargo" onclick="toggleLayer('ais-cargo')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#a065c4"></span>Tanker (petroliers, GNL)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-tanker" onclick="toggleLayer('ais-tanker')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>Passager (ferries, croisieres)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-passenger" onclick="toggleLayer('ais-passenger')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#29b6f6"></span>Peche</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-fishing" onclick="toggleLayer('ais-fishing')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e63946"></span>Militaire / officiel</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-military" onclick="toggleLayer('ais-military')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8e96a2"></span>Autres (remorqueurs, plaisance)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-other" onclick="toggleLayer('ais-other')"></div>
+        </div>
+      </div>
+
     </div>
 
+  </div>
+</div>
+
+<!-- Indicateur LIVE temps reel -->
+<div id="ais-stats">
+  <span class="ais-live-dot"></span>
+  <span>AIS LIVE</span>
+  <span class="ais-count" id="ais-count">0</span>
+  <span style="color:var(--tx1);font-size:8.5px">navires</span>
+  <span class="ais-reset" onclick="aisResetKey()" title="Changer la cle API">RESET</span>
+</div>
+
+<!-- Modale cle API AISStream.io -->
+<div id="ais-key-modal" onclick="if(event.target.id==='ais-key-modal') aisCloseModal()">
+  <div class="modal-box">
+    <h3>Connexion AIS temps reel</h3>
+    <div class="modal-sub">AISStream.io · WebSocket</div>
+    <p>
+      Pour afficher les navires en temps reel sur la zone Afrique maritime, il faut une cle API gratuite
+      <a href="https://aisstream.io/" target="_blank" rel="noopener">aisstream.io</a> (inscription en 30 secondes).
+    </p>
+    <p style="color:var(--tx1);font-size:11px">
+      Colle ta cle ci-dessous. Elle sera conservee en local dans ce navigateur uniquement.
+    </p>
+    <div class="modal-error" id="ais-modal-error">Cle invalide ou refusee par le serveur.</div>
+    <input type="text" id="ais-key-input" placeholder="Ex. a1b2c3d4e5f6..." autocomplete="off" spellcheck="false">
+    <div class="modal-actions">
+      <button onclick="aisCloseModal()">Annuler</button>
+      <button class="primary" onclick="aisSubmitKey()">Activer</button>
+    </div>
   </div>
 </div>
 
@@ -308,6 +480,17 @@ const CATALOG = {
       { id:'hubs-carburant',   label:'Carburant / hydrocarbures',  file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'carburant'],   color:'#e07c5a', defaultOn:false },
       { id:'hubs-logistique',  label:'Logistique / multimodal',    file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'logistique'],  color:'#c49a3c', defaultOn:false }
     ]
+  },
+  ais: {
+    title: 'Bateaux temps reel',
+    children: [
+      { id:'ais-cargo',     label:'Cargo',     kind:'ais', color:'#e0b452', defaultOn:false },
+      { id:'ais-tanker',    label:'Tanker',    kind:'ais', color:'#a065c4', defaultOn:false },
+      { id:'ais-passenger', label:'Passager',  kind:'ais', color:'#4fb8cc', defaultOn:false },
+      { id:'ais-fishing',   label:'Peche',     kind:'ais', color:'#29b6f6', defaultOn:false },
+      { id:'ais-military',  label:'Militaire', kind:'ais', color:'#e63946', defaultOn:false },
+      { id:'ais-other',     label:'Autres',    kind:'ais', color:'#8e96a2', defaultOn:false }
+    ]
   }
 };
 
@@ -349,6 +532,12 @@ map.on('style.load', () => {
       const s = layerState[id];
       if (s.visible && s.data) addSubLayer(id);
     });
+    // Re-injecter le calque AIS apres changement de style
+    if (typeof aisAnyEnabled === 'function' && aisAnyEnabled()) {
+      aisState.iconsAdded = false;
+      aisEnsureLayer();
+      aisRenderNow();
+    }
   }
 });
 
@@ -368,6 +557,7 @@ function initLayersCatalog() {
   // Prefetch all files
   Object.values(ALL_CHILDREN).forEach(c => {
     layerState[c.id] = { data: null, visible: false, cfg: c };
+    if (c.kind === 'ais') return;  // pas de fichier — flux WebSocket
     fetch('./' + c.file + '?v=' + Date.now())
       .then(r => r.json())
       .then(data => {
@@ -384,8 +574,12 @@ window.toggleLayer = function(id) {
   s.visible = !s.visible;
   const tEl = document.getElementById('sb-toggle-' + id);
   if (tEl) tEl.classList.toggle('on', s.visible);
-  if (!s.data) return;
-  if (s.visible) addSubLayer(id); else removeSubLayer(id);
+  if (s.cfg.kind === 'ais') {
+    aisHandleToggle();
+  } else {
+    if (!s.data) return;
+    if (s.visible) addSubLayer(id); else removeSubLayer(id);
+  }
   updateBadges();
   updateMasters();
   updateActiveCount();
@@ -609,6 +803,7 @@ function updateActiveCount() {
 function updateFeatureCount() {
   let total = 0;
   Object.values(ALL_CHILDREN).forEach(c => { const s = layerState[c.id]; if (s?.visible && s?.data?.features) total += s.data.features.length; });
+  if (typeof aisAnyEnabled === 'function' && aisAnyEnabled() && typeof aisShips !== 'undefined') total += aisShips.size;
   const el = document.getElementById('feature-count');
   if (el) el.textContent = total || '—';
 }
@@ -637,7 +832,7 @@ window.toggleSbSection = function(h) {
 
 /* Open all sub-layer groups by default so users see what they can toggle */
 setTimeout(() => {
-  ['flux','ports','piraterie','navale','hubs'].forEach(g => {
+  ['flux','ports','piraterie','navale','hubs','ais'].forEach(g => {
     const sub = document.getElementById('sub-'+g);
     if (sub) sub.classList.add('open');
   });
@@ -714,6 +909,459 @@ function tickFlux(t) {
   requestAnimationFrame(tickFlux);
 }
 requestAnimationFrame(tickFlux);
+
+/* ═════════════════════════════════════════════════════════════════
+   AIS — Bateaux temps reel (AISStream.io WebSocket)
+   ═════════════════════════════════════════════════════════════════ */
+const AIS_CATEGORIES = {
+  cargo:     { label:'Cargo',     color:'#e0b452', types:[70,71,72,73,74,75,76,77,78,79] },
+  tanker:    { label:'Tanker',    color:'#a065c4', types:[80,81,82,83,84,85,86,87,88,89] },
+  passenger: { label:'Passager',  color:'#4fb8cc', types:[60,61,62,63,64,65,66,67,68,69] },
+  fishing:   { label:'Peche',     color:'#29b6f6', types:[30] },
+  military:  { label:'Militaire', color:'#e63946', types:[35,55] }
+};
+const AIS_KEY_STORAGE = 'aisstream_api_key_v1';
+const AIS_WS_URL = 'wss://stream.aisstream.io/v0/stream';
+// Cle API embarquee (compte Algor Int). L'utilisateur peut l'overrider via localStorage.
+const AIS_DEFAULT_KEY = '74f3a2c9bf38cfa3db1c187fba5bcde6d0dc6e7c';
+// BBOX format AISStream: [[[lat_SW, lng_SW], [lat_NE, lng_NE]]]
+// Couverture maximale Afrique : Atlantique W, Cap, Mozambique, Indian, Mer Rouge, Golfe Persique, Med Sud
+const AIS_BBOX = [[[-45, -25], [40, 75]]];
+
+const aisShips = new Map();  // mmsi -> ship state
+const aisState = {
+  ws: null,
+  status: 'disconnected',
+  reconnectTimer: null,
+  reconnectAttempts: 0,
+  apiKey: null,
+  iconsAdded: false,
+  popupBound: false
+};
+
+function aisCategoryOf(typeCode) {
+  if (typeCode == null) return 'other';
+  for (const [k, v] of Object.entries(AIS_CATEGORIES)) {
+    if (v.types.includes(typeCode)) return k;
+  }
+  return 'other';
+}
+
+function aisEnabledCategories() {
+  const out = [];
+  ['cargo','tanker','passenger','fishing','military','other'].forEach(k => {
+    const s = layerState['ais-' + k];
+    if (s && s.visible) out.push(k);
+  });
+  return out;
+}
+
+function aisAnyEnabled() {
+  return aisEnabledCategories().length > 0;
+}
+
+function aisHandleToggle() {
+  if (aisAnyEnabled()) {
+    aisEnsureLayer();
+    aisEnsureConnection();
+    document.getElementById('ais-stats')?.classList.add('on');
+    aisRenderNow();
+  } else {
+    document.getElementById('ais-stats')?.classList.remove('on');
+    aisDisconnect();
+    aisRemoveLayer();
+  }
+}
+
+function aisMakeIcons() {
+  if (aisState.iconsAdded) return;
+  // Fleche orientee (cap)
+  const s1 = 28;
+  const c1 = document.createElement('canvas');
+  c1.width = c1.height = s1;
+  const x1 = c1.getContext('2d');
+  x1.beginPath();
+  x1.moveTo(s1/2, 2);
+  x1.lineTo(s1 - 5, s1 - 4);
+  x1.lineTo(s1/2, s1 * 0.70);
+  x1.lineTo(5, s1 - 4);
+  x1.closePath();
+  x1.fillStyle = 'rgba(255,255,255,1)';
+  x1.fill();
+  try {
+    if (!map.hasImage('ais-arrow')) map.addImage('ais-arrow', x1.getImageData(0,0,s1,s1), { sdf: true });
+  } catch(e){}
+
+  // Point ancre
+  const s2 = 18;
+  const c2 = document.createElement('canvas');
+  c2.width = c2.height = s2;
+  const x2 = c2.getContext('2d');
+  x2.beginPath();
+  x2.arc(s2/2, s2/2, s2/2 - 3, 0, Math.PI * 2);
+  x2.fillStyle = 'rgba(255,255,255,1)';
+  x2.fill();
+  try {
+    if (!map.hasImage('ais-dot')) map.addImage('ais-dot', x2.getImageData(0,0,s2,s2), { sdf: true });
+  } catch(e){}
+
+  aisState.iconsAdded = true;
+}
+
+function aisEnsureLayer() {
+  aisMakeIcons();
+  if (!map.getSource('src-ais')) {
+    map.addSource('src-ais', { type:'geojson', data: { type:'FeatureCollection', features: [] } });
+  }
+  const colorExpr = ['match', ['get','cat'],
+    'cargo',     '#e0b452',
+    'tanker',    '#a065c4',
+    'passenger', '#4fb8cc',
+    'fishing',   '#29b6f6',
+    'military',  '#e63946',
+    '#8e96a2'
+  ];
+  if (!map.getLayer('ais-ships-stopped')) {
+    map.addLayer({
+      id: 'ais-ships-stopped',
+      type: 'symbol',
+      source: 'src-ais',
+      filter: ['<', ['coalesce',['get','sog'],0], 0.5],
+      layout: {
+        'icon-image': 'ais-dot',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.35, 5, 0.55, 8, 0.85, 11, 1.0],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true
+      },
+      paint: {
+        'icon-color': colorExpr,
+        'icon-opacity': 0.65
+      }
+    });
+  }
+  if (!map.getLayer('ais-ships-moving')) {
+    map.addLayer({
+      id: 'ais-ships-moving',
+      type: 'symbol',
+      source: 'src-ais',
+      filter: ['>=', ['coalesce',['get','sog'],0], 0.5],
+      layout: {
+        'icon-image': 'ais-arrow',
+        'icon-rotate': ['get', 'cog'],
+        'icon-rotation-alignment': 'map',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.35, 5, 0.6, 8, 0.9, 11, 1.15],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true
+      },
+      paint: {
+        'icon-color': colorExpr,
+        'icon-opacity': 0.92
+      }
+    });
+  }
+  if (!aisState.popupBound) {
+    ['ais-ships-moving','ais-ships-stopped'].forEach(lid => {
+      map.on('click', lid, aisOnClick);
+      map.on('mouseenter', lid, () => map.getCanvas().style.cursor = 'pointer');
+      map.on('mouseleave', lid, () => map.getCanvas().style.cursor = '');
+    });
+    aisState.popupBound = true;
+  }
+}
+
+function aisRemoveLayer() {
+  ['ais-ships-moving','ais-ships-stopped'].forEach(id => {
+    if (map.getLayer(id)) { try { map.removeLayer(id); } catch(e){} }
+  });
+  if (map.getSource('src-ais')) { try { map.removeSource('src-ais'); } catch(e){} }
+}
+
+function aisOnClick(e) {
+  if (!e.features || !e.features.length) return;
+  const p = e.features[0].properties;
+  const cat = p.cat || 'other';
+  const color = (AIS_CATEGORIES[cat] || { color:'#8e96a2' }).color || '#8e96a2';
+  const name = p.name && p.name !== 'null' ? p.name : ('MMSI ' + p.mmsi);
+  const rows = [];
+  rows.push(['MMSI', p.mmsi]);
+  if (p.imo && p.imo !== 'null' && p.imo !== '0') rows.push(['IMO', p.imo]);
+  if (p.callsign && p.callsign !== 'null') rows.push(['Indicatif', p.callsign]);
+  rows.push(['Type', (AIS_CATEGORIES[cat]?.label || 'Autre')]);
+  if (p.type_code) rows.push(['Code AIS', p.type_code]);
+  rows.push(['Vitesse', (parseFloat(p.sog) || 0).toFixed(1) + ' noeuds']);
+  rows.push(['Cap', Math.round(parseFloat(p.cog) || 0) + '°']);
+  if (p.destination && p.destination !== 'null') rows.push(['Destination', p.destination]);
+  const lu = parseInt(p.lastUpdate);
+  if (lu) {
+    const sec = Math.round((Date.now() - lu) / 1000);
+    rows.push(['Mise a jour', sec < 60 ? ('il y a ' + sec + 's') : ('il y a ' + Math.round(sec/60) + ' min')]);
+  }
+  const body = rows.map(r => '<div class="popup-row"><span class="popup-key">' + r[0] + '</span><span class="popup-val">' + escapeHtml(String(r[1])) + '</span></div>').join('');
+  new mapboxgl.Popup({ closeButton:true, maxWidth:'320px', className:'algor-popup' })
+    .setLngLat(e.lngLat)
+    .setHTML('<div class="popup-header"><div class="popup-dot-bar" style="background:' + color + '"></div><div class="popup-actor">' + escapeHtml(name) + '</div></div><div class="popup-body">' + body + '</div>')
+    .addTo(map);
+}
+
+function aisEnsureConnection() {
+  if (aisState.status === 'connected' || aisState.status === 'connecting') return;
+  const key = aisState.apiKey || localStorage.getItem(AIS_KEY_STORAGE) || AIS_DEFAULT_KEY;
+  if (!key) { aisOpenModal(false); return; }
+  aisState.apiKey = key;
+  aisConnect(key);
+}
+
+function aisConnect(key) {
+  aisState.status = 'connecting';
+  aisSetStatusUI('connecting');
+  let ws;
+  try { ws = new WebSocket(AIS_WS_URL); }
+  catch(e) { console.warn('[ais] ws construct error', e); aisScheduleReconnect(); return; }
+  aisState.ws = ws;
+  let openedAt = 0;
+  let receivedAny = false;
+  ws.onopen = () => {
+    openedAt = Date.now();
+    receivedAny = false;
+    const sub = {
+      APIKey: key,
+      BoundingBoxes: AIS_BBOX,
+      FilterMessageTypes: ['PositionReport','ShipStaticData']
+    };
+    try { ws.send(JSON.stringify(sub)); } catch(e){}
+    aisState.status = 'connected';
+    aisSetStatusUI('connected');
+    console.log('[ais] ws open, sub envoyee');
+  };
+  ws.onmessage = (ev) => {
+    receivedAny = true;
+    aisState.reconnectAttempts = 0;  // succes : reset le compteur
+    aisOnMessage(ev);
+  };
+  ws.onerror = () => { console.warn('[ais] ws error'); };
+  ws.onclose = () => {
+    if (aisState.ws !== ws) return;  // ignore stale
+    aisState.status = 'disconnected';
+    aisSetStatusUI('disconnected');
+    // Detection cle invalide : ouvert + ferme rapidement sans aucun message recu
+    const liveMs = openedAt ? Date.now() - openedAt : 0;
+    if (openedAt && !receivedAny && liveMs < 8000) {
+      aisState.badKeyStrikes = (aisState.badKeyStrikes || 0) + 1;
+      console.warn('[ais] suspect cle invalide (close apres', liveMs, 'ms sans message), strikes=', aisState.badKeyStrikes);
+      if (aisState.badKeyStrikes >= 2) {
+        // Cle user echoue : fallback sur la cle default Algor Int
+        if (key !== AIS_DEFAULT_KEY && AIS_DEFAULT_KEY) {
+          console.warn('[ais] fallback sur cle Algor Int');
+          localStorage.removeItem(AIS_KEY_STORAGE);
+          aisState.apiKey = AIS_DEFAULT_KEY;
+          aisState.badKeyStrikes = 0;
+        } else {
+          // Meme la default ne marche pas : prompt user
+          console.warn('[ais] default key rejetee, prompt user');
+          aisState.apiKey = null;
+          aisState.badKeyStrikes = 0;
+          if (aisState.reconnectTimer) { clearTimeout(aisState.reconnectTimer); aisState.reconnectTimer = null; }
+          aisOpenModal(true);
+          return;
+        }
+      }
+    } else if (receivedAny) {
+      aisState.badKeyStrikes = 0;
+    }
+    if (aisAnyEnabled()) aisScheduleReconnect();
+  };
+}
+
+function aisOnMessage(ev) {
+  // AISStream envoie des Blobs binaires, pas du texte
+  if (typeof ev.data === 'string') {
+    aisProcessText(ev.data);
+  } else if (ev.data instanceof Blob) {
+    ev.data.text().then(aisProcessText).catch(()=>{});
+  } else if (ev.data instanceof ArrayBuffer) {
+    aisProcessText(new TextDecoder().decode(ev.data));
+  }
+}
+
+function aisProcessText(text) {
+  let m;
+  try { m = JSON.parse(text); } catch(e){ return; }
+  if (m.error) {
+    console.warn('[ais] server error:', m.error);
+    if (/api\s*key|invalid|unauth/i.test(String(m.error))) {
+      localStorage.removeItem(AIS_KEY_STORAGE);
+      aisState.apiKey = null;
+      aisDisconnect();
+      aisOpenModal(true);
+    }
+    return;
+  }
+  if (m.MessageType === 'PositionReport') {
+    const r = m.Message && m.Message.PositionReport;
+    if (!r || typeof r.Latitude !== 'number' || typeof r.Longitude !== 'number') return;
+    const mmsi = String(r.UserID);
+    const prev = aisShips.get(mmsi) || { mmsi };
+    aisShips.set(mmsi, Object.assign(prev, {
+      lat: r.Latitude,
+      lng: r.Longitude,
+      cog: typeof r.Cog === 'number' ? r.Cog : (prev.cog || 0),
+      sog: typeof r.Sog === 'number' ? r.Sog : (prev.sog || 0),
+      heading: r.TrueHeading,
+      lastUpdate: Date.now()
+    }));
+  } else if (m.MessageType === 'ShipStaticData') {
+    const r = m.Message && m.Message.ShipStaticData;
+    if (!r) return;
+    const mmsi = String(r.UserID);
+    const prev = aisShips.get(mmsi) || { mmsi };
+    const name = (r.Name || '').trim();
+    const dest = (r.Destination || '').trim();
+    const cs   = (r.CallSign || '').trim();
+    aisShips.set(mmsi, Object.assign(prev, {
+      name: name || prev.name || null,
+      type_code: r.Type != null ? r.Type : prev.type_code,
+      destination: dest || prev.destination || null,
+      callsign: cs || prev.callsign || null,
+      imo: r.ImoNumber || prev.imo || null
+    }));
+  }
+}
+
+function aisScheduleReconnect() {
+  if (aisState.reconnectTimer) return;
+  aisState.reconnectAttempts++;
+  const delay = Math.min(30000, 1500 * Math.pow(2, Math.min(aisState.reconnectAttempts, 5)));
+  aisState.reconnectTimer = setTimeout(() => {
+    aisState.reconnectTimer = null;
+    if (aisAnyEnabled() && aisState.apiKey) aisConnect(aisState.apiKey);
+  }, delay);
+}
+
+function aisDisconnect() {
+  if (aisState.reconnectTimer) { clearTimeout(aisState.reconnectTimer); aisState.reconnectTimer = null; }
+  if (aisState.ws) {
+    const w = aisState.ws;
+    aisState.ws = null;
+    try { w.close(); } catch(e){}
+  }
+  aisState.status = 'disconnected';
+  aisSetStatusUI('disconnected');
+}
+
+function aisSetStatusUI(status) {
+  const el = document.getElementById('ais-stats');
+  if (!el) return;
+  el.classList.remove('connecting','disconnected');
+  if (status === 'connecting') el.classList.add('connecting');
+  else if (status === 'disconnected') el.classList.add('disconnected');
+}
+
+function aisBuildFeatures() {
+  const features = [];
+  const enabled = new Set(aisEnabledCategories());
+  if (!enabled.size) return features;
+  const cutoff = Date.now() - 30 * 60 * 1000;  // 30 min stale
+  for (const ship of aisShips.values()) {
+    if (typeof ship.lat !== 'number' || typeof ship.lng !== 'number') continue;
+    if (ship.lat < -90 || ship.lat > 90) continue;
+    if ((ship.lastUpdate || 0) < cutoff) continue;
+    const cat = aisCategoryOf(ship.type_code);
+    if (!enabled.has(cat)) continue;
+    features.push({
+      type: 'Feature',
+      properties: {
+        mmsi: ship.mmsi,
+        name: ship.name,
+        cat,
+        type_code: ship.type_code,
+        cog: ship.cog || 0,
+        sog: ship.sog || 0,
+        destination: ship.destination,
+        imo: ship.imo,
+        callsign: ship.callsign,
+        lastUpdate: ship.lastUpdate
+      },
+      geometry: { type:'Point', coordinates: [ship.lng, ship.lat] }
+    });
+  }
+  return features;
+}
+
+function aisRenderNow() {
+  const src = map.getSource('src-ais');
+  if (!src) return;
+  const features = aisBuildFeatures();
+  src.setData({ type:'FeatureCollection', features });
+  const c = document.getElementById('ais-count');
+  if (c) c.textContent = features.length.toLocaleString('fr-FR');
+  updateFeatureCount();
+}
+
+// Render loop : 1.5s
+setInterval(() => {
+  if (aisAnyEnabled() && map.getSource('src-ais')) aisRenderNow();
+}, 1500);
+
+/* ═════════ Modale cle API ═════════ */
+function aisOpenModal(isError) {
+  const err = document.getElementById('ais-modal-error');
+  if (err) {
+    err.textContent = 'Cle invalide ou refusee par le serveur.';
+    err.classList.toggle('show', !!isError);
+  }
+  const inp = document.getElementById('ais-key-input');
+  if (inp) inp.value = '';
+  document.getElementById('ais-key-modal').classList.add('open');
+  setTimeout(() => inp && inp.focus(), 50);
+}
+
+window.aisCloseModal = function() {
+  document.getElementById('ais-key-modal').classList.remove('open');
+  // Si annulation sans cle valide, desactiver tous les calques AIS
+  if (!aisState.apiKey && aisAnyEnabled()) {
+    ['cargo','tanker','passenger','fishing','military','other'].forEach(k => {
+      const id = 'ais-' + k;
+      const s = layerState[id];
+      if (s && s.visible) window.toggleLayer(id);
+    });
+  }
+};
+
+window.aisSubmitKey = function() {
+  const v = document.getElementById('ais-key-input').value.trim();
+  const err = document.getElementById('ais-modal-error');
+  if (!v || v.length < 10) {
+    if (err) { err.textContent = 'Cle trop courte (min 10 caracteres).'; err.classList.add('show'); }
+    return;
+  }
+  localStorage.setItem(AIS_KEY_STORAGE, v);
+  aisState.apiKey = v;
+  document.getElementById('ais-key-modal').classList.remove('open');
+  aisConnect(v);
+};
+
+window.aisResetKey = function() {
+  if (!confirm('Supprimer la cle API AISStream.io enregistree et se deconnecter ?')) return;
+  localStorage.removeItem(AIS_KEY_STORAGE);
+  aisState.apiKey = null;
+  aisDisconnect();
+  aisShips.clear();
+  if (map.getSource('src-ais')) {
+    map.getSource('src-ais').setData({ type:'FeatureCollection', features: [] });
+  }
+  const c = document.getElementById('ais-count');
+  if (c) c.textContent = '0';
+};
+
+// Touche Entree dans le champ cle
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && document.getElementById('ais-key-modal').classList.contains('open')) {
+    e.preventDefault();
+    window.aisSubmitKey();
+  } else if (e.key === 'Escape' && document.getElementById('ais-key-modal').classList.contains('open')) {
+    window.aisCloseModal();
+  }
+});
 
 </script>
 
