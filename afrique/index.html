@@ -1025,6 +1025,38 @@ function aisSaveBuffer() {
 const _aisRestored = aisRestoreBuffer();
 if (_aisRestored > 0) console.log('[ais] buffer restaure depuis derniere session:', _aisRestored, 'navires');
 
+/* Charge le snapshot statique commit dans le repo (~2000 navires capturés a un instant T).
+   Permet d'avoir une carte deja peuplee des le premier load, avant que la WebSocket
+   n'ait eu le temps d'accumuler ses donnees. La WS prend ensuite le relais pour la fraicheur. */
+function aisLoadStaticSnapshot() {
+  fetch('./ais-snapshot.json?v=' + (window._aisSnapshotV || '1'))
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (!data || !Array.isArray(data.ships)) return;
+      // Marque les positions du snapshot avec un timestamp ancien mais < AIS_STALE_MS
+      // pour qu'elles soient affichees mais soient ecrasees par les positions live des leur arrivee
+      const snapshotAge = Date.now() - (data.capturedAt || Date.now());
+      let loaded = 0;
+      for (const s of data.ships) {
+        if (!s || !s.mmsi) continue;
+        const mmsi = String(s.mmsi);
+        // N'ecrase pas une position deja recue en live (lastUpdate plus recent)
+        const existing = aisShips.get(mmsi);
+        const snapUpdate = s.lastUpdate || (Date.now() - snapshotAge);
+        if (existing && (existing.lastUpdate || 0) > snapUpdate) continue;
+        aisShips.set(mmsi, { ...s, mmsi, lastUpdate: snapUpdate });
+        loaded++;
+      }
+      console.log('[ais] snapshot charge:', loaded, 'navires (capture il y a', Math.round(snapshotAge/60000), 'min)');
+      // Re-render si calques AIS deja actifs
+      if (typeof aisAnyEnabled === 'function' && aisAnyEnabled() && typeof aisRenderNow === 'function') {
+        aisRenderNow();
+      }
+    })
+    .catch(err => console.warn('[ais] snapshot fetch error', err));
+}
+aisLoadStaticSnapshot();
+
 // Save periodique
 setInterval(aisSaveBuffer, AIS_BUFFER_SAVE_MS);
 // Save aussi avant fermeture/navigation
@@ -1042,8 +1074,8 @@ function aisPreWarm() {
   console.log('[ais] pre-chauffe WebSocket — buffer restaure =', _aisRestored, 'navires');
   aisConnect(key);
 }
-// Lance la pre-chauffe 2s apres le load (laisse la map terminer son init)
-setTimeout(aisPreWarm, 2000);
+// Lance la pre-chauffe immediatement — pas besoin d'attendre la map
+aisPreWarm();
 
 function aisMakeIcons() {
   if (aisState.iconsAdded) return;
