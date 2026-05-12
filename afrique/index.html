@@ -925,13 +925,30 @@ const AIS_BUFFER_STORAGE = 'aisstream_buffer_v1';
 const AIS_WS_URL = 'wss://stream.aisstream.io/v0/stream';
 // Cle API embarquee (compte Algor Int). L'utilisateur peut l'overrider via localStorage.
 const AIS_DEFAULT_KEY = '74f3a2c9bf38cfa3db1c187fba5bcde6d0dc6e7c';
-// BBOX format AISStream: [[[lat_SW, lng_SW], [lat_NE, lng_NE]]]
-// Couverture MAXIMALE Afrique maritime : Atlantique W (-35°), Mer Noire/Caspienne (+45°N),
-// jusqu'a Bangladesh/Sumatra (+100°E) — englobe toute la route Suez-Asie + cabotage
-const AIS_BBOX = [[[-55, -35], [45, 100]]];
+// BBOX format AISStream: [[[lat_SW, lng_SW], [lat_NE, lng_NE]], ...]
+// 5 zones focalisees sur le perimetre maritime africain — exclut Med, mer Noire, Indien profond
+const AIS_BBOX = [
+  [[-38, -22], [36, 16]],   // 1. Cote Ouest : Maroc -> Cap (Atlantique, Golfe de Guinee)
+  [[-42, 14], [-26, 36]],   // 2. Cap de Bonne-Esperance : Cape Town, Agulhas, Durban
+  [[-30, 32], [14, 60]],    // 3. Cote Est + Madagascar : Mozambique, Tanzanie, Kenya, Somalie, Madagascar, Seychelles
+  [[11, 32], [32, 45]],     // 4. Mer Rouge : Bab el-Mandeb, Djibouti, Jeddah, Canal de Suez, Port-Said
+  [[22, 54], [28, 62]]      // 5. Detroit d'Ormuz : Bandar Abbas, Mascate, entree Golfe Persique
+];
 const AIS_STALE_MS = 6 * 60 * 60 * 1000;   // 6h : un navire reste affiche meme sans MAJ recente
 const AIS_BUFFER_SAVE_MS = 8000;           // persistance localStorage toutes les 8s
 const AIS_BUFFER_MAX = 12000;              // cap pour rester sous la limite 5MB localStorage
+
+// Verifie si une position est dans l'une des zones AIS_BBOX.
+// Utilise pour filtrer le buffer localStorage et les positions WebSocket (defense-en-profondeur :
+// si un user a un ancien buffer avec des navires Med, ils ne sont pas restaures).
+function aisInBbox(lat, lng) {
+  if (typeof lat !== 'number' || typeof lng !== 'number') return false;
+  for (const box of AIS_BBOX) {
+    const sw = box[0], ne = box[1];
+    if (lat >= sw[0] && lat <= ne[0] && lng >= sw[1] && lng <= ne[1]) return true;
+  }
+  return false;
+}
 
 const aisShips = new Map();  // mmsi -> ship state
 const aisState = {
@@ -987,13 +1004,16 @@ function aisRestoreBuffer() {
     const buf = JSON.parse(raw);
     if (!buf || !Array.isArray(buf.ships)) return 0;
     const cutoff = Date.now() - AIS_STALE_MS;
-    let restored = 0;
+    let restored = 0, dropped = 0;
     for (const s of buf.ships) {
       if (!s || !s.mmsi) continue;
       if ((s.lastUpdate || 0) < cutoff) continue;
+      // Filtre bbox : un user qui avait un buffer avec des navires Med ne les voit plus apparaitre
+      if (!aisInBbox(s.lat, s.lng)) { dropped++; continue; }
       aisShips.set(String(s.mmsi), s);
       restored++;
     }
+    if (dropped > 0) console.log('[ais] buffer:', dropped, 'navires hors-zone elimines');
     return restored;
   } catch(e) { console.warn('[ais] restore buffer error', e); return 0; }
 }
@@ -1029,7 +1049,7 @@ if (_aisRestored > 0) console.log('[ais] buffer restaure depuis derniere session
    Permet d'avoir une carte deja peuplee des le premier load, avant que la WebSocket
    n'ait eu le temps d'accumuler ses donnees. La WS prend ensuite le relais pour la fraicheur. */
 function aisLoadStaticSnapshot() {
-  fetch('./ais-snapshot.json?v=' + (window._aisSnapshotV || '1'))
+  fetch('./ais-snapshot.json?v=' + (window._aisSnapshotV || '20260512a'))
     .then(r => r.ok ? r.json() : null)
     .then(data => {
       if (!data || !Array.isArray(data.ships)) return;
@@ -1304,6 +1324,9 @@ function aisProcessText(text) {
   if (m.MessageType === 'PositionReport') {
     const r = m.Message && m.Message.PositionReport;
     if (!r || typeof r.Latitude !== 'number' || typeof r.Longitude !== 'number') return;
+    // Defense-en-profondeur : AISStream peut renvoyer des positions a la frontiere du bbox.
+    // On rejette tout ce qui n'est pas strictement dans une de nos 5 zones.
+    if (!aisInBbox(r.Latitude, r.Longitude)) return;
     const mmsi = String(r.UserID);
     const prev = aisShips.get(mmsi) || { mmsi };
     aisShips.set(mmsi, Object.assign(prev, {
