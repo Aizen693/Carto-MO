@@ -967,11 +967,25 @@ function aisHandleToggle() {
     document.getElementById('ais-stats')?.classList.add('on');
     aisRenderNow();
   } else {
+    // On garde le WebSocket actif (pre-chauffe) pour reactivation instantanee
     document.getElementById('ais-stats')?.classList.remove('on');
-    aisDisconnect();
     aisRemoveLayer();
   }
 }
+
+/* Pre-chauffe : ouvre la WebSocket et accumule les navires en arriere-plan
+   des le chargement de la page, pour que le toggle affiche instantanement
+   tous les navires deja recus (200-700 navires en 10-30s d'ecoute). */
+function aisPreWarm() {
+  if (aisState.ws || aisState.status === 'connected' || aisState.status === 'connecting') return;
+  const key = aisState.apiKey || localStorage.getItem(AIS_KEY_STORAGE) || AIS_DEFAULT_KEY;
+  if (!key) return;
+  aisState.apiKey = key;
+  console.log('[ais] pre-chauffe WebSocket pour reactivation instantanee');
+  aisConnect(key);
+}
+// Lance la pre-chauffe 2s apres le load (laisse la map terminer son init)
+setTimeout(aisPreWarm, 2000);
 
 function aisMakeIcons() {
   if (aisState.iconsAdded) return;
@@ -1168,7 +1182,8 @@ function aisConnect(key) {
     } else if (receivedAny) {
       aisState.badKeyStrikes = 0;
     }
-    if (aisAnyEnabled()) aisScheduleReconnect();
+    // Reconnexion automatique tant qu'on a une cle (mode pre-chauffe)
+    if (aisState.apiKey) aisScheduleReconnect();
   };
 }
 
@@ -1233,7 +1248,8 @@ function aisScheduleReconnect() {
   const delay = Math.min(30000, 1500 * Math.pow(2, Math.min(aisState.reconnectAttempts, 5)));
   aisState.reconnectTimer = setTimeout(() => {
     aisState.reconnectTimer = null;
-    if (aisAnyEnabled() && aisState.apiKey) aisConnect(aisState.apiKey);
+    // Reconnecte tant qu'on a une cle (mode pre-chauffe — meme si aucun calque actif)
+    if (aisState.apiKey) aisConnect(aisState.apiKey);
   }, delay);
 }
 
