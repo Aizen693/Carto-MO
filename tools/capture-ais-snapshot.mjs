@@ -25,7 +25,7 @@ const BBOXES = [
   [[-30, 32],  [20, 78]],   // 4. Cote Est + Madagascar + Indien Ouest : Suez-Inde route
   [[10, 30],   [33, 55]],   // 5. Mer Rouge + Golfe Aden + Suez
   [[22, 48],   [30, 62]],   // 6. Detroit d'Ormuz + Golfe Persique
-  [[30, -6],   [38, 35]]    // 7. Med Sud (cote Maghreb : Maroc, Algerie, Tunisie, Libye, Egypte)
+  [[30, -6],   [46, 36]]    // 7. Med entiere : Maghreb + Med Nord (couverture AISStream maximale)
 ];
 
 const ZONE_LABELS = ['Atl-mid', 'Cote Ouest', 'Cap+S.Indien', 'Est+Mada+Indien', 'M.Rouge+Aden', 'Ormuz+G.Pers', 'Med Maghreb'];
