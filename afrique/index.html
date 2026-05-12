@@ -1123,7 +1123,7 @@ if (_aisRestored > 0) console.log('[ais] buffer restaure depuis derniere session
    Permet d'avoir une carte deja peuplee des le premier load, avant que la WebSocket
    n'ait eu le temps d'accumuler ses donnees. La WS prend ensuite le relais pour la fraicheur. */
 function aisLoadStaticSnapshot() {
-  fetch('./ais-snapshot.json?v=' + (window._aisSnapshotV || '20260512a'))
+  fetch('./ais-snapshot.json?v=' + (window._aisSnapshotV || '20260512b'))
     .then(r => r.ok ? r.json() : null)
     .then(data => {
       if (!data || !Array.isArray(data.ships)) return;
