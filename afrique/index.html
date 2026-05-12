@@ -926,15 +926,17 @@ const AIS_WS_URL = 'wss://stream.aisstream.io/v0/stream';
 // Cle API embarquee (compte Algor Int). L'utilisateur peut l'overrider via localStorage.
 const AIS_DEFAULT_KEY = '74f3a2c9bf38cfa3db1c187fba5bcde6d0dc6e7c';
 // BBOX format AISStream: [[[lat_SW, lng_SW], [lat_NE, lng_NE]], ...]
-// 5 zones focalisees sur le perimetre maritime africain — exclut Med, mer Noire, Indien profond
+// 7 zones : 5 zones africaines focalisees + Atlantique mi-ocean (Cape route) + Med Maghreb
 const AIS_BBOX = [
-  [[-38, -22], [36, 16]],   // 1. Cote Ouest : Maroc -> Cap (Atlantique, Golfe de Guinee)
-  [[-42, 14], [-26, 36]],   // 2. Cap de Bonne-Esperance : Cape Town, Agulhas, Durban
-  [[-30, 32], [14, 60]],    // 3. Cote Est + Madagascar : Mozambique, Tanzanie, Kenya, Somalie, Madagascar, Seychelles
-  [[11, 32], [32, 45]],     // 4. Mer Rouge : Bab el-Mandeb, Djibouti, Jeddah, Canal de Suez, Port-Said
-  [[22, 54], [28, 62]]      // 5. Detroit d'Ormuz : Bandar Abbas, Mascate, entree Golfe Persique
+  [[-50, -45], [38, -6]],   // 1. Atlantique mi-ocean : Cape route transatlantique, Madere, Canaries
+  [[-38, -22], [36, 16]],   // 2. Cote Ouest : Maroc -> Cap, Golfe de Guinee
+  [[-50, 12],  [-20, 60]],  // 3. Cap + Sud Indien : Cape Town, Agulhas, Mozambique Channel
+  [[-30, 32],  [20, 78]],   // 4. Cote Est + Madagascar + Indien Ouest : route Suez-Inde
+  [[10, 30],   [33, 55]],   // 5. Mer Rouge + Golfe d'Aden + Bab el-Mandeb + Canal de Suez
+  [[22, 48],   [30, 62]],   // 6. Detroit d'Ormuz + Golfe Persique
+  [[30, -6],   [38, 35]]    // 7. Med Maghreb : Maroc N, Algerie, Tunisie, Libye, Egypte (cote sud Med)
 ];
-const AIS_STALE_MS = 6 * 60 * 60 * 1000;   // 6h : un navire reste affiche meme sans MAJ recente
+const AIS_STALE_MS = 24 * 60 * 60 * 1000;  // 24h : accumulation glissante cote browser, evite drop a froid
 const AIS_BUFFER_SAVE_MS = 8000;           // persistance localStorage toutes les 8s
 const AIS_BUFFER_MAX = 12000;              // cap pour rester sous la limite 5MB localStorage
 
