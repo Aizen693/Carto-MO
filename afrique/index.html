@@ -1096,7 +1096,7 @@ function aisSaveBuffer() {
   try {
     let ships = [];
     for (const s of aisShips.values()) {
-      if (typeof s.lat === 'number' && typeof s.lng === 'number' && s._source !== 'reference') ships.push(s);
+      if (typeof s.lat === 'number' && typeof s.lng === 'number') ships.push(s);
     }
     if (ships.length > AIS_BUFFER_MAX) {
       ships.sort((a,b) => (b.lastUpdate||0) - (a.lastUpdate||0));
@@ -1150,34 +1150,6 @@ function aisLoadStaticSnapshot() {
     .catch(err => console.warn('[ais] snapshot fetch error', err));
 }
 aisLoadStaticSnapshot();
-
-/* Charge le dataset de reference (positions estimees zones AISStream non couvertes :
-   Cote Est, Madagascar, Indien Ouest, Ormuz). Marque _source='reference' sur chaque
-   navire pour distinction visuelle et popup adapte. Ces positions ne sont jamais
-   ecrasees par le live (un MMSI live arrivant a la meme valeur reste prioritaire). */
-function aisLoadReferenceDataset() {
-  fetch('./ais-reference.json?v=' + (window._aisReferenceV || '20260512c'))
-    .then(r => r.ok ? r.json() : null)
-    .then(data => {
-      if (!data || !Array.isArray(data.ships)) return;
-      let loaded = 0;
-      for (const s of data.ships) {
-        if (!s || !s.mmsi) continue;
-        const mmsi = String(s.mmsi);
-        // Si un navire live a deja ce MMSI, ne pas ecraser (live > reference)
-        const existing = aisShips.get(mmsi);
-        if (existing && existing._source !== 'reference') continue;
-        aisShips.set(mmsi, { ...s, mmsi, _source: 'reference' });
-        loaded++;
-      }
-      console.log('[ais] reference dataset charge:', loaded, 'navires');
-      if (typeof aisAnyEnabled === 'function' && aisAnyEnabled() && typeof aisRenderNow === 'function') {
-        aisRenderNow();
-      }
-    })
-    .catch(err => console.warn('[ais] reference fetch error', err));
-}
-aisLoadReferenceDataset();
 
 // Save periodique
 setInterval(aisSaveBuffer, AIS_BUFFER_SAVE_MS);
@@ -1294,9 +1266,6 @@ function aisEnsureLayer() {
     'military',  '#e63946',
     '#8e96a2'
   ];
-  // Reference = opacite reduite (positions estimees, pas live)
-  const opacityStopped = ['case', ['==',['get','_source'],'reference'], 0.40, 0.65];
-  const opacityMoving  = ['case', ['==',['get','_source'],'reference'], 0.45, 0.92];
   if (!map.getLayer('ais-ships-stopped')) {
     map.addLayer({
       id: 'ais-ships-stopped',
@@ -1311,7 +1280,7 @@ function aisEnsureLayer() {
       },
       paint: {
         'icon-color': colorExpr,
-        'icon-opacity': opacityStopped
+        'icon-opacity': 0.65
       }
     });
   }
@@ -1331,7 +1300,7 @@ function aisEnsureLayer() {
       },
       paint: {
         'icon-color': colorExpr,
-        'icon-opacity': opacityMoving
+        'icon-opacity': 0.92
       }
     });
   }
@@ -1400,12 +1369,8 @@ function aisOnClick(e) {
   }
   // Affichage de la trace si on a au moins 2 positions
   const ship = aisShips.get(String(p.mmsi));
-  const isRef = p._source === 'reference' || (ship && ship._source === 'reference');
   const trailLen = ship && ship.trail ? ship.trail.length : 0;
-  if (isRef) {
-    rows.push(['Source', 'Reference (zone non couverte AIS)']);
-    aisClearTrail();
-  } else if (trailLen >= 2) {
+  if (trailLen >= 2) {
     rows.push(['Historique', trailLen + ' positions']);
     aisShowTrail(p.mmsi);
   } else {
@@ -1611,8 +1576,7 @@ function aisBuildFeatures() {
         destination: ship.destination,
         imo: ship.imo,
         callsign: ship.callsign,
-        lastUpdate: ship.lastUpdate,
-        _source: ship._source || 'live'
+        lastUpdate: ship.lastUpdate
       },
       geometry: { type:'Point', coordinates: [ship.lng, ship.lat] }
     });
