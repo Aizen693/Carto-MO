@@ -1,30 +1,32 @@
 /**
- * calque-timeline.js — Filtre les calques par les periodes selectionnees.
+ * calque-timeline.js — Filtre les calques par les periodes selectionnees +
+ * auto-activation des calques temporels au chargement + compteur d'evenements.
  *
- * Le slider/Play sont geres par engine.js comme avant (cycle de PERIODS).
- * Quand l'utilisateur change de periode, engine.js appelle un hook
- * `window.onActivePeriodsChange(activeIndexes, PERIODS, showAll)` que ce
- * helper intercepte pour appliquer un filtre Mapbox sur les couches des
- * calques temporels.
+ * Le slider/Play sont geres par engine.js (cycle de PERIODS). Quand
+ * activePeriods change, engine.js appelle window.onActivePeriodsChange.
  *
  * Le helper :
  *   1. Charge chaque fichier source, extrait la date par feature (champs
- *      Date / date / DATE, ou "Date: DD/MM/YYYY" dans description),
- *      normalise au format ISO YYYY-MM-DD dans `properties._normDate`.
+ *      Date / date / DATE, ou "Date: DD/MM/YYYY" dans description) et la
+ *      normalise dans `properties._normDate` (YYYY-MM-DD).
  *   2. Pousse les features normalisees dans la source Mapbox correspondante.
- *   3. Calcule les plages de dates (start..end) des periodes actives :
+ *   3. Auto-active le calque dans la sidebar (toggleLayer) une fois que la
+ *      source est prete (sauf si autoEnable: false).
+ *   4. Calcule les plages de dates des periodes actives (start..end) :
  *      - explicite via PERIODS[i].start / .end
  *      - ou auto-derivee du nom de fichier (ex: 2026-jan-01-15.geojson).
- *   4. Construit un filtre OR cumulant les plages actives et l'applique
- *      sur tous les `layers` declares.
+ *   5. Applique un filtre OR cumulant les plages sur les `layers` listes.
+ *   6. Met a jour le compteur #event-counter avec le total des points filtres.
  *
  * Utilisation :
  *   AlgorCalqueTimeline.init({
  *     sources: [
- *       { file: 'evenements.geojson', sourceId: 'evenements-src',
+ *       { calqueId: 'evenements', file: 'evenements.geojson',
+ *         sourceId: 'evenements-src',
  *         layers: ['events-glow','events-ring','events-dots', ...] },
- *       { files: ['2026-jan-01-15.geojson', ...], sourceId: 'evenements-src',
- *         layers: [...] }
+ *       { calqueId: 'humint', file: 'humint.geojson',
+ *         sourceId: 'humint-src',
+ *         layers: ['humint-glow','humint-ring','humint-dots'] }
  *     ]
  *   });
  */
@@ -85,6 +87,7 @@
   function init(opts) {
     opts = opts || {};
     var sources = opts.sources || [];
+    var autoEnableDefault = opts.autoEnable !== false;
     var allFilterLayers = [];
     sources.forEach(function(s) {
       if (s.layers && s.layers.length) allFilterLayers = allFilterLayers.concat(s.layers);
@@ -114,12 +117,6 @@
       });
     }
 
-    Promise.all(sources.map(fetchSource)).then(function(results) {
-      results.forEach(function(d, i) { sources[i]._normalized = d; });
-      pushSourceData();
-      applyFilterForCurrentState();
-    });
-
     function pushSourceData() {
       var m = getMap();
       if (!m || !m.getSource) return;
@@ -132,12 +129,24 @@
       });
     }
 
+    function autoEnableCalques() {
+      if (!window.toggleLayer) return;
+      sources.forEach(function(s) {
+        if (!s.calqueId) return;
+        if (s.autoEnable === false) return;
+        if (s._autoEnabled) return;
+        var el = document.getElementById('sb-toggle-' + s.calqueId);
+        var alreadyOn = el && el.classList.contains('on');
+        if (!alreadyOn && autoEnableDefault) {
+          try { window.toggleLayer(s.calqueId); } catch (e) {}
+        }
+        s._autoEnabled = true;
+      });
+    }
+
     function buildFilterFromState(activeIndexes, periods, showAll) {
-      if (showAll) return null; // pas de filtre : tout afficher
-      if (!activeIndexes.length) {
-        // aucune periode active = rien afficher (filtre toujours faux)
-        return ['==', ['literal', 1], ['literal', 0]];
-      }
+      if (showAll) return null;
+      if (!activeIndexes.length) return ['==', ['literal', 1], ['literal', 0]];
       var ranges = [];
       activeIndexes.forEach(function(i) {
         var p = periods[i];
@@ -155,6 +164,48 @@
     }
 
     var lastFilter = null;
+    var lastActive = [];
+    var lastShowAll = false;
+
+    function dateInRanges(iso, ranges) {
+      if (!iso) return false;
+      for (var i = 0; i < ranges.length; i++) {
+        if (iso >= ranges[i].start && iso <= ranges[i].end) return true;
+      }
+      return false;
+    }
+
+    function countFiltered() {
+      var total = 0;
+      var ranges = [];
+      if (!lastShowAll) {
+        var periods = (window.ZONE_CONFIG && window.ZONE_CONFIG.PERIODS) || [];
+        lastActive.forEach(function(i) {
+          var p = periods[i];
+          if (!p) return;
+          var r = (p.start && p.end) ? { start: p.start, end: p.end } : rangeFromFile(p.file);
+          if (r) ranges.push(r);
+        });
+        if (!ranges.length) return 0;
+      }
+      sources.forEach(function(s) {
+        if (!s._normalized || !s._normalized.features) return;
+        s._normalized.features.forEach(function(f) {
+          var iso = f.properties && f.properties._normDate;
+          if (lastShowAll) { total++; return; }
+          if (dateInRanges(iso, ranges)) total++;
+        });
+      });
+      return total;
+    }
+
+    function updateCounter() {
+      var el = document.getElementById('event-counter');
+      if (!el) return;
+      var n = countFiltered();
+      el.textContent = n.toLocaleString() + ' événements';
+      el.style.display = 'block';
+    }
 
     function applyFilter(filter) {
       var m = getMap();
@@ -166,15 +217,24 @@
       });
     }
 
-    function applyFilterForCurrentState() {
+    Promise.all(sources.map(fetchSource)).then(function(results) {
+      results.forEach(function(d, i) { sources[i]._normalized = d; });
+      pushSourceData();
+      autoEnableCalques();
       applyFilter(lastFilter);
-    }
+      updateCounter();
+    });
 
-    // Hook recu d'engine.js a chaque changement de periodes (Play, slider,
-    // bouton periode, TOUT).
     window.onActivePeriodsChange = function(activeIndexes, periods, showAll) {
-      lastFilter = buildFilterFromState(activeIndexes, periods, showAll);
+      lastActive = activeIndexes || [];
+      lastShowAll = !!showAll;
+      lastFilter = buildFilterFromState(lastActive, periods, lastShowAll);
       applyFilter(lastFilter);
+      // Le calque peut etre cree de facon lazy par le factory ; on s'assure
+      // que les sources/donnees soient pretes a chaque changement.
+      pushSourceData();
+      autoEnableCalques();
+      updateCounter();
     };
 
     var m = getMap();

@@ -272,7 +272,7 @@ const ZONE_CONFIG = {
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js?v=20260512c"></script>
+<script src="../shared/engine.js?v=20260513b"></script>
 <script>
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
 (function() {
@@ -436,7 +436,7 @@ const ZONE_CONFIG = {
 
     fetch('./' + cfg.file + '?v=' + Date.now())
       .then(r => r.json())
-      .then(d => { if (d && d.features && d.features.length) data = d; })
+      .then(d => { if (d && d.features) { data = d; if (visible && !map.getSource(srcId)) addLayers(); } })
       .catch(() => {});
 
     function addLayers() {
@@ -822,11 +822,12 @@ window.focusGeocoder = function() {
      evenements.geojson est vide ; les vraies donnees sont reparties dans les
      anciens fichiers par periode. Le helper les fusionne et les pousse dans
      la source 'evenements-src' du calque pour qu'elles deviennent un calque. -->
-<script src="../shared/calque-timeline.js?v=20260512c"></script>
+<script src="../shared/calque-timeline.js?v=20260513b"></script>
 <script>
 AlgorCalqueTimeline.init({
   sources: [
     {
+      calqueId: 'evenements',
       files: [
         '2026-jan-01-15.geojson', '2026-jan-16-31.geojson',
         '2026-fev-01-14.geojson', '2026-fev-15-28.geojson',
