@@ -6,8 +6,8 @@
  */
 
 import { initAuth, login, logout, getCurrentUser, requireRole } from './modules/auth.js?v=20260420a';
-import { getPoints } from './modules/firestore.js?v=20260420a';
-import { logActivity } from './modules/firestore.js?v=20260420a';
+import { getPoints } from './modules/firestore.js?v=20260513a';
+import { logActivity } from './modules/firestore.js?v=20260513a';
 import {
   initEditorMap, whenReady, renderAdminPoints, renderStaticPoints, onMapClick, onPointClick,
   flyToPoint, selectPoint, switchZone, destroy as destroyMap
@@ -15,12 +15,13 @@ import {
 import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js?v=20260420a';
 import { init as initActors, renderActorList, updateZone as updateActorZone } from './modules/actor-manager.js?v=20260420a';
 import { importGeoJSON, importStaticFiles, exportGeoJSON, exportCSV } from './modules/import-export.js?v=20260420a';
-import { purgeEmptyPoints, bulkSoftDeletePoints, restorePoints } from './modules/firestore.js?v=20260420a';
+import { purgeEmptyPoints, bulkSoftDeletePoints, restorePoints, pushToGitHub } from './modules/firestore.js?v=20260513a';
 import { renderActivityLog } from './modules/activity-log.js?v=20260420a';
 import { renderUserList } from './modules/user-manager.js?v=20260420a';
 
-// Purge tout ancien token GitHub stocke en localStorage (migration vers sessionStorage)
+// Purge tout ancien token GitHub stocke cote client (migre vers Edge Function 2026-05-13)
 try { localStorage.removeItem('carto_gh_token'); } catch (_) {}
+try { sessionStorage.removeItem('carto_gh_token'); } catch (_) {}
 
 // ── Zone configs (mirrored from each zone's index.html) ─────────────
 
@@ -528,50 +529,13 @@ function setupCalquesManager() {
         throw new Error('Format invalide — GeoJSON, JSON array ou CSV attendu');
       }
 
-      // Push to GitHub repo directly
-      let GH_TOKEN = sessionStorage.getItem('carto_gh_token');
-      if (!GH_TOKEN) {
-        GH_TOKEN = prompt('Token GitHub requis pour push les calques.\nCollez votre Personal Access Token :');
-        if (!GH_TOKEN) throw new Error('Token GitHub requis');
-        sessionStorage.setItem('carto_gh_token', GH_TOKEN);
-      }
-      const GH_REPO  = 'Aizen693/Carto-MO';
-      const zonePath  = config.DATA_PATH.replace('../', '');
-      const ghPath    = `${zonePath}${overlay.file}`;
-      const content   = JSON.stringify(data, null, 2);
-      const b64       = btoa(unescape(encodeURIComponent(content)));
-
-      // Get current file SHA (needed for update)
-      let sha = null;
-      try {
-        const existing = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${ghPath}`, {
-          headers: { Authorization: `token ${GH_TOKEN}` }
-        });
-        if (existing.ok) {
-          const meta = await existing.json();
-          sha = meta.sha;
-        }
-      } catch (_) {}
-
-      const body = {
-        message: `[admin] Import calque ${overlay.label} (${data.features.length} features)`,
-        content: b64
-      };
-      if (sha) body.sha = sha;
-
-      const resp = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${ghPath}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `token ${GH_TOKEN}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
+      // Push via Edge Function (token GH cote serveur)
+      const ghPath = `${config.DATA_PATH.replace('../', '')}${overlay.file}`;
+      await pushToGitHub({
+        path: ghPath,
+        content: JSON.stringify(data, null, 2),
+        message: `Import calque ${overlay.label} (${data.features.length} features)`,
       });
-
-      if (!resp.ok) {
-        const err = await resp.json();
-        throw new Error('GitHub: ' + (err.message || resp.statusText));
-      }
 
       // Clear purged flag on successful import
       delete calquePurgedAt[currentZone + ':' + overlay.id];
@@ -719,7 +683,7 @@ async function refreshCalquesList() {
           const p = ft.properties || {};
           const name = p.name || p.Name || p.nom || p.Nom || p.Acteur || p.acteur || Object.values(p)[0] || '(sans nom)';
           const detail = p.Date || p.date || p['Pays + Lieu'] || p.description || '';
-          fhtml += `<label class="calque-feature-item"><input type="checkbox" class="feat-check" data-idx="${idx}"><span class="feat-name">${name}</span>${detail ? `<span class="feat-detail">${detail}</span>` : ''}</label>`;
+          fhtml += `<label class="calque-feature-item"><input type="checkbox" class="feat-check" data-idx="${idx}"><span class="feat-name">${escapeHtml(name)}</span>${detail ? `<span class="feat-detail">${escapeHtml(detail)}</span>` : ''}</label>`;
         });
         fhtml += '</div>';
         panel.innerHTML = fhtml;
@@ -748,24 +712,12 @@ async function refreshCalquesList() {
           const newData = { type: 'FeatureCollection', features: kept };
 
           try {
-            let GH_TOKEN = sessionStorage.getItem('carto_gh_token');
-            if (!GH_TOKEN) {
-              GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
-              if (!GH_TOKEN) throw new Error('Token requis');
-              sessionStorage.setItem('carto_gh_token', GH_TOKEN);
-            }
-            const GH_REPO = 'Aizen693/Carto-MO';
             const path = config.DATA_PATH.replace('../', '') + file;
-            const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
-            const getRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=main`, { headers: { 'Authorization': 'token ' + GH_TOKEN } });
-            if (!getRes.ok) throw new Error('SHA introuvable');
-            const sha = (await getRes.json()).sha;
-            const putRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
-              method: 'PUT',
-              headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
-              body: JSON.stringify({ message: `[admin] Suppression ${toRemove.size} pts de ${file}`, content: b64, sha, branch: 'main' })
+            await pushToGitHub({
+              path,
+              content: JSON.stringify(newData, null, 2),
+              message: `Suppression ${toRemove.size} pts de ${file}`,
             });
-            if (!putRes.ok) throw new Error('Erreur GitHub: ' + putRes.status);
             const statusEl = document.getElementById('calque-status-msg');
             if (statusEl) { statusEl.textContent = `${toRemove.size} point(s) supprime(s) de "${file}". ${kept.length} restant(s).`; statusEl.className = 'calque-import-status io-status-ok'; }
             panel.style.display = 'none';
@@ -779,7 +731,7 @@ async function refreshCalquesList() {
           }
         });
       } catch (e) {
-        panel.innerHTML = `<div class="calque-features-loading" style="color:var(--err)">Erreur: ${e.message}</div>`;
+        panel.innerHTML = `<div class="calque-features-loading" style="color:var(--err)">Erreur: ${escapeHtml(e.message)}</div>`;
       }
     });
   });
@@ -792,38 +744,17 @@ async function refreshCalquesList() {
       if (!confirm(`Vider TOUT le calque "${file}" ? Le fichier sera remplace par un GeoJSON vide.`)) return;
       const statusEl = document.getElementById('calque-status-msg');
       try {
-        let GH_TOKEN = sessionStorage.getItem('carto_gh_token');
-        if (!GH_TOKEN) {
-          GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
-          if (!GH_TOKEN) throw new Error('Token GitHub requis');
-          sessionStorage.setItem('carto_gh_token', GH_TOKEN);
-        }
-        const GH_REPO = 'Aizen693/Carto-MO';
-        const emptyGeo = { type: 'FeatureCollection', features: [] };
         const config = ZONE_CONFIGS[currentZone];
         const path = config.DATA_PATH.replace('../', '') + file;
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(emptyGeo))));
-        const getRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=main`, {
-          headers: { 'Authorization': 'token ' + GH_TOKEN }
+        await pushToGitHub({
+          path,
+          content: JSON.stringify({ type: 'FeatureCollection', features: [] }),
+          message: `Vider calque ${file}`,
         });
-        if (getRes.ok) {
-          const getData = await getRes.json();
-          const putRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
-            method: 'PUT',
-            headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: `Vider calque ${file}`, content: content, sha: getData.sha, branch: 'main' })
-          });
-          if (putRes.ok) {
-            const now = new Date();
-            calquePurgedAt[currentZone + ':' + id] = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' }) + ' ' + now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
-            if (statusEl) { statusEl.textContent = `Calque "${file}" vide avec succes.`; statusEl.className = 'calque-import-status io-status-ok'; }
-            refreshCalquesList();
-          } else {
-            if (statusEl) { statusEl.textContent = 'Erreur GitHub: ' + putRes.status; statusEl.className = 'calque-import-status io-status-err'; }
-          }
-        } else {
-          if (statusEl) { statusEl.textContent = 'Fichier introuvable sur GitHub: ' + getRes.status; statusEl.className = 'calque-import-status io-status-err'; }
-        }
+        const now = new Date();
+        calquePurgedAt[currentZone + ':' + id] = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' }) + ' ' + now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+        if (statusEl) { statusEl.textContent = `Calque "${file}" vide avec succes.`; statusEl.className = 'calque-import-status io-status-ok'; }
+        refreshCalquesList();
       } catch (e) {
         if (statusEl) { statusEl.textContent = 'Erreur: ' + e.message; statusEl.className = 'calque-import-status io-status-err'; }
       }

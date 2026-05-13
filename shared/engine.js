@@ -10,6 +10,8 @@
 // ── ACCESS TOKEN (partage) ───────────────────────────────────────────
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
 // ── DESTRUCTURATION ZONE_CONFIG ──────────────────────────────────────
 const { OTAN_DATA, ACTOR_GROUPS, ACTOR_COLORS, PERIODS, STYLES, MAP_ZONES, ZONE_ID } = ZONE_CONFIG;
 // Mode "calques only" : pas de points par periode (kml-dots), slider/play
@@ -171,7 +173,8 @@ function updateChart(features) {
     sorted.forEach(([name, count]) => {
       const color = getColor(name), pct = (count / max * 100).toFixed(0);
       const row = document.createElement('div'); row.className = 'bar-row';
-      row.innerHTML = `<span class="bar-label" title="${name}">${name}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="bar-num">${count}</span>`;
+      const safeName = esc(name);
+      row.innerHTML = `<span class="bar-label" title="${safeName}">${safeName}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${esc(color)}"></div></div><span class="bar-num">${count}</span>`;
       sbBody.appendChild(row);
     });
   }
@@ -182,7 +185,8 @@ function updateChart(features) {
     sorted.forEach(([name, count]) => {
       const color = getColor(name), pct = (count / max * 100).toFixed(0);
       const row = document.createElement('div'); row.className = 'bar-row';
-      row.innerHTML = `<span class="bar-label" title="${name}">${name}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="bar-num">${count}</span>`;
+      const safeName = esc(name);
+      row.innerHTML = `<span class="bar-label" title="${safeName}">${safeName}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${esc(color)}"></div></div><span class="bar-num">${count}</span>`;
       body.appendChild(row);
     });
   }
@@ -551,13 +555,13 @@ function updateLegend(actors) {
     const visible = members.filter(m => actors[m]);
     if (!visible.length) return;
     const group = document.createElement('div'); group.className = 'legend-group';
-    group.innerHTML = '<div class="legend-group-title">' + groupName + '</div>';
+    group.innerHTML = '<div class="legend-group-title">' + esc(groupName) + '</div>';
     visible.forEach(name => {
       const color = actors[name];
       const item = document.createElement('div'); item.className = 'legend-item'; item.dataset.actor = name;
       if (activeFilter === name) item.classList.add('active-filter');
       else if (activeFilter) item.classList.add('filtered-out');
-      item.innerHTML = '<div class="legend-dot" style="background:' + color + ';box-shadow:0 0 4px ' + color + '66"></div><span>' + name + '</span>';
+      item.innerHTML = '<div class="legend-dot" style="background:' + esc(color) + ';box-shadow:0 0 4px ' + esc(color) + '66"></div><span>' + esc(name) + '</span>';
       item.onclick = () => toggleActorFilter(name);
       group.appendChild(item);
     });
@@ -609,8 +613,8 @@ function renderCategoryHeader(label) {
 
 function renderActorRow(actor) {
   const div = document.createElement('div'); div.className = 'search-result search-result-actor';
-  div.innerHTML = '<div class="search-result-dot" style="background:' + (actor.color || '#888') + '"></div>' +
-    '<div><div class="search-result-name">' + actor.name + '</div>' +
+  div.innerHTML = '<div class="search-result-dot" style="background:' + esc(actor.color || '#888') + '"></div>' +
+    '<div><div class="search-result-name">' + esc(actor.name) + '</div>' +
     '<div class="search-result-sub">' + actor.count + ' evenement' + (actor.count > 1 ? 's' : '') + ' · filtrer</div></div>';
   div.onclick = () => {
     toggleActorFilter(actor.name);
@@ -625,8 +629,8 @@ function renderPlaceRow(p) {
   const kindLabel = kind === 'country' ? 'Pays' : kind === 'region' ? 'Region' : kind === 'place' ? 'Ville' : kind === 'locality' ? 'Localite' : kind === 'district' ? 'District' : kind === 'neighborhood' ? 'Quartier' : kind === 'poi' ? 'Point d\'interet' : 'Lieu';
   const sub = (p.place_name || '').replace(p.text + ', ', '') || kindLabel;
   div.innerHTML = '<div class="search-result-dot" style="background:var(--ac)"></div>' +
-    '<div><div class="search-result-name">' + p.text + '</div>' +
-    '<div class="search-result-sub">' + kindLabel + ' · ' + sub + '</div></div>';
+    '<div><div class="search-result-name">' + esc(p.text) + '</div>' +
+    '<div class="search-result-sub">' + esc(kindLabel) + ' · ' + esc(sub) + '</div></div>';
   div.onclick = () => {
     const zoomByKind = kind === 'country' ? 5 : kind === 'region' ? 7 : kind === 'district' ? 8 : 10;
     map.flyTo({ center: p.center, zoom: zoomByKind, duration: 1200, essential: true });
@@ -808,7 +812,7 @@ map.on('mousemove', 'kml-dots', (e) => {
   if (!e.features || !e.features[0]) return;
   const p = e.features[0].properties;
   const color = p._color || '#888';
-  tooltip.innerHTML = '<span class="tooltip-dot" style="background:' + color + '"></span>' + (p.name || '');
+  tooltip.innerHTML = '<span class="tooltip-dot" style="background:' + esc(color) + '"></span>' + esc(p.name || '');
   tooltip.style.display = 'block';
   tooltip.style.left = (e.originalEvent.clientX + 12) + 'px';
   tooltip.style.top  = (e.originalEvent.clientY - 8)  + 'px';

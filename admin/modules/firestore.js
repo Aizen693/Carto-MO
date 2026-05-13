@@ -6,6 +6,22 @@
 import { supabase } from '../supabase-config.js?v=20260420a';
 import { getCurrentUser } from './auth.js?v=20260420a';
 
+// ── GitHub deploy (via Edge Function, token cote serveur) ──
+
+// pushToGitHub : ecrit un fichier GeoJSON dans le repo via l'Edge Function
+// `gh-deploy`. Le token GitHub ne quitte jamais Supabase. Le JWT de l'utilisateur
+// est inclus automatiquement par functions.invoke ; l'Edge Function verifie que
+// le role est editor ou admin avant de relayer.
+export async function pushToGitHub({ path, content, message }) {
+  const b64 = btoa(unescape(encodeURIComponent(content)));
+  const { data, error } = await supabase.functions.invoke('gh-deploy', {
+    body: { path, content_b64: b64, message }
+  });
+  if (error) throw new Error(error.message || 'gh-deploy invocation failed');
+  if (!data?.ok) throw new Error(data?.error || 'gh-deploy refused');
+  return data;
+}
+
 // ── Points ──────────────────────────────────────────────
 
 export async function getPoints(zone) {

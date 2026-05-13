@@ -4,6 +4,7 @@
 
 import { getZoneConfig, updateZoneConfig } from './firestore.js?v=20260420a';
 import { requireRole } from './auth.js?v=20260420a';
+import { escapeHtml } from '../../shared/escape.js?v=20260513a';
 
 let currentZone = null;
 let localConfig = null;
@@ -28,17 +29,17 @@ export async function renderActorList(container) {
   for (const [group, actors] of Object.entries(localConfig.ACTOR_GROUPS)) {
     const groupEl = document.createElement('div');
     groupEl.className = 'actor-group';
-    groupEl.innerHTML = `<div class="actor-group-title">${group}</div>`;
+    groupEl.innerHTML = `<div class="actor-group-title">${escapeHtml(group)}</div>`;
 
     actors.forEach(actor => {
       const color = colorOverrides[actor] || localConfig.ACTOR_COLORS[actor] || '#888888';
       const row = document.createElement('div');
       row.className = 'actor-row';
       row.innerHTML = `
-        <span class="actor-dot" style="background:${color}"></span>
-        <span class="actor-name">${actor}</span>
-        <input type="color" class="actor-color-input" value="${color}"
-               data-actor="${actor}" title="Modifier la couleur">
+        <span class="actor-dot" style="background:${escapeHtml(color)}"></span>
+        <span class="actor-name">${escapeHtml(actor)}</span>
+        <input type="color" class="actor-color-input" value="${escapeHtml(color)}"
+               data-actor="${escapeHtml(actor)}" title="Modifier la couleur">
       `;
       const input = row.querySelector('.actor-color-input');
       input.addEventListener('change', (e) => onColorChange(actor, e.target.value));

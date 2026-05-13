@@ -5,6 +5,7 @@
 import { getUsers, updateUserRole } from './firestore.js?v=20260420a';
 import { requireRole } from './auth.js?v=20260420a';
 import { supabase } from '../supabase-config.js?v=20260420a';
+import { escapeHtml } from '../../shared/escape.js?v=20260513a';
 
 const SUPABASE_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
@@ -44,12 +45,12 @@ export async function renderUserList(container) {
 
       row.innerHTML = `
         <div class="user-info">
-          <span class="user-email">${u.email}</span>
-          <span class="user-name">${u.displayName || ''}</span>
-          <span class="user-last-login">Dernier login: ${lastLogin}</span>
+          <span class="user-email">${escapeHtml(u.email)}</span>
+          <span class="user-name">${escapeHtml(u.displayName || '')}</span>
+          <span class="user-last-login">Dernier login: ${escapeHtml(lastLogin)}</span>
         </div>
         <div class="user-actions">
-          <select class="user-role-select" data-uid="${u.id}">
+          <select class="user-role-select" data-uid="${escapeHtml(u.id)}">
             <option value="viewer" ${u.role === 'viewer' ? 'selected' : ''}>Viewer</option>
             <option value="editor" ${u.role === 'editor' ? 'selected' : ''}>Editor</option>
             <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
@@ -70,7 +71,7 @@ export async function renderUserList(container) {
       list.appendChild(row);
     });
   } catch (e) {
-    container.innerHTML = `<div class="log-error">Erreur: ${e.message}</div>`;
+    container.innerHTML = `<div class="log-error">Erreur: ${escapeHtml(e.message)}</div>`;
   }
 }
 

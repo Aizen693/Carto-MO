@@ -4,6 +4,7 @@
 
 import { createPoint, bulkCreatePoints, getPoints, logActivity } from './firestore.js?v=20260420a';
 import { getCurrentUser } from './auth.js?v=20260420a';
+import { escapeHtml } from '../../shared/escape.js?v=20260513a';
 
 export async function importGeoJSON(file, zone, zoneConfig) {
   return new Promise((resolve, reject) => {
@@ -241,7 +242,7 @@ export function renderPuitsTable(container, filter) {
 
     const tr = document.createElement('tr');
     tr.dataset.index = i;
-    tr.innerHTML = `<td><input type="checkbox" class="puits-cb" data-index="${i}"></td><td>${nom}</td><td>${region}</td><td>${coordStr}</td>`;
+    tr.innerHTML = `<td><input type="checkbox" class="puits-cb" data-index="${i}"></td><td>${escapeHtml(nom)}</td><td>${escapeHtml(region)}</td><td>${escapeHtml(coordStr)}</td>`;
     tbody.appendChild(tr);
   });
 

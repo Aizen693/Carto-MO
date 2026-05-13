@@ -3,6 +3,7 @@
  */
 
 import { getActivityLog } from './firestore.js?v=20260420a';
+import { escapeHtml } from '../../shared/escape.js?v=20260513a';
 
 export async function renderActivityLog(container, zone) {
   container.innerHTML = '<div class="log-loading">Chargement...</div>';
@@ -34,15 +35,15 @@ export async function renderActivityLog(container, zone) {
       el.innerHTML = `
         <div class="log-meta">
           <span class="log-date">${date} ${time}</span>
-          <span class="log-action ${actionClass}">${entry.action.toUpperCase()}</span>
-          <span class="log-zone">${entry.zone || ''}</span>
+          <span class="log-action ${actionClass}">${escapeHtml(entry.action.toUpperCase())}</span>
+          <span class="log-zone">${escapeHtml(entry.zone || '')}</span>
         </div>
-        <div class="log-details">${entry.details || ''}</div>
-        <div class="log-user">${entry.userEmail || ''}</div>
+        <div class="log-details">${escapeHtml(entry.details || '')}</div>
+        <div class="log-user">${escapeHtml(entry.userEmail || '')}</div>
       `;
       container.appendChild(el);
     });
   } catch (e) {
-    container.innerHTML = `<div class="log-error">Erreur: ${e.message}</div>`;
+    container.innerHTML = `<div class="log-error">Erreur: ${escapeHtml(e.message)}</div>`;
   }
 }
