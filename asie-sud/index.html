@@ -281,7 +281,7 @@ const ZONE_CONFIG = {
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js?v=20260513b"></script>
+<script src="../shared/engine.js?v=20260513c"></script>
 <script>
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
 (function() {
@@ -976,7 +976,7 @@ window.focusGeocoder = function() {
 </script>
 
 <!-- SLIDER DATES (CALQUES_ONLY) -->
-<script src="../shared/calque-timeline.js?v=20260513b"></script>
+<script src="../shared/calque-timeline.js?v=20260513d"></script>
 <script>
 AlgorCalqueTimeline.init({
   sources: [
@@ -985,7 +985,21 @@ AlgorCalqueTimeline.init({
       'evenements-3d-glow', 'evenements-3d-base', 'evenements-3d-body',
       'evenements-3d-mid', 'evenements-3d-cap', 'evenements-3d-beacon',
       'evenements-3d-label'
-    ]}
+    ]},
+    // Autres calques inclus dans le filtre temporel (autoEnable: false ;
+    // dates extraites des descriptions, points sans date restent visibles)
+    { calqueId: 'forces', file: 'forces.geojson', sourceId: 'forces-src',
+      autoEnable: false, layers: ['forces-glow', 'forces-ring', 'forces-dots'] },
+    { calqueId: 'mines', file: 'mines.geojson', sourceId: 'mines-src',
+      autoEnable: false, layers: ['mines-glow', 'mines-ring', 'mines-dots'] },
+    { calqueId: 'infrastructures', file: 'infrastructures.geojson', sourceId: 'infrastructures-src',
+      autoEnable: false, layers: ['infra-lines', 'infra-glow', 'infra-ring', 'infra-dots'] },
+    { calqueId: 'population', file: 'population.geojson', sourceId: 'population-src',
+      autoEnable: false, layers: ['population-glow', 'population-ring', 'population-dots'] },
+    { calqueId: 'flux', file: 'flux.geojson', sourceId: 'flux-src',
+      autoEnable: false, layers: ['flux-main-lines', 'flux-sec-lines'] },
+    { calqueId: 'ethnies', file: 'ethnies.geojson', sourceId: 'ethnies-src',
+      autoEnable: false, layers: ['ethnies-fill', 'ethnies-outline'] }
   ]
 });
 </script>

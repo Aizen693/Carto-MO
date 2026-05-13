@@ -44,33 +44,76 @@
     return null;
   }
 
-  function extractDate(props) {
-    if (!props) return null;
-    var candidates = [props.Date, props.date, props.DATE];
-    for (var i = 0; i < candidates.length; i++) {
-      var d = normalizeDate(candidates[i]);
-      if (d) return d;
+  var MONTHS_FR = {
+    jan: 1, janv: 1, janvier: 1, january: 1,
+    fev: 2, 'fév': 2, fevr: 2, 'févr': 2, fevrier: 2, 'février': 2, february: 2,
+    mars: 3, march: 3,
+    avr: 4, avril: 4, april: 4,
+    mai: 5, may: 5,
+    juin: 6, june: 6,
+    juil: 7, juillet: 7, july: 7,
+    aout: 8, 'août': 8, aoû: 8, august: 8,
+    sep: 9, sept: 9, septembre: 9, september: 9,
+    oct: 10, octobre: 10, october: 10,
+    nov: 11, novembre: 11, november: 11,
+    dec: 12, 'déc': 12, decembre: 12, 'décembre': 12, december: 12
+  };
+  var MONTH_ALT = Object.keys(MONTHS_FR).sort(function(a, b) { return b.length - a.length; }).join('|');
+
+  function extractDateFromText(text) {
+    if (!text) return null;
+    var m;
+    // 1. ISO YYYY-MM-DD
+    m = text.match(/\b(\d{4})-(\d{1,2})-(\d{1,2})\b/);
+    if (m) return m[1] + '-' + pad2(m[2]) + '-' + pad2(m[3]);
+    // 2. DD/MM/YYYY (ou DD-MM-YYYY, DD.MM.YYYY)
+    m = text.match(/\b(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})\b/);
+    if (m) return m[3] + '-' + pad2(m[2]) + '-' + pad2(m[1]);
+    // 3. DD mois YYYY (FR/EN)
+    m = text.match(new RegExp('\\b(\\d{1,2})\\s+(' + MONTH_ALT + ')\\.?\\s+(\\d{4})\\b', 'i'));
+    if (m) {
+      var mon3 = MONTHS_FR[m[2].toLowerCase()];
+      if (mon3) return m[3] + '-' + pad2(mon3) + '-' + pad2(m[1]);
     }
-    var desc = props.description || props.Description || '';
-    var m = desc.match(/Date\s*:\s*([0-9\/\.\-]+)/i);
-    if (m) return normalizeDate(m[1]);
+    // 4. mois YYYY (sans jour, prend le 1er)
+    m = text.match(new RegExp('\\b(' + MONTH_ALT + ')\\.?\\s+(\\d{4})\\b', 'i'));
+    if (m) {
+      var mon4 = MONTHS_FR[m[1].toLowerCase()];
+      if (mon4) return m[2] + '-' + pad2(mon4) + '-01';
+    }
+    // 5. QN YYYY (trimestre — debut du trimestre)
+    m = text.match(/\bQ([1-4])\s+(\d{4})\b/i);
+    if (m) {
+      var qm = (parseInt(m[1], 10) - 1) * 3 + 1;
+      return m[2] + '-' + pad2(qm) + '-01';
+    }
     return null;
   }
 
-  var MONTHS_FR = {
-    jan: 1, janv: 1, janvier: 1,
-    fev: 2, 'fév': 2, fevr: 2, 'févr': 2, fevrier: 2, 'février': 2,
-    mars: 3,
-    avr: 4, avril: 4,
-    mai: 5,
-    juin: 6,
-    juil: 7, juillet: 7,
-    aout: 8, 'août': 8, aoû: 8,
-    sep: 9, sept: 9, septembre: 9,
-    oct: 10, octobre: 10,
-    nov: 11, novembre: 11,
-    dec: 12, 'déc': 12, decembre: 12, 'décembre': 12
-  };
+  function extractDate(props) {
+    if (!props) return null;
+    // a) Champs directs
+    var direct = [props.Date, props.date, props.DATE];
+    for (var i = 0; i < direct.length; i++) {
+      var d = normalizeDate(direct[i]);
+      if (d) return d;
+    }
+    // b) Scan large : description + detail + tout champ string
+    var fields = ['description', 'Description', 'detail', 'Detail', 'detail'];
+    for (var j = 0; j < fields.length; j++) {
+      var v = props[fields[j]];
+      if (typeof v === 'string') {
+        var iso = extractDateFromText(v);
+        if (iso) return iso;
+      }
+    }
+    // c) Dernier recours : concatener tous les champs string
+    var blob = '';
+    for (var k in props) {
+      if (typeof props[k] === 'string') blob += ' ' + props[k];
+    }
+    return extractDateFromText(blob);
+  }
 
   function rangeFromFile(file) {
     if (!file) return null;
@@ -146,7 +189,9 @@
 
     function buildFilterFromState(activeIndexes, periods, showAll) {
       if (showAll) return null;
-      if (!activeIndexes.length) return ['==', ['literal', 1], ['literal', 0]];
+      // Aucune periode active : on garde visible uniquement les points sans
+      // _normDate (calques statiques) ; les events temporels sont caches.
+      if (!activeIndexes.length) return ['!', ['has', '_normDate']];
       var ranges = [];
       activeIndexes.forEach(function(i) {
         var p = periods[i];
@@ -155,7 +200,10 @@
         if (r) ranges.push(r);
       });
       if (!ranges.length) return null;
-      return ['any'].concat(ranges.map(function(r) {
+      // Les points sans _normDate (calques statiques sans date detectee)
+      // restent toujours visibles — on n'affiche que les events temporels
+      // dans leur plage de date.
+      return ['any', ['!', ['has', '_normDate']]].concat(ranges.map(function(r) {
         return ['all',
           ['>=', ['coalesce', ['get', '_normDate'], ''], r.start],
           ['<=', ['coalesce', ['get', '_normDate'], ''], r.end]
