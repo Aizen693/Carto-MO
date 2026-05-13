@@ -1,0 +1,9 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.30,-18.10]},"properties":{"name":"Cyclone","Date":"2026-02-05","Pays + Lieu":"Madagascar - cote est (Toamasina / Fenerive)","type":"Humanitaire","detail":"Contexte : saison cyclonique active (nov-avr). Passages recurrents cyclones classes sur la cote est. Impact : inondations, coupures d'electricite, aide humanitaire.","rank":"B2","sources":"MeteoMadagascar|https://www.meteomadagascar.mg/ OCHA|https://reliefweb.int/country/mdg PAM|https://fr.wfp.org/pays/madagascar"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.52,-18.92]},"properties":{"name":"Mouvement Hery Vaovao","Date":"2026-02-08","Pays + Lieu":"Madagascar - Antananarivo","type":"Geopolitique","detail":"Opposition civile : mobilisations contre lenteur du calendrier electoral de la transition.","rank":"B3","sources":"RFI|https://www.rfi.fr/fr/afrique/ Madagascar Tribune|https://www.madagascar-tribune.com/"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.10,-23.35]},"properties":{"name":"Dahalo","Date":"2026-02-10","Pays + Lieu":"Madagascar - Ihorombe / Ihosy","type":"Attaque","detail":"Pattern : zone Bara, attaques dahalo sur troupeaux. RN13 frequemment coupee.","rank":"B3","sources":"Crisis Group|https://www.crisisgroup.org/africa/southern-africa/madagascar"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.83,-16.95]},"properties":{"name":"Orpailleurs illegaux","Date":"2026-02-12","Pays + Lieu":"Madagascar - Maevatanana","type":"Incursion","detail":"Pattern : orpaillage artisanal non encadre. Conflits avec villages hotes, pollution mercure.","rank":"B2","sources":"Global Initiative|https://globalinitiative.net/ WWF|https://www.wwf.mg/"}}
+  ]
+}

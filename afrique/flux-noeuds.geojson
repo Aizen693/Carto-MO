@@ -1,0 +1,77 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [18.5, -34.85]},
+      "properties": {
+        "name": "Cape of Good Hope",
+        "label": "CAP DE BONNE-ESPERANCE",
+        "tier": 1,
+        "type": "Choke point strategique majeur",
+        "description": "Point d'inflexion route Atlantique → ocean Indien. Trafic en hausse de 70% depuis crise houthie nov. 2023.",
+        "sources": "SAMSA|https://www.samsa.org.za/ Lloyds_List|https://www.lloydslist.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [20.0, -35.3]},
+      "properties": {
+        "name": "Cape Agulhas",
+        "label": "CAP AGULHAS",
+        "tier": 2,
+        "type": "Point sud du continent africain",
+        "description": "Limite officielle entre Atlantique Sud et ocean Indien. Cape Agulhas Bank : zone de peche industrielle.",
+        "sources": "IHO|https://iho.int/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [43.3, 12.5]},
+      "properties": {
+        "name": "Bab el-Mandeb",
+        "label": "BAB EL-MANDEB",
+        "tier": 1,
+        "type": "Choke point critique mer Rouge",
+        "description": "Largeur 30 km. Cible attaques houthies depuis nov. 2023. EU NAVFOR Aspides + USA Prosperity Guardian deployes. -65% trafic vs 2022.",
+        "sources": "EU_NAVFOR_Aspides|https://eunavfor.eu/ UKMTO|https://www.ukmto.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [56.4, 26.6]},
+      "properties": {
+        "name": "Strait of Hormuz",
+        "label": "ORMUZ",
+        "tier": 1,
+        "type": "Choke point petrolier critique",
+        "description": "1/3 du brut maritime mondial (~17 Mb/j). Iran controle nord, US 5e flotte sud. Fermeture potentielle = +30% prix mondial.",
+        "sources": "EIA|https://www.eia.gov/ US_5th_Fleet|https://www.cusnc.navy.mil/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [32.55, 30.5]},
+      "properties": {
+        "name": "Suez Canal",
+        "label": "CANAL DE SUEZ",
+        "tier": 1,
+        "type": "Choke point conteneurs critique",
+        "description": "Avant Houthis : ~12% commerce mondial. Trafic effondre depuis nov. 2023 (deviation Cap). Revenus Egypte : -50%.",
+        "sources": "Suez_Canal_Authority|https://www.suezcanal.gov.eg UNCTAD|https://unctad.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [-5.6, 35.95]},
+      "properties": {
+        "name": "Strait of Gibraltar",
+        "label": "GIBRALTAR",
+        "tier": 2,
+        "type": "Choke point Atlantique-Mediterranee",
+        "description": "Largeur 14 km. 100 000 navires/an. Hub bunker + transhipment Tanger Med (1er port Med).",
+        "sources": "Lloyds_List|https://www.lloydslist.com/"
+      }
+    }
+  ]
+}
