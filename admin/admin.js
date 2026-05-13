@@ -19,6 +19,9 @@ import { purgeEmptyPoints, bulkSoftDeletePoints, restorePoints } from './modules
 import { renderActivityLog } from './modules/activity-log.js?v=20260420a';
 import { renderUserList } from './modules/user-manager.js?v=20260420a';
 
+// Purge tout ancien token GitHub stocke en localStorage (migration vers sessionStorage)
+try { localStorage.removeItem('carto_gh_token'); } catch (_) {}
+
 // ── Zone configs (mirrored from each zone's index.html) ─────────────
 
 const ZONE_CONFIGS = {
@@ -526,11 +529,11 @@ function setupCalquesManager() {
       }
 
       // Push to GitHub repo directly
-      let GH_TOKEN = localStorage.getItem('carto_gh_token');
+      let GH_TOKEN = sessionStorage.getItem('carto_gh_token');
       if (!GH_TOKEN) {
         GH_TOKEN = prompt('Token GitHub requis pour push les calques.\nCollez votre Personal Access Token :');
         if (!GH_TOKEN) throw new Error('Token GitHub requis');
-        localStorage.setItem('carto_gh_token', GH_TOKEN);
+        sessionStorage.setItem('carto_gh_token', GH_TOKEN);
       }
       const GH_REPO  = 'Aizen693/Carto-MO';
       const zonePath  = config.DATA_PATH.replace('../', '');
@@ -745,11 +748,11 @@ async function refreshCalquesList() {
           const newData = { type: 'FeatureCollection', features: kept };
 
           try {
-            let GH_TOKEN = localStorage.getItem('carto_gh_token');
+            let GH_TOKEN = sessionStorage.getItem('carto_gh_token');
             if (!GH_TOKEN) {
               GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
               if (!GH_TOKEN) throw new Error('Token requis');
-              localStorage.setItem('carto_gh_token', GH_TOKEN);
+              sessionStorage.setItem('carto_gh_token', GH_TOKEN);
             }
             const GH_REPO = 'Aizen693/Carto-MO';
             const path = config.DATA_PATH.replace('../', '') + file;
@@ -789,11 +792,11 @@ async function refreshCalquesList() {
       if (!confirm(`Vider TOUT le calque "${file}" ? Le fichier sera remplace par un GeoJSON vide.`)) return;
       const statusEl = document.getElementById('calque-status-msg');
       try {
-        let GH_TOKEN = localStorage.getItem('carto_gh_token');
+        let GH_TOKEN = sessionStorage.getItem('carto_gh_token');
         if (!GH_TOKEN) {
           GH_TOKEN = prompt('Token GitHub requis.\nCollez votre Personal Access Token :');
           if (!GH_TOKEN) throw new Error('Token GitHub requis');
-          localStorage.setItem('carto_gh_token', GH_TOKEN);
+          sessionStorage.setItem('carto_gh_token', GH_TOKEN);
         }
         const GH_REPO = 'Aizen693/Carto-MO';
         const emptyGeo = { type: 'FeatureCollection', features: [] };
