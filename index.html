@@ -512,9 +512,244 @@
     .top-right { gap: 16px; }
     h1.title { font-size: 38px; }
   }
+
+  /* ─────────────────────────────────────── Splash intro (Dotted Surface) */
+  #splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 18vh;
+    cursor: pointer;
+    transition: opacity 700ms ease;
+  }
+  #splash.fading {
+    opacity: 0;
+    pointer-events: none;
+  }
+  #splash-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .splash-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 900px;
+    height: 900px;
+    max-width: 90vw;
+    max-height: 90vh;
+    transform: translate(-50%, -55%);
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.14), transparent 58%);
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .splash-glow.tight {
+    width: 520px;
+    height: 240px;
+    max-width: 70vw;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse at center, rgba(184,149,74,0.08), transparent 65%);
+    filter: blur(28px);
+    z-index: 1;
+  }
+  .splash-brand {
+    position: absolute;
+    top: 28px;
+    left: var(--pad-x);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    opacity: 0;
+    animation: splash-logo-in 1s 0.1s ease forwards;
+  }
+  .splash-brand .splash-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    object-fit: cover;
+    display: block;
+    background: var(--s1);
+    box-shadow:
+      0 0 0 1px var(--line2),
+      0 8px 20px -6px rgba(0,0,0,0.7),
+      0 0 40px rgba(184,149,74,0.15);
+  }
+  .splash-brand .splash-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.18;
+  }
+  .splash-brand .splash-stack .l1 {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--tx1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .splash-brand .splash-stack .l2 {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 400;
+    color: var(--tx2);
+    letter-spacing: 0.18em;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+  .splash-center {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding: 0 24px;
+    text-align: center;
+  }
+  .splash-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 400;
+    color: var(--tx2);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: splash-fade-in 1s 0.25s ease forwards;
+  }
+  .splash-kicker .rule {
+    width: 48px;
+    height: 1px;
+    background: var(--line2);
+    display: inline-block;
+  }
+  .splash-kicker .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold, #b8954a);
+    box-shadow: 0 0 0 3px rgba(184,149,74,0.10);
+    display: inline-block;
+  }
+  .splash-title {
+    position: relative;
+    z-index: 2;
+    font-family: var(--sans);
+    font-size: clamp(44px, 6vw, 84px);
+    font-weight: 500;
+    color: var(--tx1);
+    letter-spacing: -0.022em;
+    line-height: 1.04;
+    margin: 0;
+    opacity: 0;
+    animation: splash-title-in 1.2s 0.45s ease forwards;
+  }
+  .splash-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--tx2);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: splash-fade-in 1.2s 0.75s ease forwards;
+  }
+  .splash-sub .sep {
+    color: var(--tx3);
+    margin: 0 10px;
+  }
+  .splash-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--tx3);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: splash-hint-in 1.5s 1.1s ease forwards;
+    pointer-events: none;
+  }
+  .splash-hint kbd {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 7px;
+    border: 1px solid var(--line2);
+    color: var(--tx1);
+    letter-spacing: 0.14em;
+    background: rgba(255,255,255,0.02);
+  }
+  @keyframes splash-logo-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes splash-title-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes splash-fade-in {
+    to { opacity: 1; }
+  }
+  @keyframes splash-hint-in {
+    0%   { opacity: 0; }
+    100% { opacity: 0.85; }
+  }
 </style>
 </head>
 <body data-screen-label="Carto-MO · Lobby">
+
+  <!-- ─────────────────────────────────────── Splash intro (Dotted Surface) -->
+  <div id="splash" role="dialog" aria-label="Entrée du site">
+    <canvas id="splash-canvas"></canvas>
+    <div class="splash-glow"></div>
+    <div class="splash-glow tight"></div>
+    <div class="splash-brand">
+      <img class="splash-logo" src="./favicon.jpg" alt="Algor Int" decoding="async">
+      <div class="splash-stack">
+        <span class="l1">Algor Int</span>
+        <span class="l2">Geopolitical Intelligence</span>
+      </div>
+    </div>
+    <div class="splash-center">
+      <div class="splash-kicker">
+        <span class="rule"></span>
+        <span class="dot"></span>
+        <span>Console interne</span>
+        <span class="dot"></span>
+        <span class="rule"></span>
+      </div>
+      <h1 class="splash-title">Algor Acces</h1>
+      <div class="splash-sub">
+        <span>Cartographie OSINT</span>
+        <span class="sep">·</span>
+        <span>Algor Int</span>
+        <span class="sep">·</span>
+        <span>v1</span>
+      </div>
+    </div>
+    <div class="splash-hint">
+      <span>Cliquer ou</span>
+      <kbd>Entrée</kbd>
+      <span>pour entrer</span>
+    </div>
+  </div>
 
   <!-- ─────────────────────────────────────── Starfield -->
   <div id="stars" aria-hidden="true"><canvas id="sky"></canvas></div>
@@ -1341,6 +1576,151 @@
   tick(); setInterval(tick, 30 * 1000);
   const y = document.getElementById('year');
   if (y) y.textContent = new Date().toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris', year: 'numeric' });
+})();
+</script>
+
+<script>
+/* ─────────────────────────────────────── Splash intro — Dotted Surface (canvas 2D) */
+(function initSplash() {
+  const splash = document.getElementById('splash');
+  if (!splash) return;
+  // DEV: sessionStorage check désactivé pendant l'itération du splash.
+  // À réactiver avant deploy : décommenter les 3 lignes ci-dessous.
+  // if (sessionStorage.getItem('splash-seen') === '1') {
+  //   splash.remove();
+  //   return;
+  // }
+
+  const canvas = document.getElementById('splash-canvas');
+  const ctx = canvas.getContext('2d');
+  let w = 0, h = 0, dpr = 1;
+  const FOV_DEG = 60;
+  let focalProj = 1;   // projection focal (uses tan(fov/2))
+  let sizeScale = 1;   // point-size scale = canvasHeight / 2 (Three.js convention)
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = splash.getBoundingClientRect();
+    w = Math.max(rect.width, window.innerWidth, document.documentElement.clientWidth, 1);
+    h = Math.max(rect.height, window.innerHeight, document.documentElement.clientHeight, 1);
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    focalProj = h / (2 * Math.tan((FOV_DEG * Math.PI / 180) / 2));
+    sizeScale = h / 2;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(resize).observe(splash);
+  }
+
+  // Exact mirror of 21st.dev sshahaider/dotted-surface (Three.js port to canvas 2D)
+  const SEPARATION = 150;
+  const AMOUNTX = 40;
+  const AMOUNTY = 60;
+  const CAM_Y = 355;
+  const CAM_Z = 1220;
+  const POINT_SIZE = 8;        // material.size
+  const POINT_OPACITY = 0.8;   // material.opacity
+  const POINT_COLOR = '200,200,200';
+
+  // Pre-compute rotation aligning look(camera→origin) with -z axis
+  const camDist = Math.sqrt(CAM_Y * CAM_Y + CAM_Z * CAM_Z);
+  const cosP = CAM_Z / camDist;
+  const sinP = CAM_Y / camDist;
+
+  // Pre-compute grid base x/z (y is animated each frame)
+  const N = AMOUNTX * AMOUNTY;
+  const baseX = new Float32Array(N);
+  const baseZ = new Float32Array(N);
+  const ixArr = new Int16Array(N);
+  const iyArr = new Int16Array(N);
+  {
+    let idx = 0;
+    for (let ix = 0; ix < AMOUNTX; ix++) {
+      for (let iy = 0; iy < AMOUNTY; iy++) {
+        baseX[idx] = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2;
+        baseZ[idx] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2;
+        ixArr[idx] = ix;
+        iyArr[idx] = iy;
+        idx++;
+      }
+    }
+  }
+  const projected = new Array(N);
+
+  let count = 0;
+  let rafId = 0;
+  let running = true;
+
+  function frame() {
+    if (!running) return;
+    ctx.clearRect(0, 0, w, h);
+    const cx = w / 2;
+    const cy = h / 2;
+
+    let n = 0;
+    for (let i = 0; i < N; i++) {
+      const wx = baseX[i];
+      const wz = baseZ[i];
+      const wy = Math.sin((ixArr[i] + count) * 0.3) * 50
+               + Math.sin((iyArr[i] + count) * 0.5) * 50;
+
+      // World → camera (translate then rotate around X by +pitch)
+      const ty = wy - CAM_Y;
+      const tz = wz - CAM_Z;
+      const camY = ty * cosP - tz * sinP;
+      const camZ = ty * sinP + tz * cosP;
+      const depth = -camZ;
+      if (depth < 50) continue;
+
+      const projScale = focalProj / depth;
+      const px = cx + wx * projScale;
+      const py = cy - camY * projScale;
+      const size = (POINT_SIZE * sizeScale) / depth;
+      if (size < 0.35) continue;
+
+      projected[n++] = { px, py, size, depth };
+    }
+    projected.length = n;
+    projected.sort((a, b) => b.depth - a.depth);
+
+    ctx.fillStyle = 'rgba(' + POINT_COLOR + ',' + POINT_OPACITY + ')';
+    for (let k = 0; k < projected.length; k++) {
+      const p = projected[k];
+      ctx.beginPath();
+      ctx.arc(p.px, p.py, p.size * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    count += 0.1;
+    rafId = requestAnimationFrame(frame);
+  }
+  rafId = requestAnimationFrame(frame);
+
+  let dismissing = false;
+  function dismiss() {
+    if (dismissing) return;
+    dismissing = true;
+    sessionStorage.setItem('splash-seen', '1');
+    splash.classList.add('fading');
+    setTimeout(() => {
+      running = false;
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', resize);
+      splash.remove();
+    }, 750);
+  }
+
+  splash.addEventListener('click', dismiss);
+  document.addEventListener('keydown', function onKey(e) {
+    if (e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') {
+      document.removeEventListener('keydown', onKey);
+      dismiss();
+    }
+  });
 })();
 </script>
 
