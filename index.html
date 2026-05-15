@@ -1671,12 +1671,14 @@
 (function initSplash() {
   const splash = document.getElementById('splash');
   if (!splash) return;
-  // DEV: sessionStorage check désactivé pendant l'itération du splash.
-  // À réactiver avant deploy : décommenter les 3 lignes ci-dessous.
-  // if (sessionStorage.getItem('splash-seen') === '1') {
-  //   splash.remove();
-  //   return;
-  // }
+
+  /* Empêche la restauration auto du scroll par le browser et verrouille le scroll
+     pendant que le splash est affiché — sinon au dismiss l'utilisateur retrouve la
+     planisphère mi-animée au lieu de commencer en plein écran zoomé. */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  const prevOverflow = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
 
   const canvas = document.getElementById('splash-canvas');
   const ctx = canvas.getContext('2d');
@@ -1789,11 +1791,16 @@
     dismissing = true;
     sessionStorage.setItem('splash-seen', '1');
     splash.classList.add('fading');
+    /* Reset scroll au tout début pour que la planisphère parte du plein écran
+       zoomé — c'est l'utilisateur qui pilote l'effet en scrollant ensuite. */
+    window.scrollTo(0, 0);
+    document.body.style.overflow = prevOverflow;
     setTimeout(() => {
       running = false;
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', resize);
       splash.remove();
+      window.scrollTo(0, 0);
     }, 750);
   }
 
