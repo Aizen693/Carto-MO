@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carto-MO — Algor·Int</title>
+<script>
+  /* Doit s'exécuter AVANT que Safari ne restaure un scroll précédent —
+     sinon le splash dismiss expose la planisphère mi-parcours. */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  try { window.scrollTo(0, 0); } catch (e) {}
+</script>
 <script type="module" src="./shared/site-auth.js?v=20260511a"></script>
 <link rel="icon" type="image/jpeg" href="./favicon.jpg">
 <meta property="og:title" content="Algor Int — Console interne · cartographie OSINT">
@@ -1872,12 +1878,21 @@
      car overflow a été restauré), force progress=0 et redraw immédiat — ça
      évite qu'une frame foireuse stale soit visible pendant le fade du splash. */
   window.addEventListener('splash:dismissed', function () {
+    /* Force scroll=0 sur plusieurs RAF — Safari peut auto-restaurer le scroll
+       après notre scrollTo initial. On clobber pendant ~500ms pour s'assurer
+       que la planisphère démarre bien à scroll=0 (planisphère plein écran). */
+    let lockFrames = 30;
+    function lockScroll() {
+      if (window.scrollY !== 0) window.scrollTo(0, 0);
+      progress = 0;
+      positionCanvas();
+      draw(performance.now());
+      if (--lockFrames > 0) requestAnimationFrame(lockScroll);
+    }
     resize();
     computeTarget();
-    progress = 0;
     freeLon = -FOCUS_LON;
-    positionCanvas();
-    draw(performance.now());
+    requestAnimationFrame(lockScroll);
   });
 
   /* Cache le globe live pendant l'animation pour qu'il n'y ait qu'UN seul globe
