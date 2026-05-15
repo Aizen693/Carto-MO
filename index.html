@@ -1180,8 +1180,44 @@
   }
   window.addEventListener('resize', resize);
 
+  /* === Texture noise pre-rendue pour fill des continents — donne un grain
+     "satellite" subtil sans cout par frame (le pattern est GPU-cache) === */
+  function makeNoisePattern(rgb, contrast) {
+    const N = 256, off = document.createElement('canvas');
+    off.width = N; off.height = N;
+    const oc = off.getContext('2d');
+    const img = oc.createImageData(N, N);
+    for (let i = 0; i < N * N; i++) {
+      const n = (Math.random() - 0.5) * contrast;
+      img.data[i*4]   = Math.max(0, Math.min(255, rgb[0] + n));
+      img.data[i*4+1] = Math.max(0, Math.min(255, rgb[1] + n));
+      img.data[i*4+2] = Math.max(0, Math.min(255, rgb[2] + n));
+      img.data[i*4+3] = 255;
+    }
+    oc.putImageData(img, 0, 0);
+    return ctx.createPattern(off, 'repeat');
+  }
+  /* C.land = #22262c → rgb(34,38,44). Contraste +-22 = grain visible mais sobre */
+  const landTexture = makeNoisePattern([34, 38, 44], 22);
+  const oceanTexture = makeNoisePattern([13, 16, 19], 8);
+
+  /* === Gradient radial de lumiere sur la sphere — effet "soleil" 3D ===
+     Recalcule a chaque resize seulement (cache au-dela). */
+  let sphereLight = null;
+  function buildLight() {
+    const cx = W * 0.35, cy = H * 0.35;
+    const r = Math.min(W, H) * 0.6;
+    sphereLight = ctx.createRadialGradient(cx, cy, 0, W * 0.5, H * 0.5, r);
+    sphereLight.addColorStop(0,    'rgba(255,255,255,0.06)');
+    sphereLight.addColorStop(0.55, 'rgba(255,255,255,0)');
+    sphereLight.addColorStop(1,    'rgba(0,0,0,0.55)');
+  }
+  buildLight();
+  /* listener separe pour rebuild le light gradient au resize */
+  window.addEventListener('resize', buildLight);
+
   // — load world topology asynchronously; sphere/graticule render immediately
-  // 50m = 3x plus de vertices que 110m → cotes beaucoup plus detaillees
+  // 110m = leger pour perf, suffisant a cette echelle
   let land = null, borders = null;
   fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
     .then(r => r.json())
@@ -1339,21 +1375,29 @@
   function draw(t){
     ctx.clearRect(0, 0, W, H);
 
-    // sphere fill (ocean)
+    // sphere fill (ocean) — pattern noise pour grain texture
     ctx.beginPath(); path(sphere);
-    ctx.fillStyle = C.ocean; ctx.fill();
+    ctx.fillStyle = oceanTexture; ctx.fill();
 
     // graticule
     ctx.beginPath(); path(graticule);
     ctx.strokeStyle = C.grat; ctx.lineWidth = 0.55; ctx.stroke();
 
-    // land — fill + borders (perf safe, pas de shadowBlur en boucle RAF)
+    // land — fill avec texture noise (grain "satellite") + borders
     if (land) {
       ctx.beginPath(); path(land);
-      ctx.fillStyle = C.land; ctx.fill();
+      ctx.fillStyle = landTexture; ctx.fill();
       ctx.beginPath(); path(borders);
       ctx.strokeStyle = C.border; ctx.lineWidth = 0.45; ctx.stroke();
     }
+
+    /* Overlay lighting : gradient radial clip a la sphere = effet planete 3D
+       (highlight haut-gauche + ombre terminator bas-droite). Cout: 1 fill clipped. */
+    ctx.save();
+    ctx.beginPath(); path(sphere); ctx.clip();
+    ctx.fillStyle = sphereLight;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
 
     // sphere rim
     ctx.beginPath(); path(sphere);
@@ -1866,6 +1910,36 @@
   resize();
   window.addEventListener('resize', resize);
 
+  /* === Texture noise + lighting gradient (memes principes que le live globe) === */
+  function makeNoisePattern(rgb, contrast) {
+    const N = 256, off = document.createElement('canvas');
+    off.width = N; off.height = N;
+    const oc = off.getContext('2d');
+    const img = oc.createImageData(N, N);
+    for (let i = 0; i < N * N; i++) {
+      const n = (Math.random() - 0.5) * contrast;
+      img.data[i*4]   = Math.max(0, Math.min(255, rgb[0] + n));
+      img.data[i*4+1] = Math.max(0, Math.min(255, rgb[1] + n));
+      img.data[i*4+2] = Math.max(0, Math.min(255, rgb[2] + n));
+      img.data[i*4+3] = 255;
+    }
+    oc.putImageData(img, 0, 0);
+    return ctx.createPattern(off, 'repeat');
+  }
+  const landTexture = makeNoisePattern([34, 38, 44], 22);
+  const oceanTexture = makeNoisePattern([13, 16, 19], 8);
+  let sphereLight = null;
+  function buildLight() {
+    const cx = W * 0.35, cy = H * 0.35;
+    const r = Math.min(W, H) * 0.6;
+    sphereLight = ctx.createRadialGradient(cx, cy, 0, W * 0.5, H * 0.5, r);
+    sphereLight.addColorStop(0,    'rgba(255,255,255,0.06)');
+    sphereLight.addColorStop(0.55, 'rgba(255,255,255,0)');
+    sphereLight.addColorStop(1,    'rgba(0,0,0,0.55)');
+  }
+  buildLight();
+  window.addEventListener('resize', buildLight);
+
   /* ─── target = position du .globe-wrap quand le hero est en plein viewport
      (i.e. à scroll = section_height = 100vh). On capture sa position document
      au load et on calcule sa position viewport pour ce scroll cible. */
@@ -2086,19 +2160,30 @@
     ctx.clearRect(0, 0, W, H);
 
     ctx.beginPath(); path(sphere);
-    ctx.fillStyle = C.ocean; ctx.fill();
+    ctx.fillStyle = oceanTexture; ctx.fill();
 
     ctx.beginPath(); path(graticule);
     ctx.strokeStyle = C.grat; ctx.lineWidth = 0.55; ctx.stroke();
 
-    /* Land — multi-pass realiste : depth (drop shadow) + cote lit (additif) +
-       cote nette + frontieres internes fines. Donne du relief sans changer
-       la couleur de base (#22262c). */
+    /* Land : fill avec texture noise (grain "satellite") + frontieres */
     if (land) {
       ctx.beginPath(); path(land);
-      ctx.fillStyle = C.land; ctx.fill();
+      ctx.fillStyle = landTexture; ctx.fill();
       ctx.beginPath(); path(borders);
       ctx.strokeStyle = C.border; ctx.lineWidth = 0.4; ctx.stroke();
+    }
+
+    /* Overlay lighting = effet planete 3D. Gradient calcule a partir du
+       rayon courant de la sphere (proj.scale change pendant le scroll). */
+    {
+      const sR = proj.scale();
+      const cx = W / 2, cy = H / 2;
+      const grad = ctx.createRadialGradient(cx - sR * 0.35, cy - sR * 0.35, 0, cx, cy, sR);
+      grad.addColorStop(0,    'rgba(255,255,255,0.07)');
+      grad.addColorStop(0.55, 'rgba(255,255,255,0)');
+      grad.addColorStop(1,    'rgba(0,0,0,0.55)');
+      ctx.beginPath(); path(sphere);
+      ctx.fillStyle = grad; ctx.fill();
     }
 
     ctx.beginPath(); path(sphere);
