@@ -1790,17 +1790,21 @@
     if (dismissing) return;
     dismissing = true;
     sessionStorage.setItem('splash-seen', '1');
-    splash.classList.add('fading');
-    /* Reset scroll au tout début pour que la planisphère parte du plein écran
-       zoomé — c'est l'utilisateur qui pilote l'effet en scrollant ensuite. */
+    /* Reset scroll + restore overflow AVANT le fade pour que la layout soit
+       stable quand la planisphère se réinitialise. */
     window.scrollTo(0, 0);
     document.body.style.overflow = prevOverflow;
+    /* Notifie la planisphère pour qu'elle recompute target + force frame propre
+       SYNCHRONE avant que le splash ne commence à fade — comme ça l'utilisateur
+       voit la planisphère plein écran zoomé dès la première frame visible. */
+    window.dispatchEvent(new CustomEvent('splash:dismissed'));
+    /* Démarre le fade APRÈS la frame de reset planisphère */
+    requestAnimationFrame(() => splash.classList.add('fading'));
     setTimeout(() => {
       running = false;
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', resize);
       splash.remove();
-      window.scrollTo(0, 0);
     }, 750);
   }
 
@@ -1863,6 +1867,18 @@
   setTimeout(computeTarget, 100);
   setTimeout(computeTarget, 600);
   window.addEventListener('resize', computeTarget);
+
+  /* Quand le splash se dismiss : recompute target (la layout vient de changer
+     car overflow a été restauré), force progress=0 et redraw immédiat — ça
+     évite qu'une frame foireuse stale soit visible pendant le fade du splash. */
+  window.addEventListener('splash:dismissed', function () {
+    resize();
+    computeTarget();
+    progress = 0;
+    freeLon = -FOCUS_LON;
+    positionCanvas();
+    draw(performance.now());
+  });
 
   /* Cache le globe live pendant l'animation pour qu'il n'y ait qu'UN seul globe
      visible à tout moment. On le révèle uniquement quand notre canvas atteint
