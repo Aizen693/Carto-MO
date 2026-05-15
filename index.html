@@ -2173,18 +2173,6 @@
       ctx.strokeStyle = C.border; ctx.lineWidth = 0.4; ctx.stroke();
     }
 
-    /* Overlay lighting = effet planete 3D. Gradient calcule a partir du
-       rayon courant de la sphere (proj.scale change pendant le scroll). */
-    {
-      const sR = proj.scale();
-      const cx = W / 2, cy = H / 2;
-      const grad = ctx.createRadialGradient(cx - sR * 0.35, cy - sR * 0.35, 0, cx, cy, sR);
-      grad.addColorStop(0,    'rgba(255,255,255,0.07)');
-      grad.addColorStop(0.55, 'rgba(255,255,255,0)');
-      grad.addColorStop(1,    'rgba(0,0,0,0.55)');
-      ctx.beginPath(); path(sphere);
-      ctx.fillStyle = grad; ctx.fill();
-    }
 
     ctx.beginPath(); path(sphere);
     ctx.strokeStyle = C.rim; ctx.lineWidth = 0.75; ctx.stroke();
