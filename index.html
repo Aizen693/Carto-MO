@@ -1181,8 +1181,9 @@
   window.addEventListener('resize', resize);
 
   // — load world topology asynchronously; sphere/graticule render immediately
+  // 50m = 3x plus de vertices que 110m → cotes beaucoup plus detaillees
   let land = null, borders = null;
-  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json')
     .then(r => r.json())
     .then(topo => {
       land    = topojson.feature(topo, topo.objects.countries);
@@ -1346,12 +1347,31 @@
     ctx.beginPath(); path(graticule);
     ctx.strokeStyle = C.grat; ctx.lineWidth = 0.55; ctx.stroke();
 
-    // land
+    // land — multi-pass pour effet realiste (depth + lit edge + crisp coast)
     if (land) {
+      // 1. Drop shadow sous le landmass = profondeur de mer
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,0.55)';
+      ctx.shadowBlur = 12;
       ctx.beginPath(); path(land);
       ctx.fillStyle = C.land; ctx.fill();
+      ctx.restore();
+      // 2. Highlight subtil sur les cotes en blend additif = effet lit
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.beginPath(); path(land);
+      ctx.strokeStyle = 'rgba(70,90,110,0.18)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.restore();
+      // 3. Cote nette par-dessus
+      ctx.beginPath(); path(land);
+      ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+      ctx.lineWidth = 0.55;
+      ctx.stroke();
+      // 4. Frontieres internes (pays) — fines
       ctx.beginPath(); path(borders);
-      ctx.strokeStyle = C.border; ctx.lineWidth = 0.45; ctx.stroke();
+      ctx.strokeStyle = C.border; ctx.lineWidth = 0.4; ctx.stroke();
     }
 
     // sphere rim
@@ -1918,7 +1938,8 @@
   if (liveWrap) liveWrap.style.visibility = 'hidden';
 
   let land = null, borders = null;
-  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+  /* 50m = 3x plus de vertices que 110m → cotes beaucoup plus detaillees */
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json')
     .then(function (r) { return r.json(); })
     .then(function (topo) {
       land    = topojson.feature(topo, topo.objects.countries);
@@ -2096,11 +2117,29 @@
     ctx.beginPath(); path(graticule);
     ctx.strokeStyle = C.grat; ctx.lineWidth = 0.55; ctx.stroke();
 
+    /* Land — multi-pass realiste : depth (drop shadow) + cote lit (additif) +
+       cote nette + frontieres internes fines. Donne du relief sans changer
+       la couleur de base (#22262c). */
     if (land) {
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,0.55)';
+      ctx.shadowBlur = 12;
       ctx.beginPath(); path(land);
       ctx.fillStyle = C.land; ctx.fill();
+      ctx.restore();
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.beginPath(); path(land);
+      ctx.strokeStyle = 'rgba(70,90,110,0.18)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.restore();
+      ctx.beginPath(); path(land);
+      ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+      ctx.lineWidth = 0.55;
+      ctx.stroke();
       ctx.beginPath(); path(borders);
-      ctx.strokeStyle = C.border; ctx.lineWidth = 0.45; ctx.stroke();
+      ctx.strokeStyle = C.border; ctx.lineWidth = 0.4; ctx.stroke();
     }
 
     /* Atmosphere — halo bleu-blanc autour du globe pour effet realiste */
