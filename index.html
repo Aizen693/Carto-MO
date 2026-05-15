@@ -512,6 +512,84 @@
     .top-right { gap: 16px; }
     h1.title { font-size: 38px; }
   }
+
+  /* ─────────────────────────────────────── Scroll-Hero (planisphère → globe live)
+     Le canvas est position:fixed et anime size+position du plein écran vers le rect
+     du .globe-wrap du hero, pour créer l'illusion d'un seul globe qui se déplace. */
+  .scroll-hero {
+    position: relative;
+    height: 100vh;
+    background: var(--bg);
+    margin-inline: calc(-1 * var(--pad-x));
+    user-select: text;
+  }
+  #scroll-globe {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    z-index: 4;
+    pointer-events: none;
+    transform-origin: 0 0;
+    /* animation par transform = GPU compositing, pas de reflow → zéro grésillement */
+    will-change: transform, opacity;
+  }
+  .sh-text {
+    position: fixed;
+    left: 50%;
+    bottom: 12vh;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+    padding: 0 24px;
+    width: max-content;
+    max-width: 90vw;
+    will-change: opacity;
+  }
+  .sh-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .sh-eyebrow .bar {
+    display: inline-block;
+    width: 22px; height: 1px;
+    background: var(--gold);
+  }
+  .sh-title {
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: clamp(28px, 3.6vw, 44px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--tx1);
+    margin: 0 0 8px;
+    text-shadow: 0 2px 32px rgba(0,0,0,0.7);
+  }
+  .sh-title em {
+    font-family: var(--sans);
+    font-style: normal;
+    color: var(--tx1);
+  }
+  .sh-hint {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--tx2);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    margin-top: 14px;
+  }
 </style>
 </head>
 <body data-screen-label="Carto-MO · Lobby">
@@ -535,6 +613,16 @@
   </header>
 
   <main>
+
+    <!-- ─────────────────────────────────────── Scroll-Hero (planisphère → globe live) -->
+    <section class="scroll-hero" id="scroll-hero" aria-label="Planisphère opérationnel">
+      <canvas id="scroll-globe" role="img" aria-label="Vue cartographique des six théâtres"></canvas>
+      <div class="sh-text" id="sh-text">
+        <div class="sh-eyebrow"><span class="bar"></span>Carto OSINT · 6 théâtres</div>
+        <h2 class="sh-title">Algor <em>Acces</em></h2>
+        <div class="sh-hint">Scroll pour dézoomer ↓</div>
+      </div>
+    </section>
 
     <!-- ─────────────────────────────────────── Hero -->
     <section class="hero">
@@ -1341,6 +1429,368 @@
   tick(); setInterval(tick, 30 * 1000);
   const y = document.getElementById('year');
   if (y) y.textContent = new Date().toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris', year: 'numeric' });
+})();
+
+/* ─────────────────────────────────────── Scroll-Hero planisphère → globe
+   IIFE indépendante du globe live du hero — données dupliquées pour ne pas toucher
+   le globe existant. Au scroll 0 : très zoomé (effet planisphère, surface plate visible).
+   Au scroll = 100vh : revient à la vue monde, identique visuellement au globe du hero. */
+(function () {
+  const canvas = document.getElementById('scroll-globe');
+  if (!canvas || !window.d3 || !window.topojson) return;
+  const ctx = canvas.getContext('2d');
+
+  const proj = d3.geoOrthographic()
+    .clipAngle(90)
+    .rotate([-22, -12, 0])
+    .translate([800, 400])
+    .scale(800);
+  const path = d3.geoPath(proj, ctx);
+
+  let W = 1280, H = 800, baseScale = 320;
+  const DPR = Math.min(window.devicePixelRatio || 1, 3);
+  /* La taille interne du canvas est figée au viewport (au load et à chaque resize fenêtre).
+     Pendant le scroll, seul transform/opacity animent → GPU, aucun reflow. */
+  function resize() {
+    W = window.innerWidth  || 1280;
+    H = window.innerHeight || 800;
+    canvas.width  = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    baseScale = Math.max(80, Math.min(W, H) / 2 - 12);
+    proj.translate([W / 2, H / 2]);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  /* ─── target = position du .globe-wrap quand le hero est en plein viewport
+     (i.e. à scroll = section_height = 100vh). On capture sa position document
+     au load et on calcule sa position viewport pour ce scroll cible. */
+  const liveWrap = document.querySelector('.hero .globe-wrap');
+  let target = { left: 0, top: 0, width: 200, height: 200 };
+  function computeTarget() {
+    if (!liveWrap) return;
+    const r = liveWrap.getBoundingClientRect();
+    target = {
+      left:   r.left,
+      top:    r.top + window.scrollY - window.innerHeight,
+      width:  r.width,
+      height: r.height
+    };
+  }
+  setTimeout(computeTarget, 100);
+  setTimeout(computeTarget, 600);
+  window.addEventListener('resize', computeTarget);
+
+  /* Cache le globe live pendant l'animation pour qu'il n'y ait qu'UN seul globe
+     visible à tout moment. On le révèle uniquement quand notre canvas atteint
+     sa position cible (à progress = 1). */
+  if (liveWrap) liveWrap.style.visibility = 'hidden';
+
+  let land = null, borders = null;
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+    .then(function (r) { return r.json(); })
+    .then(function (topo) {
+      land    = topojson.feature(topo, topo.objects.countries);
+      borders = topojson.mesh(topo, topo.objects.countries, function (a, b) { return a !== b; });
+    }).catch(function () {});
+  const graticule = d3.geoGraticule10();
+  const sphere = { type: 'Sphere' };
+
+  /* Anchors — copie exacte de celles du globe live */
+  const anchors = [
+    { id: 'MO-01',    lon:  44, lat:  33, label: 'MO-01 · Moyen-Orient' },
+    { id: 'SAHEL-02', lon:   0, lat:  16, label: 'SAHEL-02 · Sahel' },
+    { id: 'LACS-03',  lon:  29, lat:  -2, label: 'LACS-03 · Grands Lacs' },
+    { id: 'MDG-04',   lon:  47, lat: -19, label: 'MDG-04 · Madagascar' },
+    { id: 'AFR-05',   lon:  43, lat:  12, label: 'AFR-05 · Afrique Maritime' },
+    { id: 'ASIE-06',  lon:  74, lat:  30, label: 'ASIE-06 · Asie du Sud' }
+  ];
+
+  /* Arcs — copie exacte du globe live (50 terrestres + 35 maritimes) */
+  const T = function (a, b) { return { a: a, b: b, kind: 'land' }; };
+  const M = function (a, b) { return { a: a, b: b, kind: 'sea'  }; };
+  const arcs = [
+    T([36.30, 33.50], [35.50, 33.90]), T([36.30, 33.50], [37.16, 36.20]),
+    T([44.40, 33.30], [36.30, 33.50]), T([44.40, 33.30], [43.13, 36.34]),
+    T([44.20, 15.40], [45.03, 12.78]), T([44.40, 33.30], [51.42, 35.70]),
+    T([51.42, 35.70], [59.61, 36.30]), T([44.00, 36.20], [43.13, 36.34]),
+    T([35.50, 33.90], [35.20, 33.27]), T([51.42, 35.70], [46.30, 38.08]),
+    T([59.61, 36.30], [62.20, 34.34]), T([45.03, 12.78], [49.13, 14.55]),
+    T([-8.00, 12.65], [-0.04, 16.27]), T([-8.00, 12.65], [-1.52, 12.37]),
+    T([-1.52, 12.37], [ 2.11, 13.51]), T([ 2.11, 13.51], [ 7.99, 16.97]),
+    T([ 7.99, 16.97], [15.05, 12.13]), T([-2.99, 16.77], [-0.04, 16.27]),
+    T([-4.18, 14.50], [-8.00, 12.65]), T([12.61, 13.31], [13.16, 11.85]),
+    T([ 2.11, 13.51], [12.61, 13.31]), T([-1.52, 12.37], [-4.30, 11.18]),
+    T([-8.00, 12.65], [-4.18, 14.50]), T([ 1.41, 18.44], [ 1.05, 20.20]),
+    T([15.31, -4.32], [29.22, -1.68]), T([29.22, -1.68], [28.86, -2.50]),
+    T([29.22, -1.68], [29.47,  0.49]), T([29.47,  0.49], [30.25,  1.56]),
+    T([30.06, -1.94], [29.22, -1.68]), T([29.36, -3.38], [28.86, -2.50]),
+    T([32.58,  0.32], [30.25,  1.56]), T([28.86, -2.50], [29.13, -3.40]),
+    T([29.47,  0.49], [29.28,  0.13]), T([15.31, -4.32], [27.49,-11.66]),
+    T([47.51,-18.91], [49.40,-18.15]), T([47.51,-18.91], [46.32,-15.72]),
+    T([47.51,-18.91], [43.68,-23.35]), T([47.51,-18.91], [47.08,-21.45]),
+    T([43.68,-23.35], [46.99,-25.03]), T([46.32,-15.72], [49.29,-12.32]),
+    T([49.40,-18.15], [50.17,-14.27]), T([43.68,-23.35], [47.08,-21.45]),
+    T([67.00, 24.86], [74.36, 31.55]), T([74.36, 31.55], [73.05, 33.69]),
+    T([73.05, 33.69], [69.18, 34.53]), T([69.18, 34.53], [65.71, 31.62]),
+    T([74.79, 34.08], [77.21, 28.61]), T([77.21, 28.61], [72.83, 18.98]),
+    T([65.71, 31.62], [66.99, 30.18]), T([66.99, 30.18], [67.00, 24.86]),
+    M([56.27, 27.18], [58.00, 24.00]), M([45.03, 12.78], [43.15, 11.60]),
+    M([35.78, 35.52], [35.50, 33.90]), M([39.17, 21.49], [37.22, 19.62]),
+    M([45.03, 12.78], [49.13, 14.55]), M([35.50, 33.90], [35.00, 32.83]),
+    M([ 3.40,  6.50], [-4.00,  5.30]), M([-4.00,  5.30], [-17.40, 14.70]),
+    M([-17.00, 20.90],[-15.40, 28.00]),M([-17.40, 14.70], [-7.59, 33.60]),
+    M([-17.40, 14.70], [-23.51, 14.93]),
+    M([29.20, -5.95], [29.13, -3.40]), M([29.22, -1.68], [28.86, -2.50]),
+    M([29.63, -4.88], [31.10, -8.77]),
+    M([18.42,-33.92], [39.28, -6.82]), M([ 3.40,  6.50], [11.85, -4.78]),
+    M([32.55, 29.97], [33.04, 34.71]), M([39.66, -4.04], [43.15, 11.60]),
+    M([31.04,-29.86], [57.50,-20.16]), M([18.42,-33.92], [14.51,-22.95]),
+    M([ 3.40,  6.50], [13.23, -8.84]), M([45.32,  2.04], [39.66, -4.04]),
+    M([49.40,-18.15], [49.29,-12.32]), M([46.32,-15.72], [43.27,-11.70]),
+    M([49.40,-18.15], [57.50,-20.16]), M([49.40,-18.15], [55.45,-20.88]),
+    M([43.68,-23.35], [32.57,-25.97]),
+    M([67.00, 24.86], [72.83, 18.98]), M([72.83, 18.98], [79.85,  6.93]),
+    M([67.00, 24.86], [62.32, 25.12]), M([62.32, 25.12], [56.27, 27.18]),
+    M([72.83, 18.98], [73.51,  4.18]), M([79.85,  6.93], [91.81, 22.34]),
+    M([72.83, 18.98], [55.27, 25.20]), M([67.00, 24.86], [55.27, 25.20])
+  ];
+  arcs.forEach(function (arc, i) {
+    arc.interp = d3.geoInterpolate(arc.a, arc.b);
+    arc.dur    = (arc.kind === 'sea' ? 7200 : 5200) + (i % 5) * 380;
+    arc.offset = (i * 730) % arc.dur;
+    arc.np     = arc.kind === 'sea' ? 2 : 4;
+    arc.trail  = arc.kind === 'sea' ? 0.06 : 0.10;
+  });
+
+  const C = {
+    ocean:  '#0d1013',
+    land:   '#22262c',
+    border: 'rgba(255,255,255,0.13)',
+    grat:   'rgba(255,255,255,0.055)',
+    rim:    'rgba(255,255,255,0.18)',
+    gold:   '196,154,60',
+    cyan:   '120,170,195'
+  };
+
+  function visible(coord) {
+    const r = proj.rotate();
+    const cl = -r[0] * Math.PI / 180, cp = -r[1] * Math.PI / 180;
+    const lo = coord[0] * Math.PI / 180, la = coord[1] * Math.PI / 180;
+    return Math.cos(la) * Math.cos(cp) * Math.cos(lo - cl) + Math.sin(la) * Math.sin(cp) > 0.02;
+  }
+
+  /* scroll progress 0 → 1 sur les 100 premiers vh */
+  let progress = 0;
+  const sectionText = document.getElementById('sh-text');
+  function updateProgress() {
+    const total = window.innerHeight;
+    progress = Math.max(0, Math.min((window.scrollY || 0) / total, 1));
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  /* zoom : à p=0 planisphère légèrement zoomée (Sahel + Afrique de l'Ouest visibles,
+     flux maritimes Atlantique/Mer Rouge en vue, particules animées sur les arcs),
+     à p=1 vue monde identique au globe live (ZOOM_OUT = 1.0 → scale = baseScale strict). */
+  const FOCUS_LON = 10, FOCUS_LAT = 15;   /* centré sur Sahel + Afrique de l'Ouest */
+  const ZOOM_IN   = 1.6;                  /* x1.6 — Sahel + voisins + flux maritimes visibles */
+  const ZOOM_OUT  = 1.0;
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+  function easeInCubic(t)  { return t * t * t; }
+  let freeLon = -FOCUS_LON;
+
+  /* Animation en 2 phases (anime UNIQUEMENT transform + opacity → GPU compositing,
+     pas de reflow → 60fps stable, aucun grésillement).
+     - Phase 1 (0 → 65% du scroll) : transform identité, le globe interne DÉZOOME
+       via proj.scale (planisphère → vue globe).
+     - Phase 2 (50 → 100% du scroll) : transform translate+scale UNIFORME glisse
+       le globe vers le centre du .globe-wrap. Scale uniforme = globe reste rond. */
+  function positionCanvas() {
+    const posP = Math.max(0, Math.min((progress - 0.5) / 0.5, 1));
+    const e = easeInCubic(posP);
+    const vw = window.innerWidth, vh = window.innerHeight;
+
+    /* Scale uniforme pour matcher la taille visuelle du globe live à la fin.
+       Le globe live a un rayon ≈ min(wrap.w, wrap.h)/2 - 12 px ; on ajuste pour matcher. */
+    const targetGlobeRadius = Math.min(target.width, target.height) / 2 - 12;
+    const targetScale = baseScale > 0 ? targetGlobeRadius / baseScale : 0.7;
+    const s = 1 + e * (targetScale - 1);
+
+    /* Translate pour aligner le centre du globe avec le centre du .globe-wrap */
+    const targetCx = target.left + target.width / 2;
+    const targetCy = target.top + target.height / 2;
+    const myCx = vw / 2;
+    const myCy = vh / 2;
+    const tx = e * (targetCx - myCx * targetScale);
+    const ty = e * (targetCy - myCy * targetScale);
+
+    canvas.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0) scale(' + s + ')';
+
+    if (progress >= 1) {
+      canvas.style.opacity = '0';
+      if (liveWrap) liveWrap.style.visibility = 'visible';
+    } else {
+      canvas.style.opacity = '1';
+      if (liveWrap) liveWrap.style.visibility = 'hidden';
+    }
+
+    if (sectionText) {
+      sectionText.style.opacity = String(Math.max(0, 1 - progress * 1.6));
+    }
+  }
+
+  /* Phase 1 : zoom interne du globe, mappée sur 0-65% du scroll */
+  function getZoomProgress() {
+    return Math.min(progress / 0.65, 1);
+  }
+
+  function draw(t) {
+    /* Phase 1 : le zoom interne suit getZoomProgress (0-65% du scroll).
+       À 65%+ le globe est en vue monde "globe view" et reste figé pendant
+       que la phase 2 (déplacement) prend le relais. */
+    const zoomP = getZoomProgress();
+    const eased = easeOutCubic(zoomP);
+    const mul = ZOOM_IN + (ZOOM_OUT - ZOOM_IN) * eased;
+    proj.scale(baseScale * mul);
+    const targetLon = (-FOCUS_LON) * (1 - eased) + freeLon * eased;
+    const targetLat = (-FOCUS_LAT) * (1 - eased) + (-10) * eased;
+    proj.rotate([targetLon, targetLat, 0]);
+
+    ctx.clearRect(0, 0, W, H);
+
+    ctx.beginPath(); path(sphere);
+    ctx.fillStyle = C.ocean; ctx.fill();
+
+    ctx.beginPath(); path(graticule);
+    ctx.strokeStyle = C.grat; ctx.lineWidth = 0.55; ctx.stroke();
+
+    if (land) {
+      ctx.beginPath(); path(land);
+      ctx.fillStyle = C.land; ctx.fill();
+      ctx.beginPath(); path(borders);
+      ctx.strokeStyle = C.border; ctx.lineWidth = 0.45; ctx.stroke();
+    }
+
+    ctx.beginPath(); path(sphere);
+    ctx.strokeStyle = C.rim; ctx.lineWidth = 0.75; ctx.stroke();
+
+    arcs.forEach(function (arc) {
+      if (!visible(arc.a) && !visible(arc.b)) return;
+      const isSea = arc.kind === 'sea';
+      ctx.beginPath();
+      path({ type: 'LineString', coordinates: [arc.a, arc.b] });
+      ctx.setLineDash(isSea ? [2.2, 3.4] : []);
+      ctx.strokeStyle = isSea ? 'rgba(' + C.cyan + ',0.42)' : 'rgba(' + C.gold + ',0.40)';
+      ctx.lineWidth = isSea ? 1.1 : 1.3;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
+
+    arcs.forEach(function (arc) {
+      const isSea = arc.kind === 'sea';
+      [arc.a, arc.b].forEach(function (pt) {
+        if (!visible(pt)) return;
+        const xy = proj(pt); if (!xy) return;
+        ctx.beginPath();
+        ctx.arc(xy[0], xy[1], isSea ? 1.7 : 2.0, 0, Math.PI * 2);
+        ctx.fillStyle = isSea ? 'rgba(' + C.cyan + ',0.75)' : 'rgba(' + C.gold + ',0.78)';
+        ctx.fill();
+      });
+    });
+
+    arcs.forEach(function (arc) {
+      const isSea = arc.kind === 'sea';
+      const palette = isSea ? C.cyan : C.gold;
+      const heads = isSea ? 2 : 1;
+      for (let h = 0; h < heads; h++) {
+        const headPhase = (((t + arc.offset + h * arc.dur / heads) % arc.dur) + arc.dur) % arc.dur / arc.dur;
+        for (let i = 0; i < arc.np; i++) {
+          let phase = headPhase - i * arc.trail;
+          if (phase < 0 || phase > 1) continue;
+          const p = arc.interp(phase);
+          if (!visible(p)) continue;
+          const xy = proj(p); if (!xy) continue;
+          const fade = Math.sin(phase * Math.PI);
+          const decay = Math.pow(1 - i / arc.np, 1.8);
+          const baseOp = (isSea ? 0.85 : 1.0) * fade * decay;
+          const baseR  = (isSea ? 1.6 : 2.4) * (i === 0 ? 1 : (1 - i * 0.18));
+          /* Outer halo (large, faint) */
+          if (i === 0) {
+            ctx.beginPath();
+            ctx.arc(xy[0], xy[1], baseR * (isSea ? 4.2 : 5.0), 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(' + palette + ',' + (baseOp * 0.10).toFixed(3) + ')';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(xy[0], xy[1], baseR * (isSea ? 2.8 : 3.4), 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(' + palette + ',' + (baseOp * 0.26).toFixed(3) + ')';
+            ctx.fill();
+          }
+          /* Bright core with bloom */
+          ctx.shadowColor = 'rgba(' + palette + ',' + (baseOp * 0.9).toFixed(3) + ')';
+          ctx.shadowBlur = i === 0 ? (isSea ? 8 : 12) : 4;
+          ctx.beginPath();
+          ctx.arc(xy[0], xy[1], Math.max(0.6, baseR), 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + palette + ',' + baseOp.toFixed(3) + ')';
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+    });
+
+    const labelOp = Math.max(0, eased * 1.1 - 0.1);
+    anchors.forEach(function (a, i) {
+      if (!visible([a.lon, a.lat])) return;
+      const xy = proj([a.lon, a.lat]); if (!xy) return;
+      const pulse = (Math.sin(t / 900 + i * 1.7) + 1) / 2;
+      /* Outer pulse (very faint, large) */
+      ctx.beginPath();
+      ctx.arc(xy[0], xy[1], 18 + pulse * 10, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + C.gold + ',' + (0.03 + pulse * 0.06).toFixed(3) + ')';
+      ctx.fill();
+      /* Mid pulse */
+      ctx.beginPath();
+      ctx.arc(xy[0], xy[1], 11 + pulse * 6, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + C.gold + ',' + (0.08 + pulse * 0.14).toFixed(3) + ')';
+      ctx.fill();
+      /* Static ring */
+      ctx.beginPath();
+      ctx.arc(xy[0], xy[1], 7, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(' + C.gold + ',0.65)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      /* Bright core with bloom */
+      ctx.shadowColor = 'rgba(' + C.gold + ',0.9)';
+      ctx.shadowBlur = 14;
+      ctx.beginPath();
+      ctx.arc(xy[0], xy[1], 3.2, 0, Math.PI * 2);
+      ctx.fillStyle = '#e6c071';
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      if (labelOp > 0.02) {
+        ctx.font = '500 11px JetBrains Mono, ui-monospace, monospace';
+        ctx.fillStyle = 'rgba(138,141,147,' + labelOp.toFixed(2) + ')';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(a.label, xy[0] + 11, xy[1] + 0.5);
+      }
+    });
+
+  }
+
+  let last = performance.now();
+  const period = 90000; /* 90s / tour — rotation lente, sobre */
+  function step(now) {
+    const dt = Math.min(now - last, 80); last = now;
+    freeLon += (dt / period) * 360;
+    updateProgress();
+    positionCanvas();
+    draw(now);
+  }
+  function loop(now) { step(now); requestAnimationFrame(loop); }
+  positionCanvas();
+  draw(performance.now());
+  requestAnimationFrame(loop);
 })();
 </script>
 
