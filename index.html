@@ -1377,7 +1377,7 @@
 
     // sphere fill (ocean) — pattern noise pour grain texture
     ctx.beginPath(); path(sphere);
-    ctx.fillStyle = oceanTexture; ctx.fill();
+    ctx.fillStyle = C.ocean; ctx.fill();
 
     // graticule
     ctx.beginPath(); path(graticule);
@@ -1386,7 +1386,7 @@
     // land — fill avec texture noise (grain "satellite") + borders
     if (land) {
       ctx.beginPath(); path(land);
-      ctx.fillStyle = landTexture; ctx.fill();
+      ctx.fillStyle = C.land; ctx.fill();
       ctx.beginPath(); path(borders);
       ctx.strokeStyle = C.border; ctx.lineWidth = 0.45; ctx.stroke();
     }
@@ -2160,7 +2160,7 @@
     ctx.clearRect(0, 0, W, H);
 
     ctx.beginPath(); path(sphere);
-    ctx.fillStyle = oceanTexture; ctx.fill();
+    ctx.fillStyle = C.ocean; ctx.fill();
 
     ctx.beginPath(); path(graticule);
     ctx.strokeStyle = C.grat; ctx.lineWidth = 0.55; ctx.stroke();
@@ -2168,7 +2168,7 @@
     /* Land : fill avec texture noise (grain "satellite") + frontieres */
     if (land) {
       ctx.beginPath(); path(land);
-      ctx.fillStyle = landTexture; ctx.fill();
+      ctx.fillStyle = C.land; ctx.fill();
       ctx.beginPath(); path(borders);
       ctx.strokeStyle = C.border; ctx.lineWidth = 0.4; ctx.stroke();
     }
