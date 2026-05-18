@@ -47,8 +47,11 @@ const STYLES = `
 #brief-ia-content li::before { content: ''; position: absolute; left: 0; top: 13px; width: 6px; height: 1px; background: #c49a3c; }
 #brief-ia-sources { margin-top: 20px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); }
 #brief-ia-sources-label { font: 600 9px/1 'JetBrains Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #888; margin-bottom: 10px; }
-.bia-source { display: block; color: #c49a3c; font: 400 11px/1.4 'JetBrains Mono', monospace; text-decoration: none; padding: 6px 10px; border: 1px solid rgba(196,154,60,0.25); margin-bottom: 6px; word-break: break-word; }
+.bia-inline-link { color: #c49a3c; text-decoration: underline; text-decoration-color: rgba(196,154,60,0.4); text-underline-offset: 2px; word-break: break-word; }
+.bia-inline-link:hover { text-decoration-color: #c49a3c; }
+.bia-source { display: block; color: #c49a3c; font: 400 11px/1.4 'JetBrains Mono', monospace; text-decoration: none; padding: 8px 10px; border: 1px solid rgba(196,154,60,0.25); margin-bottom: 6px; word-break: break-word; }
 .bia-source:hover { background: rgba(196,154,60,0.08); border-color: #c49a3c; }
+.bia-source-domain { display: block; color: #888; font-size: 9px; letter-spacing: 0.06em; margin-top: 4px; }
 #brief-ia-error { color: #ff5252; font: 400 12px/1.6 'JetBrains Mono', monospace; background: rgba(255,82,82,0.06); border: 1px solid rgba(255,82,82,0.25); padding: 12px 14px; }
 #brief-ia-error-hint { color: #888; font-size: 10px; margin-top: 8px; }
 `;
@@ -115,10 +118,10 @@ function buildExportHtml(data) {
   });
   const briefHtml = mdToHtml(data.brief || '');
   const sourcesItems = (data.sources || []).map(
-    (s) => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a></li>`
+    (s) => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}<span class="src-domain">${esc(domainOf(s.url))}</span></a></li>`
   ).join('');
   const sourcesBlock = sourcesItems
-    ? `<section><h2>Sources</h2><ol class="sources">${sourcesItems}</ol></section>`
+    ? `<section><h2>Sources (${(data.sources || []).length})</h2><ol class="sources">${sourcesItems}</ol></section>`
     : '';
   const titleEsc = esc(data.name || 'Brief securite');
   const modelEsc = esc(data.model || '');
@@ -147,7 +150,9 @@ function buildExportHtml(data) {
   ol.sources { counter-reset: src; }
   ol.sources li { counter-increment: src; padding-left: 28px; font: 400 11px/1.5 'JetBrains Mono', monospace; word-break: break-word; }
   ol.sources li::before { content: counter(src, decimal-leading-zero); position: absolute; left: 0; top: 6px; color: #c49a3c; font-weight: 700; }
-  ol.sources a { color: #c49a3c; text-decoration: none; border-bottom: 1px solid rgba(196,154,60,0.3); }
+  ol.sources a { color: #c49a3c; text-decoration: underline; text-underline-offset: 2px; display: block; }
+  ol.sources a:hover { background: rgba(196,154,60,0.06); }
+  ol.sources .src-domain { display: block; color: #888; font: 400 9px/1.4 'JetBrains Mono', monospace; letter-spacing: 0.06em; margin-top: 3px; text-decoration: none; }
   .ftr { margin-top: 48px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.07); font: 500 9px/1.4 'JetBrains Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase; color: #666; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   @media print {
     body { background: #fff; color: #111; padding: 20mm; max-width: none; }
@@ -212,7 +217,20 @@ function renderError(msg, hint) {
 
 // Parseur markdown minimaliste : ##, **bold**, listes "- ", paragraphes.
 // On echappe le HTML d'abord pour eviter toute injection, puis on reapplique
-// les balises markdown explicitement.
+// les balises markdown explicitement + auto-linkification des URLs.
+function autoLink(s) {
+  // Linkify les URLs http(s):// — applique apres escape donc les & sont &amp;
+  return s.replace(/(https?:\/\/[^\s<>"']+)/g, function (url) {
+    var clean = url.replace(/[.,;:!?)\]]+$/, ''); // strip ponctuation finale
+    var tail = url.slice(clean.length);
+    var display = clean.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    if (display.length > 50) display = display.substring(0, 47) + '...';
+    return '<a href="' + clean + '" target="_blank" rel="noopener" class="bia-inline-link">' + display + '</a>' + tail;
+  });
+}
+function applyInline(s) {
+  return autoLink(s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'));
+}
 function mdToHtml(raw) {
   const escaped = esc(raw || '');
   const lines = escaped.split(/\r?\n/);
@@ -221,7 +239,7 @@ function mdToHtml(raw) {
   let para = [];
   function flushPara() {
     if (para.length) {
-      out.push('<p>' + para.join(' ').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>');
+      out.push('<p>' + applyInline(para.join(' ')) + '</p>');
       para = [];
     }
   }
@@ -235,11 +253,11 @@ function mdToHtml(raw) {
     const li = line.match(/^[-*]\s+(.+)$/);
     if (h2) {
       flushPara(); closeList();
-      out.push('<h2>' + h2[1].replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</h2>');
+      out.push('<h2>' + applyInline(h2[1]) + '</h2>');
     } else if (li) {
       flushPara();
       if (!inList) { out.push('<ul>'); inList = true; }
-      out.push('<li>' + li[1].replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</li>');
+      out.push('<li>' + applyInline(li[1]) + '</li>');
     } else {
       closeList();
       para.push(line);
@@ -249,12 +267,16 @@ function mdToHtml(raw) {
   return out.join('');
 }
 
+function domainOf(url) {
+  try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return ''; }
+}
+
 function renderBrief(data) {
   const briefHtml = mdToHtml(data.brief || '');
   const sourcesHtml = (data.sources || []).length
     ? `<div id="brief-ia-sources">
-         <div id="brief-ia-sources-label">Sources</div>
-         ${data.sources.map(s => `<a class="bia-source" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>`).join('')}
+         <div id="brief-ia-sources-label">Sources (${data.sources.length})</div>
+         ${data.sources.map(s => `<a class="bia-source" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}<span class="bia-source-domain">${esc(domainOf(s.url))}</span></a>`).join('')}
        </div>`
     : '';
   return `<div id="brief-ia-content">${briefHtml}</div>${sourcesHtml}`;
