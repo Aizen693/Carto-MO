@@ -1,16 +1,20 @@
 // Edge Function : brief-securite
 // POST { name, ville?, pays?, lng?, lat? }
-// Retourne un brief securite IA (Claude opus-4-7 + web_search) sur le point clique.
+// Retourne un brief securite IA (Google Gemini 2.0 Flash + Google Search grounding)
+// sur le point clique.
 //
-// Secrets requis dans Supabase : ANTHROPIC_API_KEY
-// Deploy : supabase functions deploy brief-securite --no-verify-jwt=false
+// Secrets requis dans Supabase : GEMINI_API_KEY (gratuite sur https://aistudio.google.com)
+// Deploy : supabase functions deploy brief-securite
 
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 
-const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY');
+const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
+
+const GEMINI_MODEL = 'gemini-2.0-flash';
+const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 const ALLOWED_ORIGINS = [
   'https://algoracces.fr',
@@ -40,9 +44,9 @@ Format strict :
 - Acteurs cles, tendance (escalade / stabilisation / nouveau)
 - Aucune speculation, uniquement faits sources
 
-Tu DOIS utiliser web_search pour obtenir des informations a jour. Cite tes sources avec leur URL.
+Utilise la recherche web Google pour obtenir des informations a jour. Cite tes sources.
 
-Sortie en francais, sobre, factuelle. Pas d'introduction ni de conclusion, juste les puces et les sources.`;
+Sortie en francais, sobre, factuelle. Pas d'introduction ni de conclusion, juste les puces.`;
 }
 
 interface BriefResult {
@@ -51,43 +55,44 @@ interface BriefResult {
   model: string;
 }
 
-async function callClaude(prompt: string): Promise<BriefResult> {
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+async function callGemini(prompt: string): Promise<BriefResult> {
+  const response = await fetch(`${GEMINI_ENDPOINT}?key=${GEMINI_API_KEY}`, {
     method: 'POST',
-    headers: {
-      'x-api-key': ANTHROPIC_API_KEY!,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-    },
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-opus-4-7',
-      max_tokens: 2000,
-      tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 5 }],
-      messages: [{ role: 'user', content: prompt }],
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      tools: [{ google_search: {} }],
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 1500,
+      },
     }),
   });
 
   if (!response.ok) {
     const errText = await response.text();
-    throw new Error(`Anthropic API ${response.status}: ${errText}`);
+    throw new Error(`Gemini API ${response.status}: ${errText}`);
   }
 
   const data = await response.json();
-  const textBlocks = (data.content || []).filter((b: { type: string }) => b.type === 'text');
-  const brief = textBlocks.map((b: { text: string }) => b.text).join('\n').trim();
+  const candidate = data.candidates?.[0];
+  if (!candidate) throw new Error('Gemini : aucune reponse generee');
+
+  const brief = (candidate.content?.parts || [])
+    .map((p: { text?: string }) => p.text || '')
+    .join('\n')
+    .trim();
 
   const sources: Array<{ title: string; url: string }> = [];
-  for (const block of data.content || []) {
-    if (block.type === 'web_search_tool_result' && Array.isArray(block.content)) {
-      for (const item of block.content) {
-        if (item.type === 'web_search_result' && item.url) {
-          sources.push({ title: item.title || item.url, url: item.url });
-        }
-      }
+  const chunks = candidate.groundingMetadata?.groundingChunks || [];
+  for (const chunk of chunks) {
+    const web = chunk.web;
+    if (web?.uri) {
+      sources.push({ title: web.title || web.uri, url: web.uri });
     }
   }
 
-  return { brief, sources, model: data.model || 'claude-opus-4-7' };
+  return { brief, sources, model: GEMINI_MODEL };
 }
 
 Deno.serve(async (req) => {
@@ -123,10 +128,10 @@ Deno.serve(async (req) => {
     });
   }
 
-  if (!ANTHROPIC_API_KEY) {
+  if (!GEMINI_API_KEY) {
     return new Response(JSON.stringify({
-      error: 'Cle Anthropic absente',
-      hint: 'Ajoute ANTHROPIC_API_KEY dans Supabase > Project Settings > Edge Functions > Secrets',
+      error: 'Cle Gemini absente',
+      hint: 'Ajoute GEMINI_API_KEY dans Supabase > Project Settings > Edge Functions > Secrets. Cle gratuite sur https://aistudio.google.com',
     }), {
       status: 503,
       headers: { ...cors, 'content-type': 'application/json' },
@@ -151,7 +156,7 @@ Deno.serve(async (req) => {
 
   try {
     const prompt = buildPrompt({ name: input.name, ville: input.ville, pays: input.pays });
-    const result = await callClaude(prompt);
+    const result = await callGemini(prompt);
     return new Response(JSON.stringify(result), {
       status: 200,
       headers: { ...cors, 'content-type': 'application/json' },

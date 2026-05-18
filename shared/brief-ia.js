@@ -2,8 +2,8 @@
  * brief-ia.js — Modal "Brief IA Securite" sur les points cartographiques
  *
  * Expose window.openBriefIA(name, pays?, ville?) appelable depuis les popups.
- * Appelle l'edge function Supabase `brief-securite` qui interroge Claude opus-4-7
- * avec le tool web_search et renvoie un brief securite + sources.
+ * Appelle l'edge function Supabase `brief-securite` qui interroge Gemini 2.0 Flash
+ * avec recherche Google et renvoie un brief securite + sources.
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
@@ -84,7 +84,7 @@ function closeBrief() {
 }
 
 function renderLoading() {
-  return `<div id="brief-ia-loading"><span class="bia-dot"></span><span class="bia-dot"></span><span class="bia-dot"></span> Generation en cours · web search + analyse Claude opus 4.7</div>`;
+  return `<div id="brief-ia-loading"><span class="bia-dot"></span><span class="bia-dot"></span><span class="bia-dot"></span> Generation en cours · recherche Google + analyse IA</div>`;
 }
 
 function renderError(msg, hint) {
