@@ -1,0 +1,17 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[50.10,-15.75]},"properties":{"name":"Masoala","detail":"Peninsule NE, plus grand parc national (2300 km2). Cible trafic bois de rose.","statut":"Menace","sources":"WWF|https://www.wwf.mg UNESCO|https://whc.unesco.org/fr/list/1257"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.75,-24.85]},"properties":{"name":"Andohahela","detail":"SE, foret humide + epineuse.","statut":"Protege","sources":"UNESCO|https://whc.unesco.org/fr/list/1257"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.97,-16.30]},"properties":{"name":"Ankarafantsika","detail":"Nord-ouest, foret seche.","statut":"Protege"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[45.35,-22.55]},"properties":{"name":"Isalo","detail":"Sud, massif greseux, tourisme.","statut":"Protege","sources":"Madagascar National Parks|https://www.parcs-madagascar.com"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[47.42,-21.25]},"properties":{"name":"Ranomafana","detail":"Est central, foret pluviale.","statut":"Protege","sources":"UNESCO|https://whc.unesco.org/fr/list/1257"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[48.42,-18.92]},"properties":{"name":"Andasibe-Mantadia","detail":"Est, lemuriens indri.","statut":"Protege"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.15,-12.95]},"properties":{"name":"Ankarana","detail":"Nord, massif karstique tsingy.","statut":"Protege"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[44.75,-19.05]},"properties":{"name":"Tsingy de Bemaraha","detail":"Ouest, UNESCO, karsts aiguilles.","statut":"Protege","sources":"UNESCO|https://whc.unesco.org/fr/list/494"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[44.35,-20.25]},"properties":{"name":"Menabe Antimena","detail":"Allee des Baobabs, deforestation massive.","statut":"Menace","sources":"WWF|https://www.wwf.mg"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.77,-14.45]},"properties":{"name":"Marojejy","detail":"NE, UNESCO, propitheques soyeux.","statut":"Menace bois de rose","sources":"UNESCO|https://whc.unesco.org/fr/list/1257"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[46.50,-19.75]},"properties":{"name":"Analamazaotra","detail":"Centre-est, foret primaire.","statut":"Protege"}},
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[49.60,-15.00]},"properties":{"name":"Anjanaharibe-Sud","detail":"NE, trafic bois rose.","statut":"Menace","sources":"WWF|https://www.wwf.mg"}}
+  ]
+}

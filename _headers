@@ -1,0 +1,24 @@
+# Headers de securite servis par Cloudflare Pages pour tous les chemins.
+# Doc Cloudflare : https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  # Content-Security-Policy : restreint d'ou peut etre chargee la page.
+  # On garde 'unsafe-inline' (30 inline scripts a refactorer) mais on RETIRE 'unsafe-eval'
+  # (Mapbox GL v3 n'en a plus besoin, teste 2026-05-13). Gain : empeche eval() / new Function().
+  # TODO : extraire les 30 inline scripts vers fichiers .js pour tomber 'unsafe-inline'.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://api.mapbox.com https://cdn.sheetjs.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://api.mapbox.com https://fonts.googleapis.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://lwgrjdpuagnvvzmdbyzb.supabase.co wss://lwgrjdpuagnvvzmdbyzb.supabase.co https://api.mapbox.com https://events.mapbox.com https://*.tiles.mapbox.com wss://stream.aisstream.io https://api.github.com; worker-src 'self' blob:; child-src blob:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests
+
+  # Bloque l'embed du site dans une iframe externe (anti-clickjacking).
+  X-Frame-Options: SAMEORIGIN
+
+  # Empeche les navigateurs de "deviner" un type MIME (anti-XSS via fichier mal type).
+  X-Content-Type-Options: nosniff
+
+  # Limite le Referer envoye aux sites externes a l'origine seule.
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # Refuse l'acces aux API sensibles que le site n'utilise pas.
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
+
+  # Force HTTPS pour 2 ans + tous sous-domaines (Cloudflare le set deja, on confirme).
+  Strict-Transport-Security: max-age=63072000; includeSubDomains

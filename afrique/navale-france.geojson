@@ -1,0 +1,141 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.145,
+          11.601
+        ]
+      },
+      "properties": {
+        "name": "Forces Francaises a Djibouti (FFDj)",
+        "type": "Base navale",
+        "pays": "France",
+        "description": "1500 militaires. Seule base permanente francaise dans la Corne. Heliport, patrouilles maritimes Atlantique 2 (Breguet).",
+        "sources": "Min_Armees_FR|https://www.defense.gouv.fr/ CSIS|https://www.csis.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -17.454,
+          14.666
+        ]
+      },
+      "properties": {
+        "name": "Elements Francais au Senegal (EFS)",
+        "type": "Base cooperation",
+        "pays": "France",
+        "description": "~350 militaires. Port de Dakar, escale Marine FR. Cooperations Marine senegalaise.",
+        "sources": "EMA_FR|https://www.defense.gouv.fr/ema Le_Monde|https://www.lemonde.fr/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          55.286,
+          -20.94
+        ]
+      },
+      "properties": {
+        "name": "FAZSOI - La Reunion (Le Port)",
+        "type": "Base navale",
+        "pays": "France",
+        "description": "FAZSOI (Forces Armees Zone Sud Ocean Indien). 1700 militaires. FS Floreal + Nivose. Canal Mozambique.",
+        "sources": "FAZSOI|https://www.defense.gouv.fr/ Marine_Nationale|https://www.defense.gouv.fr/marine"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          45.278,
+          -12.806
+        ]
+      },
+      "properties": {
+        "name": "FAZSOI - Mayotte (Dzaoudzi)",
+        "type": "Point d'appui",
+        "pays": "France",
+        "description": "Detachement FAZSOI. Surveillance maritime Comores-Mayotte. Patrouilleur Le Champlain.",
+        "sources": "FAZSOI|https://www.defense.gouv.fr/ MINDEF|https://www.defense.gouv.fr/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.454,
+          0.462
+        ]
+      },
+      "properties": {
+        "name": "Elements Francais au Gabon (EFG)",
+        "type": "Base cooperation",
+        "pays": "France",
+        "description": "350 militaires. Port-Gentil. Cooperation Marine gabonaise. Statut en revision post-coup 2023.",
+        "sources": "EMA_FR|https://www.defense.gouv.fr/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.75,
+          -17.053
+        ]
+      },
+      "properties": {
+        "name": "Iles Eparses (Juan de Nova)",
+        "type": "Point d'appui",
+        "pays": "France",
+        "description": "Souverainete contestee. Juan de Nova, Europa, Bassas da India, Glorieuses, Tromelin. FAZSOI.",
+        "sources": "TAAF|https://taaf.fr/ Marine_Nationale|https://www.defense.gouv.fr/marine"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.672,
+          -4.059
+        ]
+      },
+      "properties": {
+        "name": "Escale operationnelle Mombasa",
+        "type": "Point d'appui",
+        "pays": "France",
+        "description": "Escale reguliere Marine FR (Dixmude, Tonnerre, FS La Fayette) pour operations Corymbe/ocean Indien.",
+        "sources": "Marine_Nationale|https://www.defense.gouv.fr/marine"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.598,
+          11.86
+        ]
+      },
+      "properties": {
+        "name": "Cooperation Bissau/Conakry",
+        "type": "Point d'appui",
+        "pays": "France",
+        "description": "Escales Corymbe (FR Marine) pour securite Golfe de Guinee. Exercices bilatereaux.",
+        "sources": "Marine_Nationale|https://www.defense.gouv.fr/marine"
+      }
+    }
+  ]
+}

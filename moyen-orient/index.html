@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Algor Int — Attaques Moyen-Orient 2005–2026</title>
+<script type="module" src="../shared/site-auth.js?v=20260511a"></script>
 <link rel="icon" type="image/jpeg" href="../favicon.jpg">
 <meta property="og:title" content="Algor Int — Carte Moyen-Orient">
 <meta property="og:description" content="Cartographie interactive des attaques chiites/sunnites au Moyen-Orient. 173 evenements, 22 acteurs, 10 periodes. Cotation OTAN.">
@@ -16,7 +17,7 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
-<link rel="stylesheet" href="../shared/styles.css">
+<link rel="stylesheet" href="../shared/styles.css?v=20260420h">
 </head>
 <body>
 
@@ -38,7 +39,11 @@
   <div class="hdr-cell">
     <span id="event-counter"></span>
   </div>
-  <div class="hdr-controls"></div>
+  <div class="hdr-controls">
+    <button class="hbtn" id="btn-export-html" onclick="exportLivrable()" title="Exporter les calques visibles dans un fichier HTML autonome (Leaflet, sans token)">
+      <span style="font-size:10px;line-height:1">⬇</span> Exporter HTML
+    </button>
+  </div>
 </div>
 
 <div id="progress-bar"><div id="progress-fill"></div></div>
@@ -152,7 +157,7 @@ const ZONE_CONFIG = {
   ACTOR_GROUPS: {
     'Milices chiites': ['Hezbollah','Asaib Ahl al-Haq','IRGC-Qods Force','IRGC-Qods Force+Basij','Kataib Hezbollah','Basij','Kataib Sayyid al-Shuhada','Harakat Hezbollah al-Nujaba','Fatemiyoun Brigade','Zainebiyoun Brigade','PMF / Hashd al-Shaabi','PMF / Hashd al-Shaabi+Kataib Hezbollah','IRGC Ground Forces','Houthis'],
     'Djihadistes sunnites': ['Daesh','Daesh + Armées Irakiennes'],
-    'Coalitions & États': ['Coalition Internationale','USA, Force Delta','Armées Irakiennes','Armées Irakiennes + Peshmergas vs. Daesh'],
+    'Coalitions & États': ['Coalition Internationale','USA','USA, Force Delta','Israel / IDF','Armées Irakiennes','Armées Irakiennes + Peshmergas vs. Daesh'],
     'Kurdes & FDS': ['Peshmergas','Forces Démocratiques Syriennes']
   },
   ACTOR_COLORS: {
@@ -163,7 +168,7 @@ const ZONE_CONFIG = {
     'PMF / Hashd al-Shaabi+Kataib Hezbollah':'#e76f51','IRGC Ground Forces':'#ae2012',
     'Zainebiyoun Brigade':'#bb3e03','Houthis':'#7b2d8b','Daesh':'#555555',
     'Daesh + Armées Irakiennes':'#777777','Coalition Internationale':'#1d7ed8',
-    'USA, Force Delta':'#0077b6','Peshmergas':'#ccaa00','Armées Irakiennes':'#2d6a4f',
+    'USA':'#0077b6','USA, Force Delta':'#023e8a','Israel / IDF':'#1a5f7a','Peshmergas':'#ccaa00','Armées Irakiennes':'#2d6a4f',
     'Armées Irakiennes + Peshmergas vs. Daesh':'#40916c','Forces Démocratiques Syriennes':'#48cae4'
   },
   normalizeName: function(raw) {
@@ -214,7 +219,7 @@ fetch("./otan-data.json").then(r => r.json()).then(d => { ZONE_CONFIG.OTAN_DATA 
 fetch("./map-zones.json").then(r => r.json()).then(d => { ZONE_CONFIG.MAP_ZONES = d; }).catch(() => console.warn("MAP_ZONES data not loaded"));
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js"></script>
+<script src="../shared/engine.js?v=20260513c"></script>
 
 <!-- MO-SPECIFIC: Daesh territory zones + auto-toggle -->
 <script>
@@ -346,5 +351,26 @@ fetch("./map-zones.json").then(r => r.json()).then(d => { ZONE_CONFIG.MAP_ZONES 
   </div>
 </div>
 
+<!-- Exporter HTML standalone (Leaflet) -->
+<script type="module">
+import { exportZoneAsHTML } from '../shared/exporter.js?v=20260511a';
+window.exportLivrable = async function() {
+  const btn = document.getElementById('btn-export-html');
+  const old = btn?.innerHTML;
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span style="font-size:10px">⏳</span> Export…'; }
+  try {
+    const period = document.getElementById('period-badge')?.textContent?.trim();
+    const subtitle = period && period !== 'Aucune période' ? ('Période ' + period) : '';
+    await exportZoneAsHTML({ zoneName: 'Moyen-Orient', subtitle, map: window.algorMap || window.map });
+  } catch (e) {
+    console.error('[export]', e);
+    alert("Echec de l'export : " + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = old; }
+  }
+};
+</script>
+
 </body>
+
 </html>

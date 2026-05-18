@@ -1,0 +1,741 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.3883,
+          39.9042
+        ]
+      },
+      "properties": {
+        "name": "ISI",
+        "type": "Crise diplomatique",
+        "description": "Date: 03/04/2026\nPays: Chine (Pekin) — mediation Pak/Afg\nEvenement: Nouvelle ronde de pourparlers de paix Pakistan-Afghanistan\nDetail: NPR rapporte qu'une nouvelle ronde de negociations de paix entre Islamabad et Kaboul est en cours a Pekin, sous mediation chinoise. Suit les appels a la retenue du Qatar et de l'Arabie Saoudite.\nBilan: aucune percee immediate, poursuite des frappes intermittentes",
+        "sources": "NPR|https://www.npr.org/2026/04/03/g-s1-116299/pakistan-says-a-new-round-of-peace-talks-with-afghanistan-is-underway-in-china Logical_Indian|https://thelogicalindian.com/pakistan-afghanistan-border-clashes-escalate-dozens-killed-amid-torkham-and-chaman-closures/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.0909,
+          32.9731
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Incident frontalier",
+        "description": "Date: 05/04/2026\nPays: Pakistan (Nord-Waziristan)\nEvenement: Echange d'artillerie pres de Zoram Fort\nDetail: Pakistan et forces afghanes echangent des tirs d'artillerie dans le secteur de Zoram Fort, Nord-Waziristan. Premier accrochage majeur post-trêve d'Aid al-Fitr.\nBilan: pertes bilaterales non specifiees officiellement",
+        "sources": "Wikipedia_2026_Afghanistan-Pakistan_war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war Anadolu_Agency|https://www.aa.com.tr/en/asia-pacific/timeline-how-pakistan-afghanistan-tensions-reached-a-breaking-point/3842132"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.0909,
+          32.9731
+        ]
+      },
+      "properties": {
+        "name": "Afghan Taliban",
+        "type": "Incident frontalier",
+        "description": "Date: 06/04/2026\nPays: Afghanistan (Khost / Nangarhar)\nEvenement: Affrontements prolonges Zoram Fort\nDetail: Suite de l'echange d'artillerie du 5 avril. Le ministere de la Defense afghan declare que les affrontements ont tue 32 soldats pakistanais et blesse plusieurs dizaines d'autres dans les provinces frontalieres Nangarhar / Paktia / Khost / Kandahar (chiffres contestes).\nBilan: 32 soldats pakistanais tues selon Kaboul, chiffres contestes par Islamabad",
+        "sources": "Wikipedia_2026_Afghanistan-Pakistan_war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war Al_Jazeera|https://www.aljazeera.com/news/2026/2/24/fresh-afghan-pakistani-border-clashes-follow-deadly-strikes"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.8723,
+          31.634
+        ]
+      },
+      "properties": {
+        "name": "Delhi Police Special Cell",
+        "type": "Siege",
+        "description": "Date: 09/04/2026\nPays: Inde (Amritsar, Pendjab)\nEvenement: Remise d'armes a 2 operatifs ISI presumes — Amritsar\nDetail: Sur instruction du gangster pakistanais Shahzad Bhatti (proxy ISI), les operatifs Rajveer et Vivek Banjara (residents de Dabra, Gwalior MP) se rendent a Amritsar ou ils recoivent 1 pistolet, 15-20 cartouches et 20000 roupies. Module destine a des frappes sur hotels Delhi-NCR et club de Zirakpur.\nBilan: prelude a la tentative du 11 avril a Zirakpur, arrestations par Delhi Police Special Cell",
+        "sources": "Tribune_India|https://www.tribuneindia.com/news/delhi/2-isi-operatives-arrested-for-planning-targeted-killings-grenade-attacks-in-delhi-punjab/ SATP_India|https://www.satp.org/terrorist-activity/india"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.8173,
+          30.6434
+        ]
+      },
+      "properties": {
+        "name": "ISI (proxies)",
+        "type": "Attaque",
+        "description": "Date: 11/04/2026\nPays: Inde (Zirakpur, Pendjab)\nEvenement: Tentative de fusillade sur club — Zirakpur\nDetail: Rajveer tente d'ouvrir le feu sur un club de Zirakpur, mais l'arme s'enraie (probleme mecanique). Vivek Banjara filme la tentative pour l'envoyer au commanditaire. Complot dejoue par le Delhi Police Special Cell.\nBilan: echec technique, 2 arrestations, armes et preuves saisies",
+        "sources": "Tribune_India|https://www.tribuneindia.com/news/delhi/2-isi-operatives-arrested-for-planning-targeted-killings-grenade-attacks-in-delhi-punjab/ SATP_India|https://www.satp.org/terrorist-activity/india"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.536,
+          34.0151
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Siege",
+        "description": "Date: 14/04/2026\nPays: Pakistan (KP / Baloutchistan)\nEvenement: Operations post-Eid — 34 militants tues sur la semaine\nDetail: Pakistan reprend les operations apres la trêve de l'Aid al-Fitr. Arab News rapporte que les forces de securite ont tue 34 militants dans le sud-ouest (Baloutchistan) et le nord-ouest (KP) — dont 26 TTP et 8 insurges baloutches.\nBilan: 34 militants tues (26 TTP + 8 Baloutches)",
+        "sources": "Arab_News|https://www.arabnews.com/node/2634421/amp Prism_News|https://www.prismnews.com/news/pakistan-resumes-military-operations-in-afghanistan-after"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.3412,
+          34.0151
+        ]
+      },
+      "properties": {
+        "name": "Indian Army",
+        "type": "Incident frontalier",
+        "description": "Date: 18/04/2026\nPays: Inde (secteur Kupwara / Uri)\nEvenement: Operations anti-infiltration renforcees — approche commemoration Pahalgam\nDetail: A l'approche du premier anniversaire de l'attaque de Pahalgam (22 avril 2025), l'armee indienne renforce les patrouilles anti-infiltration le long de la LoC. Deploiements supplementaires dans les secteurs de Kupwara, Uri et Poonch.\nBilan: dispositif preventif, pas d'accrochage majeur",
+        "sources": "Business_Standard_-_1_year_Pahalgam|https://www.business-standard.com/india-news/pahalgam-terror-attack-anniversary-let-kashmir-2025-recap-126042200475_1.html SATP_J&K|https://www.satp.org/terrorist-activity/india-jammukashmir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5249,
+          34.0151
+        ]
+      },
+      "properties": {
+        "name": "TTP",
+        "type": "Attaque",
+        "description": "Date: 19/04/2026\nPays: Pakistan (KP)\nEvenement: Attaque sur base FC — district non specifie\nDetail: Suite de l'operation \"Khyber\" annoncee le 10 mars. Attaque coordonnee sur une base du Frontier Corps dans le Khyber Pakhtunkhwa. Attribution TTP.\nBilan: victimes cote FC KP, contre-attaque pakistanaise",
+        "sources": "SATP_Pakistan|https://www.satp.org/terrorist-activity/pakistan Wikipedia_Terrorist_incidents_2026|https://en.wikipedia.org/wiki/Terrorist_incidents_in_Pakistan_in_2026"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.3245,
+          33.7275
+        ]
+      },
+      "properties": {
+        "name": "J&K Police",
+        "type": "Geopolitique",
+        "description": "Date: 22/04/2026\nPays: Inde (Pahalgam, J&K)\nEvenement: Premier anniversaire de l'attaque de Pahalgam\nDetail: Ceremonies de commemoration du 22 avril 2025 (26 civils, majoritairement touristes hindous, tues par 5 terroristes LeT). Renforcement de la securite au Cachemire, alertes ISI publiees, hommage officiel par le PM et le gouverneur.\nBilan: securite renforcee sur tout le territoire J&K, pas d'incident immediat signale",
+        "sources": "Business_Standard|https://www.business-standard.com/india-news/pahalgam-terror-attack-anniversary-let-kashmir-2025-recap-126042200475_1.html Wikipedia_2025_Pahalgam_attack|https://en.wikipedia.org/wiki/2025_Pahalgam_attack Britannica|https://www.britannica.com/question/What-was-the-Pahalgam-attack"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.9936,
+          30.1798
+        ]
+      },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 22/04/2026\nPays: Pakistan (Baloutchistan)\nEvenement: Embuscade sur convoi a proximite de Quetta\nDetail: Continuite des operations BLA apres la campagne de fin janvier. Embuscade IED + armes legeres sur un convoi paramilitaire dans la peripherie de Quetta.\nBilan: victimes cote securite, reponse operationnelle pakistanaise",
+        "sources": "SATP_Pakistan|https://www.satp.org/terrorist-activity/pakistan Wikipedia_Insurgency_in_Balochistan|https://en.wikipedia.org/wiki/Insurgency_in_Balochistan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.1383,
+          34.1688
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Crise diplomatique",
+        "description": "Date: 23/04/2026\nPays: Pakistan / Afghanistan (Torkham)\nEvenement: Poursuite de la fermeture des passages de Torkham et Chaman\nDetail: Les points de passage strategiques Torkham (Khyber) et Chaman (Balouchistan) restent fermes depuis les frappes de fevrier. Impact humanitaire et commercial majeur. Les pourparlers de Pekin n'ont pas debouche sur une reouverture.\nBilan: paralysie commerciale, tension humanitaire sur les communautes frontalieres",
+        "sources": "Logical_Indian|https://thelogicalindian.com/pakistan-afghanistan-border-clashes-escalate-dozens-killed-amid-torkham-and-chaman-closures/ Arab_News|https://www.arabnews.com/node/2624966/pakistan ABC_News|https://abcnews.go.com/International/wireStory/overnight-exchange-fire-afghan-pakistan-border-kills-5-128168281"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.9936,
+          30.1798
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Attaque",
+        "description": "Date: 02/02/2026\nPays: Pakistan (Baloutchistan)\nEvenement: Contre-offensive — 145 combattants BLA tues\nDetail: Les forces pakistanaises mobilisent unites conventionnelles et heliportees pour reprendre le controle apres les attaques du 30-31 janvier. Al Jazeera et Arab News rapportent 145 insurges tues, Business Standard 92 militants + 15 securite.\nBilan: 145 insurges tues selon Al Jazeera, 216 au total d'ici le 5 fevrier (cumul sur la periode des attaques)",
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/2/2/pakistani-forces-kill-145-fighters-in-balochistan-after-deadly-attacks Arab_News|https://www.arabnews.com/node/2634421/amp Business_Standard|https://www.business-standard.com/world-news/balochistan-liberation-army-pakistan-blast-quetta-126020100085_1.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.0593,
+          33.7177
+        ]
+      },
+      "properties": {
+        "name": "ISKP",
+        "type": "Attaque",
+        "description": "Date: 06/02/2026\nPays: Pakistan (Islamabad)\nEvenement: Attentat-suicide mosquee chiite — Islamabad\nDetail: Un kamikaze se fait exploser lors de la priere du vendredi dans une mosquee chiite d'Islamabad. L'Etat islamique revendique via Telegram (photo et nom de l'auteur). Le cerveau presume, operatif afghan de l'EI, est arrete. La planification a eu lieu en Afghanistan.\nBilan: 32 morts, plus de 160 blesses",
+        "sources": "CNN|https://www.cnn.com/2026/02/06/asia/islamabad-pakistan-mosque-explosion-intl Al_Jazeera|https://www.aljazeera.com/news/2026/2/7/thousands-mourn-32-victims-of-islamabad-shia-mosque-bombing-in-pakistan South_Asia_Monitor|https://www.southasiamonitor.org/spotlight/pakistan-mosque-blast-isis-growing-shadow-subcontinent India_Narrative|https://www.indianarrative.com/opinion/pakistan-mosque-blast-isis-shadow-in-the-subcontinent-is-alarming/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.0593,
+          33.7177
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Siege",
+        "description": "Date: 07/02/2026\nPays: Pakistan (Islamabad)\nEvenement: Arrestation de 4 facilitateurs de l'attentat du 6 fevrier\nDetail: Les forces de securite pakistanaises annoncent l'arrestation de 4 facilitateurs presumes lies a l'attentat de la mosquee chiite, alors que les victimes sont enterrees. Al Jazeera souligne le focus sur les reseaux transfrontaliers.\nBilan: 4 arrestations, enquete elargie aux reseaux en Afghanistan",
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/2/7/deadly-islamabad-bombing-sharpens-focus-on-cross-border-attacks-in-pakistan Al_Jazeera_suite|https://www.aljazeera.com/news/2026/2/7/thousands-mourn-32-victims-of-islamabad-shia-mosque-bombing-in-pakistan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.5879,
+          33.0046
+        ]
+      },
+      "properties": {
+        "name": "TTP",
+        "type": "Attaque",
+        "description": "Date: 09/02/2026\nPays: Pakistan (Bannu, KP)\nEvenement: Attaque au debut du Ramadan — Bannu\nDetail: Le TTP frappe dans le district de Bannu pendant les premiers jours du Ramadan. Pakistan cite cette attaque — avec Bajaur — comme justification pour la riposte majeure sur l'Afghanistan.\nBilan: victimes cote securite, contexte justifiant la contre-offensive de fevrier",
+        "sources": "Wikipedia_2026_Bajaur_attack|https://en.wikipedia.org/wiki/2026_Bajaur_attack Wikipedia_2026_Afghanistan-Pakistan_war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.8723,
+          31.634
+        ]
+      },
+      "properties": {
+        "name": "Delhi Police Special Cell",
+        "type": "Incident frontalier",
+        "description": "Date: 12/02/2026\nPays: Inde (Amritsar, Pendjab)\nEvenement: Ronde intensifiee apres alertes ISI\nDetail: Apres les evenements de Baloutchistan et l'escalade regionale, les agences indiennes renforcent la surveillance des reseaux presumes affilies a l'ISI au Pendjab. Prefigure les arrestations du 11 avril a Zirakpur.\nBilan: arrestations preventives, saisies d'armes",
+        "sources": "Tribune_India|https://www.tribuneindia.com/news/delhi/2-isi-operatives-arrested-for-planning-targeted-killings-grenade-attacks-in-delhi-punjab/ SATP_India|https://www.satp.org/terrorist-activity/india"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5249,
+          34.6859
+        ]
+      },
+      "properties": {
+        "name": "TTP",
+        "type": "Attaque",
+        "description": "Date: 16/02/2026\nPays: Pakistan (Bajaur, KP)\nEvenement: Attentat-suicide vehicule + assaut arme leger — Bajaur\nDetail: Un kamikaze precipite un vehicule piege sur un checkpoint de securite du district de Bajaur, immediatement suivi d'un assaut a l'arme legere. Les forces pakistanaises tuent 12 militants. Attribution TTP — cellules operant depuis l'Afghanistan selon Islamabad. Declenche l'escalade diplomatique des 18-19 fevrier.\nBilan: 11 membres des forces de securite et 1 enfant tues, 7 blesses, 12 militants TTP tues",
+        "sources": "Wikipedia_2026_Bajaur_attack|https://en.wikipedia.org/wiki/2026_Bajaur_attack Times_of_Islamabad|https://timesofislamabad.com/16-02-2026/massive-vehicle-borne-suicide-attack-struck-a-security-official-compound-in-kp/ Crisis_Group|https://www.crisisgroup.org/sites/default/files/2026-02/354-pakistan-militant-surge.pdf"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.0593,
+          33.7177
+        ]
+      },
+      "properties": {
+        "name": "ISI",
+        "type": "Crise diplomatique",
+        "description": "Date: 19/02/2026\nPays: Pakistan (Islamabad)\nEvenement: Demarche diplomatique forte contre Kaboul\nDetail: Le ministere des Affaires etrangeres pakistanais convoque l'adjoint au chef de mission afghan et protest formellement contre l'utilisation du territoire afghan par les insurges. Prelude a l'offensive aerienne du 27 fevrier.\nBilan: escalade diplomatique, rappels d'ambassadeurs",
+        "sources": "Wikipedia_2026_Bajaur_attack|https://en.wikipedia.org/wiki/2026_Bajaur_attack Wikipedia_2026_Afghanistan-Pakistan_war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war Anadolu_Agency|https://www.aa.com.tr/en/asia-pacific/timeline-how-pakistan-afghanistan-tensions-reached-a-breaking-point/3842132"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.2556,
+          34.5107
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Incident frontalier",
+        "description": "Date: 20/02/2026\nPays: Ligne de Controle (Cachemire)\nEvenement: Violation de cessez-le-feu — secteur Nowgam, Kupwara\nDetail: Tirs pakistanais depuis les postes de la LoC cote AJK sur le secteur de Toot Mar Gali dans la zone de Nowgam, district de Kupwara. Premiere violation majeure documentee de 2026, rompant la trêve DGMO de mai 2025.\nBilan: ripostes indiennes, pas de victimes civiles confirmees cote indien",
+        "sources": "DD_News|https://ddnews.gov.in/en/pakistan-violates-ceasefire-for-10th-consecutive-day-along-loc-in-jk/ Anadolu_Agency|https://www.aa.com.tr/en/asia-pacific/india-pakistan-accuse-each-other-of-ceasefire-violations-along-kashmir-border/3557487 SATP_J&K|https://www.satp.org/terrorist-activity/india-jammukashmir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.3879,
+          34.1304
+        ]
+      },
+      "properties": {
+        "name": "Afghan Taliban",
+        "type": "Incident frontalier",
+        "description": "Date: 24/02/2026\nPays: Ligne Durand (KP / Nangarhar)\nEvenement: Affrontements Pak-Afg a la frontiere — post airstrikes\nDetail: Nouveaux accrochages entre forces pakistanaises et talibanes afghanes a la frontiere, suite aux frappes. Echange de tirs d'artillerie. Al Jazeera rapporte des pertes des deux cotes.\nBilan: pertes bilaterales, intensification des tensions",
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/2/24/fresh-afghan-pakistani-border-clashes-follow-deadly-strikes Wikipedia_Afghanistan-Pakistan_border_skirmishes|https://en.wikipedia.org/wiki/Afghanistan%E2%80%93Pakistan_clashes_(2024%E2%80%93present)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5249,
+          34.6859
+        ]
+      },
+      "properties": {
+        "name": "TTP",
+        "type": "Attaque",
+        "description": "Date: 25/02/2026\nPays: Pakistan (Bajaur, KP)\nEvenement: Tir sur patrouille police — 4 policiers tues\nDetail: Ouverture du feu sur une patrouille a Bajaur, 9 jours apres l'attentat-suicide du 16 fevrier. Phase de pression TTP maintenue contre les FC KP.\nBilan: 4 policiers martyrs",
+        "sources": "Pakistan_Today|https://www.pakistantoday.com.pk/2026/02/25/four-policemen-martyred-as-armed-men-open-fire-on-police-patrol-in-bajaur"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.1723,
+          34.526
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Air Force",
+        "type": "Attaque",
+        "description": "Date: 27/02/2026\nPays: Afghanistan (Kabul)\nEvenement: Frappes aeriennes PAF sur Kabul — \"guerre ouverte\"\nDetail: La Pakistan Air Force mene des frappes majeures sur Kabul et Kandahar. Pakistan declare la guerre ouverte au Taliban afghan. Al Jazeera parle de \"major casualties\" des deux cotes. Cibles revendiquees : 313 Corps, depots d'armes, camps d'entrainement TTP/ISKP.\nBilan: victimes civiles et combattants, 4 morts confirmes en version officielle, chiffres plus eleves cotes afghan",
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/2/27/air-attacks-on-kabul-push-pakistan-taliban-crisis-into-uncharted-territory Military.com|https://www.military.com/feature/2026/02/27/pakistan-declares-open-war-afghan-taliban-airstrikes-hammer-kabul-and-kandahar.html PBS|https://www.pbs.org/newshour/world/afghanistan-accuses-pakistan-of-carrying-out-airstrikes-that-killed-4-in-kabul Wikipedia_2026_Afghanistan-Pakistan_war|https://en.wikipedia.org/wiki/2026_Afghanistan%E2%80%93Pakistan_war"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          65.71,
+          31.61
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Air Force",
+        "type": "Attaque",
+        "description": "Date: 27/02/2026\nPays: Afghanistan (Kandahar)\nEvenement: Frappes sur centre d'entrainement Tarawo\nDetail: En parallele des frappes sur Kabul, la PAF cible le centre d'entrainement Tarawo et les infrastructures logistiques (depot de carburant) a Kandahar. Kam Air rapporte la destruction d'un de ses depots de carburant.\nBilan: infrastructures detruites, victimes cote Taliban",
+        "sources": "Military.com|https://www.military.com/feature/2026/02/27/pakistan-declares-open-war-afghan-taliban-airstrikes-hammer-kabul-and-kandahar.html Army_Recognition|https://www.armyrecognition.com/news/aerospace-news/2026/pakistan-fighter-jets-strike-kabul-as-2026-war-with-afghanistan-escalates"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5249,
+          34.0151
+        ]
+      },
+      "properties": {
+        "name": "TTP",
+        "type": "Attaque",
+        "description": "Date: 04/01/2026\nPays: Pakistan (KP)\nEvenement: Attaque coordonnee sur convoi militaire, district de Peshawar\nDetail: Embuscade et tirs nourris contre un convoi des Frontier Corps sur l'axe Peshawar–Landi Kotal. Revendication TTP dans le cadre de la campagne hivernale annoncee fin decembre 2025.\nBilan: plusieurs morts et blesses cote FC KP",
+        "sources": "South_Asia_Terrorism_Portal|https://www.satp.org/terrorist-activity/pakistan Wikipedia_Terrorist_incidents_in_Pakistan_2026|https://en.wikipedia.org/wiki/Terrorist_incidents_in_Pakistan_in_2026"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.1065,
+          32.9731
+        ]
+      },
+      "properties": {
+        "name": "TTP",
+        "type": "Embuscades",
+        "description": "Date: 07/01/2026\nPays: Pakistan (Nord-Waziristan)\nEvenement: IED puis assaut sur poste avance\nDetail: Dispositif explosif improvise sur la route menant a Miranshah, suivi de tirs sur une patrouille de l'armee pakistanaise. Zone revendiquee par la Wilayat Gulzar Imam Shaheed du TTP.\nBilan: soldats pakistanais tues, armement recupere par le TTP",
+        "sources": "SATP_Pakistan|https://www.satp.org/terrorist-activity/pakistan Dawn|https://www.dawn.com/news/waziristan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.9936,
+          30.1798
+        ]
+      },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 12/01/2026\nPays: Pakistan (Baloutchistan)\nEvenement: Attaque de la Majeed Brigade contre un convoi de securite a Quetta\nDetail: Attentat-suicide suivi de tirs d'assaut contre un convoi du Frontier Corps dans la peripherie est de Quetta. La BLA annonce la preparation d'une offensive majeure a venir.\nBilan: officiers FC tues, insurges abattus, prelude aux attaques du 30 janvier",
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Al_Jazeera|https://www.aljazeera.com/news/2026/2/2/pakistani-forces-kill-145-fighters-in-balochistan-after-deadly-attacks"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.3587,
+          34.0837
+        ]
+      },
+      "properties": {
+        "name": "Indian Army",
+        "type": "Incursion",
+        "description": "Date: 09/01/2026\nPays: Inde (Jammu-et-Cachemire)\nEvenement: Operation anti-infiltration secteur Kupwara\nDetail: Operation conjointe Indian Army / J&K Police dans la foret de Nowgam apres detection de mouvements suspects cote LoC. Engagement bref, pas de victimes cote indien confirme.\nBilan: infiltre presume neutralise, armes saisies",
+        "sources": "SATP_J&K_2026|https://www.satp.org/terrorist-activity/india-jammukashmir The_Hindu|https://www.thehindu.com/news/national/jammu-and-kashmir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.5394,
+          32.254
+        ]
+      },
+      "properties": {
+        "name": "ISKP",
+        "type": "Attaque",
+        "description": "Date: 14/01/2026\nPays: Pakistan / Afghanistan (frontiere Paktika)\nEvenement: Embuscade sur patrouille Taliban afghane\nDetail: Cellule presumee de l'Etat islamique-Khorasan revendique une attaque sur une patrouille des forces talibanes pres de la frontiere pakistanaise. Confirme la reactivation de l'ISKP sur l'axe Paktika-Khost.\nBilan: plusieurs combattants talibans tues",
+        "sources": "Al_Jazeera_Afghanistan|https://www.aljazeera.com/news/afghanistan Long_War_Journal|https://www.longwarjournal.org/tags/iskp"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.5423,
+          32.4816
+        ]
+      },
+      "properties": {
+        "name": "Indian Army",
+        "type": "Incursion",
+        "description": "Date: 23/01/2026\nPays: Inde (Kathua, J&K)\nEvenement: Neutralisation d'un commandant Jaish-e-Mohammed a Billawar\nDetail: Les forces indiennes annoncent la mort de \"Usmaan\", cadre pakistanais du JeM, a Parhetar (village de Billawar, district de Kathua). Une operation coordonnee entre Indian Army et J&K Police.\nBilan: 1 cadre JeM neutralise, explosifs et armement saisis",
+        "sources": "SATP_J&K_Timeline_2026|https://www.satp.org/terrorist-activity/india-jammukashmir Hindustan_Times|https://www.hindustantimes.com/india-news/kashmir-kathua"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.1148,
+          32.5608
+        ]
+      },
+      "properties": {
+        "name": "BSF",
+        "type": "Incident frontalier",
+        "description": "Date: 25/01/2026\nPays: Inde (Samba, J&K)\nEvenement: Intrus pakistanais abattu sur la International Border\nDetail: La Border Security Force (BSF) intercepte un individu non identifie tentant de franchir l'IB (International Border) dans le secteur de Samba. Tir somme suivi de neutralisation.\nBilan: 1 intrus tue",
+        "sources": "SATP_J&K_2026|https://www.satp.org/terrorist-activity/india-jammukashmir Times_of_India|https://timesofindia.indiatimes.com/india/samba-border"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.9936,
+          30.1798
+        ]
+      },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 30/01/2026\nPays: Pakistan (Baloutchistan)\nEvenement: Attaques coordonnees BLA — Quetta\nDetail: Vers 03h00 (PKT), la Balochistan Liberation Army lance une offensive simultanee sur 9 districts. A Quetta, 3 postes de police incendies, assaut sur prison de haute securite, helicoptere militaire engage. Phase initiale de l'une des plus vastes operations BLA jamais menees.\nBilan: policiers et civils tues, assaillants neutralises partiellement",
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Business_Standard|https://www.business-standard.com/world-news/balochistan-liberation-army-pakistan-blast-quetta-126020100085_1.html DD_News|https://ddnews.gov.in/en/who-is-the-baloch-liberation-army-behind-pakistans-balochistan-attacks/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          62.3225,
+          25.1264
+        ]
+      },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 30/01/2026\nPays: Pakistan (Gwadar, Baloutchistan)\nEvenement: Assaut BLA — cite ouvriere Gwadar\nDetail: Insurges attaquent une colonie de travailleurs (ouvriers de Khuzdar) dans le port strategique de Gwadar. Attentat-suicide dans le meme creneau. Message anti-CPEC adresse a la Chine.\nBilan: 5 ouvriers d'une meme famille tues",
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Al_Jazeera|https://www.aljazeera.com/news/2026/1/31/suspected-separatists-kill-8-pakistani-policemen-in-coordinated-attacks"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.8439,
+          29.7992
+        ]
+      },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 30/01/2026\nPays: Pakistan (Mastung, Baloutchistan)\nEvenement: Attentat-suicide — secteur Mastung\nDetail: Kamikaze BLA contre position de securite. Mastung est l'un des 9 districts cibles simultanement. L'attaque fait partie de l'offensive la plus vaste jamais conduite par la BLA.\nBilan: victimes multiples, bilan inclus dans le total 58 civils + 22 securite",
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Organiser|https://organiser.org/2026/02/03/338276/world/baloch-army-locks-pakistan-as-complex-terrain-catalyses-strategic-edge-islamabad-kills-145-fighters-seeking-liberation/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.0251,
+          29.5527
+        ]
+      },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 30/01/2026\nPays: Pakistan (Nushki, Baloutchistan)\nEvenement: Attentat-suicide et tirs sur centres administratifs\nDetail: Nushki touche dans le cadre de l'offensive multi-sites BLA. Banque, ecole, marche et postes de securite vises simultanement.\nBilan: victimes inclues dans bilan global de 274 morts sur 30 janvier – 5 fevrier",
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks Al_Jazeera_Features|https://www.aljazeera.com/features/2026/2/1/everyone-here-is-corrupt-what-fuels-the-balochistan-separatist-violence"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          63.4707,
+          25.2631
+        ]
+      },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 30/01/2026\nPays: Pakistan (Pasni, Baloutchistan)\nEvenement: Assaut BLA sur infrastructures cotieres\nDetail: Pasni frappe dans l'offensive simultanee. Axe cotier Makran - un des couloirs strategiques du CPEC pour la Chine.\nBilan: degats materiels et victimes",
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks DD_News|https://www.newsonair.gov.in/baloch-liberation-army-launches-major-attack-in-balochistan/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          65.4237,
+          28.5842
+        ]
+      },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 30/01/2026\nPays: Pakistan (Kharan, Baloutchistan)\nEvenement: Attaque coordonnee — Kharan\nDetail: Kharan cible dans la vague d'attaques BLA. Armes legeres, grenades et gilets explosifs. Positions policieres et paramilitaires visees.\nBilan: victimes incluses dans total global",
+        "sources": "Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.9936,
+          30.1798
+        ]
+      },
+      "properties": {
+        "name": "BLA",
+        "type": "Attaque",
+        "description": "Date: 31/01/2026\nPays: Pakistan (Baloutchistan)\nEvenement: Suite des attaques coordonnees — 8 policiers tues\nDetail: Les insurges presumes separatistes prolongent l'offensive au lendemain du 30 janvier. Al Jazeera rapporte 8 policiers tues dans les attaques coordonnees.\nBilan: 8 policiers pakistanais tues, 33 morts total confirmes au 31/01",
+        "sources": "Al_Jazeera_31_jan_2026|https://www.aljazeera.com/news/2026/1/31/suspected-separatists-kill-8-pakistani-policemen-in-coordinated-attacks"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5249,
+          34.0151
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Army",
+        "type": "Siege",
+        "description": "Date: 08/03/2026\nPays: Pakistan (KP)\nEvenement: Intelligence-based operations — 13 terroristes tues\nDetail: Operations de renseignement menees a travers le Khyber Pakhtunkhwa. Pakistan Today rapporte 13 terroristes neutralises en un jour. Continuite de la pression post-frappes de fevrier.\nBilan: 13 militants tues",
+        "sources": "Pakistan_Today|https://www.pakistantoday.com.pk/2026/03/08/security-forces-kill-13-terrorists-in-intelligence-based-operations-across-khyber-pakhtunkhwa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.2795,
+          34.5553
+        ]
+      },
+      "properties": {
+        "name": "TTP",
+        "type": "Geopolitique",
+        "description": "Date: 10/03/2026\nPays: Afghanistan / Pakistan\nEvenement: TTP annonce l'offensive de printemps \"Khyber\"\nDetail: Le Tehrik-e-Taliban Pakistan annonce officiellement l'operation \"Khyber\", offensive de printemps contre les forces pakistanaises. Declaration relayee par les chaines TTP et repercutee par Shamshad News.\nBilan: signalement strategique — montee en intensite annoncee",
+        "sources": "Shamshad_News|https://shamshadnews.com/en/2026/03/10/ttp-announces-spring-offensive-khyber-against-pakistani-forces/ Wikipedia_Insurgency_in_KP|https://en.wikipedia.org/wiki/Insurgency_in_Khyber_Pakhtunkhwa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.1723,
+          34.526
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Air Force",
+        "type": "Attaque",
+        "description": "Date: 13/03/2026\nPays: Afghanistan (Kabul, Kandahar, Paktia, Paktika)\nEvenement: Seconde vague de frappes PAF\nDetail: La PAF mene une serie de frappes aeriennes sur 4 provinces afghanes. Cibles revendiquees : 313 Corps (Kabul), depot d'armes, centre d'entrainement Tarawo (Kandahar), depot de carburant Kam Air, camp Sher-e-Nau (Paktia). Kaboul accuse Islamabad de viser civils et infrastructures civiles.\nBilan: victimes multiples, tension aerienne maximale",
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan Wikipedia_2026_Pakistani_airstrikes|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan Army_Recognition|https://www.armyrecognition.com/news/aerospace-news/2026/pakistan-fighter-jets-strike-kabul-as-2026-war-with-afghanistan-escalates"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.5394,
+          33.7
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Air Force",
+        "type": "Attaque",
+        "description": "Date: 13/03/2026\nPays: Afghanistan (Paktia)\nEvenement: Frappe sur camp Sher-e-Nau\nDetail: Frappe ciblee sur un camp presume de militants dans la province de Paktia, dans le cadre de la serie du 13 mars. Pakistan identifie Sher-e-Nau comme camp militant ; Kaboul conteste.\nBilan: victimes cote Taliban et combattants locaux",
+        "sources": "Wikipedia_2026_Pakistani_airstrikes|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          65.71,
+          31.61
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Air Force",
+        "type": "Attaque",
+        "description": "Date: 13/03/2026\nPays: Afghanistan (Kandahar)\nEvenement: Frappe sur depot de carburant Kam Air\nDetail: La PAF confirme avoir cible des \"infrastructures logistiques, incluant un depot de carburant\" a Kandahar. La compagnie aerienne afghane Kam Air rapporte la destruction d'un de ses depots.\nBilan: destruction d'infrastructure civile selon Kam Air",
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan Wikipedia|https://en.wikipedia.org/wiki/2026_Pakistani_airstrikes_in_Afghanistan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.2075,
+          34.5513
+        ]
+      },
+      "properties": {
+        "name": "Pakistan Air Force",
+        "type": "Attaque",
+        "description": "Date: 16/03/2026\nPays: Afghanistan (Kabul)\nEvenement: Frappe sur Omar Addiction Treatment Hospital — Kabul\nDetail: L'Afghanistan accuse Pakistan d'une frappe aerienne sur l'hopital de traitement des addictions Omar (2000 lits), visant selon Kaboul patients et personnel. L'attaque a eu lieu vers 21h heure locale et a detruit de larges sections de l'etablissement. Pakistan nie et affirme n'avoir cible que des installations militaires a Kabul et Nangarhar.\nBilan: 400 morts revendiques par Kaboul (chiffre conteste par Islamabad), enfants parmi les victimes",
+        "sources": "Al_Jazeera|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan Al_Jazeera_-_400_morts|https://www.aljazeera.com/news/2026/3/16/afghanistan-says-children-among-those-killed-in-latest-attacks-by-pakistan PBS|https://www.pbs.org/newshour/world/afghanistan-accuses-pakistan-of-carrying-out-airstrikes-that-killed-hundreds-in-kabul"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.0479,
+          33.5651
+        ]
+      },
+      "properties": {
+        "name": "ISI",
+        "type": "Geopolitique",
+        "description": "Date: 20/03/2026\nPays: Pakistan / Afghanistan\nEvenement: Trêve temporaire pour l'Aid al-Fitr\nDetail: Une trêve informelle est observee a l'occasion de l'Aid al-Fitr (20-21 mars). Les operations militaires pakistanaises sur l'Afghanistan sont suspendues. Reprise annoncee apres les festivites.\nBilan: pause temporaire, tensions diplomatiques maintenues",
+        "sources": "Prism_News|https://www.prismnews.com/news/pakistan-resumes-military-operations-in-afghanistan-after Anadolu_Agency|https://www.aa.com.tr/en/asia-pacific/timeline-how-pakistan-afghanistan-tensions-reached-a-breaking-point/3842132"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.8087,
+          34.07
+        ]
+      },
+      "properties": {
+        "name": "J&K Police",
+        "type": "Siege",
+        "description": "Date: 28/03/2026\nPays: Inde (Jammu-et-Cachemire)\nEvenement: Bilan trimestriel — 10 fatalites terroristes au J&K\nDetail: Le South Asia Terrorism Portal (SATP) comptabilise au moins 10 fatalites terroristes / associees en Jammu-et-Cachemire pour le premier trimestre 2026. Intensite en baisse comparee aux pics de 2025, mais continuite operationnelle des groupes transfrontaliers.\nBilan: 10 morts cumul jan-mars au J&K (SATP)",
+        "sources": "SATP_J&K_2026|https://www.satp.org/terrorist-activity/india-jammukashmir Sri_Lanka_Guardian|https://slguardian.org/jk-lingering-threat/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5249,
+          34.0151
+        ]
+      },
+      "properties": {
+        "name": "TTP",
+        "type": "Attaque",
+        "description": "Date: 29/03/2026\nPays: Pakistan (KP)\nEvenement: Reprise des attaques post-Ramadan — operation Khyber\nDetail: Apres la trêve d'Aid al-Fitr, le TTP intensifie l'offensive de printemps \"Khyber\" annoncee le 10 mars. Frappes sporadiques sur postes avances et convois dans plusieurs districts du KP.\nBilan: victimes cote securite, pressions sur les axes logistiques",
+        "sources": "Shamshad_News|https://shamshadnews.com/en/2026/03/10/ttp-announces-spring-offensive-khyber-against-pakistani-forces/ SATP_Pakistan|https://www.satp.org/terrorist-activity/pakistan"
+      }
+    }
+  ]
+}

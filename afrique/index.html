@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algor Int — Afrique Maritime</title>
+<script type="module" src="../shared/site-auth.js?v=20260511a"></script>
+<link rel="icon" type="image/jpeg" href="../favicon.jpg">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<link rel="stylesheet" href="../shared/styles.css?v=20260428c">
+<style>
+/* === AFRIQUE — styles minimaux, modes geres par Mapbox === */
+#map { background: #e8eaed; }
+
+.hdr-cell-sm { display: flex; align-items: center; padding: 0 12px; border-right: 1px solid var(--ln); }
+.hdr-cell-sm span { font: 500 9px/1 var(--m); color: var(--tx1); letter-spacing: 0.18em; text-transform: uppercase; }
+.hdr-cell-sm strong { color: var(--ac); font-weight: 600; }
+
+/* Legende dans sidebar */
+#sidebar-legend-body .legend-row { display:flex; align-items:center; gap:10px; padding:4px 16px; font:400 10.5px/1.3 var(--b); color: var(--tx); }
+#sidebar-legend-body .legend-swatch { width:12px; height:12px; flex:0 0 12px; }
+#sidebar-legend-body .legend-swatch.line { height: 2px; width: 18px; flex: 0 0 18px; }
+#sidebar-legend-body .legend-empty { padding: 12px 16px; font:400 10px/1.4 var(--b); color: var(--tx2); font-style: italic; }
+
+/* Popup dark-or coherent Sahel */
+.mapboxgl-popup-content { background: var(--bg1) !important; border: 1px solid var(--ln) !important; border-top: 2px solid var(--ac) !important; padding: 0 !important; max-width: 360px !important; color: var(--tx); box-shadow: 0 6px 24px rgba(0,0,0,0.35) !important; }
+.mapboxgl-popup-close-button { color: var(--tx1) !important; right: 6px !important; top: 4px !important; font-size: 16px !important; }
+.mapboxgl-popup-close-button:hover { color: var(--ac) !important; }
+.mapboxgl-popup-tip { display: none; }
+.popup-header { padding: 10px 14px 8px; border-bottom: 1px solid var(--ln); display: flex; align-items: center; gap: 8px; }
+.popup-dot-bar { width: 4px; height: 14px; }
+.popup-actor { font: 600 12px/1.1 var(--bc); color: var(--txh); letter-spacing: 0.08em; text-transform: uppercase; }
+.popup-body { padding: 10px 14px; }
+.popup-row { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
+.popup-key { font: 500 8px/1 var(--m); color: var(--tx1); letter-spacing: 0.16em; text-transform: uppercase; }
+.popup-val { font: 400 11px/1.45 var(--b); color: var(--tx); white-space: pre-wrap; }
+
+/* Sidebar close btn mobile */
+#sidebar-close-btn { position:absolute; top:10px; right:10px; background:transparent; border:none; color:var(--tx1); font-size: 22px; cursor:pointer; z-index:5; line-height:1; display:none; }
+#sidebar-close-btn:hover { color: var(--ac); }
+@media (max-width: 900px) { #sidebar-close-btn { display: block; } }
+
+/* Mapbox bottom controls leger */
+.mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right { opacity: 0.4; }
+.mapboxgl-ctrl-bottom-left:hover, .mapboxgl-ctrl-bottom-right:hover { opacity: 1; }
+
+/* ═════════ AIS — Bateaux temps reel ═════════ */
+#ais-stats {
+  position: fixed;
+  top: 56px; right: 12px;
+  z-index: 30;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  background: rgba(15,17,20,0.92);
+  border: 1px solid var(--ln1);
+  border-top: 2px solid var(--ac);
+  backdrop-filter: blur(10px);
+  font: 500 10px/1 var(--m);
+  color: var(--tx);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+#ais-stats.on { display: inline-flex; }
+#ais-stats .ais-live-dot {
+  width: 6px; height: 6px;
+  background: #5a9a5f;
+  box-shadow: 0 0 8px rgba(90,154,95,0.7);
+  animation: ais-pulse 1.4s ease-in-out infinite;
+}
+#ais-stats.connecting .ais-live-dot { background: var(--ac); box-shadow: 0 0 8px rgba(196,154,60,0.7); }
+#ais-stats.disconnected .ais-live-dot { background: #c94a4a; box-shadow: 0 0 8px rgba(201,74,74,0.7); animation: none; }
+#ais-stats .ais-count { color: var(--ac); font-weight: 600; font-size: 11px; letter-spacing: 0.1em; }
+#ais-stats .ais-reset { color: var(--tx1); cursor: pointer; padding-left: 8px; border-left: 1px solid var(--ln); margin-left: 2px; }
+#ais-stats .ais-reset:hover { color: var(--ac); }
+@keyframes ais-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Modale cle API */
+#ais-key-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5,6,8,0.78);
+  backdrop-filter: blur(6px);
+}
+#ais-key-modal.open { display: flex; }
+#ais-key-modal .modal-box {
+  width: min(480px, calc(100% - 32px));
+  background: var(--bg1);
+  border: 1px solid var(--ln1);
+  border-top: 2px solid var(--ac);
+  padding: 24px 28px 20px;
+  font-family: var(--b);
+  color: var(--tx);
+}
+#ais-key-modal h3 {
+  font: 600 14px/1.1 var(--bc);
+  color: var(--txh);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+#ais-key-modal .modal-sub {
+  font: 500 9px/1 var(--m);
+  color: var(--ac);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+#ais-key-modal p {
+  font: 400 12px/1.55 var(--b);
+  color: var(--tx);
+  margin-bottom: 14px;
+}
+#ais-key-modal p a {
+  color: var(--ac);
+  text-decoration: none;
+  border-bottom: 1px solid var(--acb);
+}
+#ais-key-modal p a:hover { color: var(--ach); border-color: var(--ach); }
+#ais-key-modal input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--ln1);
+  color: var(--txh);
+  font: 400 12px/1 var(--m);
+  letter-spacing: 0.04em;
+  outline: none;
+  margin-bottom: 14px;
+}
+#ais-key-modal input[type="text"]:focus { border-color: var(--acb); background: rgba(196,154,60,0.04); }
+#ais-key-modal .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+#ais-key-modal button {
+  padding: 9px 16px;
+  background: transparent;
+  border: 1px solid var(--ln1);
+  color: var(--tx);
+  font: 500 10px/1 var(--m);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+#ais-key-modal button:hover { border-color: var(--ln2); color: var(--txh); }
+#ais-key-modal button.primary { background: var(--acd); border-color: var(--acb); color: var(--ac); }
+#ais-key-modal button.primary:hover { background: rgba(196,154,60,0.16); color: var(--ach); border-color: var(--ach); }
+#ais-key-modal .modal-error { color: #c94a4a; font: 400 11px/1.4 var(--b); margin-bottom: 10px; display: none; }
+#ais-key-modal .modal-error.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="header">
+  <div id="header-left">
+    <button id="btn-sidebar" onclick="toggleSidebar()"><span class="hamburger">&#9776;</span> Menu</button>
+    <a href="../index.html" title="Retour a la selection" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <img src="algor_int_logo.jpg" alt="Algor Int">
+      <div>
+        <h1>Afrique Maritime</h1>
+        <p>Flux · Ports · Piraterie · Presence navale</p>
+      </div>
+    </a>
+  </div>
+  <div class="hdr-cell">
+    <span class="hdr-cell-label">Calques</span>
+    <span id="active-count" style="font:500 10px/1 var(--m);color:var(--ac);letter-spacing:0.1em">0/27</span>
+  </div>
+  <div class="hdr-cell">
+    <span class="hdr-cell-label">Features</span>
+    <span id="feature-count" style="font:500 10px/1 var(--m);color:var(--tx);letter-spacing:0.1em">—</span>
+  </div>
+  <div class="hdr-spacer"></div>
+  <div class="hdr-cell-sm">
+    <button id="btn-export-html" onclick="exportLivrable()" title="Exporter les calques visibles dans un fichier HTML autonome" style="background:transparent;border:none;font:500 9px/1 var(--m);color:var(--tx1);letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0">
+      <span style="font-size:11px;line-height:1">⬇</span> Exporter HTML
+    </button>
+  </div>
+  <div class="hdr-cell-sm">
+    <span>Classif <strong>UNCLASSIFIED</strong></span>
+  </div>
+</div>
+
+<!-- Map -->
+<div id="map"></div>
+
+<!-- Sidebar overlay (mobile) -->
+<div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <button id="sidebar-close-btn" onclick="toggleSidebar()">&times;</button>
+  <div class="sb-sections">
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Legende</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body" id="sidebar-legend-body">
+      <div class="legend-empty">Aucun calque actif</div>
+    </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Sources</span>
+      <span class="sb-section-arrow">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body collapsed">
+      <div style="padding:12px 16px;font:400 10px/1.55 var(--b);color:var(--tx1)">
+        Carte Afrique maritime. Flux commerciaux et strategiques, ports majeurs par vocation, zones de piraterie documentees, presence navale FR / CN / US.
+        <br><br>
+        <span style="color:var(--tx)">IMO · UNCTAD · CSIS · Transnet · DP World · CMA CGM · ACLED · EU NAVFOR · UKMTO · AFRICOM · CFR · Brookings · IMB · MDAT-GoG · ISS Africa</span>
+      </div>
+    </div>
+
+    <div class="sb-section-header" onclick="toggleSbSection(this)">
+      <span class="sb-section-title">Calques</span>
+      <span class="sb-section-arrow open">&#x25B2;</span>
+    </div>
+    <div class="sb-section-body">
+
+      <div class="sb-style-row">
+        <button class="sb-style-btn" onclick="toggleAll(true)">Tout activer</button>
+        <button class="sb-style-btn" onclick="toggleAll(false)">Tout enlever</button>
+      </div>
+
+      <div class="sb-cat-label">Style carte</div>
+      <div class="sb-style-row">
+        <button class="sb-style-btn active" onclick="setStyle('standard')" id="sb-standard">Standard</button>
+        <button class="sb-style-btn" onclick="setStyle('satellite')" id="sb-satellite">Satellite</button>
+        <button class="sb-style-btn" onclick="setStyle('dark')" id="sb-dark">Sombre</button>
+      </div>
+
+      <!-- Group 1: FLUX MARITIMES -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'flux')">
+        <span>1. Flux maritimes <span class="sb-sub-badge" id="badge-flux">0/7</span></span>
+        <div class="sb-toggle" id="sb-master-flux" onclick="event.stopPropagation();toggleMaster('flux')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-flux">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e0b452"></span>Conteneurs (Cap, Suez)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-containers" onclick="toggleLayer('flux-containers')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#a065c4"></span>Hydrocarbures (brut)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-oil" onclick="toggleLayer('flux-oil')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>GNL (gaz liquefie)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-lng" onclick="toggleLayer('flux-lng')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c08a5a"></span>Vrac sec (fer, charbon)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-bulk" onclick="toggleLayer('flux-bulk')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#5fc4d6"></span>Cabotage regional</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-regional" onclick="toggleLayer('flux-regional')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8e96a2"></span>Bypass &amp; alternatifs</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-bypass" onclick="toggleLayer('flux-bypass')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e0b452;border-radius:0;outline:1px solid #e0b452;outline-offset:1px"></span>Noeuds strategiques</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-flux-noeuds" onclick="toggleLayer('flux-noeuds')"></div>
+        </div>
+      </div>
+
+      <!-- Group 2: PORTS -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'ports')">
+        <span>2. Ports <span class="sb-sub-badge" id="badge-ports">0/5</span></span>
+        <div class="sb-toggle" id="sb-master-ports" onclick="event.stopPropagation();toggleMaster('ports')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-ports">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c49a3c"></span>Commerciaux / conteneurs</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-com" onclick="toggleLayer('ports-com')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#7c4f9e"></span>Petroliers / LNG</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-oil" onclick="toggleLayer('ports-oil')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8d6e63"></span>Mineraliers / vrac</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-ore" onclick="toggleLayer('ports-ore')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>Peche industrielle</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-fish" onclick="toggleLayer('ports-fish')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Militaires (dual-use)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ports-mil" onclick="toggleLayer('ports-mil')"></div>
+        </div>
+      </div>
+
+      <!-- Group 3: PIRATERIE -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'piraterie')">
+        <span>3. Zones de piraterie <span class="sb-sub-badge" id="badge-piraterie">0/3</span></span>
+        <div class="sb-toggle" id="sb-master-piraterie" onclick="event.stopPropagation();toggleMaster('piraterie')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-piraterie">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Somalie / Bab el-Mandeb</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-pirate-somalie" onclick="toggleLayer('pirate-somalie')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Canal du Mozambique</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-pirate-mozambique" onclick="toggleLayer('pirate-mozambique')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#b4534b"></span>Golfe de Guinee</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-pirate-guinee" onclick="toggleLayer('pirate-guinee')"></div>
+        </div>
+      </div>
+
+      <!-- Group 4: NAVALE -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'navale')">
+        <span>4. Presence navale militaire <span class="sb-sub-badge" id="badge-navale">0/3</span></span>
+        <div class="sb-toggle" id="sb-master-navale" onclick="event.stopPropagation();toggleMaster('navale')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-navale">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#1a4d7a"></span>France</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-fr" onclick="toggleLayer('nav-fr')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8b2e3c"></span>Chine</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-cn" onclick="toggleLayer('nav-cn')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#2e8b8b"></span>Etats-Unis</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-us" onclick="toggleLayer('nav-us')"></div>
+        </div>
+      </div>
+
+      <!-- Group 5: HUBS & ENTREPOTS (Mali / Burkina / Mauritanie) -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'hubs')">
+        <span>5. Hubs &amp; entrepots <span class="sb-sub-badge" id="badge-hubs">0/3</span></span>
+        <div class="sb-toggle" id="sb-master-hubs" onclick="event.stopPropagation();toggleMaster('hubs')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-hubs">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>Humanitaire (WFP)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-hubs-humanitaire" onclick="toggleLayer('hubs-humanitaire')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e07c5a"></span>Carburant / hydrocarbures</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-hubs-carburant" onclick="toggleLayer('hubs-carburant')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#c49a3c"></span>Logistique / multimodal</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-hubs-logistique" onclick="toggleLayer('hubs-logistique')"></div>
+        </div>
+      </div>
+
+      <!-- Group 6: BATEAUX TEMPS REEL (AIS) -->
+      <div class="sb-layer-row sb-layer-parent" onclick="toggleGroup(event,'ais')">
+        <span>6. Bateaux temps reel (AIS) <span class="sb-sub-badge" id="badge-ais">0/6</span></span>
+        <div class="sb-toggle" id="sb-master-ais" onclick="event.stopPropagation();toggleMaster('ais')"></div>
+      </div>
+      <div class="sb-sublayers" id="sub-ais">
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e0b452"></span>Cargo (conteneurs, vrac)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-cargo" onclick="toggleLayer('ais-cargo')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#a065c4"></span>Tanker (petroliers, GNL)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-tanker" onclick="toggleLayer('ais-tanker')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#4fb8cc"></span>Passager (ferries, croisieres)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-passenger" onclick="toggleLayer('ais-passenger')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#29b6f6"></span>Peche</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-fishing" onclick="toggleLayer('ais-fishing')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#e63946"></span>Militaire / officiel</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-military" onclick="toggleLayer('ais-military')"></div>
+        </div>
+        <div class="sb-sublayer-row">
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#8e96a2"></span>Autres (remorqueurs, plaisance)</span>
+          <div class="sb-toggle sb-toggle-sm" id="sb-toggle-ais-other" onclick="toggleLayer('ais-other')"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- Indicateur LIVE temps reel -->
+<div id="ais-stats">
+  <span class="ais-live-dot"></span>
+  <span>AIS LIVE</span>
+  <span class="ais-count" id="ais-count">0</span>
+  <span style="color:var(--tx1);font-size:8.5px">navires</span>
+  <span class="ais-reset" onclick="aisResetKey()" title="Changer la cle API">RESET</span>
+</div>
+
+<!-- Modale cle API AISStream.io -->
+<div id="ais-key-modal" onclick="if(event.target.id==='ais-key-modal') aisCloseModal()">
+  <div class="modal-box">
+    <h3>Connexion AIS temps reel</h3>
+    <div class="modal-sub">AISStream.io · WebSocket</div>
+    <p>
+      Pour afficher les navires en temps reel sur la zone Afrique maritime, il faut une cle API gratuite
+      <a href="https://aisstream.io/" target="_blank" rel="noopener">aisstream.io</a> (inscription en 30 secondes).
+    </p>
+    <p style="color:var(--tx1);font-size:11px">
+      Colle ta cle ci-dessous. Elle sera conservee en local dans ce navigateur uniquement.
+    </p>
+    <div class="modal-error" id="ais-modal-error">Cle invalide ou refusee par le serveur.</div>
+    <input type="text" id="ais-key-input" placeholder="Ex. a1b2c3d4e5f6..." autocomplete="off" spellcheck="false">
+    <div class="modal-actions">
+      <button onclick="aisCloseModal()">Annuler</button>
+      <button class="primary" onclick="aisSubmitKey()">Activer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════════
+     SCRIPTS
+     ═════════════════════════════════════════════════════════════════ -->
+<script>
+/* ═════════ CATALOGUE DES CALQUES ═════════ */
+const CATALOG = {
+  flux: {
+    title: 'Flux maritimes',
+    children: [
+      { id:'flux-containers', label:'Conteneurs (Cap, Suez)',   file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'containers'], color:'#e0b452', defaultOn:true },
+      { id:'flux-oil',        label:'Hydrocarbures (brut)',     file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'oil'],        color:'#a065c4', defaultOn:false },
+      { id:'flux-lng',        label:'GNL (gaz liquefie)',       file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'lng'],        color:'#4fb8cc', defaultOn:false },
+      { id:'flux-bulk',       label:'Vrac sec (fer, charbon)',  file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'bulk'],       color:'#c08a5a', defaultOn:false },
+      { id:'flux-regional',   label:'Cabotage regional',        file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'regional'],   color:'#5fc4d6', defaultOn:true },
+      { id:'flux-bypass',     label:'Bypass & alternatifs',     file:'flux-maritimes.geojson', kind:'flux2', filter:['==',['get','category'],'bypass'],     color:'#8e96a2', defaultOn:false },
+      { id:'flux-noeuds',     label:'Noeuds strategiques',      file:'flux-noeuds.geojson',    kind:'noeud', color:'#e0b452', defaultOn:true }
+    ]
+  },
+  ports: {
+    title: 'Ports',
+    children: [
+      { id:'ports-com',  label:'Commerciaux',  file:'ports-commerciaux.geojson', kind:'port', color:'#c49a3c', defaultOn:true },
+      { id:'ports-oil',  label:'Petroliers',   file:'ports-petroliers.geojson',  kind:'port', color:'#ab47bc', defaultOn:false },
+      { id:'ports-ore',  label:'Mineraliers',  file:'ports-mineraliers.geojson', kind:'port', color:'#8d6e63', defaultOn:false },
+      { id:'ports-fish', label:'Peche',        file:'ports-peche.geojson',       kind:'port', color:'#29b6f6', defaultOn:false },
+      { id:'ports-mil',  label:'Militaires',   file:'ports-militaires.geojson',  kind:'port', color:'#e63946', defaultOn:false }
+    ]
+  },
+  piraterie: {
+    title: 'Piraterie',
+    children: [
+      { id:'pirate-somalie',    label:'Somalie',     file:'piraterie-somalie.geojson',    kind:'zone', color:'#e63946', defaultOn:false },
+      { id:'pirate-mozambique', label:'Mozambique',  file:'piraterie-mozambique.geojson', kind:'zone', color:'#e63946', defaultOn:false },
+      { id:'pirate-guinee',     label:'Guinee',      file:'piraterie-guinee.geojson',     kind:'zone', color:'#e63946', defaultOn:false }
+    ]
+  },
+  navale: {
+    title: 'Presence navale',
+    children: [
+      { id:'nav-fr', label:'France',      file:'navale-france.geojson', kind:'nav', color:'#1a4d7a', defaultOn:false },
+      { id:'nav-cn', label:'Chine',       file:'navale-chine.geojson',  kind:'nav', color:'#8b2e3c', defaultOn:false },
+      { id:'nav-us', label:'Etats-Unis',  file:'navale-usa.geojson',    kind:'nav', color:'#2e8b8b', defaultOn:false }
+    ]
+  },
+  hubs: {
+    title: 'Hubs & entrepots',
+    children: [
+      { id:'hubs-humanitaire', label:'Humanitaire (WFP)',          file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'humanitaire'], color:'#4fb8cc', defaultOn:false },
+      { id:'hubs-carburant',   label:'Carburant / hydrocarbures',  file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'carburant'],   color:'#e07c5a', defaultOn:false },
+      { id:'hubs-logistique',  label:'Logistique / multimodal',    file:'hubs-entrepots.geojson', kind:'hub', filter:['==',['get','category'],'logistique'],  color:'#c49a3c', defaultOn:false }
+    ]
+  },
+  ais: {
+    title: 'Bateaux temps reel',
+    children: [
+      { id:'ais-cargo',     label:'Cargo',     kind:'ais', color:'#e0b452', defaultOn:false },
+      { id:'ais-tanker',    label:'Tanker',    kind:'ais', color:'#a065c4', defaultOn:false },
+      { id:'ais-passenger', label:'Passager',  kind:'ais', color:'#4fb8cc', defaultOn:false },
+      { id:'ais-fishing',   label:'Peche',     kind:'ais', color:'#29b6f6', defaultOn:false },
+      { id:'ais-military',  label:'Militaire', kind:'ais', color:'#e63946', defaultOn:false },
+      { id:'ais-other',     label:'Autres',    kind:'ais', color:'#8e96a2', defaultOn:false }
+    ]
+  }
+};
+
+// Flat index
+const ALL_CHILDREN = {};
+Object.values(CATALOG).forEach(g => g.children.forEach(c => ALL_CHILDREN[c.id] = c));
+
+/* ═════════ MAP INIT ═════════ */
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+
+const STYLES = {
+  standard:  'mapbox://styles/mapbox/standard',
+  satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+  dark:      'mapbox://styles/mapbox/dark-v11'
+};
+let currentMode = 'standard';
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: STYLES[currentMode],
+  center: [22, 8],
+  zoom: 3.0,
+  minZoom: 2.4,
+  maxZoom: 10,
+  projection: 'mercator',
+  attributionControl: true
+});
+window.map = map;
+window.algorMap = map;
+
+let _catalogInitialized = false;
+map.on('style.load', () => {
+  if (!_catalogInitialized) {
+    initLayersCatalog();
+    _catalogInitialized = true;
+  } else {
+    // Re-injecter les sub-layers actives apres changement de style
+    Object.keys(layerState).forEach(id => {
+      const s = layerState[id];
+      if (s.visible && s.data) addSubLayer(id);
+    });
+    // Re-injecter le calque AIS apres changement de style
+    if (typeof aisAnyEnabled === 'function' && aisAnyEnabled()) {
+      aisState.iconsAdded = false;
+      aisEnsureLayer();
+      aisRenderNow();
+    }
+  }
+});
+
+window.setStyle = function(mode) {
+  if (!STYLES[mode] || mode === currentMode) return;
+  currentMode = mode;
+  document.querySelectorAll('.sb-style-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('sb-' + mode);
+  if (btn) btn.classList.add('active');
+  map.setStyle(STYLES[mode]);
+};
+
+/* ═════════ CATALOGUE RENDERING ═════════ */
+const layerState = {};
+
+function initLayersCatalog() {
+  // Prefetch all files
+  Object.values(ALL_CHILDREN).forEach(c => {
+    layerState[c.id] = { data: null, visible: false, cfg: c };
+    if (c.kind === 'ais') return;  // pas de fichier — flux WebSocket
+    fetch('./' + c.file + '?v=' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        layerState[c.id].data = data;
+        if (c.defaultOn) toggleLayer(c.id);
+        updateFeatureCount();
+      })
+      .catch(err => console.warn('[afrique]', c.id, err));
+  });
+}
+
+window.toggleLayer = function(id) {
+  const s = layerState[id]; if (!s) return;
+  s.visible = !s.visible;
+  const tEl = document.getElementById('sb-toggle-' + id);
+  if (tEl) tEl.classList.toggle('on', s.visible);
+  if (s.cfg.kind === 'ais') {
+    aisHandleToggle();
+  } else {
+    if (!s.data) return;
+    if (s.visible) addSubLayer(id); else removeSubLayer(id);
+  }
+  updateBadges();
+  updateMasters();
+  updateActiveCount();
+  renderLegend();
+  updateFeatureCount();
+};
+
+window.toggleMaster = function(group) {
+  const children = CATALOG[group].children;
+  const allOn = children.every(c => layerState[c.id]?.visible);
+  children.forEach(c => {
+    const s = layerState[c.id];
+    if (!s) return;
+    if (allOn && s.visible) window.toggleLayer(c.id);
+    else if (!allOn && !s.visible) window.toggleLayer(c.id);
+  });
+};
+
+window.toggleGroup = function(event, group) {
+  if (event && event.target && event.target.closest && event.target.closest('.sb-toggle')) return;
+  const sub = document.getElementById('sub-' + group);
+  if (sub) sub.classList.toggle('open');
+};
+
+window.toggleAll = function(on) {
+  Object.values(ALL_CHILDREN).forEach(c => {
+    const s = layerState[c.id];
+    if (!s) return;
+    if (on && !s.visible) window.toggleLayer(c.id);
+    else if (!on && s.visible) window.toggleLayer(c.id);
+  });
+};
+
+function addSubLayer(id) {
+  const s = layerState[id]; const c = s.cfg;
+  const srcId = 'src-' + id;
+  if (!map.getSource(srcId)) { try { map.addSource(srcId, { type:'geojson', data: s.data, lineMetrics: true }); } catch(e){ return; } }
+  const layers = buildMapboxLayers(c, srcId);
+  layers.forEach(def => {
+    if (!map.getLayer(def.id)) { try { map.addLayer(def); } catch(e) { console.warn('[afrique] addLayer', def.id, e); } }
+  });
+  layers.forEach(def => {
+    if (['circle','fill','line'].indexOf(def.type) !== -1) bindPopup(def.id, id);
+  });
+}
+
+function removeSubLayer(id) {
+  const c = layerState[id].cfg;
+  const layers = buildMapboxLayers(c, 'src-' + id);
+  layers.forEach(def => { if (map.getLayer(def.id)) { try { map.removeLayer(def.id); } catch(e){} } });
+  if (map.getSource('src-' + id)) { try { map.removeSource('src-' + id); } catch(e){} }
+}
+
+function buildMapboxLayers(c, srcId) {
+  const col = c.color;
+  if (c.kind === 'flux2') {
+    // Rendu data-driven: epaisseur/opacite selon volume_tier, glow selon pressure
+    const f = c.filter || ['==',1,1];
+    // Mapbox v3.3 line-width ne supporte ni data-expr ni zoom+data:
+    // on cree 3 layers par tier (chacun avec line-width fixe et filter additionnel)
+    const opacityByTier = ['match', ['get','volume_tier'], 1, 0.92, 2, 0.72, 3, 0.50, 0.65];
+    const glowOpacity = ['match', ['get','pressure'], 'high', 0.20, 'medium', 0.12, 'low', 0.07, 0.10];
+    const layers = [];
+    const tierConfigs = [
+      { tier:1, glow:14, line:5.0 },
+      { tier:2, glow: 9, line:2.8 },
+      { tier:3, glow: 5, line:1.4 }
+    ];
+    tierConfigs.forEach(({tier, glow, line}) => {
+      const tf = ['all', f, ['==',['get','volume_tier'], tier]];
+      layers.push({ id:`flux-glow-${c.id}-t${tier}`, type:'line', source:srcId, filter:tf,
+        layout:{'line-cap':'round','line-join':'round'},
+        paint:{ 'line-color':col, 'line-width':glow, 'line-opacity':glowOpacity, 'line-blur':5 }
+      });
+      layers.push({ id:`flux-line-${c.id}-t${tier}`, type:'line', source:srcId, filter:tf,
+        layout:{'line-cap':'round','line-join':'round'},
+        paint:{ 'line-color':col, 'line-width':line, 'line-opacity':opacityByTier }
+      });
+      if (tier <= 2) {
+        // Pulse lumineux glissant (comet trail) — rendu GPU via line-gradient sur line-progress
+        // line-gradient sera mis a jour par tickFlux a chaque frame
+        layers.push({ id:`flux-pulse-${c.id}-t${tier}`, type:'line', source:srcId, filter:tf,
+          layout:{'line-cap':'round','line-join':'round'},
+          paint:{
+            'line-width': tier === 1 ? 3.2 : 2.0,
+            'line-gradient': ['interpolate', ['linear'], ['line-progress'],
+              0, 'rgba(255,255,255,0)',
+              1, 'rgba(255,255,255,0)'
+            ]
+          }
+        });
+      }
+    });
+    return layers;
+  }
+  if (c.kind === 'noeud') {
+    // Choke points strategiques : croix lumineuse + label uppercase or
+    return [
+      { id:'noeud-glow-'+c.id, type:'circle', source:srcId,
+        paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,12,7,22], 'circle-color':col, 'circle-opacity':0.20, 'circle-blur':1.5 }
+      },
+      { id:'noeud-ring-'+c.id, type:'circle', source:srcId,
+        paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,5,7,9], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.5, 'circle-stroke-opacity':0.95 }
+      },
+      { id:'noeud-dot-'+c.id, type:'circle', source:srcId,
+        paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,2,7,4], 'circle-color':col, 'circle-stroke-color':'rgba(255,255,255,0.8)', 'circle-stroke-width':0.7 }
+      },
+      { id:'noeud-label-'+c.id, type:'symbol', source:srcId,
+        layout:{
+          'text-field': ['get','label'],
+          'text-font': ['Open Sans Bold','Arial Unicode MS Bold'],
+          'text-size': ['interpolate',['linear'],['zoom'], 3, 8, 5, 10, 7, 12],
+          'text-letter-spacing': 0.22,
+          'text-offset': [0, 1.6],
+          'text-anchor': 'top',
+          'text-allow-overlap': false
+        },
+        paint:{ 'text-color': col, 'text-halo-color': 'rgba(0,0,0,0.85)', 'text-halo-width': 2 }
+      }
+    ];
+  }
+  if (c.kind === 'port') {
+    return [
+      { id:'port-ring-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3,6,5.5,9,9], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.3, 'circle-stroke-opacity':0.7 } },
+      { id:'port-dot-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,2,6,3.5,9,5], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':0.9 } }
+    ];
+  }
+  if (c.kind === 'zone') {
+    return [
+      { id:'pirate-fill-'+c.id, type:'fill', source:srcId, paint:{ 'fill-color':col, 'fill-opacity':0.15 } },
+      { id:'pirate-line-'+c.id, type:'line', source:srcId, paint:{ 'line-color':col, 'line-width':1.5, 'line-opacity':0.75, 'line-dasharray':[3,2] } }
+    ];
+  }
+  if (c.kind === 'nav') {
+    return [
+      { id:'nav-ring-'+c.id, type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,5.5,6,8.5,9,12.5], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':1.5, 'circle-stroke-opacity':0.85 } },
+      { id:'nav-dot-'+c.id,  type:'circle', source:srcId, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,3,6,4.5,9,6.5], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':1 } }
+    ];
+  }
+  if (c.kind === 'hub') {
+    // Hubs intérieurs : marqueur carré (rayon double) pour différencier visuellement des ports cotiers
+    const f = c.filter || ['==',1,1];
+    return [
+      { id:'hub-square-'+c.id, type:'circle', source:srcId, filter:f, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,4,6,6,9,9], 'circle-color':col, 'circle-stroke-color':'#ffffff', 'circle-stroke-width':1.2, 'circle-stroke-opacity':0.9 } },
+      { id:'hub-ring-'+c.id,   type:'circle', source:srcId, filter:f, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],3,7,6,10,9,14], 'circle-color':'transparent', 'circle-stroke-color':col, 'circle-stroke-width':0.8, 'circle-stroke-opacity':0.5 } }
+    ];
+  }
+  return [];
+}
+
+function bindPopup(layerId, subId) {
+  map.on('click', layerId, (e) => {
+    if (!e.features || !e.features.length) return;
+    new mapboxgl.Popup({ closeButton:true, maxWidth:'360px', className:'algor-popup' })
+      .setLngLat(e.lngLat)
+      .setHTML(makePopup(e.features[0].properties, subId))
+      .addTo(map);
+  });
+  map.on('mouseenter', layerId, () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave', layerId, () => map.getCanvas().style.cursor = '');
+}
+
+function makePopup(props, subId) {
+  const color = ALL_CHILDREN[subId]?.color || '#c49a3c';
+  const name = props.name || props.Name || 'Point';
+  const skip = ['name','Name','sources','Sources','source'];
+  const labelMap = { type:'Type', pays:'Pays', description:'Description', detail:'Detail', volume:'Volume', objet:'Objet', rank:'Niveau', zone:'Zone', evolution_15j:'Δ 15j', statut:'Statut', operateur:'Operateur', ville:'Ville' };
+  const order = ['type','pays','description','detail','volume','objet','rank','zone','evolution_15j','statut','operateur'];
+  const seen = {};
+  let body = '';
+  const renderRow = (k) => {
+    if (skip.indexOf(k) !== -1 || seen[k]) return;
+    const v = (props[k] || '').toString().trim(); if (!v) return;
+    seen[k] = true;
+    const lbl = labelMap[k] || k.replace(/_/g,' ').replace(/^\w/, c => c.toUpperCase());
+    body += `<div class="popup-row"><span class="popup-key">${lbl}</span><span class="popup-val">${escapeHtml(v)}</span></div>`;
+  };
+  order.forEach(renderRow);
+  Object.keys(props).forEach(renderRow);
+
+  const sv = (props.sources || props.Sources || props.source || '').toString().trim();
+  if (sv) {
+    const linksHtml = sv.split(/\s+(?=[^\s|]+\|http)/).map(s => {
+      const p = s.split('|');
+      if (p.length === 2 && p[1].startsWith('http')) {
+        return `<a href="${p[1]}" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-size:10px;font-family:'JetBrains Mono',monospace;border:1px solid rgba(196,154,60,0.25);padding:1px 6px;letter-spacing:0.04em;margin-right:4px;display:inline-block;margin-bottom:3px;">${escapeHtml(p[0])}</a>`;
+      }
+      return `<span style="color:#999;font-size:10px;">${escapeHtml(s)}</span>`;
+    }).join(' ');
+    body += `<div style="margin-top:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);"><div class="popup-key" style="margin-bottom:4px">Sources</div>${linksHtml}</div>`;
+  }
+  return `<div class="popup-header"><div class="popup-dot-bar" style="background:${color}"></div><div class="popup-actor">${escapeHtml(name)}</div></div>${body ? `<div class="popup-body">${body}</div>` : ''}`;
+}
+
+function escapeHtml(s) {
+  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function updateBadges() {
+  Object.keys(CATALOG).forEach(g => {
+    const total = CATALOG[g].children.length;
+    const on = CATALOG[g].children.filter(c => layerState[c.id]?.visible).length;
+    const badge = document.getElementById('badge-'+g);
+    if (badge) { badge.textContent = `${on}/${total}`; badge.classList.toggle('has-active', on > 0); }
+  });
+}
+function updateMasters() {
+  Object.keys(CATALOG).forEach(g => {
+    const all = CATALOG[g].children.every(c => layerState[c.id]?.visible);
+    const any = CATALOG[g].children.some(c => layerState[c.id]?.visible);
+    const el = document.getElementById('sb-master-'+g);
+    if (el) el.classList.toggle('on', any);
+  });
+}
+function updateActiveCount() {
+  let total = 0, on = 0;
+  Object.values(CATALOG).forEach(g => g.children.forEach(c => { total++; if (layerState[c.id]?.visible) on++; }));
+  const el = document.getElementById('active-count');
+  if (el) el.textContent = `${on}/${total}`;
+}
+function updateFeatureCount() {
+  let total = 0;
+  Object.values(ALL_CHILDREN).forEach(c => { const s = layerState[c.id]; if (s?.visible && s?.data?.features) total += s.data.features.length; });
+  if (typeof aisAnyEnabled === 'function' && aisAnyEnabled() && typeof aisShips !== 'undefined') total += aisShips.size;
+  const el = document.getElementById('feature-count');
+  if (el) el.textContent = total || '—';
+}
+function renderLegend() {
+  const body = document.getElementById('sidebar-legend-body');
+  if (!body) return;
+  const items = [];
+  Object.values(CATALOG).forEach(g => g.children.forEach(c => {
+    if (!layerState[c.id]?.visible) return;
+    const sw = (c.kind === 'flux') ? `<span class="legend-swatch line" style="background:${c.color}"></span>` : `<span class="legend-swatch" style="background:${c.color}"></span>`;
+    items.push(`<div class="legend-row">${sw}${c.label}</div>`);
+  }));
+  if (!items.length) { body.innerHTML = '<div class="legend-empty">Aucun calque actif</div>'; return; }
+  body.innerHTML = items.join('');
+}
+
+/* ═════════ SIDEBAR ═════════ */
+window.toggleSidebar = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+};
+window.toggleSbSection = function(h) {
+  h.querySelector('.sb-section-arrow').classList.toggle('open');
+  h.nextElementSibling.classList.toggle('collapsed');
+};
+
+/* Open all sub-layer groups by default so users see what they can toggle */
+setTimeout(() => {
+  ['flux','ports','piraterie','navale','hubs','ais'].forEach(g => {
+    const sub = document.getElementById('sub-'+g);
+    if (sub) sub.classList.add('open');
+  });
+}, 50);
+
+/* ═════════ Flux maritimes — pulses lumineux glissant (line-gradient sur line-progress) ═════════
+   Remplace l'ancien dash blanc rigide par 3 comètes lumineuses fadées par catégorie.
+   Rendu GPU continu (pas de re-validation), fluide, premium.
+   Couleur du pulse = teinte claire de la catégorie (cohérence visuelle avec le trait de base).
+   Cadence narrative : containers rapide (commerce mondial), bulk lent (Capesize). */
+let _fluxStart = null;
+
+// [category, ms pour traverser 100% de la ligne, RGB du pulse, intensite peak]
+const PULSE_CADENCES = [
+  ['containers',  9000, '255,235,180', 0.95],  // Or pâle, tempo rapide
+  ['lng',        10500, '180,232,238', 0.90],  // Bleu glacier
+  ['oil',        12000, '210,180,230', 0.90],  // Lavande / violet pâle
+  ['bulk',       14000, '230,200,165', 0.85],  // Cuivre pâle
+  ['regional',   13000, '200,235,240', 0.80],  // Cyan pâle (cabotage)
+  ['bypass',     16000, '210,215,220', 0.65],  // Gris-blanc (opportuniste, discret)
+];
+const PULSE_COUNT = 3;       // 3 comètes par ligne, equireparties
+const PULSE_HALF  = 0.040;   // Largeur du pulse (en fraction de ligne)
+const PULSE_TAIL  = 0.10;    // Trainée (pre-pulse fade-in plus long que post-pulse)
+
+function buildPulseGradient(t, totalMs, rgb, peakAlpha, tier) {
+  const speed = 1 / totalMs;
+  const peak = tier === 1 ? peakAlpha : peakAlpha * 0.7;
+  const tail = PULSE_TAIL * (tier === 1 ? 1 : 0.7);
+  const half = PULSE_HALF * (tier === 1 ? 1 : 0.85);
+  // Positions des 3 comettes (defilement homogene)
+  const positions = [];
+  for (let i = 0; i < PULSE_COUNT; i++) {
+    let p = (t * speed + i / PULSE_COUNT) % 1;
+    if (p < 0) p += 1;
+    positions.push(p);
+  }
+  positions.sort((a, b) => a - b);
+  // Construction des stops
+  const expr = ['interpolate', ['linear'], ['line-progress']];
+  const transparent = `rgba(${rgb},0)`;
+  expr.push(0, transparent);
+  let last = 0;
+  for (const p of positions) {
+    // Pre-pulse fade-in (tail plus long que la pointe pour effet comete)
+    const fadeStart = Math.max(last + 0.0005, p - tail);
+    const peakPos = Math.max(fadeStart + 0.0005, Math.min(0.9990, p));
+    const fadeEnd = Math.min(0.9995, peakPos + half);
+    if (fadeStart > last + 0.0005) expr.push(fadeStart, transparent);
+    expr.push(peakPos, `rgba(${rgb},${peak.toFixed(3)})`);
+    expr.push(fadeEnd, transparent);
+    last = fadeEnd;
+  }
+  if (last < 1) expr.push(1, transparent);
+  return expr;
+}
+
+function tickFlux(t) {
+  if (!_fluxStart) _fluxStart = t;
+  const dt = t - _fluxStart;
+  for (const [category, totalMs, rgb, peak] of PULSE_CADENCES) {
+    [1, 2].forEach(tier => {
+      const id = `flux-pulse-flux-${category}-t${tier}`;
+      if (!map.getLayer(id)) return;
+      // Tier 2 leg`erement decale en phase pour eviter la synchronisation visuelle
+      const ms = tier === 2 ? totalMs * 1.15 : totalMs;
+      const phaseShift = tier === 2 ? totalMs * 0.5 : 0;
+      try {
+        map.setPaintProperty(id, 'line-gradient',
+          buildPulseGradient(dt + phaseShift, ms, rgb, peak, tier));
+      } catch(e){}
+    });
+  }
+  requestAnimationFrame(tickFlux);
+}
+requestAnimationFrame(tickFlux);
+
+/* ═════════════════════════════════════════════════════════════════
+   AIS — Bateaux temps reel (AISStream.io WebSocket)
+   ═════════════════════════════════════════════════════════════════ */
+const AIS_CATEGORIES = {
+  cargo:     { label:'Cargo',     color:'#e0b452', types:[70,71,72,73,74,75,76,77,78,79] },
+  tanker:    { label:'Tanker',    color:'#a065c4', types:[80,81,82,83,84,85,86,87,88,89] },
+  passenger: { label:'Passager',  color:'#4fb8cc', types:[60,61,62,63,64,65,66,67,68,69] },
+  fishing:   { label:'Peche',     color:'#29b6f6', types:[30] },
+  military:  { label:'Militaire', color:'#e63946', types:[35,55] }
+};
+
+// Table ITU Maritime Identification Digits (MID) : 3 premiers chiffres du MMSI = pays.
+// Liste complete des indicatifs maritimes (Annexe 1 a l'Article 19 du RR UIT).
+const AIS_MID_COUNTRIES = {
+  201:'Albanie', 202:'Andorre', 203:'Autriche', 204:'Acores', 205:'Belgique', 206:'Belarus',
+  207:'Bulgarie', 208:'Vatican', 209:'Chypre', 210:'Chypre', 211:'Allemagne', 212:'Chypre',
+  213:'Georgie', 214:'Moldavie', 215:'Malte', 216:'Armenie', 218:'Allemagne', 219:'Danemark',
+  220:'Danemark', 224:'Espagne', 225:'Espagne', 226:'France', 227:'France', 228:'France',
+  229:'Malte', 230:'Finlande', 231:'Feroe', 232:'Royaume-Uni', 233:'Royaume-Uni', 234:'Royaume-Uni',
+  235:'Royaume-Uni', 236:'Gibraltar', 237:'Grece', 238:'Croatie', 239:'Grece', 240:'Grece',
+  241:'Grece', 242:'Maroc', 243:'Hongrie', 244:'Pays-Bas', 245:'Pays-Bas', 246:'Pays-Bas',
+  247:'Italie', 248:'Malte', 249:'Malte', 250:'Irlande', 251:'Islande', 252:'Liechtenstein',
+  253:'Luxembourg', 254:'Monaco', 255:'Madere', 256:'Malte', 257:'Norvege', 258:'Norvege',
+  259:'Norvege', 261:'Pologne', 262:'Montenegro', 263:'Portugal', 264:'Roumanie', 265:'Suede',
+  266:'Suede', 267:'Slovaquie', 268:'San Marino', 269:'Suisse', 270:'Tchequie', 271:'Turquie',
+  272:'Ukraine', 273:'Russie', 274:'Macedoine N.', 275:'Lettonie', 276:'Estonie', 277:'Lituanie',
+  278:'Slovenie', 279:'Serbie',
+  301:'Anguilla', 303:'Alaska', 304:'Antigua-Barbuda', 305:'Antigua-Barbuda', 306:'Curacao',
+  307:'Aruba', 308:'Bahamas', 309:'Bahamas', 310:'Bermudes', 311:'Bahamas', 312:'Belize',
+  314:'Barbade', 316:'Canada', 319:'Iles Caimans', 321:'Costa Rica', 323:'Cuba', 325:'Dominique',
+  327:'Rep. Dominicaine', 329:'Guadeloupe', 330:'Grenade', 331:'Groenland', 332:'Guatemala',
+  334:'Honduras', 336:'Haiti', 338:'Etats-Unis', 339:'Jamaique', 341:'Saint-Kitts-Nevis',
+  343:'Sainte-Lucie', 345:'Mexique', 347:'Martinique', 348:'Montserrat', 350:'Nicaragua',
+  351:'Panama', 352:'Panama', 353:'Panama', 354:'Panama', 355:'Panama', 356:'Panama',
+  357:'Panama', 358:'Porto Rico', 359:'El Salvador', 361:'Saint-Pierre-et-Miquelon',
+  362:'Trinite-et-Tobago', 364:'Iles Turques-et-Caiques', 366:'Etats-Unis', 367:'Etats-Unis',
+  368:'Etats-Unis', 369:'Etats-Unis', 370:'Panama', 371:'Panama', 372:'Panama', 373:'Panama',
+  374:'Panama', 375:'Saint-Vincent', 376:'Saint-Vincent', 377:'Saint-Vincent',
+  378:'Iles Vierges Brit.', 379:'Iles Vierges US',
+  401:'Afghanistan', 403:'Arabie Saoudite', 405:'Bangladesh', 408:'Bahrein', 410:'Bhoutan',
+  412:'Chine', 413:'Chine', 414:'Chine', 416:'Taiwan', 417:'Sri Lanka', 419:'Inde',
+  422:'Iran', 423:'Azerbaidjan', 425:'Irak', 428:'Israel', 431:'Japon', 432:'Japon',
+  434:'Turkmenistan', 436:'Kazakhstan', 437:'Ouzbekistan', 438:'Jordanie', 440:'Coree du Sud',
+  441:'Coree du Sud', 443:'Palestine', 445:'Coree du Nord', 447:'Koweit', 450:'Liban',
+  451:'Kirghizstan', 453:'Macao', 455:'Maldives', 457:'Mongolie', 459:'Nepal', 461:'Oman',
+  463:'Pakistan', 466:'Qatar', 468:'Syrie', 470:'Emirats Arabes Unis', 471:'Emirats Arabes Unis',
+  472:'Tadjikistan', 473:'Yemen', 475:'Yemen', 477:'Hong Kong', 478:'Bosnie-Herzegovine',
+  501:'Antarctique Adelie', 503:'Australie', 506:'Myanmar', 508:'Brunei', 510:'Micronesie',
+  511:'Palaos', 512:'Nouvelle-Zelande', 514:'Cambodge', 515:'Cambodge', 516:'Iles Christmas',
+  518:'Iles Cook', 520:'Fidji', 523:'Iles Cocos', 525:'Indonesie', 529:'Kiribati', 531:'Laos',
+  533:'Malaisie', 536:'Iles Mariannes Nord', 538:'Iles Marshall', 540:'Nouvelle-Caledonie',
+  542:'Niue', 544:'Nauru', 546:'Polynesie francaise', 548:'Philippines', 553:'Papouasie-N.G.',
+  555:'Pitcairn', 557:'Iles Salomon', 559:'Samoa americaines', 561:'Samoa', 563:'Singapour',
+  564:'Singapour', 565:'Singapour', 566:'Singapour', 567:'Thailande', 570:'Tonga', 572:'Tuvalu',
+  574:'Vietnam', 576:'Vanuatu', 577:'Vanuatu', 578:'Wallis-et-Futuna',
+  601:'Afrique du Sud', 603:'Angola', 605:'Algerie', 607:'Iles Saint-Paul', 608:'Ascension',
+  609:'Burundi', 610:'Benin', 611:'Botswana', 612:'Centrafrique', 613:'Cameroun', 615:'Congo',
+  616:'Comores', 617:'Cap-Vert', 618:'Antarctique Crozet', 619:'Cote d\'Ivoire', 620:'Comores',
+  621:'Djibouti', 622:'Egypte', 624:'Ethiopie', 625:'Erythree', 626:'Gabon', 627:'Ghana',
+  629:'Gambie', 630:'Guinee-Bissau', 631:'Guinee Equatoriale', 632:'Guinee', 633:'Burkina Faso',
+  634:'Kenya', 635:'Antarctique Kerguelen', 636:'Liberia', 637:'Liberia', 638:'Soudan du Sud',
+  642:'Libye', 644:'Lesotho', 645:'Maurice', 647:'Madagascar', 649:'Mali', 650:'Mozambique',
+  654:'Mauritanie', 655:'Malawi', 656:'Niger', 657:'Nigeria', 659:'Namibie', 660:'Reunion',
+  661:'Rwanda', 662:'Soudan', 663:'Senegal', 664:'Seychelles', 665:'Sainte-Helene',
+  666:'Somalie', 667:'Sierra Leone', 668:'Sao Tome-et-Principe', 669:'Eswatini', 670:'Tchad',
+  671:'Togo', 672:'Tunisie', 673:'Tanzanie', 674:'Tanzanie', 675:'Ouganda', 676:'RDC',
+  677:'Tanzanie', 678:'Zambie', 679:'Zimbabwe',
+  701:'Argentine', 710:'Bresil', 720:'Bolivie', 725:'Chili', 730:'Colombie', 735:'Equateur',
+  740:'Falkland', 745:'Guyane francaise', 750:'Guyana', 755:'Paraguay', 760:'Perou',
+  765:'Suriname', 770:'Uruguay', 775:'Venezuela'
+};
+
+// Renvoie le pays (texte) du navire d'apres son MMSI. Null si non identifiable.
+function aisCountry(mmsi) {
+  if (!mmsi) return null;
+  const s = String(mmsi);
+  if (s.length < 3) return null;
+  const mid = parseInt(s.slice(0, 3), 10);
+  return AIS_MID_COUNTRIES[mid] || null;
+}
+
+const AIS_TRAIL_MAX = 30;   // nombre max de positions historiques par navire
+const AIS_KEY_STORAGE = 'aisstream_api_key_v1';
+const AIS_BUFFER_STORAGE = 'aisstream_buffer_v1';
+const AIS_WS_URL = 'wss://stream.aisstream.io/v0/stream';
+// Cle API embarquee (compte Algor Int). L'utilisateur peut l'overrider via localStorage.
+const AIS_DEFAULT_KEY = '74f3a2c9bf38cfa3db1c187fba5bcde6d0dc6e7c';
+// BBOX format AISStream: [[[lat_SW, lng_SW], [lat_NE, lng_NE]], ...]
+// 7 zones : 5 zones africaines focalisees + Atlantique mi-ocean (Cape route) + Med Maghreb
+const AIS_BBOX = [
+  [[-50, -45], [38, -6]],   // 1. Atlantique mi-ocean : Cape route transatlantique, Madere, Canaries
+  [[-38, -22], [36, 16]],   // 2. Cote Ouest : Maroc -> Cap, Golfe de Guinee
+  [[-50, 12],  [-20, 60]],  // 3. Cap + Sud Indien : Cape Town, Agulhas, Mozambique Channel
+  [[-30, 32],  [20, 78]],   // 4. Cote Est + Madagascar + Indien Ouest : route Suez-Inde
+  [[10, 30],   [33, 55]],   // 5. Mer Rouge + Golfe d'Aden + Bab el-Mandeb + Canal de Suez
+  [[22, 48],   [30, 62]],   // 6. Detroit d'Ormuz + Golfe Persique
+  [[30, -6],   [46, 36]]    // 7. Med entiere : Maghreb + Med Nord (couverture AISStream maximale)
+];
+const AIS_STALE_MS = 24 * 60 * 60 * 1000;  // 24h : accumulation glissante cote browser, evite drop a froid
+const AIS_BUFFER_SAVE_MS = 8000;           // persistance localStorage toutes les 8s
+const AIS_BUFFER_MAX = 12000;              // cap pour rester sous la limite 5MB localStorage
+
+// Verifie si une position est dans l'une des zones AIS_BBOX.
+// Utilise pour filtrer le buffer localStorage et les positions WebSocket (defense-en-profondeur :
+// si un user a un ancien buffer avec des navires Med, ils ne sont pas restaures).
+function aisInBbox(lat, lng) {
+  if (typeof lat !== 'number' || typeof lng !== 'number') return false;
+  for (const box of AIS_BBOX) {
+    const sw = box[0], ne = box[1];
+    if (lat >= sw[0] && lat <= ne[0] && lng >= sw[1] && lng <= ne[1]) return true;
+  }
+  return false;
+}
+
+const aisShips = new Map();  // mmsi -> ship state
+const aisState = {
+  ws: null,
+  status: 'disconnected',
+  reconnectTimer: null,
+  reconnectAttempts: 0,
+  apiKey: null,
+  iconsAdded: false,
+  popupBound: false
+};
+
+function aisCategoryOf(typeCode) {
+  if (typeCode == null) return 'other';
+  for (const [k, v] of Object.entries(AIS_CATEGORIES)) {
+    if (v.types.includes(typeCode)) return k;
+  }
+  return 'other';
+}
+
+function aisEnabledCategories() {
+  const out = [];
+  ['cargo','tanker','passenger','fishing','military','other'].forEach(k => {
+    const s = layerState['ais-' + k];
+    if (s && s.visible) out.push(k);
+  });
+  return out;
+}
+
+function aisAnyEnabled() {
+  return aisEnabledCategories().length > 0;
+}
+
+function aisHandleToggle() {
+  if (aisAnyEnabled()) {
+    aisEnsureLayer();
+    aisEnsureConnection();
+    document.getElementById('ais-stats')?.classList.add('on');
+    aisRenderNow();
+  } else {
+    // On garde le WebSocket actif (pre-chauffe) pour reactivation instantanee
+    document.getElementById('ais-stats')?.classList.remove('on');
+    aisRemoveLayer();
+  }
+}
+
+/* Persistance localStorage : sauve le buffer toutes les 8s, restaure au boot.
+   Objectif : a la 2e visite, l'user demarre deja avec 3000-6000 navires. */
+function aisRestoreBuffer() {
+  try {
+    const raw = localStorage.getItem(AIS_BUFFER_STORAGE);
+    if (!raw) return 0;
+    const buf = JSON.parse(raw);
+    if (!buf || !Array.isArray(buf.ships)) return 0;
+    const cutoff = Date.now() - AIS_STALE_MS;
+    let restored = 0, dropped = 0;
+    for (const s of buf.ships) {
+      if (!s || !s.mmsi) continue;
+      if ((s.lastUpdate || 0) < cutoff) continue;
+      // Filtre bbox : un user qui avait un buffer avec des navires Med ne les voit plus apparaitre
+      if (!aisInBbox(s.lat, s.lng)) { dropped++; continue; }
+      aisShips.set(String(s.mmsi), s);
+      restored++;
+    }
+    if (dropped > 0) console.log('[ais] buffer:', dropped, 'navires hors-zone elimines');
+    return restored;
+  } catch(e) { console.warn('[ais] restore buffer error', e); return 0; }
+}
+
+function aisSaveBuffer() {
+  try {
+    let ships = [];
+    for (const s of aisShips.values()) {
+      if (typeof s.lat === 'number' && typeof s.lng === 'number') ships.push(s);
+    }
+    if (ships.length > AIS_BUFFER_MAX) {
+      ships.sort((a,b) => (b.lastUpdate||0) - (a.lastUpdate||0));
+      ships.length = AIS_BUFFER_MAX;
+    }
+    localStorage.setItem(AIS_BUFFER_STORAGE, JSON.stringify({ savedAt: Date.now(), ships }));
+  } catch(e) {
+    // Quota exceeded — on retire les plus vieux
+    if (e && /quota/i.test(String(e.name || e.message))) {
+      const ships = Array.from(aisShips.values())
+        .filter(s => typeof s.lat === 'number')
+        .sort((a,b) => (b.lastUpdate||0) - (a.lastUpdate||0))
+        .slice(0, Math.floor(AIS_BUFFER_MAX / 2));
+      try { localStorage.setItem(AIS_BUFFER_STORAGE, JSON.stringify({ savedAt: Date.now(), ships })); } catch(_){}
+    }
+  }
+}
+
+// Restore au boot
+const _aisRestored = aisRestoreBuffer();
+if (_aisRestored > 0) console.log('[ais] buffer restaure depuis derniere session:', _aisRestored, 'navires');
+
+/* Charge le snapshot statique commit dans le repo (~2000 navires capturés a un instant T).
+   Permet d'avoir une carte deja peuplee des le premier load, avant que la WebSocket
+   n'ait eu le temps d'accumuler ses donnees. La WS prend ensuite le relais pour la fraicheur. */
+function aisLoadStaticSnapshot() {
+  fetch('./ais-snapshot.json?v=' + (window._aisSnapshotV || '20260512b'))
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (!data || !Array.isArray(data.ships)) return;
+      // Marque les positions du snapshot avec un timestamp ancien mais < AIS_STALE_MS
+      // pour qu'elles soient affichees mais soient ecrasees par les positions live des leur arrivee
+      const snapshotAge = Date.now() - (data.capturedAt || Date.now());
+      let loaded = 0;
+      for (const s of data.ships) {
+        if (!s || !s.mmsi) continue;
+        const mmsi = String(s.mmsi);
+        // N'ecrase pas une position deja recue en live (lastUpdate plus recent)
+        const existing = aisShips.get(mmsi);
+        const snapUpdate = s.lastUpdate || (Date.now() - snapshotAge);
+        if (existing && (existing.lastUpdate || 0) > snapUpdate) continue;
+        aisShips.set(mmsi, { ...s, mmsi, lastUpdate: snapUpdate });
+        loaded++;
+      }
+      console.log('[ais] snapshot charge:', loaded, 'navires (capture il y a', Math.round(snapshotAge/60000), 'min)');
+      // Re-render si calques AIS deja actifs
+      if (typeof aisAnyEnabled === 'function' && aisAnyEnabled() && typeof aisRenderNow === 'function') {
+        aisRenderNow();
+      }
+    })
+    .catch(err => console.warn('[ais] snapshot fetch error', err));
+}
+aisLoadStaticSnapshot();
+
+// Save periodique
+setInterval(aisSaveBuffer, AIS_BUFFER_SAVE_MS);
+// Save aussi avant fermeture/navigation
+window.addEventListener('beforeunload', aisSaveBuffer);
+window.addEventListener('pagehide', aisSaveBuffer);
+
+/* Pre-chauffe : ouvre la WebSocket et accumule les navires en arriere-plan
+   des le chargement de la page, pour que le toggle affiche instantanement
+   tous les navires deja recus + ceux restaures depuis le buffer. */
+function aisPreWarm() {
+  if (aisState.ws || aisState.status === 'connected' || aisState.status === 'connecting') return;
+  const key = aisState.apiKey || localStorage.getItem(AIS_KEY_STORAGE) || AIS_DEFAULT_KEY;
+  if (!key) return;
+  aisState.apiKey = key;
+  console.log('[ais] pre-chauffe WebSocket — buffer restaure =', _aisRestored, 'navires');
+  aisConnect(key);
+}
+// Lance la pre-chauffe immediatement — pas besoin d'attendre la map
+aisPreWarm();
+
+function aisMakeIcons() {
+  if (aisState.iconsAdded) return;
+  // Fleche orientee (cap)
+  const s1 = 28;
+  const c1 = document.createElement('canvas');
+  c1.width = c1.height = s1;
+  const x1 = c1.getContext('2d');
+  x1.beginPath();
+  x1.moveTo(s1/2, 2);
+  x1.lineTo(s1 - 5, s1 - 4);
+  x1.lineTo(s1/2, s1 * 0.70);
+  x1.lineTo(5, s1 - 4);
+  x1.closePath();
+  x1.fillStyle = 'rgba(255,255,255,1)';
+  x1.fill();
+  try {
+    if (!map.hasImage('ais-arrow')) map.addImage('ais-arrow', x1.getImageData(0,0,s1,s1), { sdf: true });
+  } catch(e){}
+
+  // Point ancre
+  const s2 = 18;
+  const c2 = document.createElement('canvas');
+  c2.width = c2.height = s2;
+  const x2 = c2.getContext('2d');
+  x2.beginPath();
+  x2.arc(s2/2, s2/2, s2/2 - 3, 0, Math.PI * 2);
+  x2.fillStyle = 'rgba(255,255,255,1)';
+  x2.fill();
+  try {
+    if (!map.hasImage('ais-dot')) map.addImage('ais-dot', x2.getImageData(0,0,s2,s2), { sdf: true });
+  } catch(e){}
+
+  aisState.iconsAdded = true;
+}
+
+function aisEnsureLayer() {
+  aisMakeIcons();
+  if (!map.getSource('src-ais')) {
+    map.addSource('src-ais', { type:'geojson', data: { type:'FeatureCollection', features: [] } });
+  }
+  // Source + layer pour la trace du navire selectionne (1 polyline a la fois)
+  if (!map.getSource('src-ais-trail')) {
+    map.addSource('src-ais-trail', { type:'geojson', lineMetrics: true, data: { type:'FeatureCollection', features: [] } });
+  }
+  if (!map.getLayer('ais-trail-glow')) {
+    map.addLayer({
+      id: 'ais-trail-glow',
+      type: 'line',
+      source: 'src-ais-trail',
+      paint: {
+        'line-color': '#c49a3c',
+        'line-width': 6,
+        'line-opacity': 0.2,
+        'line-blur': 2
+      },
+      layout: { 'line-cap':'round', 'line-join':'round' }
+    });
+  }
+  if (!map.getLayer('ais-trail-line')) {
+    map.addLayer({
+      id: 'ais-trail-line',
+      type: 'line',
+      source: 'src-ais-trail',
+      paint: {
+        'line-color': '#c49a3c',
+        'line-width': 1.8,
+        'line-gradient': ['interpolate', ['linear'], ['line-progress'],
+          0, 'rgba(196,154,60,0.10)',
+          1, 'rgba(196,154,60,0.95)'
+        ]
+      },
+      layout: { 'line-cap':'round', 'line-join':'round' }
+    });
+  }
+  if (!map.getLayer('ais-trail-points')) {
+    map.addLayer({
+      id: 'ais-trail-points',
+      type: 'circle',
+      source: 'src-ais-trail',
+      filter: ['==', ['geometry-type'], 'Point'],
+      paint: {
+        'circle-radius': 2,
+        'circle-color': '#c49a3c',
+        'circle-opacity': 0.5
+      }
+    });
+  }
+  const colorExpr = ['match', ['get','cat'],
+    'cargo',     '#e0b452',
+    'tanker',    '#a065c4',
+    'passenger', '#4fb8cc',
+    'fishing',   '#29b6f6',
+    'military',  '#e63946',
+    '#8e96a2'
+  ];
+  if (!map.getLayer('ais-ships-stopped')) {
+    map.addLayer({
+      id: 'ais-ships-stopped',
+      type: 'symbol',
+      source: 'src-ais',
+      filter: ['<', ['coalesce',['get','sog'],0], 0.5],
+      layout: {
+        'icon-image': 'ais-dot',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.35, 5, 0.55, 8, 0.85, 11, 1.0],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true
+      },
+      paint: {
+        'icon-color': colorExpr,
+        'icon-opacity': 0.65
+      }
+    });
+  }
+  if (!map.getLayer('ais-ships-moving')) {
+    map.addLayer({
+      id: 'ais-ships-moving',
+      type: 'symbol',
+      source: 'src-ais',
+      filter: ['>=', ['coalesce',['get','sog'],0], 0.5],
+      layout: {
+        'icon-image': 'ais-arrow',
+        'icon-rotate': ['get', 'cog'],
+        'icon-rotation-alignment': 'map',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.35, 5, 0.6, 8, 0.9, 11, 1.15],
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true
+      },
+      paint: {
+        'icon-color': colorExpr,
+        'icon-opacity': 0.92
+      }
+    });
+  }
+  if (!aisState.popupBound) {
+    ['ais-ships-moving','ais-ships-stopped'].forEach(lid => {
+      map.on('click', lid, aisOnClick);
+      map.on('mouseenter', lid, () => map.getCanvas().style.cursor = 'pointer');
+      map.on('mouseleave', lid, () => map.getCanvas().style.cursor = '');
+    });
+    aisState.popupBound = true;
+  }
+}
+
+function aisRemoveLayer() {
+  ['ais-ships-moving','ais-ships-stopped','ais-trail-points','ais-trail-line','ais-trail-glow'].forEach(id => {
+    if (map.getLayer(id)) { try { map.removeLayer(id); } catch(e){} }
+  });
+  ['src-ais','src-ais-trail'].forEach(id => {
+    if (map.getSource(id)) { try { map.removeSource(id); } catch(e){} }
+  });
+}
+
+function aisShowTrail(mmsi) {
+  if (!map.getSource('src-ais-trail')) return;
+  const ship = aisShips.get(String(mmsi));
+  const features = [];
+  if (ship && ship.trail && ship.trail.length >= 2) {
+    features.push({
+      type: 'Feature',
+      geometry: { type: 'LineString', coordinates: ship.trail.map(p => [p.lng, p.lat]) }
+    });
+    // Points intermediaires pour les positions historiques
+    for (const p of ship.trail.slice(0, -1)) {
+      features.push({ type:'Feature', geometry: { type:'Point', coordinates: [p.lng, p.lat] } });
+    }
+  }
+  map.getSource('src-ais-trail').setData({ type:'FeatureCollection', features });
+}
+
+function aisClearTrail() {
+  if (!map.getSource('src-ais-trail')) return;
+  map.getSource('src-ais-trail').setData({ type:'FeatureCollection', features: [] });
+}
+
+function aisOnClick(e) {
+  if (!e.features || !e.features.length) return;
+  const p = e.features[0].properties;
+  const cat = p.cat || 'other';
+  const color = (AIS_CATEGORIES[cat] || { color:'#8e96a2' }).color || '#8e96a2';
+  const name = p.name && p.name !== 'null' ? p.name : ('MMSI ' + p.mmsi);
+  const country = aisCountry(p.mmsi);
+  const rows = [];
+  rows.push(['MMSI', p.mmsi]);
+  if (country) rows.push(['Pavillon', country]);
+  if (p.imo && p.imo !== 'null' && p.imo !== '0') rows.push(['IMO', p.imo]);
+  if (p.callsign && p.callsign !== 'null') rows.push(['Indicatif', p.callsign]);
+  rows.push(['Type', (AIS_CATEGORIES[cat]?.label || 'Autre')]);
+  if (p.type_code) rows.push(['Code AIS', p.type_code]);
+  rows.push(['Vitesse', (parseFloat(p.sog) || 0).toFixed(1) + ' noeuds']);
+  rows.push(['Cap', Math.round(parseFloat(p.cog) || 0) + '°']);
+  if (p.destination && p.destination !== 'null') rows.push(['Destination', p.destination]);
+  const lu = parseInt(p.lastUpdate);
+  if (lu) {
+    const sec = Math.round((Date.now() - lu) / 1000);
+    rows.push(['Mise a jour', sec < 60 ? ('il y a ' + sec + 's') : ('il y a ' + Math.round(sec/60) + ' min')]);
+  }
+  // Affichage de la trace si on a au moins 2 positions
+  const ship = aisShips.get(String(p.mmsi));
+  const trailLen = ship && ship.trail ? ship.trail.length : 0;
+  if (trailLen >= 2) {
+    rows.push(['Historique', trailLen + ' positions']);
+    aisShowTrail(p.mmsi);
+  } else {
+    rows.push(['Historique', 'En cours de constitution']);
+    aisClearTrail();
+  }
+  const body = rows.map(r => '<div class="popup-row"><span class="popup-key">' + r[0] + '</span><span class="popup-val">' + escapeHtml(String(r[1])) + '</span></div>').join('');
+  const popup = new mapboxgl.Popup({ closeButton:true, maxWidth:'320px', className:'algor-popup' })
+    .setLngLat(e.lngLat)
+    .setHTML('<div class="popup-header"><div class="popup-dot-bar" style="background:' + color + '"></div><div class="popup-actor">' + escapeHtml(name) + '</div></div><div class="popup-body">' + body + '</div>')
+    .addTo(map);
+  popup.on('close', aisClearTrail);
+}
+
+function aisEnsureConnection() {
+  if (aisState.status === 'connected' || aisState.status === 'connecting') return;
+  const key = aisState.apiKey || localStorage.getItem(AIS_KEY_STORAGE) || AIS_DEFAULT_KEY;
+  if (!key) { aisOpenModal(false); return; }
+  aisState.apiKey = key;
+  aisConnect(key);
+}
+
+function aisConnect(key) {
+  aisState.status = 'connecting';
+  aisSetStatusUI('connecting');
+  let ws;
+  try { ws = new WebSocket(AIS_WS_URL); }
+  catch(e) { console.warn('[ais] ws construct error', e); aisScheduleReconnect(); return; }
+  aisState.ws = ws;
+  let openedAt = 0;
+  let receivedAny = false;
+  ws.onopen = () => {
+    openedAt = Date.now();
+    receivedAny = false;
+    const sub = {
+      APIKey: key,
+      BoundingBoxes: AIS_BBOX,
+      FilterMessageTypes: ['PositionReport','ShipStaticData']
+    };
+    try { ws.send(JSON.stringify(sub)); } catch(e){}
+    aisState.status = 'connected';
+    aisSetStatusUI('connected');
+    console.log('[ais] ws open, sub envoyee');
+  };
+  ws.onmessage = (ev) => {
+    receivedAny = true;
+    aisState.reconnectAttempts = 0;  // succes : reset le compteur
+    aisOnMessage(ev);
+  };
+  ws.onerror = () => { console.warn('[ais] ws error'); };
+  ws.onclose = () => {
+    if (aisState.ws !== ws) return;  // ignore stale
+    aisState.status = 'disconnected';
+    aisSetStatusUI('disconnected');
+    // Detection cle invalide : ouvert + ferme rapidement sans aucun message recu
+    const liveMs = openedAt ? Date.now() - openedAt : 0;
+    if (openedAt && !receivedAny && liveMs < 8000) {
+      aisState.badKeyStrikes = (aisState.badKeyStrikes || 0) + 1;
+      console.warn('[ais] suspect cle invalide (close apres', liveMs, 'ms sans message), strikes=', aisState.badKeyStrikes);
+      if (aisState.badKeyStrikes >= 2) {
+        // Cle user echoue : fallback sur la cle default Algor Int
+        if (key !== AIS_DEFAULT_KEY && AIS_DEFAULT_KEY) {
+          console.warn('[ais] fallback sur cle Algor Int');
+          localStorage.removeItem(AIS_KEY_STORAGE);
+          aisState.apiKey = AIS_DEFAULT_KEY;
+          aisState.badKeyStrikes = 0;
+        } else {
+          // Meme la default ne marche pas : prompt user
+          console.warn('[ais] default key rejetee, prompt user');
+          aisState.apiKey = null;
+          aisState.badKeyStrikes = 0;
+          if (aisState.reconnectTimer) { clearTimeout(aisState.reconnectTimer); aisState.reconnectTimer = null; }
+          aisOpenModal(true);
+          return;
+        }
+      }
+    } else if (receivedAny) {
+      aisState.badKeyStrikes = 0;
+    }
+    // Reconnexion automatique tant qu'on a une cle (mode pre-chauffe)
+    if (aisState.apiKey) aisScheduleReconnect();
+  };
+}
+
+function aisOnMessage(ev) {
+  // AISStream envoie des Blobs binaires, pas du texte
+  if (typeof ev.data === 'string') {
+    aisProcessText(ev.data);
+  } else if (ev.data instanceof Blob) {
+    ev.data.text().then(aisProcessText).catch(()=>{});
+  } else if (ev.data instanceof ArrayBuffer) {
+    aisProcessText(new TextDecoder().decode(ev.data));
+  }
+}
+
+function aisProcessText(text) {
+  let m;
+  try { m = JSON.parse(text); } catch(e){ return; }
+  if (m.error) {
+    console.warn('[ais] server error:', m.error);
+    if (/api\s*key|invalid|unauth/i.test(String(m.error))) {
+      localStorage.removeItem(AIS_KEY_STORAGE);
+      aisState.apiKey = null;
+      aisDisconnect();
+      aisOpenModal(true);
+    }
+    return;
+  }
+  if (m.MessageType === 'PositionReport') {
+    const r = m.Message && m.Message.PositionReport;
+    if (!r || typeof r.Latitude !== 'number' || typeof r.Longitude !== 'number') return;
+    // Defense-en-profondeur : AISStream peut renvoyer des positions a la frontiere du bbox.
+    // On rejette tout ce qui n'est pas strictement dans une de nos 5 zones.
+    if (!aisInBbox(r.Latitude, r.Longitude)) return;
+    const mmsi = String(r.UserID);
+    const prev = aisShips.get(mmsi) || { mmsi };
+    const now = Date.now();
+    // Trail : on garde les N dernieres positions pour tracer l'historique au clic
+    const trail = prev.trail ? prev.trail.slice() : [];
+    // Ne pas push si la position est identique a la derniere (navire a quai immobile)
+    const last = trail[trail.length - 1];
+    if (!last || last.lat !== r.Latitude || last.lng !== r.Longitude) {
+      trail.push({ lat: r.Latitude, lng: r.Longitude, ts: now });
+      if (trail.length > AIS_TRAIL_MAX) trail.shift();
+    }
+    aisShips.set(mmsi, Object.assign(prev, {
+      lat: r.Latitude,
+      lng: r.Longitude,
+      cog: typeof r.Cog === 'number' ? r.Cog : (prev.cog || 0),
+      sog: typeof r.Sog === 'number' ? r.Sog : (prev.sog || 0),
+      heading: r.TrueHeading,
+      lastUpdate: now,
+      trail
+    }));
+  } else if (m.MessageType === 'ShipStaticData') {
+    const r = m.Message && m.Message.ShipStaticData;
+    if (!r) return;
+    const mmsi = String(r.UserID);
+    const prev = aisShips.get(mmsi) || { mmsi };
+    const name = (r.Name || '').trim();
+    const dest = (r.Destination || '').trim();
+    const cs   = (r.CallSign || '').trim();
+    aisShips.set(mmsi, Object.assign(prev, {
+      name: name || prev.name || null,
+      type_code: r.Type != null ? r.Type : prev.type_code,
+      destination: dest || prev.destination || null,
+      callsign: cs || prev.callsign || null,
+      imo: r.ImoNumber || prev.imo || null
+    }));
+  }
+}
+
+function aisScheduleReconnect() {
+  if (aisState.reconnectTimer) return;
+  aisState.reconnectAttempts++;
+  const delay = Math.min(30000, 1500 * Math.pow(2, Math.min(aisState.reconnectAttempts, 5)));
+  aisState.reconnectTimer = setTimeout(() => {
+    aisState.reconnectTimer = null;
+    // Reconnecte tant qu'on a une cle (mode pre-chauffe — meme si aucun calque actif)
+    if (aisState.apiKey) aisConnect(aisState.apiKey);
+  }, delay);
+}
+
+function aisDisconnect() {
+  if (aisState.reconnectTimer) { clearTimeout(aisState.reconnectTimer); aisState.reconnectTimer = null; }
+  if (aisState.ws) {
+    const w = aisState.ws;
+    aisState.ws = null;
+    try { w.close(); } catch(e){}
+  }
+  aisState.status = 'disconnected';
+  aisSetStatusUI('disconnected');
+}
+
+function aisSetStatusUI(status) {
+  const el = document.getElementById('ais-stats');
+  if (!el) return;
+  el.classList.remove('connecting','disconnected');
+  if (status === 'connecting') el.classList.add('connecting');
+  else if (status === 'disconnected') el.classList.add('disconnected');
+}
+
+function aisBuildFeatures() {
+  const features = [];
+  const enabled = new Set(aisEnabledCategories());
+  if (!enabled.size) return features;
+  const cutoff = Date.now() - AIS_STALE_MS;  // 6h stale (constante en haut)
+  for (const ship of aisShips.values()) {
+    if (typeof ship.lat !== 'number' || typeof ship.lng !== 'number') continue;
+    if (ship.lat < -90 || ship.lat > 90) continue;
+    if ((ship.lastUpdate || 0) < cutoff) continue;
+    const cat = aisCategoryOf(ship.type_code);
+    if (!enabled.has(cat)) continue;
+    features.push({
+      type: 'Feature',
+      properties: {
+        mmsi: ship.mmsi,
+        name: ship.name,
+        cat,
+        type_code: ship.type_code,
+        cog: ship.cog || 0,
+        sog: ship.sog || 0,
+        destination: ship.destination,
+        imo: ship.imo,
+        callsign: ship.callsign,
+        lastUpdate: ship.lastUpdate
+      },
+      geometry: { type:'Point', coordinates: [ship.lng, ship.lat] }
+    });
+  }
+  return features;
+}
+
+function aisRenderNow() {
+  const src = map.getSource('src-ais');
+  if (!src) return;
+  const features = aisBuildFeatures();
+  src.setData({ type:'FeatureCollection', features });
+  const c = document.getElementById('ais-count');
+  if (c) c.textContent = features.length.toLocaleString('fr-FR');
+  updateFeatureCount();
+}
+
+// Render loop : 1.5s
+setInterval(() => {
+  if (aisAnyEnabled() && map.getSource('src-ais')) aisRenderNow();
+}, 1500);
+
+/* ═════════ Modale cle API ═════════ */
+function aisOpenModal(isError) {
+  const err = document.getElementById('ais-modal-error');
+  if (err) {
+    err.textContent = 'Cle invalide ou refusee par le serveur.';
+    err.classList.toggle('show', !!isError);
+  }
+  const inp = document.getElementById('ais-key-input');
+  if (inp) inp.value = '';
+  document.getElementById('ais-key-modal').classList.add('open');
+  setTimeout(() => inp && inp.focus(), 50);
+}
+
+window.aisCloseModal = function() {
+  document.getElementById('ais-key-modal').classList.remove('open');
+  // Si annulation sans cle valide, desactiver tous les calques AIS
+  if (!aisState.apiKey && aisAnyEnabled()) {
+    ['cargo','tanker','passenger','fishing','military','other'].forEach(k => {
+      const id = 'ais-' + k;
+      const s = layerState[id];
+      if (s && s.visible) window.toggleLayer(id);
+    });
+  }
+};
+
+window.aisSubmitKey = function() {
+  const v = document.getElementById('ais-key-input').value.trim();
+  const err = document.getElementById('ais-modal-error');
+  if (!v || v.length < 10) {
+    if (err) { err.textContent = 'Cle trop courte (min 10 caracteres).'; err.classList.add('show'); }
+    return;
+  }
+  localStorage.setItem(AIS_KEY_STORAGE, v);
+  aisState.apiKey = v;
+  document.getElementById('ais-key-modal').classList.remove('open');
+  aisConnect(v);
+};
+
+window.aisResetKey = function() {
+  if (!confirm('Supprimer la cle API AISStream.io enregistree et se deconnecter ?')) return;
+  localStorage.removeItem(AIS_KEY_STORAGE);
+  aisState.apiKey = null;
+  aisDisconnect();
+  aisShips.clear();
+  if (map.getSource('src-ais')) {
+    map.getSource('src-ais').setData({ type:'FeatureCollection', features: [] });
+  }
+  const c = document.getElementById('ais-count');
+  if (c) c.textContent = '0';
+};
+
+// Touche Entree dans le champ cle
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && document.getElementById('ais-key-modal').classList.contains('open')) {
+    e.preventDefault();
+    window.aisSubmitKey();
+  } else if (e.key === 'Escape' && document.getElementById('ais-key-modal').classList.contains('open')) {
+    window.aisCloseModal();
+  }
+});
+
+</script>
+
+<!-- Exporter HTML standalone (Leaflet) -->
+<script type="module">
+import { exportZoneAsHTML } from '../shared/exporter.js?v=20260511a';
+window.exportLivrable = async function() {
+  const btn = document.getElementById('btn-export-html');
+  const old = btn?.innerHTML;
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span style="font-size:10px">⏳</span> Export…'; }
+  try {
+    const period = document.getElementById('period-badge')?.textContent?.trim();
+    const subtitle = period && period !== 'Aucune période' ? ('Période ' + period) : '';
+    await exportZoneAsHTML({ zoneName: 'Afrique Maritime', subtitle, map: window.algorMap || window.map });
+  } catch (e) {
+    console.error('[export]', e);
+    alert("Echec de l'export : " + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = old; }
+  }
+};
+</script>
+
+</body>
+
+</html>

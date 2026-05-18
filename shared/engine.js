@@ -10,8 +10,13 @@
 // ── ACCESS TOKEN (partage) ───────────────────────────────────────────
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
 // ── DESTRUCTURATION ZONE_CONFIG ──────────────────────────────────────
 const { OTAN_DATA, ACTOR_GROUPS, ACTOR_COLORS, PERIODS, STYLES, MAP_ZONES, ZONE_ID } = ZONE_CONFIG;
+// Mode "calques only" : pas de points par periode (kml-dots), slider/play
+// pilote par les dates des points des calques. Defini par chaque zone.
+const CALQUES_ONLY = ZONE_CONFIG.CALQUES_ONLY === true;
 
 function getColor(n) { return ACTOR_COLORS[n] || '#888888'; }
 function normalizeName(raw) { return ZONE_CONFIG.normalizeName(raw); }
@@ -106,6 +111,10 @@ const map = new mapboxgl.Map({
   maxPitch: 85,
   antialias: true
 });
+// Expose the Mapbox instance globally so external tools (exporter, etc.) can
+// reach it. `window.map` is shadowed by the <div id="map"> element on every
+// zone page, so we use a dedicated name.
+window.algorMap = map;
 map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
 map.addControl(new mapboxgl.ScaleControl({ maxWidth: 120, unit: 'metric' }), 'bottom-right');
 map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
@@ -125,6 +134,7 @@ const sliderLabel = document.getElementById('slider-label');
 slider.max = PERIODS.length - 1;
 
 function updateSliderLabel(i) {
+  if (!PERIODS.length) return;
   const pct = i / (PERIODS.length - 1), tw = slider.offsetWidth;
   sliderLabel.style.left = (pct * (tw - 16) + 8) + 'px';
   sliderLabel.textContent = PERIODS[i].label;
@@ -163,7 +173,8 @@ function updateChart(features) {
     sorted.forEach(([name, count]) => {
       const color = getColor(name), pct = (count / max * 100).toFixed(0);
       const row = document.createElement('div'); row.className = 'bar-row';
-      row.innerHTML = `<span class="bar-label" title="${name}">${name}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="bar-num">${count}</span>`;
+      const safeName = esc(name);
+      row.innerHTML = `<span class="bar-label" title="${safeName}">${safeName}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${esc(color)}"></div></div><span class="bar-num">${count}</span>`;
       sbBody.appendChild(row);
     });
   }
@@ -174,7 +185,8 @@ function updateChart(features) {
     sorted.forEach(([name, count]) => {
       const color = getColor(name), pct = (count / max * 100).toFixed(0);
       const row = document.createElement('div'); row.className = 'bar-row';
-      row.innerHTML = `<span class="bar-label" title="${name}">${name}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="bar-num">${count}</span>`;
+      const safeName = esc(name);
+      row.innerHTML = `<span class="bar-label" title="${safeName}">${safeName}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${esc(color)}"></div></div><span class="bar-num">${count}</span>`;
       body.appendChild(row);
     });
   }
@@ -354,7 +366,7 @@ async function loadKML(index) {
   if (loadedData[index]) return loadedData[index];
   try {
     let geo, descMap = {};
-    const res = await fetch('./' + PERIODS[index].file);
+    const res = await fetch('./' + PERIODS[index].file + '?v=20260422b');
     if (!res.ok) throw new Error('404');
     if (PERIODS[index].file.endsWith('.geojson')) {
       geo = await res.json();
@@ -412,7 +424,16 @@ async function renderAll() {
   ['kml-dots-glow', 'kml-dots', 'kml-pulse', 'kml-cylinders', 'kml-cylinders-top', 'kml-points-labels', 'kml-lines', 'kml-fill', 'kml-fill-outline'].forEach(id => { if (map.getLayer(id)) map.removeLayer(id); });
   if (map.getSource('kml-circles')) map.removeSource('kml-circles');
   if (map.getSource('kml-current')) map.removeSource('kml-current');
+
+  // Hook : informe les zone-scripts (calque-timeline) du changement de periodes
+  if (typeof window.onActivePeriodsChange === 'function') {
+    try { window.onActivePeriodsChange([...activePeriods], PERIODS, showAll); } catch (e) {}
+  }
+
   if (!activePeriods.size) { updateLegend({}); updateChart([]); return; }
+
+  // Mode calques-only : pas de kml-dots, le filtrage est fait par calque-timeline.js
+  if (CALQUES_ONLY) { updateChart([]); return; }
 
   const activeLabels = new Set([...activePeriods].map(i => PERIODS[i].label));
   const allFeatures = [];
@@ -534,13 +555,13 @@ function updateLegend(actors) {
     const visible = members.filter(m => actors[m]);
     if (!visible.length) return;
     const group = document.createElement('div'); group.className = 'legend-group';
-    group.innerHTML = '<div class="legend-group-title">' + groupName + '</div>';
+    group.innerHTML = '<div class="legend-group-title">' + esc(groupName) + '</div>';
     visible.forEach(name => {
       const color = actors[name];
       const item = document.createElement('div'); item.className = 'legend-item'; item.dataset.actor = name;
       if (activeFilter === name) item.classList.add('active-filter');
       else if (activeFilter) item.classList.add('filtered-out');
-      item.innerHTML = '<div class="legend-dot" style="background:' + color + ';box-shadow:0 0 4px ' + color + '66"></div><span>' + name + '</span>';
+      item.innerHTML = '<div class="legend-dot" style="background:' + esc(color) + ';box-shadow:0 0 4px ' + esc(color) + '66"></div><span>' + esc(name) + '</span>';
       item.onclick = () => toggleActorFilter(name);
       group.appendChild(item);
     });
@@ -580,76 +601,121 @@ const SEARCH_BBOX = (ZONE_CONFIG.SEARCH_BBOX || [-20, 2, 55, 40]).join(',');
 let searchGeoTimer = null;
 let searchGeoReqId = 0;
 
-function renderSearchResults(actorMatches, placeMatches, query) {
+// Recherche : 2 categories — Acteurs (dedup local) + Lieux (geocoder Mapbox).
+// Les evenements individuels sont exclus (trop de bruit, on les voit sur la carte).
+
+function renderCategoryHeader(label) {
+  const h = document.createElement('div');
+  h.className = 'search-category-header';
+  h.textContent = label;
+  searchResults.appendChild(h);
+}
+
+function renderActorRow(actor) {
+  const div = document.createElement('div'); div.className = 'search-result search-result-actor';
+  div.innerHTML = '<div class="search-result-dot" style="background:' + esc(actor.color || '#888') + '"></div>' +
+    '<div><div class="search-result-name">' + esc(actor.name) + '</div>' +
+    '<div class="search-result-sub">' + actor.count + ' evenement' + (actor.count > 1 ? 's' : '') + ' · filtrer</div></div>';
+  div.onclick = () => {
+    toggleActorFilter(actor.name);
+    searchResults.style.display = 'none'; searchInput.value = '';
+  };
+  searchResults.appendChild(div);
+}
+
+function renderPlaceRow(p) {
+  const div = document.createElement('div'); div.className = 'search-result search-result-place';
+  const kind = (p.place_type && p.place_type[0]) || 'lieu';
+  const kindLabel = kind === 'country' ? 'Pays' : kind === 'region' ? 'Region' : kind === 'place' ? 'Ville' : kind === 'locality' ? 'Localite' : kind === 'district' ? 'District' : kind === 'neighborhood' ? 'Quartier' : kind === 'poi' ? 'Point d\'interet' : 'Lieu';
+  const sub = (p.place_name || '').replace(p.text + ', ', '') || kindLabel;
+  div.innerHTML = '<div class="search-result-dot" style="background:var(--ac)"></div>' +
+    '<div><div class="search-result-name">' + esc(p.text) + '</div>' +
+    '<div class="search-result-sub">' + esc(kindLabel) + ' · ' + esc(sub) + '</div></div>';
+  div.onclick = () => {
+    const zoomByKind = kind === 'country' ? 5 : kind === 'region' ? 7 : kind === 'district' ? 8 : 10;
+    map.flyTo({ center: p.center, zoom: zoomByKind, duration: 1200, essential: true });
+    searchResults.style.display = 'none'; searchInput.value = '';
+  };
+  searchResults.appendChild(div);
+}
+
+function renderSearchResults(actors, places) {
   searchResults.innerHTML = '';
-  const seen = new Set();
-  actorMatches.slice(0, 8).forEach(f => {
-    const key = f.properties.name + '_' + f.properties._period;
-    if (seen.has(key)) return; seen.add(key);
-    const div = document.createElement('div'); div.className = 'search-result';
-    const color = f.properties._color || '#888';
-    const parsed = f.properties._desc ? parseDesc(f.properties._desc) : null;
-    const lieu = parsed && parsed.pays ? parsed.pays : '';
-    const evt = parsed && parsed.event ? parsed.event : '';
-    div.innerHTML = '<div class="search-result-dot" style="background:' + color + '"></div>' +
-      '<div><div class="search-result-name">' + f.properties.name + '</div>' +
-      '<div class="search-result-sub">' + (evt || lieu || '') + (lieu && evt ? ' · ' : '') + f.properties._period + '</div></div>';
-    div.onclick = () => {
-      const coords = f.geometry.coordinates;
-      map.flyTo({ center: coords, zoom: 10, duration: 1200, essential: true });
-      searchResults.style.display = 'none'; searchInput.value = '';
-      setTimeout(() => {
-        const sp = new mapboxgl.Popup({ closeButton: true, maxWidth: '310px', className: 'algor-popup' })
-          .setLngLat(coords).setHTML(makePopupHTML(f.properties)).addTo(map);
-        sp.getElement()?.querySelector('.mapboxgl-popup-close-button')?.addEventListener('click', () => sp.remove());
-      }, 1300);
-    };
-    searchResults.appendChild(div);
-  });
-  placeMatches.slice(0, 5).forEach(p => {
-    const div = document.createElement('div'); div.className = 'search-result';
-    div.innerHTML = '<div class="search-result-dot" style="background:#c49a3c;border-radius:2px"></div>' +
-      '<div><div class="search-result-name">' + p.text + '</div>' +
-      '<div class="search-result-sub">' + (p.place_name || '').replace(p.text + ', ', '') + '</div></div>';
-    div.onclick = () => {
-      map.flyTo({ center: p.center, zoom: 10, duration: 1200, essential: true });
-      searchResults.style.display = 'none'; searchInput.value = '';
-    };
-    searchResults.appendChild(div);
-  });
-  if (!actorMatches.length && !placeMatches.length) {
-    searchResults.style.display = 'none';
+  if (!actors.length && !places.length) {
+    const empty = document.createElement('div');
+    empty.className = 'search-result search-state-empty';
+    empty.innerHTML = '<div class="search-result-sub" style="flex:1;text-align:center;padding:4px 0">Aucun resultat · affinez la requete</div>';
+    searchResults.appendChild(empty);
+    searchResults.style.display = 'block';
     return;
+  }
+  if (actors.length) {
+    renderCategoryHeader('Acteurs');
+    actors.slice(0, 5).forEach(renderActorRow);
+  }
+  if (places.length) {
+    renderCategoryHeader('Lieu · Ville · Region');
+    places.slice(0, 8).forEach(renderPlaceRow);
   }
   searchResults.style.display = 'block';
 }
 
-searchInput.addEventListener('input', function () {
-  const q = this.value.trim().toLowerCase();
-  if (!q || q.length < 2) { searchResults.style.display = 'none'; searchResults.innerHTML = ''; return; }
-  const actorMatches = [];
+function renderSearchState(kind, msg) {
+  searchResults.innerHTML = '';
+  const div = document.createElement('div');
+  div.className = 'search-result search-state-' + kind;
+  const color = kind === 'error' ? 'var(--err)' : 'var(--tx2)';
+  div.innerHTML = '<div class="search-result-sub" style="flex:1;text-align:center;padding:4px 0;color:' + color + '">' + msg + '</div>';
+  searchResults.appendChild(div);
+  searchResults.style.display = 'block';
+}
+
+// Acteurs locaux dedupliques par nom (name match uniquement, pas desc).
+function collectLocalActors(q) {
+  const map = new Map();
   Object.values(loadedData).forEach(geo => {
     if (!geo) return;
     geo.features.forEach(f => {
       if (!f.geometry || f.geometry.type !== 'Point') return;
-      const name = (f.properties.name || '').toLowerCase();
-      const desc = (f.properties._desc || '').toLowerCase();
-      if (name.includes(q) || desc.includes(q)) actorMatches.push(f);
+      const rawName = f.properties.name || '';
+      if (!rawName) return;
+      if (!rawName.toLowerCase().includes(q)) return;
+      const cur = map.get(rawName) || { name: rawName, count: 0, color: f.properties._color || '#888' };
+      cur.count++;
+      map.set(rawName, cur);
     });
   });
-  renderSearchResults(actorMatches, [], q);
+  return Array.from(map.values()).sort((a, b) => b.count - a.count);
+}
+
+searchInput.addEventListener('input', function () {
+  const q = this.value.trim();
+  const qLower = q.toLowerCase();
+  if (!q || q.length < 2) { searchResults.style.display = 'none'; searchResults.innerHTML = ''; return; }
+  const actors = collectLocalActors(qLower);
+  // Rendu immediat avec acteurs locaux (geocoder vient en async)
+  if (!actors.length) renderSearchState('loading', 'Recherche...');
+  else renderSearchResults(actors, []);
+
   clearTimeout(searchGeoTimer);
   const myReqId = ++searchGeoReqId;
   searchGeoTimer = setTimeout(() => {
     const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(q) +
-      '.json?access_token=' + mapboxgl.accessToken + '&language=fr&limit=5&bbox=' + SEARCH_BBOX +
-      '&types=place,locality,region,country,poi';
-    fetch(url).then(r => r.json()).then(data => {
+      '.json?access_token=' + mapboxgl.accessToken + '&language=fr&limit=8&bbox=' + SEARCH_BBOX +
+      '&types=place,locality,region,country,district,neighborhood,poi';
+    fetch(url).then(r => {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    }).then(data => {
       if (myReqId !== searchGeoReqId) return;
       const places = (data && data.features) ? data.features : [];
-      renderSearchResults(actorMatches, places, q);
-    }).catch(() => {});
-  }, 250);
+      renderSearchResults(actors, places);
+    }).catch(err => {
+      if (myReqId !== searchGeoReqId) return;
+      if (actors.length) renderSearchResults(actors, []);
+      else renderSearchState('error', 'Geocoder · code ' + (err && err.message || 'net') + ' · reessayer');
+    });
+  }, 200);
 });
 document.addEventListener('click', (e) => {
   if (!document.getElementById('search-box').contains(e.target)) searchResults.style.display = 'none';
@@ -746,7 +812,7 @@ map.on('mousemove', 'kml-dots', (e) => {
   if (!e.features || !e.features[0]) return;
   const p = e.features[0].properties;
   const color = p._color || '#888';
-  tooltip.innerHTML = '<span class="tooltip-dot" style="background:' + color + '"></span>' + (p.name || '');
+  tooltip.innerHTML = '<span class="tooltip-dot" style="background:' + esc(color) + '"></span>' + esc(p.name || '');
   tooltip.style.display = 'block';
   tooltip.style.left = (e.originalEvent.clientX + 12) + 'px';
   tooltip.style.top  = (e.originalEvent.clientY - 8)  + 'px';
@@ -772,9 +838,12 @@ map.on('load', async () => {
   mapReady = true;
   document.getElementById('loader').style.display = 'none';
   updateSliderLabel(0);
-  // Prechargement en arriere-plan
-  for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
-  // Aucun calque/periode pre-selectionne au chargement
+  // CALQUES_ONLY : pas de prechargement KML (les calques chargent leurs propres fichiers)
+  if (!CALQUES_ONLY) {
+    for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
+  }
+  // Restauration etat depuis URL — sinon aucun calque/periode pre-selectionne au chargement
+  restoreStateFromURL();
   // Show tutorial AFTER everything is loaded (if not already seen)
   var tutKey = ZONE_CONFIG.TUTORIAL_KEY;
   if (tutKey && !localStorage.getItem(tutKey)) {
@@ -782,4 +851,54 @@ map.on('load', async () => {
     if (tutEl) tutEl.style.display = 'flex';
   }
 });
+
+// ── URL SHARING (P2) ─────────────────────────────────────────────────
+// Parametres supportes :
+//   ?p=0,1,2  liste d'index de periodes actives (ou 'all')
+//   ?actor=<nom>  filtre acteur actif
+// Permet de partager un lien reproduisant l'etat exact de l'analyse.
+function restoreStateFromURL() {
+  var params = new URLSearchParams(window.location.search);
+  var pParam = params.get('p');
+  var actorParam = params.get('actor');
+  var did = false;
+  if (pParam === 'all') {
+    toggleAll();
+    did = true;
+  } else if (pParam) {
+    var indices = pParam.split(',').map(function(s){return parseInt(s, 10);}).filter(function(i){return !isNaN(i) && i >= 0 && i < PERIODS.length;});
+    if (indices.length) {
+      indices.forEach(function(i){ togglePeriod(i); });
+      did = true;
+    }
+  }
+  if (actorParam) {
+    // Applique le filtre acteur apres les periodes (pour que applyFilter ait un set actif)
+    setTimeout(function(){ toggleActorFilter(decodeURIComponent(actorParam)); }, 80);
+    did = true;
+  }
+  return did;
+}
+
+var _urlSyncTimer = null;
+function syncStateToURL() {
+  if (_urlSyncTimer) clearTimeout(_urlSyncTimer);
+  _urlSyncTimer = setTimeout(function(){
+    var params = new URLSearchParams();
+    if (showAll) params.set('p', 'all');
+    else if (activePeriods.size) params.set('p', [...activePeriods].sort(function(a,b){return a-b;}).join(','));
+    if (activeFilter) params.set('actor', encodeURIComponent(activeFilter));
+    var q = params.toString();
+    var newUrl = window.location.pathname + (q ? '?' + q : '') + window.location.hash;
+    try { history.replaceState(null, '', newUrl); } catch(e) {}
+  }, 250);
+}
+
+// Hook sur togglePeriod / toggleAll / toggleActorFilter via proxy : on appelle syncStateToURL apres.
+var _origTogglePeriod = togglePeriod;
+togglePeriod = function(i){ _origTogglePeriod(i); syncStateToURL(); };
+var _origToggleAll = toggleAll;
+toggleAll = function(){ _origToggleAll(); syncStateToURL(); };
+var _origToggleActorFilter = toggleActorFilter;
+toggleActorFilter = function(n){ _origToggleActorFilter(n); syncStateToURL(); };
 map.on('error', (e) => console.warn('Mapbox error:', e));

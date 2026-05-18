@@ -1,0 +1,329 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            65.5,
+            31.5
+          ],
+          [
+            68.0,
+            33.5
+          ],
+          [
+            71.0,
+            33.5
+          ],
+          [
+            72.5,
+            33.0
+          ],
+          [
+            73.5,
+            33.0
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Axe heroine Kandahar → KP → Pendjab",
+        "type": "Trafic heroine",
+        "rank": "main",
+        "volume": "~150 t/an (estimations UNODC)",
+        "evolution_15j": "+18%",
+        "objet": "Heroine afghane brute (Taliban 2021-2024 levee puis retablie)",
+        "detail": "Route historique de l'heroine afghane via Nangarhar/Kandahar vers le KP (Peshawar) et le Pendjab pakistanais. Alimente le marche international via le port de Karachi.",
+        "sources": "UNODC_World_Drug_Report|https://www.unodc.org/unodc/en/data-and-analysis/world-drug-report.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            67.0,
+            24.8
+          ],
+          [
+            70.0,
+            24.0
+          ],
+          [
+            73.0,
+            22.0
+          ],
+          [
+            75.0,
+            20.0
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Route maritime heroine — Makran vers Golfe",
+        "type": "Trafic heroine",
+        "rank": "main",
+        "volume": "30-40% des exportations",
+        "evolution_15j": "Stable",
+        "objet": "Heroine en cargos et dhows",
+        "detail": "Cote Makran (Gwadar, Pasni, Jiwani) vers Emirats arabes unis, Oman, puis Afrique de l'Est. Interceptions CMF (Combined Maritime Forces).",
+        "sources": "UNODC|https://www.unodc.org/ Combined_Maritime_Forces|https://combinedmaritimeforces.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.5,
+            34.0
+          ],
+          [
+            74.0,
+            33.8
+          ],
+          [
+            74.3,
+            33.5
+          ],
+          [
+            74.6,
+            33.3
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Infiltration LoC — secteur Kupwara/Uri",
+        "type": "Infiltration transfrontaliere",
+        "rank": "main",
+        "volume": "15-25 tentatives/mois",
+        "evolution_15j": "+22%",
+        "objet": "Cadres LeT/JeM/HM, armes, explosifs",
+        "detail": "Secteurs historiquement permeables (bois denses, vallees). L'armee indienne a renforce le dispositif AI (anti-infiltration) en avril 2026 avant la commemoration Pahalgam.",
+        "sources": "Indian_Army|https://www.indianarmy.nic.in/ SATP_J&K|https://www.satp.org/terrorist-activity/india-jammukashmir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            75.0,
+            32.7
+          ],
+          [
+            74.6,
+            32.7
+          ],
+          [
+            74.3,
+            32.5
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Infiltration IB Jammu — Samba/Kathua",
+        "type": "Infiltration transfrontaliere",
+        "rank": "secondary",
+        "volume": "5-10 tentatives/mois",
+        "evolution_15j": "+5%",
+        "objet": "Tunnels detectes 2020-2023, drones 2024-2026",
+        "detail": "Secteur plus plat que la LoC. Tentatives impliquant drones cargo (chutes d'armes, stupefiants). BSF neutralise regulierement (cas du 25/01/2026 Samba).",
+        "sources": "BSF_India|https://www.bsf.gov.in/ SATP|https://www.satp.org/terrorist-activity/india-jammukashmir"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            68.3,
+            34.0
+          ],
+          [
+            69.0,
+            34.3
+          ],
+          [
+            70.5,
+            33.8
+          ],
+          [
+            71.5,
+            34.0
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Flux combattants TTP — Afghanistan → KP",
+        "type": "Infiltration transfrontaliere",
+        "rank": "main",
+        "volume": "~3000-6000 combattants actifs",
+        "evolution_15j": "+30%",
+        "objet": "Combattants TTP, armement, financement",
+        "detail": "TTP base en Afghanistan orientale (Kunar, Paktika) selon Islamabad. Offensive \"Khyber\" annoncee 10/03/2026. Casus belli de la crise Pak-Afg.",
+        "sources": "Crisis_Group|https://www.crisisgroup.org/sites/default/files/2026-02/354-pakistan-militant-surge.pdf Shamshad_News|https://shamshadnews.com/en/2026/03/10/ttp-announces-spring-offensive-khyber-against-pakistani-forces/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            92.0,
+            21.4
+          ],
+          [
+            88.5,
+            24.0
+          ],
+          [
+            85.0,
+            25.5
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Flux Rohingyas — Bangladesh → Inde",
+        "type": "Refugies",
+        "rank": "main",
+        "volume": "~50 000 en Inde (estimations)",
+        "evolution_15j": "Stable",
+        "objet": "Refugies Rohingyas fuyant Cox's Bazar",
+        "detail": "Transit clandestin via frontiere poreuse Bangladesh-Inde (Assam, Bengale occidental). Tensions securitaires et politiques recurrentes cote indien.",
+        "sources": "UNHCR|https://www.unhcr.org/rohingya-emergency.html IOM|https://www.iom.int/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            62.3225,
+            25.1264
+          ],
+          [
+            66.9936,
+            30.1798
+          ],
+          [
+            73.0479,
+            33.6007
+          ],
+          [
+            75.92,
+            36.7
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Corridor CPEC — Gwadar → Xinjiang",
+        "type": "Corridor CPEC",
+        "rank": "main",
+        "volume": "62 Mds USD (phase 1+2)",
+        "evolution_15j": "Retarde",
+        "objet": "Biens, energie, influence chinoise",
+        "detail": "Artere strategique Chine-Pakistan. Cible prioritaire BLA (symbole d'exploitation baloutche et neo-colonialisme chinois). Assaut Gwadar du 30/01/2026.",
+        "sources": "CSIS_CPEC|https://www.csis.org/analysis/china-pakistan-economic-corridor Wikipedia_2026_Balochistan_attacks|https://en.wikipedia.org/wiki/2026_Balochistan_attacks"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            68.5,
+            35.0
+          ],
+          [
+            71.0,
+            34.1
+          ],
+          [
+            73.0,
+            33.0
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Trafic armes — Afghanistan → Pakistan (Darra)",
+        "type": "Trafic d'armes",
+        "rank": "main",
+        "volume": "Volume significatif (non quantifie)",
+        "evolution_15j": "+15%",
+        "objet": "AK-47, RPG, armes US abandonnees 2021",
+        "detail": "Darra Adam Khel (Pakistan) reste hub historique du trafic d'armes. Stock US abandonne en 2021 reinjecte sur le marche regional. Alimente TTP/BLA/LeT.",
+        "sources": "Small_Arms_Survey|https://www.smallarmssurvey.org/ Reuters|https://www.reuters.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            74.8723,
+            31.634
+          ],
+          [
+            76.8173,
+            30.6434
+          ],
+          [
+            77.209,
+            28.6139
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Reseau ISI-proxies — Pendjab indien → Delhi-NCR",
+        "type": "Infiltration transfrontaliere",
+        "rank": "secondary",
+        "volume": "Modules reguliers",
+        "evolution_15j": "+40%",
+        "objet": "Gangsters proxies (Shahzad Bhatti), armes, fonds",
+        "detail": "Reseaux de gangsters pakistanais (Bhatti) recrutant jeunes Indiens via reseaux sociaux. Remise d'armes/fonds a Amritsar, attaques ciblees a Delhi/Pendjab. Dejoue 11/04/2026.",
+        "sources": "Tribune_India|https://www.tribuneindia.com/news/delhi/2-isi-operatives-arrested-for-planning-targeted-killings-grenade-attacks-in-delhi-punjab/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            68.75,
+            31.25
+          ],
+          [
+            66.4669,
+            30.9239
+          ],
+          [
+            65.71,
+            31.61
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Expulsions refugies afghans — Pakistan → Afghanistan",
+        "type": "Migration",
+        "rank": "main",
+        "volume": "~800 000 expulses depuis nov. 2023",
+        "evolution_15j": "+10%",
+        "objet": "Refugies afghans \"sans papiers\"",
+        "detail": "Campagne massive de retour force orchestree par Islamabad. Pression humanitaire critique sur Afghanistan. Cristallise les tensions Pak-Afg fin 2025 / 2026.",
+        "sources": "UNHCR_Pakistan|https://www.unhcr.org/pk/ IOM_Afghanistan|https://afghanistan.iom.int/ Reuters|https://www.reuters.com/"
+      }
+    }
+  ]
+}
