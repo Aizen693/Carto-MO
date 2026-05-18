@@ -57,22 +57,47 @@ function buildPrompt(input: {
     return 'angle securitaire general (acteurs, tendance, incidents recents)';
   })();
 
-  return `Tu es analyste pour Algor Int — cabinet francais d'intelligence economique et securitaire.
-Ton client doit prendre une decision rapide sur ce point cartographique.
+  return `Tu es analyste senior pour Algor Int — cabinet francais d'intelligence economique et securitaire (style Palantir / Stratfor).
+Ton client est un decideur : il doit pouvoir trancher en 90 secondes de lecture. La plus-value du cabinet repose sur la profondeur et la verifiabilite.
 
 POINT ANALYSE : **${input.name}**
-${ctxLines ? `\nCONTEXTE FOURNI :\n${ctxLines}\n` : ''}
-MISSION : Brief actionnable, ${angleHint}.
+${ctxLines ? `\nCONTEXTE FOURNI (a integrer) :\n${ctxLines}\n` : ''}
+MISSION : Note d'analyse complete, ${angleHint}.
 
-FORMAT STRICT :
-- 4 a 6 puces, une phrase punchy chacune
-- 1ere puce = synthese decisionnelle (l'essentiel a retenir)
-- Puces suivantes = faits recents (3 derniers mois prioritaires), acteurs cles, tendance
-- Pas de conditionnel speculatif, uniquement des faits sourcables
+UTILISE INTENSIVEMENT la recherche web Google : 5-10 recherches ciblees minimum. Privilegie sources tier-1 (presse internationale, instituts, ONU, ACLED, IISS, Crisis Group, presse regionale). Pas de blogs aleatoires.
 
-UTILISE la recherche web Google pour des infos a jour. Cite tes sources.
+FORMAT IMPOSE — utilise EXACTEMENT cette structure markdown :
 
-Sortie : francais sobre style note d'analyse. Aucune introduction ni conclusion. Aucun emoji. Juste les puces.`;
+## Synthese decisionnelle
+Un paragraphe dense de 3 a 5 lignes. L'essentiel a retenir pour la decision. Sans euphemisme, sans langue de bois. Ton ferme, analytique.
+
+## Acteurs cles
+- **Acteur 1** — role precis, capacite, posture actuelle
+- **Acteur 2** — idem
+(3 a 6 acteurs, prioriser ceux pertinents pour la decision)
+
+## Chronologie recente
+- **JJ/MM/AAAA** — Evenement horodate, source
+- **JJ/MM/AAAA** — Evenement horodate, source
+(5 a 10 entrees, focus 6 derniers mois, du plus recent au plus ancien)
+
+## Dynamique
+Un paragraphe de 2 a 4 lignes. Tendance de fond, signaux faibles, ruptures recentes. Lecture analytique, pas description.
+
+## Axes de vigilance
+- **Axe 1** — declencheur a surveiller + ce que ca signifierait
+- **Axe 2** — idem
+(3 a 5 axes operationnels, pas de generalites)
+
+REGLES :
+- Francais sobre, registre analyste senior
+- Aucun emoji, aucun gradient typographique, aucune mise en page fantaisiste
+- Aucune phrase d'introduction ou de conclusion en dehors des sections
+- Si une info n'est pas verifiable, ne l'inclus pas — ne speculer JAMAIS
+- Dates en JJ/MM/AAAA, montants avec unite, acteurs en gras (**nom**)
+- Si le contexte fourni mentionne un point fixe (mine, infrastructure, FMP), traite-le comme objet : qui l'exploite/le surveille, quels incidents le concernent, quelle valeur strategique
+
+Cite tes sources via grounding Google (elles seront affichees automatiquement).`;
 }
 
 interface BriefResult {
@@ -94,7 +119,7 @@ async function callGemini(prompt: string): Promise<BriefResult> {
       body: JSON.stringify({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         tools: [{ google_search: {} }],
-        generationConfig: { temperature: 0.3, maxOutputTokens: 1500 },
+        generationConfig: { temperature: 0.3, maxOutputTokens: 6000 },
       }),
     });
     if (response.ok) break;

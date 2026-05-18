@@ -20,7 +20,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => (
 const STYLES = `
 #brief-ia-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.78); z-index: 9999; display: none; align-items: flex-start; justify-content: center; padding: 60px 20px 20px; overflow-y: auto; }
 #brief-ia-overlay.open { display: flex; }
-#brief-ia-modal { background: #111214; border: 1px solid rgba(196,154,60,0.35); border-top: 2px solid #c49a3c; max-width: 720px; width: 100%; color: #e8e8e8; font-family: 'JetBrains Mono', monospace; }
+#brief-ia-modal { background: #111214; border: 1px solid rgba(196,154,60,0.35); border-top: 2px solid #c49a3c; max-width: 880px; width: 100%; color: #e8e8e8; font-family: 'JetBrains Mono', monospace; }
 #brief-ia-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
 #brief-ia-title-wrap { display: flex; flex-direction: column; gap: 4px; }
 #brief-ia-eyebrow { font: 500 9px/1 'JetBrains Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #c49a3c; }
@@ -33,8 +33,14 @@ const STYLES = `
 .bia-dot:nth-child(2) { animation-delay: 0.2s; }
 .bia-dot:nth-child(3) { animation-delay: 0.4s; }
 @keyframes biaPulse { 0%, 80%, 100% { opacity: 0.2; } 40% { opacity: 1; } }
-#brief-ia-content { font: 400 13px/1.65 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #e0e0e0; white-space: pre-wrap; }
+#brief-ia-content { font: 400 13px/1.65 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #e0e0e0; }
 #brief-ia-content strong, #brief-ia-content b { color: #c49a3c; font-weight: 700; }
+#brief-ia-content h2 { font: 600 9px/1 'JetBrains Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #c49a3c; margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(196,154,60,0.25); }
+#brief-ia-content h2:first-child { margin-top: 0; }
+#brief-ia-content p { margin: 0 0 12px; color: #e8e8e8; }
+#brief-ia-content ul { margin: 0 0 12px; padding-left: 0; list-style: none; }
+#brief-ia-content li { padding: 5px 0 5px 14px; position: relative; color: #d8d8d8; }
+#brief-ia-content li::before { content: ''; position: absolute; left: 0; top: 13px; width: 6px; height: 1px; background: #c49a3c; }
 #brief-ia-sources { margin-top: 20px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); }
 #brief-ia-sources-label { font: 600 9px/1 'JetBrains Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #888; margin-bottom: 10px; }
 .bia-source { display: block; color: #c49a3c; font: 400 11px/1.4 'JetBrains Mono', monospace; text-decoration: none; padding: 6px 10px; border: 1px solid rgba(196,154,60,0.25); margin-bottom: 6px; word-break: break-word; }
@@ -89,8 +95,47 @@ function renderError(msg, hint) {
   return `<div id="brief-ia-error">${esc(msg)}${hint ? `<div id="brief-ia-error-hint">${esc(hint)}</div>` : ''}</div>`;
 }
 
+// Parseur markdown minimaliste : ##, **bold**, listes "- ", paragraphes.
+// On echappe le HTML d'abord pour eviter toute injection, puis on reapplique
+// les balises markdown explicitement.
+function mdToHtml(raw) {
+  const escaped = esc(raw || '');
+  const lines = escaped.split(/\r?\n/);
+  const out = [];
+  let inList = false;
+  let para = [];
+  function flushPara() {
+    if (para.length) {
+      out.push('<p>' + para.join(' ').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>');
+      para = [];
+    }
+  }
+  function closeList() {
+    if (inList) { out.push('</ul>'); inList = false; }
+  }
+  for (const ln of lines) {
+    const line = ln.trim();
+    if (!line) { flushPara(); closeList(); continue; }
+    const h2 = line.match(/^##\s+(.+)$/);
+    const li = line.match(/^[-*]\s+(.+)$/);
+    if (h2) {
+      flushPara(); closeList();
+      out.push('<h2>' + h2[1].replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</h2>');
+    } else if (li) {
+      flushPara();
+      if (!inList) { out.push('<ul>'); inList = true; }
+      out.push('<li>' + li[1].replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</li>');
+    } else {
+      closeList();
+      para.push(line);
+    }
+  }
+  flushPara(); closeList();
+  return out.join('');
+}
+
 function renderBrief(data) {
-  const briefHtml = esc(data.brief || '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  const briefHtml = mdToHtml(data.brief || '');
   const sourcesHtml = (data.sources || []).length
     ? `<div id="brief-ia-sources">
          <div id="brief-ia-sources-label">Sources</div>
