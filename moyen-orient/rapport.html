@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="module" src="../shared/site-auth.js?v=20260511a"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root {
@@ -335,6 +336,9 @@ body { min-height: 100vh; }
   <div class="hero-title">Analyse des acteurs et tendances</div>
   <div class="hero-sub">Rapport de synthese base sur 173 evenements recenses couvrant 22 acteurs chiites, sunnites et etatiques sur 10 periodes. Donnees issues des sources OSINT Algor Int.</div>
 
+  <!-- Synthese decisionnelle (page 1 - IA + edition manuelle, persiste localStorage) -->
+  <div id="synthese-host"></div>
+
   <!-- METRICS -->
   <div class="metrics">
     <div class="metric-card">
@@ -505,6 +509,20 @@ new Chart(document.getElementById('chart-donut'), {
     },
   }
 });
+</script>
+
+<!-- Synthese decisionnelle IA - module ES + init -->
+<script type="module" src="../shared/synthese-rapport.js?v=20260518a"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    if (!window.AlgorSynthese) return;
+    AlgorSynthese.init({
+      containerId: 'synthese-host',
+      zoneId: 'moyen-orient',
+      zoneLabel: 'Moyen-Orient — Syrie, Irak, Iran, Liban, Yemen, Israel (2005-2026)',
+      reportTitle: 'Moyen-Orient — Analyse acteurs et tendances',
+    });
+  });
 </script>
 </body>
 </html>

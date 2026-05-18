@@ -32,12 +32,42 @@ function corsHeaders(origin: string | null): HeadersInit {
   };
 }
 
+function buildSynthesePrompt(input: {
+  name: string;
+  context?: Record<string, string>;
+}): string {
+  const ctx = input.context || {};
+  const scope = ctx.scope || ctx.zone_label || input.name;
+  return `Tu es analyste senior pour Algor Int — cabinet francais d'intelligence economique et securitaire.
+
+Produis UN SEUL paragraphe synthese decisionnelle pour la PAGE 1 du rapport sur : **${input.name}**
+Scope : ${scope}
+
+Ce paragraphe doit permettre au decideur (DG, DSI, exec) de trancher SANS lire le reste du rapport.
+
+REGLES STRICTES :
+- UN seul paragraphe de 4 a 6 lignes (60 a 110 mots)
+- 1er mot = verdict fort (ex : "Escalade", "Stabilisation", "Bascule", "Erosion", "Fragmentation", "Consolidation")
+- Suivi : trajectoire dominante (1-2 phrases factuelles, datees)
+- Acteurs / dynamiques cles (1-2 phrases)
+- Phrase finale = implication actionnable pour le decideur
+- AUCUNE puce, AUCUN markdown, AUCUN emoji
+- Texte continu, dense, sobre, registre analyste senior
+- Si une info n'est pas verifiable, ne l'inclus pas
+
+UTILISE la recherche web Google : 3-5 recherches ciblees minimum pour les faits des 3 derniers mois. Privilegie sources tier-1 (ACLED, ONU, ICG, IISS, presse internationale).
+
+Sortie : juste le paragraphe, rien d'autre.`;
+}
+
 function buildPrompt(input: {
   name: string;
   ville?: string;
   pays?: string;
   context?: Record<string, string>;
+  mode?: string;
 }): string {
+  if (input.mode === 'synthese') return buildSynthesePrompt(input);
   const ctx = input.context || {};
   // Champs utiles a injecter dans le prompt (on filtre les bruits)
   const skipKeys = new Set(['name', 'Name', 'nom', 'Nom', '_calque']);
@@ -195,7 +225,7 @@ Deno.serve(async (req) => {
     });
   }
 
-  let input: { name?: string; ville?: string; pays?: string; context?: Record<string, string> };
+  let input: { name?: string; ville?: string; pays?: string; mode?: string; context?: Record<string, string> };
   try {
     input = await req.json();
   } catch {
@@ -217,6 +247,7 @@ Deno.serve(async (req) => {
       ville: input.ville,
       pays: input.pays,
       context: input.context,
+      mode: input.mode,
     });
     const result = await callGemini(prompt);
     return new Response(JSON.stringify(result), {
