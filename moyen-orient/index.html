@@ -219,7 +219,8 @@ fetch("./otan-data.json").then(r => r.json()).then(d => { ZONE_CONFIG.OTAN_DATA 
 fetch("./map-zones.json").then(r => r.json()).then(d => { ZONE_CONFIG.MAP_ZONES = d; }).catch(() => console.warn("MAP_ZONES data not loaded"));
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js?v=20260518a"></script>
+<script type="module" src="../shared/brief-ia.js?v=20260518i"></script>
+<script src="../shared/engine.js?v=20260518i"></script>
 
 <!-- MO-SPECIFIC: Daesh territory zones + auto-toggle -->
 <script>

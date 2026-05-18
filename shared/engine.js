@@ -88,7 +88,12 @@ function makePopupHTML(p) {
     ).join(' ');
     otanBlock = `<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="background:${c};color:#fff;font-size:11px;font-weight:800;padding:2px 9px;border-radius:6px;letter-spacing:1px;">${otan.cotation}</span>${linksHtml}</div>`;
   }
-  return `<div class="popup-header"><div class="popup-dot-bar" style="background:${color}"></div><div class="popup-actor">${p.name || 'Point'}</div><div class="popup-period-badge">${p._period || ''}</div></div>${body || otanBlock ? `<div class="popup-body">${body}${otanBlock}</div>` : ''}`;
+  // Bouton Brief IA Securite (si module shared/brief-ia.js charge)
+  const briefBtn = (typeof window !== 'undefined' && window.buildBriefIAButton)
+    ? window.buildBriefIAButton(p.name || 'Point', { ...desc, pays: desc?.pays || '', ville: p.ville || '', period: p._period || '', event: desc?.event || '' }, 'evenements')
+    : '';
+  const bodyContent = body + otanBlock + briefBtn;
+  return `<div class="popup-header"><div class="popup-dot-bar" style="background:${color}"></div><div class="popup-actor">${p.name || 'Point'}</div><div class="popup-period-badge">${p._period || ''}</div></div>${bodyContent ? `<div class="popup-body">${bodyContent}</div>` : ''}`;
 }
 
 // ── CONFIGURATION ────────────────────────────────────────────────────

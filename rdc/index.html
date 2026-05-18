@@ -214,7 +214,8 @@ const ZONE_CONFIG = {
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js?v=20260518a"></script>
+<script type="module" src="../shared/brief-ia.js?v=20260518i"></script>
+<script src="../shared/engine.js?v=20260518i"></script>
 
 <!-- CALQUE : Renseignement HUMINT (points colores par auteur, popup riche) -->
 <script>
@@ -258,9 +259,10 @@ const ZONE_CONFIG = {
           if (!e.features || !e.features.length) return;
           var p = e.features[0].properties;
           var desc = (p.description || '').replace(/\n/g, '<br>');
+          var briefBtn = window.buildBriefIAButton ? window.buildBriefIAButton(p.name || 'Point', p, 'humint') : '';
           var html = '<div class="popup-header"><div class="popup-actor">' +
             (p.name || 'Point') + '</div></div>' +
-            '<div class="popup-body" style="white-space:pre-line">' + desc + '</div>';
+            '<div class="popup-body" style="white-space:pre-line">' + desc + briefBtn + '</div>';
           new mapboxgl.Popup({ closeButton: true, maxWidth: '340px', className: 'algor-popup' })
             .setLngLat(e.lngLat).setHTML(html).addTo(window.algorMap);
         });

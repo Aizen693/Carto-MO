@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Algor Int — Afrique Maritime</title>
 <script type="module" src="../shared/site-auth.js?v=20260511a"></script>
+<script type="module" src="../shared/brief-ia.js?v=20260518i"></script>
 <link rel="icon" type="image/jpeg" href="../favicon.jpg">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
@@ -771,6 +772,7 @@ function makePopup(props, subId) {
     }).join(' ');
     body += `<div style="margin-top:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);"><div class="popup-key" style="margin-bottom:4px">Sources</div>${linksHtml}</div>`;
   }
+  if (window.buildBriefIAButton) body += window.buildBriefIAButton(name, props, subId);
   return `<div class="popup-header"><div class="popup-dot-bar" style="background:${color}"></div><div class="popup-actor">${escapeHtml(name)}</div></div>${body ? `<div class="popup-body">${body}</div>` : ''}`;
 }
 

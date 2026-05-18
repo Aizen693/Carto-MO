@@ -281,7 +281,8 @@ const ZONE_CONFIG = {
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script src="../shared/engine.js?v=20260518a"></script>
+<script type="module" src="../shared/brief-ia.js?v=20260518i"></script>
+<script src="../shared/engine.js?v=20260518i"></script>
 <script>
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
 (function() {
@@ -337,6 +338,7 @@ const ZONE_CONFIG = {
       }).join(' ');
       body += '<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="popup-key" style="color:#888;margin-right:2px;">Sources</span>' + linksHtml + '</div>';
     }
+    if (window.buildBriefIAButton) body += window.buildBriefIAButton(name, props, calqueId);
     return header + (body ? '<div class="popup-body">' + body + '</div>' : '');
   }
 

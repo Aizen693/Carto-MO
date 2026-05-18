@@ -292,6 +292,25 @@ function decodePayload(arg) {
   return { name: String(arg || '') };
 }
 
+// Helper : construit le HTML du bouton "Brief IA Securite" injectable dans un popup.
+// Encode le contexte du point en base64 pour eviter l'enfer d'escaping dans onclick.
+window.buildBriefIAButton = function buildBriefIAButton(name, props, calqueId) {
+  const ctx = { name: name || '', _calque: calqueId || '' };
+  const p = props || {};
+  for (const k in p) {
+    if (!Object.prototype.hasOwnProperty.call(p, k)) continue;
+    if (k.charAt(0) === '_') continue;
+    const v = (p[k] == null ? '' : p[k]).toString().trim();
+    if (v && v.length < 600) ctx[k] = v;
+  }
+  const payload = btoa(unescape(encodeURIComponent(JSON.stringify(ctx))));
+  return '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);">'
+    + '<button onclick="window.openBriefIA(\'' + payload + '\')" '
+    + 'style="background:transparent;border:1px solid rgba(196,154,60,0.45);border-top:1px solid #c49a3c;color:#c49a3c;'
+    + 'font:600 9px/1 \'JetBrains Mono\',monospace;letter-spacing:0.14em;text-transform:uppercase;padding:7px 14px;cursor:pointer;width:100%;text-align:left;">'
+    + 'Brief IA Securite &nbsp;&rarr;</button></div>';
+};
+
 window.openBriefIA = async function openBriefIA(payloadOrName, _legacyPays, _legacyVille) {
   const ctx = (typeof payloadOrName === 'string' && (!_legacyPays && !_legacyVille))
     ? decodePayload(payloadOrName)
