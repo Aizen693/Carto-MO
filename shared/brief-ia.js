@@ -6,14 +6,12 @@
  * avec recherche Google et renvoie un brief securite + sources.
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
-
+// On reutilise le client Supabase deja instancie par site-auth.js (window.algorAuth.supabase)
+// pour eviter une double instance + un import esm.sh redondant.
 const SUPABASE_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: { storageKey: 'carto-admin-auth', persistSession: true, autoRefreshToken: true },
-});
+function getSupabase() {
+  return window.algorAuth?.supabase || null;
+}
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
@@ -109,6 +107,14 @@ window.openBriefIA = async function openBriefIA(name, pays, ville) {
   overlay.classList.add('open');
 
   try {
+    const supabase = getSupabase();
+    if (!supabase) {
+      overlay.querySelector('#brief-ia-body').innerHTML = renderError(
+        'Client Supabase indisponible.',
+        'Attends que la page finisse de charger puis reessaie.'
+      );
+      return;
+    }
     const { data: sess } = await supabase.auth.getSession();
     const token = sess?.session?.access_token;
     if (!token) {
