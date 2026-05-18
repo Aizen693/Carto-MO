@@ -138,7 +138,7 @@ window.openBriefIA = async function openBriefIA(name, pays, ville) {
     if (!res.ok) {
       overlay.querySelector('#brief-ia-body').innerHTML = renderError(
         json.error || `Erreur HTTP ${res.status}`,
-        json.hint || ''
+        json.hint || json.detail || ''
       );
       return;
     }
