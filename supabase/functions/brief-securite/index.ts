@@ -32,21 +32,47 @@ function corsHeaders(origin: string | null): HeadersInit {
   };
 }
 
-function buildPrompt(input: { name: string; ville?: string; pays?: string }): string {
-  const lieu = [input.ville, input.pays].filter(Boolean).join(', ') || input.name;
-  return `Tu es analyste securite pour Algor Int (cabinet d'intelligence economique francais).
+function buildPrompt(input: {
+  name: string;
+  ville?: string;
+  pays?: string;
+  context?: Record<string, string>;
+}): string {
+  const ctx = input.context || {};
+  // Champs utiles a injecter dans le prompt (on filtre les bruits)
+  const skipKeys = new Set(['name', 'Name', 'nom', 'Nom', '_calque']);
+  const ctxLines = Object.entries(ctx)
+    .filter(([k, v]) => !skipKeys.has(k) && typeof v === 'string' && v.trim())
+    .slice(0, 20)
+    .map(([k, v]) => `- ${k} : ${v}`)
+    .join('\n');
 
-Donne un brief securite concis sur : **${input.name}**${lieu !== input.name ? ` (${lieu})` : ''}
+  const calque = ctx._calque || '';
+  const angleHint = (() => {
+    if (calque === 'mines' || ctx.statut || ctx.operateur) return 'angle economique + securitaire (acteurs operationnels, conflits autour de l\'actif, tensions filiere)';
+    if (calque === 'evenements' || ctx.evenement || ctx.event) return 'angle threat (acteur, victimes, mode operatoire, revendications, suites)';
+    if (calque === 'flux') return 'angle flux (volumes, axes, acteurs, evolution, vulnerabilites)';
+    if (calque === 'infrastructures') return 'angle infrastructure (criticite, securisation, incidents passes)';
+    if (calque === 'population' || calque === 'ethnies') return 'angle communautaire (tensions, deplacements, dynamiques recentes)';
+    return 'angle securitaire general (acteurs, tendance, incidents recents)';
+  })();
 
-Format strict :
-- 3 a 5 puces, chacune une phrase courte
-- Focus evenements securitaires recents (3 derniers mois)
-- Acteurs cles, tendance (escalade / stabilisation / nouveau)
-- Aucune speculation, uniquement faits sources
+  return `Tu es analyste pour Algor Int — cabinet francais d'intelligence economique et securitaire.
+Ton client doit prendre une decision rapide sur ce point cartographique.
 
-Utilise la recherche web Google pour obtenir des informations a jour. Cite tes sources.
+POINT ANALYSE : **${input.name}**
+${ctxLines ? `\nCONTEXTE FOURNI :\n${ctxLines}\n` : ''}
+MISSION : Brief actionnable, ${angleHint}.
 
-Sortie en francais, sobre, factuelle. Pas d'introduction ni de conclusion, juste les puces.`;
+FORMAT STRICT :
+- 4 a 6 puces, une phrase punchy chacune
+- 1ere puce = synthese decisionnelle (l'essentiel a retenir)
+- Puces suivantes = faits recents (3 derniers mois prioritaires), acteurs cles, tendance
+- Pas de conditionnel speculatif, uniquement des faits sourcables
+
+UTILISE la recherche web Google pour des infos a jour. Cite tes sources.
+
+Sortie : francais sobre style note d'analyse. Aucune introduction ni conclusion. Aucun emoji. Juste les puces.`;
 }
 
 interface BriefResult {
@@ -138,7 +164,7 @@ Deno.serve(async (req) => {
     });
   }
 
-  let input: { name?: string; ville?: string; pays?: string };
+  let input: { name?: string; ville?: string; pays?: string; context?: Record<string, string> };
   try {
     input = await req.json();
   } catch {
@@ -155,7 +181,12 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const prompt = buildPrompt({ name: input.name, ville: input.ville, pays: input.pays });
+    const prompt = buildPrompt({
+      name: input.name,
+      ville: input.ville,
+      pays: input.pays,
+      context: input.context,
+    });
     const result = await callGemini(prompt);
     return new Response(JSON.stringify(result), {
       status: 200,

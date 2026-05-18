@@ -288,7 +288,7 @@ const ZONE_CONFIG = {
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
-<script type="module" src="../shared/brief-ia.js?v=20260518d"></script>
+<script type="module" src="../shared/brief-ia.js?v=20260518e"></script>
 <script src="../shared/engine.js?v=20260518a"></script>
 <script>
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
@@ -345,12 +345,17 @@ const ZONE_CONFIG = {
       }).join(' ');
       body += '<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="popup-key" style="color:#888;margin-right:2px;">Sources</span>' + linksHtml + '</div>';
     }
-    // Brief IA Securite — appel Claude opus-4-7 + web_search via Edge Function
-    var nameEsc = (name || '').replace(/'/g, "\\'");
-    var paysEsc = ((props.pays || props.Pays || '') + '').replace(/'/g, "\\'");
-    var villeEsc = ((props.ville || props.Ville || '') + '').replace(/'/g, "\\'");
+    // Brief IA Securite — passe tout le contexte du popup encode en base64
+    // (evite l'enfer d'escaping dans onclick) — decode cote brief-ia.js
+    var ctx = { name: name || '', _calque: calqueId };
+    Object.keys(props || {}).forEach(function(k) {
+      if (k.charAt(0) === '_') return; // skip internal fields
+      var v = (props[k] || '').toString().trim();
+      if (v && v.length < 600) ctx[k] = v;
+    });
+    var payload = btoa(unescape(encodeURIComponent(JSON.stringify(ctx))));
     body += '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);">'
-         +  '<button onclick="window.openBriefIA(\'' + nameEsc + '\', \'' + paysEsc + '\', \'' + villeEsc + '\')" '
+         +  '<button onclick="window.openBriefIA(\'' + payload + '\')" '
          +  'style="background:transparent;border:1px solid rgba(196,154,60,0.45);border-top:1px solid #c49a3c;color:#c49a3c;'
          +  'font:600 9px/1 \'JetBrains Mono\',monospace;letter-spacing:0.14em;text-transform:uppercase;padding:7px 14px;cursor:pointer;width:100%;text-align:left;">'
          +  'Brief IA Securite &nbsp;→</button></div>';

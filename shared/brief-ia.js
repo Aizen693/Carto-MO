@@ -100,9 +100,23 @@ function renderBrief(data) {
   return `<div id="brief-ia-content">${briefHtml}</div>${sourcesHtml}`;
 }
 
-window.openBriefIA = async function openBriefIA(name, pays, ville) {
+function decodePayload(arg) {
+  // Nouveau format : base64(JSON) ; ancien format : name string brut.
+  try {
+    const json = decodeURIComponent(escape(atob(arg)));
+    const parsed = JSON.parse(json);
+    if (parsed && typeof parsed === 'object' && parsed.name) return parsed;
+  } catch (e) { /* fall through */ }
+  return { name: String(arg || '') };
+}
+
+window.openBriefIA = async function openBriefIA(payloadOrName, _legacyPays, _legacyVille) {
+  const ctx = (typeof payloadOrName === 'string' && (!_legacyPays && !_legacyVille))
+    ? decodePayload(payloadOrName)
+    : { name: payloadOrName, pays: _legacyPays || '', ville: _legacyVille || '' };
+
   const overlay = ensureOverlay();
-  overlay.querySelector('#brief-ia-title').textContent = name || 'Point inconnu';
+  overlay.querySelector('#brief-ia-title').textContent = ctx.name || 'Point inconnu';
   overlay.querySelector('#brief-ia-body').innerHTML = renderLoading();
   overlay.classList.add('open');
 
@@ -131,7 +145,12 @@ window.openBriefIA = async function openBriefIA(name, pays, ville) {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, pays: pays || '', ville: ville || '' }),
+      body: JSON.stringify({
+        name: ctx.name,
+        ville: ctx.ville || ctx.Ville || '',
+        pays: ctx.pays || ctx.Pays || '',
+        context: ctx,
+      }),
     });
 
     const json = await res.json().catch(() => ({}));
