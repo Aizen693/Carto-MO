@@ -774,8 +774,7 @@ map.on('load', async () => {
   updateSliderLabel(0);
   // Prechargement en arriere-plan
   for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
-  // Auto-selection premiere periode
-  togglePeriod(0);
+  // Aucun calque/periode pre-selectionne au chargement
   // Show tutorial AFTER everything is loaded (if not already seen)
   var tutKey = ZONE_CONFIG.TUTORIAL_KEY;
   if (tutKey && !localStorage.getItem(tutKey)) {

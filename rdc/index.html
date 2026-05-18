@@ -250,7 +250,7 @@ const ZONE_CONFIG = {
 <script>
 (function() {
   const DAESH_PERIODS = [4, 5]; // index 4=2013-2014, 5=2015-2016
-  let daeshZonesVisible = true;
+  let daeshZonesVisible = false;
 
   function checkDaeshAutoToggle() {
     const hasDaesh = [...activePeriods].some(i => DAESH_PERIODS.includes(i));
