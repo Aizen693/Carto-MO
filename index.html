@@ -1391,14 +1391,6 @@
       ctx.strokeStyle = C.border; ctx.lineWidth = 0.45; ctx.stroke();
     }
 
-    /* Overlay lighting : gradient radial clip a la sphere = effet planete 3D
-       (highlight haut-gauche + ombre terminator bas-droite). Cout: 1 fill clipped. */
-    ctx.save();
-    ctx.beginPath(); path(sphere); ctx.clip();
-    ctx.fillStyle = sphereLight;
-    ctx.fillRect(0, 0, W, H);
-    ctx.restore();
-
     // sphere rim
     ctx.beginPath(); path(sphere);
     ctx.strokeStyle = C.rim; ctx.lineWidth = 0.75; ctx.stroke();
