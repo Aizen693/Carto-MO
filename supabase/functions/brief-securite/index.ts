@@ -82,22 +82,28 @@ interface BriefResult {
 }
 
 async function callGemini(prompt: string): Promise<BriefResult> {
-  const response = await fetch(`${GEMINI_ENDPOINT}?key=${GEMINI_API_KEY}`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      tools: [{ google_search: {} }],
-      generationConfig: {
-        temperature: 0.3,
-        maxOutputTokens: 1500,
-      },
-    }),
-  });
-
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Gemini API ${response.status}: ${errText}`);
+  // Retry sur 503 (modele surcharge) — backoff exponentiel : 0 / 1.5s / 3.5s
+  const delays = [0, 1500, 3500];
+  let response: Response | null = null;
+  let lastErrText = '';
+  for (const d of delays) {
+    if (d > 0) await new Promise((r) => setTimeout(r, d));
+    response = await fetch(`${GEMINI_ENDPOINT}?key=${GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        tools: [{ google_search: {} }],
+        generationConfig: { temperature: 0.3, maxOutputTokens: 1500 },
+      }),
+    });
+    if (response.ok) break;
+    lastErrText = await response.text();
+    // Ne retry que sur 503 (UNAVAILABLE) et 429 (rate limit transitoire)
+    if (response.status !== 503 && response.status !== 429) break;
+  }
+  if (!response || !response.ok) {
+    throw new Error(`Gemini API ${response?.status ?? '???'}: ${lastErrText}`);
   }
 
   const data = await response.json();
