@@ -130,7 +130,7 @@
   function init(opts) {
     opts = opts || {};
     var sources = opts.sources || [];
-    var autoEnableDefault = opts.autoEnable !== false;
+    var autoEnableDefault = opts.autoEnable === true;
     var allFilterLayers = [];
     sources.forEach(function(s) {
       if (s.layers && s.layers.length) allFilterLayers = allFilterLayers.concat(s.layers);
