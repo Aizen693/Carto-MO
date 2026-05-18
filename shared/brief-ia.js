@@ -25,8 +25,12 @@ const STYLES = `
 #brief-ia-title-wrap { display: flex; flex-direction: column; gap: 4px; }
 #brief-ia-eyebrow { font: 500 9px/1 'JetBrains Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #c49a3c; }
 #brief-ia-title { font: 700 16px/1.2 'JetBrains Mono', monospace; color: #ffffff; }
-#brief-ia-close { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #b0b0b0; font: 500 10px/1 'JetBrains Mono', monospace; padding: 6px 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; }
-#brief-ia-close:hover { color: #c49a3c; border-color: #c49a3c; }
+#brief-ia-actions { display: flex; gap: 8px; align-items: center; }
+.bia-btn { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #b0b0b0; font: 500 10px/1 'JetBrains Mono', monospace; padding: 6px 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.bia-btn:hover { color: #c49a3c; border-color: #c49a3c; }
+.bia-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.bia-btn:disabled:hover { color: #b0b0b0; border-color: rgba(255,255,255,0.15); }
+.bia-btn svg { width: 11px; height: 11px; }
 #brief-ia-body { padding: 18px 20px 22px; min-height: 120px; }
 #brief-ia-loading { display: flex; align-items: center; gap: 10px; color: #888; font: 400 11px/1 'JetBrains Mono', monospace; letter-spacing: 0.06em; }
 .bia-dot { width: 6px; height: 6px; background: #c49a3c; display: inline-block; animation: biaPulse 1.2s infinite; }
@@ -50,6 +54,7 @@ const STYLES = `
 `;
 
 let overlayEl = null;
+let currentBrief = null; // { name, brief, sources, model, generatedAt } — pour l'export
 
 function ensureOverlay() {
   if (overlayEl) return overlayEl;
@@ -66,7 +71,15 @@ function ensureOverlay() {
           <span id="brief-ia-eyebrow">Brief IA Securite</span>
           <span id="brief-ia-title"></span>
         </div>
-        <button id="brief-ia-close" type="button">Fermer</button>
+        <div id="brief-ia-actions">
+          <button id="brief-ia-export" class="bia-btn" type="button" disabled title="Exporter la note en HTML autonome">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M8 1v9m0 0l-3-3m3 3l3-3M2 12v2a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2"/>
+            </svg>
+            Exporter
+          </button>
+          <button id="brief-ia-close" class="bia-btn" type="button">Fermer</button>
+        </div>
       </div>
       <div id="brief-ia-body"></div>
     </div>
@@ -77,6 +90,7 @@ function ensureOverlay() {
     if (e.target === overlayEl) closeBrief();
   });
   overlayEl.querySelector('#brief-ia-close').addEventListener('click', closeBrief);
+  overlayEl.querySelector('#brief-ia-export').addEventListener('click', exportBrief);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && overlayEl.classList.contains('open')) closeBrief();
   });
@@ -85,6 +99,107 @@ function ensureOverlay() {
 
 function closeBrief() {
   if (overlayEl) overlayEl.classList.remove('open');
+}
+
+function setExportEnabled(enabled) {
+  if (!overlayEl) return;
+  const btn = overlayEl.querySelector('#brief-ia-export');
+  if (btn) btn.disabled = !enabled;
+}
+
+function buildExportHtml(data) {
+  const date = new Date(data.generatedAt || Date.now());
+  const dateStr = date.toLocaleString('fr-FR', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
+  });
+  const briefHtml = mdToHtml(data.brief || '');
+  const sourcesItems = (data.sources || []).map(
+    (s) => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a></li>`
+  ).join('');
+  const sourcesBlock = sourcesItems
+    ? `<section><h2>Sources</h2><ol class="sources">${sourcesItems}</ol></section>`
+    : '';
+  const titleEsc = esc(data.name || 'Brief securite');
+  const modelEsc = esc(data.model || '');
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Brief securite — ${titleEsc}</title>
+<meta name="generator" content="Algor Int — Brief IA Securite">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #111214; color: #e8e8e8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+  body { padding: 60px 28px; max-width: 880px; margin: 0 auto; font-size: 14px; line-height: 1.65; }
+  .hdr { border-top: 2px solid #c49a3c; border-bottom: 1px solid rgba(196,154,60,0.25); padding: 18px 0 22px; margin-bottom: 32px; }
+  .hdr-row1 { display: flex; justify-content: space-between; align-items: center; font: 600 9px/1 'JetBrains Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #c49a3c; }
+  .hdr-brand { font-weight: 700; }
+  .hdr-confid { color: #ff5252; }
+  .hdr-title { margin: 14px 0 6px; font: 700 22px/1.2 'JetBrains Mono', monospace; color: #ffffff; }
+  .hdr-meta { font: 400 11px/1.5 'JetBrains Mono', monospace; color: #888; letter-spacing: 0.04em; }
+  h2 { font: 600 10px/1 'JetBrains Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #c49a3c; margin: 30px 0 12px; padding-bottom: 7px; border-bottom: 1px solid rgba(196,154,60,0.25); }
+  p { margin: 0 0 14px; }
+  strong, b { color: #c49a3c; font-weight: 700; }
+  ul, ol { margin: 0 0 14px; padding-left: 0; list-style: none; }
+  li { padding: 6px 0 6px 16px; position: relative; color: #d8d8d8; }
+  ul li::before { content: ''; position: absolute; left: 0; top: 15px; width: 7px; height: 1px; background: #c49a3c; }
+  ol.sources { counter-reset: src; }
+  ol.sources li { counter-increment: src; padding-left: 28px; font: 400 11px/1.5 'JetBrains Mono', monospace; word-break: break-word; }
+  ol.sources li::before { content: counter(src, decimal-leading-zero); position: absolute; left: 0; top: 6px; color: #c49a3c; font-weight: 700; }
+  ol.sources a { color: #c49a3c; text-decoration: none; border-bottom: 1px solid rgba(196,154,60,0.3); }
+  .ftr { margin-top: 48px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.07); font: 500 9px/1.4 'JetBrains Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase; color: #666; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  @media print {
+    body { background: #fff; color: #111; padding: 20mm; max-width: none; }
+    .hdr { border-top-color: #b8860b; }
+    .hdr-title { color: #000; }
+    h2 { color: #b8860b; }
+    strong, b { color: #b8860b; }
+    ul li::before, ol.sources li::before { background: #b8860b; color: #b8860b; }
+    ol.sources a { color: #b8860b; }
+    .ftr { color: #555; border-top-color: #ccc; }
+  }
+</style>
+</head>
+<body>
+  <header class="hdr">
+    <div class="hdr-row1">
+      <span class="hdr-brand">Algor Int — Note d'analyse</span>
+      <span class="hdr-confid">Confidentiel entreprise</span>
+    </div>
+    <h1 class="hdr-title">${titleEsc}</h1>
+    <div class="hdr-meta">Genere le ${esc(dateStr)}${modelEsc ? ` · ${modelEsc} + recherche web` : ''}</div>
+  </header>
+  <main>
+    ${briefHtml}
+    ${sourcesBlock}
+  </main>
+  <footer class="ftr">
+    <span>Algor Int · Intelligence economique et securitaire</span>
+    <span>Note generee par IA — verifier les sources avant exploitation</span>
+  </footer>
+</body>
+</html>`;
+}
+
+function exportBrief() {
+  if (!currentBrief) return;
+  const html = buildExportHtml(currentBrief);
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const safeName = (currentBrief.name || 'brief')
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9-]/gi, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase() || 'brief';
+  const dateSlug = new Date().toISOString().slice(0, 10);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `brief-${safeName}-${dateSlug}.html`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
 }
 
 function renderLoading() {
@@ -164,6 +279,8 @@ window.openBriefIA = async function openBriefIA(payloadOrName, _legacyPays, _leg
   overlay.querySelector('#brief-ia-title').textContent = ctx.name || 'Point inconnu';
   overlay.querySelector('#brief-ia-body').innerHTML = renderLoading();
   overlay.classList.add('open');
+  currentBrief = null;
+  setExportEnabled(false);
 
   try {
     const supabase = getSupabase();
@@ -207,6 +324,14 @@ window.openBriefIA = async function openBriefIA(payloadOrName, _legacyPays, _leg
       return;
     }
     overlay.querySelector('#brief-ia-body').innerHTML = renderBrief(json);
+    currentBrief = {
+      name: ctx.name || 'Point',
+      brief: json.brief || '',
+      sources: json.sources || [],
+      model: json.model || '',
+      generatedAt: Date.now(),
+    };
+    setExportEnabled(true);
   } catch (e) {
     overlay.querySelector('#brief-ia-body').innerHTML = renderError(
       'Echec reseau.',
