@@ -1427,5 +1427,13 @@ window.exportLivrable = async function() {
 };
 </script>
 
+<!-- V2 overlay (active uniquement avec ?v2=1) - refonte 2026-05 -->
+<!-- Note Sahel : CALQUES_ONLY=true, overlay charge mais sans effet visuel (cibler MO pour la demo) -->
+<script type="module">
+  if (new URLSearchParams(location.search).get('v2') === '1') {
+    import('../shared/v2/zone-overlay.js?v=20260519c').catch(e => console.warn('[V2] overlay failed:', e));
+  }
+</script>
+
 </body>
 </html>
