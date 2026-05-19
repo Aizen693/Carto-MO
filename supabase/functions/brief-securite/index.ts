@@ -136,14 +136,24 @@ interface BriefResult {
   model: string;
 }
 
+// Tente d'abord gemini-2.5-flash puis fallback gemini-2.0-flash-001 si 503 persistant
+const FALLBACK_MODEL = 'gemini-2.0-flash-001';
+const FALLBACK_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${FALLBACK_MODEL}:generateContent`;
+
 async function callGemini(prompt: string): Promise<BriefResult> {
-  // Retry sur 503 (modele surcharge) — backoff exponentiel : 0 / 1.5s / 3.5s
-  const delays = [0, 1500, 3500];
+  // Retry sur 503 (modele surcharge) — 5 tentatives, max ~28s total
+  // Pics de charge Gemini 2.5 Flash durent souvent 15-25s
+  const delays = [0, 1500, 4000, 9000, 14000];
   let response: Response | null = null;
   let lastErrText = '';
-  for (const d of delays) {
+  let usedModel = GEMINI_MODEL;
+  for (let i = 0; i < delays.length; i++) {
+    const d = delays[i];
     if (d > 0) await new Promise((r) => setTimeout(r, d));
-    response = await fetch(`${GEMINI_ENDPOINT}?key=${GEMINI_API_KEY}`, {
+    // A la derniere tentative, bascule sur le modele fallback si 503 persistant
+    const endpoint = (i === delays.length - 1) ? FALLBACK_ENDPOINT : `${GEMINI_ENDPOINT}`;
+    if (i === delays.length - 1) usedModel = FALLBACK_MODEL;
+    response = await fetch(`${endpoint}?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
@@ -179,7 +189,7 @@ async function callGemini(prompt: string): Promise<BriefResult> {
     }
   }
 
-  return { brief, sources, model: GEMINI_MODEL };
+  return { brief, sources, model: usedModel };
 }
 
 Deno.serve(async (req) => {
