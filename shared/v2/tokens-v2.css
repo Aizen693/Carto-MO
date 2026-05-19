@@ -174,3 +174,70 @@
   padding: 10px 12px !important;
   text-align: center !important;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SIDE PANEL — Section Visuel (og:image via microlink.io)
+   ═══════════════════════════════════════════════════════════ */
+.sp-photo-section h3 { /* meme h3 que les autres sections */ }
+.sp-photo-loading {
+  display: flex; align-items: center; gap: 10px;
+  font: 400 10px/1 var(--m);
+  color: var(--tx2);
+  letter-spacing: 0.06em;
+  padding: 4px 0;
+}
+.sp-photo-spinner {
+  width: 10px; height: 10px;
+  border: 1px solid var(--ac);
+  border-top-color: transparent;
+  animation: spinPhoto 0.8s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spinPhoto {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-photo-spinner { animation: none; }
+}
+.sp-photo-frame {
+  display: block;
+  position: relative;
+  text-decoration: none;
+  border: 1px solid var(--ln1);
+  background: rgba(0,0,0,0.35);
+  transition: border-color .15s;
+}
+.sp-photo-frame:hover { border-color: var(--ac); }
+.sp-photo-img {
+  display: block;
+  width: 100%;
+  max-height: 210px;
+  object-fit: cover;
+  filter: brightness(0.92) contrast(1.04);
+}
+.sp-photo-cap {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--ln1);
+  background: rgba(0,0,0,0.20);
+}
+.sp-photo-cap-title {
+  font: 500 11px/1.4 var(--m);
+  color: var(--txh);
+}
+.sp-photo-cap-pub {
+  font: 600 8px/1 var(--m);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ach);
+}
+.sp-photo-empty {
+  font: 400 10px/1.5 var(--m);
+  color: var(--tx2);
+  letter-spacing: 0.04em;
+}
+.sp-photo-empty a {
+  color: var(--ach);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

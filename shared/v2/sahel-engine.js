@@ -521,6 +521,56 @@ function setSelected(name) {
 }
 
 // ════════════════════════════════════════════════════════════════════
+//  PHOTO (og:image via microlink.io — service public, ~50 req/jour)
+// ════════════════════════════════════════════════════════════════════
+const _photoCache = new Map();
+async function fetchOgImage(url) {
+  if (_photoCache.has(url)) return _photoCache.get(url);
+  try {
+    const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}&meta=false`);
+    if (!res.ok) { _photoCache.set(url, null); return null; }
+    const data = await res.json();
+    if (data?.status !== 'success' || !data.data) { _photoCache.set(url, null); return null; }
+    const result = {
+      image: data.data?.image?.url || null,
+      title: data.data?.title || null,
+      publisher: data.data?.publisher || data.data?.author || null,
+      url: data.data?.url || url,
+    };
+    _photoCache.set(url, result);
+    return result;
+  } catch (e) {
+    _photoCache.set(url, null);
+    return null;
+  }
+}
+
+async function loadPhotoSection(grouped, photoSectionId) {
+  const target = document.getElementById(photoSectionId);
+  if (!target) return;
+  const primary = grouped.presse?.[0] || grouped.officiel?.[0] || grouped.osint?.[0];
+  if (!primary) {
+    target.innerHTML = '<h3>Visuel</h3><p class="sp-photo-empty">Aucune source URL disponible pour ce point.</p>';
+    return;
+  }
+  const og = await fetchOgImage(primary.url);
+  if (!og || !og.image) {
+    target.innerHTML = `<h3>Visuel</h3><p class="sp-photo-empty">Pas d'image extraite de <a href="${esc(primary.url)}" target="_blank" rel="noopener">${esc(primary.name)}</a>. Lancer le Brief IA pour rechercher.</p>`;
+    return;
+  }
+  target.innerHTML = `
+    <h3>Visuel</h3>
+    <a href="${esc(og.url)}" target="_blank" rel="noopener" class="sp-photo-frame" title="Ouvrir la source dans un nouvel onglet">
+      <img class="sp-photo-img" src="${esc(og.image)}" alt="${esc(og.title || primary.name)}" loading="lazy" referrerpolicy="no-referrer">
+      <span class="sp-photo-cap">
+        <span class="sp-photo-cap-title">${esc((og.title || primary.name).slice(0, 110))}</span>
+        <span class="sp-photo-cap-pub">${esc(og.publisher || primary.name)} →</span>
+      </span>
+    </a>
+  `;
+}
+
+// ════════════════════════════════════════════════════════════════════
 //  SIDE PANEL
 // ════════════════════════════════════════════════════════════════════
 function openSidePanel(feature) {
@@ -556,6 +606,14 @@ function openSidePanel(feature) {
       <div class="sp-meta">Fiabilité <b>${esc(CONF_LABELS[spec.confidence])}</b></div>
       ${d.date ? `<div class="sp-meta" style="margin-left:auto;">${esc(d.date)}</div>` : ''}
     </div>
+
+    <section class="sp-section sp-photo-section" id="sp-photo">
+      <h3>Visuel</h3>
+      <div class="sp-photo-loading">
+        <div class="sp-photo-spinner"></div>
+        <span>Recherche image source…</span>
+      </div>
+    </section>
 
     <section class="sp-section">
       <h3>Synthèse</h3>
@@ -607,6 +665,9 @@ function openSidePanel(feature) {
   });
 
   panel.classList.add('open');
+
+  // Charge la photo en async (n'attend pas le rendu initial)
+  loadPhotoSection(grouped, 'sp-photo');
 }
 
 function extractSources(desc, props) {
