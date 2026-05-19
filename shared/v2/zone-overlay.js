@@ -90,52 +90,55 @@ function hideLegacy(map) {
   });
 }
 
+/**
+ * Style "Reticule analyste" — sobre, Palantir/Stratfor-like :
+ *   - Dot central fin (3-5px) : sev color, sans bordure decorative
+ *   - Anneau exterieur fin (1px) a distance : meme couleur sev, opacity = confidence
+ *   - Halo TRES discret, sev 4 uniquement (sev 3 = pas de halo)
+ *   - Acteur passe en TOOLTIP au hover (plus dans le marker) — moins charge
+ */
 function ensureV2Layers(map) {
   if (!map.isStyleLoaded || !map.isStyleLoaded()) return false;
   if (!map.getSource('kml-current')) return false;
   if (map.getLayer('v2s-core')) return true;
 
-  // Halo diffus tres visible — sev >= 3
+  // Halo : SEULEMENT sev 4 (les vraies critiques), tres subtle
   map.addLayer({
     id: 'v2s-halo',
     type: 'circle',
     source: 'kml-current',
-    filter: ['all', ['==', ['geometry-type'], 'Point'], SEV_HIGH_FILTER],
+    filter: ['all', ['==', ['geometry-type'], 'Point'], ['==', ['get', '_sev'], 4]],
     paint: {
-      'circle-radius': [
-        'interpolate', ['linear'], ['zoom'],
-        3,  ['match', ['get', '_sev'], 3, 10, 4, 14, 10],
-        12, ['match', ['get', '_sev'], 3, 28, 4, 38, 28],
-      ],
-      'circle-color': sevColorExpr(),
-      'circle-opacity': 0.28,
-      'circle-blur': 0.85,
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 8, 12, 22],
+      'circle-color': '#c0392b',
+      'circle-opacity': 0.16,
+      'circle-blur': 0.6,
       'circle-pitch-alignment': 'map',
       'circle-pitch-scale': 'map',
     },
   });
 
-  // Stroke ring — encode fiabilite via opacity
+  // Anneau exterieur — a distance du core (effet reticule)
   map.addLayer({
     id: 'v2s-stroke',
     type: 'circle',
     source: 'kml-current',
     filter: ['==', ['geometry-type'], 'Point'],
     paint: {
-      'circle-radius': [
-        'interpolate', ['linear'], ['zoom'],
-        3,  ['+', ['match', ['get', '_imp'], 1, 3, 2, 4, 3, 5, 4, 7, 4], 3],
-        12, ['+', ['match', ['get', '_imp'], 1, 7, 2, 11, 3, 15, 4, 20, 9], 4],
-      ],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 5, 12, 11],
       'circle-color': 'transparent',
       'circle-stroke-color': sevColorExpr(),
-      'circle-stroke-width': 1.8,
-      'circle-stroke-opacity': confOpacityExpr(),
+      'circle-stroke-width': 1,
+      'circle-stroke-opacity': [
+        'interpolate', ['linear'], ['zoom'],
+        4, ['*', confOpacityExpr(), 0.4],
+        9, confOpacityExpr(),
+      ],
       'circle-pitch-alignment': 'map',
     },
   });
 
-  // Core — severite + bord interne couleur acteur
+  // Core — dot central, fin et net. Bordure 0.5px sombre pour lisibilite sur fond clair.
   map.addLayer({
     id: 'v2s-core',
     type: 'circle',
@@ -144,39 +147,84 @@ function ensureV2Layers(map) {
     paint: {
       'circle-radius': [
         'interpolate', ['linear'], ['zoom'],
-        3,  ['match', ['get', '_imp'], 1, 3, 2, 4, 3, 5, 4, 7, 4],
-        12, ['match', ['get', '_imp'], 1, 7, 2, 11, 3, 15, 4, 20, 9],
+        3,  ['match', ['get', '_sev'], 1, 1.8, 2, 2.2, 3, 2.6, 4, 3.2, 2.2],
+        12, ['match', ['get', '_sev'], 1, 3.5, 2, 4.5, 3, 5.5, 4, 7, 4.5],
       ],
       'circle-color': sevColorExpr(),
-      'circle-stroke-color': ['get', '_color'],
-      'circle-stroke-width': 1.4,
+      'circle-stroke-color': '#0d0e10',
+      'circle-stroke-width': 0.6,
       'circle-stroke-opacity': 0.9,
       'circle-opacity': 1,
       'circle-pitch-alignment': 'map',
     },
   });
 
-  // Selection — anneau or
+  // Selection — anneau gold tres fin, eloigne du core
   map.addLayer({
     id: 'v2s-sel',
     type: 'circle',
     source: 'kml-current',
     filter: ['==', ['get', '__never__'], true],
     paint: {
-      'circle-radius': [
-        'interpolate', ['linear'], ['zoom'],
-        3,  ['+', ['match', ['get', '_imp'], 1, 3, 2, 4, 3, 5, 4, 7, 4], 7],
-        12, ['+', ['match', ['get', '_imp'], 1, 7, 2, 11, 3, 15, 4, 20, 9], 10],
-      ],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 9, 12, 18],
       'circle-color': 'transparent',
       'circle-stroke-color': '#c49a3c',
-      'circle-stroke-width': 2,
-      'circle-stroke-opacity': 0.95,
+      'circle-stroke-width': 1.2,
+      'circle-stroke-opacity': 0.9,
     },
   });
 
   startConditionalPulse(map);
   return true;
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  CLICK HANDLER + HOVER — sur v2s-core (les markers V2 visibles)
+// ════════════════════════════════════════════════════════════════════
+function setupV2Interactions(map) {
+  if (map.__v2_clickHooked) return;
+  map.__v2_clickHooked = true;
+
+  // Click : ouvre une popup algor-popup que le MutationObserver convertira en V2
+  map.on('click', 'v2s-core', (e) => {
+    if (!e.features?.length) return;
+    const feature = e.features[0];
+    const p = feature.properties;
+    // Si engine.js a expose makePopupHTML globalement, on le reutilise
+    // (le MutationObserver convertira en V2). Sinon fallback V2 direct.
+    let html;
+    if (typeof window.makePopupHTML === 'function') {
+      try { html = window.makePopupHTML(p); } catch (err) { html = null; }
+    }
+    if (!html) html = buildV2PopupHTML(feature);
+    const popup = new mapboxgl.Popup({
+      closeButton: true,
+      maxWidth: '320px',
+      className: 'algor-popup',
+      offset: 14,
+    })
+      .setLngLat(e.lngLat)
+      .setHTML(html)
+      .addTo(map);
+    popup
+      .getElement()
+      ?.querySelector('.mapboxgl-popup-close-button')
+      ?.addEventListener('click', () => popup.remove());
+  });
+
+  // Hover cursor + tooltip natif via title sur le marker (acteur visible)
+  map.on('mouseenter', 'v2s-core', (e) => {
+    map.getCanvas().style.cursor = 'pointer';
+    if (e.features?.[0]) {
+      const p = e.features[0].properties;
+      const tip = `${p.name || ''}${p._period ? ' · ' + p._period : ''}`;
+      map.getContainer().setAttribute('title', tip);
+    }
+  });
+  map.on('mouseleave', 'v2s-core', () => {
+    map.getCanvas().style.cursor = '';
+    map.getContainer().removeAttribute('title');
+  });
 }
 
 // ════════════════════════════════════════════════════════════════════
@@ -284,7 +332,10 @@ function ensureFluxLayer(map, zoneId) {
     });
   }
 
-  // Ligne casing (glow legere autour)
+  // Flux SOUS les markers (insere avant v2s-halo si present, sinon avant kml-pulse, sinon top)
+  const beforeId = map.getLayer('v2s-halo') ? 'v2s-halo' : (map.getLayer('kml-pulse') ? 'kml-pulse' : undefined);
+
+  // Ligne casing (glow tres subtile)
   map.addLayer({
     id: 'v2s-flux-glow',
     type: 'line',
@@ -292,13 +343,13 @@ function ensureFluxLayer(map, zoneId) {
     layout: { 'line-cap': 'round', 'line-join': 'round' },
     paint: {
       'line-color': '#c49a3c',
-      'line-width': ['interpolate', ['linear'], ['zoom'], 3, 4, 10, 9],
-      'line-opacity': ['interpolate', ['linear'], ['get', 'intensity'], 0.6, 0.05, 1, 0.12],
-      'line-blur': 4,
+      'line-width': ['interpolate', ['linear'], ['zoom'], 3, 3, 10, 6],
+      'line-opacity': ['interpolate', ['linear'], ['get', 'intensity'], 0.6, 0.04, 1, 0.10],
+      'line-blur': 3,
     },
-  });
+  }, beforeId);
 
-  // Ligne principale dashed (sera animee)
+  // Ligne principale dashed (sera animee). Plus discret qu'avant.
   map.addLayer({
     id: 'v2s-flux-line',
     type: 'line',
@@ -306,13 +357,13 @@ function ensureFluxLayer(map, zoneId) {
     layout: { 'line-cap': 'round', 'line-join': 'round' },
     paint: {
       'line-color': '#c49a3c',
-      'line-width': ['interpolate', ['linear'], ['zoom'], 3, 1, 10, 1.6],
-      'line-opacity': ['interpolate', ['linear'], ['get', 'intensity'], 0.6, 0.45, 1, 0.85],
+      'line-width': ['interpolate', ['linear'], ['zoom'], 3, 0.8, 10, 1.3],
+      'line-opacity': ['interpolate', ['linear'], ['get', 'intensity'], 0.6, 0.35, 1, 0.65],
       'line-dasharray': [0, 4, 3],
     },
-  });
+  }, beforeId);
 
-  // Arrows symbol layer le long des lignes
+  // Arrows symbol layer le long des lignes — plus discret
   if (!map.getLayer('v2s-flux-arrow')) {
     map.addLayer({
       id: 'v2s-flux-arrow',
@@ -320,20 +371,20 @@ function ensureFluxLayer(map, zoneId) {
       source: 'v2s-flux',
       layout: {
         'symbol-placement': 'line',
-        'symbol-spacing': 90,
-        'text-field': '▶',
-        'text-size': 11,
+        'symbol-spacing': 120,
+        'text-field': '›',
+        'text-size': 14,
         'text-keep-upright': false,
         'text-rotation-alignment': 'map',
         'text-pitch-alignment': 'map',
       },
       paint: {
-        'text-color': '#e0b452',
-        'text-opacity': 0.7,
-        'text-halo-color': 'rgba(0,0,0,0.6)',
-        'text-halo-width': 1,
+        'text-color': '#c49a3c',
+        'text-opacity': 0.6,
+        'text-halo-color': 'rgba(0,0,0,0.45)',
+        'text-halo-width': 0.8,
       },
-    });
+    }, beforeId);
   }
 
   startFluxAnimation(map);
@@ -831,7 +882,9 @@ function bootOverlay() {
     try {
       if (map.getSource('kml-current')) {
         hideLegacy(map);
-        ensureV2Layers(map);
+        if (ensureV2Layers(map)) {
+          setupV2Interactions(map);
+        }
       }
       ensureFluxLayer(map, zoneId);
     } catch (e) {
