@@ -682,3 +682,117 @@ select:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   *:focus-visible { transition: none; }
 }
+
+/* ═════════ MODE ARCHIVE (DISABLE_LAYERS_AND_POINTS) ═════════
+   Active sur 6 zones : carte videe, donnees consultables via /dashboard/.
+   La classe .layers-disabled est posee sur <html> et <body> par engine.js
+   (et par afrique/index.html pour le cas qui n'utilise pas engine.js). */
+
+body.layers-disabled #controls,
+body.layers-disabled #compare-panel,
+body.layers-disabled #search-box,
+body.layers-disabled #hover-tooltip,
+body.layers-disabled #event-counter,
+body.layers-disabled #btn-export-html,
+body.layers-disabled #btn-center-sahel,
+body.layers-disabled #btn-sidebar,
+body.layers-disabled #btn-layers,
+body.layers-disabled #btn-style,
+body.layers-disabled #btn-handtrack,
+body.layers-disabled .mapboxgl-ctrl-top-right,
+body.layers-disabled .mapboxgl-ctrl-top-left,
+body.layers-disabled .mapboxgl-ctrl-bottom-right,
+body.layers-disabled .mapboxgl-ctrl-bottom-left {
+  display: none !important;
+}
+
+body.layers-disabled #map-container,
+body.layers-disabled #map,
+body.layers-disabled #map2 {
+  filter: grayscale(0.6) brightness(0.55);
+  pointer-events: none;
+}
+
+#archive-banner {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+#archive-banner .ab-card {
+  pointer-events: auto;
+  background: #111214;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: 2px solid #c49a3c;
+  padding: 36px 44px 32px;
+  max-width: 480px;
+  width: calc(100vw - 48px);
+  color: #ededee;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  text-align: left;
+}
+
+#archive-banner .ab-tag {
+  font: 600 9px/1 'JetBrains Mono', monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c49a3c;
+  margin-bottom: 14px;
+}
+
+#archive-banner h2 {
+  font: 500 22px/1.25 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+  color: #ededee;
+  margin: 0 0 12px;
+}
+
+#archive-banner p {
+  font: 400 13px/1.55 'Inter', sans-serif;
+  color: #8a8d93;
+  margin: 0 0 22px;
+}
+
+#archive-banner .ab-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #c49a3c;
+  color: #111214;
+  padding: 11px 18px;
+  font: 600 11px/1 'JetBrains Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-right: 14px;
+  transition: background 0.15s;
+}
+
+#archive-banner .ab-cta:hover {
+  background: #e0b452;
+}
+
+#archive-banner .ab-cta span {
+  font-size: 13px;
+}
+
+#archive-banner .ab-link {
+  font: 500 11px/1 'JetBrains Mono', monospace;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: #8a8d93;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding-bottom: 2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+#archive-banner .ab-link:hover {
+  color: #c49a3c;
+  border-bottom-color: #c49a3c;
+}

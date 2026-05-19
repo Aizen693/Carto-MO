@@ -17,6 +17,19 @@ const { OTAN_DATA, ACTOR_GROUPS, ACTOR_COLORS, PERIODS, STYLES, MAP_ZONES, ZONE_
 // Mode "calques only" : pas de points par periode (kml-dots), slider/play
 // pilote par les dates des points des calques. Defini par chaque zone.
 const CALQUES_ONLY = ZONE_CONFIG.CALQUES_ONLY === true;
+// Mode "archive" : aucun calque/point charge, donnees accessibles via /dashboard/
+const DISABLE_LAYERS_AND_POINTS = ZONE_CONFIG.DISABLE_LAYERS_AND_POINTS === true;
+if (DISABLE_LAYERS_AND_POINTS && typeof document !== 'undefined') {
+  document.documentElement.classList.add('layers-disabled');
+  document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('layers-disabled');
+    if (document.getElementById('archive-banner')) return;
+    var b = document.createElement('div');
+    b.id = 'archive-banner';
+    b.innerHTML = '<div class="ab-card"><div class="ab-tag">Donnees archivees</div><h2>Cette carte a ete videe</h2><p>Les points et calques de cette zone sont desormais consultables dans le Dashboard de recherche.</p><a class="ab-cta" href="../dashboard/">Ouvrir le Dashboard <span>&rarr;</span></a><a class="ab-link" href="../archive/">Voir l\'archive brute</a></div>';
+    document.body.appendChild(b);
+  });
+}
 
 function getColor(n) { return ACTOR_COLORS[n] || '#888888'; }
 function normalizeName(raw) { return ZONE_CONFIG.normalizeName(raw); }
@@ -844,7 +857,8 @@ map.on('load', async () => {
   document.getElementById('loader').style.display = 'none';
   updateSliderLabel(0);
   // CALQUES_ONLY : pas de prechargement KML (les calques chargent leurs propres fichiers)
-  if (!CALQUES_ONLY) {
+  // DISABLE_LAYERS_AND_POINTS : mode archive, aucun chargement
+  if (!CALQUES_ONLY && !DISABLE_LAYERS_AND_POINTS) {
     for (let i = 0; i < PERIODS.length; i++) { await loadKML(i); }
   }
   // Restauration etat depuis URL — sinon aucun calque/periode pre-selectionne au chargement
