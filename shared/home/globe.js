@@ -61,32 +61,32 @@ function Globe() {
       id: 'MO-01',
       lon: 44,
       lat: 33,
-      label: 'MO-01 · Moyen-Orient'
+      label: 'Moyen-Orient'
     }, {
       id: 'SAHEL-02',
       lon: 0,
       lat: 16,
-      label: 'SAHEL-02 · Sahel'
+      label: 'Sahel'
     }, {
       id: 'LACS-03',
       lon: 29,
       lat: -2,
-      label: 'LACS-03 · Grands Lacs'
+      label: 'Grands Lacs'
     }, {
       id: 'MDG-04',
       lon: 47,
       lat: -19,
-      label: 'MDG-04 · Madagascar'
+      label: 'Madagascar'
     }, {
       id: 'AFR-05',
       lon: 43,
       lat: 12,
-      label: 'AFR-05 · Afrique Maritime'
+      label: 'Afrique Maritime'
     }, {
       id: 'ASIE-06',
       lon: 74,
       lat: 30,
-      label: 'ASIE-06 · Asie du Sud'
+      label: 'Asie du Sud'
     }];
 
     // — flow definitions (50 terrestres + 35 maritimes)
@@ -135,9 +135,7 @@ function Globe() {
       // bord du globe
       fluxLand: '246,162,84',
       // flux terrestres — orange clair (glow holo)
-      fluxSea: '39,174,192',
-      // flux maritimes — cyan (glow holo)
-      gold: '184,149,74' // ancres (6 theatres)
+      fluxSea: '39,174,192' // flux maritimes — cyan (glow holo)
     };
     function draw(t) {
       ctx.clearRect(0, 0, W, H);
@@ -272,52 +270,56 @@ function Globe() {
         }
       });
 
-      // anchors (zones disponibles) — points holographiques, plus gros + plus brillants
+      // anchors (zones disponibles) — points orange, meme style que les flux.
+      //   Titre affiche UNIQUEMENT au survol (hoverAnchor).
       anchors.forEach((a, i) => {
         if (!visible([a.lon, a.lat])) return;
         const xy = proj([a.lon, a.lat]);
         if (!xy) return;
-        const pulse = (Math.sin(t / 900 + i * 1.7) + 1) / 2;
+        const hovered = hoverAnchor && hoverAnchor.id === a.id;
+        const pulse = (Math.sin(t / 1100 + i * 1.7) + 1) / 2;
+        const k = hovered ? 1.5 : 1;
 
-        // glow bloom dore — large et lumineux
-        const glowR = 18 + pulse * 7;
+        // glow bloom orange — meme teinte que les flux terrestres
+        const glowR = (10 + pulse * 4) * k;
         const g = ctx.createRadialGradient(xy[0], xy[1], 0, xy[0], xy[1], glowR);
-        g.addColorStop(0, `rgba(${C.gold},${(0.46 + pulse * 0.20).toFixed(3)})`);
-        g.addColorStop(0.45, `rgba(${C.gold},${(0.16 + pulse * 0.08).toFixed(3)})`);
-        g.addColorStop(1, `rgba(${C.gold},0)`);
+        g.addColorStop(0, `rgba(${C.fluxLand},${(0.42 + pulse * 0.16).toFixed(3)})`);
+        g.addColorStop(0.45, `rgba(${C.fluxLand},${(0.14 + pulse * 0.06).toFixed(3)})`);
+        g.addColorStop(1, `rgba(${C.fluxLand},0)`);
         ctx.fillStyle = g;
         ctx.beginPath();
         ctx.arc(xy[0], xy[1], glowR, 0, Math.PI * 2);
         ctx.fill();
 
-        // anneaux HUD concentriques
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = `rgba(${C.gold},${(0.55 + pulse * 0.25).toFixed(3)})`;
+        // halo orange serre
         ctx.beginPath();
-        ctx.arc(xy[0], xy[1], 8.5, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.strokeStyle = `rgba(${C.gold},0.30)`;
-        ctx.beginPath();
-        ctx.arc(xy[0], xy[1], 12 + pulse * 3, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // halo dore serre
-        ctx.beginPath();
-        ctx.arc(xy[0], xy[1], 5.4, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${C.gold},0.92)`;
+        ctx.arc(xy[0], xy[1], 3.4 * k, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${C.fluxLand},0.82)`;
         ctx.fill();
 
-        // coeur blanc lumineux — plus gros + plus brillant que les flux
+        // coeur blanc lumineux
         ctx.beginPath();
-        ctx.arc(xy[0], xy[1], 3.4, 0, Math.PI * 2);
+        ctx.arc(xy[0], xy[1], 1.7 * k, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(255,255,255,0.98)';
         ctx.fill();
 
-        // label
-        ctx.font = '600 11px JetBrains Mono, ui-monospace, monospace';
-        ctx.fillStyle = '#5b5668';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(a.label, xy[0] + 14, xy[1] + 0.5);
+        // label — uniquement au survol : annotation cartographique sobre,
+        //   halo blanc doux pour la lisibilite, aucun cadre.
+        if (hovered) {
+          ctx.save();
+          ctx.font = '600 12px Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif';
+          ctx.textBaseline = 'middle';
+          const tx = xy[0] + 12,
+            ty = xy[1] + 0.5;
+          ctx.fillStyle = '#2c2840';
+          ctx.shadowColor = 'rgba(255,255,255,0.95)';
+          ctx.shadowBlur = 5;
+          ctx.fillText(a.label, tx, ty); // passes empilees -> halo blanc
+          ctx.fillText(a.label, tx, ty);
+          ctx.shadowBlur = 0;
+          ctx.fillText(a.label, tx, ty); // passe nette finale
+          ctx.restore();
+        }
       });
       ctx.restore(); // fin du clip circulaire
     }
@@ -326,6 +328,7 @@ function Globe() {
     let last = performance.now();
     const period = 30000;
     let zoomTarget = null;
+    let hoverAnchor = null;
     function step(now) {
       const dt = Math.min(now - last, 80);
       last = now;
@@ -431,15 +434,18 @@ function Globe() {
       const hit = findAnchorAt(e.clientX - rect.left, e.clientY - rect.top);
       if (hit) {
         canvas.style.cursor = 'pointer';
+        hoverAnchor = hit;
         const meta = ANCHOR_META[hit.id];
         if (meta) zoomTarget = meta.target;
       } else {
         canvas.style.cursor = 'default';
+        hoverAnchor = null;
         zoomTarget = null;
       }
     }
     function onLeave() {
       canvas.style.cursor = 'default';
+      hoverAnchor = null;
       zoomTarget = null;
     }
     function onClick(e) {
