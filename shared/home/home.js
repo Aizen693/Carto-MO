@@ -29,9 +29,15 @@ function HomeView({
   }, "Outil de travail des analystes Algor Int sur six theatres \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement."), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
   }, /*#__PURE__*/React.createElement("button", {
-    className: "btn btn--primary btn--lg",
+    className: "btn btn--primary btn--lg btn--neon",
     onClick: onEnter
-  }, "Ouvrir un theatre", /*#__PURE__*/React.createElement(Arrow, null)), /*#__PURE__*/React.createElement("a", {
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "btn-neon btn-neon--top",
+    "aria-hidden": "true"
+  }), "Acceder au catalogue", /*#__PURE__*/React.createElement(Arrow, null), /*#__PURE__*/React.createElement("span", {
+    className: "btn-neon btn-neon--bottom",
+    "aria-hidden": "true"
+  })), /*#__PURE__*/React.createElement("a", {
     className: "btn--ghost-link",
     href: "/admin/"
   }, "Console admin", /*#__PURE__*/React.createElement(ArrowDiag, null))), /*#__PURE__*/React.createElement("nav", {

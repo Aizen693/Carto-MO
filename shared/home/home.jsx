@@ -24,9 +24,11 @@ function HomeView({ onEnter, clock, videoStyle }) {
           </p>
 
           <div className="hero__cta-row">
-            <button className="btn btn--primary btn--lg" onClick={onEnter}>
-              Ouvrir un theatre
+            <button className="btn btn--primary btn--lg btn--neon" onClick={onEnter}>
+              <span className="btn-neon btn-neon--top" aria-hidden="true" />
+              Acceder au catalogue
               <Arrow />
+              <span className="btn-neon btn-neon--bottom" aria-hidden="true" />
             </button>
             <a className="btn--ghost-link" href="/admin/">
               Console admin
