@@ -1,5 +1,5 @@
 /* global React, ZONES, REPORTS, GRAPHS, THEMES, THEME_DETAIL, SidePanel, Arrow */
-// Page 2 — 4 actions : Region · Rapport · Graph · Theme
+// Page 2 — 5 actions : Region · Rapport · Graph · Theme · Cartographie
 
 const { useState: useStateP } = React;
 
@@ -25,7 +25,7 @@ function PlatformView({ onBack }) {
             </h1>
           </div>
           <p className="platform__lede">
-            Quatre points d'entree pour naviguer dans les donnees Algor Int. Chacun ouvre un panneau lateral structure, avec recherche et navigation hierarchique.
+            Cinq points d'entree pour naviguer dans les donnees Algor Int. Chacun ouvre un panneau lateral structure, avec recherche et navigation hierarchique.
           </p>
         </header>
 
@@ -49,6 +49,11 @@ function PlatformView({ onBack }) {
             num="04" name="Theme" desc="Lectures transversales — Ports, Mines, JNIM, Routes, Energie..."
             count={`${THEMES.length} themes`} icon={<ThemeIconLg />}
             onClick={() => openAction('theme')} />
+
+          <ActionCard
+            num="05" name="Cartographie" desc="Acces direct aux cartes interactives — six theatres, calques et timeline."
+            count={`${ZONES.length} cartes`} icon={<CartoIconLg />}
+            onClick={() => openAction('cartographie')} />
         </div>
 
         <div className="section-rule">
@@ -113,22 +118,118 @@ function cascadeFor(name) {
       };
     });
   }
+  if (name === 'Cartographie') {
+    return ZONES.map(z => ({
+      label: z.name, meta: z.code,
+      actions: [
+        { label: 'Ouvrir la carte interactive', meta: z.countries, href: z.href },
+      ],
+    }));
+  }
   return [];
 }
 
-// Apercu anime en tete du popup — aurore violet/bleu, balayage, icone flottante.
-function CascadePreview({ name, icon, count }) {
+// Apercu anime en tete du popup — aurore violet/bleu + mini-clip propre a la carte.
+function CascadePreview({ name, count }) {
   return (
     <div className="cascade-preview" aria-hidden="true">
       <div className="cascade-preview__aurora" />
       <div className="cascade-preview__grid" />
-      <div className="cascade-preview__icon">{icon}</div>
+      <PreviewScene name={name} />
       <div className="cascade-preview__shine" />
       <div className="cascade-preview__caption">
         <span className="cascade-preview__dot" />
         Apercu · {name}
         <span className="cascade-preview__count">{count}</span>
       </div>
+    </div>
+  );
+}
+
+// Mini-clip anime distinct par carte (boucle ~10-14 s, joue au survol).
+function PreviewScene({ name }) {
+  if (name === 'Region')       return <SceneGlobe />;
+  if (name === 'Rapport')      return <SceneDoc />;
+  if (name === 'Graph')        return <SceneChart />;
+  if (name === 'Theme')        return <SceneNet />;
+  if (name === 'Cartographie') return <SceneMap />;
+  return null;
+}
+
+function SceneGlobe() {
+  return (
+    <div className="cp-scene cp-globe">
+      <div className="cp-globe__ball"><div className="cp-globe__lines" /></div>
+      <span className="cp-ping" style={{ left: '32%', top: '34%' }} />
+      <span className="cp-ping" style={{ left: '64%', top: '50%', animationDelay: '1.3s' }} />
+      <span className="cp-ping" style={{ left: '46%', top: '70%', animationDelay: '2.6s' }} />
+    </div>
+  );
+}
+
+function SceneDoc() {
+  const bars = [
+    { cls: 'cp-doc__bar cp-doc__bar--h', w: '62%' },
+    { w: '92%' }, { w: '74%' }, { w: '88%' }, { w: '56%' }, { w: '80%' },
+  ];
+  return (
+    <div className="cp-scene cp-doc">
+      <div className="cp-doc__sheet">
+        {bars.map((b, i) => (
+          <span key={i} className={b.cls || 'cp-doc__bar'}
+                style={{ width: b.w, animationDelay: (i * 0.55) + 's' }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SceneChart() {
+  const bars = [44, 72, 32, 88, 58];
+  return (
+    <div className="cp-scene cp-chart">
+      {bars.map((h, i) => (
+        <span key={i} className="cp-bar"
+              style={{ height: h + 'px', animationDelay: (i * 0.28) + 's' }} />
+      ))}
+    </div>
+  );
+}
+
+function SceneNet() {
+  return (
+    <div className="cp-scene cp-net">
+      <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet">
+        <g className="cp-net__links">
+          <line x1="50" y1="42" x2="100" y2="28" />
+          <line x1="100" y1="28" x2="150" y2="48" />
+          <line x1="50" y1="42" x2="86" y2="86" />
+          <line x1="86" y1="86" x2="150" y2="48" />
+          <line x1="86" y1="86" x2="136" y2="94" />
+          <line x1="100" y1="28" x2="86" y2="86" />
+        </g>
+        <g className="cp-net__nodes">
+          <circle cx="50" cy="42" r="5" />
+          <circle cx="100" cy="28" r="6.5" />
+          <circle cx="150" cy="48" r="5" />
+          <circle cx="86" cy="86" r="6.5" />
+          <circle cx="136" cy="94" r="4.5" />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
+function SceneMap() {
+  return (
+    <div className="cp-scene cp-map">
+      <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+        <path className="cp-map__land" d="M14 84 Q42 54 80 60 Q116 66 126 40 Q156 22 192 42 L192 120 L14 120 Z" />
+        <path className="cp-map__land cp-map__land--2" d="M2 26 Q34 18 56 32 Q74 44 62 60 Q40 72 16 58 Q-6 44 2 26 Z" />
+        <path className="cp-map__route" d="M34 94 Q72 64 108 76 Q148 90 172 44" />
+        <circle className="cp-map__pin" cx="172" cy="44" r="4.5" />
+      </svg>
+      <div className="cp-radar" />
     </div>
   );
 }
@@ -159,7 +260,7 @@ function ActionCard({ num, name, desc, count, icon, onClick }) {
 
       {groups.length > 0 && (
         <div className="cascade-pop" role="menu">
-          <CascadePreview name={name} icon={icon} count={count} />
+          <CascadePreview name={name} count={count} />
           {groups.map((g, i) => (
             <div className="cascade-row" key={i}>
               <span className="cascade-row__label">{g.label}</span>
@@ -227,6 +328,12 @@ function GraphIconLg() {
 function ThemeIconLg() {
   return (<svg width="22" height="22" viewBox="0 0 22 22" fill="none">
     <path d="M11 3l2.4 4.8 5.3.8-3.85 3.75.9 5.3L11 15.2l-4.75 2.5.9-5.3L3.3 8.6l5.3-.8L11 3z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  </svg>);
+}
+function CartoIconLg() {
+  return (<svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+    <path d="M11 2.5l8 3.9-8 3.9-8-3.9 8-3.9z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/>
+    <path d="M3.2 10.9L11 14.7l7.8-3.8M3.2 14.9L11 18.7l7.8-3.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>);
 }
 function ArrowBack() {

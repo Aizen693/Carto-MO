@@ -80,6 +80,7 @@ function rootFor(action) {
   if (action === 'rapport') return { kind: 'zones-r', title: 'Rapports', subtitle: 'Classement par zone, puis par rapport. Notes hebdomadaires, synthèses et études.' };
   if (action === 'graph')   return { kind: 'zones-g', title: 'Graphs',   subtitle: 'Visualisations et indicateurs : flux, densités, réseaux, séries temporelles.' };
   if (action === 'theme')   return { kind: 'themes',  title: 'Thèmes',   subtitle: 'Lectures transversales — un sujet, plusieurs zones. Ports, Mines, JNIM, etc.' };
+  if (action === 'cartographie') return { kind: 'zones', title: 'Cartographie', subtitle: 'Accès direct aux cartes interactives — sélectionnez un théâtre pour l\'ouvrir.' };
   return null;
 }
 

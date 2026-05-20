@@ -770,8 +770,11 @@ img, svg { display: block; max-width: 100%; }
 
 .actions-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+@media (max-width: 1320px) {
+  .actions-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 1100px) {
   .actions-grid { grid-template-columns: repeat(2, 1fr); }
@@ -904,19 +907,150 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   -webkit-mask-image: radial-gradient(72% 72% at 50% 48%, #000, transparent);
   mask-image: radial-gradient(72% 72% at 50% 48%, #000, transparent);
 }
-.cascade-preview__icon {
+/* Mini-clip anime distinct par carte — joue au survol du popup */
+.cp-scene {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
 }
-.cascade-preview__icon svg {
-  width: 46px;
-  height: 46px;
-  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.45));
+
+/* Region — globe filaire avec points qui pulsent */
+.cp-globe__ball {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,0.55), transparent 52%),
+    radial-gradient(circle at 52% 56%, rgba(124,92,220,0.95), rgba(24,15,50,0.98));
+  box-shadow: 0 8px 22px rgba(0,0,0,0.55), inset -8px -10px 20px rgba(0,0,0,0.5);
+  overflow: hidden;
 }
+.cp-globe__lines {
+  position: absolute;
+  inset: 0;
+  background-position: 0 0, 0 0;
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 13px, rgba(255,255,255,0.30) 13px 14px),
+    repeating-linear-gradient(0deg, transparent 0 13px, rgba(255,255,255,0.15) 13px 14px);
+}
+.action-card-wrap:hover .cp-globe__lines { animation: cp-roll 7s linear infinite; }
+.cp-ping {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: #74E3A4;
+  box-shadow: 0 0 9px #74E3A4;
+}
+.cp-ping::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid #74E3A4;
+  opacity: 0;
+}
+.action-card-wrap:hover .cp-ping::after { animation: cp-ring 2.7s ease-out infinite; }
+
+/* Rapport — feuille dont les lignes se remplissent */
+.cp-doc__sheet {
+  width: 118px;
+  padding: 13px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: rgba(255,255,255,0.97);
+  border-radius: 5px;
+  box-shadow: 0 12px 26px rgba(0,0,0,0.5);
+}
+.cp-doc__bar {
+  height: 5px;
+  border-radius: 2px;
+  background: rgba(58,48,92,0.32);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+.cp-doc__bar--h {
+  height: 8px;
+  background: linear-gradient(90deg, #7C5CDC, #2E84D4);
+}
+.action-card-wrap:hover .cp-doc__bar { animation: cp-typein 6.4s ease-in-out infinite; }
+
+/* Graph — barres qui montent */
+.cp-chart {
+  gap: 9px;
+  align-items: flex-end;
+  padding-bottom: 30px;
+}
+.cp-bar {
+  width: 15px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, #A892EC, #2E84D4);
+  box-shadow: 0 0 10px rgba(124,92,220,0.55);
+  transform-origin: bottom;
+  transform: scaleY(0.06);
+}
+.action-card-wrap:hover .cp-bar { animation: cp-grow 4.6s ease-in-out infinite; }
+
+/* Theme — reseau de noeuds relies */
+.cp-net svg,
+.cp-map svg { width: 100%; height: 100%; }
+.cp-net__links line { stroke: rgba(255,255,255,0.34); stroke-width: 1.4; }
+.action-card-wrap:hover .cp-net__links line {
+  stroke-dasharray: 4 5;
+  animation: cp-dash 2.6s linear infinite;
+}
+.cp-net__nodes circle {
+  fill: #fff;
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: drop-shadow(0 0 5px rgba(150,120,240,0.95));
+}
+.action-card-wrap:hover .cp-net__nodes circle { animation: cp-pulse 3.1s ease-in-out infinite; }
+.action-card-wrap:hover .cp-net__nodes circle:nth-child(2) { animation-delay: .5s; }
+.action-card-wrap:hover .cp-net__nodes circle:nth-child(3) { animation-delay: 1s; }
+.action-card-wrap:hover .cp-net__nodes circle:nth-child(4) { animation-delay: 1.5s; }
+.action-card-wrap:hover .cp-net__nodes circle:nth-child(5) { animation-delay: 2s; }
+
+/* Cartographie — carte avec trace anime + balayage radar */
+.cp-map__land {
+  fill: rgba(124,92,220,0.34);
+  stroke: rgba(255,255,255,0.20);
+  stroke-width: 1;
+}
+.cp-map__land--2 { fill: rgba(46,132,212,0.30); }
+.cp-map__route {
+  fill: none;
+  stroke: #74E3A4;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-dasharray: 280;
+  stroke-dashoffset: 280;
+  filter: drop-shadow(0 0 4px rgba(116,227,164,0.85));
+}
+.action-card-wrap:hover .cp-map__route { animation: cp-draw 6.2s ease-in-out infinite; }
+.cp-map__pin {
+  fill: #74E3A4;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+.action-card-wrap:hover .cp-map__pin { animation: cp-pop 6.2s ease-in-out infinite; }
+.cp-radar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  height: 220px;
+  margin: -110px 0 0 -110px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(116,227,164,0.30), transparent 26%);
+}
+.action-card-wrap:hover .cp-radar { animation: cp-spin 5.5s linear infinite; }
 .cascade-preview__shine {
   position: absolute;
   top: -20%;
@@ -948,17 +1082,12 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 }
 /* Les animations ne tournent que lorsque le popup est ouvert (survol) */
 .action-card-wrap:hover .cascade-preview__aurora { animation: cp-drift 9s ease-in-out infinite alternate; }
-.action-card-wrap:hover .cascade-preview__icon   { animation: cp-float 4.2s ease-in-out infinite; }
 .action-card-wrap:hover .cascade-preview__shine  { animation: cp-sweep 4s ease-in-out 0.3s infinite; }
 .action-card-wrap:hover .cascade-preview__dot    { animation: cp-blink 1.9s ease-in-out infinite; }
 @keyframes cp-drift {
   0%   { transform: translate(-7%, -5%) scale(1); }
   50%  { transform: translate(5%, 4%) scale(1.14); }
   100% { transform: translate(7%, 6%) scale(1.05); }
-}
-@keyframes cp-float {
-  0%, 100% { transform: translateY(-4px); }
-  50%      { transform: translateY(4px); }
 }
 @keyframes cp-sweep {
   0%   { transform: translateX(-180%) rotate(8deg); }
@@ -969,11 +1098,20 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.35; }
 }
+/* Keyframes des mini-clips par carte */
+@keyframes cp-roll   { to { background-position: -140px 0, 0 0; } }
+@keyframes cp-ring   { 0% { transform: scale(1); opacity: 0.85; } 100% { transform: scale(3.6); opacity: 0; } }
+@keyframes cp-typein { 0% { transform: scaleX(0); } 16%, 74% { transform: scaleX(1); } 90%, 100% { transform: scaleX(0); } }
+@keyframes cp-grow   { 0% { transform: scaleY(0.06); } 42%, 74% { transform: scaleY(1); } 100% { transform: scaleY(0.06); } }
+@keyframes cp-pulse  { 0%, 100% { transform: scale(0.72); opacity: 0.55; } 50% { transform: scale(1.18); opacity: 1; } }
+@keyframes cp-dash   { to { stroke-dashoffset: -18; } }
+@keyframes cp-draw   { 0% { stroke-dashoffset: 280; } 58%, 82% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 280; } }
+@keyframes cp-pop    { 0%, 52% { opacity: 0; transform: scale(0.3); } 62%, 88% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.3); } }
+@keyframes cp-spin   { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
-  .action-card-wrap:hover .cascade-preview__aurora,
-  .action-card-wrap:hover .cascade-preview__icon,
-  .action-card-wrap:hover .cascade-preview__shine,
-  .action-card-wrap:hover .cascade-preview__dot { animation: none; }
+  .action-card-wrap:hover .cascade-preview *,
+  .action-card-wrap:hover .cascade-preview *::before,
+  .action-card-wrap:hover .cascade-preview *::after { animation: none !important; }
 }
 
 .action-card {

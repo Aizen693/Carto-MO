@@ -1,6 +1,6 @@
 (function () {
 /* global React, ZONES, REPORTS, GRAPHS, THEMES, THEME_DETAIL, SidePanel, Arrow */
-// Page 2 — 4 actions : Region · Rapport · Graph · Theme
+// Page 2 — 5 actions : Region · Rapport · Graph · Theme · Cartographie
 
 const {
   useState: useStateP
@@ -32,7 +32,7 @@ function PlatformView({
     className: "platform__title"
   }, "Que souhaitez-vous ", /*#__PURE__*/React.createElement("em", null, "consulter"), "\xA0?")), /*#__PURE__*/React.createElement("p", {
     className: "platform__lede"
-  }, "Quatre points d'entree pour naviguer dans les donnees Algor Int. Chacun ouvre un panneau lateral structure, avec recherche et navigation hierarchique.")), /*#__PURE__*/React.createElement("div", {
+  }, "Cinq points d'entree pour naviguer dans les donnees Algor Int. Chacun ouvre un panneau lateral structure, avec recherche et navigation hierarchique.")), /*#__PURE__*/React.createElement("div", {
     className: "actions-grid"
   }, /*#__PURE__*/React.createElement(ActionCard, {
     num: "01",
@@ -62,6 +62,13 @@ function PlatformView({
     count: `${THEMES.length} themes`,
     icon: /*#__PURE__*/React.createElement(ThemeIconLg, null),
     onClick: () => openAction('theme')
+  }), /*#__PURE__*/React.createElement(ActionCard, {
+    num: "05",
+    name: "Cartographie",
+    desc: "Acces direct aux cartes interactives \u2014 six theatres, calques et timeline.",
+    count: `${ZONES.length} cartes`,
+    icon: /*#__PURE__*/React.createElement(CartoIconLg, null),
+    onClick: () => openAction('cartographie')
   })), /*#__PURE__*/React.createElement("div", {
     className: "section-rule"
   }, /*#__PURE__*/React.createElement("span", {
@@ -164,13 +171,23 @@ function cascadeFor(name) {
       };
     });
   }
+  if (name === 'Cartographie') {
+    return ZONES.map(z => ({
+      label: z.name,
+      meta: z.code,
+      actions: [{
+        label: 'Ouvrir la carte interactive',
+        meta: z.countries,
+        href: z.href
+      }]
+    }));
+  }
   return [];
 }
 
-// Apercu anime en tete du popup — aurore violet/bleu, balayage, icone flottante.
+// Apercu anime en tete du popup — aurore violet/bleu + mini-clip propre a la carte.
 function CascadePreview({
   name,
-  icon,
   count
 }) {
   return /*#__PURE__*/React.createElement("div", {
@@ -180,9 +197,9 @@ function CascadePreview({
     className: "cascade-preview__aurora"
   }), /*#__PURE__*/React.createElement("div", {
     className: "cascade-preview__grid"
+  }), /*#__PURE__*/React.createElement(PreviewScene, {
+    name: name
   }), /*#__PURE__*/React.createElement("div", {
-    className: "cascade-preview__icon"
-  }, icon), /*#__PURE__*/React.createElement("div", {
     className: "cascade-preview__shine"
   }), /*#__PURE__*/React.createElement("div", {
     className: "cascade-preview__caption"
@@ -191,6 +208,174 @@ function CascadePreview({
   }), "Apercu \xB7 ", name, /*#__PURE__*/React.createElement("span", {
     className: "cascade-preview__count"
   }, count)));
+}
+
+// Mini-clip anime distinct par carte (boucle ~10-14 s, joue au survol).
+function PreviewScene({
+  name
+}) {
+  if (name === 'Region') return /*#__PURE__*/React.createElement(SceneGlobe, null);
+  if (name === 'Rapport') return /*#__PURE__*/React.createElement(SceneDoc, null);
+  if (name === 'Graph') return /*#__PURE__*/React.createElement(SceneChart, null);
+  if (name === 'Theme') return /*#__PURE__*/React.createElement(SceneNet, null);
+  if (name === 'Cartographie') return /*#__PURE__*/React.createElement(SceneMap, null);
+  return null;
+}
+function SceneGlobe() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "cp-scene cp-globe"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cp-globe__ball"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cp-globe__lines"
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "cp-ping",
+    style: {
+      left: '32%',
+      top: '34%'
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "cp-ping",
+    style: {
+      left: '64%',
+      top: '50%',
+      animationDelay: '1.3s'
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "cp-ping",
+    style: {
+      left: '46%',
+      top: '70%',
+      animationDelay: '2.6s'
+    }
+  }));
+}
+function SceneDoc() {
+  const bars = [{
+    cls: 'cp-doc__bar cp-doc__bar--h',
+    w: '62%'
+  }, {
+    w: '92%'
+  }, {
+    w: '74%'
+  }, {
+    w: '88%'
+  }, {
+    w: '56%'
+  }, {
+    w: '80%'
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    className: "cp-scene cp-doc"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cp-doc__sheet"
+  }, bars.map((b, i) => /*#__PURE__*/React.createElement("span", {
+    key: i,
+    className: b.cls || 'cp-doc__bar',
+    style: {
+      width: b.w,
+      animationDelay: i * 0.55 + 's'
+    }
+  }))));
+}
+function SceneChart() {
+  const bars = [44, 72, 32, 88, 58];
+  return /*#__PURE__*/React.createElement("div", {
+    className: "cp-scene cp-chart"
+  }, bars.map((h, i) => /*#__PURE__*/React.createElement("span", {
+    key: i,
+    className: "cp-bar",
+    style: {
+      height: h + 'px',
+      animationDelay: i * 0.28 + 's'
+    }
+  })));
+}
+function SceneNet() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "cp-scene cp-net"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 200 120",
+    preserveAspectRatio: "xMidYMid meet"
+  }, /*#__PURE__*/React.createElement("g", {
+    className: "cp-net__links"
+  }, /*#__PURE__*/React.createElement("line", {
+    x1: "50",
+    y1: "42",
+    x2: "100",
+    y2: "28"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "100",
+    y1: "28",
+    x2: "150",
+    y2: "48"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "50",
+    y1: "42",
+    x2: "86",
+    y2: "86"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "86",
+    y1: "86",
+    x2: "150",
+    y2: "48"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "86",
+    y1: "86",
+    x2: "136",
+    y2: "94"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "100",
+    y1: "28",
+    x2: "86",
+    y2: "86"
+  })), /*#__PURE__*/React.createElement("g", {
+    className: "cp-net__nodes"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "50",
+    cy: "42",
+    r: "5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "100",
+    cy: "28",
+    r: "6.5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "150",
+    cy: "48",
+    r: "5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "86",
+    cy: "86",
+    r: "6.5"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "136",
+    cy: "94",
+    r: "4.5"
+  }))));
+}
+function SceneMap() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "cp-scene cp-map"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 200 120",
+    preserveAspectRatio: "xMidYMid slice"
+  }, /*#__PURE__*/React.createElement("path", {
+    className: "cp-map__land",
+    d: "M14 84 Q42 54 80 60 Q116 66 126 40 Q156 22 192 42 L192 120 L14 120 Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "cp-map__land cp-map__land--2",
+    d: "M2 26 Q34 18 56 32 Q74 44 62 60 Q40 72 16 58 Q-6 44 2 26 Z"
+  }), /*#__PURE__*/React.createElement("path", {
+    className: "cp-map__route",
+    d: "M34 94 Q72 64 108 76 Q148 90 172 44"
+  }), /*#__PURE__*/React.createElement("circle", {
+    className: "cp-map__pin",
+    cx: "172",
+    cy: "44",
+    r: "4.5"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "cp-radar"
+  }));
 }
 function ActionCard({
   num,
@@ -246,7 +431,6 @@ function ActionCard({
     role: "menu"
   }, /*#__PURE__*/React.createElement(CascadePreview, {
     name: name,
-    icon: icon,
     count: count
   }), groups.map((g, i) => /*#__PURE__*/React.createElement("div", {
     className: "cascade-row",
@@ -378,6 +562,25 @@ function ThemeIconLg() {
     d: "M11 3l2.4 4.8 5.3.8-3.85 3.75.9 5.3L11 15.2l-4.75 2.5.9-5.3L3.3 8.6l5.3-.8L11 3z",
     stroke: "currentColor",
     strokeWidth: "1.5",
+    strokeLinejoin: "round"
+  }));
+}
+function CartoIconLg() {
+  return /*#__PURE__*/React.createElement("svg", {
+    width: "22",
+    height: "22",
+    viewBox: "0 0 22 22",
+    fill: "none"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M11 2.5l8 3.9-8 3.9-8-3.9 8-3.9z",
+    stroke: "currentColor",
+    strokeWidth: "1.6",
+    strokeLinejoin: "round"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M3.2 10.9L11 14.7l7.8-3.8M3.2 14.9L11 18.7l7.8-3.8",
+    stroke: "currentColor",
+    strokeWidth: "1.6",
+    strokeLinecap: "round",
     strokeLinejoin: "round"
   }));
 }

@@ -94,6 +94,11 @@ function rootFor(action) {
     title: 'Thèmes',
     subtitle: 'Lectures transversales — un sujet, plusieurs zones. Ports, Mines, JNIM, etc.'
   };
+  if (action === 'cartographie') return {
+    kind: 'zones',
+    title: 'Cartographie',
+    subtitle: 'Accès direct aux cartes interactives — sélectionnez un théâtre pour l\'ouvrir.'
+  };
   return null;
 }
 
