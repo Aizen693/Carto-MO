@@ -875,6 +875,107 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   transform: translateX(0);
 }
 
+/* Apercu anime en tete du popup (animations actives au survol seulement) */
+.cascade-preview {
+  position: relative;
+  height: 134px;
+  margin: 2px 2px 8px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: #0E0A1F;
+  isolation: isolate;
+}
+.cascade-preview__aurora {
+  position: absolute;
+  inset: -45%;
+  background:
+    radial-gradient(42% 52% at 32% 36%, rgba(124,92,220,0.92), transparent 70%),
+    radial-gradient(46% 56% at 70% 64%, rgba(46,132,212,0.88), transparent 70%),
+    radial-gradient(34% 44% at 62% 26%, rgba(150,110,240,0.6), transparent 70%);
+  filter: blur(16px);
+}
+.cascade-preview__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(72% 72% at 50% 48%, #000, transparent);
+  mask-image: radial-gradient(72% 72% at 50% 48%, #000, transparent);
+}
+.cascade-preview__icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.cascade-preview__icon svg {
+  width: 46px;
+  height: 46px;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.45));
+}
+.cascade-preview__shine {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  width: 38%;
+  transform: translateX(-180%) rotate(8deg);
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.26), transparent);
+}
+.cascade-preview__caption {
+  position: absolute;
+  left: 11px;
+  bottom: 9px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.86);
+}
+.cascade-preview__count { color: rgba(255,255,255,0.5); }
+.cascade-preview__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #74E3A4;
+  box-shadow: 0 0 7px #74E3A4;
+}
+/* Les animations ne tournent que lorsque le popup est ouvert (survol) */
+.action-card-wrap:hover .cascade-preview__aurora { animation: cp-drift 9s ease-in-out infinite alternate; }
+.action-card-wrap:hover .cascade-preview__icon   { animation: cp-float 4.2s ease-in-out infinite; }
+.action-card-wrap:hover .cascade-preview__shine  { animation: cp-sweep 4s ease-in-out 0.3s infinite; }
+.action-card-wrap:hover .cascade-preview__dot    { animation: cp-blink 1.9s ease-in-out infinite; }
+@keyframes cp-drift {
+  0%   { transform: translate(-7%, -5%) scale(1); }
+  50%  { transform: translate(5%, 4%) scale(1.14); }
+  100% { transform: translate(7%, 6%) scale(1.05); }
+}
+@keyframes cp-float {
+  0%, 100% { transform: translateY(-4px); }
+  50%      { transform: translateY(4px); }
+}
+@keyframes cp-sweep {
+  0%   { transform: translateX(-180%) rotate(8deg); }
+  60%  { transform: translateX(420%) rotate(8deg); }
+  100% { transform: translateX(420%) rotate(8deg); }
+}
+@keyframes cp-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .action-card-wrap:hover .cascade-preview__aurora,
+  .action-card-wrap:hover .cascade-preview__icon,
+  .action-card-wrap:hover .cascade-preview__shine,
+  .action-card-wrap:hover .cascade-preview__dot { animation: none; }
+}
+
 .action-card {
   position: relative;
   background: var(--surface);

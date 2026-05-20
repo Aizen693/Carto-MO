@@ -116,6 +116,23 @@ function cascadeFor(name) {
   return [];
 }
 
+// Apercu anime en tete du popup — aurore violet/bleu, balayage, icone flottante.
+function CascadePreview({ name, icon, count }) {
+  return (
+    <div className="cascade-preview" aria-hidden="true">
+      <div className="cascade-preview__aurora" />
+      <div className="cascade-preview__grid" />
+      <div className="cascade-preview__icon">{icon}</div>
+      <div className="cascade-preview__shine" />
+      <div className="cascade-preview__caption">
+        <span className="cascade-preview__dot" />
+        Apercu · {name}
+        <span className="cascade-preview__count">{count}</span>
+      </div>
+    </div>
+  );
+}
+
 function ActionCard({ num, name, desc, count, icon, onClick }) {
   const groups = cascadeFor(name);
   return (
@@ -142,6 +159,7 @@ function ActionCard({ num, name, desc, count, icon, onClick }) {
 
       {groups.length > 0 && (
         <div className="cascade-pop" role="menu">
+          <CascadePreview name={name} icon={icon} count={count} />
           {groups.map((g, i) => (
             <div className="cascade-row" key={i}>
               <span className="cascade-row__label">{g.label}</span>

@@ -166,6 +166,32 @@ function cascadeFor(name) {
   }
   return [];
 }
+
+// Apercu anime en tete du popup — aurore violet/bleu, balayage, icone flottante.
+function CascadePreview({
+  name,
+  icon,
+  count
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "cascade-preview",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cascade-preview__aurora"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "cascade-preview__grid"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "cascade-preview__icon"
+  }, icon), /*#__PURE__*/React.createElement("div", {
+    className: "cascade-preview__shine"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "cascade-preview__caption"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "cascade-preview__dot"
+  }), "Apercu \xB7 ", name, /*#__PURE__*/React.createElement("span", {
+    className: "cascade-preview__count"
+  }, count)));
+}
 function ActionCard({
   num,
   name,
@@ -218,7 +244,11 @@ function ActionCard({
   }))))), groups.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "cascade-pop",
     role: "menu"
-  }, groups.map((g, i) => /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(CascadePreview, {
+    name: name,
+    icon: icon,
+    count: count
+  }), groups.map((g, i) => /*#__PURE__*/React.createElement("div", {
     className: "cascade-row",
     key: i
   }, /*#__PURE__*/React.createElement("span", {
