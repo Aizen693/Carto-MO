@@ -131,11 +131,11 @@ function cascadeFor(name) {
 
 // Apercu video en tete du popup — capture reelle de la page cible.
 const PREVIEW_SRC = {
-  Region:       './shared/home/assets/preview-region.mp4?v=20260520ag',
-  Rapport:      './shared/home/assets/preview-rapport.mp4?v=20260520ag',
-  Graph:        './shared/home/assets/preview-graph.mp4?v=20260520ag',
-  Theme:        './shared/home/assets/preview-theme.mp4?v=20260520ag',
-  Cartographie: './shared/home/assets/preview-cartographie.mp4?v=20260520ag',
+  Region:       './shared/home/assets/preview-region.mp4?v=20260520ah',
+  Rapport:      './shared/home/assets/preview-rapport.mp4?v=20260520ah',
+  Graph:        './shared/home/assets/preview-graph.mp4?v=20260520ah',
+  Theme:        './shared/home/assets/preview-theme.mp4?v=20260520ah',
+  Cartographie: './shared/home/assets/preview-cartographie.mp4?v=20260520ah',
 };
 
 function CascadePreview({ name, count }) {
