@@ -451,7 +451,7 @@ img, svg { display: block; max-width: 100%; }
 .hero__eyebrow-muted { color: var(--muted); }
 
 .hero__title {
-  font-size: clamp(44px, 5.6vw, 84px);
+  font-size: clamp(40px, 5.1vw, 76px);
   font-weight: 700;
   letter-spacing: -0.028em;
   line-height: 1.02;

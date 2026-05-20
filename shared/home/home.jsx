@@ -15,9 +15,8 @@ function HomeView({ onEnter, clock, videoStyle }) {
           </div>
 
           <h1 className="hero__title">
-            Console interne<br />
-            de <em>cartographie</em><br />
-            OSINT
+            Console interne de<br />
+            <em>cartographie</em> OSINT
           </h1>
 
           <p className="hero__lede">

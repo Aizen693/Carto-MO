@@ -24,7 +24,7 @@ function HomeView({
     className: "hero__eyebrow-muted"
   }, "Algor Int \xB7 usage interne \xB7 2026")), /*#__PURE__*/React.createElement("h1", {
     className: "hero__title"
-  }, "Console interne", /*#__PURE__*/React.createElement("br", null), "de ", /*#__PURE__*/React.createElement("em", null, "cartographie"), /*#__PURE__*/React.createElement("br", null), "OSINT"), /*#__PURE__*/React.createElement("p", {
+  }, "Console interne de", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "cartographie"), " OSINT"), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
   }, "Outil de travail des analystes Algor Int sur six theatres \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement."), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
