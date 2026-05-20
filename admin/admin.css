@@ -1,26 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap');
 
+/* DA unifiee — palette claire/violette de la homepage (refonte 2026) */
 :root {
-  --bg:    #111214;
-  --bg1:   #161819;
-  --bg2:   #1b1d1f;
-  --bg3:   #212326;
-  --bg4:   #2a2c30;
-  --ln:    rgba(255,255,255,0.07);
-  --ln1:   rgba(255,255,255,0.12);
-  --ln2:   rgba(255,255,255,0.20);
-  --tx:    #c8cdd6;
-  --tx1:   #727a87;
-  --tx2:   #3e444e;
-  --txh:   #e8ecf2;
-  --ac:    #c49a3c;
-  --ach:   #e0b452;
-  --acd:   rgba(196,154,60,0.09);
-  --acb:   rgba(196,154,60,0.20);
-  --err:   #a84040;
-  --ok:    #2d6a4f;
-  --bc:  'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --b:   'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --bg:    #F4F2F8;
+  --bg1:   #FFFFFF;
+  --bg2:   #FFFFFF;
+  --bg3:   #F1EDF7;
+  --bg4:   #E7E0F2;
+  --ln:    rgba(24,20,40,0.07);
+  --ln1:   rgba(24,20,40,0.12);
+  --ln2:   rgba(24,20,40,0.20);
+  --tx:    #3A3450;
+  --tx1:   #6E6982;
+  --tx2:   #A19DB0;
+  --txh:   #181428;
+  --ac:    #6B3FA0;
+  --ach:   #5A2F8C;
+  --acd:   rgba(107,63,160,0.08);
+  --acb:   rgba(107,63,160,0.22);
+  --err:   #B83A4A;
+  --ok:    #2F8A6B;
+  --bc:  'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --b:   'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --m:   'JetBrains Mono', 'Courier New', monospace;
   --serif: 'Instrument Serif', Georgia, serif;
 }
@@ -119,8 +120,9 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
   transition: all .12s;
   display: inline-flex; align-items: center; gap: 5px;
 }
-.admin-btn:hover { background: var(--acb); color: #fff; }
-.admin-btn-full { width: 100%; justify-content: center; }
+.admin-btn:hover { background: var(--ac); color: #fff; }
+.admin-btn-full { width: 100%; justify-content: center; background: var(--ac); border-color: var(--ac); color: #fff; }
+.admin-btn-full:hover { background: var(--ach); border-color: var(--ach); color: #fff; }
 .admin-btn-sm { padding: 5px 10px; font-size: 7px; }
 .admin-btn-ghost {
   background: transparent;
@@ -722,7 +724,7 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
   white-space: nowrap;
   border-radius: 2px;
 }
-.calque-btn:hover { background: var(--acb); color: #fff; }
+.calque-btn:hover { background: var(--ac); color: #fff; }
 .calque-btn-del { background: rgba(168,64,64,0.08); border-color: rgba(168,64,64,0.3); color: var(--err); }
 .calque-btn-del:hover { background: rgba(168,64,64,0.25); color: #ff6b6b; }
 
