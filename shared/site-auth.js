@@ -35,7 +35,6 @@ window.algorAuth = {
 
 const OVERLAY_HTML = `
 <div id="site-auth-overlay" aria-hidden="false" role="dialog" aria-modal="true">
-  <div id="site-auth-stars"></div>
   <div id="site-auth-card">
     <div class="sa-brand">
       <span class="sa-logo-dot"></span>
@@ -71,15 +70,17 @@ const OVERLAY_HTML = `
 `;
 
 const OVERLAY_CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 :root.sa-pending body > *:not(#site-auth-overlay) { filter: blur(8px); pointer-events: none; user-select: none; }
 #site-auth-overlay {
   position: fixed; inset: 0; z-index: 999999;
   display: flex; align-items: center; justify-content: center;
-  background: radial-gradient(ellipse 80% 60% at 70% 30%, rgba(184,149,74,0.04), transparent 60%),
-              radial-gradient(ellipse 70% 50% at 20% 80%, rgba(90,143,168,0.025), transparent 60%),
-              #0a0b0d;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  color: #ededee;
+  background:
+    radial-gradient(ellipse 64% 52% at 80% 18%, rgba(107,63,160,0.12), transparent 62%),
+    radial-gradient(ellipse 58% 48% at 14% 86%, rgba(46,132,212,0.10), transparent 62%),
+    #F7F6FA;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #181428;
   -webkit-font-smoothing: antialiased;
   opacity: 0;
   animation: sa-fadein 0.25s ease forwards;
@@ -87,109 +88,105 @@ const OVERLAY_CSS = `
 #site-auth-overlay.sa-closing { animation: sa-fadeout 0.3s ease forwards; }
 @keyframes sa-fadein  { to { opacity: 1; } }
 @keyframes sa-fadeout { to { opacity: 0; visibility: hidden; } }
-#site-auth-stars {
-  position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.4), transparent 50%),
-    radial-gradient(1px 1px at 80% 70%, rgba(255,255,255,0.3), transparent 50%),
-    radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.35), transparent 50%),
-    radial-gradient(1px 1px at 65% 15%, rgba(255,255,255,0.25), transparent 50%),
-    radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,0.3), transparent 50%);
-}
 #site-auth-card {
   position: relative; z-index: 1;
-  width: 380px; max-width: calc(100vw - 48px);
-  background: #14161a;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-top: 2px solid #b8954a;
-  padding: 36px 36px 28px;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(184,149,74,0.04);
+  width: 392px; max-width: calc(100vw - 48px);
+  background: #FFFFFF;
+  border: 1px solid rgba(24,20,40,0.10);
+  border-radius: 18px;
+  padding: 38px 38px 30px;
+  box-shadow: 0 32px 80px -24px rgba(46,24,87,0.28), 0 12px 28px -12px rgba(24,20,40,0.10);
 }
 .sa-brand {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 13px;
   padding-bottom: 22px;
   margin-bottom: 22px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(24,20,40,0.08);
 }
 .sa-logo-dot {
-  width: 8px; height: 8px;
-  background: #b8954a;
-  box-shadow: 0 0 0 3px rgba(184,149,74,0.15);
-  flex: 0 0 8px;
+  width: 30px; height: 30px; flex: 0 0 30px;
+  border-radius: 9px;
+  background: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #2E84D4 100%);
+  box-shadow: 0 6px 16px -4px rgba(86,80,198,0.55);
 }
 .sa-brand-l1 {
-  font-size: 13px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
-  color: #ededee;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #181428;
 }
 .sa-brand-l2 {
   font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
-  font-size: 9.5px; font-weight: 400; letter-spacing: 0.14em;
-  color: #6a6d72; text-transform: uppercase; margin-top: 4px;
+  font-size: 9.5px; font-weight: 400; letter-spacing: 0.12em;
+  color: #6E6982; text-transform: uppercase; margin-top: 4px;
 }
 .sa-title {
-  font-size: 22px; font-weight: 500; letter-spacing: -0.01em;
-  margin: 0 0 10px;
+  font-size: 24px; font-weight: 700; letter-spacing: -0.02em;
+  margin: 0 0 10px; color: #181428;
 }
 .sa-intro {
-  font-size: 12.5px; line-height: 1.5; color: #8a8d93;
-  margin: 0 0 26px; font-weight: 300;
+  font-size: 13px; line-height: 1.55; color: #6E6982;
+  margin: 0 0 26px; font-weight: 400;
 }
 .sa-field { display: block; margin-bottom: 14px; }
 .sa-label {
   display: block;
   font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
   font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: #6a6d72; margin-bottom: 7px;
+  color: #6E6982; margin-bottom: 7px;
 }
 #site-auth-email, #site-auth-password {
   width: 100%; box-sizing: border-box;
-  padding: 11px 12px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.10);
-  color: #ededee;
+  padding: 12px 13px;
+  background: #F5F3FA;
+  border: 1px solid rgba(24,20,40,0.14);
+  border-radius: 8px;
+  color: #181428;
   font-family: inherit; font-size: 14px;
   outline: none;
-  transition: border-color .15s ease, background .15s ease;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
 }
 #site-auth-email:focus, #site-auth-password:focus {
-  border-color: #b8954a;
-  background: rgba(184,149,74,0.04);
+  border-color: #6B3FA0;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(107,63,160,0.12);
 }
 #site-auth-error {
   display: none;
   font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
   font-size: 10.5px; line-height: 1.4;
-  color: #ef6055;
+  color: #B83A4A;
   padding: 8px 0 4px;
 }
 #site-auth-error.visible { display: block; }
 #site-auth-submit {
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; margin-top: 18px;
-  padding: 13px 16px;
-  background: rgba(184,149,74,0.08);
-  border: 1px solid rgba(184,149,74,0.40);
-  color: #d4b56e;
-  font-family: inherit; font-size: 13px; font-weight: 500;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  width: 100%; margin-top: 20px;
+  padding: 14px 16px;
+  background: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #2E84D4 100%);
+  border: none;
+  border-radius: 10px;
+  color: #FFFFFF;
+  font-family: inherit; font-size: 13.5px; font-weight: 600;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: background .15s ease, border-color .15s ease;
+  box-shadow: 0 8px 20px -8px rgba(86,80,198,0.6);
+  transition: filter .15s ease, box-shadow .15s ease, transform .12s ease;
 }
 #site-auth-submit:hover:not(:disabled) {
-  background: rgba(184,149,74,0.16);
-  border-color: rgba(184,149,74,0.60);
+  filter: brightness(1.08);
+  box-shadow: 0 10px 26px -8px rgba(86,80,198,0.72);
 }
-#site-auth-submit:disabled { opacity: 0.55; cursor: progress; }
-.sa-btn-arrow { font-family: ui-monospace, Menlo, monospace; opacity: 0.6; }
+#site-auth-submit:active:not(:disabled) { transform: translateY(1px); }
+#site-auth-submit:disabled { opacity: 0.6; cursor: progress; }
+.sa-btn-arrow { opacity: 0.85; }
 .sa-foot {
   margin-top: 28px; padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(24,20,40,0.07);
   font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
-  font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: #4a4d52;
+  font-size: 9.5px; letter-spacing: 0.10em; text-transform: uppercase;
+  color: #A19DB0;
   display: flex; gap: 10px;
 }
-.sa-foot-sep { color: #2e3035; }
+.sa-foot-sep { color: #CFC8E2; }
 `;
 
 let overlayEl = null;
