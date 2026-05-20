@@ -9,7 +9,7 @@
 <link rel="icon" type="image/jpeg" href="../favicon.jpg">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
-<link rel="stylesheet" href="../shared/styles.css?v=20260428c">
+<link rel="stylesheet" href="../shared/styles.css?v=20260519a">
 <style>
 /* === AFRIQUE — styles minimaux, modes geres par Mapbox === */
 #map { background: #e8eaed; }
@@ -434,6 +434,20 @@
      SCRIPTS
      ═════════════════════════════════════════════════════════════════ -->
 <script>
+/* ═════════ FLAG MODE ARCHIVE ═════════ */
+const DISABLE_LAYERS_AND_POINTS = false;
+if (DISABLE_LAYERS_AND_POINTS) {
+  document.documentElement.classList.add('layers-disabled');
+  document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('layers-disabled');
+    if (document.getElementById('archive-banner')) return;
+    var b = document.createElement('div');
+    b.id = 'archive-banner';
+    b.innerHTML = '<div class="ab-card"><div class="ab-tag">Donnees archivees</div><h2>Cette carte a ete videe</h2><p>Les points et calques de cette zone sont desormais consultables dans le Dashboard de recherche.</p><a class="ab-cta" href="../dashboard/">Ouvrir le Dashboard <span>&rarr;</span></a><a class="ab-link" href="../archive/">Voir l\'archive brute</a></div>';
+    document.body.appendChild(b);
+  });
+}
+
 /* ═════════ CATALOGUE DES CALQUES ═════════ */
 const CATALOG = {
   flux: {
@@ -555,6 +569,7 @@ window.setStyle = function(mode) {
 const layerState = {};
 
 function initLayersCatalog() {
+  if (DISABLE_LAYERS_AND_POINTS) return;
   // Prefetch all files
   Object.values(ALL_CHILDREN).forEach(c => {
     layerState[c.id] = { data: null, visible: false, cfg: c };
@@ -1125,6 +1140,7 @@ if (_aisRestored > 0) console.log('[ais] buffer restaure depuis derniere session
    Permet d'avoir une carte deja peuplee des le premier load, avant que la WebSocket
    n'ait eu le temps d'accumuler ses donnees. La WS prend ensuite le relais pour la fraicheur. */
 function aisLoadStaticSnapshot() {
+  if (DISABLE_LAYERS_AND_POINTS) return;
   fetch('./ais-snapshot.json?v=' + (window._aisSnapshotV || '20260512b'))
     .then(r => r.ok ? r.json() : null)
     .then(data => {
@@ -1163,6 +1179,7 @@ window.addEventListener('pagehide', aisSaveBuffer);
    des le chargement de la page, pour que le toggle affiche instantanement
    tous les navires deja recus + ceux restaures depuis le buffer. */
 function aisPreWarm() {
+  if (DISABLE_LAYERS_AND_POINTS) return;
   if (aisState.ws || aisState.status === 'connected' || aisState.status === 'connecting') return;
   const key = aisState.apiKey || localStorage.getItem(AIS_KEY_STORAGE) || AIS_DEFAULT_KEY;
   if (!key) return;

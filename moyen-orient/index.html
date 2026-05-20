@@ -17,7 +17,7 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
-<link rel="stylesheet" href="../shared/styles.css?v=20260420h">
+<link rel="stylesheet" href="../shared/styles.css?v=20260519a">
 </head>
 <body>
 
@@ -211,7 +211,9 @@ const ZONE_CONFIG = {
   MAP_BEARING: -20,
   MAP_ZONES: null,
   BADGE_ALL_TEXT: 'Toutes \u00b7 2005\u20132026',
-  TUTORIAL_KEY: 'algor-tutorial-mo-seen'
+  TUTORIAL_KEY: 'algor-tutorial-mo-seen',
+  // Donnees archivees : carte videe, donnees accessibles via /dashboard/
+  DISABLE_LAYERS_AND_POINTS: false
 };
 
 /* Chargement asynchrone OTAN + MAP_ZONES */
@@ -220,7 +222,7 @@ fetch("./map-zones.json").then(r => r.json()).then(d => { ZONE_CONFIG.MAP_ZONES 
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
 <script type="module" src="../shared/brief-ia.js?v=20260518i"></script>
-<script src="../shared/engine.js?v=20260518i"></script>
+<script src="../shared/engine.js?v=20260519a"></script>
 
 <!-- MO-SPECIFIC: Daesh territory zones + auto-toggle -->
 <script>
