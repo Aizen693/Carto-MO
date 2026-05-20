@@ -185,22 +185,32 @@ function cascadeFor(name) {
   return [];
 }
 
-// Apercu anime en tete du popup — aurore violet/bleu + mini-clip propre a la carte.
+// Apercu video en tete du popup — capture reelle de la page cible.
+const PREVIEW_SRC = {
+  Region: './shared/home/assets/preview-region.mp4?v=20260520ag',
+  Rapport: './shared/home/assets/preview-rapport.mp4?v=20260520ag',
+  Graph: './shared/home/assets/preview-graph.mp4?v=20260520ag',
+  Theme: './shared/home/assets/preview-theme.mp4?v=20260520ag',
+  Cartographie: './shared/home/assets/preview-cartographie.mp4?v=20260520ag'
+};
 function CascadePreview({
   name,
   count
 }) {
+  const src = PREVIEW_SRC[name];
   return /*#__PURE__*/React.createElement("div", {
     className: "cascade-preview",
     "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "cascade-preview__aurora"
+  }, src && /*#__PURE__*/React.createElement("video", {
+    className: "cascade-preview__video",
+    src: src,
+    autoPlay: true,
+    loop: true,
+    muted: true,
+    playsInline: true,
+    preload: "metadata"
   }), /*#__PURE__*/React.createElement("div", {
-    className: "cascade-preview__grid"
-  }), /*#__PURE__*/React.createElement(PreviewScene, {
-    name: name
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "cascade-preview__shine"
+    className: "cascade-preview__shade"
   }), /*#__PURE__*/React.createElement("div", {
     className: "cascade-preview__caption"
   }, /*#__PURE__*/React.createElement("span", {
@@ -208,174 +218,6 @@ function CascadePreview({
   }), "Apercu \xB7 ", name, /*#__PURE__*/React.createElement("span", {
     className: "cascade-preview__count"
   }, count)));
-}
-
-// Mini-clip anime distinct par carte (boucle ~10-14 s, joue au survol).
-function PreviewScene({
-  name
-}) {
-  if (name === 'Region') return /*#__PURE__*/React.createElement(SceneGlobe, null);
-  if (name === 'Rapport') return /*#__PURE__*/React.createElement(SceneDoc, null);
-  if (name === 'Graph') return /*#__PURE__*/React.createElement(SceneChart, null);
-  if (name === 'Theme') return /*#__PURE__*/React.createElement(SceneNet, null);
-  if (name === 'Cartographie') return /*#__PURE__*/React.createElement(SceneMap, null);
-  return null;
-}
-function SceneGlobe() {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "cp-scene cp-globe"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "cp-globe__ball"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "cp-globe__lines"
-  })), /*#__PURE__*/React.createElement("span", {
-    className: "cp-ping",
-    style: {
-      left: '32%',
-      top: '34%'
-    }
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "cp-ping",
-    style: {
-      left: '64%',
-      top: '50%',
-      animationDelay: '1.3s'
-    }
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "cp-ping",
-    style: {
-      left: '46%',
-      top: '70%',
-      animationDelay: '2.6s'
-    }
-  }));
-}
-function SceneDoc() {
-  const bars = [{
-    cls: 'cp-doc__bar cp-doc__bar--h',
-    w: '62%'
-  }, {
-    w: '92%'
-  }, {
-    w: '74%'
-  }, {
-    w: '88%'
-  }, {
-    w: '56%'
-  }, {
-    w: '80%'
-  }];
-  return /*#__PURE__*/React.createElement("div", {
-    className: "cp-scene cp-doc"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "cp-doc__sheet"
-  }, bars.map((b, i) => /*#__PURE__*/React.createElement("span", {
-    key: i,
-    className: b.cls || 'cp-doc__bar',
-    style: {
-      width: b.w,
-      animationDelay: i * 0.55 + 's'
-    }
-  }))));
-}
-function SceneChart() {
-  const bars = [44, 72, 32, 88, 58];
-  return /*#__PURE__*/React.createElement("div", {
-    className: "cp-scene cp-chart"
-  }, bars.map((h, i) => /*#__PURE__*/React.createElement("span", {
-    key: i,
-    className: "cp-bar",
-    style: {
-      height: h + 'px',
-      animationDelay: i * 0.28 + 's'
-    }
-  })));
-}
-function SceneNet() {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "cp-scene cp-net"
-  }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 200 120",
-    preserveAspectRatio: "xMidYMid meet"
-  }, /*#__PURE__*/React.createElement("g", {
-    className: "cp-net__links"
-  }, /*#__PURE__*/React.createElement("line", {
-    x1: "50",
-    y1: "42",
-    x2: "100",
-    y2: "28"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "100",
-    y1: "28",
-    x2: "150",
-    y2: "48"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "50",
-    y1: "42",
-    x2: "86",
-    y2: "86"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "86",
-    y1: "86",
-    x2: "150",
-    y2: "48"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "86",
-    y1: "86",
-    x2: "136",
-    y2: "94"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "100",
-    y1: "28",
-    x2: "86",
-    y2: "86"
-  })), /*#__PURE__*/React.createElement("g", {
-    className: "cp-net__nodes"
-  }, /*#__PURE__*/React.createElement("circle", {
-    cx: "50",
-    cy: "42",
-    r: "5"
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "100",
-    cy: "28",
-    r: "6.5"
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "150",
-    cy: "48",
-    r: "5"
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "86",
-    cy: "86",
-    r: "6.5"
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "136",
-    cy: "94",
-    r: "4.5"
-  }))));
-}
-function SceneMap() {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "cp-scene cp-map"
-  }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 200 120",
-    preserveAspectRatio: "xMidYMid slice"
-  }, /*#__PURE__*/React.createElement("path", {
-    className: "cp-map__land",
-    d: "M14 84 Q42 54 80 60 Q116 66 126 40 Q156 22 192 42 L192 120 L14 120 Z"
-  }), /*#__PURE__*/React.createElement("path", {
-    className: "cp-map__land cp-map__land--2",
-    d: "M2 26 Q34 18 56 32 Q74 44 62 60 Q40 72 16 58 Q-6 44 2 26 Z"
-  }), /*#__PURE__*/React.createElement("path", {
-    className: "cp-map__route",
-    d: "M34 94 Q72 64 108 76 Q148 90 172 44"
-  }), /*#__PURE__*/React.createElement("circle", {
-    className: "cp-map__pin",
-    cx: "172",
-    cy: "44",
-    r: "4.5"
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "cp-radar"
-  }));
 }
 function ActionCard({
   num,

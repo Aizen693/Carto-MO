@@ -129,107 +129,29 @@ function cascadeFor(name) {
   return [];
 }
 
-// Apercu anime en tete du popup — aurore violet/bleu + mini-clip propre a la carte.
+// Apercu video en tete du popup — capture reelle de la page cible.
+const PREVIEW_SRC = {
+  Region:       './shared/home/assets/preview-region.mp4?v=20260520ag',
+  Rapport:      './shared/home/assets/preview-rapport.mp4?v=20260520ag',
+  Graph:        './shared/home/assets/preview-graph.mp4?v=20260520ag',
+  Theme:        './shared/home/assets/preview-theme.mp4?v=20260520ag',
+  Cartographie: './shared/home/assets/preview-cartographie.mp4?v=20260520ag',
+};
+
 function CascadePreview({ name, count }) {
+  const src = PREVIEW_SRC[name];
   return (
     <div className="cascade-preview" aria-hidden="true">
-      <div className="cascade-preview__aurora" />
-      <div className="cascade-preview__grid" />
-      <PreviewScene name={name} />
-      <div className="cascade-preview__shine" />
+      {src && (
+        <video className="cascade-preview__video" src={src}
+               autoPlay loop muted playsInline preload="metadata" />
+      )}
+      <div className="cascade-preview__shade" />
       <div className="cascade-preview__caption">
         <span className="cascade-preview__dot" />
         Apercu · {name}
         <span className="cascade-preview__count">{count}</span>
       </div>
-    </div>
-  );
-}
-
-// Mini-clip anime distinct par carte (boucle ~10-14 s, joue au survol).
-function PreviewScene({ name }) {
-  if (name === 'Region')       return <SceneGlobe />;
-  if (name === 'Rapport')      return <SceneDoc />;
-  if (name === 'Graph')        return <SceneChart />;
-  if (name === 'Theme')        return <SceneNet />;
-  if (name === 'Cartographie') return <SceneMap />;
-  return null;
-}
-
-function SceneGlobe() {
-  return (
-    <div className="cp-scene cp-globe">
-      <div className="cp-globe__ball"><div className="cp-globe__lines" /></div>
-      <span className="cp-ping" style={{ left: '32%', top: '34%' }} />
-      <span className="cp-ping" style={{ left: '64%', top: '50%', animationDelay: '1.3s' }} />
-      <span className="cp-ping" style={{ left: '46%', top: '70%', animationDelay: '2.6s' }} />
-    </div>
-  );
-}
-
-function SceneDoc() {
-  const bars = [
-    { cls: 'cp-doc__bar cp-doc__bar--h', w: '62%' },
-    { w: '92%' }, { w: '74%' }, { w: '88%' }, { w: '56%' }, { w: '80%' },
-  ];
-  return (
-    <div className="cp-scene cp-doc">
-      <div className="cp-doc__sheet">
-        {bars.map((b, i) => (
-          <span key={i} className={b.cls || 'cp-doc__bar'}
-                style={{ width: b.w, animationDelay: (i * 0.55) + 's' }} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function SceneChart() {
-  const bars = [44, 72, 32, 88, 58];
-  return (
-    <div className="cp-scene cp-chart">
-      {bars.map((h, i) => (
-        <span key={i} className="cp-bar"
-              style={{ height: h + 'px', animationDelay: (i * 0.28) + 's' }} />
-      ))}
-    </div>
-  );
-}
-
-function SceneNet() {
-  return (
-    <div className="cp-scene cp-net">
-      <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet">
-        <g className="cp-net__links">
-          <line x1="50" y1="42" x2="100" y2="28" />
-          <line x1="100" y1="28" x2="150" y2="48" />
-          <line x1="50" y1="42" x2="86" y2="86" />
-          <line x1="86" y1="86" x2="150" y2="48" />
-          <line x1="86" y1="86" x2="136" y2="94" />
-          <line x1="100" y1="28" x2="86" y2="86" />
-        </g>
-        <g className="cp-net__nodes">
-          <circle cx="50" cy="42" r="5" />
-          <circle cx="100" cy="28" r="6.5" />
-          <circle cx="150" cy="48" r="5" />
-          <circle cx="86" cy="86" r="6.5" />
-          <circle cx="136" cy="94" r="4.5" />
-        </g>
-      </svg>
-    </div>
-  );
-}
-
-function SceneMap() {
-  return (
-    <div className="cp-scene cp-map">
-      <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
-        <path className="cp-map__land" d="M14 84 Q42 54 80 60 Q116 66 126 40 Q156 22 192 42 L192 120 L14 120 Z" />
-        <path className="cp-map__land cp-map__land--2" d="M2 26 Q34 18 56 32 Q74 44 62 60 Q40 72 16 58 Q-6 44 2 26 Z" />
-        <path className="cp-map__route" d="M34 94 Q72 64 108 76 Q148 90 172 44" />
-        <circle className="cp-map__pin" cx="172" cy="44" r="4.5" />
-      </svg>
-      <div className="cp-radar" />
     </div>
   );
 }
