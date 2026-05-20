@@ -26,7 +26,7 @@
   --violet-d:  #6B3FA0;          /* profond — couleur signature logo */
   --violet-bg: rgba(181,150,224,0.08); /* wash */
   --violet-bd: rgba(181,150,224,0.22); /* bordure accent */
-  --violet-grad: linear-gradient(145deg, var(--violet-d) 0%, var(--violet) 52%, var(--violet-2) 100%); /* degrade logo Algor */
+  --violet-grad: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #2E84D4 100%); /* degrade violet -> bleu */
 
   /* ─── Or — accent secondaire, heritage Algor Int ─── */
   --gold:    #c49a3c;
