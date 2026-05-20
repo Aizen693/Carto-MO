@@ -335,8 +335,9 @@ function Globe() {
         // label — toujours visible : annotation cartographique sobre,
         //   halo blanc doux pour la lisibilite, aucun cadre.
         ctx.save();
-        ctx.font = (hovered ? '600 ' : '500 ') +
-          '12px Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif';
+        ctx.font = (hovered ? '500 ' : '400 ') +
+          '11px "JetBrains Mono", ui-monospace, Menlo, monospace';
+        ctx.letterSpacing = '0.03em';
         ctx.textBaseline = 'middle';
         const tx = xy[0] + 12, ty = xy[1] + 0.5;
         ctx.fillStyle = hovered ? '#2c2840' : '#4a4660';
