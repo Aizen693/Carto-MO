@@ -738,6 +738,101 @@ img, svg { display: block; max-width: 100%; }
   .hero__visual { max-width: 420px; }
 }
 
+/* ─── Cascade au survol : carte -> sous-elements -> actions ─── */
+.action-card-wrap { position: relative; }
+
+.cascade-pop {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 322px;
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-3);
+  padding: 6px;
+  z-index: 60;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity .15s ease, transform .15s ease, visibility 0s linear .15s;
+}
+.action-card-wrap:hover > .cascade-pop {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .15s ease, transform .15s ease, visibility 0s;
+}
+
+.cascade-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 11px;
+  border-radius: var(--r-sm);
+  cursor: default;
+}
+.cascade-row:hover { background: var(--violet-bg); }
+.cascade-row__label { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.cascade-row__meta {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.cascade-row__chev { color: var(--muted-2); flex-shrink: 0; transition: color .14s ease; }
+.cascade-row:hover .cascade-row__chev { color: var(--violet); }
+
+.cascade-sub {
+  position: absolute;
+  top: -7px;
+  left: 100%;
+  width: 302px;
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-3);
+  padding: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-6px);
+  transition: opacity .14s ease, transform .14s ease, visibility 0s linear .14s;
+}
+.cascade-row:hover > .cascade-sub {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  transition: opacity .14s ease, transform .14s ease, visibility 0s;
+}
+
+.cascade-sub__item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 11px;
+  border-radius: var(--r-sm);
+  text-decoration: none;
+}
+a.cascade-sub__item:hover { background: var(--violet-bg); }
+.cascade-sub__label { font-size: 12.5px; font-weight: 500; color: var(--ink); }
+a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
+.cascade-sub__meta { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.cascade-sub__item--static { opacity: 0.68; }
+
+/* Deux dernieres cartes : sous-popup vers la gauche pour ne pas deborder */
+.actions-grid > .action-card-wrap:last-child .cascade-pop { left: auto; right: 0; }
+.actions-grid > .action-card-wrap:nth-last-child(-n+2) .cascade-sub {
+  left: auto;
+  right: 100%;
+  transform: translateX(6px);
+}
+.actions-grid > .action-card-wrap:nth-last-child(-n+2) .cascade-row:hover > .cascade-sub {
+  transform: translateX(0);
+}
+
 .action-card {
   position: relative;
   background: var(--surface);

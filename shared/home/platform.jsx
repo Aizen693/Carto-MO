@@ -1,4 +1,4 @@
-/* global React, ZONES, REPORTS, GRAPHS, THEMES, SidePanel, Arrow */
+/* global React, ZONES, REPORTS, GRAPHS, THEMES, THEME_DETAIL, SidePanel, Arrow */
 // Page 2 — 4 actions : Region · Rapport · Graph · Theme
 
 const { useState: useStateP } = React;
@@ -71,27 +71,107 @@ function PlatformView({ onBack }) {
   );
 }
 
+// Cascade au survol : carte d'action -> sous-elements -> actions.
+function cascadeFor(name) {
+  const zoneName = id => (ZONES.find(z => z.id === id) || {}).name || id;
+  const zoneHref = id => (ZONES.find(z => z.id === id) || {}).href || '#';
+  if (name === 'Region') {
+    return ZONES.map(z => ({
+      label: z.name, meta: z.code,
+      actions: [
+        { label: 'Carte interactive', meta: z.countries, href: z.href },
+        { label: 'Rapports analytiques', meta: `${(REPORTS[z.id] || []).length} document(s)`,
+          href: ((REPORTS[z.id] || []).find(r => r.href) || {}).href || z.href },
+        { label: 'Visualisations', meta: `${(GRAPHS[z.id] || []).length} graph(s)`, href: z.href },
+      ],
+    }));
+  }
+  if (name === 'Rapport') {
+    return Object.keys(REPORTS).map(zid => ({
+      label: zoneName(zid), meta: `${REPORTS[zid].length} doc(s)`,
+      actions: REPORTS[zid].map(r => ({
+        label: r.title, meta: `${r.pages} p · ${r.tag}`, href: r.href || zoneHref(zid),
+      })),
+    }));
+  }
+  if (name === 'Graph') {
+    return Object.keys(GRAPHS).map(zid => ({
+      label: zoneName(zid), meta: `${GRAPHS[zid].length} vue(s)`,
+      actions: GRAPHS[zid].map(g => ({
+        label: g.title, meta: `${g.type} · ${g.scope}`, href: zoneHref(zid),
+      })),
+    }));
+  }
+  if (name === 'Theme') {
+    return THEMES.map(t => {
+      const detail = THEME_DETAIL[t.id] || [];
+      return {
+        label: t.name, meta: `${t.count} entrees`,
+        actions: detail.length
+          ? detail.map(d => ({ label: d.title, meta: `${d.type} · ${d.meta}`, href: d.href || null }))
+          : [{ label: t.desc, meta: 'Lecture transverse', href: null }],
+      };
+    });
+  }
+  return [];
+}
+
 function ActionCard({ num, name, desc, count, icon, onClick }) {
+  const groups = cascadeFor(name);
   return (
-    <button className="action-card" onClick={onClick}>
-      <div className="action-card__top">
-        <div className="action-card__icon">{icon}</div>
-        <span className="action-card__num">— {num}</span>
+    <div className="action-card-wrap">
+      <div className="action-card" onClick={onClick} role="button" tabIndex={0}
+           onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}>
+        <div className="action-card__top">
+          <div className="action-card__icon">{icon}</div>
+          <span className="action-card__num">— {num}</span>
+        </div>
+        <div>
+          <h3 className="action-card__title">{name}</h3>
+          <p className="action-card__desc">{desc}</p>
+        </div>
+        <div className="action-card__foot">
+          <span className="action-card__count">{count}</span>
+          <span className="action-card__arrow">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 7h7M7 3.5L10.5 7 7 10.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+        </div>
       </div>
-      <div>
-        <h3 className="action-card__title">{name}</h3>
-        <p className="action-card__desc">{desc}</p>
-      </div>
-      <div className="action-card__foot">
-        <span className="action-card__count">{count}</span>
-        <span className="action-card__arrow">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M3 7h7M7 3.5L10.5 7 7 10.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </span>
-      </div>
-    </button>
+
+      {groups.length > 0 && (
+        <div className="cascade-pop" role="menu">
+          {groups.map((g, i) => (
+            <div className="cascade-row" key={i}>
+              <span className="cascade-row__label">{g.label}</span>
+              <span className="cascade-row__meta">{g.meta}</span>
+              <ChevronRight />
+              <div className="cascade-sub">
+                {g.actions.map((a, j) => (
+                  a.href
+                    ? <a className="cascade-sub__item" href={a.href} key={j}>
+                        <span className="cascade-sub__label">{a.label}</span>
+                        <span className="cascade-sub__meta">{a.meta}</span>
+                      </a>
+                    : <span className="cascade-sub__item cascade-sub__item--static" key={j}>
+                        <span className="cascade-sub__label">{a.label}</span>
+                        <span className="cascade-sub__meta">{a.meta}</span>
+                      </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
+}
+
+function ChevronRight() {
+  return (<svg className="cascade-row__chev" width="12" height="12" viewBox="0 0 12 12" fill="none">
+    <path d="M4.5 2.5L8 6l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>);
 }
 
 function RecentItem({ icon, title, href }) {
