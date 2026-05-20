@@ -568,7 +568,7 @@ img, svg { display: block; max-width: 100%; }
   text-wrap: balance;
 }
 .video-band__title em {
-  font-family: var(--serif); font-style: normal; color: var(--violet); font-weight: 400;
+  font-style: normal; color: var(--violet);
 }
 .video-band__intro {
   font-size: 15px;
@@ -707,7 +707,7 @@ img, svg { display: block; max-width: 100%; }
   display: grid;
   grid-template-columns: 1.4fr 1fr;
   gap: 48px;
-  align-items: end;
+  align-items: start;
   margin-bottom: 56px;
 }
 .platform__title {
@@ -718,7 +718,7 @@ img, svg { display: block; max-width: 100%; }
   color: var(--ink);
   text-wrap: balance;
 }
-.platform__title em { font-family: var(--serif); font-style: normal; color: var(--violet); font-weight: 400; }
+.platform__title em { font-style: normal; color: var(--violet); }
 .platform__lede {
   font-size: 16px;
   color: var(--ink-2);
