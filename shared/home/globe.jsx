@@ -332,22 +332,21 @@ function Globe() {
         ctx.fillStyle = 'rgba(255,255,255,0.98)';
         ctx.fill();
 
-        // label — uniquement au survol : annotation cartographique sobre,
+        // label — toujours visible : annotation cartographique sobre,
         //   halo blanc doux pour la lisibilite, aucun cadre.
-        if (hovered) {
-          ctx.save();
-          ctx.font = '600 12px Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif';
-          ctx.textBaseline = 'middle';
-          const tx = xy[0] + 12, ty = xy[1] + 0.5;
-          ctx.fillStyle = '#2c2840';
-          ctx.shadowColor = 'rgba(255,255,255,0.95)';
-          ctx.shadowBlur = 5;
-          ctx.fillText(a.label, tx, ty);  // passes empilees -> halo blanc
-          ctx.fillText(a.label, tx, ty);
-          ctx.shadowBlur = 0;
-          ctx.fillText(a.label, tx, ty);  // passe nette finale
-          ctx.restore();
-        }
+        ctx.save();
+        ctx.font = (hovered ? '600 ' : '500 ') +
+          '12px Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif';
+        ctx.textBaseline = 'middle';
+        const tx = xy[0] + 12, ty = xy[1] + 0.5;
+        ctx.fillStyle = hovered ? '#2c2840' : '#4a4660';
+        ctx.shadowColor = 'rgba(255,255,255,0.95)';
+        ctx.shadowBlur = 5;
+        ctx.fillText(a.label, tx, ty);  // passes empilees -> halo blanc
+        ctx.fillText(a.label, tx, ty);
+        ctx.shadowBlur = 0;
+        ctx.fillText(a.label, tx, ty);  // passe nette finale
+        ctx.restore();
       });
 
       ctx.restore(); // fin du clip circulaire
