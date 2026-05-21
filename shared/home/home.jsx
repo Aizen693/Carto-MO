@@ -263,10 +263,6 @@ function VeilleView({ onBack }) {
         <button className="veille-fs__btn" onClick={onBack}>
           &larr; Retour a la console
         </button>
-        <a className="veille-fs__btn veille-fs__btn--ghost" href={VEILLE_URL}
-           target="_blank" rel="noopener noreferrer">
-          Ouvrir dans un onglet ↗
-        </a>
       </div>
     </div>,
     document.body

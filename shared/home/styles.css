@@ -695,16 +695,6 @@ img, svg { display: block; max-width: 100%; }
   transition: background 0.15s var(--ease), transform 0.15s var(--ease), border-color 0.15s var(--ease), color 0.15s var(--ease);
 }
 .veille-fs__btn:hover { background: var(--violet-h); transform: translateY(-1px); }
-.veille-fs__btn--ghost {
-  color: var(--ink);
-  background: var(--surface);
-  border-color: var(--line-2);
-}
-.veille-fs__btn--ghost:hover {
-  background: var(--surface);
-  border-color: var(--violet);
-  color: var(--violet);
-}
 
 /* Dashboard Archives */
 .dash-msg {

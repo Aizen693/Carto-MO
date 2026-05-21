@@ -377,12 +377,7 @@ function VeilleView({
   }, /*#__PURE__*/React.createElement("button", {
     className: "veille-fs__btn",
     onClick: onBack
-  }, "\u2190 Retour a la console"), /*#__PURE__*/React.createElement("a", {
-    className: "veille-fs__btn veille-fs__btn--ghost",
-    href: VEILLE_URL,
-    target: "_blank",
-    rel: "noopener noreferrer"
-  }, "Ouvrir dans un onglet \u2197"))), document.body);
+  }, "\u2190 Retour a la console"))), document.body);
 }
 
 // Page « Archives » — dashboard de tous les points, par theatre (lecture base Supabase).
