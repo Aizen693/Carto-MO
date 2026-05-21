@@ -231,6 +231,97 @@ img, svg { display: block; max-width: 100%; }
 }
 .header-cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
 .header-cta__star { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* Popover premium au survol du bouton */
+.header-cta-wrap { position: relative; }
+.cta-pop {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 340px;
+  padding-top: 12px;          /* pont transparent : evite le clignotement */
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.18s var(--ease), transform 0.18s var(--ease);
+  z-index: 60;
+}
+.header-cta-wrap:hover .cta-pop,
+.header-cta-wrap:focus-within .cta-pop {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.cta-pop__card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: 0 22px 54px -14px rgba(46,24,87,0.40);
+  padding: 18px 18px 16px;
+}
+.cta-pop__kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+.cta-pop__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 5px;
+}
+.cta-pop__lede {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--muted);
+  margin: 4px 0 13px;
+}
+.cta-pop__list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+.cta-pop__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+.cta-pop__check {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--violet);
+}
+.cta-pop__custom {
+  margin-top: 14px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.cta-pop__tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--violet);
+  background: var(--violet-bg);
+  border: 1px solid var(--violet-bd);
+  padding: 3px 7px;
+  border-radius: 999px;
+  margin-right: 6px;
+}
 .nav-link {
   font-size: 14px;
   font-weight: 500;
