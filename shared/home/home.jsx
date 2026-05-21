@@ -15,8 +15,8 @@ function HomeView({ onEnter, clock, videoStyle }) {
           </div>
 
           <h1 className="hero__title">
-            La <em>cartographie</em> OSINT<br />
-            des theatres a risque
+            Anticiper les<br />
+            <em>risques operationnels</em>
           </h1>
 
           <p className="hero__lede">

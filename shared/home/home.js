@@ -24,7 +24,7 @@ function HomeView({
     className: "hero__eyebrow-muted"
   }, "Algor Access \xB7 2026")), /*#__PURE__*/React.createElement("h1", {
     className: "hero__title"
-  }, "La ", /*#__PURE__*/React.createElement("em", null, "cartographie"), " OSINT", /*#__PURE__*/React.createElement("br", null), "des theatres a risque"), /*#__PURE__*/React.createElement("p", {
+  }, "Anticiper les", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "risques operationnels")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
   }, "Six theatres geopolitiques suivis en continu \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram, agreges sur une carte unique : chaque evenement source, date et auditable."), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
