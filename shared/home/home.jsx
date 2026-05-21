@@ -229,6 +229,13 @@ function ConsoleView({ onBack, onArchives, onVeille }) {
             icon={<><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" /></>}
           />
           <ConsoleTab
+            href="/cloud/"
+            label="Cloud"
+            popTitle="Cloud"
+            popText="Plateforme collaborative de l'equipe — base de sources, documents, suivi client, comptes rendus et syntheses, synchronises."
+            icon={<><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" /></>}
+          />
+          <ConsoleTab
             soon
             label="Rapport"
             popTitle="Rapport"

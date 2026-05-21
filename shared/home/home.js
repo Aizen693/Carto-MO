@@ -327,6 +327,14 @@ function ConsoleView({
       r: "3"
     }))
   }), /*#__PURE__*/React.createElement(ConsoleTab, {
+    href: "/cloud/",
+    label: "Cloud",
+    popTitle: "Cloud",
+    popText: "Plateforme collaborative de l'equipe \u2014 base de sources, documents, suivi client, comptes rendus et syntheses, synchronises.",
+    icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+      d: "M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"
+    }))
+  }), /*#__PURE__*/React.createElement(ConsoleTab, {
     soon: true,
     label: "Rapport",
     popTitle: "Rapport",
