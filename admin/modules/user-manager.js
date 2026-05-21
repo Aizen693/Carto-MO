@@ -2,7 +2,7 @@
  * user-manager.js — Gestion des utilisateurs (admin only)
  */
 
-import { getUsers, updateUserRole } from './firestore.js?v=20260420a';
+import { getUsers, updateUserRole, updateUserPlan } from './firestore.js?v=20260521a';
 import { requireRole } from './auth.js?v=20260420a';
 import { supabase } from '../supabase-config.js?v=20260420a';
 import { escapeHtml } from '../../shared/escape.js?v=20260513a';
@@ -43,6 +43,7 @@ export async function renderUserList(container) {
         ? u.lastLogin.toDate().toLocaleDateString('fr-FR')
         : 'Jamais';
 
+      const isPremium = u.plan === 'premium';
       row.innerHTML = `
         <div class="user-info">
           <span class="user-email">${escapeHtml(u.email)}</span>
@@ -50,6 +51,10 @@ export async function renderUserList(container) {
           <span class="user-last-login">Dernier login: ${escapeHtml(lastLogin)}</span>
         </div>
         <div class="user-actions">
+          <select class="user-plan-select ${isPremium ? 'plan-premium' : 'plan-free'}" data-uid="${escapeHtml(u.id)}">
+            <option value="free" ${!isPremium ? 'selected' : ''}>Gratuit</option>
+            <option value="premium" ${isPremium ? 'selected' : ''}>Premium</option>
+          </select>
           <select class="user-role-select" data-uid="${escapeHtml(u.id)}">
             <option value="viewer" ${u.role === 'viewer' ? 'selected' : ''}>Viewer</option>
             <option value="editor" ${u.role === 'editor' ? 'selected' : ''}>Editor</option>
@@ -65,6 +70,20 @@ export async function renderUserList(container) {
         } catch (err) {
           alert('Erreur: ' + err.message);
           e.target.value = u.role;
+        }
+      });
+
+      const planSelect = row.querySelector('.user-plan-select');
+      planSelect.addEventListener('change', async (e) => {
+        const newPlan = e.target.value;
+        try {
+          await updateUserPlan(u.id, newPlan);
+          u.plan = newPlan;
+          planSelect.classList.toggle('plan-premium', newPlan === 'premium');
+          planSelect.classList.toggle('plan-free', newPlan !== 'premium');
+        } catch (err) {
+          alert('Erreur: ' + err.message);
+          e.target.value = u.plan;
         }
       });
 

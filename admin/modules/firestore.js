@@ -254,6 +254,7 @@ export async function getUsers() {
     email: d.email,
     displayName: d.display_name,
     role: d.role,
+    plan: d.plan || 'free',
     lastLogin: d.last_login ? { toDate: () => new Date(d.last_login) } : null,
     createdAt: d.created_at
   }));
@@ -272,6 +273,14 @@ export async function updateUserRole(uid, role) {
   const { error } = await supabase
     .from('profiles')
     .update({ role })
+    .eq('id', uid);
+  if (error) throw error;
+}
+
+export async function updateUserPlan(uid, plan) {
+  const { error } = await supabase
+    .from('profiles')
+    .update({ plan })
     .eq('id', uid);
   if (error) throw error;
 }

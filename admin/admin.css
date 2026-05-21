@@ -963,6 +963,19 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
   padding: 3px 6px;
   cursor: pointer;
 }
+.user-actions { display: flex; gap: 6px; align-items: center; }
+.user-plan-select {
+  background: var(--bg);
+  border: 1px solid var(--ln);
+  color: var(--txh);
+  font: 400 8px/1 var(--m);
+  padding: 3px 6px;
+  cursor: pointer;
+}
+.user-plan-select.plan-premium {
+  border-color: var(--ac);
+  color: var(--ac);
+}
 .add-user-form {
   padding: 10px 12px;
   border-bottom: 1px solid var(--ln);

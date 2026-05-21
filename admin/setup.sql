@@ -125,6 +125,37 @@ create policy "log_auth_insert" on activity_log for insert to authenticated with
 -- Personne ne peut modifier ou supprimer (immutable)
 
 
+-- ── Plan d'abonnement (free / premium) ──────────────────────────
+-- Tout nouveau compte est 'free'. Seul un admin peut le passer 'premium'.
+-- L'acces aux 6 theatres est reserve aux comptes 'premium'.
+
+alter table profiles
+  add column if not exists plan text not null default 'free'
+  check (plan in ('free', 'premium'));
+
+-- Securite : empeche un compte non-admin de modifier son propre role
+-- ou son propre plan. Sans ce garde-fou, la policy profiles_self_update
+-- laisserait un compte gratuit se passer premium tout seul.
+
+create or replace function protect_profile_privileges()
+returns trigger as $$
+begin
+  if (new.role is distinct from old.role
+      or new.plan is distinct from old.plan) then
+    if coalesce((select role from profiles where id = auth.uid()), '') <> 'admin' then
+      raise exception 'Seul un administrateur peut modifier le role ou le plan';
+    end if;
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists trg_protect_profile_privileges on profiles;
+create trigger trg_protect_profile_privileges
+  before update on profiles
+  for each row execute function protect_profile_privileges();
+
+
 -- ═══════════════════════════════════════════════════════════════════
 -- FIN — Toutes les tables sont creees.
 --

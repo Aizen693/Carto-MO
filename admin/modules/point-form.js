@@ -2,7 +2,7 @@
  * point-form.js — Formulaire creation/edition de point (drawer bas)
  */
 
-import { createPoint, updatePoint, softDeletePoint } from './firestore.js?v=20260420a';
+import { createPoint, updatePoint, softDeletePoint } from './firestore.js?v=20260521a';
 import { getCurrentUser, requireRole } from './auth.js?v=20260420a';
 import { renderAdminPoints, selectPoint, clearSelection, flyToPoint } from './map-editor.js?v=20260420a';
 

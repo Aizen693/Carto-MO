@@ -2,7 +2,7 @@
  * import-export.js — Import/export GeoJSON
  */
 
-import { createPoint, bulkCreatePoints, getPoints, logActivity } from './firestore.js?v=20260420a';
+import { createPoint, bulkCreatePoints, getPoints, logActivity } from './firestore.js?v=20260521a';
 import { getCurrentUser } from './auth.js?v=20260420a';
 import { escapeHtml } from '../../shared/escape.js?v=20260513a';
 

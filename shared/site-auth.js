@@ -1,22 +1,30 @@
 /**
- * site-auth.js — Site-wide Supabase auth gate
+ * site-auth.js — Portail d'accès aux théâtres (Supabase auth)
  *
- * Imported by each page (lobby + zones). Shows a full-screen login overlay
- * until the user has a valid Supabase session. Once authenticated, the
- * overlay fades out and the page renders normally.
+ * Importé par les 6 zones (pas la homepage, qui est publique).
+ * Affiche un overlay plein écran tant que l'utilisateur n'a pas :
+ *   1. une session Supabase valide  ET
+ *   2. un profil avec plan = 'premium'.
  *
- * Sessions are shared with the admin tool (same storageKey: 'carto-admin-auth').
- * Users must be created via the Supabase dashboard.
+ * 3 vues dans l'overlay :
+ *   - login   : connexion email + mot de passe
+ *   - signup  : création de compte en libre-service (compte créé en 'free')
+ *   - upgrade : compte connecté mais gratuit → accès théâtres refusé
  *
- * Design : carte sign-in glassmorphism violette (charte Carto-MO v3),
- * faisceaux lumineux animés + tilt 3D — porté du composant 21st.dev
- * "sign-in-card-2" en JS/CSS vanilla.
+ * Les comptes sont créés par les visiteurs eux-mêmes. Le passage en
+ * 'premium' se fait uniquement côté admin (console admin).
+ * Session partagée avec la console admin (storageKey 'carto-admin-auth').
+ *
+ * Design : carte sign-in glassmorphism violette — porté du composant
+ * 21st.dev "sign-in-card-2" en JS/CSS vanilla.
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
 
 const SUPABASE_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
+
+const MIN_PASSWORD = 12;
 
 // « Se souvenir de moi » : route le token vers localStorage (persistant) ou
 // sessionStorage (effacé à la fermeture du navigateur). La préférence elle-même
@@ -62,6 +70,30 @@ const ICON_EYE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 const ICON_EYE_OFF = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>`;
 const ICON_ARROW = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
 const ICON_CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+const ICON_STAR = `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2.5l2.9 5.9 6.6.95-4.75 4.63 1.12 6.52L12 17.9l-5.9 3.1 1.13-6.52L2.5 9.85l6.6-.95z"/></svg>`;
+
+const FIELD = (icon, input) =>
+  `<div class="sa-field"><span class="sa-field-icon">${icon}</span>${input}</div>`;
+
+const PASSWORD_FIELD = (id, placeholder, autocomplete) => `
+<div class="sa-field">
+  <span class="sa-field-icon">${ICON_LOCK}</span>
+  <input id="${id}" type="password" placeholder="${placeholder}"
+         autocomplete="${autocomplete}" required>
+  <button type="button" class="sa-eye" aria-label="Afficher le mot de passe">
+    <span class="sa-eye-off">${ICON_EYE_OFF}</span>
+    <span class="sa-eye-on">${ICON_EYE}</span>
+  </button>
+</div>`;
+
+const SUBMIT = (label) => `
+<button type="submit" class="sa-submit">
+  <span class="sa-submit-content">
+    <span class="sa-btn-text">${label}</span>
+    <span class="sa-btn-arrow">${ICON_ARROW}</span>
+  </span>
+  <span class="sa-spinner" aria-hidden="true"></span>
+</button>`;
 
 const OVERLAY_HTML = `
 <div id="site-auth-overlay" aria-hidden="false" role="dialog" aria-modal="true">
@@ -92,52 +124,61 @@ const OVERLAY_HTML = `
           <div class="sa-logo">
             <img src="/shared/algor-mark.jpg" alt="Algor Access" decoding="async">
           </div>
-          <h1 class="sa-title">Authentification</h1>
-          <p class="sa-sub">Connectez-vous pour accéder à la console Algor Access.</p>
+          <h1 class="sa-title" id="sa-title">Authentification</h1>
+          <p class="sa-sub" id="sa-sub">Connectez-vous pour accéder aux théâtres Algor Access.</p>
         </div>
 
-        <form id="site-auth-form" autocomplete="on">
-          <div class="sa-field">
-            <span class="sa-field-icon">${ICON_MAIL}</span>
-            <input id="site-auth-email" type="email" placeholder="Adresse email"
-                   autocomplete="username" required spellcheck="false">
-          </div>
-
-          <div class="sa-field">
-            <span class="sa-field-icon">${ICON_LOCK}</span>
-            <input id="site-auth-password" type="password" placeholder="Mot de passe"
-                   autocomplete="current-password" required>
-            <button type="button" id="site-auth-eye" class="sa-eye"
-                    aria-label="Afficher le mot de passe">
-              <span class="sa-eye-off">${ICON_EYE_OFF}</span>
-              <span class="sa-eye-on">${ICON_EYE}</span>
-            </button>
-          </div>
-
-          <div class="sa-row">
-            <label class="sa-remember">
-              <input type="checkbox" id="site-auth-remember" checked>
-              <span class="sa-check">${ICON_CHECK}</span>
-              <span>Se souvenir de moi</span>
-            </label>
-            <a href="#" id="site-auth-forgot" class="sa-link">Mot de passe oublié&nbsp;?</a>
-          </div>
-
-          <div id="site-auth-error" role="alert" aria-live="polite"></div>
-
-          <button id="site-auth-submit" type="submit" class="sa-submit">
-            <span class="sa-submit-content">
-              <span class="sa-btn-text">Se connecter</span>
-              <span class="sa-btn-arrow">${ICON_ARROW}</span>
-            </span>
-            <span class="sa-spinner" aria-hidden="true"></span>
-          </button>
-
+        <!-- ── Vue : connexion ── -->
+        <div class="sa-view sa-view-active" id="sa-view-login">
+          <form id="site-auth-form" autocomplete="on">
+            ${FIELD(ICON_MAIL, `<input id="site-auth-email" type="email" placeholder="Adresse email" autocomplete="username" required spellcheck="false">`)}
+            ${PASSWORD_FIELD('site-auth-password', 'Mot de passe', 'current-password')}
+            <div class="sa-row">
+              <label class="sa-remember">
+                <input type="checkbox" id="site-auth-remember" checked>
+                <span class="sa-check">${ICON_CHECK}</span>
+                <span>Se souvenir de moi</span>
+              </label>
+              <a href="#" id="site-auth-forgot" class="sa-link">Mot de passe oublié&nbsp;?</a>
+            </div>
+            <div class="sa-error" id="site-auth-error" role="alert" aria-live="polite"></div>
+            ${SUBMIT('Se connecter')}
+          </form>
           <p class="sa-signup">
             Pas encore de compte&nbsp;?
-            <a href="#" id="site-auth-signup" class="sa-link sa-link-strong">Demander un accès</a>
+            <a href="#" id="sa-go-signup" class="sa-link sa-link-strong">Créer un compte</a>
           </p>
-        </form>
+        </div>
+
+        <!-- ── Vue : inscription ── -->
+        <div class="sa-view" id="sa-view-signup">
+          <form id="site-auth-signup-form" autocomplete="on">
+            ${FIELD(ICON_MAIL, `<input id="sa-signup-email" type="email" placeholder="Adresse email" autocomplete="email" required spellcheck="false">`)}
+            ${PASSWORD_FIELD('sa-signup-password', 'Mot de passe (12 caractères min.)', 'new-password')}
+            ${FIELD(ICON_LOCK, `<input id="sa-signup-confirm" type="password" placeholder="Confirmer le mot de passe" autocomplete="new-password" required>`)}
+            <div class="sa-error" id="site-auth-signup-error" role="alert" aria-live="polite"></div>
+            ${SUBMIT('Créer mon compte')}
+          </form>
+          <p class="sa-signup">
+            Déjà un compte&nbsp;?
+            <a href="#" id="sa-go-login" class="sa-link sa-link-strong">Se connecter</a>
+          </p>
+          <p class="sa-note">Le compte créé est gratuit. L'accès aux théâtres nécessite un passage premium.</p>
+        </div>
+
+        <!-- ── Vue : compte gratuit (upgrade) ── -->
+        <div class="sa-view" id="sa-view-upgrade">
+          <div class="sa-upgrade">
+            <div class="sa-upgrade-badge">${ICON_STAR}</div>
+            <p class="sa-upgrade-msg" id="sa-upgrade-msg">
+              Votre compte est gratuit. L'accès aux théâtres est réservé aux comptes premium.
+              Contactez Algor Access pour activer votre accès.
+            </p>
+            <button type="button" id="sa-logout-btn" class="sa-submit sa-submit-ghost">
+              <span class="sa-submit-content"><span class="sa-btn-text">Se déconnecter</span></span>
+            </button>
+          </div>
+        </div>
 
         <div class="sa-foot">
           <span>algoracces.fr</span>
@@ -158,10 +199,10 @@ const OVERLAY_CSS = `
 }
 
 #site-auth-overlay {
-  --v:       #7c4dbf;            /* violet vif */
-  --v-deep:  #6B3FA0;            /* violet charte Carto-MO */
-  --v-soft:  #a679e0;            /* violet clair */
-  --sa-bg:   #0d0a18;            /* fond violet sombre */
+  --v:       #7c4dbf;
+  --v-deep:  #6B3FA0;
+  --v-soft:  #a679e0;
+  --sa-bg:   #0d0a18;
   --sa-tx:   #ededf2;
   --sa-tx-d: rgba(255,255,255,0.55);
   --sa-tx-f: rgba(255,255,255,0.34);
@@ -317,6 +358,10 @@ const OVERLAY_CSS = `
   color: var(--sa-tx-d); margin: 0;
 }
 
+/* ── Vues ──────────────────────────────────────────────── */
+.sa-view { display: none; }
+.sa-view.sa-view-active { display: block; }
+
 /* ── Champs ────────────────────────────────────────────── */
 .sa-field {
   position: relative; display: flex; align-items: center;
@@ -331,7 +376,7 @@ const OVERLAY_CSS = `
 }
 .sa-field-icon svg { width: 100%; height: 100%; }
 .sa-field:focus-within .sa-field-icon { color: #fff; }
-#site-auth-email, #site-auth-password {
+.sa-field input {
   width: 100%; box-sizing: border-box;
   height: 44px; padding: 0 14px 0 40px;
   background: rgba(255,255,255,0.05);
@@ -341,11 +386,9 @@ const OVERLAY_CSS = `
   outline: none;
   transition: border-color 0.25s ease, background 0.25s ease;
 }
-#site-auth-password { padding-right: 42px; }
-#site-auth-email::placeholder, #site-auth-password::placeholder {
-  color: var(--sa-tx-f);
-}
-#site-auth-email:focus, #site-auth-password:focus {
+.sa-field input[type="password"] { padding-right: 42px; }
+.sa-field input::placeholder { color: var(--sa-tx-f); }
+.sa-field input:focus {
   background: rgba(255,255,255,0.09);
   border-color: rgba(255,255,255,0.20);
 }
@@ -404,16 +447,17 @@ const OVERLAY_CSS = `
 .sa-link-strong { color: #fff; font-weight: 600; }
 
 /* ── Erreur / info ─────────────────────────────────────── */
-#site-auth-error {
+.sa-error {
   display: none;
   font-size: 11.5px; line-height: 1.45;
   padding: 8px 0 2px;
   color: #ef8d86;
 }
-#site-auth-error.visible { display: block; }
-#site-auth-error.sa-info { color: var(--sa-soft, var(--v-soft)); }
+.sa-error.visible { display: block; }
+.sa-error.sa-info { color: var(--v-soft); }
+.sa-error.sa-ok   { color: #74c69d; }
 
-/* ── Bouton connexion ──────────────────────────────────── */
+/* ── Bouton principal ──────────────────────────────────── */
 .sa-submit {
   position: relative; width: 100%; height: 46px; margin-top: 14px;
   border: 0; border-radius: 11px; cursor: pointer;
@@ -435,14 +479,23 @@ const OVERLAY_CSS = `
 }
 .sa-submit:active:not(:disabled) { transform: translateY(0) scale(0.99); }
 .sa-submit:disabled { cursor: progress; }
+.sa-submit-ghost {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: none;
+}
+.sa-submit-ghost:hover:not(:disabled) {
+  background: rgba(255,255,255,0.11);
+  filter: none;
+  box-shadow: none;
+}
 .sa-submit-content {
   display: flex; align-items: center; justify-content: center; gap: 7px;
   font-size: 14px; font-weight: 600;
 }
-.sa-btn-arrow { display: flex; width: 15px; height: 15px; }
+.sa-btn-arrow { display: flex; width: 15px; height: 15px; transition: transform 0.25s ease; }
 .sa-btn-arrow svg { width: 100%; height: 100%; }
 .sa-submit:hover:not(:disabled) .sa-btn-arrow { transform: translateX(3px); }
-.sa-btn-arrow { transition: transform 0.25s ease; }
 .sa-spinner {
   display: none;
   width: 18px; height: 18px;
@@ -452,19 +505,37 @@ const OVERLAY_CSS = `
 }
 @keyframes sa-spin { to { transform: rotate(360deg); } }
 .sa-submit.is-loading .sa-submit-content { display: none; }
-.sa-submit.is-loading .sa-spinner {
-  display: block; margin: 0 auto;
-}
+.sa-submit.is-loading .sa-spinner { display: block; margin: 0 auto; }
 .sa-submit.is-loading::before { animation: sa-shimmer 1.4s ease-in-out infinite; }
 @keyframes sa-shimmer {
   0% { transform: translateX(-100%); } 100% { transform: translateX(100%); }
 }
 
-/* ── Pied ──────────────────────────────────────────────── */
+/* ── Bas de carte ──────────────────────────────────────── */
 .sa-signup {
   text-align: center; font-size: 12px;
   color: var(--sa-tx-d); margin: 14px 0 0;
 }
+.sa-note {
+  text-align: center; font-size: 11px; line-height: 1.45;
+  color: var(--sa-tx-f); margin: 9px 0 0;
+}
+
+/* ── Vue upgrade ───────────────────────────────────────── */
+.sa-upgrade { text-align: center; padding: 4px 4px 2px; }
+.sa-upgrade-badge {
+  width: 44px; height: 44px; margin: 2px auto 14px;
+  border-radius: 12px;
+  background: linear-gradient(150deg, var(--v) 0%, var(--v-deep) 100%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 22px rgba(124,77,191,0.45);
+}
+.sa-upgrade-badge svg { width: 22px; height: 22px; color: #fff; }
+.sa-upgrade-msg {
+  font-size: 13px; line-height: 1.55; color: var(--sa-tx-d);
+  margin: 0 0 6px;
+}
+
 .sa-foot {
   display: flex; justify-content: center; gap: 9px;
   margin-top: 18px; padding-top: 14px;
@@ -483,6 +554,24 @@ const OVERLAY_CSS = `
 }
 `;
 
+const VIEWS = {
+  login: {
+    title: 'Authentification',
+    sub: 'Connectez-vous pour accéder aux théâtres Algor Access.',
+    focus: '#site-auth-email',
+  },
+  signup: {
+    title: 'Créer un compte',
+    sub: 'Inscrivez-vous pour rejoindre Algor Access.',
+    focus: '#sa-signup-email',
+  },
+  upgrade: {
+    title: 'Accès premium requis',
+    sub: 'Votre compte ne donne pas encore accès aux théâtres.',
+    focus: null,
+  },
+};
+
 let overlayEl = null;
 
 function injectStyles() {
@@ -493,6 +582,57 @@ function injectStyles() {
   document.head.appendChild(style);
 }
 
+function switchView(name) {
+  if (!overlayEl) return;
+  overlayEl.querySelectorAll('.sa-view').forEach((v) => v.classList.remove('sa-view-active'));
+  overlayEl.querySelector(`#sa-view-${name}`).classList.add('sa-view-active');
+  const meta = VIEWS[name];
+  overlayEl.querySelector('#sa-title').textContent = meta.title;
+  overlayEl.querySelector('#sa-sub').textContent = meta.sub;
+  if (meta.focus) overlayEl.querySelector(meta.focus)?.focus();
+}
+
+// Lit le rôle + le plan du profil connecté.
+// En cas de doute (erreur, profil absent), valeurs les plus restrictives.
+async function fetchProfile(userId) {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('role, plan')
+      .eq('id', userId)
+      .single();
+    if (error || !data) return { role: 'viewer', plan: 'free' };
+    return { role: data.role || 'viewer', plan: data.plan || 'free' };
+  } catch (e) {
+    return { role: 'viewer', plan: 'free' };
+  }
+}
+
+// Accès aux théâtres : l'équipe interne (admin/editor) y a toujours droit ;
+// pour les autres comptes, il faut un plan premium.
+function hasZoneAccess(profile) {
+  return profile.role === 'admin'
+    || profile.role === 'editor'
+    || profile.plan === 'premium';
+}
+
+// Après une authentification réussie : accès accordé → on ouvre la zone,
+// sinon → on bascule sur la vue upgrade.
+async function proceedAfterAuth(userId) {
+  const profile = await fetchProfile(userId);
+  if (hasZoneAccess(profile)) {
+    removeOverlay();
+  } else {
+    switchView('upgrade');
+  }
+}
+
+function setError(el, message, kind) {
+  el.textContent = message;
+  el.className = 'sa-error visible' + (kind ? ' ' + kind : '');
+}
+function clearError(el) { el.className = 'sa-error'; }
+
 function buildOverlay() {
   injectStyles();
   document.documentElement.classList.add('sa-pending');
@@ -501,38 +641,60 @@ function buildOverlay() {
   overlayEl = wrapper.firstElementChild;
   document.body.appendChild(overlayEl);
 
-  const form = overlayEl.querySelector('#site-auth-form');
-  const emailIn = overlayEl.querySelector('#site-auth-email');
-  const passIn = overlayEl.querySelector('#site-auth-password');
-  const errEl = overlayEl.querySelector('#site-auth-error');
-  const submitBtn = overlayEl.querySelector('#site-auth-submit');
+  const loginForm = overlayEl.querySelector('#site-auth-form');
+  const signupForm = overlayEl.querySelector('#site-auth-signup-form');
+  const loginErr = overlayEl.querySelector('#site-auth-error');
+  const signupErr = overlayEl.querySelector('#site-auth-signup-error');
   const rememberIn = overlayEl.querySelector('#site-auth-remember');
-  const eyeBtn = overlayEl.querySelector('#site-auth-eye');
   const tiltEl = overlayEl.querySelector('#sa-tilt');
   const wrapEl = overlayEl.querySelector('.sa-card-wrap');
-  emailIn.focus();
 
-  // Affiche/masque le mot de passe
-  eyeBtn.addEventListener('click', () => {
-    const reveal = passIn.type === 'password';
-    passIn.type = reveal ? 'text' : 'password';
-    eyeBtn.classList.toggle('is-open', reveal);
-    eyeBtn.setAttribute('aria-label',
-      reveal ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+  overlayEl.querySelector('#site-auth-email').focus();
+
+  // Affiche/masque les mots de passe (tous les champs .sa-eye)
+  overlayEl.querySelectorAll('.sa-eye').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const input = btn.parentElement.querySelector('input');
+      const reveal = input.type === 'password';
+      input.type = reveal ? 'text' : 'password';
+      btn.classList.toggle('is-open', reveal);
+      btn.setAttribute('aria-label',
+        reveal ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+    });
   });
 
-  // Liens « mot de passe oublié » / « demander un accès » : gérés en interne
-  function showNote(msg) {
-    errEl.textContent = msg;
-    errEl.className = 'visible sa-info';
-  }
-  overlayEl.querySelector('#site-auth-forgot').addEventListener('click', (e) => {
+  // Bascule entre les vues login / signup
+  overlayEl.querySelector('#sa-go-signup').addEventListener('click', (e) => {
     e.preventDefault();
-    showNote('Réinitialisation gérée en interne — contactez votre administrateur Algor Access.');
+    clearError(loginErr); clearError(signupErr);
+    switchView('signup');
   });
-  overlayEl.querySelector('#site-auth-signup').addEventListener('click', (e) => {
+  overlayEl.querySelector('#sa-go-login').addEventListener('click', (e) => {
     e.preventDefault();
-    showNote('Les accès sont créés en interne — contactez votre administrateur Algor Access.');
+    clearError(loginErr); clearError(signupErr);
+    switchView('login');
+  });
+
+  // Mot de passe oublié — réinitialisation par email Supabase
+  overlayEl.querySelector('#site-auth-forgot').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = overlayEl.querySelector('#site-auth-email').value.trim();
+    if (!email) {
+      setError(loginErr, 'Saisissez votre email ci-dessus, puis recliquez sur « Mot de passe oublié ».', 'sa-info');
+      return;
+    }
+    try {
+      await supabase.auth.resetPasswordForEmail(email);
+      setError(loginErr, "Si un compte existe, un email de réinitialisation vient d'être envoyé.", 'sa-ok');
+    } catch (err) {
+      setError(loginErr, "Échec de l'envoi · réessayez plus tard.", null);
+    }
+  });
+
+  // Déconnexion depuis la vue upgrade
+  overlayEl.querySelector('#sa-logout-btn').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    location.reload();
   });
 
   // Tilt 3D au survol (désactivé si l'utilisateur réduit les animations)
@@ -548,26 +710,67 @@ function buildOverlay() {
     });
   }
 
-  form.addEventListener('submit', async (e) => {
+  // ── Connexion ──
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    errEl.className = '';
-    submitBtn.disabled = true;
-    submitBtn.classList.add('is-loading');
+    clearError(loginErr);
+    const btn = loginForm.querySelector('.sa-submit');
+    btn.disabled = true; btn.classList.add('is-loading');
     try {
       localStorage.setItem(REMEMBER_KEY, rememberIn.checked ? '1' : '0');
-      const { error } = await supabase.auth.signInWithPassword({
-        email: emailIn.value.trim(),
-        password: passIn.value,
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: overlayEl.querySelector('#site-auth-email').value.trim(),
+        password: overlayEl.querySelector('#site-auth-password').value,
       });
       if (error) throw error;
-      removeOverlay();
+      await proceedAfterAuth(data.user.id);
     } catch (err) {
       const code = (err && (err.status || err.code)) || 'auth';
-      errEl.textContent = 'Échec de connexion · code ' + code + ' · vérifier email et mot de passe';
-      errEl.className = 'visible';
-      passIn.value = '';
-      submitBtn.disabled = false;
-      submitBtn.classList.remove('is-loading');
+      setError(loginErr, 'Échec de connexion · code ' + code + ' · vérifier email et mot de passe', null);
+      overlayEl.querySelector('#site-auth-password').value = '';
+    } finally {
+      btn.disabled = false; btn.classList.remove('is-loading');
+    }
+  });
+
+  // ── Inscription ──
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError(signupErr);
+    const email = overlayEl.querySelector('#sa-signup-email').value.trim();
+    const password = overlayEl.querySelector('#sa-signup-password').value;
+    const confirm = overlayEl.querySelector('#sa-signup-confirm').value;
+
+    if (password.length < MIN_PASSWORD) {
+      setError(signupErr, `Le mot de passe doit faire au moins ${MIN_PASSWORD} caractères.`, null);
+      return;
+    }
+    if (password !== confirm) {
+      setError(signupErr, 'Les deux mots de passe ne correspondent pas.', null);
+      return;
+    }
+
+    const btn = signupForm.querySelector('.sa-submit');
+    btn.disabled = true; btn.classList.add('is-loading');
+    try {
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) throw error;
+      if (data.session && data.user) {
+        // Inscription immédiate (confirmation email désactivée) → compte gratuit
+        await proceedAfterAuth(data.user.id);
+      } else {
+        // Confirmation email requise
+        setError(signupErr, 'Compte créé. Vérifiez votre email pour le confirmer, puis connectez-vous.', 'sa-ok');
+        signupForm.reset();
+      }
+    } catch (err) {
+      const msg = (err && err.message) || '';
+      const friendly = /registered|already/i.test(msg)
+        ? 'Un compte existe déjà avec cet email.'
+        : 'Échec de l\'inscription · ' + (msg || 'réessayez plus tard');
+      setError(signupErr, friendly, null);
+    } finally {
+      btn.disabled = false; btn.classList.remove('is-loading');
     }
   });
 }
@@ -588,7 +791,13 @@ async function gateSite() {
   try {
     const { data } = await supabase.auth.getSession();
     if (data?.session?.user) {
-      window.dispatchEvent(new CustomEvent('algorAuthReady'));
+      const profile = await fetchProfile(data.session.user.id);
+      if (hasZoneAccess(profile)) {
+        window.dispatchEvent(new CustomEvent('algorAuthReady'));
+        return;
+      }
+      buildOverlay();
+      switchView('upgrade');
       return;
     }
   } catch (e) {

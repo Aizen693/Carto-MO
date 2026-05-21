@@ -6,8 +6,8 @@
  */
 
 import { initAuth, login, logout, getCurrentUser, requireRole } from './modules/auth.js?v=20260420a';
-import { getPoints } from './modules/firestore.js?v=20260513a';
-import { logActivity } from './modules/firestore.js?v=20260513a';
+import { getPoints } from './modules/firestore.js?v=20260521a';
+import { logActivity } from './modules/firestore.js?v=20260521a';
 import {
   initEditorMap, whenReady, renderAdminPoints, renderStaticPoints, onMapClick, onPointClick,
   flyToPoint, selectPoint, switchZone, destroy as destroyMap
@@ -15,9 +15,9 @@ import {
 import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js?v=20260420a';
 import { init as initActors, renderActorList, updateZone as updateActorZone } from './modules/actor-manager.js?v=20260420a';
 import { importGeoJSON, importStaticFiles, exportGeoJSON, exportCSV } from './modules/import-export.js?v=20260420a';
-import { purgeEmptyPoints, bulkSoftDeletePoints, restorePoints, pushToGitHub } from './modules/firestore.js?v=20260513a';
+import { purgeEmptyPoints, bulkSoftDeletePoints, restorePoints, pushToGitHub } from './modules/firestore.js?v=20260521a';
 import { renderActivityLog } from './modules/activity-log.js?v=20260420a';
-import { renderUserList } from './modules/user-manager.js?v=20260420a';
+import { renderUserList } from './modules/user-manager.js?v=20260521a';
 
 // Purge tout ancien token GitHub stocke cote client (migre vers Edge Function 2026-05-13)
 try { localStorage.removeItem('carto_gh_token'); } catch (_) {}
