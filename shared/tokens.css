@@ -3,39 +3,40 @@
    Couleurs, typo, spacing, motion, line-height.
    REGLE : aucune valeur hardcodee dans les composants. Si un
    token manque, l'ajouter ici — pas en local dans un module.
-   DA : dark #111214 / or #c49a3c / zero border-radius / OSINT Palantir
+   DA UNIFIEE 2026-05-20 : clair #F4F2F8 / violet #6B3FA0 / Plus Jakarta Sans
+   (alignee sur la homepage v3 — voir shared/home/styles.css)
    ═══════════════════════════════════════════════════════════ */
 :root {
   /* ── Couleurs backgrounds ────────────────────────────── */
-  --bg:    #111214;  /* fond principal */
-  --bg1:   #161819;  /* panels, header */
-  --bg2:   #1b1d1f;  /* hover, elevated */
-  --bg3:   #212326;  /* input bg */
-  --bg4:   #2a2c30;  /* slider track */
+  --bg:    #F4F2F8;  /* fond principal */
+  --bg1:   #FFFFFF;  /* panels, header */
+  --bg2:   #FFFFFF;  /* hover, elevated */
+  --bg3:   #F1EDF7;  /* input bg */
+  --bg4:   #E7E0F2;  /* slider track */
 
   /* ── Couleurs traits ─────────────────────────────────── */
-  --ln:    rgba(255,255,255,0.07);  /* trait discret */
-  --ln1:   rgba(255,255,255,0.12);  /* trait standard */
-  --ln2:   rgba(255,255,255,0.20);  /* trait marque */
+  --ln:    rgba(24,20,40,0.07);  /* trait discret */
+  --ln1:   rgba(24,20,40,0.12);  /* trait standard */
+  --ln2:   rgba(24,20,40,0.20);  /* trait marque */
 
-  /* ── Couleurs texte (WCAG AA valide) ─────────────────── */
-  --tx:    #c8cdd6;  /* body 11.74:1 sur bg */
-  --tx1:   #8e96a2;  /* labels 6.28:1 sur bg (v2026-04) */
-  --tx2:   #6a7280;  /* faded 3.87:1 sur bg, 3:1 min non-text (v2026-04) */
-  --txh:   #e8ecf2;  /* high contrast 15.81:1 */
+  /* ── Couleurs texte ──────────────────────────────────── */
+  --tx:    #3A3450;  /* body */
+  --tx1:   #6E6982;  /* labels */
+  --tx2:   #A19DB0;  /* faded */
+  --txh:   #181428;  /* high contrast */
 
-  /* ── Accent or ─────────────────────────────────────── */
-  --ac:    #c49a3c;  /* or principal */
-  --ach:   #e0b452;  /* or hover */
-  --acd:   rgba(196,154,60,0.09);  /* or-soft fill */
-  --acb:   rgba(196,154,60,0.20);  /* or-soft border */
+  /* ── Accent violet (logo Algor) ──────────────────────── */
+  --ac:    #6B3FA0;  /* violet principal */
+  --ach:   #5A2F8C;  /* violet hover */
+  --acd:   rgba(107,63,160,0.08);  /* violet-soft fill */
+  --acb:   rgba(107,63,160,0.22);  /* violet-soft border */
 
   /* ── Status ──────────────────────────────────────────── */
-  --err:   #d76060;  /* erreur 5.12:1 sur bg (v2026-04) */
+  --err:   #B83A4A;  /* erreur */
 
-  /* ── Familles typo (refonte editoriale Carto-MO 2026-05) ── */
-  --bc:    'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --b:     'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  /* ── Familles typo ───────────────────────────────────── */
+  --bc:    'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --b:     'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --m:     'JetBrains Mono', 'Courier New', monospace;
   --serif: 'Instrument Serif', Georgia, serif;
 

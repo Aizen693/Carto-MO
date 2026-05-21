@@ -7,10 +7,10 @@
 <script type="module" src="../shared/site-auth.js?v=20260521b"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
-<link rel="stylesheet" href="../shared/styles.css?v=20260420h">
+<link rel="stylesheet" href="../shared/styles.css?v=20260520ai">
 <style>
 .sb-cat-label {
   padding:8px 12px 3px;
@@ -284,12 +284,14 @@ const ZONE_CONFIG = {
   BADGE_ALL_TEXT: 'Toutes · Jan–Avril 2026',
   TUTORIAL_KEY: 'algor-tutorial-sahel-seen',
   // Pas de points isoles par periode — slider/play pilote par les dates des calques
-  CALQUES_ONLY: true
+  CALQUES_ONLY: true,
+  // Donnees archivees : carte videe, donnees accessibles via /dashboard/
+  DISABLE_LAYERS_AND_POINTS: false
 };
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
 <script type="module" src="../shared/brief-ia.js?v=20260518i"></script>
-<script src="../shared/engine.js?v=20260518i"></script>
+<script src="../shared/engine.js?v=20260519a"></script>
 <script>
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
 (function() {
@@ -1025,7 +1027,7 @@ window.focusGeocoder = function() {
 </script>
 
 <!-- SLIDER DATES (CALQUES_ONLY) -->
-<script src="../shared/calque-timeline.js?v=20260518a"></script>
+<script src="../shared/calque-timeline.js?v=20260519a"></script>
 <script>
 AlgorCalqueTimeline.init({
   sources: [

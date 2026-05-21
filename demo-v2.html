@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carto-MO V2 — Démo socle (refonte 2026-05)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
+
+  <link rel="stylesheet" href="./shared/styles.css?v=20260420h">
+  <link rel="stylesheet" href="./shared/v2/tokens-v2.css?v=20260519b">
+
+  <!-- brief-ia.js attend window.algorAuth.supabase. Pour la demo on stub. -->
+  <script>
+    // Stub minimal : permet a brief-ia.js de se charger sans site-auth.
+    // Le bouton sera visible mais l'appel echouera ('demo mode').
+    window.algorAuth = window.algorAuth || { supabase: null };
+  </script>
+  <script src="./shared/brief-ia.js?v=20260519b"></script>
+
+  <style>
+    /* Layout demo : header minimal + map plein, banniere V2 */
+    body { overflow: hidden; }
+    #demo-banner {
+      position: fixed; top: 0; left: 0; right: 0; height: 32px;
+      background: var(--bg1);
+      border-bottom: 1px solid var(--ac);
+      display: flex; align-items: center; gap: 16px;
+      padding: 0 16px; z-index: 100;
+      font-family: var(--m);
+    }
+    #demo-banner-brand {
+      font: 600 10px/1 var(--bc);
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ac);
+    }
+    #demo-banner-spacer { flex: 1; }
+    #demo-banner-stat {
+      font: 500 9px/1 var(--m);
+      color: var(--tx1);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    #demo-banner-stat strong { color: var(--txh); }
+    .demo-style-switch {
+      display: flex; border-left: 1px solid var(--ln); height: 100%;
+    }
+    .demo-style-switch button {
+      background: transparent; border: none; border-right: 1px solid var(--ln);
+      color: var(--tx2); font: 500 9px/1 var(--m);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0 12px; cursor: pointer; height: 100%;
+      transition: color var(--mo-fast), background var(--mo-fast);
+    }
+    .demo-style-switch button:last-child { border-right: none; }
+    .demo-style-switch button:hover { color: var(--ach); background: var(--bg2); }
+    .demo-style-switch button.active { color: var(--ach); background: var(--acd); }
+
+    #map { position: fixed; top: 32px; left: 0; right: 0; bottom: 0; }
+    #demo-loader {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: var(--bg1); border: 1px solid var(--ln); border-top: 2px solid var(--ac);
+      padding: 14px 24px; z-index: 200;
+      font: 400 9px/1 var(--m); color: var(--tx1);
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    #demo-legend {
+      position: fixed; bottom: 24px; left: 16px; z-index: 50;
+      background: rgba(17,18,20,0.95);
+      border: 1px solid var(--ln);
+      border-top: 1px solid var(--ac);
+      padding: 12px 14px;
+      min-width: 220px;
+      font-family: var(--m);
+    }
+    #demo-legend h3 {
+      font: 600 8px/1 var(--bc);
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--tx2); margin-bottom: 10px;
+    }
+    .dl-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 4px 0;
+      font: 400 9px/1 var(--m);
+      color: var(--tx1);
+      letter-spacing: 0.06em;
+    }
+    .dl-dot {
+      width: 10px; height: 10px;
+      flex-shrink: 0;
+    }
+    .dl-count {
+      margin-left: auto;
+      color: var(--tx2);
+      font-size: 8px;
+    }
+
+    /* ═ Overrides Mapbox popup pour le V2 ═ */
+    .mapboxgl-popup-content {
+      padding: 0 !important;
+      background: rgba(17,18,20,0.99) !important;
+      border: 1px solid var(--ln1) !important;
+      border-left: none !important;  /* la bar sev est dans .pv2-bar */
+      border-radius: 0 !important;
+      max-width: 320px !important;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.7) !important;
+    }
+    .mapboxgl-popup-tip { display: none !important; }
+    .mapboxgl-popup-close-button {
+      color: var(--tx1) !important;
+      font-size: 18px !important;
+      line-height: 1 !important;
+      padding: 6px 10px !important;
+      top: 0 !important; right: 0 !important;
+      background: transparent !important; border: none !important;
+      z-index: 99 !important;
+    }
+    .mapboxgl-popup-close-button:hover { color: var(--ach) !important; }
+  </style>
+</head>
+<body>
+
+<div id="demo-banner">
+  <span id="demo-banner-brand">Carto-MO V2 · Démo socle</span>
+  <span style="color:var(--tx2);font-size:9px;letter-spacing:0.08em;">Étapes 1+2+4 — tokens, style override, marqueur 4-axes, popup compact</span>
+  <div id="demo-banner-spacer"></div>
+  <span id="demo-banner-stat"><strong id="demo-counter">…</strong></span>
+  <div class="demo-style-switch">
+    <button type="button" data-style="cartodb-dark" class="active">Dark</button>
+    <button type="button" data-style="cartodb-voyager">Voyager</button>
+    <button type="button" data-style="esri-imagery">Satellite</button>
+    <button type="button" data-style="mapbox-dark" title="Necessite token Mapbox autorise (algoracces.fr)">Mapbox</button>
+  </div>
+</div>
+
+<div id="map"></div>
+
+<div id="demo-loader">Chargement…</div>
+
+<div id="demo-legend">
+  <h3>Sévérité</h3>
+  <div class="dl-row"><div class="dl-dot" style="background:#c0392b"></div>Critique <span class="dl-count">≥ 50 victimes</span></div>
+  <div class="dl-row"><div class="dl-dot" style="background:#d97742"></div>Élevée <span class="dl-count">≥ 10 victimes</span></div>
+  <div class="dl-row"><div class="dl-dot" style="background:#c49a3c"></div>Modérée <span class="dl-count">≥ 1 victime</span></div>
+  <div class="dl-row"><div class="dl-dot" style="background:#5a8a9a"></div>Faible <span class="dl-count">non-cinétique</span></div>
+  <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--ln);font:400 8px/1.4 var(--m);color:var(--tx2);letter-spacing:0.04em;">
+    Bordure 1px = couleur acteur · opacité = fiabilité · pulse = sévérité &ge; 3
+  </div>
+</div>
+
+<script>
+  // Configuration de la demo — utilise un sous-ensemble Sahel
+  window.DEMO_CONFIG = {
+    TOKEN: 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg',
+    STYLE_KEY: 'cartodb-dark', // fond raster public — fonctionne sans token Mapbox
+    CENTER: [-2.5, 15.5],
+    ZOOM: 5,
+    BEARING: 0,
+    BRIEF_SECTOR: 'evenements',
+    GEOJSON_URLS: [
+      './sahel/2026-jan-01-15.geojson',
+      './sahel/2026-jan-16-31.geojson',
+      './sahel/2026-fev-01-14.geojson',
+      './sahel/2026-fev-15-28.geojson',
+      './sahel/2026-mars-01-15.geojson',
+      './sahel/2026-mars-16-31.geojson',
+      './sahel/2026-avr-01-15.geojson',
+    ],
+  };
+
+  // Style switcher (post-engine boot)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.demo-style-switch button');
+    if (!btn) return;
+    document.querySelectorAll('.demo-style-switch button').forEach((b) => b.classList.toggle('active', b === btn));
+    if (window.cartoMoV2) window.cartoMoV2.reloadStyle(btn.dataset.style);
+  });
+</script>
+
+<script type="module" src="./shared/v2/engine-v2.js?v=20260519b"></script>
+</body>
+</html>
