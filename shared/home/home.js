@@ -270,7 +270,8 @@ function ConsoleTab({
 }
 function ConsoleView({
   onBack,
-  onArchives
+  onArchives,
+  onVeille
 }) {
   return /*#__PURE__*/React.createElement("main", {
     className: "view-enter view-enter-active"
@@ -314,10 +315,10 @@ function ConsoleView({
       d: "M10 12h4"
     }))
   }), /*#__PURE__*/React.createElement(ConsoleTab, {
-    soon: true,
+    onClick: onVeille,
     label: "Veille",
     popTitle: "Veille",
-    popText: "Tableau de bord de veille en temps reel. Bientot disponible.",
+    popText: "Agregateur d'articles OSINT \u2014 chargement, filtres, scoring et exports. Outil de veille interne.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"
     }), /*#__PURE__*/React.createElement("circle", {
@@ -358,6 +359,41 @@ function ConsoleView({
       d: "M8.2 7.3l7.6 3.4M8.2 16.7l7.6-3.4"
     }))
   }))));
+}
+
+// Page « Veille » — outil de veille OSINT (app Streamlit Algor Int) integre en cadre.
+const VEILLE_URL = 'https://carto-mo-d95ewgm9x6zzfugtcpdst8.streamlit.app/';
+function VeilleView({
+  onBack
+}) {
+  return /*#__PURE__*/React.createElement("main", {
+    className: "view-enter view-enter-active"
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "console-page"
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "console-back",
+    href: "#",
+    onClick: e => {
+      e.preventDefault();
+      onBack();
+    }
+  }, "\u2190 Retour a la console"), /*#__PURE__*/React.createElement("h1", {
+    className: "hero__title"
+  }, "Veille ", /*#__PURE__*/React.createElement("em", null, "OSINT")), /*#__PURE__*/React.createElement("p", {
+    className: "hero__lede"
+  }, "Agregateur d'articles Inoreader \u2014 chargement a la demande, filtres, scoring local et exports. Outil de travail interne des analystes Algor Int."), /*#__PURE__*/React.createElement("div", {
+    className: "veille-frame"
+  }, /*#__PURE__*/React.createElement("iframe", {
+    className: "veille-frame__iframe",
+    src: VEILLE_URL + '?embed=true',
+    title: "Outil de veille OSINT Algor Int",
+    loading: "lazy"
+  })), /*#__PURE__*/React.createElement("a", {
+    className: "veille-frame__fallback",
+    href: VEILLE_URL,
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, "Ouvrir en plein ecran \u2197")));
 }
 
 // Page « Archives » — dashboard de tous les points, par theatre (lecture base Supabase).
@@ -613,6 +649,7 @@ Object.assign(window, {
   VideoBand,
   ConsoleView,
   ArchivesView,
+  VeilleView,
   Arrow,
   ArrowDiag
 });

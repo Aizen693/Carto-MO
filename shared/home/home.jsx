@@ -192,7 +192,7 @@ function ConsoleTab({ href, soon, onClick, icon, label, popTitle, popText }) {
   );
 }
 
-function ConsoleView({ onBack, onArchives }) {
+function ConsoleView({ onBack, onArchives, onVeille }) {
   return (
     <main className="view-enter view-enter-active">
       <section className="console-page">
@@ -222,10 +222,10 @@ function ConsoleView({ onBack, onArchives }) {
             icon={<><path d="M21 8v13H3V8" /><path d="M1 3h22v5H1z" /><path d="M10 12h4" /></>}
           />
           <ConsoleTab
-            soon
+            onClick={onVeille}
             label="Veille"
             popTitle="Veille"
-            popText="Tableau de bord de veille en temps reel. Bientot disponible."
+            popText="Agregateur d'articles OSINT — chargement, filtres, scoring et exports. Outil de veille interne."
             icon={<><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" /></>}
           />
           <ConsoleTab
@@ -243,6 +243,37 @@ function ConsoleView({ onBack, onArchives }) {
             icon={<><circle cx="6" cy="6" r="2.5" /><circle cx="6" cy="18" r="2.5" /><circle cx="18" cy="12" r="2.5" /><path d="M8.2 7.3l7.6 3.4M8.2 16.7l7.6-3.4" /></>}
           />
         </div>
+      </section>
+    </main>
+  );
+}
+
+// Page « Veille » — outil de veille OSINT (app Streamlit Algor Int) integre en cadre.
+const VEILLE_URL = 'https://carto-mo-d95ewgm9x6zzfugtcpdst8.streamlit.app/';
+
+function VeilleView({ onBack }) {
+  return (
+    <main className="view-enter view-enter-active">
+      <section className="console-page">
+        <a className="console-back" href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>
+          &larr; Retour a la console
+        </a>
+        <h1 className="hero__title">Veille <em>OSINT</em></h1>
+        <p className="hero__lede">
+          Agregateur d'articles Inoreader — chargement a la demande, filtres, scoring local et exports. Outil de travail interne des analystes Algor Int.
+        </p>
+
+        <div className="veille-frame">
+          <iframe
+            className="veille-frame__iframe"
+            src={VEILLE_URL + '?embed=true'}
+            title="Outil de veille OSINT Algor Int"
+            loading="lazy"
+          />
+        </div>
+        <a className="veille-frame__fallback" href={VEILLE_URL} target="_blank" rel="noopener noreferrer">
+          Ouvrir en plein ecran ↗
+        </a>
       </section>
     </main>
   );
@@ -483,4 +514,4 @@ function DashCloseIcon({ size = 14 }) {
   </svg>);
 }
 
-Object.assign(window, { HomeView, VideoBand, ConsoleView, ArchivesView, Arrow, ArrowDiag });
+Object.assign(window, { HomeView, VideoBand, ConsoleView, ArchivesView, VeilleView, Arrow, ArrowDiag });
