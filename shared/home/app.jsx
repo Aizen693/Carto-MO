@@ -12,13 +12,19 @@ function PopCheck() {
 }
 
 function App() {
-  const [view, setView] = useState('home');
+  // Ancre #console : ouvre directement la Console (retour depuis /cloud/, /admin/...).
+  const [view, setView] = useState(
+    window.location.hash === '#console' ? 'console' : 'home'
+  );
   const [clock, setClock] = useState('--:--');
 
   // Lock theme + accent (no Tweaks panel in production).
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', 'light');
     document.documentElement.setAttribute('data-accent', 'violet');
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname);
+    }
   }, []);
 
   // Live clock (Paris)
