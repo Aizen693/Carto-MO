@@ -41,6 +41,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# Logo Algor Access — coin haut-gauche
+st.logo("algor_int_logo.jpg", size="large")
+
 st.markdown(
     """
     <style>
@@ -51,8 +54,18 @@ st.markdown(
     [data-testid="stSidebar"], button, input, textarea, select {
         font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
-    [data-testid="stAppViewContainer"] { background: #FFFFFF; }
-    [data-testid="stHeader"] { background: transparent; }
+    .stApp, [data-testid="stAppViewContainer"] { background: #FFFFFF; }
+
+    /* Header translucide (effet verre du site) */
+    [data-testid="stHeader"] {
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: saturate(140%) blur(14px);
+        -webkit-backdrop-filter: saturate(140%) blur(14px);
+        border-bottom: 1px solid rgba(24,20,40,0.08);
+    }
+
+    /* Logo coin haut-gauche */
+    [data-testid="stLogo"] { height: 2.6rem; width: auto; }
 
     /* Titres */
     h1, h2, h3, h4, h5 {
@@ -73,16 +86,22 @@ st.markdown(
     }
     [data-testid="stSidebar"] h2 { color: #6B3FA0; }
 
-    /* Boutons */
+    /* Boutons — rayon, transition douce, survol surelevé (effet du site) */
     .stButton > button, .stDownloadButton > button, .stFormSubmitButton > button {
         border-radius: 8px;
         font-weight: 600;
         border: 1px solid rgba(24,20,40,0.14);
-        transition: border-color .15s ease, background .15s ease, color .15s ease;
+        transition: border-color .15s cubic-bezier(0.22,0.61,0.36,1),
+                    background .15s cubic-bezier(0.22,0.61,0.36,1),
+                    color .15s cubic-bezier(0.22,0.61,0.36,1),
+                    transform .15s cubic-bezier(0.22,0.61,0.36,1),
+                    box-shadow .15s cubic-bezier(0.22,0.61,0.36,1);
     }
     .stButton > button:hover, .stDownloadButton > button:hover {
         border-color: #6B3FA0;
         color: #6B3FA0;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 22px -12px rgba(107,63,160,0.5);
     }
     .stButton > button[kind="primary"],
     .stFormSubmitButton > button[kind="primary"],
@@ -93,25 +112,37 @@ st.markdown(
         color: #FFFFFF;
     }
     .stButton > button[kind="primary"]:hover,
+    .stFormSubmitButton > button[kind="primary"]:hover,
     [data-testid="stBaseButton-primary"]:hover,
     [data-testid="stBaseButton-primaryFormSubmit"]:hover {
         background: #5A2F8C;
         border-color: #5A2F8C;
         color: #FFFFFF;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 26px -10px rgba(107,63,160,0.55);
     }
 
-    /* Metrics */
+    /* Metrics — cartes, ombre douce, survol surelevé */
     [data-testid="stMetric"] {
         background: #FFFFFF;
         border: 1px solid rgba(24,20,40,0.08);
         border-radius: 12px;
         padding: 14px 16px;
+        box-shadow: 0 1px 0 rgba(24,20,40,0.04), 0 8px 24px -8px rgba(24,20,40,0.08);
+        transition: transform .15s cubic-bezier(0.22,0.61,0.36,1),
+                    box-shadow .15s cubic-bezier(0.22,0.61,0.36,1);
+    }
+    [data-testid="stMetric"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 32px -12px rgba(46,24,87,0.18);
     }
     [data-testid="stMetricValue"] { color: #6B3FA0; font-weight: 700; }
     [data-testid="stMetricLabel"] {
         color: #6E6982;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 0.68rem;
     }
 
     /* Champs de saisie */
@@ -128,17 +159,31 @@ st.markdown(
     [data-testid="stSidebar"] [role="radiogroup"] label {
         border-radius: 8px;
         padding: 2px 6px;
+        transition: background .15s cubic-bezier(0.22,0.61,0.36,1);
+    }
+    [data-testid="stSidebar"] [role="radiogroup"] label:hover {
+        background: rgba(107,63,160,0.06);
     }
 
-    /* Expanders */
+    /* Expanders — carte arrondie, ombre douce */
     [data-testid="stExpander"] {
         border: 1px solid rgba(24,20,40,0.08);
         border-radius: 12px;
+        box-shadow: 0 1px 0 rgba(24,20,40,0.04), 0 8px 24px -10px rgba(24,20,40,0.06);
     }
     [data-testid="stExpander"] summary:hover { color: #6B3FA0; }
 
+    /* Tableaux */
+    [data-testid="stDataFrame"], [data-testid="stTable"] {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
     /* Sliders */
     [data-testid="stSlider"] [role="slider"] { background-color: #6B3FA0; }
+
+    /* Alertes */
+    [data-testid="stAlert"] { border-radius: 10px; }
 
     /* Liens */
     a, a:visited { color: #6B3FA0; }
