@@ -488,6 +488,8 @@ img, svg { display: block; max-width: 100%; }
 
 /* Above background */
 .app-header, main, .video-band, .da-fab, .panel-overlay, .side-panel { position: relative; z-index: 10; }
+/* Header au-dessus de main : sinon le popover premium est traverse par le titre. */
+.app-header { z-index: 40; }
 
 /* ═══════════════════════════════════════════════════════
    GLOBE / SPHERE
