@@ -1,5 +1,5 @@
 /* global React */
-// Page 1 — Accueil interne Carto-MO / Algor Int
+// Page 1 — Accueil client Algor Access (plateforme OSINT)
 
 function HomeView({ onEnter, clock, videoStyle }) {
   return (
@@ -7,20 +7,20 @@ function HomeView({ onEnter, clock, videoStyle }) {
       <section className="hero">
         <div className="hero__copy">
           <div className="hero__eyebrow">
-            <span>console</span>
+            <span>plateforme</span>
             <span className="hero__eyebrow-sep" />
-            <span>outil interne</span>
+            <span>intelligence OSINT</span>
             <span className="hero__eyebrow-sep" />
-            <span className="hero__eyebrow-muted">Algor Int · usage interne · 2026</span>
+            <span className="hero__eyebrow-muted">Algor Access · 2026</span>
           </div>
 
           <h1 className="hero__title">
-            Console interne de<br />
-            <em>cartographie</em> OSINT
+            La <em>cartographie</em> OSINT<br />
+            des theatres a risque
           </h1>
 
           <p className="hero__lede">
-            Outil de travail des analystes Algor Int sur six theatres — Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement.
+            Six theatres geopolitiques suivis en continu — Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram, agreges sur une carte unique : chaque evenement source, date et auditable.
           </p>
 
           <div className="hero__cta-row">

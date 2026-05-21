@@ -1,7 +1,7 @@
 (function () {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* global React */
-// Page 1 — Accueil interne Carto-MO / Algor Int
+// Page 1 — Accueil client Algor Access (plateforme OSINT)
 
 function HomeView({
   onEnter,
@@ -16,17 +16,17 @@ function HomeView({
     className: "hero__copy"
   }, /*#__PURE__*/React.createElement("div", {
     className: "hero__eyebrow"
-  }, /*#__PURE__*/React.createElement("span", null, "console"), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", null, "plateforme"), /*#__PURE__*/React.createElement("span", {
     className: "hero__eyebrow-sep"
-  }), /*#__PURE__*/React.createElement("span", null, "outil interne"), /*#__PURE__*/React.createElement("span", {
+  }), /*#__PURE__*/React.createElement("span", null, "intelligence OSINT"), /*#__PURE__*/React.createElement("span", {
     className: "hero__eyebrow-sep"
   }), /*#__PURE__*/React.createElement("span", {
     className: "hero__eyebrow-muted"
-  }, "Algor Int \xB7 usage interne \xB7 2026")), /*#__PURE__*/React.createElement("h1", {
+  }, "Algor Access \xB7 2026")), /*#__PURE__*/React.createElement("h1", {
     className: "hero__title"
-  }, "Console interne de", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "cartographie"), " OSINT"), /*#__PURE__*/React.createElement("p", {
+  }, "La ", /*#__PURE__*/React.createElement("em", null, "cartographie"), " OSINT", /*#__PURE__*/React.createElement("br", null), "des theatres a risque"), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Outil de travail des analystes Algor Int sur six theatres \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement."), /*#__PURE__*/React.createElement("div", {
+  }, "Six theatres geopolitiques suivis en continu \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram, agreges sur une carte unique : chaque evenement source, date et auditable."), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
   }, /*#__PURE__*/React.createElement("button", {
     className: "btn btn--primary btn--lg btn--neon",
