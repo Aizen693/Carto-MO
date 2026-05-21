@@ -14,15 +14,7 @@ function HomeView({
     className: "hero"
   }, /*#__PURE__*/React.createElement("div", {
     className: "hero__copy"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "hero__eyebrow"
-  }, /*#__PURE__*/React.createElement("span", null, "plateforme"), /*#__PURE__*/React.createElement("span", {
-    className: "hero__eyebrow-sep"
-  }), /*#__PURE__*/React.createElement("span", null, "intelligence OSINT"), /*#__PURE__*/React.createElement("span", {
-    className: "hero__eyebrow-sep"
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "hero__eyebrow-muted"
-  }, "Algor Access \xB7 2026")), /*#__PURE__*/React.createElement("h1", {
+  }, /*#__PURE__*/React.createElement("h1", {
     className: "hero__title"
   }, "Anticiper les", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "risques operationnels")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"

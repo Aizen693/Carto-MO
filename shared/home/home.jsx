@@ -6,14 +6,6 @@ function HomeView({ onEnter, clock, videoStyle }) {
     <main className="view-enter view-enter-active">
       <section className="hero">
         <div className="hero__copy">
-          <div className="hero__eyebrow">
-            <span>plateforme</span>
-            <span className="hero__eyebrow-sep" />
-            <span>intelligence OSINT</span>
-            <span className="hero__eyebrow-sep" />
-            <span className="hero__eyebrow-muted">Algor Access · 2026</span>
-          </div>
-
           <h1 className="hero__title">
             Anticiper les<br />
             <em>risques operationnels</em>
