@@ -366,34 +366,23 @@ const VEILLE_URL = 'https://carto-mo-d95ewgm9x6zzfugtcpdst8.streamlit.app/';
 function VeilleView({
   onBack
 }) {
-  return /*#__PURE__*/React.createElement("main", {
-    className: "view-enter view-enter-active"
-  }, /*#__PURE__*/React.createElement("section", {
-    className: "console-page"
-  }, /*#__PURE__*/React.createElement("a", {
-    className: "console-back",
-    href: "#",
-    onClick: e => {
-      e.preventDefault();
-      onBack();
-    }
-  }, "\u2190 Retour a la console"), /*#__PURE__*/React.createElement("h1", {
-    className: "hero__title"
-  }, "Veille ", /*#__PURE__*/React.createElement("em", null, "OSINT")), /*#__PURE__*/React.createElement("p", {
-    className: "hero__lede"
-  }, "Agregateur d'articles Inoreader \u2014 chargement a la demande, filtres, scoring local et exports. Outil de travail interne des analystes Algor Int."), /*#__PURE__*/React.createElement("div", {
-    className: "veille-frame"
+  return ReactDOM.createPortal(/*#__PURE__*/React.createElement("div", {
+    className: "veille-fs"
   }, /*#__PURE__*/React.createElement("iframe", {
-    className: "veille-frame__iframe",
+    className: "veille-fs__iframe",
     src: VEILLE_URL + '?embed=true',
-    title: "Outil de veille OSINT Algor Int",
-    loading: "lazy"
-  })), /*#__PURE__*/React.createElement("a", {
-    className: "veille-frame__fallback",
+    title: "Outil de veille OSINT Algor Int"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "veille-fs__bar"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "veille-fs__btn",
+    onClick: onBack
+  }, "\u2190 Retour a la console"), /*#__PURE__*/React.createElement("a", {
+    className: "veille-fs__btn veille-fs__btn--ghost",
     href: VEILLE_URL,
     target: "_blank",
     rel: "noopener noreferrer"
-  }, "Ouvrir en plein ecran \u2197")));
+  }, "Ouvrir dans un onglet \u2197"))), document.body);
 }
 
 // Page « Archives » — dashboard de tous les points, par theatre (lecture base Supabase).

@@ -252,30 +252,24 @@ function ConsoleView({ onBack, onArchives, onVeille }) {
 const VEILLE_URL = 'https://carto-mo-d95ewgm9x6zzfugtcpdst8.streamlit.app/';
 
 function VeilleView({ onBack }) {
-  return (
-    <main className="view-enter view-enter-active">
-      <section className="console-page">
-        <a className="console-back" href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>
+  return ReactDOM.createPortal(
+    <div className="veille-fs">
+      <iframe
+        className="veille-fs__iframe"
+        src={VEILLE_URL + '?embed=true'}
+        title="Outil de veille OSINT Algor Int"
+      />
+      <div className="veille-fs__bar">
+        <button className="veille-fs__btn" onClick={onBack}>
           &larr; Retour a la console
+        </button>
+        <a className="veille-fs__btn veille-fs__btn--ghost" href={VEILLE_URL}
+           target="_blank" rel="noopener noreferrer">
+          Ouvrir dans un onglet ↗
         </a>
-        <h1 className="hero__title">Veille <em>OSINT</em></h1>
-        <p className="hero__lede">
-          Agregateur d'articles Inoreader — chargement a la demande, filtres, scoring local et exports. Outil de travail interne des analystes Algor Int.
-        </p>
-
-        <div className="veille-frame">
-          <iframe
-            className="veille-frame__iframe"
-            src={VEILLE_URL + '?embed=true'}
-            title="Outil de veille OSINT Algor Int"
-            loading="lazy"
-          />
-        </div>
-        <a className="veille-frame__fallback" href={VEILLE_URL} target="_blank" rel="noopener noreferrer">
-          Ouvrir en plein ecran ↗
-        </a>
-      </section>
-    </main>
+      </div>
+    </div>,
+    document.body
   );
 }
 
