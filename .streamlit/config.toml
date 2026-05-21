@@ -1,0 +1,8 @@
+# Theme Algor Access — direction artistique violet/blanc
+[theme]
+base = "light"
+primaryColor = "#6B3FA0"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F5F3FA"
+textColor = "#181428"
+font = "sans serif"

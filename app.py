@@ -44,6 +44,110 @@ st.set_page_config(
 st.markdown(
     """
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    /* ── Algor Access — direction artistique violet/blanc ───────────────── */
+    html, body, .stApp, [data-testid="stAppViewContainer"],
+    [data-testid="stSidebar"], button, input, textarea, select {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+    [data-testid="stAppViewContainer"] { background: #FFFFFF; }
+    [data-testid="stHeader"] { background: transparent; }
+
+    /* Titres */
+    h1, h2, h3, h4, h5 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        color: #181428;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+    h1 { font-size: 1.95rem; }
+    h2 { font-size: 1.35rem; }
+    h3 { font-size: 1.1rem; }
+
+    /* Sidebar */
+    [data-testid="stSidebar"] {
+        min-width: 320px; max-width: 380px;
+        background: #F5F3FA;
+        border-right: 1px solid rgba(24,20,40,0.08);
+    }
+    [data-testid="stSidebar"] h2 { color: #6B3FA0; }
+
+    /* Boutons */
+    .stButton > button, .stDownloadButton > button, .stFormSubmitButton > button {
+        border-radius: 8px;
+        font-weight: 600;
+        border: 1px solid rgba(24,20,40,0.14);
+        transition: border-color .15s ease, background .15s ease, color .15s ease;
+    }
+    .stButton > button:hover, .stDownloadButton > button:hover {
+        border-color: #6B3FA0;
+        color: #6B3FA0;
+    }
+    .stButton > button[kind="primary"],
+    .stFormSubmitButton > button[kind="primary"],
+    [data-testid="stBaseButton-primary"],
+    [data-testid="stBaseButton-primaryFormSubmit"] {
+        background: #6B3FA0;
+        border-color: #6B3FA0;
+        color: #FFFFFF;
+    }
+    .stButton > button[kind="primary"]:hover,
+    [data-testid="stBaseButton-primary"]:hover,
+    [data-testid="stBaseButton-primaryFormSubmit"]:hover {
+        background: #5A2F8C;
+        border-color: #5A2F8C;
+        color: #FFFFFF;
+    }
+
+    /* Metrics */
+    [data-testid="stMetric"] {
+        background: #FFFFFF;
+        border: 1px solid rgba(24,20,40,0.08);
+        border-radius: 12px;
+        padding: 14px 16px;
+    }
+    [data-testid="stMetricValue"] { color: #6B3FA0; font-weight: 700; }
+    [data-testid="stMetricLabel"] {
+        color: #6E6982;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* Champs de saisie */
+    [data-baseweb="input"], [data-baseweb="textarea"], [data-baseweb="select"] > div {
+        border-radius: 8px;
+    }
+    .stTextInput input:focus, .stNumberInput input:focus,
+    .stDateInput input:focus, .stTextArea textarea:focus {
+        border-color: #6B3FA0;
+        box-shadow: 0 0 0 1px #6B3FA0;
+    }
+
+    /* Navigation radio (sidebar) */
+    [data-testid="stSidebar"] [role="radiogroup"] label {
+        border-radius: 8px;
+        padding: 2px 6px;
+    }
+
+    /* Expanders */
+    [data-testid="stExpander"] {
+        border: 1px solid rgba(24,20,40,0.08);
+        border-radius: 12px;
+    }
+    [data-testid="stExpander"] summary:hover { color: #6B3FA0; }
+
+    /* Sliders */
+    [data-testid="stSlider"] [role="slider"] { background-color: #6B3FA0; }
+
+    /* Liens */
+    a, a:visited { color: #6B3FA0; }
+    a:hover { color: #5A2F8C; }
+
+    /* Separateurs */
+    hr { border-color: rgba(24,20,40,0.08); }
+
+    /* Layout (conserve de l'original) */
     [data-testid="stSidebar"] { min-width: 320px; max-width: 380px; }
     .metric-row { display:flex; gap:12px; margin-bottom:8px; }
     .stDataFrame { font-size: 13px; }
