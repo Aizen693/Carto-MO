@@ -563,6 +563,17 @@ img, svg { display: block; max-width: 100%; }
   min-height: 78vh;
 }
 .hero__copy { max-width: 600px; position: relative; z-index: 2; }
+
+/* Page « Console interne » (vue console) */
+.console-page {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 90px 48px 120px;
+}
+.console-page .eyebrow { display: block; margin-bottom: 18px; }
+.console-page .hero__title,
+.console-page .hero__lede { max-width: 680px; }
+.console-page .hero__cta-row { margin-top: 32px; }
 .hero__eyebrow {
   display: inline-flex;
   align-items: center;

@@ -1,7 +1,7 @@
 /* global React */
 // Page 1 — Accueil client Algor Access (plateforme OSINT)
 
-function HomeView({ onEnter, clock, videoStyle }) {
+function HomeView({ onEnter, onConsole, clock, videoStyle }) {
   return (
     <main className="view-enter view-enter-active">
       <section className="hero">
@@ -22,8 +22,9 @@ function HomeView({ onEnter, clock, videoStyle }) {
               <Arrow />
               <span className="btn-neon btn-neon--bottom" aria-hidden="true" />
             </button>
-            <a className="btn--ghost-link" href="/admin/">
-              Console admin
+            <a className="btn--ghost-link" href="#console"
+               onClick={(e) => { e.preventDefault(); onConsole(); }}>
+              Console interne
               <ArrowDiag />
             </a>
           </div>
@@ -149,4 +150,27 @@ function ArrowDiag() {
   );
 }
 
-Object.assign(window, { HomeView, VideoBand, Arrow, ArrowDiag });
+// Page « Console interne » — presentation de la plateforme interne, dans la D.A. client.
+function ConsoleView({ onBack }) {
+  return (
+    <main className="view-enter view-enter-active">
+      <section className="console-page">
+        <span className="eyebrow">— Plateforme interne</span>
+        <h1 className="hero__title">
+          Console interne de<br />
+          <em>cartographie</em> OSINT
+        </h1>
+        <p className="hero__lede">
+          Outil de travail des analystes Algor Int sur six theatres — Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement.
+        </p>
+        <div className="hero__cta-row">
+          <a className="btn--ghost-link" href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>
+            &larr; Retour a l'accueil
+          </a>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+Object.assign(window, { HomeView, VideoBand, ConsoleView, Arrow, ArrowDiag });

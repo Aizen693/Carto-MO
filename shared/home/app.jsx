@@ -1,4 +1,4 @@
-/* global React, ReactDOM, HomeView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, PlatformView, Starfield */
 
 const { useState, useEffect } = React;
 
@@ -100,9 +100,11 @@ function App() {
       {view === 'home' && (
         <HomeView
           onEnter={() => setView('platform')}
+          onConsole={() => setView('console')}
           clock={clock}
           videoStyle="strip" />
       )}
+      {view === 'console' && <ConsoleView onBack={() => setView('home')} />}
       {view === 'platform' && <PlatformView onBack={() => setView('home')} />}
     </>
   );

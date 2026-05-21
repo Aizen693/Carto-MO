@@ -1,5 +1,5 @@
 (function () {
-/* global React, ReactDOM, HomeView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, PlatformView, Starfield */
 
 const {
   useState,
@@ -119,8 +119,11 @@ function App() {
     className: "status-pill__loc"
   }, "Paris")))))), view === 'home' && /*#__PURE__*/React.createElement(HomeView, {
     onEnter: () => setView('platform'),
+    onConsole: () => setView('console'),
     clock: clock,
     videoStyle: "strip"
+  }), view === 'console' && /*#__PURE__*/React.createElement(ConsoleView, {
+    onBack: () => setView('home')
   }), view === 'platform' && /*#__PURE__*/React.createElement(PlatformView, {
     onBack: () => setView('home')
   }));

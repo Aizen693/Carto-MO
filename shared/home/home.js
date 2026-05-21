@@ -5,6 +5,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
 
 function HomeView({
   onEnter,
+  onConsole,
   clock,
   videoStyle
 }) {
@@ -31,8 +32,12 @@ function HomeView({
     "aria-hidden": "true"
   })), /*#__PURE__*/React.createElement("a", {
     className: "btn--ghost-link",
-    href: "/admin/"
-  }, "Console admin", /*#__PURE__*/React.createElement(ArrowDiag, null))), /*#__PURE__*/React.createElement("nav", {
+    href: "#console",
+    onClick: e => {
+      e.preventDefault();
+      onConsole();
+    }
+  }, "Console interne", /*#__PURE__*/React.createElement(ArrowDiag, null))), /*#__PURE__*/React.createElement("nav", {
     className: "hero__foot-nav"
   }, /*#__PURE__*/React.createElement("a", {
     href: "/sahel/"
@@ -203,9 +208,36 @@ function ArrowDiag() {
     strokeLinejoin: "round"
   }));
 }
+
+// Page « Console interne » — presentation de la plateforme interne, dans la D.A. client.
+function ConsoleView({
+  onBack
+}) {
+  return /*#__PURE__*/React.createElement("main", {
+    className: "view-enter view-enter-active"
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "console-page"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "eyebrow"
+  }, "\u2014 Plateforme interne"), /*#__PURE__*/React.createElement("h1", {
+    className: "hero__title"
+  }, "Console interne de", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "cartographie"), " OSINT"), /*#__PURE__*/React.createElement("p", {
+    className: "hero__lede"
+  }, "Outil de travail des analystes Algor Int sur six theatres \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement."), /*#__PURE__*/React.createElement("div", {
+    className: "hero__cta-row"
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "btn--ghost-link",
+    href: "#",
+    onClick: e => {
+      e.preventDefault();
+      onBack();
+    }
+  }, "\u2190 Retour a l'accueil"))));
+}
 Object.assign(window, {
   HomeView,
   VideoBand,
+  ConsoleView,
   Arrow,
   ArrowDiag
 });
