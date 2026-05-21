@@ -37,12 +37,13 @@ def main() -> None:
             "doivent être définis dans .env"
         )
 
+    # scope laissé vide volontairement : Inoreader accorde alors l'accès
+    # lecture ET écriture (favoris, libellés). `scope=read` = lecture seule.
     auth_url = (
         f"{AUTH_URL}"
         f"?client_id={client_id}"
         f"&redirect_uri={REDIRECT_URI}"
         f"&response_type=code"
-        f"&scope=read"
         f"&state=inoreader_dashboard"
     )
 

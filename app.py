@@ -219,6 +219,8 @@ def _init_state() -> None:
         "active_shortlist": "Panier 1",
         "table_key":      0,   # incrémenté pour forcer reset du data_editor
         "page_index":     0,
+        "user_labels":    [],     # libellés créés en session, pas encore dans Inoreader
+        "auto_loaded":    False,  # garde-fou : chargement auto une seule fois par session
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -269,6 +271,9 @@ def load_metadata(client: InoreaderClient) -> None:
         st.session_state.tags_list = sorted(set(tag_names))
     except InoreaderAPIError as exc:
         st.warning(f"Erreur métadonnées : {exc}")
+    except Exception as exc:
+        st.warning(f"Erreur métadonnées : {exc}")
+        logger.exception("load_metadata failed")
 
 
 # ── Article loading ────────────────────────────────────────────────────────────
@@ -388,7 +393,7 @@ def render_sidebar() -> str:
 
         c1, c2 = st.columns(2)
         with c1:
-            if st.button("🔄 Charger", use_container_width=True, type="primary"):
+            if st.button("🔄 Rafraîchir", use_container_width=True, type="primary"):
                 client = get_client()
                 if client:
                     with st.spinner("Chargement…"):
@@ -404,6 +409,56 @@ def render_sidebar() -> str:
                         load_metadata(client)
                     nb = len(st.session_state.subscriptions)
                     st.success(f"{nb} abonnements.")
+
+        # ── Libellés ───────────────────────────────────────────────────────────
+        st.divider()
+        st.markdown("### 🏷️ Libellés")
+        st.caption("Classez les articles cochés du panier actif dans des libellés.")
+
+        lc1, lc2 = st.columns([3, 1])
+        with lc1:
+            new_label = st.text_input(
+                "Nouveau libellé", key="new_label_input",
+                label_visibility="collapsed", placeholder="Nom du libellé…",
+            )
+        with lc2:
+            if st.button("➕ Créer", key="btn_create_label", use_container_width=True):
+                nl = new_label.strip()
+                if not nl:
+                    st.warning("Saisissez un nom de libellé.")
+                elif nl in _available_labels():
+                    st.info(f"« {nl} » existe déjà.")
+                else:
+                    st.session_state.user_labels.append(nl)
+                    st.rerun()
+
+        labels = _available_labels()
+        panier_n = len(st.session_state.shortlists.get(st.session_state.active_shortlist, set()))
+        if labels:
+            chosen_label = st.selectbox("Libellé cible", labels, key="sidebar_label")
+            b1, b2 = st.columns(2)
+            with b1:
+                if st.button(
+                    f"🏷️ Classer ({panier_n})", key="btn_assign_label",
+                    use_container_width=True, type="primary", disabled=panier_n == 0,
+                ):
+                    if _apply_label(chosen_label, add=True):
+                        st.rerun()
+            with b2:
+                if st.button(
+                    "✕ Retirer", key="btn_unassign_label",
+                    use_container_width=True, disabled=panier_n == 0,
+                ):
+                    if _apply_label(chosen_label, add=False):
+                        st.rerun()
+            if st.button("👁 Voir ce libellé", key="btn_view_label", use_container_width=True):
+                client = get_client()
+                if client:
+                    with st.spinner(f"Chargement de « {chosen_label} »…"):
+                        load_articles(client, "tag", chosen_label, 500, False, None, None)
+                    st.rerun()
+        else:
+            st.caption("Aucun libellé pour l'instant — créez-en un ci-dessus.")
 
         # Filters — only shown when data is loaded
         df = st.session_state.articles_df
@@ -536,7 +591,11 @@ def render_articles_page() -> None:
     c5.metric("Abonnements", len(st.session_state.subscriptions))
 
     if full_df.empty:
-        st.info("Aucun article chargé. Utilisez le panneau gauche pour charger des articles, puis lancez l'application OAuth si nécessaire.")
+        st.warning(
+            "Aucun article chargé. Le chargement automatique a échoué — "
+            "le token Inoreader a probablement expiré. Régénérez-le puis "
+            "mettez à jour les secrets Streamlit. Ou cliquez « 🔄 Rafraîchir »."
+        )
         st.code("python oauth_setup.py", language="bash")
         return
 
@@ -589,7 +648,7 @@ def render_articles_page() -> None:
 
     # ── Column visibility ──────────────────────────────────────────────────────
     with st.expander("🔧 Colonnes affichées"):
-        available = ["title", "source", "folder", "tags", "author", "published_at", "summary", "is_read", "is_starred", "word_count", "score"]
+        available = ["title", "source", "folder", "tags", "author", "published_at", "summary", "is_read", "word_count", "score"]
         default   = ["title", "source", "folder", "published_at", "score", "word_count"]
         visible   = st.multiselect("Colonnes", available, default=default, key="col_vis")
 
@@ -637,26 +696,27 @@ def render_articles_page() -> None:
 
     display = page_df.copy()
     display.insert(0, "✓", display["id"].isin(current_sl))
+    display.insert(1, "⭐", display["is_starred"].astype(bool))
 
-    show_cols = ["✓"] + [c for c in visible if c in display.columns] + ["id", "url"]
+    show_cols = ["✓", "⭐"] + [c for c in visible if c in display.columns] + ["id", "url"]
     display   = display[[c for c in show_cols if c in display.columns]]
 
     rename_map = {
         "title": "Titre", "source": "Source", "folder": "Dossier",
         "tags": "Tags", "author": "Auteur", "published_at": "Publié",
-        "summary": "Résumé", "is_read": "Lu", "is_starred": "Fav",
-        "word_count": "Mots", "score": "Score", "✓": "✓",
+        "summary": "Résumé", "is_read": "Lu",
+        "word_count": "Mots", "score": "Score", "✓": "✓", "⭐": "⭐",
     }
     display = display.rename(columns=rename_map)
 
     col_config: dict = {
-        "✓":       st.column_config.CheckboxColumn("✓", width="small"),
+        "✓":       st.column_config.CheckboxColumn("✓", width="small", help="Ajouter au panier actif"),
+        "⭐":       st.column_config.CheckboxColumn("⭐", width="small", help="Favori — cochez pour ajouter/retirer"),
         "Titre":   st.column_config.TextColumn("Titre", width="large"),
         "Résumé":  st.column_config.TextColumn("Résumé", width="large"),
         "Score":   st.column_config.NumberColumn("Score", format="%.1f", width="small"),
         "Mots":    st.column_config.NumberColumn("Mots", width="small"),
-        "Lu":      st.column_config.CheckboxColumn("Lu",  width="small"),
-        "Fav":     st.column_config.CheckboxColumn("Fav", width="small"),
+        "Lu":      st.column_config.CheckboxColumn("Lu",  width="small", disabled=True),
         "url":     st.column_config.LinkColumn("🔗 URL", display_text="ouvrir"),
         "id":      None,   # colonne cachée
     }
@@ -680,6 +740,18 @@ def render_articles_page() -> None:
                 sl.add(rid)
             else:
                 sl.discard(rid)
+
+    # Sync favoris (⭐) → API Inoreader : on détecte les cases modifiées
+    if "⭐" in edited.columns and "id" in edited.columns:
+        orig_star = dict(zip(page_df["id"], page_df["is_starred"].astype(bool)))
+        to_star   = [r["id"] for _, r in edited.iterrows() if bool(r["⭐"]) and not orig_star.get(r["id"], False)]
+        to_unstar = [r["id"] for _, r in edited.iterrows() if not bool(r["⭐"]) and orig_star.get(r["id"], False)]
+        if to_star or to_unstar:
+            if to_star:
+                _toggle_star(to_star, True)
+            if to_unstar:
+                _toggle_star(to_unstar, False)
+            st.rerun()
 
     # ── Quick preview ──────────────────────────────────────────────────────────
     st.divider()
@@ -760,7 +832,7 @@ def render_actions_panel(filtered_df: pd.DataFrame) -> None:
             st.text_area("URLs", value=urls, height=150, key="urls_area")
 
     # Inoreader write actions
-    with st.expander("🔗 Actions Inoreader (nécessite connexion API)"):
+    with st.expander("🔗 Actions Inoreader sur le panier", expanded=True):
         ca, cb, cc, cd = st.columns(4)
         with ca:
             if st.button("✓ Marquer lus", use_container_width=True):
@@ -770,20 +842,29 @@ def render_actions_panel(filtered_df: pd.DataFrame) -> None:
                 _api_action(sel_df, lambda c, ids: c.mark_as_unread(ids), "marqués non lus")
         with cc:
             if st.button("⭐ Ajouter favoris", use_container_width=True):
-                _api_action(sel_df, lambda c, ids: c.add_star(ids), "ajoutés aux favoris")
+                _toggle_star(list(sl_ids), True)
+                st.rerun()
         with cd:
             if st.button("✗ Retirer favoris", use_container_width=True):
-                _api_action(sel_df, lambda c, ids: c.remove_star(ids), "retirés des favoris")
+                _toggle_star(list(sl_ids), False)
+                st.rerun()
 
-        tag_col1, tag_col2, tag_col3 = st.columns([3, 1, 1])
-        with tag_col1:
-            tag_name = st.text_input("Nom du tag Inoreader", placeholder="mon-tag", key="tag_input")
-        with tag_col2:
-            if st.button("🏷 Ajouter", use_container_width=True) and tag_name:
-                _api_action(sel_df, lambda c, ids: c.add_tag(ids, tag_name), f"tagués « {tag_name} »")
-        with tag_col3:
-            if st.button("🏷 Retirer", use_container_width=True) and tag_name:
-                _api_action(sel_df, lambda c, ids: c.remove_tag(ids, tag_name), f"tag « {tag_name} » retiré")
+        st.markdown("**Classer dans un libellé**")
+        labels = _available_labels()
+        if labels:
+            lc1, lc2, lc3 = st.columns([3, 1, 1])
+            with lc1:
+                lbl = st.selectbox("Libellé", labels, key="actions_label", label_visibility="collapsed")
+            with lc2:
+                if st.button("🏷️ Classer", use_container_width=True, key="btn_actions_assign"):
+                    if _apply_label(lbl, add=True):
+                        st.rerun()
+            with lc3:
+                if st.button("✕ Retirer", use_container_width=True, key="btn_actions_unassign"):
+                    if _apply_label(lbl, add=False):
+                        st.rerun()
+        else:
+            st.caption("Créez un libellé depuis le panneau de gauche (section 🏷️ Libellés).")
 
 
 def _api_action(sel_df: pd.DataFrame, fn, label: str) -> None:
@@ -797,6 +878,100 @@ def _api_action(sel_df: pd.DataFrame, fn, label: str) -> None:
             st.success(f"✓ {len(ids)} articles {label}.")
         except Exception as exc:
             st.error(f"Erreur : {exc}")
+
+
+# ── Libellés & favoris (Inoreader natif) ────────────────────────────────────────
+
+def _available_labels() -> list[str]:
+    """Libellés disponibles : tags Inoreader existants + libellés créés en session."""
+    return sorted(set(st.session_state.tags_list) | set(st.session_state.user_labels))
+
+
+def _update_local_tags(ids, label: str, add: bool) -> None:
+    """Met à jour la colonne `tags` des DataFrames en mémoire, sans recharger l'API."""
+    ids = set(ids)
+
+    def _mod(cell: str) -> str:
+        parts = [t.strip() for t in str(cell).split(",") if t.strip()]
+        if add and label not in parts:
+            parts.append(label)
+        elif not add and label in parts:
+            parts.remove(label)
+        return ", ".join(parts)
+
+    for key in ("articles_df", "filtered_df"):
+        df = st.session_state[key]
+        if df.empty:
+            continue
+        mask = df["id"].isin(ids)
+        df.loc[mask, "tags"] = df.loc[mask, "tags"].apply(_mod)
+
+
+def _apply_label(label: str, add: bool) -> bool:
+    """Classe (ou retire) le panier actif dans un libellé Inoreader. True si succès."""
+    client = get_client()
+    if not client or not label:
+        return False
+    ids = list(st.session_state.shortlists.get(st.session_state.active_shortlist, set()))
+    if not ids:
+        st.warning("Aucun article sélectionné — cochez des lignes dans le tableau.")
+        return False
+    verb = "Classement" if add else "Retrait"
+    with st.spinner(f"{verb} de {len(ids)} article(s)…"):
+        try:
+            if add:
+                client.add_tag(ids, label)
+            else:
+                client.remove_tag(ids, label)
+        except Exception as exc:
+            st.error(f"Erreur Inoreader : {exc}")
+            return False
+    _update_local_tags(ids, label, add)
+    if add and label not in st.session_state.tags_list:
+        st.session_state.tags_list.append(label)
+    st.session_state.table_key += 1
+    done = "classés dans" if add else "retirés de"
+    st.toast(f"{len(ids)} article(s) {done} « {label} ».", icon="🏷️")
+    return True
+
+
+def _toggle_star(ids: list[str], starred: bool) -> None:
+    """Ajoute ou retire le favori sur une liste d'articles."""
+    client = get_client()
+    if not client or not ids:
+        return
+    try:
+        if starred:
+            client.add_star(ids)
+        else:
+            client.remove_star(ids)
+    except Exception as exc:
+        st.error(f"Erreur favori : {exc}")
+        return
+    for key in ("articles_df", "filtered_df"):
+        df = st.session_state[key]
+        if not df.empty:
+            df.loc[df["id"].isin(ids), "is_starred"] = starred
+    st.session_state.table_key += 1
+    txt = "ajouté(s) aux favoris" if starred else "retiré(s) des favoris"
+    st.toast(f"{len(ids)} article(s) {txt}.", icon="⭐")
+
+
+# ── Chargement automatique ──────────────────────────────────────────────────────
+
+def _auto_load() -> None:
+    """Charge automatiquement les articles non lus au premier rendu de la session."""
+    if st.session_state.auto_loaded:
+        return
+    st.session_state.auto_loaded = True
+    if missing_keys(load_config()):
+        return
+    client = get_client()
+    if not client:
+        return
+    with st.spinner("Chargement des articles non lus…"):
+        load_metadata(client)
+        load_articles(client, "all", "", 500, exclude_read=True, start_ts=None, end_ts=None)
 
 
 # ── Dashboard page ─────────────────────────────────────────────────────────────
@@ -1008,6 +1183,7 @@ def render_saved_filters_page() -> None:
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main() -> None:
+    _auto_load()
     page = render_sidebar()
 
     if page == "📋 Articles":

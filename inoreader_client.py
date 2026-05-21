@@ -139,6 +139,10 @@ class InoreaderClient:
                 logger.warning("Request attempt %d failed: %s. Retry in %ds.", attempt + 1, exc, wait)
                 time.sleep(wait)
 
+        # Toutes les tentatives ont fini en `continue` (refresh + 429 répétés) :
+        # on lève une erreur explicite plutôt que de renvoyer None silencieusement.
+        raise InoreaderAPIError(429, f"Aucune réponse après {retries} tentatives pour {url}")
+
     def get(self, path: str, **params: Any) -> Any:
         return self._request("GET", f"{BASE_URL}{path}", params={k: v for k, v in params.items() if v is not None})
 
@@ -149,12 +153,16 @@ class InoreaderClient:
 
     def list_subscriptions(self) -> list[dict]:
         """Retourne tous les abonnements RSS."""
-        data = self.get("/subscription/list")
+        data = self.get("/subscription/list", output="json")
+        if not isinstance(data, dict):
+            raise InoreaderAPIError(502, f"Réponse inattendue de /subscription/list : {type(data).__name__}")
         return data.get("subscriptions", [])
 
     def list_tags(self) -> list[dict]:
         """Retourne labels/dossiers/tags. type='folder' indique un dossier."""
-        data = self.get("/tag/list")
+        data = self.get("/tag/list", output="json")
+        if not isinstance(data, dict):
+            raise InoreaderAPIError(502, f"Réponse inattendue de /tag/list : {type(data).__name__}")
         return data.get("tags", [])
 
     def user_info(self) -> dict:
@@ -211,6 +219,8 @@ class InoreaderClient:
                 continuation=continuation,
                 **kwargs,
             )
+            if not isinstance(data, dict):
+                raise InoreaderAPIError(502, f"Réponse inattendue de /stream/contents : {type(data).__name__}")
             batch = data.get("items", [])
             items.extend(batch)
             logger.debug("Fetched %d articles (total %d).", len(batch), len(items))
