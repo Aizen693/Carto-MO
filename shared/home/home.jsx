@@ -1,4 +1,4 @@
-/* global React */
+/* global React, ReactDOM */
 // Page 1 — Accueil client Algor Access (plateforme OSINT)
 
 const { useState, useEffect } = React;
@@ -252,6 +252,8 @@ function ConsoleView({ onBack, onArchives }) {
 function ArchivesView({ onBack }) {
   const [points, setPoints] = useState(null);
   const [error, setError] = useState(null);
+  const [query, setQuery] = useState('');
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -262,7 +264,7 @@ function ArchivesView({ onBack }) {
         const page = 1000;
         while (true) {
           const res = await fetch(
-            SB_URL + '/rest/v1/points?select=id,zone,name,period,coordinates,casualties,deleted'
+            SB_URL + '/rest/v1/points?select=id,zone,name,description,period,coordinates,color,casualties,deleted,created_at'
               + '&order=zone.asc,created_at.desc&offset=' + offset + '&limit=' + page,
             { headers: { apikey: SB_KEY } }
           );
@@ -280,8 +282,23 @@ function ArchivesView({ onBack }) {
     return () => { cancelled = true; };
   }, []);
 
+  // Esc ferme le detail
+  useEffect(() => {
+    if (!selected) return;
+    const h = (e) => { if (e.key === 'Escape') setSelected(null); };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [selected]);
+
+  const needle = query.toLowerCase().trim();
+  const visible = (points || []).filter((p) => {
+    if (!needle) return true;
+    return [p.name, p.description, p.period, ZONE_LABELS[p.zone] || p.zone]
+      .some((f) => (f || '').toString().toLowerCase().includes(needle));
+  });
+
   const groups = {};
-  (points || []).forEach((p) => { (groups[p.zone] = groups[p.zone] || []).push(p); });
+  visible.forEach((p) => { (groups[p.zone] = groups[p.zone] || []).push(p); });
   const zones = Object.keys(groups).sort();
 
   return (
@@ -295,9 +312,33 @@ function ArchivesView({ onBack }) {
           Tous les points cartographies, regroupes par theatre. Conserves en base meme apres retrait des cartes.
         </p>
 
+        {points && points.length > 0 && (
+          <div className="dash-search">
+            <div className="search-input">
+              <DashSearchIcon />
+              <input
+                placeholder="Rechercher un point — nom, description, periode, theatre..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              {query && (
+                <button className="search-input__clear" onClick={() => setQuery('')} aria-label="Effacer">
+                  <DashCloseIcon size={12} />
+                </button>
+              )}
+            </div>
+            <span className="dash-search__count">
+              {visible.length} point{visible.length > 1 ? 's' : ''}
+            </span>
+          </div>
+        )}
+
         {error && <div className="dash-msg dash-msg--err">Erreur : {error}</div>}
         {!points && !error && <div className="dash-msg">Chargement des points...</div>}
-        {points && zones.length === 0 && <div className="dash-msg">Aucun point en base.</div>}
+        {points && points.length === 0 && <div className="dash-msg">Aucun point en base.</div>}
+        {points && points.length > 0 && zones.length === 0 && (
+          <div className="dash-msg">Aucun resultat pour « {query} ».</div>
+        )}
 
         {points && zones.map((z) => (
           <div className="dash-zone" key={z}>
@@ -317,7 +358,9 @@ function ArchivesView({ onBack }) {
                   {groups[z].map((p) => {
                     const c = Array.isArray(p.coordinates) ? p.coordinates : [];
                     return (
-                      <tr key={p.id}>
+                      <tr key={p.id} className="dash-row" tabIndex={0}
+                          onClick={() => setSelected(p)}
+                          onKeyDown={(e) => { if (e.key === 'Enter') setSelected(p); }}>
                         <td>{p.name || '—'}</td>
                         <td>{p.period || '—'}</td>
                         <td>{c[1] != null ? Number(c[1]).toFixed(4) : '—'}</td>
@@ -337,8 +380,107 @@ function ArchivesView({ onBack }) {
           </div>
         ))}
       </section>
+
+      {selected && <PointDetail point={selected} onClose={() => setSelected(null)} />}
     </main>
   );
+}
+
+// Parse le champ description structure (Date / Pays / Evenement / Detail),
+// meme logique que l'ancien pop-up des cartes (shared/engine.js parseDesc).
+function parsePointDesc(raw) {
+  if (!raw || raw === 'null') return null;
+  const txt = raw.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '');
+  const r = {};
+  txt.split('\n').forEach((l) => {
+    const m = l.match(/^([^:]+):\s*(.+)$/);
+    if (!m) return;
+    const k = m[1].trim().toLowerCase();
+    const v = m[2].trim();
+    if (k === 'date') r.date = v;
+    else if (k === 'pays') r.pays = v;
+    else if (k === 'evenement' || k === 'événement') r.event = v;
+    else if (k === 'détail' || k === 'detail') r.detail = v;
+  });
+  return Object.keys(r).length ? r : null;
+}
+
+// Popup detail d'un point — reprend le contenu de l'ancien pop-up des cartes.
+function PointDetail({ point, onClose }) {
+  const c = Array.isArray(point.coordinates) ? point.coordinates : [];
+  const lng = c[0] != null ? Number(c[0]).toFixed(5) : '—';
+  const lat = c[1] != null ? Number(c[1]).toFixed(5) : '—';
+  const created = point.created_at
+    ? new Date(point.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+    : '—';
+  const d = parsePointDesc(point.description);
+
+  const eventRows = [];
+  if (d) {
+    if (d.date) eventRows.push(['Date', d.date]);
+    if (d.pays) eventRows.push(['Pays', d.pays]);
+    if (d.event) eventRows.push(['Evenement', d.event]);
+    if (d.detail) eventRows.push(['Detail', d.detail]);
+  }
+  const metaRows = [
+    ['Theatre', ZONE_LABELS[point.zone] || point.zone],
+    ['Coordonnees', lat + ', ' + lng],
+    ['Victimes', String(point.casualties || 0)],
+    ['Statut', point.deleted ? 'Archive (retire des cartes)' : 'Actif'],
+    ['Ajoute le', created],
+  ];
+
+  return ReactDOM.createPortal(
+    <div className="point-modal-overlay" onClick={onClose}>
+      <div className="point-modal" role="dialog" aria-modal="true"
+           onClick={(e) => e.stopPropagation()}>
+        <button className="point-modal__close" onClick={onClose} aria-label="Fermer">
+          <DashCloseIcon size={16} />
+        </button>
+        <div className="point-modal__head">
+          <span className="point-modal__dot" style={{ background: point.color || '#888888' }} />
+          <h3 className="point-modal__name">{point.name || 'Point sans nom'}</h3>
+          {point.period && <span className="point-modal__period">{point.period}</span>}
+        </div>
+
+        {eventRows.length > 0 && (
+          <div className="point-modal__rows point-modal__rows--event">
+            {eventRows.map(([k, v]) => (
+              <div className="point-modal__row" key={k}>
+                <span className="point-modal__key">{k}</span>
+                <span className="point-modal__val">{v}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        {!eventRows.length && point.description && point.description !== 'null' && (
+          <p className="point-modal__desc">{point.description}</p>
+        )}
+
+        <div className="point-modal__rows">
+          {metaRows.map(([k, v]) => (
+            <div className="point-modal__row" key={k}>
+              <span className="point-modal__key">{k}</span>
+              <span className="point-modal__val">{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+function DashSearchIcon() {
+  return (<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>);
+}
+function DashCloseIcon({ size = 14 }) {
+  return (<svg width={size} height={size} viewBox="0 0 14 14" fill="none">
+    <path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>);
 }
 
 Object.assign(window, { HomeView, VideoBand, ConsoleView, ArchivesView, Arrow, ArrowDiag });

@@ -1,6 +1,6 @@
 (function () {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
-/* global React */
+/* global React, ReactDOM */
 // Page 1 — Accueil client Algor Access (plateforme OSINT)
 
 const {
@@ -366,6 +366,8 @@ function ArchivesView({
 }) {
   const [points, setPoints] = useState(null);
   const [error, setError] = useState(null);
+  const [query, setQuery] = useState('');
+  const [selected, setSelected] = useState(null);
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -374,7 +376,7 @@ function ArchivesView({
         let offset = 0;
         const page = 1000;
         while (true) {
-          const res = await fetch(SB_URL + '/rest/v1/points?select=id,zone,name,period,coordinates,casualties,deleted' + '&order=zone.asc,created_at.desc&offset=' + offset + '&limit=' + page, {
+          const res = await fetch(SB_URL + '/rest/v1/points?select=id,zone,name,description,period,coordinates,color,casualties,deleted,created_at' + '&order=zone.asc,created_at.desc&offset=' + offset + '&limit=' + page, {
             headers: {
               apikey: SB_KEY
             }
@@ -394,8 +396,23 @@ function ArchivesView({
       cancelled = true;
     };
   }, []);
+
+  // Esc ferme le detail
+  useEffect(() => {
+    if (!selected) return;
+    const h = e => {
+      if (e.key === 'Escape') setSelected(null);
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [selected]);
+  const needle = query.toLowerCase().trim();
+  const visible = (points || []).filter(p => {
+    if (!needle) return true;
+    return [p.name, p.description, p.period, ZONE_LABELS[p.zone] || p.zone].some(f => (f || '').toString().toLowerCase().includes(needle));
+  });
   const groups = {};
-  (points || []).forEach(p => {
+  visible.forEach(p => {
     (groups[p.zone] = groups[p.zone] || []).push(p);
   });
   const zones = Object.keys(groups).sort();
@@ -414,13 +431,31 @@ function ArchivesView({
     className: "hero__title"
   }, "Archives ", /*#__PURE__*/React.createElement("em", null, "des points")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Tous les points cartographies, regroupes par theatre. Conserves en base meme apres retrait des cartes."), error && /*#__PURE__*/React.createElement("div", {
+  }, "Tous les points cartographies, regroupes par theatre. Conserves en base meme apres retrait des cartes."), points && points.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "dash-search"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "search-input"
+  }, /*#__PURE__*/React.createElement(DashSearchIcon, null), /*#__PURE__*/React.createElement("input", {
+    placeholder: "Rechercher un point \u2014 nom, description, periode, theatre...",
+    value: query,
+    onChange: e => setQuery(e.target.value)
+  }), query && /*#__PURE__*/React.createElement("button", {
+    className: "search-input__clear",
+    onClick: () => setQuery(''),
+    "aria-label": "Effacer"
+  }, /*#__PURE__*/React.createElement(DashCloseIcon, {
+    size: 12
+  }))), /*#__PURE__*/React.createElement("span", {
+    className: "dash-search__count"
+  }, visible.length, " point", visible.length > 1 ? 's' : '')), error && /*#__PURE__*/React.createElement("div", {
     className: "dash-msg dash-msg--err"
   }, "Erreur : ", error), !points && !error && /*#__PURE__*/React.createElement("div", {
     className: "dash-msg"
-  }, "Chargement des points..."), points && zones.length === 0 && /*#__PURE__*/React.createElement("div", {
+  }, "Chargement des points..."), points && points.length === 0 && /*#__PURE__*/React.createElement("div", {
     className: "dash-msg"
-  }, "Aucun point en base."), points && zones.map(z => /*#__PURE__*/React.createElement("div", {
+  }, "Aucun point en base."), points && points.length > 0 && zones.length === 0 && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg"
+  }, "Aucun resultat pour \xAB ", query, " \xBB."), points && zones.map(z => /*#__PURE__*/React.createElement("div", {
     className: "dash-zone",
     key: z
   }, /*#__PURE__*/React.createElement("div", {
@@ -436,13 +471,142 @@ function ArchivesView({
   }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Nom"), /*#__PURE__*/React.createElement("th", null, "Periode"), /*#__PURE__*/React.createElement("th", null, "Latitude"), /*#__PURE__*/React.createElement("th", null, "Longitude"), /*#__PURE__*/React.createElement("th", null, "Victimes"), /*#__PURE__*/React.createElement("th", null, "Statut"))), /*#__PURE__*/React.createElement("tbody", null, groups[z].map(p => {
     const c = Array.isArray(p.coordinates) ? p.coordinates : [];
     return /*#__PURE__*/React.createElement("tr", {
-      key: p.id
+      key: p.id,
+      className: "dash-row",
+      tabIndex: 0,
+      onClick: () => setSelected(p),
+      onKeyDown: e => {
+        if (e.key === 'Enter') setSelected(p);
+      }
     }, /*#__PURE__*/React.createElement("td", null, p.name || '—'), /*#__PURE__*/React.createElement("td", null, p.period || '—'), /*#__PURE__*/React.createElement("td", null, c[1] != null ? Number(c[1]).toFixed(4) : '—'), /*#__PURE__*/React.createElement("td", null, c[0] != null ? Number(c[0]).toFixed(4) : '—'), /*#__PURE__*/React.createElement("td", null, p.casualties || 0), /*#__PURE__*/React.createElement("td", null, p.deleted ? /*#__PURE__*/React.createElement("span", {
       className: "dash-tag dash-tag--archived"
     }, "Archive") : /*#__PURE__*/React.createElement("span", {
       className: "dash-tag dash-tag--live"
     }, "Actif")));
-  }))))))));
+  }))))))), selected && /*#__PURE__*/React.createElement(PointDetail, {
+    point: selected,
+    onClose: () => setSelected(null)
+  }));
+}
+
+// Parse le champ description structure (Date / Pays / Evenement / Detail),
+// meme logique que l'ancien pop-up des cartes (shared/engine.js parseDesc).
+function parsePointDesc(raw) {
+  if (!raw || raw === 'null') return null;
+  const txt = raw.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '');
+  const r = {};
+  txt.split('\n').forEach(l => {
+    const m = l.match(/^([^:]+):\s*(.+)$/);
+    if (!m) return;
+    const k = m[1].trim().toLowerCase();
+    const v = m[2].trim();
+    if (k === 'date') r.date = v;else if (k === 'pays') r.pays = v;else if (k === 'evenement' || k === 'événement') r.event = v;else if (k === 'détail' || k === 'detail') r.detail = v;
+  });
+  return Object.keys(r).length ? r : null;
+}
+
+// Popup detail d'un point — reprend le contenu de l'ancien pop-up des cartes.
+function PointDetail({
+  point,
+  onClose
+}) {
+  const c = Array.isArray(point.coordinates) ? point.coordinates : [];
+  const lng = c[0] != null ? Number(c[0]).toFixed(5) : '—';
+  const lat = c[1] != null ? Number(c[1]).toFixed(5) : '—';
+  const created = point.created_at ? new Date(point.created_at).toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  }) : '—';
+  const d = parsePointDesc(point.description);
+  const eventRows = [];
+  if (d) {
+    if (d.date) eventRows.push(['Date', d.date]);
+    if (d.pays) eventRows.push(['Pays', d.pays]);
+    if (d.event) eventRows.push(['Evenement', d.event]);
+    if (d.detail) eventRows.push(['Detail', d.detail]);
+  }
+  const metaRows = [['Theatre', ZONE_LABELS[point.zone] || point.zone], ['Coordonnees', lat + ', ' + lng], ['Victimes', String(point.casualties || 0)], ['Statut', point.deleted ? 'Archive (retire des cartes)' : 'Actif'], ['Ajoute le', created]];
+  return ReactDOM.createPortal(/*#__PURE__*/React.createElement("div", {
+    className: "point-modal-overlay",
+    onClick: onClose
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "point-modal",
+    role: "dialog",
+    "aria-modal": "true",
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "point-modal__close",
+    onClick: onClose,
+    "aria-label": "Fermer"
+  }, /*#__PURE__*/React.createElement(DashCloseIcon, {
+    size: 16
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "point-modal__head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "point-modal__dot",
+    style: {
+      background: point.color || '#888888'
+    }
+  }), /*#__PURE__*/React.createElement("h3", {
+    className: "point-modal__name"
+  }, point.name || 'Point sans nom'), point.period && /*#__PURE__*/React.createElement("span", {
+    className: "point-modal__period"
+  }, point.period)), eventRows.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "point-modal__rows point-modal__rows--event"
+  }, eventRows.map(([k, v]) => /*#__PURE__*/React.createElement("div", {
+    className: "point-modal__row",
+    key: k
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "point-modal__key"
+  }, k), /*#__PURE__*/React.createElement("span", {
+    className: "point-modal__val"
+  }, v)))), !eventRows.length && point.description && point.description !== 'null' && /*#__PURE__*/React.createElement("p", {
+    className: "point-modal__desc"
+  }, point.description), /*#__PURE__*/React.createElement("div", {
+    className: "point-modal__rows"
+  }, metaRows.map(([k, v]) => /*#__PURE__*/React.createElement("div", {
+    className: "point-modal__row",
+    key: k
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "point-modal__key"
+  }, k), /*#__PURE__*/React.createElement("span", {
+    className: "point-modal__val"
+  }, v)))))), document.body);
+}
+function DashSearchIcon() {
+  return /*#__PURE__*/React.createElement("svg", {
+    width: "16",
+    height: "16",
+    viewBox: "0 0 16 16",
+    fill: "none"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "7",
+    cy: "7",
+    r: "5",
+    stroke: "currentColor",
+    strokeWidth: "1.5"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M11 11l3 3",
+    stroke: "currentColor",
+    strokeWidth: "1.5",
+    strokeLinecap: "round"
+  }));
+}
+function DashCloseIcon({
+  size = 14
+}) {
+  return /*#__PURE__*/React.createElement("svg", {
+    width: size,
+    height: size,
+    viewBox: "0 0 14 14",
+    fill: "none"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M3.5 3.5l7 7M10.5 3.5l-7 7",
+    stroke: "currentColor",
+    strokeWidth: "1.5",
+    strokeLinecap: "round"
+  }));
 }
 Object.assign(window, {
   HomeView,
