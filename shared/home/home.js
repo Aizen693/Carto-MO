@@ -3,6 +3,20 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
 /* global React */
 // Page 1 — Accueil client Algor Access (plateforme OSINT)
 
+const {
+  useState,
+  useEffect
+} = React;
+const SB_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
+const SB_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
+const ZONE_LABELS = {
+  'moyen-orient': 'Moyen-Orient',
+  'sahel': 'Sahel',
+  'rdc': 'RDC',
+  'madagascar': 'Madagascar',
+  'afrique': 'Afrique Maritime',
+  'asie-sud': 'Asie du Sud'
+};
 function HomeView({
   onEnter,
   onConsole,
@@ -213,6 +227,7 @@ function ArrowDiag() {
 function ConsoleTab({
   href,
   soon,
+  onClick,
   icon,
   label,
   popTitle,
@@ -233,6 +248,13 @@ function ConsoleTab({
     className: "console-tab-wrap"
   }, soon ? /*#__PURE__*/React.createElement("div", {
     className: "console-tab console-tab--soon"
+  }, inner) : onClick ? /*#__PURE__*/React.createElement("a", {
+    className: "console-tab",
+    href: "#",
+    onClick: e => {
+      e.preventDefault();
+      onClick();
+    }
   }, inner) : /*#__PURE__*/React.createElement("a", {
     className: "console-tab",
     href: href
@@ -247,7 +269,8 @@ function ConsoleTab({
   }, popText))));
 }
 function ConsoleView({
-  onBack
+  onBack,
+  onArchives
 }) {
   return /*#__PURE__*/React.createElement("main", {
     className: "view-enter view-enter-active"
@@ -277,6 +300,18 @@ function ConsoleView({
       cx: "12",
       cy: "10",
       r: "2.6"
+    }))
+  }), /*#__PURE__*/React.createElement(ConsoleTab, {
+    onClick: onArchives,
+    label: "Archives",
+    popTitle: "Archives",
+    popText: "Tous les points cartographies des 6 theatres, conserves en base. Consultable sous forme de tableau, par theatre.",
+    icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+      d: "M21 8v13H3V8"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M1 3h22v5H1z"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M10 12h4"
     }))
   }), /*#__PURE__*/React.createElement(ConsoleTab, {
     soon: true,
@@ -324,10 +359,96 @@ function ConsoleView({
     }))
   }))));
 }
+
+// Page « Archives » — dashboard de tous les points, par theatre (lecture base Supabase).
+function ArchivesView({
+  onBack
+}) {
+  const [points, setPoints] = useState(null);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const all = [];
+        let offset = 0;
+        const page = 1000;
+        while (true) {
+          const res = await fetch(SB_URL + '/rest/v1/points?select=id,zone,name,period,coordinates,casualties,deleted' + '&order=zone.asc,created_at.desc&offset=' + offset + '&limit=' + page, {
+            headers: {
+              apikey: SB_KEY
+            }
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const chunk = await res.json();
+          all.push(...chunk);
+          if (chunk.length < page) break;
+          offset += page;
+        }
+        if (!cancelled) setPoints(all);
+      } catch (e) {
+        if (!cancelled) setError(e && e.message || 'Erreur de chargement');
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const groups = {};
+  (points || []).forEach(p => {
+    (groups[p.zone] = groups[p.zone] || []).push(p);
+  });
+  const zones = Object.keys(groups).sort();
+  return /*#__PURE__*/React.createElement("main", {
+    className: "view-enter view-enter-active"
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "console-page"
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "console-back",
+    href: "#",
+    onClick: e => {
+      e.preventDefault();
+      onBack();
+    }
+  }, "\u2190 Retour a la console"), /*#__PURE__*/React.createElement("h1", {
+    className: "hero__title"
+  }, "Archives ", /*#__PURE__*/React.createElement("em", null, "des points")), /*#__PURE__*/React.createElement("p", {
+    className: "hero__lede"
+  }, "Tous les points cartographies, regroupes par theatre. Conserves en base meme apres retrait des cartes."), error && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg dash-msg--err"
+  }, "Erreur : ", error), !points && !error && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg"
+  }, "Chargement des points..."), points && zones.length === 0 && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg"
+  }, "Aucun point en base."), points && zones.map(z => /*#__PURE__*/React.createElement("div", {
+    className: "dash-zone",
+    key: z
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "dash-zone__head"
+  }, /*#__PURE__*/React.createElement("h2", {
+    className: "dash-zone__name"
+  }, ZONE_LABELS[z] || z), /*#__PURE__*/React.createElement("span", {
+    className: "dash-zone__count"
+  }, groups[z].length, " points")), /*#__PURE__*/React.createElement("div", {
+    className: "dash-table-wrap"
+  }, /*#__PURE__*/React.createElement("table", {
+    className: "dash-table"
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Nom"), /*#__PURE__*/React.createElement("th", null, "Periode"), /*#__PURE__*/React.createElement("th", null, "Latitude"), /*#__PURE__*/React.createElement("th", null, "Longitude"), /*#__PURE__*/React.createElement("th", null, "Victimes"), /*#__PURE__*/React.createElement("th", null, "Statut"))), /*#__PURE__*/React.createElement("tbody", null, groups[z].map(p => {
+    const c = Array.isArray(p.coordinates) ? p.coordinates : [];
+    return /*#__PURE__*/React.createElement("tr", {
+      key: p.id
+    }, /*#__PURE__*/React.createElement("td", null, p.name || '—'), /*#__PURE__*/React.createElement("td", null, p.period || '—'), /*#__PURE__*/React.createElement("td", null, c[1] != null ? Number(c[1]).toFixed(4) : '—'), /*#__PURE__*/React.createElement("td", null, c[0] != null ? Number(c[0]).toFixed(4) : '—'), /*#__PURE__*/React.createElement("td", null, p.casualties || 0), /*#__PURE__*/React.createElement("td", null, p.deleted ? /*#__PURE__*/React.createElement("span", {
+      className: "dash-tag dash-tag--archived"
+    }, "Archive") : /*#__PURE__*/React.createElement("span", {
+      className: "dash-tag dash-tag--live"
+    }, "Actif")));
+  }))))))));
+}
 Object.assign(window, {
   HomeView,
   VideoBand,
   ConsoleView,
+  ArchivesView,
   Arrow,
   ArrowDiag
 });

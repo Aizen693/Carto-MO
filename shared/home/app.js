@@ -1,5 +1,5 @@
 (function () {
-/* global React, ReactDOM, HomeView, ConsoleView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, ArchivesView, PlatformView, Starfield */
 
 const {
   useState,
@@ -123,7 +123,10 @@ function App() {
     clock: clock,
     videoStyle: "strip"
   }), view === 'console' && /*#__PURE__*/React.createElement(ConsoleView, {
-    onBack: () => setView('home')
+    onBack: () => setView('home'),
+    onArchives: () => setView('archives')
+  }), view === 'archives' && /*#__PURE__*/React.createElement(ArchivesView, {
+    onBack: () => setView('console')
   }), view === 'platform' && /*#__PURE__*/React.createElement(PlatformView, {
     onBack: () => setView('home')
   }));

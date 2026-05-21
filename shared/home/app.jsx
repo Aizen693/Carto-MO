@@ -1,4 +1,4 @@
-/* global React, ReactDOM, HomeView, ConsoleView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, ArchivesView, PlatformView, Starfield */
 
 const { useState, useEffect } = React;
 
@@ -106,7 +106,12 @@ function App() {
           clock={clock}
           videoStyle="strip" />
       )}
-      {view === 'console' && <ConsoleView onBack={() => setView('home')} />}
+      {view === 'console' && (
+        <ConsoleView
+          onBack={() => setView('home')}
+          onArchives={() => setView('archives')} />
+      )}
+      {view === 'archives' && <ArchivesView onBack={() => setView('console')} />}
       {view === 'platform' && <PlatformView onBack={() => setView('home')} />}
     </>
   );
