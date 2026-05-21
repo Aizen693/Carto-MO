@@ -194,6 +194,33 @@ document.getElementById('login-password').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') doLogin();
 });
 
+// Login : toggle visibilite du mot de passe + tilt 3D de la carte
+(() => {
+  const eye = document.getElementById('login-eye');
+  const pwd = document.getElementById('login-password');
+  if (eye && pwd) {
+    eye.addEventListener('click', () => {
+      const reveal = pwd.type === 'password';
+      pwd.type = reveal ? 'text' : 'password';
+      eye.classList.toggle('is-open', reveal);
+      eye.setAttribute('aria-label', reveal ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+    });
+  }
+  const tilt = document.getElementById('login-tilt');
+  const wrap = tilt && tilt.closest('.sa-card-wrap');
+  if (tilt && wrap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    wrap.addEventListener('mousemove', (e) => {
+      const r = tilt.getBoundingClientRect();
+      const ry = ((e.clientX - r.left) / r.width - 0.5) * 16;
+      const rx = (0.5 - (e.clientY - r.top) / r.height) * 16;
+      tilt.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+    });
+    wrap.addEventListener('mouseleave', () => {
+      tilt.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  }
+})();
+
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;

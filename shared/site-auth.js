@@ -26,6 +26,10 @@ const SUPABASE_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
 
 const MIN_PASSWORD = 12;
 
+// Lien d'abonnement premium (Stripe...). Vide tant que le paiement n'est pas
+// branché → le bouton « S'abonner » reste désactivé.
+const SUBSCRIBE_URL = '';
+
 // « Se souvenir de moi » : route le token vers localStorage (persistant) ou
 // sessionStorage (effacé à la fermeture du navigateur). La préférence elle-même
 // reste dans localStorage pour survivre entre les sessions.
@@ -166,17 +170,24 @@ const OVERLAY_HTML = `
           <p class="sa-note">Le compte créé est gratuit. L'accès aux théâtres nécessite un passage premium.</p>
         </div>
 
-        <!-- ── Vue : compte gratuit (upgrade) ── -->
+        <!-- ── Vue : compte gratuit (upgrade premium) ── -->
         <div class="sa-view" id="sa-view-upgrade">
           <div class="sa-upgrade">
             <div class="sa-upgrade-badge">${ICON_STAR}</div>
-            <p class="sa-upgrade-msg" id="sa-upgrade-msg">
-              Votre compte est gratuit. L'accès aux théâtres est réservé aux comptes premium.
-              Contactez Algor Access pour activer votre accès.
+            <p class="sa-upgrade-lead">
+              L'accès aux 6 théâtres d'analyse est réservé aux abonnés premium.
             </p>
-            <button type="button" id="sa-logout-btn" class="sa-submit sa-submit-ghost">
-              <span class="sa-submit-content"><span class="sa-btn-text">Se déconnecter</span></span>
+            <ul class="sa-perks">
+              <li>${ICON_CHECK}<span>6 théâtres OSINT suivis en temps réel</span></li>
+              <li>${ICON_CHECK}<span>Cartographie interactive, calques &amp; timeline</span></li>
+              <li>${ICON_CHECK}<span>Briefs de sécurité générés par IA</span></li>
+            </ul>
+            <button type="button" id="sa-subscribe-btn" class="sa-submit" disabled>
+              <span class="sa-submit-content">
+                <span class="sa-btn-text">S'abonner — bientôt disponible</span>
+              </span>
             </button>
+            <a href="#" id="sa-logout-btn" class="sa-link sa-upgrade-logout">Se déconnecter</a>
           </div>
         </div>
 
@@ -478,7 +489,8 @@ const OVERLAY_CSS = `
   box-shadow: 0 14px 32px rgba(124,77,191,0.55);
 }
 .sa-submit:active:not(:disabled) { transform: translateY(0) scale(0.99); }
-.sa-submit:disabled { cursor: progress; }
+.sa-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+.sa-submit.is-loading { opacity: 1; cursor: progress; }
 .sa-submit-ghost {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.14);
@@ -531,10 +543,18 @@ const OVERLAY_CSS = `
   box-shadow: 0 8px 22px rgba(124,77,191,0.45);
 }
 .sa-upgrade-badge svg { width: 22px; height: 22px; color: #fff; }
-.sa-upgrade-msg {
+.sa-upgrade-lead {
   font-size: 13px; line-height: 1.55; color: var(--sa-tx-d);
-  margin: 0 0 6px;
+  margin: 0 0 14px;
 }
+.sa-perks { list-style: none; margin: 0; padding: 0; text-align: left; }
+.sa-perks li {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 12.5px; color: var(--sa-tx);
+  padding: 5px 2px;
+}
+.sa-perks li svg { width: 14px; height: 14px; flex: 0 0 14px; color: var(--v-soft); }
+.sa-upgrade-logout { display: inline-block; margin-top: 14px; }
 
 .sa-foot {
   display: flex; justify-content: center; gap: 9px;
@@ -566,8 +586,8 @@ const VIEWS = {
     focus: '#sa-signup-email',
   },
   upgrade: {
-    title: 'Accès premium requis',
-    sub: 'Votre compte ne donne pas encore accès aux théâtres.',
+    title: 'Passez premium',
+    sub: "Débloquez l'accès complet aux théâtres d'analyse.",
     focus: null,
   },
 };
@@ -691,8 +711,17 @@ function buildOverlay() {
     }
   });
 
+  // Bouton « S'abonner » — actif seulement si un lien de paiement est configuré
+  const subscribeBtn = overlayEl.querySelector('#sa-subscribe-btn');
+  if (SUBSCRIBE_URL) {
+    subscribeBtn.disabled = false;
+    subscribeBtn.querySelector('.sa-btn-text').textContent = "S'abonner";
+    subscribeBtn.addEventListener('click', () => window.open(SUBSCRIBE_URL, '_blank', 'noopener'));
+  }
+
   // Déconnexion depuis la vue upgrade
-  overlayEl.querySelector('#sa-logout-btn').addEventListener('click', async () => {
+  overlayEl.querySelector('#sa-logout-btn').addEventListener('click', async (e) => {
+    e.preventDefault();
     await supabase.auth.signOut();
     location.reload();
   });
