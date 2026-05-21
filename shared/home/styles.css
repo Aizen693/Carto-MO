@@ -570,10 +570,16 @@ img, svg { display: block; max-width: 100%; }
   margin: 0 auto;
   padding: 90px 48px 120px;
 }
-.console-page .eyebrow { display: block; margin-bottom: 18px; }
+.console-back {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 24px;
+  transition: color 0.15s var(--ease);
+}
+.console-back:hover { color: var(--violet); }
 .console-page .hero__title,
 .console-page .hero__lede { max-width: 680px; }
-.console-page .hero__cta-row { margin-top: 30px; }
 
 /* Onglets de la console interne */
 .console-tabs {

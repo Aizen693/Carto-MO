@@ -74,7 +74,7 @@ function App() {
     href: "/admin/"
   }, "Admin")), /*#__PURE__*/React.createElement("div", {
     className: "app-header__right"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, view !== 'console' && /*#__PURE__*/React.createElement("div", {
     className: "header-cta-wrap"
   }, /*#__PURE__*/React.createElement("a", {
     className: "header-cta",

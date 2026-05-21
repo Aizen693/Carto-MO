@@ -151,58 +151,75 @@ function ArrowDiag() {
 }
 
 // Page « Console interne » — presentation de la plateforme interne, dans la D.A. client.
+function ConsoleTab({ href, soon, icon, label, popTitle, popText }) {
+  const inner = (
+    <>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+           strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        {icon}
+      </svg>
+      {label}
+      {soon && <span className="console-tab__badge">Bientot</span>}
+    </>
+  );
+  return (
+    <div className="console-tab-wrap">
+      {soon
+        ? <div className="console-tab console-tab--soon">{inner}</div>
+        : <a className="console-tab" href={href}>{inner}</a>}
+      <div className="console-tab-pop">
+        <div className="console-tab-pop__card">
+          <div className="console-tab-pop__title">{popTitle}</div>
+          <p className="console-tab-pop__text">{popText}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ConsoleView({ onBack }) {
   return (
     <main className="view-enter view-enter-active">
       <section className="console-page">
-        <span className="eyebrow">— Plateforme interne</span>
+        <a className="console-back" href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>
+          &larr; Retour a l'accueil
+        </a>
         <h1 className="hero__title">
-          Console interne de<br />
-          <em>cartographie</em> OSINT
+          Console <em>interne</em>
         </h1>
         <p className="hero__lede">
           Outil de travail des analystes Algor Int sur six theatres — Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement.
         </p>
 
         <div className="console-tabs">
-          <div className="console-tab-wrap">
-            <a className="console-tab" href="/admin/">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z" />
-                <circle cx="12" cy="10" r="2.6" />
-              </svg>
-              Carto
-            </a>
-            <div className="console-tab-pop">
-              <div className="console-tab-pop__card">
-                <div className="console-tab-pop__title">Cartographie OSINT</div>
-                <p className="console-tab-pop__text">Edition des points, acteurs et calques sur les 6 theatres. Ouvre la console d'administration cartographique.</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="console-tab-wrap">
-            <div className="console-tab console-tab--soon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-              Veille
-              <span className="console-tab__badge">Bientot</span>
-            </div>
-            <div className="console-tab-pop">
-              <div className="console-tab-pop__card">
-                <div className="console-tab-pop__title">Veille</div>
-                <p className="console-tab-pop__text">Tableau de bord de veille en temps reel. Bientot disponible.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="hero__cta-row">
-          <a className="btn--ghost-link" href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>
-            &larr; Retour a l'accueil
-          </a>
+          <ConsoleTab
+            href="/admin/"
+            label="Carto"
+            popTitle="Cartographie OSINT"
+            popText="Edition des points, acteurs et calques sur les 6 theatres. Ouvre la console d'administration cartographique."
+            icon={<><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z" /><circle cx="12" cy="10" r="2.6" /></>}
+          />
+          <ConsoleTab
+            soon
+            label="Veille"
+            popTitle="Veille"
+            popText="Tableau de bord de veille en temps reel. Bientot disponible."
+            icon={<><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" /></>}
+          />
+          <ConsoleTab
+            soon
+            label="Rapport"
+            popTitle="Rapport"
+            popText="Generation de rapports d'analyse decisionnels. Bientot disponible."
+            icon={<><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" /><path d="M14 2v5h5" /><path d="M9 13h6M9 17h6" /></>}
+          />
+          <ConsoleTab
+            soon
+            label="Graph"
+            popTitle="Graph"
+            popText="Visualisation des reseaux et relations en graphes. Bientot disponible."
+            icon={<><circle cx="6" cy="6" r="2.5" /><circle cx="6" cy="18" r="2.5" /><circle cx="18" cy="12" r="2.5" /><path d="M8.2 7.3l7.6 3.4M8.2 16.7l7.6-3.4" /></>}
+          />
         </div>
       </section>
     </main>

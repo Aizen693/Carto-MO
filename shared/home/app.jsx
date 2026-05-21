@@ -57,6 +57,7 @@ function App() {
           )}
 
           <div className="app-header__right">
+            {view !== 'console' && (
             <div className="header-cta-wrap">
               <a className="header-cta" href="/sahel/">
                 <svg className="header-cta__star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -82,6 +83,7 @@ function App() {
                 </div>
               </div>
             </div>
+            )}
             <div className="status-pill">
               <span className="status-pill__group">
                 <span className="status-pill__dot" />

@@ -210,6 +210,42 @@ function ArrowDiag() {
 }
 
 // Page « Console interne » — presentation de la plateforme interne, dans la D.A. client.
+function ConsoleTab({
+  href,
+  soon,
+  icon,
+  label,
+  popTitle,
+  popText
+}) {
+  const inner = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, icon), label, soon && /*#__PURE__*/React.createElement("span", {
+    className: "console-tab__badge"
+  }, "Bientot"));
+  return /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-wrap"
+  }, soon ? /*#__PURE__*/React.createElement("div", {
+    className: "console-tab console-tab--soon"
+  }, inner) : /*#__PURE__*/React.createElement("a", {
+    className: "console-tab",
+    href: href
+  }, inner), /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-pop"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-pop__card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-pop__title"
+  }, popTitle), /*#__PURE__*/React.createElement("p", {
+    className: "console-tab-pop__text"
+  }, popText))));
+}
 function ConsoleView({
   onBack
 }) {
@@ -217,79 +253,76 @@ function ConsoleView({
     className: "view-enter view-enter-active"
   }, /*#__PURE__*/React.createElement("section", {
     className: "console-page"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "eyebrow"
-  }, "\u2014 Plateforme interne"), /*#__PURE__*/React.createElement("h1", {
-    className: "hero__title"
-  }, "Console interne de", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "cartographie"), " OSINT"), /*#__PURE__*/React.createElement("p", {
-    className: "hero__lede"
-  }, "Outil de travail des analystes Algor Int sur six theatres \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement."), /*#__PURE__*/React.createElement("div", {
-    className: "console-tabs"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "console-tab-wrap"
   }, /*#__PURE__*/React.createElement("a", {
-    className: "console-tab",
-    href: "/admin/"
-  }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "12",
-    cy: "10",
-    r: "2.6"
-  })), "Carto"), /*#__PURE__*/React.createElement("div", {
-    className: "console-tab-pop"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "console-tab-pop__card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "console-tab-pop__title"
-  }, "Cartographie OSINT"), /*#__PURE__*/React.createElement("p", {
-    className: "console-tab-pop__text"
-  }, "Edition des points, acteurs et calques sur les 6 theatres. Ouvre la console d'administration cartographique.")))), /*#__PURE__*/React.createElement("div", {
-    className: "console-tab-wrap"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "console-tab console-tab--soon"
-  }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "12",
-    cy: "12",
-    r: "3"
-  })), "Veille", /*#__PURE__*/React.createElement("span", {
-    className: "console-tab__badge"
-  }, "Bientot")), /*#__PURE__*/React.createElement("div", {
-    className: "console-tab-pop"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "console-tab-pop__card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "console-tab-pop__title"
-  }, "Veille"), /*#__PURE__*/React.createElement("p", {
-    className: "console-tab-pop__text"
-  }, "Tableau de bord de veille en temps reel. Bientot disponible."))))), /*#__PURE__*/React.createElement("div", {
-    className: "hero__cta-row"
-  }, /*#__PURE__*/React.createElement("a", {
-    className: "btn--ghost-link",
+    className: "console-back",
     href: "#",
     onClick: e => {
       e.preventDefault();
       onBack();
     }
-  }, "\u2190 Retour a l'accueil"))));
+  }, "\u2190 Retour a l'accueil"), /*#__PURE__*/React.createElement("h1", {
+    className: "hero__title"
+  }, "Console ", /*#__PURE__*/React.createElement("em", null, "interne")), /*#__PURE__*/React.createElement("p", {
+    className: "hero__lede"
+  }, "Outil de travail des analystes Algor Int sur six theatres \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement."), /*#__PURE__*/React.createElement("div", {
+    className: "console-tabs"
+  }, /*#__PURE__*/React.createElement(ConsoleTab, {
+    href: "/admin/",
+    label: "Carto",
+    popTitle: "Cartographie OSINT",
+    popText: "Edition des points, acteurs et calques sur les 6 theatres. Ouvre la console d'administration cartographique.",
+    icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+      d: "M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "12",
+      cy: "10",
+      r: "2.6"
+    }))
+  }), /*#__PURE__*/React.createElement(ConsoleTab, {
+    soon: true,
+    label: "Veille",
+    popTitle: "Veille",
+    popText: "Tableau de bord de veille en temps reel. Bientot disponible.",
+    icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+      d: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "12",
+      cy: "12",
+      r: "3"
+    }))
+  }), /*#__PURE__*/React.createElement(ConsoleTab, {
+    soon: true,
+    label: "Rapport",
+    popTitle: "Rapport",
+    popText: "Generation de rapports d'analyse decisionnels. Bientot disponible.",
+    icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+      d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M14 2v5h5"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M9 13h6M9 17h6"
+    }))
+  }), /*#__PURE__*/React.createElement(ConsoleTab, {
+    soon: true,
+    label: "Graph",
+    popTitle: "Graph",
+    popText: "Visualisation des reseaux et relations en graphes. Bientot disponible.",
+    icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("circle", {
+      cx: "6",
+      cy: "6",
+      r: "2.5"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "6",
+      cy: "18",
+      r: "2.5"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "18",
+      cy: "12",
+      r: "2.5"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M8.2 7.3l7.6 3.4M8.2 16.7l7.6-3.4"
+    }))
+  }))));
 }
 Object.assign(window, {
   HomeView,
