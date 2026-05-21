@@ -60,7 +60,17 @@ function App() {
     href: "/admin/"
   }, "Admin")), /*#__PURE__*/React.createElement("div", {
     className: "app-header__right"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "header-cta",
+    href: "/sahel/"
+  }, /*#__PURE__*/React.createElement("svg", {
+    className: "header-cta__star",
+    viewBox: "0 0 24 24",
+    fill: "currentColor",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 2.5l2.9 5.9 6.6.95-4.75 4.63 1.12 6.52L12 17.9l-5.9 3.1 1.13-6.52L2.5 9.85l6.6-.95z"
+  })), "Passer premium"), /*#__PURE__*/React.createElement("div", {
     className: "status-pill"
   }, /*#__PURE__*/React.createElement("span", {
     className: "status-pill__group"

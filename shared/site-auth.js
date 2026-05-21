@@ -152,6 +152,7 @@ const OVERLAY_HTML = `
             Pas encore de compte&nbsp;?
             <a href="#" id="sa-go-signup" class="sa-link sa-link-strong">Créer un compte</a>
           </p>
+          <p class="sa-premium-line">${ICON_STAR}<span>Les 6 théâtres d'analyse sont réservés aux abonnés premium</span></p>
         </div>
 
         <!-- ── Vue : inscription ── -->
@@ -532,6 +533,14 @@ const OVERLAY_CSS = `
   text-align: center; font-size: 11px; line-height: 1.45;
   color: var(--sa-tx-f); margin: 9px 0 0;
 }
+.sa-premium-line {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  font-size: 11.5px; line-height: 1.4; color: var(--v-soft);
+  margin: 13px 0 0; padding-top: 13px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+}
+.sa-premium-line svg { width: 13px; height: 13px; flex: 0 0 13px; }
 
 /* ── Vue upgrade ───────────────────────────────────────── */
 .sa-upgrade { text-align: center; padding: 4px 4px 2px; }

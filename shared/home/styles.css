@@ -206,8 +206,31 @@ img, svg { display: block; max-width: 100%; }
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-left: auto;
+  margin-left: 28px;
 }
+.app-header__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: var(--r-sm);
+  background: var(--violet-grad);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--violet) 55%, transparent);
+  transition: filter 0.15s var(--ease), transform 0.15s var(--ease);
+}
+.header-cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.header-cta__star { width: 14px; height: 14px; flex-shrink: 0; }
 .nav-link {
   font-size: 14px;
   font-weight: 500;
