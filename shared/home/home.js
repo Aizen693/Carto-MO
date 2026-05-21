@@ -224,6 +224,63 @@ function ConsoleView({
   }, "Console interne de", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "cartographie"), " OSINT"), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
   }, "Outil de travail des analystes Algor Int sur six theatres \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement."), /*#__PURE__*/React.createElement("div", {
+    className: "console-tabs"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-wrap"
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "console-tab",
+    href: "/admin/"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "10",
+    r: "2.6"
+  })), "Carto"), /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-pop"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-pop__card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-pop__title"
+  }, "Cartographie OSINT"), /*#__PURE__*/React.createElement("p", {
+    className: "console-tab-pop__text"
+  }, "Edition des points, acteurs et calques sur les 6 theatres. Ouvre la console d'administration cartographique.")))), /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-wrap"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "console-tab console-tab--soon"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "3"
+  })), "Veille", /*#__PURE__*/React.createElement("span", {
+    className: "console-tab__badge"
+  }, "Bientot")), /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-pop"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-pop__card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "console-tab-pop__title"
+  }, "Veille"), /*#__PURE__*/React.createElement("p", {
+    className: "console-tab-pop__text"
+  }, "Tableau de bord de veille en temps reel. Bientot disponible."))))), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
   }, /*#__PURE__*/React.createElement("a", {
     className: "btn--ghost-link",

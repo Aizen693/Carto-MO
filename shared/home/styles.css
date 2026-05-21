@@ -573,7 +573,85 @@ img, svg { display: block; max-width: 100%; }
 .console-page .eyebrow { display: block; margin-bottom: 18px; }
 .console-page .hero__title,
 .console-page .hero__lede { max-width: 680px; }
-.console-page .hero__cta-row { margin-top: 32px; }
+.console-page .hero__cta-row { margin-top: 30px; }
+
+/* Onglets de la console interne */
+.console-tabs {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+.console-tab-wrap { position: relative; }
+.console-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 22px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease), transform 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+.console-tab:hover {
+  border-color: var(--violet);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px -10px color-mix(in srgb, var(--violet) 50%, transparent);
+}
+.console-tab svg { width: 17px; height: 17px; color: var(--violet); flex-shrink: 0; }
+.console-tab--soon { opacity: 0.65; cursor: default; }
+.console-tab--soon:hover { border-color: var(--line-2); transform: none; box-shadow: none; }
+.console-tab__badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+  background: var(--violet-bg);
+  border: 1px solid var(--violet-bd);
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+.console-tab-pop {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 300px;
+  padding-top: 10px;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.18s var(--ease), transform 0.18s var(--ease);
+  z-index: 20;
+}
+.console-tab-wrap:hover .console-tab-pop {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.console-tab-pop__card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: 0 18px 44px -14px rgba(46,24,87,0.35);
+  padding: 14px 16px;
+}
+.console-tab-pop__title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+.console-tab-pop__text {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 0;
+}
 .hero__eyebrow {
   display: inline-flex;
   align-items: center;

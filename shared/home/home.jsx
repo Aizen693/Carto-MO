@@ -163,6 +163,42 @@ function ConsoleView({ onBack }) {
         <p className="hero__lede">
           Outil de travail des analystes Algor Int sur six theatres — Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement.
         </p>
+
+        <div className="console-tabs">
+          <div className="console-tab-wrap">
+            <a className="console-tab" href="/admin/">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z" />
+                <circle cx="12" cy="10" r="2.6" />
+              </svg>
+              Carto
+            </a>
+            <div className="console-tab-pop">
+              <div className="console-tab-pop__card">
+                <div className="console-tab-pop__title">Cartographie OSINT</div>
+                <p className="console-tab-pop__text">Edition des points, acteurs et calques sur les 6 theatres. Ouvre la console d'administration cartographique.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="console-tab-wrap">
+            <div className="console-tab console-tab--soon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              Veille
+              <span className="console-tab__badge">Bientot</span>
+            </div>
+            <div className="console-tab-pop">
+              <div className="console-tab-pop__card">
+                <div className="console-tab-pop__title">Veille</div>
+                <p className="console-tab-pop__text">Tableau de bord de veille en temps reel. Bientot disponible.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="hero__cta-row">
           <a className="btn--ghost-link" href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>
             &larr; Retour a l'accueil
