@@ -242,6 +242,7 @@ def _init_state() -> None:
         "page_index":     0,
         "user_labels":    [],
         "empty_dossiers": [],
+        "active_dossier": None,
         "auto_loaded":    False,
     }
     for k, v in defaults.items():
@@ -510,6 +511,57 @@ def render_sidebar() -> str:
 
 # ── Page Veille ───────────────────────────────────────────────────────────────
 
+def _narrow_to_dossier(df: pd.DataFrame, dossier: str | None) -> pd.DataFrame:
+    """Restreint df aux articles portant au moins un libellé du dossier."""
+    if not dossier or df.empty:
+        return df
+    labels_in = set(_dossiers_map().get(dossier, []))
+    if not labels_in:
+        return df.iloc[0:0]
+    mask = df["tags"].apply(
+        lambda c: bool(labels_in & {t.strip() for t in str(c).split(",") if t.strip()}))
+    return df[mask]
+
+
+def _render_dossier_bar(base_df: pd.DataFrame) -> None:
+    """Navigation par dossier en haut de la page Veille."""
+    mapping = _dossiers_map()
+    active  = st.session_state.get("active_dossier")
+    if active and active not in mapping:
+        active = st.session_state.active_dossier = None
+
+    with st.container(border=True):
+        st.markdown("**Dossiers**")
+        if not mapping:
+            st.caption("Aucun dossier. Créez-en dans Réglages › Dossiers "
+                       "pour classer votre veille par thème.")
+            return
+
+        names   = ["__all__"] + sorted(mapping)
+        per_row = 6
+        for i in range(0, len(names), per_row):
+            chunk = names[i:i + per_row]
+            cols  = st.columns(len(chunk))
+            for col, name in zip(cols, chunk):
+                if name == "__all__":
+                    label     = f"📋 Tous ({len(base_df)})"
+                    is_active = not active
+                else:
+                    labels_in = set(mapping[name])
+                    cnt = int(base_df["tags"].apply(
+                        lambda c: bool(labels_in & {
+                            t.strip() for t in str(c).split(",") if t.strip()})).sum())
+                    label     = f"📁 {name} ({cnt})"
+                    is_active = active == name
+                if col.button(label, key=f"dosnav_{name}",
+                              use_container_width=True,
+                              type="primary" if is_active else "secondary"):
+                    st.session_state.active_dossier = (
+                        None if name == "__all__" else name)
+                    st.session_state.page_index = 0
+                    st.rerun()
+
+
 def render_veille() -> None:
     st.markdown("## Veille")
 
@@ -523,8 +575,12 @@ def render_veille() -> None:
         st.code("python oauth_setup.py", language="bash")
         return
 
-    filtered_df = st.session_state.filtered_df
+    base_df = st.session_state.filtered_df   # filtres + recherche, hors dossier
     sel = st.session_state.selection
+
+    _render_dossier_bar(base_df)
+    dossier = st.session_state.get("active_dossier")
+    filtered_df = _narrow_to_dossier(base_df, dossier)
 
     c1, c2, c3 = st.columns(3)
     c1.metric("Chargés", len(full_df))
@@ -571,7 +627,11 @@ def render_veille() -> None:
         visible = st.session_state.get("col_vis", visible)
 
     if filtered_df.empty:
-        st.info("Aucun article ne correspond aux filtres courants.")
+        if dossier:
+            st.info(f"Aucun article chargé dans le dossier « {dossier} ». "
+                    "Classez des articles via la page Veille (popover « Actions »).")
+        else:
+            st.info("Aucun article ne correspond aux filtres courants.")
         return
 
     # ── Pagination ─────────────────────────────────────────────────────────
