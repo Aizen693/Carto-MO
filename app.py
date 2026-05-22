@@ -8,8 +8,10 @@ Trois pages :
 """
 
 import html
+import json
 import logging
 from datetime import datetime
+from pathlib import Path
 
 import pandas as pd
 import streamlit as st
@@ -32,6 +34,11 @@ setup_logging()
 logger = logging.getLogger(__name__)
 
 PAGE_SIZE = 50
+
+# Persistance locale des dossiers (regroupements de libellés).
+# Note : Inoreader n'a pas de « dossier de libellés » ; ce mapping est
+# stocké en JSON côté app — réinitialisé à chaque redéploiement Streamlit.
+DOSSIERS_FILE = Path("veille_dossiers.json")
 
 SORT_OPTIONS = ["published_at", "score", "source", "word_count", "title"]
 SORT_LABELS = {
@@ -1010,6 +1017,7 @@ def _rename_label(old: str, new: str) -> None:
     st.session_state.user_labels = [
         new if x == old else x for x in st.session_state.user_labels]
     _rename_in_dataframes(old, new)
+    _sync_label_in_dossiers(old, new)
     st.session_state.table_key += 1
     st.toast(f"Libellé renommé en « {new} ».", icon="🏷️")
     st.rerun()
@@ -1029,9 +1037,49 @@ def _delete_label(label: str) -> None:
     st.session_state.tags_list   = [x for x in st.session_state.tags_list if x != label]
     st.session_state.user_labels = [x for x in st.session_state.user_labels if x != label]
     _strip_label_in_dataframes(label)
+    _sync_label_in_dossiers(label, None)
     st.session_state.table_key += 1
     st.toast(f"Libellé « {label} » supprimé.", icon="🗑️")
     st.rerun()
+
+
+# ── Dossiers (regroupements de libellés) ──────────────────────────────────────
+
+def _load_dossiers() -> dict[str, list[str]]:
+    """Charge le mapping dossier → libellés depuis le fichier JSON local."""
+    if DOSSIERS_FILE.exists():
+        try:
+            data = json.loads(DOSSIERS_FILE.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                return {str(k): [str(x) for x in v] for k, v in data.items()}
+        except Exception as exc:
+            logger.warning("Lecture dossiers impossible : %s", exc)
+    return {}
+
+
+def _save_dossiers(dossiers: dict[str, list[str]]) -> None:
+    try:
+        DOSSIERS_FILE.write_text(
+            json.dumps(dossiers, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+    except Exception as exc:
+        st.error(f"Sauvegarde des dossiers impossible : {exc}")
+
+
+def _sync_label_in_dossiers(old: str, new: str | None) -> None:
+    """Répercute le renommage (new=nouveau nom) ou la suppression (new=None)
+    d'un libellé dans les dossiers."""
+    dossiers = _load_dossiers()
+    changed = False
+    for key, libs in dossiers.items():
+        if old in libs:
+            if new is None:
+                dossiers[key] = [x for x in libs if x != old]
+            else:
+                dossiers[key] = [new if x == old else x for x in libs]
+            changed = True
+    if changed:
+        _save_dossiers(dossiers)
 
 
 def _toggle_star(ids: list[str], starred: bool) -> None:
@@ -1142,14 +1190,94 @@ def render_analyse() -> None:
 
 def render_reglages() -> None:
     st.markdown("## Réglages")
-    tab_labels, tab_scoring, tab_filtres = st.tabs(
-        ["Libellés", "Scoring", "Filtres sauvegardés"])
+    tab_dossiers, tab_labels, tab_scoring, tab_filtres = st.tabs(
+        ["Dossiers", "Libellés", "Scoring", "Filtres sauvegardés"])
+    with tab_dossiers:
+        _render_dossiers()
     with tab_labels:
         _render_labels()
     with tab_scoring:
         _render_scoring()
     with tab_filtres:
         _render_saved_filters()
+
+
+def _render_dossiers() -> None:
+    st.caption(
+        "Regroupez vos libellés dans des dossiers thématiques pour organiser "
+        "votre veille. Les libellés se créent dans l'onglet « Libellés »."
+    )
+
+    dossiers = _load_dossiers()
+    labels   = _available_labels()
+
+    c1, c2 = st.columns([4, 1])
+    with c1:
+        new = st.text_input(
+            "Nouveau dossier", key="new_dossier", label_visibility="collapsed",
+            placeholder="Nom du nouveau dossier…",
+        )
+    with c2:
+        if st.button("Créer", type="primary", use_container_width=True,
+                     key="create_dossier"):
+            name = new.strip()
+            if not name:
+                st.warning("Saisissez un nom de dossier.")
+            elif name in dossiers:
+                st.info(f"« {name} » existe déjà.")
+            else:
+                dossiers[name] = []
+                _save_dossiers(dossiers)
+                st.rerun()
+
+    if not dossiers:
+        st.info("Aucun dossier pour l'instant. Créez-en un ci-dessus.")
+        return
+
+    st.divider()
+    for name in sorted(dossiers):
+        with st.container(border=True):
+            hc1, hc2, hc3 = st.columns([4, 1.3, 1.3])
+            with hc1:
+                rn = st.text_input("Nom", value=name, key=f"dosrn_{name}",
+                                   label_visibility="collapsed")
+            with hc2:
+                if st.button("Renommer", key=f"dosbtn_{name}",
+                             use_container_width=True):
+                    new_n = rn.strip()
+                    if new_n and new_n != name:
+                        if new_n in dossiers:
+                            st.warning(f"« {new_n} » existe déjà.")
+                        else:
+                            dossiers[new_n] = dossiers.pop(name)
+                            _save_dossiers(dossiers)
+                            st.rerun()
+            with hc3:
+                with st.popover("Supprimer", use_container_width=True):
+                    st.warning(
+                        f"Supprimer le dossier « {name} » ? Les libellés qu'il "
+                        "contient ne sont pas supprimés, seulement le regroupement."
+                    )
+                    if st.button("Confirmer la suppression", type="primary",
+                                 use_container_width=True, key=f"dosdel_{name}"):
+                        dossiers.pop(name, None)
+                        _save_dossiers(dossiers)
+                        st.rerun()
+
+            current = [lbl for lbl in dossiers[name] if lbl in labels]
+            chosen = st.multiselect(
+                "Libellés de ce dossier", labels, default=current,
+                key=f"dosset_{st.session_state.table_key}_{name}",
+                placeholder="Choisir des libellés…",
+            )
+            if set(chosen) != set(dossiers[name]):
+                dossiers[name] = chosen
+                _save_dossiers(dossiers)
+
+    assigned = {lbl for libs in dossiers.values() for lbl in libs}
+    orphans  = [lbl for lbl in labels if lbl not in assigned]
+    if orphans:
+        st.caption("Libellés sans dossier : " + ", ".join(orphans))
 
 
 def _render_labels() -> None:

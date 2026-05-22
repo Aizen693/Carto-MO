@@ -3,3 +3,5 @@
 __pycache__/
 *.pyc
 exports/
+veille_dossiers.json
+saved_filters/
