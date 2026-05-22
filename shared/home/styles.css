@@ -2566,3 +2566,61 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   .site-footer__inner { grid-template-columns: 1fr; gap: 32px; padding: 52px 22px 36px; }
   .site-footer__bottom-inner { padding: 18px 22px; }
 }
+
+/* ═══════════════════════════════════════════════════════
+   PLATEFORME — lignes feature alternées
+   ═══════════════════════════════════════════════════════ */
+.feature-rows { display: flex; flex-direction: column; gap: 40px; }
+.feature-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 52px;
+  align-items: center;
+}
+.feature-row:nth-child(even) .feature-row__visual { order: -1; }
+.feature-row__tag {
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--violet); margin-bottom: 14px;
+}
+.feature-row__title {
+  font-size: 26px; font-weight: 700;
+  letter-spacing: -0.022em; line-height: 1.12;
+  color: var(--ink); margin-bottom: 13px;
+}
+.feature-row__text {
+  font-size: 16px; line-height: 1.62;
+  color: var(--ink-2); margin-bottom: 20px;
+}
+.feature-row__list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+.feature-row__list li {
+  display: flex; align-items: center; gap: 11px;
+  font-size: 14.5px; font-weight: 500; color: var(--ink);
+}
+.feature-row__list svg { flex: none; width: 18px; height: 18px; color: var(--violet); }
+.feature-row__visual .media-frame { aspect-ratio: 16 / 11; }
+
+/* Étape d'accès numérotée */
+.step-num {
+  font-family: var(--mono); font-size: 13px; font-weight: 600;
+  color: var(--violet);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--violet-bg); border: 1px solid var(--violet-bd);
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1080px) {
+  .feature-row { grid-template-columns: 1fr; gap: 26px; }
+  .feature-row__visual,
+  .feature-row:nth-child(even) .feature-row__visual { order: -1; }
+}
+
+/* Bande compacte de théâtres (renvoi vers la rubrique Théâtres) */
+.zone-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+.zone-strip span {
+  font-family: var(--mono); font-size: 13px; font-weight: 500;
+  padding: 9px 15px; border-radius: var(--r-full);
+  border: 1px solid var(--line-2); color: var(--ink-2);
+  background: var(--surface);
+}
