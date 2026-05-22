@@ -1,17 +1,14 @@
 """
-Inoreader Dashboard — application Streamlit principale.
+Inoreader Dashboard — application Streamlit de veille.
 
-Vues :
-  📋 Articles   — tableau filtrable, sélection, paniers
-  📊 Dashboard  — analytique (sources, dates, mots-clés, scores)
-  ⚙️  Scoring   — configuration du moteur de score local
-  💾 Filtres    — gestion des profils de filtre sauvegardés
+Trois pages :
+  Veille    — liste des articles : recherche, filtres, sélection, triage
+  Analyse   — tableaux de bord analytiques
+  Réglages  — scoring local + profils de filtre sauvegardés
 """
 
 import logging
-from collections import Counter
 from datetime import datetime
-from pathlib import Path
 
 import pandas as pd
 import streamlit as st
@@ -33,15 +30,30 @@ from utils import highlight_keywords, load_config, missing_keys, setup_logging, 
 setup_logging()
 logger = logging.getLogger(__name__)
 
-# ── Page config ────────────────────────────────────────────────────────────────
+PAGE_SIZE = 50
+
+SORT_OPTIONS = ["published_at", "score", "source", "word_count", "title"]
+SORT_LABELS = {
+    "published_at": "Date de publication",
+    "score":        "Score",
+    "source":       "Source",
+    "word_count":   "Longueur",
+    "title":        "Titre",
+}
+FILTER_KEYS = [
+    "f_sources", "f_folders", "f_tags", "f_from", "f_to",
+    "f_read", "f_unread", "f_starred", "f_unstarred",
+    "f_inc", "f_exc", "f_minw", "f_maxw", "f_sort", "f_asc",
+]
+
+# ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Inoreader Dashboard",
+    page_title="Veille — Algor Int",
     page_icon="📰",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# Logo Algor Access — coin haut-gauche
 st.logo("algor_int_logo.jpg", size="large")
 
 st.markdown(
@@ -49,57 +61,47 @@ st.markdown(
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-    /* ── Algor Access — direction artistique violet/blanc ───────────────── */
     html, body, .stApp, [data-testid="stAppViewContainer"],
     [data-testid="stSidebar"], button, input, textarea, select {
         font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
     .stApp, [data-testid="stAppViewContainer"] { background: #FFFFFF; }
 
-    /* Header translucide (effet verre du site) */
     [data-testid="stHeader"] {
         background: rgba(255,255,255,0.7);
         backdrop-filter: saturate(140%) blur(14px);
         -webkit-backdrop-filter: saturate(140%) blur(14px);
         border-bottom: 1px solid rgba(24,20,40,0.08);
     }
-
-    /* Logo coin haut-gauche */
     [data-testid="stLogo"] { height: 2.6rem; width: auto; }
 
-    /* Titres */
     h1, h2, h3, h4, h5 {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        color: #181428;
-        font-weight: 700;
-        letter-spacing: -0.01em;
+        color: #181428; font-weight: 700; letter-spacing: -0.01em;
     }
-    h1 { font-size: 1.95rem; }
-    h2 { font-size: 1.35rem; }
-    h3 { font-size: 1.1rem; }
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.3rem; }
+    h3 { font-size: 1.05rem; }
 
-    /* Sidebar */
+    /* Sidebar — compacte */
     [data-testid="stSidebar"] {
-        min-width: 320px; max-width: 380px;
+        min-width: 290px; max-width: 320px;
         background: #F5F3FA;
         border-right: 1px solid rgba(24,20,40,0.08);
     }
-    [data-testid="stSidebar"] h2 { color: #6B3FA0; }
+    [data-testid="stSidebar"] h3 { color: #6B3FA0; }
 
-    /* Boutons — rayon, transition douce, survol surelevé (effet du site) */
-    .stButton > button, .stDownloadButton > button, .stFormSubmitButton > button {
-        border-radius: 8px;
-        font-weight: 600;
+    /* Boutons */
+    .stButton > button, .stDownloadButton > button,
+    .stFormSubmitButton > button, [data-testid="stPopover"] button {
+        border-radius: 8px; font-weight: 600;
         border: 1px solid rgba(24,20,40,0.14);
-        transition: border-color .15s cubic-bezier(0.22,0.61,0.36,1),
-                    background .15s cubic-bezier(0.22,0.61,0.36,1),
-                    color .15s cubic-bezier(0.22,0.61,0.36,1),
-                    transform .15s cubic-bezier(0.22,0.61,0.36,1),
-                    box-shadow .15s cubic-bezier(0.22,0.61,0.36,1);
+        transition: border-color .15s ease, background .15s ease,
+                    color .15s ease, transform .15s ease, box-shadow .15s ease;
     }
-    .stButton > button:hover, .stDownloadButton > button:hover {
-        border-color: #6B3FA0;
-        color: #6B3FA0;
+    .stButton > button:hover, .stDownloadButton > button:hover,
+    [data-testid="stPopover"] button:hover {
+        border-color: #6B3FA0; color: #6B3FA0;
         transform: translateY(-1px);
         box-shadow: 0 8px 22px -12px rgba(107,63,160,0.5);
     }
@@ -107,104 +109,67 @@ st.markdown(
     .stFormSubmitButton > button[kind="primary"],
     [data-testid="stBaseButton-primary"],
     [data-testid="stBaseButton-primaryFormSubmit"] {
-        background: #6B3FA0;
-        border-color: #6B3FA0;
-        color: #FFFFFF;
+        background: #6B3FA0; border-color: #6B3FA0; color: #FFFFFF;
     }
     .stButton > button[kind="primary"]:hover,
     .stFormSubmitButton > button[kind="primary"]:hover,
     [data-testid="stBaseButton-primary"]:hover,
     [data-testid="stBaseButton-primaryFormSubmit"]:hover {
-        background: #5A2F8C;
-        border-color: #5A2F8C;
-        color: #FFFFFF;
+        background: #5A2F8C; border-color: #5A2F8C; color: #FFFFFF;
         transform: translateY(-1px);
         box-shadow: 0 10px 26px -10px rgba(107,63,160,0.55);
     }
 
-    /* Metrics — cartes, ombre douce, survol surelevé */
+    /* Metrics */
     [data-testid="stMetric"] {
         background: #FFFFFF;
         border: 1px solid rgba(24,20,40,0.08);
-        border-radius: 12px;
-        padding: 14px 16px;
+        border-radius: 12px; padding: 12px 16px;
         box-shadow: 0 1px 0 rgba(24,20,40,0.04), 0 8px 24px -8px rgba(24,20,40,0.08);
-        transition: transform .15s cubic-bezier(0.22,0.61,0.36,1),
-                    box-shadow .15s cubic-bezier(0.22,0.61,0.36,1);
-    }
-    [data-testid="stMetric"]:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 14px 32px -12px rgba(46,24,87,0.18);
     }
     [data-testid="stMetricValue"] { color: #6B3FA0; font-weight: 700; }
     [data-testid="stMetricLabel"] {
-        color: #6E6982;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        font-family: 'JetBrains Mono', ui-monospace, monospace;
-        font-size: 0.68rem;
+        color: #6E6982; text-transform: uppercase; letter-spacing: 0.08em;
+        font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.66rem;
     }
 
-    /* Champs de saisie */
     [data-baseweb="input"], [data-baseweb="textarea"], [data-baseweb="select"] > div {
         border-radius: 8px;
     }
     .stTextInput input:focus, .stNumberInput input:focus,
     .stDateInput input:focus, .stTextArea textarea:focus {
-        border-color: #6B3FA0;
-        box-shadow: 0 0 0 1px #6B3FA0;
+        border-color: #6B3FA0; box-shadow: 0 0 0 1px #6B3FA0;
     }
 
-    /* Navigation radio (sidebar) */
     [data-testid="stSidebar"] [role="radiogroup"] label {
-        border-radius: 8px;
-        padding: 2px 6px;
-        transition: background .15s cubic-bezier(0.22,0.61,0.36,1);
+        border-radius: 8px; padding: 2px 6px;
+        transition: background .15s ease;
     }
     [data-testid="stSidebar"] [role="radiogroup"] label:hover {
         background: rgba(107,63,160,0.06);
     }
 
-    /* Expanders — carte arrondie, ombre douce */
     [data-testid="stExpander"] {
         border: 1px solid rgba(24,20,40,0.08);
         border-radius: 12px;
-        box-shadow: 0 1px 0 rgba(24,20,40,0.04), 0 8px 24px -10px rgba(24,20,40,0.06);
     }
     [data-testid="stExpander"] summary:hover { color: #6B3FA0; }
 
-    /* Tableaux */
     [data-testid="stDataFrame"], [data-testid="stTable"] {
-        border-radius: 10px;
-        overflow: hidden;
+        border-radius: 10px; overflow: hidden;
     }
-
-    /* Sliders */
     [data-testid="stSlider"] [role="slider"] { background-color: #6B3FA0; }
-
-    /* Alertes */
     [data-testid="stAlert"] { border-radius: 10px; }
-
-    /* Liens */
     a, a:visited { color: #6B3FA0; }
     a:hover { color: #5A2F8C; }
-
-    /* Separateurs */
-    hr { border-color: rgba(24,20,40,0.08); }
-
-    /* Layout (conserve de l'original) */
-    [data-testid="stSidebar"] { min-width: 320px; max-width: 380px; }
-    .metric-row { display:flex; gap:12px; margin-bottom:8px; }
+    hr { border-color: rgba(24,20,40,0.08); margin: 0.8rem 0; }
     .stDataFrame { font-size: 13px; }
-    div[data-testid="column"] > div { padding: 0 4px; }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-PAGE_SIZE = 50   # articles par page dans le tableau
-
-# ── Session state ──────────────────────────────────────────────────────────────
+# ── Session state ────────────────────────────────────────────────────────────
 
 def _init_state() -> None:
     defaults: dict = {
@@ -215,12 +180,12 @@ def _init_state() -> None:
         "folders":        [],
         "tags_list":      [],
         "scoring_config": ScoringConfig(),
-        "shortlists":     {"Panier 1": set()},
-        "active_shortlist": "Panier 1",
-        "table_key":      0,   # incrémenté pour forcer reset du data_editor
+        "flt":            FilterConfig(),
+        "selection":      set(),
+        "table_key":      0,
         "page_index":     0,
-        "user_labels":    [],     # libellés créés en session, pas encore dans Inoreader
-        "auto_loaded":    False,  # garde-fou : chargement auto une seule fois par session
+        "user_labels":    [],
+        "auto_loaded":    False,
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -228,7 +193,7 @@ def _init_state() -> None:
 
 _init_state()
 
-# ── Client ─────────────────────────────────────────────────────────────────────
+# ── Client ───────────────────────────────────────────────────────────────────
 
 def get_client() -> InoreaderClient | None:
     if st.session_state.client is not None:
@@ -249,34 +214,22 @@ def get_client() -> InoreaderClient | None:
 
 def load_metadata(client: InoreaderClient) -> None:
     try:
-        subs = client.list_subscriptions()
-        tags_raw = client.list_tags()
-        st.session_state.subscriptions = subs
-
+        st.session_state.subscriptions = client.list_subscriptions()
         folders, tag_names = [], []
-        for t in tags_raw:
+        for t in client.list_tags():
             tid = t.get("id", "")
             if "/label/" not in tid:
                 continue
             label = tid.split("/label/")[-1].strip()
             if not label:
                 continue
-            # type='folder' signale un dossier ; sinon tag utilisateur
-            if t.get("type") == "folder":
-                folders.append(label)
-            else:
-                tag_names.append(label)
-
+            (folders if t.get("type") == "folder" else tag_names).append(label)
         st.session_state.folders   = sorted(set(folders))
         st.session_state.tags_list = sorted(set(tag_names))
-    except InoreaderAPIError as exc:
-        st.warning(f"Erreur métadonnées : {exc}")
     except Exception as exc:
         st.warning(f"Erreur métadonnées : {exc}")
         logger.exception("load_metadata failed")
 
-
-# ── Article loading ────────────────────────────────────────────────────────────
 
 def load_articles(
     client: InoreaderClient,
@@ -299,26 +252,23 @@ def load_articles(
         "all":     "user/-/state/com.google/reading-list",
         "starred": "user/-/state/com.google/starred",
     }
-
     if source_type in stream_map:
         stream_id = stream_map[source_type]
     elif source_type == "feed":
-        stream_id = f"feed/{source_value}" if source_value else "user/-/state/com.google/reading-list"
+        stream_id = f"feed/{source_value}" if source_value else stream_map["all"]
     elif source_type in ("folder", "tag"):
-        stream_id = f"user/-/label/{source_value}" if source_value else "user/-/state/com.google/reading-list"
+        stream_id = f"user/-/label/{source_value}" if source_value else stream_map["all"]
     else:
-        stream_id = "user/-/state/com.google/reading-list"
+        stream_id = stream_map["all"]
 
     try:
         items = client.get_all_pages(stream_id, max_articles=max_articles, **kwargs)
-        articles = normalize_articles(items)
-        df = articles_to_dataframe(articles)
+        df = articles_to_dataframe(normalize_articles(items))
         df = apply_scoring(df, st.session_state.scoring_config)
-        st.session_state.articles_df  = df
-        st.session_state.filtered_df  = df.copy()
-        st.session_state.page_index   = 0
-        st.session_state.table_key   += 1
-        st.success(f"✓ {len(df)} articles chargés.")
+        st.session_state.articles_df = df
+        st.session_state.selection   = set()
+        _recompute()
+        st.success(f"{len(df)} articles chargés.")
     except InoreaderAPIError as exc:
         st.error(f"Erreur API Inoreader : {exc}")
     except Exception as exc:
@@ -326,426 +276,308 @@ def load_articles(
         logger.exception("load_articles failed")
 
 
-# ── Sidebar ────────────────────────────────────────────────────────────────────
+# ── Filtrage ──────────────────────────────────────────────────────────────────
+
+def _recompute() -> None:
+    """Recalcule filtered_df depuis articles_df et le filtre courant."""
+    df = st.session_state.articles_df
+    flt = st.session_state.flt
+    st.session_state.filtered_df = apply_filters(df, flt) if not df.empty else df
+    st.session_state.page_index  = 0
+    st.session_state.table_key  += 1
+
+
+def _on_search_change() -> None:
+    st.session_state.flt.search_text = st.session_state.get("search_box", "")
+    _recompute()
+
+
+def _read_filter_widgets() -> FilterConfig:
+    s = st.session_state
+    return FilterConfig(
+        search_text     = s.flt.search_text,
+        sources         = s.get("f_sources", []),
+        folders         = s.get("f_folders", []),
+        tags            = s.get("f_tags", []),
+        date_from       = s.get("f_from"),
+        date_to         = s.get("f_to"),
+        show_read       = s.get("f_read", True),
+        show_unread     = s.get("f_unread", True),
+        show_starred    = s.get("f_starred", True),
+        show_unstarred  = s.get("f_unstarred", True),
+        include_keywords= [k.strip() for k in s.get("f_inc", "").split(",") if k.strip()],
+        exclude_keywords= [k.strip() for k in s.get("f_exc", "").split(",") if k.strip()],
+        min_words       = int(s.get("f_minw", 0)),
+        max_words       = int(s.get("f_maxw", 100_000)),
+        sort_by         = s.get("f_sort", "published_at"),
+        sort_ascending  = s.get("f_asc", False),
+    )
+
+
+def _render_filter_form(df: pd.DataFrame) -> None:
+    flt = st.session_state.flt
+
+    sources = sorted(df["source"].dropna().unique())
+    folders = sorted(f for f in df["folder"].dropna().unique() if f)
+    tags: set[str] = set()
+    for cell in df["tags"].dropna():
+        for t in cell.split(","):
+            if t.strip():
+                tags.add(t.strip())
+
+    st.multiselect("Sources",  sources,      default=flt.sources, key="f_sources")
+    st.multiselect("Dossiers", folders,      default=flt.folders, key="f_folders")
+    st.multiselect("Tags",     sorted(tags), default=flt.tags,    key="f_tags")
+
+    c1, c2 = st.columns(2)
+    c1.date_input("Du", value=flt.date_from, key="f_from")
+    c2.date_input("Au", value=flt.date_to,   key="f_to")
+
+    st.markdown("**Statut**")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.checkbox("Lus",     value=flt.show_read,    key="f_read")
+        st.checkbox("Favoris", value=flt.show_starred, key="f_starred")
+    with c2:
+        st.checkbox("Non lus",     value=flt.show_unread,    key="f_unread")
+        st.checkbox("Non favoris", value=flt.show_unstarred, key="f_unstarred")
+
+    st.text_input("Contient les mots", value=", ".join(flt.include_keywords),
+                  key="f_inc", placeholder="IA, sécurité")
+    st.text_input("Exclut les mots", value=", ".join(flt.exclude_keywords),
+                  key="f_exc", placeholder="crypto, publicité")
+
+    c1, c2 = st.columns(2)
+    c1.number_input("Mots min", 0, 50_000,  value=flt.min_words, key="f_minw")
+    c2.number_input("Mots max", 0, 100_000, value=flt.max_words, key="f_maxw")
+
+    sort_idx = SORT_OPTIONS.index(flt.sort_by) if flt.sort_by in SORT_OPTIONS else 0
+    st.selectbox("Trier par", SORT_OPTIONS, index=sort_idx, key="f_sort",
+                 format_func=lambda x: SORT_LABELS[x])
+    st.checkbox("Ordre croissant", value=flt.sort_ascending, key="f_asc")
+
+    st.divider()
+    b1, b2 = st.columns(2)
+    if b1.button("Appliquer", type="primary", use_container_width=True, key="btn_apply"):
+        st.session_state.flt = _read_filter_widgets()
+        _recompute()
+        st.rerun()
+    if b2.button("Réinitialiser", use_container_width=True, key="btn_reset"):
+        for k in FILTER_KEYS:
+            st.session_state.pop(k, None)
+        st.session_state.pop("search_box", None)
+        st.session_state.flt = FilterConfig()
+        _recompute()
+        st.rerun()
+
+    with st.expander("Sauvegarder ce filtre"):
+        fname = st.text_input("Nom du profil", key="save_fname", label_visibility="collapsed",
+                              placeholder="Nom du profil…")
+        if st.button("Sauvegarder", key="btn_save_filter") and fname.strip():
+            fc = _read_filter_widgets()
+            fc.name = fname.strip()
+            save_filter_profile(fc)
+            st.success(f"Profil « {fname.strip()} » sauvegardé.")
+
+
+# ── Sidebar ───────────────────────────────────────────────────────────────────
 
 def render_sidebar() -> str:
     with st.sidebar:
-        st.markdown("## 📰 Inoreader Dashboard")
+        st.markdown("### Veille Algor Int")
 
         page = st.radio(
-            "nav",
-            ["📋 Articles", "📊 Dashboard", "⚙️ Scoring", "💾 Filtres sauvegardés"],
+            "Navigation",
+            ["Veille", "Analyse", "Réglages"],
             label_visibility="collapsed",
         )
 
         st.divider()
+        st.markdown("### Charger")
 
-        # Source selector
-        st.markdown("### Chargement")
         source_type = st.selectbox(
             "Source",
             ["all", "starred", "feed", "folder", "tag"],
             format_func=lambda x: {
-                "all":     "Tous les articles",
-                "starred": "Favoris (starred)",
-                "feed":    "Flux spécifique",
-                "folder":  "Dossier",
-                "tag":     "Tag",
+                "all": "Tous les articles", "starred": "Favoris",
+                "feed": "Flux", "folder": "Dossier", "tag": "Libellé",
             }[x],
         )
 
         source_value = ""
         subs = st.session_state.subscriptions
-
         if source_type == "feed":
             feed_map = {s.get("title", s.get("id", "?")): s.get("url", "") for s in subs}
             if feed_map:
-                chosen_feed = st.selectbox("Flux", list(feed_map.keys()))
-                source_value = feed_map.get(chosen_feed, "")
+                source_value = feed_map.get(st.selectbox("Flux", list(feed_map.keys())), "")
             else:
                 source_value = st.text_input("URL du flux RSS")
-
         elif source_type == "folder":
             folders = st.session_state.folders
-            if folders:
-                source_value = st.selectbox("Dossier", folders)
-            else:
-                source_value = st.text_input("Nom du dossier")
-
+            source_value = st.selectbox("Dossier", folders) if folders \
+                else st.text_input("Nom du dossier")
         elif source_type == "tag":
             tags = st.session_state.tags_list
-            if tags:
-                source_value = st.selectbox("Tag", tags)
-            else:
-                source_value = st.text_input("Nom du tag")
+            source_value = st.selectbox("Libellé", tags) if tags \
+                else st.text_input("Nom du libellé")
 
         max_articles = st.slider("Nb max d'articles", 50, 2000, 500, step=50)
-        exclude_read = st.checkbox("Exclure les articles lus")
+        exclude_read = st.checkbox("Articles non lus uniquement")
 
-        col1, col2 = st.columns(2)
-        with col1:
-            start_date = st.date_input("Depuis", value=None, key="load_from")
-        with col2:
-            end_date = st.date_input("Jusqu'au", value=None, key="load_to")
-
+        with st.expander("Plage de dates"):
+            c1, c2 = st.columns(2)
+            start_date = c1.date_input("Depuis",   value=None, key="load_from")
+            end_date   = c2.date_input("Jusqu'au", value=None, key="load_to")
         start_ts = int(datetime.combine(start_date, datetime.min.time()).timestamp()) if start_date else None
         end_ts   = int(datetime.combine(end_date,   datetime.max.time()).timestamp()) if end_date   else None
 
-        c1, c2 = st.columns(2)
-        with c1:
-            if st.button("🔄 Rafraîchir", use_container_width=True, type="primary"):
-                client = get_client()
-                if client:
-                    with st.spinner("Chargement…"):
-                        if not subs:
-                            load_metadata(client)
-                        load_articles(client, source_type, source_value, max_articles, exclude_read, start_ts, end_ts)
-                    st.rerun()
-        with c2:
-            if st.button("📡 Sync méta", use_container_width=True):
-                client = get_client()
-                if client:
-                    with st.spinner("Sync…"):
+        if st.button("Rafraîchir", use_container_width=True, type="primary"):
+            client = get_client()
+            if client:
+                with st.spinner("Chargement…"):
+                    if not subs:
                         load_metadata(client)
-                    nb = len(st.session_state.subscriptions)
-                    st.success(f"{nb} abonnements.")
+                    load_articles(client, source_type, source_value,
+                                  max_articles, exclude_read, start_ts, end_ts)
+                st.rerun()
 
-        # ── Libellés ───────────────────────────────────────────────────────────
-        st.divider()
-        st.markdown("### 🏷️ Libellés")
-        st.caption("Classez les articles cochés du panier actif dans des libellés.")
-
-        lc1, lc2 = st.columns([3, 1])
-        with lc1:
-            new_label = st.text_input(
-                "Nouveau libellé", key="new_label_input",
-                label_visibility="collapsed", placeholder="Nom du libellé…",
-            )
-        with lc2:
-            if st.button("➕ Créer", key="btn_create_label", use_container_width=True):
-                nl = new_label.strip()
-                if not nl:
-                    st.warning("Saisissez un nom de libellé.")
-                elif nl in _available_labels():
-                    st.info(f"« {nl} » existe déjà.")
-                else:
-                    st.session_state.user_labels.append(nl)
-                    st.rerun()
-
-        labels = _available_labels()
-        panier_n = len(st.session_state.shortlists.get(st.session_state.active_shortlist, set()))
-        if labels:
-            chosen_label = st.selectbox("Libellé cible", labels, key="sidebar_label")
-            b1, b2 = st.columns(2)
-            with b1:
-                if st.button(
-                    f"🏷️ Classer ({panier_n})", key="btn_assign_label",
-                    use_container_width=True, type="primary", disabled=panier_n == 0,
-                ):
-                    if _apply_label(chosen_label, add=True):
-                        st.rerun()
-            with b2:
-                if st.button(
-                    "✕ Retirer", key="btn_unassign_label",
-                    use_container_width=True, disabled=panier_n == 0,
-                ):
-                    if _apply_label(chosen_label, add=False):
-                        st.rerun()
-            if st.button("👁 Voir ce libellé", key="btn_view_label", use_container_width=True):
-                client = get_client()
-                if client:
-                    with st.spinner(f"Chargement de « {chosen_label} »…"):
-                        load_articles(client, "tag", chosen_label, 500, False, None, None)
-                    st.rerun()
-        else:
-            st.caption("Aucun libellé pour l'instant — créez-en un ci-dessus.")
-
-        # Filters — only shown when data is loaded
-        df = st.session_state.articles_df
-        if not df.empty:
-            st.divider()
-            _render_filter_panel(df)
+        if st.button("Synchroniser les métadonnées", use_container_width=True):
+            client = get_client()
+            if client:
+                with st.spinner("Synchronisation…"):
+                    load_metadata(client)
+                st.success(f"{len(st.session_state.subscriptions)} abonnements.")
 
     return page
 
 
-def _render_filter_panel(df: pd.DataFrame) -> None:
-    st.markdown("### Filtres")
+# ── Page Veille ───────────────────────────────────────────────────────────────
 
-    search = st.text_input("🔍 Recherche libre", placeholder="titre, résumé, contenu…")
+def render_veille() -> None:
+    st.markdown("## Veille")
 
-    all_sources = sorted(df["source"].dropna().unique())
-    sel_sources = st.multiselect("Sources", all_sources)
-
-    all_folders = sorted(f for f in df["folder"].dropna().unique() if f)
-    sel_folders = st.multiselect("Dossiers", all_folders)
-
-    # Tags extraits du DataFrame
-    all_tags: set[str] = set()
-    for cell in df["tags"].dropna():
-        for t in cell.split(", "):
-            if t.strip():
-                all_tags.add(t.strip())
-    sel_tags = st.multiselect("Tags", sorted(all_tags))
-
-    col1, col2 = st.columns(2)
-    with col1:
-        filter_from = st.date_input("Du", value=None, key="f_from")
-    with col2:
-        filter_to = st.date_input("Au", value=None, key="f_to")
-
-    st.markdown("**Statut**")
-    c1, c2 = st.columns(2)
-    with c1:
-        show_read    = st.checkbox("Lus",        value=True)
-        show_unread  = st.checkbox("Non lus",    value=True)
-    with c2:
-        show_starred   = st.checkbox("Favoris",     value=True)
-        show_unstarred = st.checkbox("Non favoris", value=True)
-
-    include_kw = st.text_input("Mots-clés requis", placeholder="IA, machine learning")
-    exclude_kw = st.text_input("Mots-clés exclus", placeholder="crypto, pub")
-
-    c1, c2 = st.columns(2)
-    with c1:
-        min_words = st.number_input("Mots min", 0, 50000, 0)
-    with c2:
-        max_words = st.number_input("Mots max", 0, 100000, 100000)
-
-    sort_by  = st.selectbox("Trier par", ["published_at", "score", "source", "word_count", "title"])
-    sort_asc = st.checkbox("Ordre croissant", value=False)
-
-    c1, c2 = st.columns(2)
-    with c1:
-        if st.button("▶ Appliquer", use_container_width=True, type="primary"):
-            fc = FilterConfig(
-                search_text=search,
-                sources=sel_sources,
-                folders=sel_folders,
-                tags=sel_tags,
-                date_from=filter_from,
-                date_to=filter_to,
-                show_read=show_read,
-                show_unread=show_unread,
-                show_starred=show_starred,
-                show_unstarred=show_unstarred,
-                include_keywords=[k.strip() for k in include_kw.split(",") if k.strip()],
-                exclude_keywords=[k.strip() for k in exclude_kw.split(",") if k.strip()],
-                min_words=int(min_words),
-                max_words=int(max_words),
-                sort_by=sort_by,
-                sort_ascending=sort_asc,
-            )
-            st.session_state.filtered_df = apply_filters(df, fc)
-            st.session_state.page_index  = 0
-            st.session_state.table_key  += 1
-            st.rerun()
-    with c2:
-        if st.button("✕ Reset", use_container_width=True):
-            st.session_state.filtered_df = df.copy()
-            st.session_state.page_index  = 0
-            st.session_state.table_key  += 1
-            st.rerun()
-
-    with st.expander("💾 Sauvegarder ce filtre"):
-        fname = st.text_input("Nom du profil", key="save_fname")
-        if st.button("Sauvegarder", key="btn_save_filter") and fname:
-            fc = FilterConfig(
-                name=fname,
-                search_text=search,
-                sources=sel_sources,
-                folders=sel_folders,
-                tags=sel_tags,
-                date_from=filter_from,
-                date_to=filter_to,
-                show_read=show_read,
-                show_unread=show_unread,
-                show_starred=show_starred,
-                show_unstarred=show_unstarred,
-                include_keywords=[k.strip() for k in include_kw.split(",") if k.strip()],
-                exclude_keywords=[k.strip() for k in exclude_kw.split(",") if k.strip()],
-                min_words=int(min_words),
-                max_words=int(max_words),
-                sort_by=sort_by,
-                sort_ascending=sort_asc,
-            )
-            save_filter_profile(fc)
-            st.success(f"Profil « {fname} » sauvegardé.")
-
-
-# ── Articles page ──────────────────────────────────────────────────────────────
-
-def render_articles_page() -> None:
-    full_df     = st.session_state.articles_df
-    filtered_df = st.session_state.filtered_df
-    shortlists  = st.session_state.shortlists
-    active_sl   = st.session_state.active_shortlist
-
-    # ── Top metrics ────────────────────────────────────────────────────────────
-    total_sel = sum(len(v) for v in shortlists.values())
-    c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("Chargés",     len(full_df))
-    c2.metric("Après filtres", len(filtered_df))
-    c3.metric("Sélectionnés", total_sel)
-    c4.metric("Sources",     full_df["source"].nunique() if not full_df.empty else 0)
-    c5.metric("Abonnements", len(st.session_state.subscriptions))
-
+    full_df = st.session_state.articles_df
     if full_df.empty:
         st.warning(
-            "Aucun article chargé. Le chargement automatique a échoué — "
-            "le token Inoreader a probablement expiré. Régénérez-le puis "
-            "mettez à jour les secrets Streamlit. Ou cliquez « 🔄 Rafraîchir »."
+            "Aucun article chargé. Le chargement automatique a probablement échoué "
+            "(token Inoreader expiré). Régénérez-le, mettez à jour les secrets "
+            "Streamlit, ou cliquez « Rafraîchir »."
         )
         st.code("python oauth_setup.py", language="bash")
         return
 
-    st.divider()
+    filtered_df = st.session_state.filtered_df
+    sel = st.session_state.selection
 
-    # ── Panier management ──────────────────────────────────────────────────────
-    st.markdown("#### Paniers de sélection")
-    c1, c2, c3, c4, c5, c6 = st.columns([2, 2, 1, 1, 1, 1])
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Chargés", len(full_df))
+    c2.metric("Affichés", len(filtered_df))
+    c3.metric("Sélectionnés", len(sel))
 
-    with c1:
-        sl_names = list(shortlists.keys())
-        idx = sl_names.index(active_sl) if active_sl in sl_names else 0
-        chosen_sl = st.selectbox("Panier actif", sl_names, index=idx, key="sl_chooser")
-        if chosen_sl != active_sl:
-            st.session_state.active_shortlist = chosen_sl
-            st.session_state.table_key += 1
-            st.rerun()
+    # ── Barre d'outils ─────────────────────────────────────────────────────
+    tc1, tc2, tc3 = st.columns([6, 1.4, 1.4])
+    with tc1:
+        st.text_input(
+            "Recherche", key="search_box", on_change=_on_search_change,
+            value=st.session_state.flt.search_text,
+            placeholder="Rechercher un mot dans les titres et résumés…",
+            label_visibility="collapsed",
+        )
+    with tc2:
+        with st.popover("Filtres", use_container_width=True):
+            _render_filter_form(full_df)
+    with tc3:
+        with st.popover("Colonnes", use_container_width=True):
+            available = ["title", "source", "folder", "tags", "author",
+                         "published_at", "summary", "is_read", "word_count", "score"]
+            st.multiselect(
+                "Colonnes affichées", available,
+                default=["title", "source", "published_at", "score"],
+                key="col_vis",
+                format_func=lambda c: {
+                    "title": "Titre", "source": "Source", "folder": "Dossier",
+                    "tags": "Tags", "author": "Auteur", "published_at": "Publié",
+                    "summary": "Résumé", "is_read": "Lu", "word_count": "Mots",
+                    "score": "Score",
+                }[c],
+            )
+    visible = st.session_state.get("col_vis", ["title", "source", "published_at", "score"])
 
-    with c2:
-        new_name = st.text_input("Nouveau panier", placeholder="Nom…", key="new_sl_name", label_visibility="collapsed")
-        if st.button("➕ Créer", key="btn_new_sl") and new_name:
-            st.session_state.shortlists[new_name] = set()
-            st.session_state.active_shortlist = new_name
-            st.session_state.table_key += 1
-            st.rerun()
+    if filtered_df.empty:
+        st.info("Aucun article ne correspond aux filtres courants.")
+        return
 
-    with c3:
-        if st.button("✅ Tout", use_container_width=True, help="Sélectionner tous les articles filtrés"):
-            st.session_state.shortlists[st.session_state.active_shortlist].update(filtered_df["id"].tolist())
-            st.session_state.table_key += 1
-            st.rerun()
-
-    with c4:
-        if st.button("✗ Aucun", use_container_width=True, help="Désélectionner tout dans ce panier"):
-            st.session_state.shortlists[st.session_state.active_shortlist].clear()
-            st.session_state.table_key += 1
-            st.rerun()
-
-    with c5:
-        nb_current = len(shortlists.get(st.session_state.active_shortlist, set()))
-        st.metric("Dans ce panier", nb_current)
-
-    with c6:
-        if st.button("🗑 Vider", use_container_width=True):
-            st.session_state.shortlists[st.session_state.active_shortlist] = set()
-            st.session_state.table_key += 1
-            st.rerun()
-
-    st.divider()
-
-    # ── Column visibility ──────────────────────────────────────────────────────
-    with st.expander("🔧 Colonnes affichées"):
-        available = ["title", "source", "folder", "tags", "author", "published_at", "summary", "is_read", "word_count", "score"]
-        default   = ["title", "source", "folder", "published_at", "score", "word_count"]
-        visible   = st.multiselect("Colonnes", available, default=default, key="col_vis")
-
-    # ── Pagination ─────────────────────────────────────────────────────────────
-    total_rows = len(filtered_df)
+    # ── Pagination ─────────────────────────────────────────────────────────
+    total_rows  = len(filtered_df)
     total_pages = max(1, (total_rows - 1) // PAGE_SIZE + 1)
-    page_idx = min(st.session_state.page_index, total_pages - 1)
-
+    page_idx    = min(st.session_state.page_index, total_pages - 1)
     start = page_idx * PAGE_SIZE
     end   = min(start + PAGE_SIZE, total_rows)
-    page_df = filtered_df.iloc[start:end].copy()
 
-    pcol1, pcol2, pcol3, pcol4, pcol5 = st.columns([1, 1, 3, 1, 1])
-    with pcol1:
-        if st.button("⏮ Début") and page_idx > 0:
-            st.session_state.page_index = 0
-            st.session_state.table_key += 1
-            st.rerun()
-    with pcol2:
-        if st.button("◀ Préc.") and page_idx > 0:
+    p1, p2, p3 = st.columns([1, 5, 1])
+    with p1:
+        if st.button("◀ Préc.", use_container_width=True, disabled=page_idx == 0):
             st.session_state.page_index = page_idx - 1
             st.session_state.table_key += 1
             st.rerun()
-    with pcol3:
+    with p2:
         st.markdown(
-            f"<div style='text-align:center;padding-top:8px'>"
-            f"Page <b>{page_idx+1}</b> / {total_pages} "
-            f"— articles {start+1}–{end} sur {total_rows}"
+            f"<div style='text-align:center;padding-top:8px;color:#6E6982'>"
+            f"Page {page_idx+1} / {total_pages} — articles {start+1}–{end} sur {total_rows}"
             f"</div>",
             unsafe_allow_html=True,
         )
-    with pcol4:
-        if st.button("Suiv. ▶") and page_idx < total_pages - 1:
+    with p3:
+        if st.button("Suiv. ▶", use_container_width=True, disabled=page_idx >= total_pages - 1):
             st.session_state.page_index = page_idx + 1
             st.session_state.table_key += 1
             st.rerun()
-    with pcol5:
-        if st.button("Fin ⏭") and page_idx < total_pages - 1:
-            st.session_state.page_index = total_pages - 1
-            st.session_state.table_key += 1
-            st.rerun()
 
-    # ── Data editor ────────────────────────────────────────────────────────────
-    current_sl = st.session_state.shortlists.get(st.session_state.active_shortlist, set())
-
+    # ── Tableau ────────────────────────────────────────────────────────────
+    page_df = filtered_df.iloc[start:end].copy()
     display = page_df.copy()
-    display.insert(0, "✓", display["id"].isin(current_sl))
+    display.insert(0, "✓", display["id"].isin(sel))
     display.insert(1, "⭐", display["is_starred"].astype(bool))
 
     show_cols = ["✓", "⭐"] + [c for c in visible if c in display.columns] + ["id", "url"]
     display   = display[[c for c in show_cols if c in display.columns]]
-
-    rename_map = {
+    display   = display.rename(columns={
         "title": "Titre", "source": "Source", "folder": "Dossier",
         "tags": "Tags", "author": "Auteur", "published_at": "Publié",
-        "summary": "Résumé", "is_read": "Lu",
-        "word_count": "Mots", "score": "Score", "✓": "✓", "⭐": "⭐",
-    }
-    display = display.rename(columns=rename_map)
-
-    col_config: dict = {
-        "✓":       st.column_config.CheckboxColumn("✓", width="small", help="Ajouter au panier actif"),
-        "⭐":       st.column_config.CheckboxColumn("⭐", width="small", help="Favori — cochez pour ajouter/retirer"),
-        "Titre":   st.column_config.TextColumn("Titre", width="large"),
-        "Résumé":  st.column_config.TextColumn("Résumé", width="large"),
-        "Score":   st.column_config.NumberColumn("Score", format="%.1f", width="small"),
-        "Mots":    st.column_config.NumberColumn("Mots", width="small"),
-        "Lu":      st.column_config.CheckboxColumn("Lu",  width="small", disabled=True),
-        "url":     st.column_config.LinkColumn("🔗 URL", display_text="ouvrir"),
-        "id":      None,   # colonne cachée
-    }
+        "summary": "Résumé", "is_read": "Lu", "word_count": "Mots", "score": "Score",
+    })
 
     edited = st.data_editor(
         display,
-        column_config=col_config,
+        column_config={
+            "✓":      st.column_config.CheckboxColumn("✓", width="small", help="Sélectionner"),
+            "⭐":      st.column_config.CheckboxColumn("⭐", width="small", help="Favori Inoreader"),
+            "Titre":  st.column_config.TextColumn("Titre", width="large"),
+            "Résumé": st.column_config.TextColumn("Résumé", width="large"),
+            "Score":  st.column_config.NumberColumn("Score", format="%.1f", width="small"),
+            "Mots":   st.column_config.NumberColumn("Mots", width="small"),
+            "Lu":     st.column_config.CheckboxColumn("Lu", width="small", disabled=True),
+            "url":    st.column_config.LinkColumn("Lien", display_text="ouvrir"),
+            "id":     None,
+        },
         use_container_width=True,
         hide_index=True,
         num_rows="fixed",
-        height=520,
+        height=560,
         key=f"tbl_{st.session_state.table_key}",
     )
 
-    # Sync checkboxes → shortlist
     if "✓" in edited.columns and "id" in edited.columns:
-        sl = st.session_state.shortlists[st.session_state.active_shortlist]
         for _, row in edited.iterrows():
-            rid = row["id"]
             if row["✓"]:
-                sl.add(rid)
+                sel.add(row["id"])
             else:
-                sl.discard(rid)
+                sel.discard(row["id"])
 
-    # Sync favoris (⭐) → API Inoreader : on détecte les cases modifiées
     if "⭐" in edited.columns and "id" in edited.columns:
-        orig_star = dict(zip(page_df["id"], page_df["is_starred"].astype(bool)))
-        to_star   = [r["id"] for _, r in edited.iterrows() if bool(r["⭐"]) and not orig_star.get(r["id"], False)]
-        to_unstar = [r["id"] for _, r in edited.iterrows() if not bool(r["⭐"]) and orig_star.get(r["id"], False)]
+        orig = dict(zip(page_df["id"], page_df["is_starred"].astype(bool)))
+        to_star   = [r["id"] for _, r in edited.iterrows() if bool(r["⭐"]) and not orig.get(r["id"], False)]
+        to_unstar = [r["id"] for _, r in edited.iterrows() if not bool(r["⭐"]) and orig.get(r["id"], False)]
         if to_star or to_unstar:
             if to_star:
                 _toggle_star(to_star, True)
@@ -753,118 +585,119 @@ def render_articles_page() -> None:
                 _toggle_star(to_unstar, False)
             st.rerun()
 
-    # ── Quick preview ──────────────────────────────────────────────────────────
-    st.divider()
-    with st.expander("🔎 Aperçu rapide d'un article"):
-        if not filtered_df.empty:
-            titles = filtered_df["title"].tolist()[:100]
-            picked = st.selectbox("Article", titles, key="preview_pick")
-            if picked:
-                row = filtered_df[filtered_df["title"] == picked].iloc[0]
-                kws = (
-                    st.session_state.scoring_config.title_keywords
-                    + st.session_state.scoring_config.body_keywords
-                )
-                left, right = st.columns([3, 1])
-                with left:
-                    link = f"[{row['title']}]({row['url']})" if row.get("url") else row["title"]
-                    st.markdown(f"### {link}")
-                    st.caption(
-                        f"**Source :** {row.get('source','')} &nbsp;|&nbsp; "
-                        f"**Dossier :** {row.get('folder','')} &nbsp;|&nbsp; "
-                        f"**Publié :** {row.get('published_at','')}"
-                    )
-                    st.markdown(highlight_keywords(row.get("summary", ""), kws) or "*Pas de résumé*")
-                with right:
-                    st.write("**Tags :**",   row.get("tags", "—"))
-                    st.write("**Auteur :**", row.get("author", "—"))
-                    st.write("**Mots :**",   row.get("word_count", 0))
-                    st.write("**Score :**",  row.get("score", 0.0))
-                    st.write("**Lu :**",     "✓" if row.get("is_read") else "✗")
-                    st.write("**Favori :**", "⭐" if row.get("is_starred") else "—")
+    _render_triage(filtered_df)
+    _render_preview(filtered_df)
+
+
+def _render_triage(filtered_df: pd.DataFrame) -> None:
+    sel = st.session_state.selection
+    n   = len(sel)
 
     st.divider()
-    render_actions_panel(filtered_df)
+    cols = st.columns([3, 1, 1, 1.2, 1.2])
+    cols[0].markdown(f"**{n}** article(s) sélectionné(s)")
+    if cols[1].button("Tout", use_container_width=True, help="Sélectionner les articles affichés"):
+        sel.update(filtered_df["id"].tolist())
+        st.session_state.table_key += 1
+        st.rerun()
+    if cols[2].button("Aucun", use_container_width=True, help="Vider la sélection"):
+        sel.clear()
+        st.session_state.table_key += 1
+        st.rerun()
 
+    sel_df = _selection_df()
 
-def render_actions_panel(filtered_df: pd.DataFrame) -> None:
-    st.markdown("### Actions sur le panier actif")
+    with cols[3].popover("Exporter", use_container_width=True, disabled=n == 0):
+        st.download_button("CSV", to_csv_bytes(sel_df), file_name="veille.csv",
+                           mime="text/csv", use_container_width=True)
+        st.download_button("Excel", to_excel_bytes(sel_df), file_name="veille.xlsx",
+                           mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                           use_container_width=True)
+        st.download_button("JSON", to_json_bytes(sel_df), file_name="veille.json",
+                           mime="application/json", use_container_width=True)
+        if st.button("Liste d'URLs", use_container_width=True):
+            st.text_area("URLs", value=get_urls_text(sel_df), height=150)
 
-    active_sl = st.session_state.active_shortlist
-    sl_ids    = st.session_state.shortlists.get(active_sl, set())
+    with cols[4].popover("Actions", use_container_width=True, disabled=n == 0):
+        st.markdown("**Statut Inoreader**")
+        a1, a2 = st.columns(2)
+        if a1.button("Marquer lus", use_container_width=True):
+            _api_action(sel_df, lambda c, ids: c.mark_as_read(ids), "marqués lus")
+        if a2.button("Marquer non lus", use_container_width=True):
+            _api_action(sel_df, lambda c, ids: c.mark_as_unread(ids), "marqués non lus")
+        a3, a4 = st.columns(2)
+        if a3.button("Ajouter favoris", use_container_width=True):
+            _toggle_star(list(sel), True)
+            st.rerun()
+        if a4.button("Retirer favoris", use_container_width=True):
+            _toggle_star(list(sel), False)
+            st.rerun()
 
-    if not sl_ids:
-        st.info("Aucun article dans ce panier. Cochez des lignes ou utilisez « Tout sélectionner ».")
-        return
-
-    sel_df = filtered_df[filtered_df["id"].isin(sl_ids)] if not filtered_df.empty else pd.DataFrame()
-    # Compléter avec articles_df si certains sélectionnés ne sont pas dans le filtre courant
-    if len(sel_df) < len(sl_ids):
-        all_df = st.session_state.articles_df
-        sel_df = all_df[all_df["id"].isin(sl_ids)]
-
-    st.write(f"**{len(sl_ids)} article(s) — panier « {active_sl} »**")
-
-    # Exports
-    c1, c2, c3, c4 = st.columns(4)
-    with c1:
-        st.download_button(
-            "📥 CSV", data=to_csv_bytes(sel_df),
-            file_name=f"inoreader_{active_sl}.csv", mime="text/csv",
-            use_container_width=True,
-        )
-    with c2:
-        st.download_button(
-            "📥 Excel", data=to_excel_bytes(sel_df),
-            file_name=f"inoreader_{active_sl}.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True,
-        )
-    with c3:
-        st.download_button(
-            "📥 JSON", data=to_json_bytes(sel_df),
-            file_name=f"inoreader_{active_sl}.json", mime="application/json",
-            use_container_width=True,
-        )
-    with c4:
-        if st.button("📋 Liste d'URLs", use_container_width=True):
-            urls = get_urls_text(sel_df)
-            st.text_area("URLs", value=urls, height=150, key="urls_area")
-
-    # Inoreader write actions
-    with st.expander("🔗 Actions Inoreader sur le panier", expanded=True):
-        ca, cb, cc, cd = st.columns(4)
-        with ca:
-            if st.button("✓ Marquer lus", use_container_width=True):
-                _api_action(sel_df, lambda c, ids: c.mark_as_read(ids), "marqués lus")
-        with cb:
-            if st.button("○ Marquer non lus", use_container_width=True):
-                _api_action(sel_df, lambda c, ids: c.mark_as_unread(ids), "marqués non lus")
-        with cc:
-            if st.button("⭐ Ajouter favoris", use_container_width=True):
-                _toggle_star(list(sl_ids), True)
-                st.rerun()
-        with cd:
-            if st.button("✗ Retirer favoris", use_container_width=True):
-                _toggle_star(list(sl_ids), False)
-                st.rerun()
-
-        st.markdown("**Classer dans un libellé**")
+        st.markdown("**Libellés**")
         labels = _available_labels()
         if labels:
-            lc1, lc2, lc3 = st.columns([3, 1, 1])
-            with lc1:
-                lbl = st.selectbox("Libellé", labels, key="actions_label", label_visibility="collapsed")
-            with lc2:
-                if st.button("🏷️ Classer", use_container_width=True, key="btn_actions_assign"):
-                    if _apply_label(lbl, add=True):
-                        st.rerun()
-            with lc3:
-                if st.button("✕ Retirer", use_container_width=True, key="btn_actions_unassign"):
-                    if _apply_label(lbl, add=False):
-                        st.rerun()
+            lbl = st.selectbox("Libellé", labels, key="triage_label",
+                               label_visibility="collapsed")
+            l1, l2 = st.columns(2)
+            if l1.button("Classer", use_container_width=True, key="t_assign"):
+                if _apply_label(lbl, add=True):
+                    st.rerun()
+            if l2.button("Retirer", use_container_width=True, key="t_unassign"):
+                if _apply_label(lbl, add=False):
+                    st.rerun()
         else:
-            st.caption("Créez un libellé depuis le panneau de gauche (section 🏷️ Libellés).")
+            st.caption("Aucun libellé pour l'instant.")
+        with st.expander("Nouveau libellé"):
+            nl = st.text_input("Nom", key="new_label_input", label_visibility="collapsed",
+                               placeholder="Nom du libellé…")
+            if st.button("Créer", key="btn_create_label"):
+                name = nl.strip()
+                if not name:
+                    st.warning("Saisissez un nom.")
+                elif name in _available_labels():
+                    st.info(f"« {name} » existe déjà.")
+                else:
+                    st.session_state.user_labels.append(name)
+                    st.rerun()
+
+
+def _render_preview(filtered_df: pd.DataFrame) -> None:
+    with st.expander("Aperçu d'un article"):
+        titles = filtered_df["title"].tolist()[:100]
+        if not titles:
+            return
+        picked = st.selectbox("Article", titles, key="preview_pick")
+        if not picked:
+            return
+        row = filtered_df[filtered_df["title"] == picked].iloc[0]
+        kws = (st.session_state.scoring_config.title_keywords
+               + st.session_state.scoring_config.body_keywords)
+        left, right = st.columns([3, 1])
+        with left:
+            link = f"[{row['title']}]({row['url']})" if row.get("url") else row["title"]
+            st.markdown(f"#### {link}")
+            st.caption(
+                f"{row.get('source','')}  ·  {row.get('folder','')}  ·  "
+                f"{row.get('published_at','')}"
+            )
+            st.markdown(highlight_keywords(row.get("summary", ""), kws) or "*Pas de résumé*")
+        with right:
+            st.write("**Tags :**",   row.get("tags", "—"))
+            st.write("**Auteur :**", row.get("author", "—"))
+            st.write("**Mots :**",   row.get("word_count", 0))
+            st.write("**Score :**",  row.get("score", 0.0))
+            st.write("**Lu :**",     "oui" if row.get("is_read") else "non")
+            st.write("**Favori :**", "oui" if row.get("is_starred") else "non")
+
+
+# ── Sélection : helpers ───────────────────────────────────────────────────────
+
+def _selection_df() -> pd.DataFrame:
+    sel = st.session_state.selection
+    if not sel:
+        return pd.DataFrame()
+    df = st.session_state.articles_df
+    return df[df["id"].isin(sel)] if not df.empty else pd.DataFrame()
 
 
 def _api_action(sel_df: pd.DataFrame, fn, label: str) -> None:
@@ -875,20 +708,16 @@ def _api_action(sel_df: pd.DataFrame, fn, label: str) -> None:
     with st.spinner(f"En cours ({len(ids)} articles)…"):
         try:
             fn(client, ids)
-            st.success(f"✓ {len(ids)} articles {label}.")
+            st.success(f"{len(ids)} articles {label}.")
         except Exception as exc:
             st.error(f"Erreur : {exc}")
 
 
-# ── Libellés & favoris (Inoreader natif) ────────────────────────────────────────
-
 def _available_labels() -> list[str]:
-    """Libellés disponibles : tags Inoreader existants + libellés créés en session."""
     return sorted(set(st.session_state.tags_list) | set(st.session_state.user_labels))
 
 
 def _update_local_tags(ids, label: str, add: bool) -> None:
-    """Met à jour la colonne `tags` des DataFrames en mémoire, sans recharger l'API."""
     ids = set(ids)
 
     def _mod(cell: str) -> str:
@@ -901,28 +730,23 @@ def _update_local_tags(ids, label: str, add: bool) -> None:
 
     for key in ("articles_df", "filtered_df"):
         df = st.session_state[key]
-        if df.empty:
-            continue
-        mask = df["id"].isin(ids)
-        df.loc[mask, "tags"] = df.loc[mask, "tags"].apply(_mod)
+        if not df.empty:
+            mask = df["id"].isin(ids)
+            df.loc[mask, "tags"] = df.loc[mask, "tags"].apply(_mod)
 
 
 def _apply_label(label: str, add: bool) -> bool:
-    """Classe (ou retire) le panier actif dans un libellé Inoreader. True si succès."""
     client = get_client()
     if not client or not label:
         return False
-    ids = list(st.session_state.shortlists.get(st.session_state.active_shortlist, set()))
+    ids = list(st.session_state.selection)
     if not ids:
-        st.warning("Aucun article sélectionné — cochez des lignes dans le tableau.")
+        st.warning("Aucun article sélectionné.")
         return False
     verb = "Classement" if add else "Retrait"
     with st.spinner(f"{verb} de {len(ids)} article(s)…"):
         try:
-            if add:
-                client.add_tag(ids, label)
-            else:
-                client.remove_tag(ids, label)
+            client.add_tag(ids, label) if add else client.remove_tag(ids, label)
         except Exception as exc:
             st.error(f"Erreur Inoreader : {exc}")
             return False
@@ -936,15 +760,11 @@ def _apply_label(label: str, add: bool) -> bool:
 
 
 def _toggle_star(ids: list[str], starred: bool) -> None:
-    """Ajoute ou retire le favori sur une liste d'articles."""
     client = get_client()
     if not client or not ids:
         return
     try:
-        if starred:
-            client.add_star(ids)
-        else:
-            client.remove_star(ids)
+        client.add_star(ids) if starred else client.remove_star(ids)
     except Exception as exc:
         st.error(f"Erreur favori : {exc}")
         return
@@ -957,10 +777,9 @@ def _toggle_star(ids: list[str], starred: bool) -> None:
     st.toast(f"{len(ids)} article(s) {txt}.", icon="⭐")
 
 
-# ── Chargement automatique ──────────────────────────────────────────────────────
+# ── Chargement automatique ────────────────────────────────────────────────────
 
 def _auto_load() -> None:
-    """Charge automatiquement les articles non lus au premier rendu de la session."""
     if st.session_state.auto_loaded:
         return
     st.session_state.auto_loaded = True
@@ -974,74 +793,61 @@ def _auto_load() -> None:
         load_articles(client, "all", "", 500, exclude_read=True, start_ts=None, end_ts=None)
 
 
-# ── Dashboard page ─────────────────────────────────────────────────────────────
+# ── Page Analyse ──────────────────────────────────────────────────────────────
 
-def render_dashboard_page() -> None:
-    st.title("📊 Dashboard analytique")
+def render_analyse() -> None:
+    st.markdown("## Analyse")
 
     full_df = st.session_state.articles_df
-    filt_df = st.session_state.filtered_df
-
     if full_df.empty:
-        st.info("Chargez des articles pour afficher le dashboard.")
+        st.info("Chargez des articles pour afficher l'analyse.")
         return
 
+    filt_df = st.session_state.filtered_df
     df = filt_df if not filt_df.empty else full_df
-    total_sel = sum(len(v) for v in st.session_state.shortlists.values())
 
-    # Top KPIs
-    c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("Total chargés",   len(full_df))
-    c2.metric("Après filtres",   len(df))
-    c3.metric("Non lus",         int(df["is_read"].eq(False).sum()))
-    c4.metric("Favoris",         int(df["is_starred"].eq(True).sum()))
-    c5.metric("Sélectionnés",    total_sel)
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Chargés",  len(full_df))
+    c2.metric("Affichés", len(df))
+    c3.metric("Non lus",  int(df["is_read"].eq(False).sum()))
+    c4.metric("Favoris",  int(df["is_starred"].eq(True).sum()))
 
     st.divider()
-
     col_l, col_r = st.columns(2)
-
     with col_l:
-        st.subheader("Top 15 sources")
-        top_src = df["source"].value_counts().head(15)
-        st.bar_chart(top_src)
-
+        st.markdown("#### Sources les plus actives")
+        st.bar_chart(df["source"].value_counts().head(15))
     with col_r:
-        st.subheader("Distribution temporelle")
+        st.markdown("#### Distribution temporelle")
         dates = pd.to_datetime(df["published_at"], errors="coerce").dropna()
         if not dates.empty:
-            date_counts = dates.dt.date.value_counts().sort_index()
-            st.bar_chart(date_counts)
+            st.bar_chart(dates.dt.date.value_counts().sort_index())
         else:
             st.info("Pas de données de date.")
 
     col_l2, col_r2 = st.columns(2)
-
     with col_l2:
-        st.subheader("Top tags")
+        st.markdown("#### Tags fréquents")
         tag_list: list[str] = []
         for cell in df["tags"].dropna():
             tag_list.extend(t.strip() for t in cell.split(",") if t.strip())
         if tag_list:
             st.bar_chart(pd.Series(tag_list).value_counts().head(20))
         else:
-            st.info("Aucun tag trouvé.")
-
+            st.info("Aucun tag.")
     with col_r2:
-        st.subheader("Mots-clés fréquents (titres)")
+        st.markdown("#### Mots-clés des titres")
         words = top_words(df["title"].dropna().tolist(), n=20)
         if words:
             wd = pd.DataFrame(words, columns=["mot", "occurrences"]).set_index("mot")
             st.bar_chart(wd["occurrences"])
 
-    # Score distribution
     if df["score"].abs().sum() > 0:
-        st.subheader("Distribution des scores")
-        score_counts = df["score"].value_counts().sort_index()
-        st.bar_chart(score_counts)
+        st.markdown("#### Distribution des scores")
+        st.bar_chart(df["score"].value_counts().sort_index())
 
     st.divider()
-    st.subheader("Statistiques par source")
+    st.markdown("#### Statistiques par source")
     stats = (
         df.groupby("source", observed=True)
         .agg(
@@ -1057,53 +863,50 @@ def render_dashboard_page() -> None:
     st.dataframe(stats, use_container_width=True)
 
 
-# ── Scoring page ───────────────────────────────────────────────────────────────
+# ── Page Réglages ─────────────────────────────────────────────────────────────
 
-def render_scoring_page() -> None:
-    st.title("⚙️ Configuration du scoring")
-    st.markdown(
-        "Le scoring est calculé **localement** après chargement des articles. "
-        "Un score positif indique un article pertinent selon vos critères."
+def render_reglages() -> None:
+    st.markdown("## Réglages")
+    tab_scoring, tab_filtres = st.tabs(["Scoring", "Filtres sauvegardés"])
+    with tab_scoring:
+        _render_scoring()
+    with tab_filtres:
+        _render_saved_filters()
+
+
+def _render_scoring() -> None:
+    st.caption(
+        "Le score est calculé localement après chargement. "
+        "Un score positif signale un article pertinent selon vos critères."
     )
-
     sc = st.session_state.scoring_config
 
     with st.form("scoring_form"):
         c1, c2 = st.columns(2)
-
         with c1:
-            title_kw = st.text_area(
-                "Mots-clés titre — bonus (+)",
-                value="\n".join(sc.title_keywords),
-                placeholder="Un mot/expression par ligne\nex: intelligence artificielle",
-                height=130,
-            )
-            body_kw = st.text_area(
-                "Mots-clés corps — bonus (+)",
-                value="\n".join(sc.body_keywords),
-                placeholder="Un mot/expression par ligne",
-                height=130,
-            )
-            neg_kw = st.text_area(
-                "Mots-clés négatifs — malus (−)",
-                value="\n".join(sc.negative_keywords),
-                placeholder="ex: publicité\ncrypto",
-                height=100,
-            )
-
+            title_kw = st.text_area("Mots-clés titre — bonus",
+                                    value="\n".join(sc.title_keywords),
+                                    placeholder="Un par ligne", height=130)
+            body_kw = st.text_area("Mots-clés corps — bonus",
+                                   value="\n".join(sc.body_keywords),
+                                   placeholder="Un par ligne", height=130)
+            neg_kw = st.text_area("Mots-clés négatifs — malus",
+                                  value="\n".join(sc.negative_keywords),
+                                  placeholder="Un par ligne", height=100)
         with c2:
-            prio_src = st.text_area(
-                "Sources prioritaires — bonus (+)",
-                value="\n".join(sc.priority_sources),
-                placeholder="Un nom de source par ligne\n(correspondance partielle)",
-                height=130,
-            )
-            title_bonus = st.number_input("Bonus / mot-clé titre",   value=sc.title_keyword_bonus,   min_value=0.0, step=0.5)
-            body_bonus  = st.number_input("Bonus / mot-clé corps",   value=sc.body_keyword_bonus,    min_value=0.0, step=0.5)
-            src_bonus   = st.number_input("Bonus source prioritaire",value=sc.source_bonus,           min_value=0.0, step=0.5)
-            neg_malus   = st.number_input("Malus / mot-clé négatif", value=sc.negative_keyword_malus, max_value=0.0, step=0.5)
-
-        submitted = st.form_submit_button("✅ Appliquer le scoring", type="primary", use_container_width=True)
+            prio_src = st.text_area("Sources prioritaires — bonus",
+                                    value="\n".join(sc.priority_sources),
+                                    placeholder="Un nom par ligne (partiel)", height=130)
+            title_bonus = st.number_input("Bonus / mot-clé titre", value=sc.title_keyword_bonus,
+                                          min_value=0.0, step=0.5)
+            body_bonus  = st.number_input("Bonus / mot-clé corps", value=sc.body_keyword_bonus,
+                                          min_value=0.0, step=0.5)
+            src_bonus   = st.number_input("Bonus source prioritaire", value=sc.source_bonus,
+                                          min_value=0.0, step=0.5)
+            neg_malus   = st.number_input("Malus / mot-clé négatif", value=sc.negative_keyword_malus,
+                                          max_value=0.0, step=0.5)
+        submitted = st.form_submit_button("Appliquer le scoring", type="primary",
+                                          use_container_width=True)
 
     if submitted:
         new_sc = ScoringConfig(
@@ -1111,41 +914,35 @@ def render_scoring_page() -> None:
             body_keywords     = [k.strip() for k in body_kw.splitlines()  if k.strip()],
             negative_keywords = [k.strip() for k in neg_kw.splitlines()   if k.strip()],
             priority_sources  = [k.strip() for k in prio_src.splitlines() if k.strip()],
-            title_keyword_bonus   = title_bonus,
-            body_keyword_bonus    = body_bonus,
-            source_bonus          = src_bonus,
-            negative_keyword_malus= neg_malus,
+            title_keyword_bonus    = title_bonus,
+            body_keyword_bonus     = body_bonus,
+            source_bonus           = src_bonus,
+            negative_keyword_malus = neg_malus,
         )
         st.session_state.scoring_config = new_sc
         if not st.session_state.articles_df.empty:
             st.session_state.articles_df = apply_scoring(st.session_state.articles_df, new_sc)
-            st.session_state.filtered_df = apply_scoring(st.session_state.filtered_df, new_sc)
-            st.session_state.table_key += 1
-        st.success("Scoring recalculé sur tous les articles.")
+            _recompute()
+        st.success("Scoring recalculé.")
         st.rerun()
 
     if not st.session_state.articles_df.empty:
         st.divider()
-        st.subheader("Top 20 articles par score")
-        top20 = (
-            st.session_state.articles_df
-            .nlargest(20, "score")[["title", "source", "published_at", "score"]]
-        )
+        st.markdown("#### Top 20 par score")
+        top20 = st.session_state.articles_df.nlargest(
+            20, "score")[["title", "source", "published_at", "score"]]
         st.dataframe(top20, use_container_width=True, hide_index=True)
 
 
-# ── Saved filters page ─────────────────────────────────────────────────────────
-
-def render_saved_filters_page() -> None:
-    st.title("💾 Profils de filtre sauvegardés")
-
+def _render_saved_filters() -> None:
     profiles = list_filter_profiles()
     if not profiles:
-        st.info("Aucun profil sauvegardé. Créez-en un depuis le panneau de filtres (sidebar).")
+        st.info("Aucun profil sauvegardé. Créez-en un depuis le bouton « Filtres » "
+                "de la page Veille.")
         return
 
     for name in profiles:
-        with st.expander(f"📄 {name}"):
+        with st.expander(name):
             try:
                 fc = load_filter_profile(name)
                 c1, c2 = st.columns([3, 1])
@@ -1162,38 +959,35 @@ def render_saved_filters_page() -> None:
                         "max_words":        fc.max_words,
                     })
                 with c2:
-                    if st.button("▶ Appliquer", key=f"apply_{name}", use_container_width=True):
-                        df = st.session_state.articles_df
-                        if not df.empty:
-                            result = apply_filters(df, fc)
-                            st.session_state.filtered_df = result
-                            st.session_state.page_index  = 0
-                            st.session_state.table_key  += 1
-                            st.success(f"{len(result)} articles après filtre.")
-                            st.rerun()
-                        else:
+                    if st.button("Appliquer", key=f"apply_{name}", use_container_width=True):
+                        if st.session_state.articles_df.empty:
                             st.warning("Chargez d'abord des articles.")
-                    if st.button("🗑 Supprimer", key=f"del_{name}", use_container_width=True):
+                        else:
+                            st.session_state.flt = fc
+                            for k in FILTER_KEYS:
+                                st.session_state.pop(k, None)
+                            st.session_state.pop("search_box", None)
+                            _recompute()
+                            st.success(f"{len(st.session_state.filtered_df)} articles — "
+                                       "rendez-vous sur la page Veille.")
+                    if st.button("Supprimer", key=f"del_{name}", use_container_width=True):
                         delete_filter_profile(name)
                         st.rerun()
             except Exception as exc:
                 st.error(f"Lecture impossible : {exc}")
 
 
-# ── Main ───────────────────────────────────────────────────────────────────────
+# ── Main ──────────────────────────────────────────────────────────────────────
 
 def main() -> None:
     _auto_load()
     page = render_sidebar()
-
-    if page == "📋 Articles":
-        render_articles_page()
-    elif page == "📊 Dashboard":
-        render_dashboard_page()
-    elif page == "⚙️ Scoring":
-        render_scoring_page()
-    elif page == "💾 Filtres sauvegardés":
-        render_saved_filters_page()
+    if page == "Veille":
+        render_veille()
+    elif page == "Analyse":
+        render_analyse()
+    elif page == "Réglages":
+        render_reglages()
 
 
 if __name__ == "__main__":
