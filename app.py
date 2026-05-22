@@ -7,6 +7,7 @@ Trois pages :
   Réglages  — scoring local + profils de filtre sauvegardés
 """
 
+import html
 import logging
 from datetime import datetime
 
@@ -164,6 +165,46 @@ st.markdown(
     a:hover { color: #5A2F8C; }
     hr { border-color: rgba(24,20,40,0.08); margin: 0.8rem 0; }
     .stDataFrame { font-size: 13px; }
+
+    /* ── Cartes d'article ──────────────────────────────────────────────── */
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        border-radius: 14px;
+        transition: box-shadow .15s ease, transform .15s ease;
+    }
+    .card-meta {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 0.72rem; color: #6E6982; letter-spacing: 0.02em;
+        margin-bottom: 2px;
+    }
+    .card-dot {
+        display: inline-block; width: 7px; height: 7px;
+        border-radius: 50%; margin-right: 6px; vertical-align: middle;
+    }
+    .card-dot.unread { background: #6B3FA0; }
+    .card-dot.read   { background: transparent; border: 1px solid #B9B3C9; }
+    .card-title {
+        font-weight: 700; font-size: 1rem; line-height: 1.35;
+        color: #181428; margin: 2px 0 6px;
+    }
+    .card-title.read { color: #6E6982; font-weight: 600; }
+    .card-excerpt {
+        font-size: 0.83rem; color: #6E6982; line-height: 1.45;
+        margin-bottom: 8px;
+    }
+    .card-badges { margin-bottom: 2px; }
+    .chip {
+        display: inline-block; padding: 1px 9px; margin: 0 5px 4px 0;
+        border-radius: 999px; font-size: 0.7rem; font-weight: 600;
+        background: #EDE7F6; color: #6B3FA0;
+    }
+    .badge-score {
+        display: inline-block; padding: 1px 9px; margin: 0 6px 4px 0;
+        border-radius: 999px; font-size: 0.7rem; font-weight: 700;
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    .badge-score.high { background: #6B3FA0; color: #FFFFFF; }
+    .badge-score.mid  { background: #EDE7F6; color: #6B3FA0; }
+    .badge-score.low  { background: #F0EEF5; color: #8A8499; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -474,8 +515,8 @@ def render_veille() -> None:
     c2.metric("Affichés", len(filtered_df))
     c3.metric("Sélectionnés", len(sel))
 
-    # ── Barre d'outils ─────────────────────────────────────────────────────
-    tc1, tc2, tc3 = st.columns([6, 1.4, 1.4])
+    # ── Barre d'outils : recherche + filtres ───────────────────────────────
+    tc1, tc2 = st.columns([7, 1.6])
     with tc1:
         st.text_input(
             "Recherche", key="search_box", on_change=_on_search_change,
@@ -486,22 +527,32 @@ def render_veille() -> None:
     with tc2:
         with st.popover("Filtres", use_container_width=True):
             _render_filter_form(full_df)
-    with tc3:
-        with st.popover("Colonnes", use_container_width=True):
-            available = ["title", "source", "folder", "tags", "author",
-                         "published_at", "summary", "is_read", "word_count", "score"]
-            st.multiselect(
-                "Colonnes affichées", available,
-                default=["title", "source", "published_at", "score"],
-                key="col_vis",
-                format_func=lambda c: {
-                    "title": "Titre", "source": "Source", "folder": "Dossier",
-                    "tags": "Tags", "author": "Auteur", "published_at": "Publié",
-                    "summary": "Résumé", "is_read": "Lu", "word_count": "Mots",
-                    "score": "Score",
-                }[c],
-            )
-    visible = st.session_state.get("col_vis", ["title", "source", "published_at", "score"])
+
+    # ── Bascule de vue ─────────────────────────────────────────────────────
+    vc1, vc2 = st.columns([3, 6])
+    with vc1:
+        view = st.segmented_control(
+            "Vue", ["Cartes", "Tableau"], default="Cartes",
+            key="view_mode", label_visibility="collapsed",
+        )
+    view = view or "Cartes"
+
+    visible = ["title", "source", "published_at", "score"]
+    if view == "Tableau":
+        with vc2:
+            with st.popover("Colonnes affichées"):
+                available = ["title", "source", "folder", "tags", "author",
+                             "published_at", "summary", "is_read", "word_count", "score"]
+                st.multiselect(
+                    "Colonnes", available, default=visible, key="col_vis",
+                    format_func=lambda c: {
+                        "title": "Titre", "source": "Source", "folder": "Dossier",
+                        "tags": "Tags", "author": "Auteur", "published_at": "Publié",
+                        "summary": "Résumé", "is_read": "Lu", "word_count": "Mots",
+                        "score": "Score",
+                    }[c],
+                )
+        visible = st.session_state.get("col_vis", visible)
 
     if filtered_df.empty:
         st.info("Aucun article ne correspond aux filtres courants.")
@@ -513,7 +564,20 @@ def render_veille() -> None:
     page_idx    = min(st.session_state.page_index, total_pages - 1)
     start = page_idx * PAGE_SIZE
     end   = min(start + PAGE_SIZE, total_rows)
+    _render_pagination(page_idx, total_pages, start, end, total_rows)
 
+    page_df = filtered_df.iloc[start:end].copy()
+    if view == "Tableau":
+        _render_table(page_df, visible, sel)
+    else:
+        _render_cards(page_df, sel)
+
+    _render_triage(filtered_df)
+    _render_preview(filtered_df)
+
+
+def _render_pagination(page_idx: int, total_pages: int,
+                       start: int, end: int, total_rows: int) -> None:
     p1, p2, p3 = st.columns([1, 5, 1])
     with p1:
         if st.button("◀ Préc.", use_container_width=True, disabled=page_idx == 0):
@@ -533,8 +597,115 @@ def render_veille() -> None:
             st.session_state.table_key += 1
             st.rerun()
 
-    # ── Tableau ────────────────────────────────────────────────────────────
-    page_df = filtered_df.iloc[start:end].copy()
+
+# ── Vue cartes ────────────────────────────────────────────────────────────────
+
+def _relative_time(ts) -> str:
+    if ts is None:
+        return ""
+    dt = pd.to_datetime(ts, errors="coerce")
+    if pd.isna(dt):
+        return ""
+    secs = (pd.Timestamp.now() - dt).total_seconds()
+    if secs < 0:
+        secs = 0
+    if secs < 3600:
+        return f"il y a {int(secs // 60)} min"
+    if secs < 86_400:
+        return f"il y a {int(secs // 3600)} h"
+    if secs < 7 * 86_400:
+        return f"il y a {int(secs // 86_400)} j"
+    return dt.strftime("%d/%m/%Y")
+
+
+def _score_badge_html(score) -> str:
+    try:
+        s = float(score)
+    except (TypeError, ValueError):
+        return ""
+    if s == 0:
+        return ""
+    cls = "high" if s >= 6 else "mid" if s > 0 else "low"
+    return f"<span class='badge-score {cls}'>score {s:.1f}</span>"
+
+
+def _chips_html(tags_str) -> str:
+    tags = [t.strip() for t in str(tags_str or "").split(",") if t.strip()][:4]
+    return "".join(f"<span class='chip'>#{html.escape(t)}</span>" for t in tags)
+
+
+def _card_select(aid: str, key: str) -> None:
+    sel = st.session_state.selection
+    if st.session_state.get(key):
+        sel.add(aid)
+    else:
+        sel.discard(aid)
+
+
+def _card(rec: dict, sel: set) -> None:
+    aid     = rec["id"]
+    is_read = bool(rec.get("is_read"))
+    is_star = bool(rec.get("is_starred"))
+    tk      = st.session_state.table_key
+
+    with st.container(border=True):
+        dot  = "read" if is_read else "unread"
+        meta = f"<span class='card-dot {dot}'></span>{html.escape(str(rec.get('source','')))}"
+        rt   = _relative_time(rec.get("published_at"))
+        if rt:
+            meta += f"  ·  {rt}"
+        st.markdown(f"<div class='card-meta'>{meta}</div>", unsafe_allow_html=True)
+
+        tcls = "card-title read" if is_read else "card-title"
+        st.markdown(
+            f"<div class='{tcls}'>{html.escape(str(rec.get('title','')))}</div>",
+            unsafe_allow_html=True,
+        )
+
+        excerpt = str(rec.get("summary") or "").strip()
+        if excerpt:
+            st.markdown(
+                f"<div class='card-excerpt'>{html.escape(excerpt[:180])}…</div>",
+                unsafe_allow_html=True,
+            )
+
+        badges = _score_badge_html(rec.get("score", 0.0)) + _chips_html(rec.get("tags", ""))
+        if badges:
+            st.markdown(f"<div class='card-badges'>{badges}</div>", unsafe_allow_html=True)
+
+        fc = st.columns([2, 1, 1])
+        with fc[0]:
+            key = f"cardsel_{tk}_{aid}"
+            st.checkbox("Sélectionner", value=aid in sel, key=key,
+                        on_change=_card_select, args=(aid, key))
+        with fc[1]:
+            if st.button("★" if is_star else "☆", key=f"cardstar_{tk}_{aid}",
+                         use_container_width=True, help="Favori Inoreader"):
+                _toggle_star([aid], not is_star)
+                st.rerun()
+        with fc[2]:
+            url = rec.get("url") or ""
+            if url:
+                st.link_button("Ouvrir", url, use_container_width=True)
+            else:
+                st.button("—", key=f"cardno_{tk}_{aid}", disabled=True,
+                          use_container_width=True)
+
+
+def _render_cards(page_df: pd.DataFrame, sel: set) -> None:
+    records = page_df.to_dict("records")
+    for i in range(0, len(records), 2):
+        cols = st.columns(2, gap="medium")
+        with cols[0]:
+            _card(records[i], sel)
+        if i + 1 < len(records):
+            with cols[1]:
+                _card(records[i + 1], sel)
+
+
+# ── Vue tableau ───────────────────────────────────────────────────────────────
+
+def _render_table(page_df: pd.DataFrame, visible: list[str], sel: set) -> None:
     display = page_df.copy()
     display.insert(0, "✓", display["id"].isin(sel))
     display.insert(1, "⭐", display["is_starred"].astype(bool))
@@ -584,9 +755,6 @@ def render_veille() -> None:
             if to_unstar:
                 _toggle_star(to_unstar, False)
             st.rerun()
-
-    _render_triage(filtered_df)
-    _render_preview(filtered_df)
 
 
 def _render_triage(filtered_df: pd.DataFrame) -> None:
