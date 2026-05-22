@@ -8,10 +8,8 @@ Trois pages :
 """
 
 import html
-import json
 import logging
 from datetime import datetime
-from pathlib import Path
 
 import pandas as pd
 import streamlit as st
@@ -35,10 +33,10 @@ logger = logging.getLogger(__name__)
 
 PAGE_SIZE = 50
 
-# Persistance locale des dossiers (regroupements de libellés).
-# Note : Inoreader n'a pas de « dossier de libellés » ; ce mapping est
-# stocké en JSON côté app — réinitialisé à chaque redéploiement Streamlit.
-DOSSIERS_FILE = Path("veille_dossiers.json")
+# Séparateur de hiérarchie des libellés Inoreader : un libellé « Dossier/Sujet »
+# est rangé dans le dossier « Dossier ». La structure des dossiers vit donc dans
+# Inoreader même (le nom du libellé) — persistante et partagée, jamais perdue.
+DOSSIER_SEP = "/"
 
 SORT_OPTIONS = ["published_at", "score", "source", "word_count", "title"]
 SORT_LABELS = {
@@ -243,6 +241,7 @@ def _init_state() -> None:
         "table_key":      0,
         "page_index":     0,
         "user_labels":    [],
+        "empty_dossiers": [],
         "auto_loaded":    False,
     }
     for k, v in defaults.items():
@@ -1017,7 +1016,6 @@ def _rename_label(old: str, new: str) -> None:
     st.session_state.user_labels = [
         new if x == old else x for x in st.session_state.user_labels]
     _rename_in_dataframes(old, new)
-    _sync_label_in_dossiers(old, new)
     st.session_state.table_key += 1
     st.toast(f"Libellé renommé en « {new} ».", icon="🏷️")
     st.rerun()
@@ -1037,49 +1035,118 @@ def _delete_label(label: str) -> None:
     st.session_state.tags_list   = [x for x in st.session_state.tags_list if x != label]
     st.session_state.user_labels = [x for x in st.session_state.user_labels if x != label]
     _strip_label_in_dataframes(label)
-    _sync_label_in_dossiers(label, None)
     st.session_state.table_key += 1
     st.toast(f"Libellé « {label} » supprimé.", icon="🗑️")
     st.rerun()
 
 
-# ── Dossiers (regroupements de libellés) ──────────────────────────────────────
+# ── Dossiers : regroupements de libellés via la hiérarchie Inoreader ──────────
+# Un dossier n'est pas stocké à part : c'est le préfixe d'un nom de libellé.
+# « Afrique/AQMI » → dossier « Afrique », libellé « AQMI ». La structure vit
+# donc dans Inoreader (compte unique partagé) et survit à tout redéploiement.
 
-def _load_dossiers() -> dict[str, list[str]]:
-    """Charge le mapping dossier → libellés depuis le fichier JSON local."""
-    if DOSSIERS_FILE.exists():
+def _split_label(label: str) -> tuple[str | None, str]:
+    """('Afrique', 'AQMI') pour « Afrique/AQMI » ; (None, label) sinon."""
+    if DOSSIER_SEP in label:
+        prefix, rest = label.split(DOSSIER_SEP, 1)
+        return prefix.strip(), rest.strip()
+    return None, label.strip()
+
+
+def _dossiers_map() -> dict[str, list[str]]:
+    """Dossier → libellés (noms complets) qu'il contient, d'après les préfixes."""
+    mapping: dict[str, list[str]] = {}
+    for lbl in _available_labels():
+        dossier, _ = _split_label(lbl)
+        if dossier:
+            mapping.setdefault(dossier, []).append(lbl)
+    return {k: sorted(v) for k, v in mapping.items()}
+
+
+def _rename_one_label(old_full: str, new_full: str) -> bool:
+    """Renomme un libellé (Inoreader + état local). True si succès."""
+    if not _is_session_only(old_full):
+        client = get_client()
+        if not client:
+            return False
         try:
-            data = json.loads(DOSSIERS_FILE.read_text(encoding="utf-8"))
-            if isinstance(data, dict):
-                return {str(k): [str(x) for x in v] for k, v in data.items()}
+            client.rename_tag(old_full, new_full)
         except Exception as exc:
-            logger.warning("Lecture dossiers impossible : %s", exc)
-    return {}
+            st.error(f"Erreur Inoreader sur « {old_full} » : {exc}")
+            return False
+    st.session_state.tags_list = sorted(
+        {new_full if x == old_full else x for x in st.session_state.tags_list})
+    st.session_state.user_labels = [
+        new_full if x == old_full else x for x in st.session_state.user_labels]
+    _rename_in_dataframes(old_full, new_full)
+    return True
 
 
-def _save_dossiers(dossiers: dict[str, list[str]]) -> None:
-    try:
-        DOSSIERS_FILE.write_text(
-            json.dumps(dossiers, indent=2, ensure_ascii=False), encoding="utf-8"
-        )
-    except Exception as exc:
-        st.error(f"Sauvegarde des dossiers impossible : {exc}")
+def _move_label(full_label: str, dossier: str | None) -> bool:
+    """Déplace un libellé vers un dossier (ou None = hors dossier)."""
+    cur, short = _split_label(full_label)
+    if cur == dossier:
+        return False
+    new_full = f"{dossier}{DOSSIER_SEP}{short}" if dossier else short
+    if new_full in _available_labels():
+        st.warning(f"Un libellé « {new_full} » existe déjà.")
+        return False
+    return _rename_one_label(full_label, new_full)
 
 
-def _sync_label_in_dossiers(old: str, new: str | None) -> None:
-    """Répercute le renommage (new=nouveau nom) ou la suppression (new=None)
-    d'un libellé dans les dossiers."""
-    dossiers = _load_dossiers()
-    changed = False
-    for key, libs in dossiers.items():
-        if old in libs:
-            if new is None:
-                dossiers[key] = [x for x in libs if x != old]
-            else:
-                dossiers[key] = [new if x == old else x for x in libs]
-            changed = True
-    if changed:
-        _save_dossiers(dossiers)
+def _create_dossier(name: str) -> None:
+    name = name.strip().strip(DOSSIER_SEP)
+    if not name:
+        st.warning("Saisissez un nom de dossier.")
+        return
+    if DOSSIER_SEP in name:
+        st.warning(f"Le nom d'un dossier ne peut pas contenir « {DOSSIER_SEP} ».")
+        return
+    if name in (set(_dossiers_map()) | set(st.session_state.empty_dossiers)):
+        st.info(f"Le dossier « {name} » existe déjà.")
+        return
+    st.session_state.empty_dossiers.append(name)
+    st.toast(f"Dossier « {name} » créé — ajoutez-y des libellés.", icon="📁")
+    st.rerun()
+
+
+def _rename_dossier(old: str, new: str) -> None:
+    new = new.strip().strip(DOSSIER_SEP)
+    if not new or new == old:
+        return
+    if DOSSIER_SEP in new:
+        st.warning(f"Le nom d'un dossier ne peut pas contenir « {DOSSIER_SEP} ».")
+        return
+    if new in (set(_dossiers_map()) | set(st.session_state.empty_dossiers)):
+        st.warning(f"Le dossier « {new} » existe déjà.")
+        return
+    members = _dossiers_map().get(old, [])
+    if members:
+        with st.spinner(f"Renommage du dossier « {old} »…"):
+            for full in members:
+                short = _split_label(full)[1]
+                if not _rename_one_label(full, f"{new}{DOSSIER_SEP}{short}"):
+                    return
+    st.session_state.empty_dossiers = [
+        new if d == old else d for d in st.session_state.empty_dossiers]
+    st.session_state.table_key += 1
+    st.toast(f"Dossier renommé en « {new} ».", icon="📁")
+    st.rerun()
+
+
+def _delete_dossier(name: str) -> None:
+    """Supprime le regroupement : les libellés en sortent mais restent intacts."""
+    members = _dossiers_map().get(name, [])
+    if members:
+        with st.spinner(f"Suppression du dossier « {name} »…"):
+            for full in members:
+                if not _rename_one_label(full, _split_label(full)[1]):
+                    return
+    st.session_state.empty_dossiers = [
+        d for d in st.session_state.empty_dossiers if d != name]
+    st.session_state.table_key += 1
+    st.toast(f"Dossier « {name} » supprimé.", icon="🗑️")
+    st.rerun()
 
 
 def _toggle_star(ids: list[str], starred: bool) -> None:
@@ -1204,12 +1271,17 @@ def render_reglages() -> None:
 
 def _render_dossiers() -> None:
     st.caption(
-        "Regroupez vos libellés dans des dossiers thématiques pour organiser "
-        "votre veille. Les libellés se créent dans l'onglet « Libellés »."
+        "Un dossier regroupe vos libellés (vos sujets de veille). La structure "
+        "est enregistrée dans Inoreader via le nom des libellés (« Dossier/Sujet ») : "
+        "elle est partagée avec l'équipe et n'est jamais perdue. Les libellés se "
+        "créent dans l'onglet « Libellés »."
     )
 
-    dossiers = _load_dossiers()
     labels   = _available_labels()
+    mapping  = _dossiers_map()
+    orphans  = sorted(l for l in labels if _split_label(l)[0] is None)
+    empty    = [d for d in st.session_state.empty_dossiers if d not in mapping]
+    dossiers = sorted(set(mapping) | set(empty))
 
     c1, c2 = st.columns([4, 1])
     with c1:
@@ -1220,64 +1292,65 @@ def _render_dossiers() -> None:
     with c2:
         if st.button("Créer", type="primary", use_container_width=True,
                      key="create_dossier"):
-            name = new.strip()
-            if not name:
-                st.warning("Saisissez un nom de dossier.")
-            elif name in dossiers:
-                st.info(f"« {name} » existe déjà.")
-            else:
-                dossiers[name] = []
-                _save_dossiers(dossiers)
-                st.rerun()
+            _create_dossier(new)
 
     if not dossiers:
-        st.info("Aucun dossier pour l'instant. Créez-en un ci-dessus.")
+        st.info("Aucun dossier pour l'instant. Créez-en un ci-dessus, "
+                "puis rangez-y vos libellés.")
         return
 
     st.divider()
-    for name in sorted(dossiers):
+    for name in dossiers:
+        members = mapping.get(name, [])
         with st.container(border=True):
             hc1, hc2, hc3 = st.columns([4, 1.3, 1.3])
             with hc1:
                 rn = st.text_input("Nom", value=name, key=f"dosrn_{name}",
                                    label_visibility="collapsed")
+                note = f"{len(members)} libellé(s)"
+                if not members:
+                    note += " · vide (non synchronisé)"
+                st.caption(note)
             with hc2:
                 if st.button("Renommer", key=f"dosbtn_{name}",
                              use_container_width=True):
-                    new_n = rn.strip()
-                    if new_n and new_n != name:
-                        if new_n in dossiers:
-                            st.warning(f"« {new_n} » existe déjà.")
-                        else:
-                            dossiers[new_n] = dossiers.pop(name)
-                            _save_dossiers(dossiers)
-                            st.rerun()
+                    _rename_dossier(name, rn)
             with hc3:
                 with st.popover("Supprimer", use_container_width=True):
                     st.warning(
-                        f"Supprimer le dossier « {name} » ? Les libellés qu'il "
-                        "contient ne sont pas supprimés, seulement le regroupement."
+                        f"Supprimer le dossier « {name} » ? Ses libellés ne sont "
+                        "pas supprimés : ils en sortent simplement et restent "
+                        "disponibles sans dossier."
                     )
                     if st.button("Confirmer la suppression", type="primary",
                                  use_container_width=True, key=f"dosdel_{name}"):
-                        dossiers.pop(name, None)
-                        _save_dossiers(dossiers)
-                        st.rerun()
+                        _delete_dossier(name)
 
-            current = [lbl for lbl in dossiers[name] if lbl in labels]
+            options = sorted(set(members) | set(orphans))
             chosen = st.multiselect(
-                "Libellés de ce dossier", labels, default=current,
+                "Libellés de ce dossier", options, default=members,
                 key=f"dosset_{st.session_state.table_key}_{name}",
-                placeholder="Choisir des libellés…",
+                format_func=lambda l: _split_label(l)[1],
+                placeholder="Ajouter des libellés à ce dossier…",
             )
-            if set(chosen) != set(dossiers[name]):
-                dossiers[name] = chosen
-                _save_dossiers(dossiers)
+            if set(chosen) != set(members):
+                moved = False
+                for lbl in set(chosen) - set(members):   # entrent dans le dossier
+                    if _move_label(lbl, name):
+                        moved = True
+                for lbl in set(members) - set(chosen):   # sortent du dossier
+                    if _move_label(lbl, None):
+                        moved = True
+                if moved:
+                    st.session_state.empty_dossiers = [
+                        d for d in st.session_state.empty_dossiers if d != name]
+                    st.session_state.table_key += 1
+                    st.rerun()
 
-    assigned = {lbl for libs in dossiers.values() for lbl in libs}
-    orphans  = [lbl for lbl in labels if lbl not in assigned]
     if orphans:
-        st.caption("Libellés sans dossier : " + ", ".join(orphans))
+        st.divider()
+        st.caption("Libellés sans dossier : "
+                   + ", ".join(_split_label(o)[1] for o in orphans))
 
 
 def _render_labels() -> None:
