@@ -185,40 +185,14 @@ function cascadeFor(name) {
   return [];
 }
 
-// Apercu video en tete du popup — capture reelle de la page cible.
+// Apercu video en fond de carte — capture reelle de la page cible, jouee au survol.
 const PREVIEW_SRC = {
-  Region: './shared/home/assets/preview-region.mp4?v=20260520ah',
-  Rapport: './shared/home/assets/preview-rapport.mp4?v=20260520ah',
-  Graph: './shared/home/assets/preview-graph.mp4?v=20260520ah',
-  Theme: './shared/home/assets/preview-theme.mp4?v=20260520ah',
-  Cartographie: './shared/home/assets/preview-cartographie.mp4?v=20260520ah'
+  Region: './shared/home/assets/preview-region.mp4?v=20260522b',
+  Rapport: './shared/home/assets/preview-rapport.mp4?v=20260522b',
+  Graph: './shared/home/assets/preview-graph.mp4?v=20260522b',
+  Theme: './shared/home/assets/preview-theme.mp4?v=20260522b',
+  Cartographie: './shared/home/assets/preview-cartographie.mp4?v=20260522b'
 };
-function CascadePreview({
-  name,
-  count
-}) {
-  const src = PREVIEW_SRC[name];
-  return /*#__PURE__*/React.createElement("div", {
-    className: "cascade-preview",
-    "aria-hidden": "true"
-  }, src && /*#__PURE__*/React.createElement("video", {
-    className: "cascade-preview__video",
-    src: src,
-    autoPlay: true,
-    loop: true,
-    muted: true,
-    playsInline: true,
-    preload: "metadata"
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "cascade-preview__shade"
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "cascade-preview__caption"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "cascade-preview__dot"
-  }), "Apercu \xB7 ", name, /*#__PURE__*/React.createElement("span", {
-    className: "cascade-preview__count"
-  }, count)));
-}
 function ActionCard({
   num,
   name,
@@ -228,8 +202,25 @@ function ActionCard({
   onClick
 }) {
   const groups = cascadeFor(name);
+  const previewSrc = PREVIEW_SRC[name];
+  const videoRef = React.useRef(null);
+  function startPreview() {
+    const v = videoRef.current;
+    if (!v) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    try {
+      v.currentTime = 0;
+      v.play().catch(() => {});
+    } catch (e) {}
+  }
+  function stopPreview() {
+    const v = videoRef.current;
+    if (v) v.pause();
+  }
   return /*#__PURE__*/React.createElement("div", {
-    className: "action-card-wrap"
+    className: "action-card-wrap",
+    onMouseEnter: startPreview,
+    onMouseLeave: stopPreview
   }, /*#__PURE__*/React.createElement("div", {
     className: "action-card",
     onClick: onClick,
@@ -241,7 +232,18 @@ function ActionCard({
         onClick();
       }
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, previewSrc && /*#__PURE__*/React.createElement("div", {
+    className: "action-card__media",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("video", {
+    ref: videoRef,
+    className: "action-card__media-video",
+    src: previewSrc,
+    loop: true,
+    muted: true,
+    playsInline: true,
+    preload: "metadata"
+  })), /*#__PURE__*/React.createElement("div", {
     className: "action-card__top"
   }, /*#__PURE__*/React.createElement("div", {
     className: "action-card__icon"
@@ -271,10 +273,7 @@ function ActionCard({
   }))))), groups.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "cascade-pop",
     role: "menu"
-  }, /*#__PURE__*/React.createElement(CascadePreview, {
-    name: name,
-    count: count
-  }), groups.map((g, i) => /*#__PURE__*/React.createElement("div", {
+  }, groups.map((g, i) => /*#__PURE__*/React.createElement("div", {
     className: "cascade-row",
     key: i
   }, /*#__PURE__*/React.createElement("span", {

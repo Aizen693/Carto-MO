@@ -129,39 +129,42 @@ function cascadeFor(name) {
   return [];
 }
 
-// Apercu video en tete du popup — capture reelle de la page cible.
+// Apercu video en fond de carte — capture reelle de la page cible, jouee au survol.
 const PREVIEW_SRC = {
-  Region:       './shared/home/assets/preview-region.mp4?v=20260520ah',
-  Rapport:      './shared/home/assets/preview-rapport.mp4?v=20260520ah',
-  Graph:        './shared/home/assets/preview-graph.mp4?v=20260520ah',
-  Theme:        './shared/home/assets/preview-theme.mp4?v=20260520ah',
-  Cartographie: './shared/home/assets/preview-cartographie.mp4?v=20260520ah',
+  Region:       './shared/home/assets/preview-region.mp4?v=20260522b',
+  Rapport:      './shared/home/assets/preview-rapport.mp4?v=20260522b',
+  Graph:        './shared/home/assets/preview-graph.mp4?v=20260522b',
+  Theme:        './shared/home/assets/preview-theme.mp4?v=20260522b',
+  Cartographie: './shared/home/assets/preview-cartographie.mp4?v=20260522b',
 };
-
-function CascadePreview({ name, count }) {
-  const src = PREVIEW_SRC[name];
-  return (
-    <div className="cascade-preview" aria-hidden="true">
-      {src && (
-        <video className="cascade-preview__video" src={src}
-               autoPlay loop muted playsInline preload="metadata" />
-      )}
-      <div className="cascade-preview__shade" />
-      <div className="cascade-preview__caption">
-        <span className="cascade-preview__dot" />
-        Apercu · {name}
-        <span className="cascade-preview__count">{count}</span>
-      </div>
-    </div>
-  );
-}
 
 function ActionCard({ num, name, desc, count, icon, onClick }) {
   const groups = cascadeFor(name);
+  const previewSrc = PREVIEW_SRC[name];
+  const videoRef = React.useRef(null);
+
+  function startPreview() {
+    const v = videoRef.current;
+    if (!v) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    try { v.currentTime = 0; v.play().catch(() => {}); } catch (e) {}
+  }
+  function stopPreview() {
+    const v = videoRef.current;
+    if (v) v.pause();
+  }
+
   return (
-    <div className="action-card-wrap">
+    <div className="action-card-wrap"
+         onMouseEnter={startPreview} onMouseLeave={stopPreview}>
       <div className="action-card" onClick={onClick} role="button" tabIndex={0}
            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}>
+        {previewSrc && (
+          <div className="action-card__media" aria-hidden="true">
+            <video ref={videoRef} className="action-card__media-video" src={previewSrc}
+                   loop muted playsInline preload="metadata" />
+          </div>
+        )}
         <div className="action-card__top">
           <div className="action-card__icon">{icon}</div>
           <span className="action-card__num">— {num}</span>
@@ -182,7 +185,6 @@ function ActionCard({ num, name, desc, count, icon, onClick }) {
 
       {groups.length > 0 && (
         <div className="cascade-pop" role="menu">
-          <CascadePreview name={name} count={count} />
           {groups.map((g, i) => (
             <div className="cascade-row" key={i}>
               <span className="cascade-row__label">{g.label}</span>
