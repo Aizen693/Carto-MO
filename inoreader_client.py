@@ -15,7 +15,7 @@ import time
 import logging
 import urllib.parse
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 import httpx
 
@@ -56,11 +56,18 @@ class InoreaderClient:
     MIN_INTERVAL = 0.5   # secondes entre deux requêtes
     MAX_RETRIES  = 3
 
-    def __init__(self, config: InoreaderConfig) -> None:
+    def __init__(
+        self,
+        config: InoreaderConfig,
+        on_token_refresh: Optional[Callable[[str, str], Any]] = None,
+    ) -> None:
         self.config = config
         self.access_token = config.access_token
         self._http = httpx.Client(timeout=30.0, follow_redirects=True)
         self._last_req: float = 0.0
+        # Appele apres chaque refresh reussi avec (access_token, refresh_token).
+        # Sert a persister les jetons (rotation) dans un stockage durable.
+        self._on_token_refresh = on_token_refresh
 
     # ── Internal helpers ───────────────────────────────────────────────────────
 
@@ -94,6 +101,12 @@ class InoreaderClient:
                 if "refresh_token" in data:
                     self.config.refresh_token = data["refresh_token"]
                 logger.info("Access token refreshed.")
+                # Persiste les jetons rotes pour survivre aux redemarrages.
+                if self._on_token_refresh:
+                    try:
+                        self._on_token_refresh(self.access_token, self.config.refresh_token)
+                    except Exception as exc:
+                        logger.warning("on_token_refresh callback a echoue: %s", exc)
                 return True
             logger.error("Token refresh failed (%d): %s", resp.status_code, resp.text[:200])
             return False

@@ -58,6 +58,32 @@ def missing_keys(config: dict[str, str]) -> list[str]:
     return [k for k in required if not config.get(k)]
 
 
+# URL Supabase du projet Carto Algorint — non secrète (déjà publique côté site).
+DEFAULT_SUPABASE_URL = "https://lwgrjdpuagnvvzmdbyzb.supabase.co"
+
+
+def load_supabase_creds() -> tuple[str, str]:
+    """Retourne (url, service_key) pour le coffre durable des jetons.
+
+    Seule la clé service (rôle service_role) est secrète : à mettre dans les
+    secrets Streamlit / .env sous SUPABASE_SERVICE_KEY, jamais commitée.
+    L'URL a une valeur par défaut, donc un seul secret suffit à l'activer.
+    """
+    url = service_key = ""
+    try:
+        import streamlit as st
+        if hasattr(st, "secrets"):
+            url = st.secrets.get("SUPABASE_URL", "") or ""
+            service_key = st.secrets.get("SUPABASE_SERVICE_KEY", "") or ""
+    except Exception:
+        pass
+    if not url:
+        url = os.getenv("SUPABASE_URL", "")
+    if not service_key:
+        service_key = os.getenv("SUPABASE_SERVICE_KEY", "")
+    return (url or DEFAULT_SUPABASE_URL), service_key
+
+
 def truncate(text: str, max_len: int = 200) -> str:
     if not text:
         return ""

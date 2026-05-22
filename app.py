@@ -24,9 +24,17 @@ from filters import (
     load_filter_profile,
     save_filter_profile,
 )
+import token_store
 from inoreader_client import InoreaderAPIError, InoreaderClient, InoreaderConfig
 from scoring import ScoringConfig, apply_scoring
-from utils import highlight_keywords, load_config, missing_keys, setup_logging, top_words
+from utils import (
+    highlight_keywords,
+    load_config,
+    load_supabase_creds,
+    missing_keys,
+    setup_logging,
+    top_words,
+)
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -257,12 +265,29 @@ def get_client() -> InoreaderClient | None:
     if st.session_state.client is not None:
         return st.session_state.client
     cfg = load_config()
+
+    # Jetons durables : le coffre Supabase prime sur les secrets Streamlit
+    # (qui ne servent que d'amorçage). Voir token_store.py — sans ça, le
+    # refresh token roté est perdu à chaque redémarrage de l'app.
+    sb_url, sb_key = load_supabase_creds()
+    stored = token_store.load_tokens(sb_url, sb_key)
+    if stored:
+        cfg["access_token"]  = stored["access_token"]  or cfg.get("access_token", "")
+        cfg["refresh_token"] = stored["refresh_token"] or cfg.get("refresh_token", "")
+    elif token_store.is_configured(sb_url, sb_key) and cfg.get("refresh_token"):
+        # Amorçage : première fois, on seed le coffre avec le jeton des secrets.
+        token_store.save_tokens(sb_url, sb_key,
+                                cfg.get("access_token", ""), cfg["refresh_token"])
+
     missing = missing_keys(cfg)
     if missing:
-        st.error(f"Variables manquantes dans .env : {', '.join(missing)}")
+        st.error(f"Variables manquantes : {', '.join(missing)}")
         return None
     try:
-        client = InoreaderClient(InoreaderConfig(**cfg))
+        on_refresh = None
+        if token_store.is_configured(sb_url, sb_key):
+            on_refresh = lambda a, r: token_store.save_tokens(sb_url, sb_key, a, r)
+        client = InoreaderClient(InoreaderConfig(**cfg), on_token_refresh=on_refresh)
         st.session_state.client = client
         return client
     except Exception as exc:
@@ -1317,8 +1342,8 @@ def render_analyse() -> None:
 
 def render_reglages() -> None:
     st.markdown("## Réglages")
-    tab_dossiers, tab_labels, tab_scoring, tab_filtres = st.tabs(
-        ["Dossiers", "Libellés", "Scoring", "Filtres sauvegardés"])
+    tab_dossiers, tab_labels, tab_scoring, tab_filtres, tab_conn = st.tabs(
+        ["Dossiers", "Libellés", "Scoring", "Filtres sauvegardés", "Connexion"])
     with tab_dossiers:
         _render_dossiers()
     with tab_labels:
@@ -1327,6 +1352,69 @@ def render_reglages() -> None:
         _render_scoring()
     with tab_filtres:
         _render_saved_filters()
+    with tab_conn:
+        _render_connexion()
+
+
+def _render_connexion() -> None:
+    st.caption(
+        "L'outil se connecte à Inoreader via un jeton OAuth. Ce jeton tourne "
+        "(rotation) à chaque rafraîchissement : il est conservé dans un coffre "
+        "Supabase pour survivre aux redémarrages de l'app — il n'expire donc "
+        "plus tout seul."
+    )
+
+    sb_url, sb_key = load_supabase_creds()
+    if not token_store.is_configured(sb_url, sb_key):
+        st.warning(
+            "Coffre Supabase non configuré : ajoutez le secret "
+            "`SUPABASE_SERVICE_KEY` dans les réglages Streamlit Cloud. "
+            "Sans ça, le jeton n'est pas persisté et la veille recassera "
+            "au prochain redémarrage de l'app."
+        )
+        return
+
+    stored = token_store.load_tokens(sb_url, sb_key)
+    if stored and stored.get("updated_at"):
+        when = str(stored["updated_at"])[:16].replace("T", " à ")
+        st.success(f"Jeton présent dans le coffre · mis à jour le {when}")
+    elif stored:
+        st.success("Jeton présent dans le coffre.")
+    else:
+        st.info(
+            "Aucun jeton dans le coffre — il sera amorcé automatiquement "
+            "depuis les secrets Streamlit au prochain chargement."
+        )
+
+    st.divider()
+    st.markdown(
+        "**Remplacer le jeton** — collez un *refresh token* frais obtenu via "
+        "`python oauth_setup.py`, puis enregistrez :"
+    )
+    new_rt = st.text_input(
+        "Refresh token", key="conn_new_rt", label_visibility="collapsed",
+        placeholder="Refresh token Inoreader…", type="password",
+    )
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button("Enregistrer le jeton", type="primary",
+                     use_container_width=True, key="conn_save"):
+            if new_rt.strip():
+                if token_store.save_tokens(sb_url, sb_key, "", new_rt.strip()):
+                    st.session_state.client = None
+                    st.success("Jeton enregistré. Allez dans « Veille » et "
+                               "cliquez « Rafraîchir ».")
+                else:
+                    st.error("Échec de l'enregistrement dans le coffre.")
+            else:
+                st.warning("Collez d'abord un refresh token.")
+    with c2:
+        if st.button("Réinitialiser le coffre", use_container_width=True,
+                     key="conn_clear"):
+            token_store.clear_tokens(sb_url, sb_key)
+            st.session_state.client = None
+            st.info("Coffre vidé. Le jeton des secrets Streamlit sera "
+                    "réutilisé au prochain chargement.")
 
 
 def _render_dossiers() -> None:
