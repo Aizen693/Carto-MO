@@ -3,20 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Algor Access — Cartographie OSINT des theatres a risque</title>
-
-<script>
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  try { window.scrollTo(0, 0); } catch (e) {}
-</script>
+<title>Algor Access — Cartographie OSINT des théâtres à risque</title>
 
 <link rel="icon" type="image/jpeg" href="./favicon.jpg" />
 
-<meta property="og:title" content="Algor Access — Cartographie OSINT des theatres a risque" />
-<meta property="og:description" content="Plateforme de cartographie OSINT. Six theatres geopolitiques suivis en continu, chaque evenement source, date et auditable." />
+<meta name="description" content="Algor Access — plateforme de cartographie OSINT. Six théâtres géopolitiques suivis en continu : carte multicouche, événements sourcés, chronologie et briefs de sécurité générés par IA." />
+<meta property="og:title" content="Algor Access — Cartographie OSINT des théâtres à risque" />
+<meta property="og:description" content="Carte multicouche, événements sourcés, chronologie et briefs IA — six théâtres réunis sur une seule plateforme." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://algoracces.fr/" />
-<meta name="description" content="Algor Access — plateforme de cartographie OSINT. Six theatres geopolitiques (Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud) suivis en continu : imagerie satellite, ACLED, GDELT, OSINT social, chaque evenement source et date." />
 <meta name="robots" content="noindex, nofollow" />
 <meta name="theme-color" content="#FFFFFF" />
 
@@ -24,25 +19,321 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet" href="./shared/home/styles.css?v=20260522g" />
+<link rel="stylesheet" href="./shared/home/styles.css?v=20260522l" />
 </head>
-<body style="background-color: #FFFFFF">
-<div id="root"></div>
+<body style="background-color:#FFFFFF">
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<!-- ─────────────────────────────────────── Header -->
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-brand" href="/">
+      <span class="site-brand__mark"></span>
+      <span class="site-brand__name">ALGOR INT</span>
+    </a>
+    <nav class="site-nav" aria-label="Rubriques">
+      <a href="/" class="is-active" aria-current="page">Plateforme</a>
+      <a href="/methodologie/">Méthodologie</a>
+      <a href="/offres/">Offres</a>
+      <a href="/theatres/">Théâtres</a>
+      <a href="/a-propos/">À propos</a>
+      <a href="/contact/">Contact</a>
+    </nav>
+    <div class="site-header__right">
+      <a class="site-login" href="/">Connexion</a>
+      <a class="site-cta" href="/offres/">Voir les offres</a>
+    </div>
+  </div>
+</header>
 
-<!-- Globe interactif : D3 + topojson (geometrie reelle des pays) -->
-<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<main>
 
-<!-- JS precompile depuis shared/home/*.jsx (sources). Recompiler apres edition. -->
-<script src="./shared/home/data.js?v=20260520ah"></script>
-<script src="./shared/home/starfield.js?v=20260520ah"></script>
-<script src="./shared/home/globe.js?v=20260520ah"></script>
-<script src="./shared/home/home.js?v=20260522f"></script>
-<script src="./shared/home/panel.js?v=20260520ah"></script>
-<script src="./shared/home/platform.js?v=20260522b"></script>
-<script src="./shared/home/app.js?v=20260522g"></script>
+  <!-- ─────────────────────────────────────── Hero -->
+  <section class="page-hero">
+    <div class="page-hero__wrap">
+      <div class="page-hero__copy">
+        <span class="page-hero__eyebrow">Plateforme</span>
+        <h1 class="page-hero__title">Le terrain, lisible <em>en un seul écran</em></h1>
+        <p class="page-hero__lede">
+          Imagerie, événements, acteurs et flux réunis sur une carte interactive. Calques superposables, chronologie, fiches sourcées et briefs générés par IA : Algor Access vous donne une lecture claire de six théâtres à risque.
+        </p>
+        <div class="page-hero__cta">
+          <a class="btn btn--primary btn--lg" href="/offres/">Voir les offres</a>
+          <a class="btn btn--ghost btn--lg" href="/methodologie/">Notre méthodologie</a>
+        </div>
+      </div>
+      <div class="page-hero__visual">
+        <div class="media-frame" role="img" aria-label="Visuel de la plateforme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="16" rx="2" />
+            <circle cx="8.5" cy="9.5" r="1.6" />
+            <path d="M21 15l-5-5L5 21" />
+          </svg>
+          <span class="media-frame__label">Visuel à venir</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────── Lignes feature -->
+  <section class="home-sec">
+    <div class="home-sec__wrap">
+      <div class="home-sec__head">
+        <span class="eyebrow">— La plateforme</span>
+        <h2 class="home-sec__title">Ce que vous pouvez <em>faire</em></h2>
+        <p class="home-sec__intro">
+          Quatre outils, une même logique : passer de la donnée brute à une lecture claire de la situation, en quelques clics.
+        </p>
+      </div>
+      <div class="feature-rows">
+
+        <article class="feature-row">
+          <div class="feature-row__copy">
+            <div class="feature-row__tag">Cartographie</div>
+            <h3 class="feature-row__title">Une carte, autant de calques que nécessaire</h3>
+            <p class="feature-row__text">Superposez jusqu'à sept calques par théâtre — acteurs armés, forces en présence, infrastructures, population, flux et ressources. Affichez ce qui compte pour votre lecture, masquez le reste.</p>
+            <ul class="feature-row__list">
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Jusqu'à 7 calques activables</li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Une carte dédiée par théâtre</li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Lecture d'ensemble immédiate</li>
+            </ul>
+          </div>
+          <div class="feature-row__visual">
+            <div class="media-frame" role="img" aria-label="Aperçu de la carte multicouche">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span class="media-frame__label">Visuel à venir</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="feature-row">
+          <div class="feature-row__copy">
+            <div class="feature-row__tag">Événements</div>
+            <h3 class="feature-row__title">Chaque point ouvre une fiche sourcée</h3>
+            <p class="feature-row__text">Cliquez sur un événement : date, localisation, acteurs impliqués, sources et cotation s'affichent. La donnée brute n'est jamais à plus d'un clic — et toujours vérifiable.</p>
+            <ul class="feature-row__list">
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Fiche datée et localisée</li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Sources primaires citées</li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Cotation fiabilité et crédibilité</li>
+            </ul>
+          </div>
+          <div class="feature-row__visual">
+            <div class="media-frame" role="img" aria-label="Aperçu d'une fiche d'événement">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span class="media-frame__label">Visuel à venir</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="feature-row">
+          <div class="feature-row__copy">
+            <div class="feature-row__tag">Chronologie</div>
+            <h3 class="feature-row__title">Rejouez l'évolution d'un théâtre</h3>
+            <p class="feature-row__text">Un curseur de période fait défiler le temps. Vous ne lisez pas seulement la situation du jour : vous voyez comment elle s'est installée, quinzaine après quinzaine.</p>
+            <ul class="feature-row__list">
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Curseur de période</li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Comparaison dans le temps</li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Détection des tendances</li>
+            </ul>
+          </div>
+          <div class="feature-row__visual">
+            <div class="media-frame" role="img" aria-label="Aperçu de la chronologie interactive">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span class="media-frame__label">Visuel à venir</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="feature-row">
+          <div class="feature-row__copy">
+            <div class="feature-row__tag">Briefs IA</div>
+            <h3 class="feature-row__title">Une synthèse de sécurité en quelques minutes</h3>
+            <p class="feature-row__text">Générez un brief sur le secteur de votre choix : la plateforme produit une synthèse structurée, appuyée par l'IA et par les données vérifiées du théâtre, prête à être partagée.</p>
+            <ul class="feature-row__list">
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Synthèse sur un secteur ciblé</li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Structurée pour la décision</li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Exportable et partageable</li>
+            </ul>
+          </div>
+          <div class="feature-row__visual">
+            <div class="media-frame" role="img" aria-label="Aperçu d'un brief de sécurité">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span class="media-frame__label">Visuel à venir</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────── Capacités complémentaires -->
+  <section class="home-sec home-sec--alt">
+    <div class="home-sec__wrap">
+      <div class="home-sec__head">
+        <span class="eyebrow">— Et aussi</span>
+        <h2 class="home-sec__title">Pensée pour un usage <em>quotidien</em></h2>
+      </div>
+      <div class="src-grid">
+        <article class="src-card">
+          <h3 class="src-card__title">Recherche & archives</h3>
+          <p class="src-card__text">Retrouvez tout événement déjà cartographié, même retiré des cartes — conservé en base et consultable.</p>
+        </article>
+        <article class="src-card">
+          <h3 class="src-card__title">Exports</h3>
+          <p class="src-card__text">Cartes, fiches et briefs s'exportent pour intégrer vos propres documents de travail.</p>
+        </article>
+        <article class="src-card">
+          <h3 class="src-card__title">Acteurs & réseaux</h3>
+          <p class="src-card__text">Chaque acteur est fiché : zones d'action, événements liés et évolution dans le temps.</p>
+        </article>
+        <article class="src-card">
+          <h3 class="src-card__title">Accès multi-utilisateurs</h3>
+          <p class="src-card__text">Partagez l'accès au sein de votre équipe, avec une lecture commune des théâtres.</p>
+        </article>
+        <article class="src-card">
+          <h3 class="src-card__title">Mises à jour continues</h3>
+          <p class="src-card__text">Les théâtres vivent : nouveaux événements et nouvelles périodes intégrés au fil de l'eau.</p>
+        </article>
+        <article class="src-card">
+          <h3 class="src-card__title">Une console sobre et rapide</h3>
+          <p class="src-card__text">Interface claire, sans superflu — conçue pour un usage professionnel au quotidien.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────── Théâtres -->
+  <section class="home-sec">
+    <div class="home-sec__wrap">
+      <div class="home-sec__head">
+        <span class="eyebrow">— Couverture</span>
+        <h2 class="home-sec__title">Six théâtres, un seul <em>abonnement</em></h2>
+        <p class="home-sec__intro">
+          Du Sahel à l'Asie du Sud, la même plateforme et la même méthode — sans accès à multiplier.
+        </p>
+      </div>
+      <div class="zone-strip">
+        <span>Moyen-Orient</span>
+        <span>Sahel</span>
+        <span>RDC</span>
+        <span>Madagascar</span>
+        <span>Afrique Maritime</span>
+        <span>Asie du Sud</span>
+      </div>
+      <a class="btn btn--ghost btn--lg" href="/theatres/">Découvrir les six théâtres</a>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────── Accès -->
+  <section class="home-sec home-sec--alt">
+    <div class="home-sec__wrap">
+      <div class="home-sec__head">
+        <span class="eyebrow">— Accès</span>
+        <h2 class="home-sec__title">Comment <em>commencer</em></h2>
+      </div>
+      <div class="src-grid">
+        <article class="src-card">
+          <span class="step-num">1</span>
+          <h3 class="src-card__title">Créez votre compte</h3>
+          <p class="src-card__text">L'inscription est libre. Vous accédez immédiatement à l'aperçu de la plateforme.</p>
+        </article>
+        <article class="src-card">
+          <span class="step-num">2</span>
+          <h3 class="src-card__title">Choisissez une formule</h3>
+          <p class="src-card__text">Sélectionnez l'abonnement adapté à votre besoin, ou demandez une analyse sur mesure.</p>
+        </article>
+        <article class="src-card">
+          <span class="step-num">3</span>
+          <h3 class="src-card__title">Ouvrez un théâtre</h3>
+          <p class="src-card__text">Accédez aux six théâtres, à leurs calques, leur chronologie et leurs briefs.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────── FAQ -->
+  <section class="home-sec">
+    <div class="home-sec__wrap">
+      <div class="home-sec__head">
+        <span class="eyebrow">— Questions fréquentes</span>
+        <h2 class="home-sec__title">Vos questions sur <em>la plateforme</em></h2>
+      </div>
+      <div class="faq">
+        <div class="faq-item">
+          <div class="faq-item__q">Faut-il installer un logiciel ?</div>
+          <div class="faq-item__a">Non. Algor Access est une plateforme web : un navigateur récent suffit, sur ordinateur comme sur tablette.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-item__q">Combien de théâtres sont inclus ?</div>
+          <div class="faq-item__a">Les six théâtres sont accessibles sous un même abonnement — du Moyen-Orient à l'Asie du Sud, sans accès à multiplier.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-item__q">Les données sont-elles à jour ?</div>
+          <div class="faq-item__a">Oui. Les théâtres sont suivis en continu et enrichis au fil de la vérification des événements.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-item__q">Peut-on partager l'accès en équipe ?</div>
+          <div class="faq-item__a">Oui. Les formules multi-utilisateurs permettent un accès partagé, avec une lecture commune des théâtres.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────── CTA -->
+  <section class="cta-band">
+    <div class="cta-band__wrap">
+      <h2 class="cta-band__title">Prêt à voir la plateforme en action ?</h2>
+      <p class="cta-band__text">Découvrez nos formules d'accès, ou parlez-nous directement de votre besoin.</p>
+      <div class="cta-band__row">
+        <a class="btn btn--lg btn--on-violet" href="/offres/">Voir les offres</a>
+        <a class="btn btn--lg btn--ghost-violet" href="/contact/">Nous contacter</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ─────────────────────────────────────── Footer -->
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <div class="site-footer__brand-name"><span></span>ALGOR INT</div>
+      <p class="site-footer__blurb">
+        Algor Access — plateforme de cartographie OSINT. Six théâtres géopolitiques suivis en continu, chaque événement sourcé, daté et auditable.
+      </p>
+    </div>
+    <div class="site-footer__col">
+      <h4>Le site</h4>
+      <a href="/">Plateforme</a>
+      <a href="/methodologie/">Méthodologie</a>
+      <a href="/offres/">Offres</a>
+      <a href="/theatres/">Théâtres</a>
+      <a href="/a-propos/">À propos</a>
+      <a href="/contact/">Contact</a>
+    </div>
+    <div class="site-footer__col">
+      <h4>Théâtres</h4>
+      <a href="/moyen-orient/">Moyen-Orient</a>
+      <a href="/sahel/">Sahel</a>
+      <a href="/rdc/">RDC</a>
+      <a href="/madagascar/">Madagascar</a>
+      <a href="/afrique/">Afrique Maritime</a>
+      <a href="/asie-sud/">Asie du Sud</a>
+    </div>
+    <div class="site-footer__col">
+      <h4>Accès</h4>
+      <a href="/">Connexion</a>
+      <a href="/offres/">Voir les offres</a>
+      <a href="/contact/">Nous contacter</a>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <div class="site-footer__bottom-inner">
+      <span>© 2026 Algor Int — Cartographie OSINT des théâtres à risque</span>
+      <span>Diffusion restreinte · usage professionnel</span>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
