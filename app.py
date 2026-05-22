@@ -97,8 +97,18 @@ st.markdown(
     .stFormSubmitButton > button, [data-testid="stPopover"] button {
         border-radius: 8px; font-weight: 600;
         border: 1px solid rgba(24,20,40,0.14);
+        white-space: nowrap;
+        min-width: 0;
         transition: border-color .15s ease, background .15s ease,
                     color .15s ease, transform .15s ease, box-shadow .15s ease;
+    }
+    /* Empêche le retour à la ligne caractère par caractère du libellé */
+    .stButton > button p, .stDownloadButton > button p,
+    .stFormSubmitButton > button p, [data-testid="stPopover"] button p,
+    .stButton > button div, [data-testid="stPopover"] button div {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .stButton > button:hover, .stDownloadButton > button:hover,
     [data-testid="stPopover"] button:hover {
@@ -513,15 +523,15 @@ def render_veille() -> None:
     c1, c2, c3 = st.columns(3)
     c1.metric("Chargés", len(full_df))
     c2.metric("Affichés", len(filtered_df))
-    c3.metric("Sélectionnés", len(sel))
+    c3.metric("Sélection", len(sel))
 
     # ── Barre d'outils : recherche + filtres ───────────────────────────────
-    tc1, tc2 = st.columns([7, 1.6])
+    tc1, tc2 = st.columns([5, 2])
     with tc1:
         st.text_input(
             "Recherche", key="search_box", on_change=_on_search_change,
             value=st.session_state.flt.search_text,
-            placeholder="Rechercher un mot dans les titres et résumés…",
+            placeholder="Rechercher un mot…",
             label_visibility="collapsed",
         )
     with tc2:
@@ -529,18 +539,18 @@ def render_veille() -> None:
             _render_filter_form(full_df)
 
     # ── Bascule de vue ─────────────────────────────────────────────────────
-    vc1, vc2 = st.columns([3, 6])
+    vc1, vc2 = st.columns([3, 4])
     with vc1:
-        view = st.segmented_control(
-            "Vue", ["Cartes", "Tableau"], default="Cartes",
-            key="view_mode", label_visibility="collapsed",
+        view = st.radio(
+            "Vue", ["Cartes", "Tableau"],
+            horizontal=True, key="view_mode", label_visibility="collapsed",
         )
     view = view or "Cartes"
 
     visible = ["title", "source", "published_at", "score"]
     if view == "Tableau":
         with vc2:
-            with st.popover("Colonnes affichées"):
+            with st.popover("Colonnes affichées", use_container_width=True):
                 available = ["title", "source", "folder", "tags", "author",
                              "published_at", "summary", "is_read", "word_count", "score"]
                 st.multiselect(
@@ -578,7 +588,7 @@ def render_veille() -> None:
 
 def _render_pagination(page_idx: int, total_pages: int,
                        start: int, end: int, total_rows: int) -> None:
-    p1, p2, p3 = st.columns([1, 5, 1])
+    p1, p2, p3 = st.columns([2, 4, 2])
     with p1:
         if st.button("◀ Préc.", use_container_width=True, disabled=page_idx == 0):
             st.session_state.page_index = page_idx - 1
