@@ -2740,3 +2740,63 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 @media (max-width: 680px) {
   .contact-form { grid-template-columns: 1fr; }
 }
+
+/* ═══════════════════════════════════════════════════════
+   MENU MOBILE — burger (header rubriques + accueil)
+   ═══════════════════════════════════════════════════════ */
+.site-brand__name { white-space: nowrap; }
+.site-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 44px; height: 44px;
+  flex: none;
+  margin-left: auto;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  cursor: pointer;
+}
+.site-burger span {
+  display: block;
+  width: 18px; height: 2px;
+  margin: 0 auto;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform 0.22s var(--ease), opacity 0.18s var(--ease);
+}
+.site-header.is-open .site-burger span:nth-child(1),
+.app-header.is-open .site-burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.site-header.is-open .site-burger span:nth-child(2),
+.app-header.is-open .site-burger span:nth-child(2) { opacity: 0; }
+.site-header.is-open .site-burger span:nth-child(3),
+.app-header.is-open .site-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+@media (max-width: 1080px) {
+  .site-burger { display: flex; }
+  .site-header__inner, .app-header__inner { flex-wrap: wrap; row-gap: 0; }
+  .app-header__inner { padding-left: 24px; padding-right: 24px; }
+  .site-nav { display: none; }
+  .site-header__right, .app-header__right { display: none; }
+  .site-header.is-open .site-nav,
+  .app-header.is-open .site-nav {
+    display: flex; flex-direction: column; align-items: stretch;
+    width: 100%; gap: 0; order: 9;
+    margin-top: 14px; padding-top: 4px;
+    border-top: 1px solid var(--line);
+  }
+  .site-header.is-open .site-nav a,
+  .app-header.is-open .site-nav a {
+    padding: 14px 2px; font-size: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .site-header.is-open .site-header__right,
+  .app-header.is-open .app-header__right {
+    display: flex; flex-wrap: wrap; align-items: center;
+    width: 100%; gap: 14px; order: 10;
+    margin-top: 16px; margin-left: 0;
+  }
+  .site-header.is-open .site-cta,
+  .site-header.is-open .site-login { flex: 1; text-align: center; justify-content: center; }
+}

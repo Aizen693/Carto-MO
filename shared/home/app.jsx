@@ -17,6 +17,7 @@ function App() {
     window.location.hash === '#console' ? 'console' : 'home'
   );
   const [clock, setClock] = useState('--:--');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Lock theme + accent (no Tweaks panel in production).
   useEffect(() => {
@@ -45,7 +46,7 @@ function App() {
         <Starfield />
       </div>
 
-      <header className="app-header">
+      <header className={'app-header' + (menuOpen ? ' is-open' : '')}>
         <div className="app-header__inner">
           <div className="brand" onClick={() => setView('home')}>
             <div className="brand__mark" />
@@ -104,6 +105,10 @@ function App() {
               </span>
             </div>
           </div>
+          <button className="site-burger" aria-label="Menu" aria-expanded={menuOpen}
+                  onClick={() => setMenuOpen((o) => !o)}>
+            <span /><span /><span />
+          </button>
         </div>
       </header>
 

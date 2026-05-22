@@ -23,6 +23,7 @@ function App() {
   // Ancre #console : ouvre directement la Console (retour depuis /cloud/, /admin/...).
   const [view, setView] = useState(window.location.hash === '#console' ? 'console' : 'home');
   const [clock, setClock] = useState('--:--');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Lock theme + accent (no Tweaks panel in production).
   useEffect(() => {
@@ -53,7 +54,7 @@ function App() {
     className: "bg-stage",
     "aria-hidden": "true"
   }, /*#__PURE__*/React.createElement(Starfield, null)), /*#__PURE__*/React.createElement("header", {
-    className: "app-header"
+    className: 'app-header' + (menuOpen ? ' is-open' : '')
   }, /*#__PURE__*/React.createElement("div", {
     className: "app-header__inner"
   }, /*#__PURE__*/React.createElement("div", {
@@ -127,7 +128,12 @@ function App() {
     className: "status-pill__clock"
   }, clock), /*#__PURE__*/React.createElement("span", {
     className: "status-pill__loc"
-  }, "Paris")))))), view === 'home' && /*#__PURE__*/React.createElement(HomeView, {
+  }, "Paris")))), /*#__PURE__*/React.createElement("button", {
+    className: "site-burger",
+    "aria-label": "Menu",
+    "aria-expanded": menuOpen,
+    onClick: () => setMenuOpen(o => !o)
+  }, /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null)))), view === 'home' && /*#__PURE__*/React.createElement(HomeView, {
     onEnter: () => setView('platform'),
     onConsole: () => setView('console'),
     clock: clock,
