@@ -67,16 +67,22 @@ function App() {
     className: "brand__name"
   }, "ALGOR INT"), /*#__PURE__*/React.createElement("div", {
     className: "brand__tag"
-  }, "Geopolitical Intelligence"))), view === 'platform' && /*#__PURE__*/React.createElement("nav", {
-    className: "app-header__nav",
-    "aria-label": "Sections"
+  }, "Geopolitical Intelligence"))), /*#__PURE__*/React.createElement("nav", {
+    className: "site-nav",
+    "aria-label": "Rubriques"
   }, /*#__PURE__*/React.createElement("a", {
-    className: "nav-link",
-    "aria-current": "page"
+    href: "/plateforme/"
   }, "Plateforme"), /*#__PURE__*/React.createElement("a", {
-    className: "nav-link",
-    href: "/admin/"
-  }, "Admin")), /*#__PURE__*/React.createElement("div", {
+    href: "/methodologie/"
+  }, "M\xE9thodologie"), /*#__PURE__*/React.createElement("a", {
+    href: "/offres/"
+  }, "Offres"), /*#__PURE__*/React.createElement("a", {
+    href: "/theatres/"
+  }, "Th\xE9\xE2tres"), /*#__PURE__*/React.createElement("a", {
+    href: "/a-propos/"
+  }, "\xC0 propos"), /*#__PURE__*/React.createElement("a", {
+    href: "/contact/"
+  }, "Contact")), /*#__PURE__*/React.createElement("div", {
     className: "app-header__right"
   }, view !== 'console' && /*#__PURE__*/React.createElement("div", {
     className: "header-cta-wrap"

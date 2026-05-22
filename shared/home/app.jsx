@@ -55,12 +55,14 @@ function App() {
             </div>
           </div>
 
-          {view === 'platform' && (
-            <nav className="app-header__nav" aria-label="Sections">
-              <a className="nav-link" aria-current="page">Plateforme</a>
-              <a className="nav-link" href="/admin/">Admin</a>
-            </nav>
-          )}
+          <nav className="site-nav" aria-label="Rubriques">
+            <a href="/plateforme/">Plateforme</a>
+            <a href="/methodologie/">Méthodologie</a>
+            <a href="/offres/">Offres</a>
+            <a href="/theatres/">Théâtres</a>
+            <a href="/a-propos/">À propos</a>
+            <a href="/contact/">Contact</a>
+          </nav>
 
           <div className="app-header__right">
             {view !== 'console' && (

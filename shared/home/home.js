@@ -63,9 +63,219 @@ function HomeView({
     href: "/afrique/"
   }, "Afrique"))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"
-  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(VideoBand, {
+  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
     style: videoStyle
   }));
+}
+
+// ─── Sections de presentation — structure marketing par sections (inspiration vigideep).
+
+function SectionHead({
+  eyebrow,
+  title,
+  em,
+  intro
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "home-sec__head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "eyebrow"
+  }, "\u2014 ", eyebrow), /*#__PURE__*/React.createElement("h2", {
+    className: "home-sec__title"
+  }, title, " ", /*#__PURE__*/React.createElement("em", null, em)), intro && /*#__PURE__*/React.createElement("p", {
+    className: "home-sec__intro"
+  }, intro));
+}
+
+// Cadre visuel reserve — en attente des captures definitives.
+function MediaFrame({
+  label
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "media-frame",
+    role: "img",
+    "aria-label": label
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.6",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "3",
+    y: "4",
+    width: "18",
+    height: "16",
+    rx: "2"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "8.5",
+    cy: "9.5",
+    r: "1.6"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M21 15l-5-5L5 21"
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "media-frame__label"
+  }, label));
+}
+
+// ── 1. Ce que vous obtenez — livrables concrets, ton commercial.
+const HOME_GET = [{
+  tag: "La carte",
+  t: "Une carte de situation",
+  d: "Chaque théâtre sur une carte interactive : la situation se lit dans son ensemble, là où il faudrait autrement compiler des dizaines d'articles.",
+  media: "Aperçu cartographie"
+}, {
+  tag: "Le brief",
+  t: "Des briefs prêts à l'emploi",
+  d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel — claire, datée et sourcée.",
+  media: "Aperçu brief de sécurité"
+}, {
+  tag: "L'accès",
+  t: "Un accès continu",
+  d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
+  media: "Aperçu plateforme"
+}];
+function GetSection() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "home-sec home-sec--alt",
+    id: "offre"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "home-sec__wrap"
+  }, /*#__PURE__*/React.createElement(SectionHead, {
+    eyebrow: "Ce que vous obtenez",
+    title: "De la donn\xE9e brute",
+    em: "\xE0 la d\xE9cision",
+    intro: "Trois outils pour lire une situation, en \xE9valuer la port\xE9e et y revenir quand la d\xE9cision se pose."
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "get-grid"
+  }, HOME_GET.map((g, i) => /*#__PURE__*/React.createElement("article", {
+    className: "get-card",
+    key: i
+  }, /*#__PURE__*/React.createElement(MediaFrame, {
+    label: g.media
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "get-card__body"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "get-card__tag"
+  }, g.tag), /*#__PURE__*/React.createElement("h3", {
+    className: "get-card__title"
+  }, g.t), /*#__PURE__*/React.createElement("p", {
+    className: "get-card__text"
+  }, g.d)))))));
+}
+
+// ── 2. Notre difference — la vraie plus-value, sans repeter le hero.
+const HOME_DIFF = [{
+  t: "Une connaissance du terrain",
+  d: "Chaque théâtre est suivi dans la durée par des analystes qui en connaissent le contexte, les acteurs et les dynamiques. Cette familiarité permet de hiérarchiser l'information et d'en restituer la portée réelle."
+}, {
+  t: "La rigueur du renseignement",
+  d: "Croisement des sources, datation et cotation de la fiabilité : chaque information est vérifiée avant d'être cartographiée."
+}, {
+  t: "La lecture dans le temps",
+  d: "Nos théâtres se relisent période par période. Au-delà de l'événement du jour, vous suivez la façon dont une situation s'installe et évolue."
+}];
+function DiffSection() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "home-sec",
+    id: "difference"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "home-sec__wrap"
+  }, /*#__PURE__*/React.createElement(SectionHead, {
+    eyebrow: "Notre approche",
+    title: "Notre approche du",
+    em: "renseignement",
+    intro: "Trois principes guident la fa\xE7on dont nous traitons et restituons l'information."
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "pillar-list"
+  }, HOME_DIFF.map((p, i) => /*#__PURE__*/React.createElement("article", {
+    className: "pillar",
+    key: i
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "pillar__num"
+  }, String(i + 1).padStart(2, '0')), /*#__PURE__*/React.createElement("div", {
+    className: "pillar__body"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "pillar__title"
+  }, p.t), /*#__PURE__*/React.createElement("p", {
+    className: "pillar__text"
+  }, p.d)))))));
+}
+
+// ── 3. Pour qui — segments clients.
+const HOME_AUD = [{
+  t: "Décideurs & directions",
+  d: "Arbitrer rapidement sur un risque-pays, sans avoir à dépouiller la presse."
+}, {
+  t: "Sûreté & sécurité",
+  d: "Évaluer la menace sur des sites, des trajets et des implantations."
+}, {
+  t: "Conseil & due diligence",
+  d: "Étayer une recommandation avec des sources datées et sourcées."
+}, {
+  t: "Opérateurs sur zone",
+  d: "ONG, industriels et logisticiens présents sur des théâtres sensibles."
+}];
+function AudienceSection() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "home-sec home-sec--alt",
+    id: "pour-qui"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "home-sec__wrap"
+  }, /*#__PURE__*/React.createElement(SectionHead, {
+    eyebrow: "Pour qui",
+    title: "\xC0 qui s'adresse",
+    em: "Algor Access",
+    intro: "Des profils diff\xE9rents, un m\xEAme besoin : une lecture fiable et dat\xE9e des th\xE9\xE2tres \xE0 risque."
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "aud-grid"
+  }, HOME_AUD.map((a, i) => /*#__PURE__*/React.createElement("article", {
+    className: "aud-card",
+    key: i
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "aud-card__rule"
+  }), /*#__PURE__*/React.createElement("h3", {
+    className: "aud-card__title"
+  }, a.t), /*#__PURE__*/React.createElement("p", {
+    className: "aud-card__text"
+  }, a.d))))));
+}
+
+// ── 4. Comparatif — retravaille : police plus large, lignes orientees plus-value.
+const COMPARE_ROWS = [["Datation", "Variable, parfois absente", "Systématique, horodatée"], ["Connaissance du terrain", "Limitée aux canaux publics", "Suivi continu par des analystes dédiés"], ["Vérification", "Au cas par cas", "Croisement systématique avant publication"], ["Fiabilité", "Non évaluée", "Cotée, source par source"], ["Profondeur", "L'actualité du jour", "La situation rejouable dans le temps"], ["Lecture", "Du texte à compiler soi-même", "Une carte de situation immédiate"]];
+function CompareSection() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "home-sec",
+    id: "comparatif"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "home-sec__wrap"
+  }, /*#__PURE__*/React.createElement(SectionHead, {
+    eyebrow: "Comparatif",
+    title: "Le suivi d'actualit\xE9",
+    em: "et la plateforme",
+    intro: "Deux fa\xE7ons de suivre une zone \u2014 voici ce qui les distingue, crit\xE8re par crit\xE8re."
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "cmp-table"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cmp-table__row cmp-table__row--head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cmp-table__cell"
+  }, "Crit\xE8re"), /*#__PURE__*/React.createElement("div", {
+    className: "cmp-table__cell"
+  }, "Fil d'actualit\xE9 & presse"), /*#__PURE__*/React.createElement("div", {
+    className: "cmp-table__cell cmp-table__cell--pos"
+  }, "Algor Access")), COMPARE_ROWS.map(([c, neg, pos], i) => /*#__PURE__*/React.createElement("div", {
+    className: "cmp-table__row",
+    key: i
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cmp-table__cell cmp-table__crit"
+  }, c), /*#__PURE__*/React.createElement("div", {
+    className: "cmp-table__cell cmp-table__neg"
+  }, neg), /*#__PURE__*/React.createElement("div", {
+    className: "cmp-table__cell cmp-table__cell--pos cmp-table__pos"
+  }, pos))))));
 }
 const HOME_VIDEOS = [{
   cat: 'Veille',

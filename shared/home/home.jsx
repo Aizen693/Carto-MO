@@ -55,8 +55,190 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
         </div>
       </section>
 
+      <GetSection />
+      <DiffSection />
+      <AudienceSection />
+      <CompareSection />
+
       <VideoBand style={videoStyle} />
     </main>
+  );
+}
+
+// ─── Sections de presentation — structure marketing par sections (inspiration vigideep).
+
+function SectionHead({ eyebrow, title, em, intro }) {
+  return (
+    <div className="home-sec__head">
+      <span className="eyebrow">— {eyebrow}</span>
+      <h2 className="home-sec__title">{title} <em>{em}</em></h2>
+      {intro && <p className="home-sec__intro">{intro}</p>}
+    </div>
+  );
+}
+
+// Cadre visuel reserve — en attente des captures definitives.
+function MediaFrame({ label }) {
+  return (
+    <div className="media-frame" role="img" aria-label={label}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"
+           strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <circle cx="8.5" cy="9.5" r="1.6" />
+        <path d="M21 15l-5-5L5 21" />
+      </svg>
+      <span className="media-frame__label">{label}</span>
+    </div>
+  );
+}
+
+// ── 1. Ce que vous obtenez — livrables concrets, ton commercial.
+const HOME_GET = [
+  { tag: "La carte",
+    t: "Une carte de situation",
+    d: "Chaque théâtre sur une carte interactive : la situation se lit dans son ensemble, là où il faudrait autrement compiler des dizaines d'articles.",
+    media: "Aperçu cartographie" },
+  { tag: "Le brief",
+    t: "Des briefs prêts à l'emploi",
+    d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel — claire, datée et sourcée.",
+    media: "Aperçu brief de sécurité" },
+  { tag: "L'accès",
+    t: "Un accès continu",
+    d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
+    media: "Aperçu plateforme" },
+];
+
+function GetSection() {
+  return (
+    <section className="home-sec home-sec--alt" id="offre">
+      <div className="home-sec__wrap">
+        <SectionHead
+          eyebrow="Ce que vous obtenez"
+          title="De la donnée brute"
+          em="à la décision"
+          intro="Trois outils pour lire une situation, en évaluer la portée et y revenir quand la décision se pose." />
+        <div className="get-grid">
+          {HOME_GET.map((g, i) => (
+            <article className="get-card" key={i}>
+              <MediaFrame label={g.media} />
+              <div className="get-card__body">
+                <span className="get-card__tag">{g.tag}</span>
+                <h3 className="get-card__title">{g.t}</h3>
+                <p className="get-card__text">{g.d}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── 2. Notre difference — la vraie plus-value, sans repeter le hero.
+const HOME_DIFF = [
+  { t: "Une connaissance du terrain",
+    d: "Chaque théâtre est suivi dans la durée par des analystes qui en connaissent le contexte, les acteurs et les dynamiques. Cette familiarité permet de hiérarchiser l'information et d'en restituer la portée réelle." },
+  { t: "La rigueur du renseignement",
+    d: "Croisement des sources, datation et cotation de la fiabilité : chaque information est vérifiée avant d'être cartographiée." },
+  { t: "La lecture dans le temps",
+    d: "Nos théâtres se relisent période par période. Au-delà de l'événement du jour, vous suivez la façon dont une situation s'installe et évolue." },
+];
+
+function DiffSection() {
+  return (
+    <section className="home-sec" id="difference">
+      <div className="home-sec__wrap">
+        <SectionHead
+          eyebrow="Notre approche"
+          title="Notre approche du"
+          em="renseignement"
+          intro="Trois principes guident la façon dont nous traitons et restituons l'information." />
+        <div className="pillar-list">
+          {HOME_DIFF.map((p, i) => (
+            <article className="pillar" key={i}>
+              <span className="pillar__num">{String(i + 1).padStart(2, '0')}</span>
+              <div className="pillar__body">
+                <h3 className="pillar__title">{p.t}</h3>
+                <p className="pillar__text">{p.d}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── 3. Pour qui — segments clients.
+const HOME_AUD = [
+  { t: "Décideurs & directions",
+    d: "Arbitrer rapidement sur un risque-pays, sans avoir à dépouiller la presse." },
+  { t: "Sûreté & sécurité",
+    d: "Évaluer la menace sur des sites, des trajets et des implantations." },
+  { t: "Conseil & due diligence",
+    d: "Étayer une recommandation avec des sources datées et sourcées." },
+  { t: "Opérateurs sur zone",
+    d: "ONG, industriels et logisticiens présents sur des théâtres sensibles." },
+];
+
+function AudienceSection() {
+  return (
+    <section className="home-sec home-sec--alt" id="pour-qui">
+      <div className="home-sec__wrap">
+        <SectionHead
+          eyebrow="Pour qui"
+          title="À qui s'adresse"
+          em="Algor Access"
+          intro="Des profils différents, un même besoin : une lecture fiable et datée des théâtres à risque." />
+        <div className="aud-grid">
+          {HOME_AUD.map((a, i) => (
+            <article className="aud-card" key={i}>
+              <span className="aud-card__rule" />
+              <h3 className="aud-card__title">{a.t}</h3>
+              <p className="aud-card__text">{a.d}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── 4. Comparatif — retravaille : police plus large, lignes orientees plus-value.
+const COMPARE_ROWS = [
+  ["Datation",                "Variable, parfois absente",       "Systématique, horodatée"],
+  ["Connaissance du terrain", "Limitée aux canaux publics",      "Suivi continu par des analystes dédiés"],
+  ["Vérification",            "Au cas par cas",                  "Croisement systématique avant publication"],
+  ["Fiabilité",               "Non évaluée",                     "Cotée, source par source"],
+  ["Profondeur",              "L'actualité du jour",             "La situation rejouable dans le temps"],
+  ["Lecture",                 "Du texte à compiler soi-même",    "Une carte de situation immédiate"],
+];
+
+function CompareSection() {
+  return (
+    <section className="home-sec" id="comparatif">
+      <div className="home-sec__wrap">
+        <SectionHead
+          eyebrow="Comparatif"
+          title="Le suivi d'actualité"
+          em="et la plateforme"
+          intro="Deux façons de suivre une zone — voici ce qui les distingue, critère par critère." />
+        <div className="cmp-table">
+          <div className="cmp-table__row cmp-table__row--head">
+            <div className="cmp-table__cell">Critère</div>
+            <div className="cmp-table__cell">Fil d'actualité & presse</div>
+            <div className="cmp-table__cell cmp-table__cell--pos">Algor Access</div>
+          </div>
+          {COMPARE_ROWS.map(([c, neg, pos], i) => (
+            <div className="cmp-table__row" key={i}>
+              <div className="cmp-table__cell cmp-table__crit">{c}</div>
+              <div className="cmp-table__cell cmp-table__neg">{neg}</div>
+              <div className="cmp-table__cell cmp-table__cell--pos cmp-table__pos">{pos}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
