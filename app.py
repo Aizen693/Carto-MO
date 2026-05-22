@@ -937,6 +937,103 @@ def _apply_label(label: str, add: bool) -> bool:
     return True
 
 
+# ── Gestion des libellés (CRUD) ───────────────────────────────────────────────
+
+def _is_session_only(label: str) -> bool:
+    """Vrai si le libellé n'existe encore qu'en session (pas dans Inoreader)."""
+    return (label in st.session_state.user_labels
+            and label not in st.session_state.tags_list)
+
+
+def _label_count(label: str) -> int:
+    """Nombre d'articles chargés portant ce libellé."""
+    df = st.session_state.articles_df
+    if df.empty:
+        return 0
+    return int(df["tags"].apply(
+        lambda c: label in [t.strip() for t in str(c).split(",")]
+    ).sum())
+
+
+def _rename_in_dataframes(old: str, new: str) -> None:
+    def _mod(cell: str) -> str:
+        parts = [t.strip() for t in str(cell).split(",") if t.strip()]
+        return ", ".join(new if p == old else p for p in parts)
+    for key in ("articles_df", "filtered_df"):
+        df = st.session_state[key]
+        if not df.empty:
+            df["tags"] = df["tags"].apply(_mod)
+
+
+def _strip_label_in_dataframes(label: str) -> None:
+    def _mod(cell: str) -> str:
+        return ", ".join(t.strip() for t in str(cell).split(",")
+                         if t.strip() and t.strip() != label)
+    for key in ("articles_df", "filtered_df"):
+        df = st.session_state[key]
+        if not df.empty:
+            df["tags"] = df["tags"].apply(_mod)
+
+
+def _create_label(name: str) -> None:
+    name = name.strip()
+    if not name:
+        st.warning("Saisissez un nom de libellé.")
+        return
+    if name in _available_labels():
+        st.info(f"« {name} » existe déjà.")
+        return
+    st.session_state.user_labels.append(name)
+    st.toast(f"Libellé « {name} » créé.", icon="🏷️")
+    st.rerun()
+
+
+def _rename_label(old: str, new: str) -> None:
+    new = new.strip()
+    if not new or new == old:
+        return
+    if new in _available_labels():
+        st.warning(f"« {new} » existe déjà.")
+        return
+    if not _is_session_only(old):
+        client = get_client()
+        if not client:
+            return
+        with st.spinner(f"Renommage de « {old} »…"):
+            try:
+                client.rename_tag(old, new)
+            except Exception as exc:
+                st.error(f"Erreur Inoreader : {exc}")
+                return
+    st.session_state.tags_list = sorted(
+        {new if x == old else x for x in st.session_state.tags_list})
+    st.session_state.user_labels = [
+        new if x == old else x for x in st.session_state.user_labels]
+    _rename_in_dataframes(old, new)
+    st.session_state.table_key += 1
+    st.toast(f"Libellé renommé en « {new} ».", icon="🏷️")
+    st.rerun()
+
+
+def _delete_label(label: str) -> None:
+    if not _is_session_only(label):
+        client = get_client()
+        if not client:
+            return
+        with st.spinner(f"Suppression de « {label} »…"):
+            try:
+                client.disable_tag(label)
+            except Exception as exc:
+                st.error(f"Erreur Inoreader : {exc}")
+                return
+    st.session_state.tags_list   = [x for x in st.session_state.tags_list if x != label]
+    st.session_state.user_labels = [x for x in st.session_state.user_labels if x != label]
+    _strip_label_in_dataframes(label)
+    st.session_state.table_key += 1
+    st.toast(f"Libellé « {label} » supprimé.", icon="🗑️")
+    st.rerun()
+
+
 def _toggle_star(ids: list[str], starred: bool) -> None:
     client = get_client()
     if not client or not ids:
@@ -1045,11 +1142,69 @@ def render_analyse() -> None:
 
 def render_reglages() -> None:
     st.markdown("## Réglages")
-    tab_scoring, tab_filtres = st.tabs(["Scoring", "Filtres sauvegardés"])
+    tab_labels, tab_scoring, tab_filtres = st.tabs(
+        ["Libellés", "Scoring", "Filtres sauvegardés"])
+    with tab_labels:
+        _render_labels()
     with tab_scoring:
         _render_scoring()
     with tab_filtres:
         _render_saved_filters()
+
+
+def _render_labels() -> None:
+    st.caption(
+        "Créez, renommez et supprimez vos libellés. Pour classer des articles "
+        "dans un libellé, passez par la page Veille : sélectionnez des articles "
+        "puis ouvrez « Actions »."
+    )
+
+    c1, c2 = st.columns([4, 1])
+    with c1:
+        new = st.text_input(
+            "Nouveau libellé", key="mgmt_new_label", label_visibility="collapsed",
+            placeholder="Nom du nouveau libellé…",
+        )
+    with c2:
+        if st.button("Créer", use_container_width=True, type="primary",
+                     key="mgmt_create"):
+            _create_label(new)
+
+    labels = _available_labels()
+    if not labels:
+        st.info("Aucun libellé pour l'instant. Créez-en un ci-dessus.")
+        return
+
+    st.divider()
+    loaded = not st.session_state.articles_df.empty
+    for label in labels:
+        with st.container(border=True):
+            lc1, lc2, lc3 = st.columns([4, 1.3, 1.3])
+            with lc1:
+                new_name = st.text_input(
+                    "Nom", value=label, key=f"lblrn_{label}",
+                    label_visibility="collapsed",
+                )
+                notes = []
+                if _is_session_only(label):
+                    notes.append("non synchronisé (créé en session)")
+                if loaded:
+                    notes.append(f"{_label_count(label)} article(s) chargé(s)")
+                if notes:
+                    st.caption(" · ".join(notes))
+            with lc2:
+                if st.button("Renommer", key=f"lblbtn_{label}",
+                             use_container_width=True):
+                    _rename_label(label, new_name)
+            with lc3:
+                with st.popover("Supprimer", use_container_width=True):
+                    st.warning(
+                        f"Supprimer « {label} » ? Le libellé sera retiré de "
+                        "tous les articles dans Inoreader. Action irréversible."
+                    )
+                    if st.button("Confirmer la suppression", type="primary",
+                                 use_container_width=True, key=f"lbldel_{label}"):
+                        _delete_label(label)
 
 
 def _render_scoring() -> None:

@@ -282,6 +282,18 @@ class InoreaderClient:
     def remove_tag(self, article_ids: list[str], tag_name: str) -> None:
         self._bulk_edit(article_ids, r=f"user/-/label/{tag_name}")
 
+    def rename_tag(self, old_name: str, new_name: str) -> None:
+        """Renomme un libellé. Les articles classés conservent le libellé."""
+        self.post(
+            "/rename-tag",
+            s=f"user/-/label/{old_name}",
+            dest=f"user/-/label/{new_name}",
+        )
+
+    def disable_tag(self, tag_name: str) -> None:
+        """Supprime un libellé : il est retiré de tous les articles."""
+        self.post("/disable-tag", s=f"user/-/label/{tag_name}")
+
     def close(self) -> None:
         self._http.close()
 
