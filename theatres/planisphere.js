@@ -4,6 +4,12 @@
 // centree sur 25°E pour cadrer Afrique / Moyen-Orient / Asie du Sud.
 
 (function () {
+  // Nettoie l'instance precedente (re-exec apres nav cote client).
+  if (window.__planisphereCleanup) {
+    try { window.__planisphereCleanup(); } catch (_) {}
+    window.__planisphereCleanup = null;
+  }
+
   function init() {
     const canvas = document.querySelector('.planisphere-canvas');
     if (!canvas) return;
@@ -350,7 +356,8 @@
 
     // — boucle d'animation (statique : aucune rotation, juste les flux qui defilent)
     let rafId = 0;
-    function frame(now) { draw(now); rafId = requestAnimationFrame(frame); }
+    let stopped = false;
+    function frame(now) { if (stopped) return; draw(now); rafId = requestAnimationFrame(frame); }
     draw(performance.now());
     let topoPoll = 0;
     (function pollTopo() {
@@ -358,6 +365,18 @@
       topoPoll = setTimeout(pollTopo, 120);
     })();
     rafId = requestAnimationFrame(frame);
+
+    // Cleanup expose pour la nav cote client (sitenav.js).
+    window.__planisphereCleanup = function () {
+      stopped = true;
+      cancelAnimationFrame(rafId);
+      clearTimeout(topoPoll);
+      window.removeEventListener('resize', resize);
+      if (ro) { try { ro.disconnect(); } catch (_) {} }
+      canvas.removeEventListener('mousemove', onMove);
+      canvas.removeEventListener('mouseleave', onLeave);
+      canvas.removeEventListener('click', onClick);
+    };
   }
 
   if (document.readyState === 'loading') {
