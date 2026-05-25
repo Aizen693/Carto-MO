@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet" href="../shared/home/styles.css?v=20260523a" />
+<link rel="stylesheet" href="../shared/home/styles.css?v=20260525f" />
 </head>
 <body style="background-color:#FFFFFF">
 
@@ -62,13 +62,8 @@
         </div>
       </div>
       <div class="page-hero__visual">
-        <div class="media-frame" role="img" aria-label="Visuel de la rubrique Théâtres">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="4" width="18" height="16" rx="2" />
-            <circle cx="8.5" cy="9.5" r="1.6" />
-            <path d="M21 15l-5-5L5 21" />
-          </svg>
-          <span class="media-frame__label">Visuel à venir</span>
+        <div class="media-frame media-frame--planisphere">
+          <canvas class="planisphere-canvas" role="img" aria-label="Planisphère interactif — six théâtres OSINT"></canvas>
         </div>
       </div>
     </div>
@@ -120,9 +115,8 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame" role="img" aria-label="Aperçu du théâtre Moyen-Orient">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
-              <span class="media-frame__label">Visuel à venir</span>
+            <div class="media-frame">
+              <img src="./assets/moyen-orient.jpg" alt="Théâtre Moyen-Orient — puits de pétrole en feu, désert irakien" loading="lazy" />
             </div>
           </div>
         </article>
@@ -137,9 +131,8 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame" role="img" aria-label="Aperçu du théâtre Sahel">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
-              <span class="media-frame__label">Visuel à venir</span>
+            <div class="media-frame">
+              <img src="./assets/sahel.png" alt="Théâtre Sahel — combattants armés dans le désert malien" loading="lazy" />
             </div>
           </div>
         </article>
@@ -154,9 +147,8 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame" role="img" aria-label="Aperçu du théâtre RDC">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
-              <span class="media-frame__label">Visuel à venir</span>
+            <div class="media-frame">
+              <img src="./assets/rdc.avif" alt="Théâtre RDC — Oicha, Nord-Kivu" loading="lazy" />
             </div>
           </div>
         </article>
@@ -171,9 +163,8 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame" role="img" aria-label="Aperçu du théâtre Madagascar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
-              <span class="media-frame__label">Visuel à venir</span>
+            <div class="media-frame">
+              <img src="./assets/madagascar.webp" alt="Théâtre Madagascar — manifestation à Antananarivo" loading="lazy" />
             </div>
           </div>
         </article>
@@ -188,9 +179,8 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame" role="img" aria-label="Aperçu du théâtre Afrique Maritime">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
-              <span class="media-frame__label">Visuel à venir</span>
+            <div class="media-frame">
+              <img src="./assets/afrique-maritime.avif" alt="Théâtre Afrique Maritime — détroits stratégiques" loading="lazy" />
             </div>
           </div>
         </article>
@@ -205,9 +195,8 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame" role="img" aria-label="Aperçu du théâtre Asie du Sud">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
-              <span class="media-frame__label">Visuel à venir</span>
+            <div class="media-frame">
+              <img src="./assets/asie-sud.jpg" alt="Théâtre Asie du Sud — combattants armés afghans" loading="lazy" />
             </div>
           </div>
         </article>
@@ -300,6 +289,9 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="./planisphere.js?v=20260525c"></script>
 <script src="../shared/home/sitenav.js?v=20260523a"></script>
 </body>
 </html>
