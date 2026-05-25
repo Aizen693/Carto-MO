@@ -136,13 +136,96 @@ function GetSection() {
 
 // ── 2. Notre difference — la vraie plus-value, sans repeter le hero.
 const HOME_DIFF = [
-  { t: "Une connaissance du terrain",
+  { icon: "terrain",
+    t: "Une connaissance du terrain",
     d: "Chaque théâtre est suivi dans la durée par des analystes qui en connaissent le contexte, les acteurs et les dynamiques. Cette familiarité permet de hiérarchiser l'information et d'en restituer la portée réelle." },
-  { t: "La rigueur du renseignement",
+  { icon: "rigueur",
+    t: "La rigueur du renseignement",
     d: "Croisement des sources, datation et cotation de la fiabilité : chaque information est vérifiée avant d'être cartographiée." },
-  { t: "La lecture dans le temps",
+  { icon: "temps",
+    t: "La lecture dans le temps",
     d: "Nos théâtres se relisent période par période. Au-delà de l'événement du jour, vous suivez la façon dont une situation s'installe et évolue." },
 ];
+
+function PillarIcon({ name }) {
+  const sw = 2.2;
+  const gradId = `pillar-grad-${name}`;
+  const grad = `url(#${gradId})`;
+  const common = {
+    viewBox: "0 0 64 64",
+    fill: "none",
+    stroke: grad,
+    strokeWidth: sw,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true",
+  };
+  const defs = (
+    <defs>
+      <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#6B3FA0" />
+        <stop offset="48%" stopColor="#5650C6" />
+        <stop offset="100%" stopColor="#2E84D4" />
+      </linearGradient>
+    </defs>
+  );
+  if (name === "terrain") {
+    return (
+      <svg {...common}>
+        {defs}
+        <circle cx="32" cy="32" r="27" />
+        <circle cx="32" cy="18" r="3.2" fill={grad} stroke="none" />
+        <path d="M27 23 C 26 28 26 34 27 38 L 37 38 C 38 34 38 28 37 23 Q 32 20 27 23 Z" />
+        <path d="M32 38 L 32 50" />
+        <path d="M32 46 Q 23 46 19 41 Q 25 40 32 43" />
+        <path d="M32 46 Q 41 46 45 41 Q 39 40 32 43" />
+        <path d="M32 49 Q 26 52 22 50 Q 26 47 31 48.5" />
+        <path d="M32 49 Q 38 52 42 50 Q 38 47 33 48.5" />
+      </svg>
+    );
+  }
+  if (name === "rigueur") {
+    return (
+      <svg {...common}>
+        {defs}
+        <circle cx="32" cy="32" r="27" />
+        <path d="M32 13 L 47 17 L 47 31 Q 47 43 32 51 Q 17 43 17 31 L 17 17 Z" />
+        <line x1="32" y1="33" x2="32" y2="22" />
+        <line x1="32" y1="33" x2="22" y2="27" />
+        <line x1="32" y1="33" x2="42" y2="27" />
+        <line x1="32" y1="33" x2="24" y2="41" />
+        <line x1="32" y1="33" x2="40" y2="41" />
+        <circle cx="32" cy="22" r="2.4" fill={grad} stroke="none" />
+        <circle cx="22" cy="27" r="2.4" fill={grad} stroke="none" />
+        <circle cx="42" cy="27" r="2.4" fill={grad} stroke="none" />
+        <circle cx="24" cy="41" r="2.4" fill={grad} stroke="none" />
+        <circle cx="40" cy="41" r="2.4" fill={grad} stroke="none" />
+        <circle cx="32" cy="33" r="3" fill={grad} stroke="none" />
+      </svg>
+    );
+  }
+  if (name === "temps") {
+    return (
+      <svg {...common}>
+        {defs}
+        <circle cx="32" cy="32" r="27" strokeDasharray="3 3.5" />
+        <circle cx="32" cy="32" r="17" />
+        <line x1="32" y1="18" x2="32" y2="22" />
+        <line x1="46" y1="32" x2="42" y2="32" />
+        <line x1="32" y1="46" x2="32" y2="42" />
+        <line x1="18" y1="32" x2="22" y2="32" />
+        <line x1="40.5" y1="20.5" x2="38.7" y2="23.5" />
+        <line x1="43.5" y1="40.5" x2="40.5" y2="38.7" />
+        <line x1="23.5" y1="43.5" x2="25.3" y2="40.5" />
+        <line x1="20.5" y1="23.5" x2="23.5" y2="25.3" />
+        <line x1="32" y1="32" x2="26" y2="27" />
+        <line x1="32" y1="32" x2="39" y2="24" />
+        <circle cx="32" cy="32" r="1.6" fill={grad} stroke="none" />
+      </svg>
+    );
+  }
+  return null;
+}
 
 function DiffSection() {
   return (
@@ -161,6 +244,7 @@ function DiffSection() {
                 <h3 className="pillar__title">{p.t}</h3>
                 <p className="pillar__text">{p.d}</p>
               </div>
+              <span className="pillar__icon"><PillarIcon name={p.icon} /></span>
             </article>
           ))}
         </div>

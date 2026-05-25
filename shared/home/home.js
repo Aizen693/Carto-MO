@@ -168,15 +168,214 @@ function GetSection() {
 
 // ── 2. Notre difference — la vraie plus-value, sans repeter le hero.
 const HOME_DIFF = [{
+  icon: "terrain",
   t: "Une connaissance du terrain",
   d: "Chaque théâtre est suivi dans la durée par des analystes qui en connaissent le contexte, les acteurs et les dynamiques. Cette familiarité permet de hiérarchiser l'information et d'en restituer la portée réelle."
 }, {
+  icon: "rigueur",
   t: "La rigueur du renseignement",
   d: "Croisement des sources, datation et cotation de la fiabilité : chaque information est vérifiée avant d'être cartographiée."
 }, {
+  icon: "temps",
   t: "La lecture dans le temps",
   d: "Nos théâtres se relisent période par période. Au-delà de l'événement du jour, vous suivez la façon dont une situation s'installe et évolue."
 }];
+function PillarIcon({
+  name
+}) {
+  const sw = 2.2;
+  const gradId = `pillar-grad-${name}`;
+  const grad = `url(#${gradId})`;
+  const common = {
+    viewBox: "0 0 64 64",
+    fill: "none",
+    stroke: grad,
+    strokeWidth: sw,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  };
+  const defs = /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: gradId,
+    x1: "0%",
+    y1: "0%",
+    x2: "100%",
+    y2: "100%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#6B3FA0"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "48%",
+    stopColor: "#5650C6"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#2E84D4"
+  })));
+  if (name === "terrain") {
+    return /*#__PURE__*/React.createElement("svg", common, defs, /*#__PURE__*/React.createElement("circle", {
+      cx: "32",
+      cy: "32",
+      r: "27"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "32",
+      cy: "18",
+      r: "3.2",
+      fill: grad,
+      stroke: "none"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M27 23 C 26 28 26 34 27 38 L 37 38 C 38 34 38 28 37 23 Q 32 20 27 23 Z"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M32 38 L 32 50"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M32 46 Q 23 46 19 41 Q 25 40 32 43"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M32 46 Q 41 46 45 41 Q 39 40 32 43"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M32 49 Q 26 52 22 50 Q 26 47 31 48.5"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M32 49 Q 38 52 42 50 Q 38 47 33 48.5"
+    }));
+  }
+  if (name === "rigueur") {
+    return /*#__PURE__*/React.createElement("svg", common, defs, /*#__PURE__*/React.createElement("circle", {
+      cx: "32",
+      cy: "32",
+      r: "27"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M32 13 L 47 17 L 47 31 Q 47 43 32 51 Q 17 43 17 31 L 17 17 Z"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "32",
+      y1: "33",
+      x2: "32",
+      y2: "22"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "32",
+      y1: "33",
+      x2: "22",
+      y2: "27"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "32",
+      y1: "33",
+      x2: "42",
+      y2: "27"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "32",
+      y1: "33",
+      x2: "24",
+      y2: "41"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "32",
+      y1: "33",
+      x2: "40",
+      y2: "41"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "32",
+      cy: "22",
+      r: "2.4",
+      fill: grad,
+      stroke: "none"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "22",
+      cy: "27",
+      r: "2.4",
+      fill: grad,
+      stroke: "none"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "42",
+      cy: "27",
+      r: "2.4",
+      fill: grad,
+      stroke: "none"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "24",
+      cy: "41",
+      r: "2.4",
+      fill: grad,
+      stroke: "none"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "40",
+      cy: "41",
+      r: "2.4",
+      fill: grad,
+      stroke: "none"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "32",
+      cy: "33",
+      r: "3",
+      fill: grad,
+      stroke: "none"
+    }));
+  }
+  if (name === "temps") {
+    return /*#__PURE__*/React.createElement("svg", common, defs, /*#__PURE__*/React.createElement("circle", {
+      cx: "32",
+      cy: "32",
+      r: "27",
+      strokeDasharray: "3 3.5"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "32",
+      cy: "32",
+      r: "17"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "32",
+      y1: "18",
+      x2: "32",
+      y2: "22"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "46",
+      y1: "32",
+      x2: "42",
+      y2: "32"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "32",
+      y1: "46",
+      x2: "32",
+      y2: "42"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "18",
+      y1: "32",
+      x2: "22",
+      y2: "32"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "40.5",
+      y1: "20.5",
+      x2: "38.7",
+      y2: "23.5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "43.5",
+      y1: "40.5",
+      x2: "40.5",
+      y2: "38.7"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "23.5",
+      y1: "43.5",
+      x2: "25.3",
+      y2: "40.5"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "20.5",
+      y1: "23.5",
+      x2: "23.5",
+      y2: "25.3"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "32",
+      y1: "32",
+      x2: "26",
+      y2: "27"
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "32",
+      y1: "32",
+      x2: "39",
+      y2: "24"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "32",
+      cy: "32",
+      r: "1.6",
+      fill: grad,
+      stroke: "none"
+    }));
+  }
+  return null;
+}
 function DiffSection() {
   return /*#__PURE__*/React.createElement("section", {
     className: "home-sec",
@@ -201,7 +400,11 @@ function DiffSection() {
     className: "pillar__title"
   }, p.t), /*#__PURE__*/React.createElement("p", {
     className: "pillar__text"
-  }, p.d)))))));
+  }, p.d)), /*#__PURE__*/React.createElement("span", {
+    className: "pillar__icon"
+  }, /*#__PURE__*/React.createElement(PillarIcon, {
+    name: p.icon
+  })))))));
 }
 
 // ── 3. Pour qui — segments clients.
