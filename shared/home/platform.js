@@ -28,7 +28,7 @@ function PlatformView({
     className: "platform__intro"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
     className: "eyebrow"
-  }, "\u2014 Bureau de travail \xB7 plateforme"), /*#__PURE__*/React.createElement("h1", {
+  }, "Bureau de travail \xB7 plateforme"), /*#__PURE__*/React.createElement("h1", {
     className: "platform__title"
   }, "Que souhaitez-vous ", /*#__PURE__*/React.createElement("em", null, "consulter"), "\xA0?")), /*#__PURE__*/React.createElement("p", {
     className: "platform__lede"
@@ -37,7 +37,7 @@ function PlatformView({
   }, /*#__PURE__*/React.createElement(ActionCard, {
     num: "01",
     name: "Region",
-    desc: "Choisir un theatre operationnel \u2014 Sahel, Moyen-Orient, RDC, Madagascar, Afrique, Asie du Sud.",
+    desc: "Choisir un theatre operationnel : Sahel, Moyen-Orient, RDC, Madagascar, Afrique, Asie du Sud.",
     count: `${ZONES.length} zones`,
     icon: /*#__PURE__*/React.createElement(RegionIcon, null),
     onClick: () => openAction('region')
@@ -51,21 +51,21 @@ function PlatformView({
   }), /*#__PURE__*/React.createElement(ActionCard, {
     num: "03",
     name: "Graph",
-    desc: "Visualisations, indicateurs et series \u2014 densites, flux, reseaux.",
+    desc: "Visualisations, indicateurs et series : densites, flux, reseaux.",
     count: `${Object.values(GRAPHS).flat().length} visualisations`,
     icon: /*#__PURE__*/React.createElement(GraphIconLg, null),
     onClick: () => openAction('graph')
   }), /*#__PURE__*/React.createElement(ActionCard, {
     num: "04",
     name: "Theme",
-    desc: "Lectures transversales \u2014 Ports, Mines, JNIM, Routes, Energie...",
+    desc: "Lectures transversales : Ports, Mines, JNIM, Routes, Energie...",
     count: `${THEMES.length} themes`,
     icon: /*#__PURE__*/React.createElement(ThemeIconLg, null),
     onClick: () => openAction('theme')
   }), /*#__PURE__*/React.createElement(ActionCard, {
     num: "05",
     name: "Cartographie",
-    desc: "Acces direct aux cartes interactives \u2014 six theatres, calques et timeline.",
+    desc: "Acces direct aux cartes interactives : six theatres, calques et timeline.",
     count: `${ZONES.length} cartes`,
     icon: /*#__PURE__*/React.createElement(CartoIconLg, null),
     onClick: () => openAction('cartographie')
@@ -73,33 +73,33 @@ function PlatformView({
     className: "section-rule"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-rule__label"
-  }, "\u2014 Recemment consultes"), /*#__PURE__*/React.createElement("span", {
+  }, "Recemment consultes"), /*#__PURE__*/React.createElement("span", {
     className: "section-rule__line"
   })), /*#__PURE__*/React.createElement("div", {
     className: "recent-grid"
   }, /*#__PURE__*/React.createElement(RecentItem, {
     icon: /*#__PURE__*/React.createElement(MapIconSm, null),
-    title: "Sahel \u2014 Carte interactive",
+    title: "Sahel : Carte interactive",
     href: "/sahel/"
   }), /*#__PURE__*/React.createElement(RecentItem, {
     icon: /*#__PURE__*/React.createElement(DocIconSm, null),
-    title: "Sahel \u2014 Rapport analytique Q1 2026",
+    title: "Sahel : Rapport analytique Q1 2026",
     href: "/sahel/rapport.html"
   }), /*#__PURE__*/React.createElement(RecentItem, {
     icon: /*#__PURE__*/React.createElement(MapIconSm, null),
-    title: "Moyen-Orient \u2014 Carte interactive",
+    title: "Moyen-Orient : Carte interactive",
     href: "/moyen-orient/"
   }), /*#__PURE__*/React.createElement(RecentItem, {
     icon: /*#__PURE__*/React.createElement(MapIconSm, null),
-    title: "RDC \u2014 Carte interactive",
+    title: "RDC : Carte interactive",
     href: "/rdc/"
   }), /*#__PURE__*/React.createElement(RecentItem, {
     icon: /*#__PURE__*/React.createElement(MapIconSm, null),
-    title: "Afrique Maritime \u2014 AIS temps reel",
+    title: "Afrique Maritime : AIS temps reel",
     href: "/afrique/"
   }), /*#__PURE__*/React.createElement(RecentItem, {
     icon: /*#__PURE__*/React.createElement(MapIconSm, null),
-    title: "Asie du Sud \u2014 Carte interactive",
+    title: "Asie du Sud : Carte interactive",
     href: "/asie-sud/"
   }))), /*#__PURE__*/React.createElement(SidePanel, {
     open: open,
@@ -249,7 +249,7 @@ function ActionCard({
     className: "action-card__icon"
   }, icon), /*#__PURE__*/React.createElement("span", {
     className: "action-card__num"
-  }, "\u2014 ", num)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
+  }, num)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
     className: "action-card__title"
   }, name), /*#__PURE__*/React.createElement("p", {
     className: "action-card__desc"

@@ -11,57 +11,57 @@ const ZONES = [
   { id: 'afrique',      code: 'AF', name: 'Afrique Maritime', countries: 'AIS temps reel · 2 360 navires',              events: 2360, period: 'Temps reel',  status: 'active', href: '/afrique/' },
 ];
 
-// Rapports par zone — pointe vers /{id}/rapport.html quand il existe.
+// Rapports par zone, pointe vers /{id}/rapport.html quand il existe.
 const REPORTS = {
   sahel: [
     { id: 'r-sh-rap',  title: 'Rapport analytique Sahel · Q1 2026',        date: '14 mars 2026', pages: 42, tag: 'Synthese', href: '/sahel/rapport.html' },
-    { id: 'r-sh-01',   title: 'JNIM — pattern attaques Mali-Burkina',       date: '14 mars 2026', pages: 28, tag: 'Hebdo' },
-    { id: 'r-sh-02',   title: 'Mines auriferes — flux et acteurs',          date: '08 mars 2026', pages: 42, tag: 'Synthese' },
+    { id: 'r-sh-01',   title: 'JNIM, pattern attaques Mali-Burkina',       date: '14 mars 2026', pages: 28, tag: 'Hebdo' },
+    { id: 'r-sh-02',   title: 'Mines auriferes, flux et acteurs',          date: '08 mars 2026', pages: 42, tag: 'Synthese' },
     { id: 'r-sh-03',   title: 'Deplacements forces Q1 2026',                date: '02 mars 2026', pages: 17, tag: 'Note' },
   ],
   'moyen-orient': [
     { id: 'r-mo-rap',  title: 'Rapport analytique Moyen-Orient',            date: '12 mars 2026', pages: 56, tag: 'Synthese', href: '/moyen-orient/rapport.html' },
     { id: 'r-mo-01',   title: 'Reconfiguration des forces chiites en Syrie', date: '12 mars 2026', pages: 36, tag: 'Synthese' },
-    { id: 'r-mo-02',   title: 'Ports du Golfe — capacite et trafic',         date: '04 mars 2026', pages: 22, tag: 'Hebdo' },
+    { id: 'r-mo-02',   title: 'Ports du Golfe, capacite et trafic',         date: '04 mars 2026', pages: 22, tag: 'Hebdo' },
   ],
   rdc: [
     { id: 'r-cd-rap',  title: 'Rapport analytique RDC',                     date: '11 mars 2026', pages: 34, tag: 'Synthese', href: '/rdc/rapport.html' },
-    { id: 'r-cd-01',   title: 'M23 / FARDC — ligne de front Kivu',           date: '11 mars 2026', pages: 24, tag: 'Hebdo' },
+    { id: 'r-cd-01',   title: 'M23 / FARDC, ligne de front Kivu',           date: '11 mars 2026', pages: 24, tag: 'Hebdo' },
   ],
   madagascar: [
-    { id: 'r-mg-01',   title: 'Madagascar — securite cotiere',              date: '09 mars 2026', pages: 19, tag: 'Note' },
+    { id: 'r-mg-01',   title: 'Madagascar, securite cotiere',              date: '09 mars 2026', pages: 19, tag: 'Note' },
   ],
   'asie-sud': [
-    { id: 'r-as-01',   title: 'Asie du Sud — tensions frontalieres',        date: '08 mars 2026', pages: 24, tag: 'Synthese' },
+    { id: 'r-as-01',   title: 'Asie du Sud, tensions frontalieres',        date: '08 mars 2026', pages: 24, tag: 'Synthese' },
   ],
   afrique: [
-    { id: 'r-af-01',   title: 'Afrique maritime — couverture AIS',          date: '15 mars 2026', pages: 54, tag: 'Reference' },
+    { id: 'r-af-01',   title: 'Afrique maritime, couverture AIS',          date: '15 mars 2026', pages: 54, tag: 'Reference' },
   ],
 };
 
 // Graphs par zone
 const GRAPHS = {
   sahel: [
-    { id: 'g-sh-01', title: 'Frontiere Mali-Guinee — densite d\'evts', type: 'Heatmap',     scope: '90 jours' },
-    { id: 'g-sh-02', title: 'Frontiere Cote d\'Ivoire-Mali — flux',    type: 'Flow',        scope: '90 jours' },
+    { id: 'g-sh-01', title: 'Frontiere Mali-Guinee, densite d\'evts', type: 'Heatmap',     scope: '90 jours' },
+    { id: 'g-sh-02', title: 'Frontiere Cote d\'Ivoire-Mali, flux',    type: 'Flow',        scope: '90 jours' },
     { id: 'g-sh-03', title: 'Casualties par acteur · Q1 2026',         type: 'Histogramme', scope: 'Trimestre' },
   ],
   'moyen-orient': [
     { id: 'g-mo-01', title: 'Trafic maritime Detroit d\'Ormuz',   type: 'Timeline',  scope: '12 mois' },
-    { id: 'g-mo-02', title: 'Acteurs chiites — graphe relations', type: 'Reseau',    scope: 'Cumule' },
+    { id: 'g-mo-02', title: 'Acteurs chiites, graphe relations', type: 'Reseau',    scope: 'Cumule' },
   ],
   rdc: [
     { id: 'g-cd-01', title: 'Densite M23 sur l\'axe Goma-Bunia', type: 'Heatmap', scope: '60 jours' },
   ],
   madagascar: [
-    { id: 'g-mg-01', title: 'Madagascar — densite portuaire', type: 'Choropleth', scope: 'Annuel' },
+    { id: 'g-mg-01', title: 'Madagascar, densite portuaire', type: 'Choropleth', scope: 'Annuel' },
   ],
   'asie-sud': [
-    { id: 'g-as-01', title: 'Asie du Sud — corridors logistiques', type: 'Flow',   scope: '12 mois' },
+    { id: 'g-as-01', title: 'Asie du Sud, corridors logistiques', type: 'Flow',   scope: '12 mois' },
   ],
   afrique: [
     { id: 'g-af-01', title: 'AIS temps reel · 6 categories navires', type: 'Carte',  scope: 'Live' },
-    { id: 'g-af-02', title: 'Ports — trafic compare',                type: 'Barres', scope: '24 mois' },
+    { id: 'g-af-02', title: 'Ports, trafic compare',                type: 'Barres', scope: '24 mois' },
   ],
 };
 
@@ -78,15 +78,15 @@ const THEMES = [
 const THEME_DETAIL = {
   't-jnim': [
     { id: 'jnim-1', title: 'Carte des attaques du JNIM (Sahel)', type: 'Carte',   meta: '214 points', href: '/sahel/' },
-    { id: 'jnim-2', title: 'Rapport Sahel — JNIM pattern',       type: 'Rapport', meta: '28 pages',   href: '/sahel/rapport.html' },
+    { id: 'jnim-2', title: 'Rapport Sahel, JNIM pattern',       type: 'Rapport', meta: '28 pages',   href: '/sahel/rapport.html' },
     { id: 'jnim-3', title: 'Graphs JNIM',                        type: 'Graph',   meta: '4 vues' },
   ],
   't-ports': [
-    { id: 'p-1', title: 'Afrique maritime — couverture AIS', type: 'Carte',   meta: '2 360 navires', href: '/afrique/' },
+    { id: 'p-1', title: 'Afrique maritime, couverture AIS', type: 'Carte',   meta: '2 360 navires', href: '/afrique/' },
     { id: 'p-2', title: 'Trafic compare · 24 mois',          type: 'Graph',   meta: '12 ports' },
   ],
   't-mines': [
-    { id: 'm-1', title: 'Sahel — sites auriferes',  type: 'Carte',   meta: '78 sites', href: '/sahel/' },
+    { id: 'm-1', title: 'Sahel, sites auriferes',  type: 'Carte',   meta: '78 sites', href: '/sahel/' },
     { id: 'm-2', title: 'Flux et acteurs (Sahel)',  type: 'Rapport', meta: '42 pages' },
   ],
 };

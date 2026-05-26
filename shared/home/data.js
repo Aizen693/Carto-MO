@@ -59,7 +59,7 @@ const ZONES = [{
   href: '/afrique/'
 }];
 
-// Rapports par zone — pointe vers /{id}/rapport.html quand il existe.
+// Rapports par zone, pointe vers /{id}/rapport.html quand il existe.
 const REPORTS = {
   sahel: [{
     id: 'r-sh-rap',
@@ -70,13 +70,13 @@ const REPORTS = {
     href: '/sahel/rapport.html'
   }, {
     id: 'r-sh-01',
-    title: 'JNIM — pattern attaques Mali-Burkina',
+    title: 'JNIM, pattern attaques Mali-Burkina',
     date: '14 mars 2026',
     pages: 28,
     tag: 'Hebdo'
   }, {
     id: 'r-sh-02',
-    title: 'Mines auriferes — flux et acteurs',
+    title: 'Mines auriferes, flux et acteurs',
     date: '08 mars 2026',
     pages: 42,
     tag: 'Synthese'
@@ -102,7 +102,7 @@ const REPORTS = {
     tag: 'Synthese'
   }, {
     id: 'r-mo-02',
-    title: 'Ports du Golfe — capacite et trafic',
+    title: 'Ports du Golfe, capacite et trafic',
     date: '04 mars 2026',
     pages: 22,
     tag: 'Hebdo'
@@ -116,28 +116,28 @@ const REPORTS = {
     href: '/rdc/rapport.html'
   }, {
     id: 'r-cd-01',
-    title: 'M23 / FARDC — ligne de front Kivu',
+    title: 'M23 / FARDC, ligne de front Kivu',
     date: '11 mars 2026',
     pages: 24,
     tag: 'Hebdo'
   }],
   madagascar: [{
     id: 'r-mg-01',
-    title: 'Madagascar — securite cotiere',
+    title: 'Madagascar, securite cotiere',
     date: '09 mars 2026',
     pages: 19,
     tag: 'Note'
   }],
   'asie-sud': [{
     id: 'r-as-01',
-    title: 'Asie du Sud — tensions frontalieres',
+    title: 'Asie du Sud, tensions frontalieres',
     date: '08 mars 2026',
     pages: 24,
     tag: 'Synthese'
   }],
   afrique: [{
     id: 'r-af-01',
-    title: 'Afrique maritime — couverture AIS',
+    title: 'Afrique maritime, couverture AIS',
     date: '15 mars 2026',
     pages: 54,
     tag: 'Reference'
@@ -148,12 +148,12 @@ const REPORTS = {
 const GRAPHS = {
   sahel: [{
     id: 'g-sh-01',
-    title: 'Frontiere Mali-Guinee — densite d\'evts',
+    title: 'Frontiere Mali-Guinee, densite d\'evts',
     type: 'Heatmap',
     scope: '90 jours'
   }, {
     id: 'g-sh-02',
-    title: 'Frontiere Cote d\'Ivoire-Mali — flux',
+    title: 'Frontiere Cote d\'Ivoire-Mali, flux',
     type: 'Flow',
     scope: '90 jours'
   }, {
@@ -169,7 +169,7 @@ const GRAPHS = {
     scope: '12 mois'
   }, {
     id: 'g-mo-02',
-    title: 'Acteurs chiites — graphe relations',
+    title: 'Acteurs chiites, graphe relations',
     type: 'Reseau',
     scope: 'Cumule'
   }],
@@ -181,13 +181,13 @@ const GRAPHS = {
   }],
   madagascar: [{
     id: 'g-mg-01',
-    title: 'Madagascar — densite portuaire',
+    title: 'Madagascar, densite portuaire',
     type: 'Choropleth',
     scope: 'Annuel'
   }],
   'asie-sud': [{
     id: 'g-as-01',
-    title: 'Asie du Sud — corridors logistiques',
+    title: 'Asie du Sud, corridors logistiques',
     type: 'Flow',
     scope: '12 mois'
   }],
@@ -198,7 +198,7 @@ const GRAPHS = {
     scope: 'Live'
   }, {
     id: 'g-af-02',
-    title: 'Ports — trafic compare',
+    title: 'Ports, trafic compare',
     type: 'Barres',
     scope: '24 mois'
   }]
@@ -251,7 +251,7 @@ const THEME_DETAIL = {
     href: '/sahel/'
   }, {
     id: 'jnim-2',
-    title: 'Rapport Sahel — JNIM pattern',
+    title: 'Rapport Sahel, JNIM pattern',
     type: 'Rapport',
     meta: '28 pages',
     href: '/sahel/rapport.html'
@@ -263,7 +263,7 @@ const THEME_DETAIL = {
   }],
   't-ports': [{
     id: 'p-1',
-    title: 'Afrique maritime — couverture AIS',
+    title: 'Afrique maritime, couverture AIS',
     type: 'Carte',
     meta: '2 360 navires',
     href: '/afrique/'
@@ -275,7 +275,7 @@ const THEME_DETAIL = {
   }],
   't-mines': [{
     id: 'm-1',
-    title: 'Sahel — sites auriferes',
+    title: 'Sahel, sites auriferes',
     type: 'Carte',
     meta: '78 sites',
     href: '/sahel/'

@@ -19,7 +19,7 @@ function PlatformView({ onBack }) {
 
         <header className="platform__intro">
           <div>
-            <span className="eyebrow">— Bureau de travail · plateforme</span>
+            <span className="eyebrow">Bureau de travail · plateforme</span>
             <h1 className="platform__title">
               Que souhaitez-vous <em>consulter</em>&nbsp;?
             </h1>
@@ -31,7 +31,7 @@ function PlatformView({ onBack }) {
 
         <div className="actions-grid">
           <ActionCard
-            num="01" name="Region" desc="Choisir un theatre operationnel — Sahel, Moyen-Orient, RDC, Madagascar, Afrique, Asie du Sud."
+            num="01" name="Region" desc="Choisir un theatre operationnel : Sahel, Moyen-Orient, RDC, Madagascar, Afrique, Asie du Sud."
             count={`${ZONES.length} zones`} icon={<RegionIcon />}
             onClick={() => openAction('region')} />
 
@@ -41,33 +41,33 @@ function PlatformView({ onBack }) {
             onClick={() => openAction('rapport')} />
 
           <ActionCard
-            num="03" name="Graph" desc="Visualisations, indicateurs et series — densites, flux, reseaux."
+            num="03" name="Graph" desc="Visualisations, indicateurs et series : densites, flux, reseaux."
             count={`${Object.values(GRAPHS).flat().length} visualisations`} icon={<GraphIconLg />}
             onClick={() => openAction('graph')} />
 
           <ActionCard
-            num="04" name="Theme" desc="Lectures transversales — Ports, Mines, JNIM, Routes, Energie..."
+            num="04" name="Theme" desc="Lectures transversales : Ports, Mines, JNIM, Routes, Energie..."
             count={`${THEMES.length} themes`} icon={<ThemeIconLg />}
             onClick={() => openAction('theme')} />
 
           <ActionCard
-            num="05" name="Cartographie" desc="Acces direct aux cartes interactives — six theatres, calques et timeline."
+            num="05" name="Cartographie" desc="Acces direct aux cartes interactives : six theatres, calques et timeline."
             count={`${ZONES.length} cartes`} icon={<CartoIconLg />}
             onClick={() => openAction('cartographie')} />
         </div>
 
         <div className="section-rule">
-          <span className="section-rule__label">— Recemment consultes</span>
+          <span className="section-rule__label">Recemment consultes</span>
           <span className="section-rule__line" />
         </div>
 
         <div className="recent-grid">
-          <RecentItem icon={<MapIconSm />}   title="Sahel — Carte interactive"                href="/sahel/" />
-          <RecentItem icon={<DocIconSm />}   title="Sahel — Rapport analytique Q1 2026"       href="/sahel/rapport.html" />
-          <RecentItem icon={<MapIconSm />}   title="Moyen-Orient — Carte interactive"         href="/moyen-orient/" />
-          <RecentItem icon={<MapIconSm />}   title="RDC — Carte interactive"                  href="/rdc/" />
-          <RecentItem icon={<MapIconSm />}   title="Afrique Maritime — AIS temps reel"        href="/afrique/" />
-          <RecentItem icon={<MapIconSm />}   title="Asie du Sud — Carte interactive"          href="/asie-sud/" />
+          <RecentItem icon={<MapIconSm />}   title="Sahel : Carte interactive"                href="/sahel/" />
+          <RecentItem icon={<DocIconSm />}   title="Sahel : Rapport analytique Q1 2026"       href="/sahel/rapport.html" />
+          <RecentItem icon={<MapIconSm />}   title="Moyen-Orient : Carte interactive"         href="/moyen-orient/" />
+          <RecentItem icon={<MapIconSm />}   title="RDC : Carte interactive"                  href="/rdc/" />
+          <RecentItem icon={<MapIconSm />}   title="Afrique Maritime : AIS temps reel"        href="/afrique/" />
+          <RecentItem icon={<MapIconSm />}   title="Asie du Sud : Carte interactive"          href="/asie-sud/" />
         </div>
       </div>
 
@@ -167,7 +167,7 @@ function ActionCard({ num, name, desc, count, icon, onClick }) {
         )}
         <div className="action-card__top">
           <div className="action-card__icon">{icon}</div>
-          <span className="action-card__num">— {num}</span>
+          <span className="action-card__num">{num}</span>
         </div>
         <div>
           <h3 className="action-card__title">{name}</h3>

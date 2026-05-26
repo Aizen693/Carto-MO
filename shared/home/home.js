@@ -33,7 +33,7 @@ function HomeView({
     className: "hero__title"
   }, "Anticiper les", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "risques operationnels")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Six theatres geopolitiques suivis en continu \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram, agreges sur une carte unique : chaque evenement source, date et auditable."), /*#__PURE__*/React.createElement("div", {
+  }, "Six theatres geopolitiques suivis en continu : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram, agreges sur une carte unique : chaque evenement source, date et auditable."), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
   }, /*#__PURE__*/React.createElement("button", {
     className: "btn btn--primary btn--lg btn--neon",
@@ -80,7 +80,7 @@ function SectionHead({
     className: "home-sec__head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "eyebrow"
-  }, "\u2014 ", eyebrow), /*#__PURE__*/React.createElement("h2", {
+  }, eyebrow), /*#__PURE__*/React.createElement("h2", {
     className: "home-sec__title"
   }, title, " ", /*#__PURE__*/React.createElement("em", null, em)), intro && /*#__PURE__*/React.createElement("p", {
     className: "home-sec__intro"
@@ -129,7 +129,7 @@ const HOME_GET = [{
 }, {
   tag: "Le brief",
   t: "Des briefs prêts à l'emploi",
-  d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel — claire, datée et sourcée.",
+  d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
   media: "Aperçu brief de sécurité"
 }, {
   tag: "L'accès",
@@ -458,7 +458,7 @@ function CompareSection() {
     eyebrow: "Comparatif",
     title: "Le suivi d'actualit\xE9",
     em: "et la plateforme",
-    intro: "Deux fa\xE7ons de suivre une zone \u2014 voici ce qui les distingue, crit\xE8re par crit\xE8re."
+    intro: "Deux fa\xE7ons de suivre une zone : voici ce qui les distingue, crit\xE8re par crit\xE8re."
   }), /*#__PURE__*/React.createElement("div", {
     className: "cmp-table"
   }, /*#__PURE__*/React.createElement("div", {
@@ -502,7 +502,7 @@ const HOME_VIDEOS = [{
   duration: '2:47'
 }, {
   cat: 'Terrain',
-  title: 'Reseaux djihadistes au Sahel — pattern 2026',
+  title: 'Reseaux djihadistes au Sahel : pattern 2026',
   meta: 'Decryptage · 5 min 12',
   duration: '5:12'
 }];
@@ -515,7 +515,7 @@ function VideoBand({
     className: "video-band__head"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
     className: "eyebrow"
-  }, "\u2014 Notre travail en images"), /*#__PURE__*/React.createElement("h2", {
+  }, "Notre travail en images"), /*#__PURE__*/React.createElement("h2", {
     className: "video-band__title"
   }, "Capsules ", /*#__PURE__*/React.createElement("em", null, "videos"), " \xB7 activites Algor Int")), /*#__PURE__*/React.createElement("p", {
     className: "video-band__intro"
@@ -558,7 +558,7 @@ function VideoCard({
     className: "video-card__body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "video-card__cat"
-  }, "\u2014 ", cat), /*#__PURE__*/React.createElement("h3", {
+  }, cat), /*#__PURE__*/React.createElement("h3", {
     className: "video-card__title"
   }, title), /*#__PURE__*/React.createElement("p", {
     className: "video-card__meta"
@@ -701,7 +701,7 @@ function ConsoleView({
     className: "hero__title"
   }, "Console ", /*#__PURE__*/React.createElement("em", null, "interne")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Outil de travail des analystes Algor Int sur six theatres \u2014 Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement."), /*#__PURE__*/React.createElement("div", {
+  }, "Outil de travail des analystes Algor Int sur six theatres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement."), /*#__PURE__*/React.createElement("div", {
     className: "console-tabs"
   }, /*#__PURE__*/React.createElement(ConsoleTab, {
     href: "/admin/",
@@ -731,7 +731,7 @@ function ConsoleView({
     onClick: onVeille,
     label: "Veille",
     popTitle: "Veille",
-    popText: "Agregateur d'articles OSINT \u2014 chargement, filtres, scoring et exports. Outil de veille interne.",
+    popText: "Agregateur d'articles OSINT : chargement, filtres, scoring et exports. Outil de veille interne.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"
     }), /*#__PURE__*/React.createElement("circle", {
@@ -743,7 +743,7 @@ function ConsoleView({
     href: "/cloud/",
     label: "Cloud",
     popTitle: "Cloud",
-    popText: "Plateforme collaborative de l'equipe \u2014 base de sources, documents, suivi client, comptes rendus et syntheses, synchronises.",
+    popText: "Plateforme collaborative de l'equipe : base de sources, documents, suivi client, comptes rendus et syntheses, synchronises.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"
     }))
@@ -877,7 +877,7 @@ function ArchivesView({
   }, /*#__PURE__*/React.createElement("div", {
     className: "search-input"
   }, /*#__PURE__*/React.createElement(DashSearchIcon, null), /*#__PURE__*/React.createElement("input", {
-    placeholder: "Rechercher un point \u2014 nom, description, periode, theatre...",
+    placeholder: "Rechercher un point : nom, description, periode, theatre...",
     value: query,
     onChange: e => setQuery(e.target.value)
   }), query && /*#__PURE__*/React.createElement("button", {
@@ -919,7 +919,7 @@ function ArchivesView({
       onKeyDown: e => {
         if (e.key === 'Enter') setSelected(p);
       }
-    }, /*#__PURE__*/React.createElement("td", null, p.name || '—'), /*#__PURE__*/React.createElement("td", null, p.period || '—'), /*#__PURE__*/React.createElement("td", null, c[1] != null ? Number(c[1]).toFixed(4) : '—'), /*#__PURE__*/React.createElement("td", null, c[0] != null ? Number(c[0]).toFixed(4) : '—'), /*#__PURE__*/React.createElement("td", null, p.casualties || 0), /*#__PURE__*/React.createElement("td", null, p.deleted ? /*#__PURE__*/React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("td", null, p.name || '·'), /*#__PURE__*/React.createElement("td", null, p.period || '·'), /*#__PURE__*/React.createElement("td", null, c[1] != null ? Number(c[1]).toFixed(4) : '·'), /*#__PURE__*/React.createElement("td", null, c[0] != null ? Number(c[0]).toFixed(4) : '·'), /*#__PURE__*/React.createElement("td", null, p.casualties || 0), /*#__PURE__*/React.createElement("td", null, p.deleted ? /*#__PURE__*/React.createElement("span", {
       className: "dash-tag dash-tag--archived"
     }, "Archive") : /*#__PURE__*/React.createElement("span", {
       className: "dash-tag dash-tag--live"
@@ -952,13 +952,13 @@ function PointDetail({
   onClose
 }) {
   const c = Array.isArray(point.coordinates) ? point.coordinates : [];
-  const lng = c[0] != null ? Number(c[0]).toFixed(5) : '—';
-  const lat = c[1] != null ? Number(c[1]).toFixed(5) : '—';
+  const lng = c[0] != null ? Number(c[0]).toFixed(5) : '·';
+  const lat = c[1] != null ? Number(c[1]).toFixed(5) : '·';
   const created = point.created_at ? new Date(point.created_at).toLocaleDateString('fr-FR', {
     day: '2-digit',
     month: 'long',
     year: 'numeric'
-  }) : '—';
+  }) : '·';
   const d = parsePointDesc(point.description);
   const eventRows = [];
   if (d) {

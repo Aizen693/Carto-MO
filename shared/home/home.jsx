@@ -25,7 +25,7 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
           </h1>
 
           <p className="hero__lede">
-            Six theatres geopolitiques suivis en continu — Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram, agreges sur une carte unique : chaque evenement source, date et auditable.
+            Six theatres geopolitiques suivis en continu : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram, agreges sur une carte unique : chaque evenement source, date et auditable.
           </p>
 
           <div className="hero__cta-row">
@@ -70,7 +70,7 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
 function SectionHead({ eyebrow, title, em, intro }) {
   return (
     <div className="home-sec__head">
-      <span className="eyebrow">— {eyebrow}</span>
+      <span className="eyebrow">{eyebrow}</span>
       <h2 className="home-sec__title">{title} <em>{em}</em></h2>
       {intro && <p className="home-sec__intro">{intro}</p>}
     </div>
@@ -100,7 +100,7 @@ const HOME_GET = [
     media: "Aperçu cartographie" },
   { tag: "Le brief",
     t: "Des briefs prêts à l'emploi",
-    d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel — claire, datée et sourcée.",
+    d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
     media: "Aperçu brief de sécurité" },
   { tag: "L'accès",
     t: "Un accès continu",
@@ -306,7 +306,7 @@ function CompareSection() {
           eyebrow="Comparatif"
           title="Le suivi d'actualité"
           em="et la plateforme"
-          intro="Deux façons de suivre une zone — voici ce qui les distingue, critère par critère." />
+          intro="Deux façons de suivre une zone : voici ce qui les distingue, critère par critère." />
         <div className="cmp-table">
           <div className="cmp-table__row cmp-table__row--head">
             <div className="cmp-table__cell">Critère</div>
@@ -331,7 +331,7 @@ const HOME_VIDEOS = [
   { cat: 'Influence',  title: 'Analyse multicouche du theatre sahelien',         meta: 'Etude de cas · 3 min 02',  duration: '3:02' },
   { cat: 'Protection', title: 'Evaluation de menaces sur les infrastructures',   meta: 'Mission · 4 min 28',       duration: '4:28' },
   { cat: 'Methode',    title: 'De la donnee brute au rapport decisionnel',       meta: 'Coulisses · 2 min 47',     duration: '2:47' },
-  { cat: 'Terrain',    title: 'Reseaux djihadistes au Sahel — pattern 2026',     meta: 'Decryptage · 5 min 12',    duration: '5:12' },
+  { cat: 'Terrain',    title: 'Reseaux djihadistes au Sahel : pattern 2026',     meta: 'Decryptage · 5 min 12',    duration: '5:12' },
 ];
 
 function VideoBand({ style = 'strip' }) {
@@ -339,7 +339,7 @@ function VideoBand({ style = 'strip' }) {
     <section className={`video-band video-band--${style}`}>
       <div className="video-band__head">
         <div>
-          <span className="eyebrow">— Notre travail en images</span>
+          <span className="eyebrow">Notre travail en images</span>
           <h2 className="video-band__title">
             Capsules <em>videos</em> · activites Algor Int
           </h2>
@@ -373,7 +373,7 @@ function VideoCard({ cat, title, meta, duration, index }) {
         <span className="video-card__duration">{duration}</span>
       </div>
       <div className="video-card__body">
-        <div className="video-card__cat">— {cat}</div>
+        <div className="video-card__cat">{cat}</div>
         <h3 className="video-card__title">{title}</h3>
         <p className="video-card__meta">{meta}</p>
       </div>
@@ -469,7 +469,7 @@ function ConsoleView({ onBack, onArchives, onVeille }) {
           Console <em>interne</em>
         </h1>
         <p className="hero__lede">
-          Outil de travail des analystes Algor Int sur six theatres — Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement.
+          Outil de travail des analystes Algor Int sur six theatres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement.
         </p>
 
         <div className="console-tabs">
@@ -491,14 +491,14 @@ function ConsoleView({ onBack, onArchives, onVeille }) {
             onClick={onVeille}
             label="Veille"
             popTitle="Veille"
-            popText="Agregateur d'articles OSINT — chargement, filtres, scoring et exports. Outil de veille interne."
+            popText="Agregateur d'articles OSINT : chargement, filtres, scoring et exports. Outil de veille interne."
             icon={<><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" /></>}
           />
           <ConsoleTab
             href="/cloud/"
             label="Cloud"
             popTitle="Cloud"
-            popText="Plateforme collaborative de l'equipe — base de sources, documents, suivi client, comptes rendus et syntheses, synchronises."
+            popText="Plateforme collaborative de l'equipe : base de sources, documents, suivi client, comptes rendus et syntheses, synchronises."
             icon={<><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" /></>}
           />
           <ConsoleTab
@@ -611,7 +611,7 @@ function ArchivesView({ onBack }) {
             <div className="search-input">
               <DashSearchIcon />
               <input
-                placeholder="Rechercher un point — nom, description, periode, theatre..."
+                placeholder="Rechercher un point : nom, description, periode, theatre..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
@@ -655,10 +655,10 @@ function ArchivesView({ onBack }) {
                       <tr key={p.id} className="dash-row" tabIndex={0}
                           onClick={() => setSelected(p)}
                           onKeyDown={(e) => { if (e.key === 'Enter') setSelected(p); }}>
-                        <td>{p.name || '—'}</td>
-                        <td>{p.period || '—'}</td>
-                        <td>{c[1] != null ? Number(c[1]).toFixed(4) : '—'}</td>
-                        <td>{c[0] != null ? Number(c[0]).toFixed(4) : '—'}</td>
+                        <td>{p.name || '·'}</td>
+                        <td>{p.period || '·'}</td>
+                        <td>{c[1] != null ? Number(c[1]).toFixed(4) : '·'}</td>
+                        <td>{c[0] != null ? Number(c[0]).toFixed(4) : '·'}</td>
                         <td>{p.casualties || 0}</td>
                         <td>
                           {p.deleted
@@ -702,11 +702,11 @@ function parsePointDesc(raw) {
 // Popup detail d'un point — reprend le contenu de l'ancien pop-up des cartes.
 function PointDetail({ point, onClose }) {
   const c = Array.isArray(point.coordinates) ? point.coordinates : [];
-  const lng = c[0] != null ? Number(c[0]).toFixed(5) : '—';
-  const lat = c[1] != null ? Number(c[1]).toFixed(5) : '—';
+  const lng = c[0] != null ? Number(c[0]).toFixed(5) : '·';
+  const lat = c[1] != null ? Number(c[1]).toFixed(5) : '·';
   const created = point.created_at
     ? new Date(point.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
-    : '—';
+    : '·';
   const d = parsePointDesc(point.description);
 
   const eventRows = [];

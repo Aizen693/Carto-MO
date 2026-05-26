@@ -92,12 +92,12 @@ function rootFor(action) {
   if (action === 'theme') return {
     kind: 'themes',
     title: 'Thèmes',
-    subtitle: 'Lectures transversales — un sujet, plusieurs zones. Ports, Mines, JNIM, etc.'
+    subtitle: 'Lectures transversales : un sujet, plusieurs zones. Ports, Mines, JNIM, etc.'
   };
   if (action === 'cartographie') return {
     kind: 'zones',
     title: 'Cartographie',
-    subtitle: 'Accès direct aux cartes interactives — sélectionnez un théâtre pour l\'ouvrir.'
+    subtitle: 'Accès direct aux cartes interactives : sélectionnez un théâtre pour l\'ouvrir.'
   };
   return null;
 }
@@ -331,7 +331,7 @@ function ZoneDetail({
     className: "detail-section__head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "detail-section__label"
-  }, "\u2014 Vue d'ensemble"), /*#__PURE__*/React.createElement("span", {
+  }, "Vue d'ensemble"), /*#__PURE__*/React.createElement("span", {
     className: "detail-section__count"
   }, zone.period)), /*#__PURE__*/React.createElement("div", {
     className: "detail-stats"
@@ -359,7 +359,7 @@ function ZoneDetail({
     className: "detail-section__head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "detail-section__label"
-  }, "\u2014 Acc\xE8s rapide")), /*#__PURE__*/React.createElement("div", {
+  }, "Acc\xE8s rapide")), /*#__PURE__*/React.createElement("div", {
     className: "panel-list"
   }, /*#__PURE__*/React.createElement("a", {
     className: "panel-row",
@@ -425,7 +425,7 @@ function ThemeDetail({
     className: "detail-section__head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "detail-section__label"
-  }, "\u2014 Aper\xE7u"), /*#__PURE__*/React.createElement("span", {
+  }, "Aper\xE7u"), /*#__PURE__*/React.createElement("span", {
     className: "detail-section__count"
   }, theme.count, " points")), /*#__PURE__*/React.createElement("div", {
     className: "detail-stats"
@@ -453,7 +453,7 @@ function ThemeDetail({
     className: "detail-section__head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "detail-section__label"
-  }, "\u2014 Contenus disponibles"), /*#__PURE__*/React.createElement("span", {
+  }, "Contenus disponibles"), /*#__PURE__*/React.createElement("span", {
     className: "detail-section__count"
   }, items.length)), /*#__PURE__*/React.createElement("div", {
     className: "panel-list"

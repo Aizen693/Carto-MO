@@ -79,8 +79,8 @@ function rootFor(action) {
   if (action === 'region')  return { kind: 'zones',   title: 'Régions',  subtitle: 'Choisissez un théâtre pour accéder à sa cartographie, ses rapports et ses indicateurs.' };
   if (action === 'rapport') return { kind: 'zones-r', title: 'Rapports', subtitle: 'Classement par zone, puis par rapport. Notes hebdomadaires, synthèses et études.' };
   if (action === 'graph')   return { kind: 'zones-g', title: 'Graphs',   subtitle: 'Visualisations et indicateurs : flux, densités, réseaux, séries temporelles.' };
-  if (action === 'theme')   return { kind: 'themes',  title: 'Thèmes',   subtitle: 'Lectures transversales — un sujet, plusieurs zones. Ports, Mines, JNIM, etc.' };
-  if (action === 'cartographie') return { kind: 'zones', title: 'Cartographie', subtitle: 'Accès direct aux cartes interactives — sélectionnez un théâtre pour l\'ouvrir.' };
+  if (action === 'theme')   return { kind: 'themes',  title: 'Thèmes',   subtitle: 'Lectures transversales : un sujet, plusieurs zones. Ports, Mines, JNIM, etc.' };
+  if (action === 'cartographie') return { kind: 'zones', title: 'Cartographie', subtitle: 'Accès direct aux cartes interactives : sélectionnez un théâtre pour l\'ouvrir.' };
   return null;
 }
 
@@ -233,7 +233,7 @@ function ZoneDetail({ zone }) {
     <>
       <div className="detail-section">
         <div className="detail-section__head">
-          <span className="detail-section__label">— Vue d'ensemble</span>
+          <span className="detail-section__label">Vue d'ensemble</span>
           <span className="detail-section__count">{zone.period}</span>
         </div>
         <div className="detail-stats">
@@ -254,7 +254,7 @@ function ZoneDetail({ zone }) {
 
       <div className="detail-section">
         <div className="detail-section__head">
-          <span className="detail-section__label">— Accès rapide</span>
+          <span className="detail-section__label">Accès rapide</span>
         </div>
         <div className="panel-list">
           <a className="panel-row" href={zone.href || '#'}>
@@ -307,7 +307,7 @@ function ThemeDetail({ theme }) {
     <>
       <div className="detail-section">
         <div className="detail-section__head">
-          <span className="detail-section__label">— Aperçu</span>
+          <span className="detail-section__label">Aperçu</span>
           <span className="detail-section__count">{theme.count} points</span>
         </div>
         <div className="detail-stats">
@@ -328,7 +328,7 @@ function ThemeDetail({ theme }) {
 
       <div className="detail-section">
         <div className="detail-section__head">
-          <span className="detail-section__label">— Contenus disponibles</span>
+          <span className="detail-section__label">Contenus disponibles</span>
           <span className="detail-section__count">{items.length}</span>
         </div>
         <div className="panel-list">
