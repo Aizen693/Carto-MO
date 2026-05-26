@@ -2141,6 +2141,46 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   display: block;
 }
 
+/* — Hero /a-propos/ : cubes 3D (chaos -> structure) */
+.page-hero__visual .media-frame--cubes {
+  padding: 0;
+  gap: 0;
+  background: #0B0716;
+  border: 1px solid var(--violet-bd);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  box-shadow:
+    0 30px 80px -30px rgba(76, 39, 178, 0.55),
+    inset 0 0 0 1px rgba(168, 130, 255, 0.06);
+}
+.media-frame--cubes .cubes-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* Oscillation hue tres lente, raccord avec swarm */
+  animation: cubesHueShift 22s ease-in-out infinite;
+}
+.media-frame--cubes::after {
+  /* Vignette subtile pour adoucir les bords */
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 50%,
+    rgba(11, 7, 22, 0) 55%,
+    rgba(11, 7, 22, 0.55) 100%);
+}
+@keyframes cubesHueShift {
+  0%   { filter: hue-rotate(-12deg) saturate(1.00); }
+  50%  { filter: hue-rotate( 14deg) saturate(1.08); }
+  100% { filter: hue-rotate(-12deg) saturate(1.00); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .media-frame--cubes .cubes-canvas { animation: none; }
+}
+
 /* — Ce que vous obtenez : cartes livrables */
 .get-grid {
   display: grid;

@@ -12,6 +12,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8768"],
       "port": 8768
+    },
+    {
+      "name": "carto-mo-worktree",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8772"],
+      "port": 8772
     }
   ]
 }
