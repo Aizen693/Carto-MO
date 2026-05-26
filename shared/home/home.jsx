@@ -119,8 +119,7 @@ function GetSection() {
           intro="Trois outils pour lire une situation, en évaluer la portée et y revenir quand la décision se pose." />
         <div className="get-grid">
           {HOME_GET.map((g, i) => (
-            <article className="get-card" key={i}>
-              <MediaFrame label={g.media} />
+            <article className="get-card get-card--solo" key={i}>
               <div className="get-card__body">
                 <span className="get-card__tag">{g.tag}</span>
                 <h3 className="get-card__title">{g.t}</h3>

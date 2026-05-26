@@ -2141,6 +2141,20 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   display: block;
 }
 
+/* — Hero solo : pas de visuel a droite, le texte prend tout */
+.page-hero--solo .page-hero__wrap {
+  grid-template-columns: 1fr;
+}
+.page-hero--solo .page-hero__copy {
+  max-width: 880px;
+}
+.page-hero--solo .page-hero__title {
+  max-width: 22ch;
+}
+.page-hero--solo .page-hero__lede {
+  max-width: 64ch;
+}
+
 /* — A-propos / equipe : tour de plaques 3D (chaos -> structure) */
 .feature-row__visual .media-frame--plates,
 .media-frame--plates {

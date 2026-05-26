@@ -151,11 +151,9 @@ function GetSection() {
   }), /*#__PURE__*/React.createElement("div", {
     className: "get-grid"
   }, HOME_GET.map((g, i) => /*#__PURE__*/React.createElement("article", {
-    className: "get-card",
+    className: "get-card get-card--solo",
     key: i
-  }, /*#__PURE__*/React.createElement(MediaFrame, {
-    label: g.media
-  }), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
     className: "get-card__body"
   }, /*#__PURE__*/React.createElement("span", {
     className: "get-card__tag"
