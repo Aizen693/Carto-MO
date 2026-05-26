@@ -1,0 +1,27 @@
+name: Keep Veille Streamlit awake
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit app
+        run: |
+          URL="https://carto-mo-d95ewgm9x6zzfugtcpdst8.streamlit.app/"
+          echo "Pinging $URL"
+          STATUS=$(curl -s -o /tmp/body.html -w "%{http_code}" -L -A "Mozilla/5.0 (keepalive-bot)" "$URL")
+          echo "HTTP $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "Unexpected status code"
+            head -c 500 /tmp/body.html
+            exit 1
+          fi
+          if grep -qi "gone to sleep" /tmp/body.html; then
+            echo "App is asleep — sending wake-up request"
+            curl -s -L -A "Mozilla/5.0 (keepalive-bot)" -X POST "$URL" -o /dev/null
+          fi
+          echo "Ping OK"
