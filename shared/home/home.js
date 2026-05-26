@@ -132,7 +132,7 @@ const HOME_GET = [{
   d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
   media: "Aperçu brief de sécurité"
 }, {
-  tag: "L'accès",
+  tag: "L'acces",
   t: "Un accès continu",
   d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
   media: "Aperçu plateforme"
@@ -411,10 +411,10 @@ const HOME_AUD = [{
   d: "Arbitrer rapidement sur un risque-pays, sans avoir à dépouiller la presse."
 }, {
   t: "Sûreté & sécurité",
-  d: "Évaluer la menace sur des sites, des trajets et des implantations."
+  d: "Evaluer la menace sur des sites, des trajets et des implantations."
 }, {
   t: "Conseil & due diligence",
-  d: "Étayer une recommandation avec des sources datées et sourcées."
+  d: "Etayer une recommandation avec des sources datées et sourcées."
 }, {
   t: "Opérateurs sur zone",
   d: "ONG, industriels et logisticiens présents sur des théâtres sensibles."
@@ -427,7 +427,7 @@ function AudienceSection() {
     className: "home-sec__wrap"
   }, /*#__PURE__*/React.createElement(SectionHead, {
     eyebrow: "Pour qui",
-    title: "\xC0 qui s'adresse",
+    title: "A qui s'adresse",
     em: "Algor Access",
     intro: "Des profils diff\xE9rents, un m\xEAme besoin : une lecture fiable et dat\xE9e des th\xE9\xE2tres \xE0 risque."
   }), /*#__PURE__*/React.createElement("div", {

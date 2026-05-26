@@ -1,10 +1,10 @@
 (function () {
 /* global React, ZONES, REPORTS, GRAPHS, THEMES, THEME_DETAIL */
 // Side panel — système hiérarchique pour les 4 actions :
-//   • RÉGION   : liste zones → détail zone (carte/rapport/graph/thème)
+//   • REGION   : liste zones → détail zone (carte/rapport/graph/thème)
 //   • RAPPORT  : liste zones → liste rapports zone
 //   • GRAPH    : liste zones → liste graphs zone
-//   • THÈME    : liste thèmes → sous-contenus thème (Carte/Rapport/Graph/...)
+//   • THEME    : liste thèmes → sous-contenus thème (Carte/Rapport/Graph/...)
 
 const {
   useState,
@@ -341,7 +341,7 @@ function ZoneDetail({
     className: "detail-stat__value"
   }, zone.events), /*#__PURE__*/React.createElement("div", {
     className: "detail-stat__label"
-  }, "\xC9v\xE8nements")), /*#__PURE__*/React.createElement("div", {
+  }, "Ev\xE8nements")), /*#__PURE__*/React.createElement("div", {
     className: "detail-stat"
   }, /*#__PURE__*/React.createElement("div", {
     className: "detail-stat__value"

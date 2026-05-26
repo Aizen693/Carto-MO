@@ -102,7 +102,7 @@ const HOME_GET = [
     t: "Des briefs prêts à l'emploi",
     d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
     media: "Aperçu brief de sécurité" },
-  { tag: "L'accès",
+  { tag: "L'acces",
     t: "Un accès continu",
     d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
     media: "Aperçu plateforme" },
@@ -257,9 +257,9 @@ const HOME_AUD = [
   { t: "Décideurs & directions",
     d: "Arbitrer rapidement sur un risque-pays, sans avoir à dépouiller la presse." },
   { t: "Sûreté & sécurité",
-    d: "Évaluer la menace sur des sites, des trajets et des implantations." },
+    d: "Evaluer la menace sur des sites, des trajets et des implantations." },
   { t: "Conseil & due diligence",
-    d: "Étayer une recommandation avec des sources datées et sourcées." },
+    d: "Etayer une recommandation avec des sources datées et sourcées." },
   { t: "Opérateurs sur zone",
     d: "ONG, industriels et logisticiens présents sur des théâtres sensibles." },
 ];
@@ -270,7 +270,7 @@ function AudienceSection() {
       <div className="home-sec__wrap">
         <SectionHead
           eyebrow="Pour qui"
-          title="À qui s'adresse"
+          title="A qui s'adresse"
           em="Algor Access"
           intro="Des profils différents, un même besoin : une lecture fiable et datée des théâtres à risque." />
         <div className="aud-grid">

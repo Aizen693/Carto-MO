@@ -1,9 +1,9 @@
 /* global React, ZONES, REPORTS, GRAPHS, THEMES, THEME_DETAIL */
 // Side panel — système hiérarchique pour les 4 actions :
-//   • RÉGION   : liste zones → détail zone (carte/rapport/graph/thème)
+//   • REGION   : liste zones → détail zone (carte/rapport/graph/thème)
 //   • RAPPORT  : liste zones → liste rapports zone
 //   • GRAPH    : liste zones → liste graphs zone
-//   • THÈME    : liste thèmes → sous-contenus thème (Carte/Rapport/Graph/...)
+//   • THEME    : liste thèmes → sous-contenus thème (Carte/Rapport/Graph/...)
 
 const { useState, useEffect, useRef } = React;
 
@@ -239,7 +239,7 @@ function ZoneDetail({ zone }) {
         <div className="detail-stats">
           <div className="detail-stat">
             <div className="detail-stat__value">{zone.events}</div>
-            <div className="detail-stat__label">Évènements</div>
+            <div className="detail-stat__label">Evènements</div>
           </div>
           <div className="detail-stat">
             <div className="detail-stat__value">{(REPORTS[zone.id] || []).length}</div>
