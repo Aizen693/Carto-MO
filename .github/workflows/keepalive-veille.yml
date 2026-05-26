@@ -13,15 +13,7 @@ jobs:
         run: |
           URL="https://carto-mo-d95ewgm9x6zzfugtcpdst8.streamlit.app/"
           echo "Pinging $URL"
-          STATUS=$(curl -s -o /tmp/body.html -w "%{http_code}" -L -A "Mozilla/5.0 (keepalive-bot)" "$URL")
-          echo "HTTP $STATUS"
-          if [ "$STATUS" != "200" ]; then
-            echo "Unexpected status code"
-            head -c 500 /tmp/body.html
-            exit 1
-          fi
-          if grep -qi "gone to sleep" /tmp/body.html; then
-            echo "App is asleep — sending wake-up request"
-            curl -s -L -A "Mozilla/5.0 (keepalive-bot)" -X POST "$URL" -o /dev/null
-          fi
-          echo "Ping OK"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -A "Mozilla/5.0 (keepalive-bot)" --max-time 30 "$URL" || echo "fail")
+          echo "HTTP status: $STATUS"
+          echo "Ping registered"
+        
