@@ -233,17 +233,47 @@
     padding: 16px 22px 18px;
   }
   #timeline-head {
-    display: flex; justify-content: space-between; align-items: baseline;
-    margin-bottom: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px; gap: 12px;
   }
+  #timeline-head .tl-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   #timeline-head .lbl {
     font-family: 'JetBrains Mono'; font-size: 11px; color: #6B6480;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.04em; flex: 1;
   }
   #timeline-head .val {
     font-family: 'JetBrains Mono'; font-size: 12px; color: var(--violet-d, #6B3FA0);
     letter-spacing: 0.02em; font-weight: 600;
+    background: var(--violet-bg, rgba(107,63,160,0.08));
+    padding: 4px 10px; border-radius: 100px;
   }
+  .tl-btn {
+    width: 30px; height: 30px;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: #fff; border-radius: 50%;
+    color: var(--violet-d, #6B3FA0);
+    cursor: pointer; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background .15s ease, transform .12s ease, border-color .15s ease;
+    font-family: 'Plus Jakarta Sans';
+  }
+  .tl-btn:hover { background: var(--violet-bg, rgba(107,63,160,0.08)); border-color: var(--violet-bd, rgba(107,63,160,0.22)); }
+  .tl-btn:active { transform: scale(0.94); }
+  .tl-btn--play {
+    background: var(--violet-d, #6B3FA0); color: #fff;
+    border-color: var(--violet-d, #6B3FA0);
+    box-shadow: 0 4px 12px -2px rgba(107,63,160,0.35);
+  }
+  .tl-btn--play:hover { background: var(--violet, #8B5FBF); border-color: var(--violet, #8B5FBF); color: #fff; }
+  .tl-btn svg { width: 12px; height: 12px; }
+  .tl-speed {
+    font-family: 'JetBrains Mono'; font-size: 10.5px; font-weight: 500;
+    color: #6B6480; cursor: pointer; padding: 6px 10px;
+    border: 1px solid rgba(0,0,0,0.10); background: #fff;
+    border-radius: 100px; letter-spacing: 0.04em;
+    transition: background .15s ease, color .15s ease;
+  }
+  .tl-speed:hover { background: var(--violet-bg, rgba(107,63,160,0.08)); color: var(--violet-d, #6B3FA0); }
   #timeline-track {
     position: relative; height: 40px; cursor: pointer;
     background: rgba(107,63,160,0.04);
@@ -258,16 +288,25 @@
   }
   .tl-tick.zero { width: 3px; opacity: 1; }
   #timeline-handle {
-    position: absolute; top: -3px; bottom: -3px; width: 2px;
+    position: absolute; top: -4px; bottom: -4px; width: 3px;
     background: var(--violet-d, #6B3FA0);
     pointer-events: none;
-    box-shadow: 0 0 12px rgba(107,63,160,0.55);
+    box-shadow: 0 0 14px rgba(107,63,160,0.6);
+    transition: left .08s linear;
   }
   #timeline-handle::before {
-    content: ''; position: absolute; top: -6px; left: -4px;
-    width: 10px; height: 10px; border-radius: 50%;
+    content: ''; position: absolute; top: -8px; left: -6.5px;
+    width: 16px; height: 16px; border-radius: 50%;
     background: var(--violet-d, #6B3FA0);
-    box-shadow: 0 4px 12px rgba(107,63,160,0.4);
+    border: 3px solid #fff;
+    box-shadow: 0 4px 14px rgba(107,63,160,0.45);
+  }
+  #timeline-handle::after {
+    content: ''; position: absolute; bottom: -8px; left: -6.5px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--violet-d, #6B3FA0);
+    border: 3px solid #fff;
+    box-shadow: 0 -4px 14px rgba(107,63,160,0.45);
   }
   #timeline-axis {
     display: flex; justify-content: space-between;
@@ -644,6 +683,15 @@
 
         <div id="timeline">
           <div id="timeline-head">
+            <div class="tl-controls">
+              <button class="tl-btn tl-btn--play" id="tl-play" type="button" aria-label="Lancer la lecture">
+                <svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M3 1.5v9l8-4.5z"/></svg>
+              </button>
+              <button class="tl-btn" id="tl-reset" type="button" aria-label="Recommencer">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6a4 4 0 1 0 1.2-2.85"/><path d="M2 1.5v2.5h2.5"/></svg>
+              </button>
+              <button class="tl-speed" id="tl-speed" type="button" aria-label="Vitesse de lecture" title="Cliquer pour changer">1×</button>
+            </div>
             <span class="lbl" id="tl-range">Timeline</span>
             <span class="val" id="tl-date">—</span>
           </div>
@@ -1149,11 +1197,67 @@ function renderTimeline(){
     const r = track.getBoundingClientRect();
     setProgress((clientX - r.left) / r.width);
   }
-  track.addEventListener('mousedown', e => { dragging = true; onMove(e.clientX); });
+  track.addEventListener('mousedown', e => { dragging = true; stopPlay(); onMove(e.clientX); });
   window.addEventListener('mousemove', e => { if (dragging) onMove(e.clientX); });
   window.addEventListener('mouseup', () => { dragging = false; });
-  track.addEventListener('touchstart', e => { onMove(e.touches[0].clientX); }, { passive: true });
+  track.addEventListener('touchstart', e => { stopPlay(); onMove(e.touches[0].clientX); }, { passive: true });
   track.addEventListener('touchmove', e => { onMove(e.touches[0].clientX); }, { passive: true });
+
+  // ── Play / Pause / Reset / Vitesse ───────────────────────────
+  const playBtn = document.getElementById('tl-play');
+  const resetBtn = document.getElementById('tl-reset');
+  const speedBtn = document.getElementById('tl-speed');
+  const SPEEDS = [1, 2, 4, 0.5]; // multiplicateurs
+  let speedIdx = 0;
+  let playInterval = null;
+  const BASE_DURATION_MS = 16000; // 16s pour parcourir toute la timeline a 1x
+  const FRAME_MS = 60;
+
+  function playIconHTML(playing) {
+    return playing
+      ? '<svg viewBox="0 0 12 12" fill="currentColor"><rect x="3" y="2" width="2.4" height="8"/><rect x="6.6" y="2" width="2.4" height="8"/></svg>'
+      : '<svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 1.5v9l8-4.5z"/></svg>';
+  }
+
+  function startPlay() {
+    if (playInterval) return;
+    // Si on est au bout, recommencer depuis 0
+    if (state.timelineProgress >= 0.999) setProgress(0);
+    playBtn.setAttribute('aria-label', 'Mettre en pause');
+    playBtn.innerHTML = playIconHTML(true);
+    const stepProgress = (FRAME_MS * SPEEDS[speedIdx]) / BASE_DURATION_MS;
+    playInterval = setInterval(() => {
+      const next = state.timelineProgress + stepProgress;
+      if (next >= 1) {
+        setProgress(1);
+        stopPlay();
+      } else {
+        setProgress(next);
+      }
+    }, FRAME_MS);
+  }
+  function stopPlay() {
+    if (!playInterval) return;
+    clearInterval(playInterval);
+    playInterval = null;
+    playBtn.setAttribute('aria-label', 'Lancer la lecture');
+    playBtn.innerHTML = playIconHTML(false);
+  }
+
+  playBtn.addEventListener('click', () => {
+    if (playInterval) stopPlay(); else startPlay();
+  });
+  resetBtn.addEventListener('click', () => {
+    stopPlay();
+    setProgress(0);
+  });
+  speedBtn.addEventListener('click', () => {
+    speedIdx = (speedIdx + 1) % SPEEDS.length;
+    speedBtn.textContent = SPEEDS[speedIdx] + '×';
+    // si en cours de lecture, on relance avec nouvelle vitesse
+    if (playInterval) { stopPlay(); startPlay(); }
+  });
+
   setProgress(1);
 }
 
