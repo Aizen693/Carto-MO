@@ -24,13 +24,12 @@ function App() {
   const [view, setView] = useState(window.location.hash === '#console' ? 'console' : 'home');
   const [clock, setClock] = useState('--:--');
   const [menuOpen, setMenuOpen] = useState(false);
-  const [authLoggedIn, setAuthLoggedIn] = useState(
-    !!(window.algorAuthState && window.algorAuthState.loggedIn)
-  );
+  const [authLoggedIn, setAuthLoggedIn] = useState(!!(window.algorAuthState && window.algorAuthState.loggedIn));
 
-  // Reflète l'état de session sur le bouton « Connexion » (texte « Connecté »).
+  // Reflète l'état de session sur le bouton « Connexion » (texte « Connecté »
+  // si une session est active). site-auth.js dispatch l'événement.
   useEffect(() => {
-    const h = (e) => setAuthLoggedIn(!!(e.detail && e.detail.loggedIn));
+    const h = e => setAuthLoggedIn(!!(e.detail && e.detail.loggedIn));
     window.addEventListener('algorAuthStateChanged', h);
     return () => window.removeEventListener('algorAuthStateChanged', h);
   }, []);
@@ -90,6 +89,8 @@ function App() {
   }, "Offres"), /*#__PURE__*/React.createElement("a", {
     href: "/theatres/"
   }, "Th\xE9\xE2tres"), /*#__PURE__*/React.createElement("a", {
+    href: "/debunkage/"
+  }, "D\xE9bunkage"), /*#__PURE__*/React.createElement("a", {
     href: "/a-propos/"
   }, "A propos"), /*#__PURE__*/React.createElement("a", {
     href: "/contact/"
@@ -99,7 +100,7 @@ function App() {
     className: 'site-login' + (authLoggedIn ? ' is-logged' : ''),
     href: "#",
     "data-algor-login": true
-  }, authLoggedIn ? "Connect\xE9" : "Connexion"), /*#__PURE__*/React.createElement("a", {
+  }, authLoggedIn ? 'Connecté' : 'Connexion'), /*#__PURE__*/React.createElement("a", {
     className: "site-cta",
     href: "/offres/"
   }, "Voir les offres")), /*#__PURE__*/React.createElement("button", {

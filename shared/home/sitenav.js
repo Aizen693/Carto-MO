@@ -32,7 +32,7 @@
   }
 
   function eagerWarm() {
-    var pages = ['/', '/methodologie/', '/theatres/', '/offres/', '/a-propos/', '/contact/'];
+    var pages = ['/', '/methodologie/', '/theatres/', '/offres/', '/debunkage/', '/a-propos/', '/contact/'];
     pages.forEach(function (p) {
       if (p !== location.pathname) fetchPage(p);
     });
