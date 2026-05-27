@@ -83,14 +83,14 @@ function App() {
   }, /*#__PURE__*/React.createElement("a", {
     href: "/plateforme/"
   }, "Plateforme"), /*#__PURE__*/React.createElement("a", {
+    href: "/debunkage/"
+  }, "D\xE9bunkage"), /*#__PURE__*/React.createElement("a", {
     href: "/methodologie/"
   }, "M\xE9thodologie"), /*#__PURE__*/React.createElement("a", {
     href: "/offres/"
   }, "Offres"), /*#__PURE__*/React.createElement("a", {
     href: "/theatres/"
   }, "Th\xE9\xE2tres"), /*#__PURE__*/React.createElement("a", {
-    href: "/debunkage/"
-  }, "D\xE9bunkage"), /*#__PURE__*/React.createElement("a", {
     href: "/a-propos/"
   }, "A propos"), /*#__PURE__*/React.createElement("a", {
     href: "/contact/"
