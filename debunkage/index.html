@@ -36,6 +36,54 @@
     padding: 18px 22px;
     border-bottom: 1px solid var(--border, rgba(0,0,0,0.06));
     background: var(--violet-bg, rgba(107,63,160,0.04));
+    gap: 16px;
+  }
+  .deb-fs-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 12px;
+    background: #fff; color: var(--violet-d, #6B3FA0);
+    border: 1px solid var(--violet-bd, rgba(107,63,160,0.22));
+    border-radius: 100px; cursor: pointer;
+    font-family: 'Plus Jakarta Sans'; font-size: 12px; font-weight: 600;
+    letter-spacing: -0.005em;
+    transition: background .15s ease, color .15s ease, border-color .15s ease, transform .12s ease;
+    flex-shrink: 0;
+  }
+  .deb-fs-btn:hover {
+    background: var(--violet-d, #6B3FA0);
+    color: #fff;
+    border-color: var(--violet-d, #6B3FA0);
+  }
+  .deb-fs-btn:active { transform: scale(0.96); }
+  .deb-fs-btn svg { width: 14px; height: 14px; }
+
+  /* Fullscreen state */
+  .deb-dossier.is-fullscreen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh; max-height: 100vh;
+    border-radius: 0; border: none;
+    z-index: 9999;
+    background: #fff;
+    display: flex; flex-direction: column;
+    box-shadow: none;
+    overflow: hidden;
+  }
+  .deb-dossier.is-fullscreen .deb-top { flex-shrink: 0; }
+  .deb-dossier.is-fullscreen .deb-body {
+    flex: 1; min-height: 0;
+    grid-template-columns: 340px minmax(0, 1fr);
+  }
+  .deb-dossier.is-fullscreen .deb-side { max-height: none; }
+  .deb-dossier.is-fullscreen .deb-main { min-height: 0; }
+  .deb-dossier.is-fullscreen #map { min-height: 0; height: 100%; }
+  .deb-dossier.is-fullscreen #timeline { flex-shrink: 0; }
+  body.deb-fs-active { overflow: hidden; }
+  @media (max-width: 760px) {
+    .deb-fs-btn .deb-fs-lbl { display: none; }
+    .deb-fs-btn { padding: 8px; }
+    .deb-dossier.is-fullscreen .deb-body { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .deb-dossier.is-fullscreen .deb-side { max-height: 38vh; overflow-y: auto; border-right: none; border-bottom: 1px solid var(--border, rgba(0,0,0,0.06)); }
   }
   .deb-top__name {
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -723,10 +771,15 @@
         </p>
       </div>
 
-      <div class="deb-dossier">
+      <div class="deb-dossier" id="deb-dossier">
         <div class="deb-top">
           <div class="deb-top__name" id="deb-top-name">—</div>
           <div class="deb-top__meta" id="deb-top-meta">—</div>
+          <button class="deb-fs-btn" id="deb-fs" type="button" aria-label="Plein écran" title="Plein écran (Échap pour quitter)">
+            <svg class="deb-fs-icon-expand" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2H2v4M14 6V2h-4M10 14h4v-4M2 10v4h4"/></svg>
+            <svg class="deb-fs-icon-shrink" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 6h4V2M10 2v4h4M14 10h-4v4M6 14v-4H2"/></svg>
+            <span class="deb-fs-lbl">Plein écran</span>
+          </button>
         </div>
 
         <div class="deb-body">
@@ -1081,6 +1134,7 @@ function buildMap(){
     document.getElementById('map-loader').style.display = 'none';
     addLayers();
     bindMapHover();
+    bindFullscreen();
     fitToData();
   });
 }
@@ -1254,6 +1308,30 @@ function fitToData(){
   const lons = state.data.publications.map(p => p.lon);
   const bounds = [[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]];
   map.fitBounds(bounds, { padding: { top: 60, right: 80, bottom: 60, left: 60 }, duration: 1200, maxZoom: 5 });
+}
+
+function bindFullscreen(){
+  const btn = document.getElementById('deb-fs');
+  const card = document.getElementById('deb-dossier');
+  if (!btn || !card) return;
+  const expandIcon = btn.querySelector('.deb-fs-icon-expand');
+  const shrinkIcon = btn.querySelector('.deb-fs-icon-shrink');
+  const label = btn.querySelector('.deb-fs-lbl');
+  function setFs(on) {
+    card.classList.toggle('is-fullscreen', on);
+    document.body.classList.toggle('deb-fs-active', on);
+    if (expandIcon) expandIcon.style.display = on ? 'none' : 'block';
+    if (shrinkIcon) shrinkIcon.style.display = on ? 'block' : 'none';
+    if (label) label.textContent = on ? 'Quitter' : 'Plein écran';
+    btn.setAttribute('aria-label', on ? 'Quitter le plein écran' : 'Plein écran');
+    // Mapbox a besoin d'un resize quand son container change de taille
+    setTimeout(() => { if (map && map.resize) map.resize(); }, 60);
+    setTimeout(() => { if (map && map.resize) map.resize(); }, 360);
+  }
+  btn.addEventListener('click', () => setFs(!card.classList.contains('is-fullscreen')));
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && card.classList.contains('is-fullscreen')) setFs(false);
+  });
 }
 
 function bindMapHover(){
