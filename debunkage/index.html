@@ -414,6 +414,99 @@
     font-weight: 400; margin: 0;
   }
 
+  /* ── Acteurs & Victimes ── */
+  .av-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 32px;
+  }
+  .av-col {
+    background: #fff;
+    border: 1px solid var(--border, rgba(0,0,0,0.08));
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .av-col__head {
+    padding: 22px 26px 18px;
+    border-bottom: 1px solid var(--border, rgba(0,0,0,0.06));
+    background: var(--violet-bg, rgba(107,63,160,0.04));
+  }
+  .av-col__kicker {
+    font-family: 'JetBrains Mono'; font-size: 10.5px;
+    color: var(--violet-d, #6B3FA0); letter-spacing: 0.14em;
+    text-transform: uppercase; font-weight: 600;
+  }
+  .av-col__title {
+    font-family: 'Plus Jakarta Sans'; font-weight: 600;
+    font-size: 22px; line-height: 1.1; color: #1F1437;
+    letter-spacing: -0.018em; margin: 8px 0 0;
+  }
+  .av-list { padding: 6px 0; }
+  .av-item {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 16px; align-items: center;
+    padding: 16px 26px;
+    border-bottom: 1px solid var(--border, rgba(0,0,0,0.05));
+  }
+  .av-item:last-child { border-bottom: none; }
+  .av-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Plus Jakarta Sans'; font-weight: 700;
+    font-size: 15px; color: #fff;
+    letter-spacing: -0.012em; flex-shrink: 0;
+    box-shadow: 0 2px 8px -2px rgba(31,18,55,0.18);
+  }
+  .av-avatar svg { width: 22px; height: 22px; color: #fff; }
+  .av-body { min-width: 0; }
+  .av-name {
+    font-family: 'Plus Jakarta Sans'; font-weight: 600;
+    font-size: 14px; color: #1F1437;
+    letter-spacing: -0.008em; line-height: 1.2;
+    margin-bottom: 4px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .av-country {
+    font-family: 'Plus Jakarta Sans'; font-weight: 600;
+    font-size: 13px; color: var(--violet-d, #6B3FA0);
+    letter-spacing: -0.005em; line-height: 1.3;
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .av-country .sep { color: #C8C2D8; font-weight: 400; }
+  .av-flag {
+    font-size: 16px; line-height: 1;
+    filter: saturate(1.05);
+  }
+  .av-meta {
+    font-family: 'JetBrains Mono'; font-size: 10.5px;
+    color: #6B6480; letter-spacing: 0.02em; line-height: 1.4;
+  }
+  .av-meta .sep { color: #C8C2D8; padding: 0 5px; }
+  .av-role {
+    font-family: 'JetBrains Mono'; font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 100px;
+    flex-shrink: 0; white-space: nowrap;
+  }
+  .av-role[data-role="patient_zero"] { background: rgba(107,63,160,0.10); color: #6B3FA0; }
+  .av-role[data-role="relai"]        { background: rgba(139,95,191,0.12); color: #6B3FA0; }
+  .av-role[data-role="amplificateur"]{ background: rgba(46,132,212,0.12); color: #2E84D4; }
+  .av-role[data-role="site_copie"]   { background: rgba(201,74,74,0.10); color: #C94A4A; }
+
+  .av-role[data-victim="marque"]    { background: rgba(201,74,74,0.10); color: #C94A4A; }
+  .av-role[data-victim="dirigeant"] { background: rgba(214,158,46,0.12); color: #B5731F; }
+  .av-role[data-victim="employes"]  { background: rgba(46,132,212,0.10); color: #2E84D4; }
+  .av-role[data-victim="partenaires"]{ background: rgba(107,63,160,0.10); color: #6B3FA0; }
+  .av-role[data-victim="indirect"]  { background: rgba(0,0,0,0.06); color: #6B6480; }
+
+  @media (max-width: 900px) {
+    .av-grid { grid-template-columns: 1fr; gap: 20px; }
+    .av-item { grid-template-columns: 38px 1fr; }
+    .av-item .av-role { grid-column: 2; justify-self: start; margin-top: 6px; }
+  }
+
   /* Modal */
   #modal-overlay {
     position: fixed; inset: 0; z-index: 100;
@@ -706,6 +799,37 @@
     </div>
   </section>
 
+  <!-- ─────────────────────────────────────── Acteurs & Victimes -->
+  <section class="home-sec" id="acteurs-victimes">
+    <div class="home-sec__wrap">
+      <div class="home-sec__head">
+        <span class="eyebrow">Identification</span>
+        <h2 class="home-sec__title">Acteurs principaux et <em>victimes ciblées</em></h2>
+        <p class="home-sec__intro">
+          L'identification des acteurs s'appuie sur les recoupements de signaux ouverts (timestamps, n-grams, plateformes, fuseaux). Les victimes sont nommées telles qu'elles apparaissent dans les narratifs et les conséquences observées.
+        </p>
+      </div>
+
+      <div class="av-grid">
+        <div class="av-col">
+          <div class="av-col__head">
+            <span class="av-col__kicker">Acteurs · top 8 par volume × audience</span>
+            <h3 class="av-col__title">Qui propage</h3>
+          </div>
+          <div id="av-acteurs" class="av-list"></div>
+        </div>
+
+        <div class="av-col">
+          <div class="av-col__head">
+            <span class="av-col__kicker">Victimes · cibles directes et indirectes</span>
+            <h3 class="av-col__title">Qui est visé</h3>
+          </div>
+          <div id="av-victimes" class="av-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ─────────────────────────────────────── CTA -->
   <section class="cta-band">
     <div class="cta-band__wrap">
@@ -857,6 +981,7 @@ async function init() {
   renderSidebar();
   buildMap();
   renderTimeline();
+  renderActeursVictimes();
 }
 
 function renderHeroStats(){
@@ -1162,6 +1287,126 @@ function bindMapHover(){
       `)
       .addTo(map);
   });
+}
+
+/* ════ Acteurs & Victimes ════ */
+const PAYS_NOM = {
+  RU: 'Russie', RO: 'Roumanie', HU: 'Hongrie', RS: 'Serbie', BG: 'Bulgarie',
+  CZ: 'Tchéquie', SK: 'Slovaquie', MD: 'Moldavie', BY: 'Bélarus',
+  DE: 'Allemagne', FR: 'France', IT: 'Italie', ES: 'Espagne',
+  BE: 'Belgique', CH: 'Suisse', AT: 'Autriche', PT: 'Portugal',
+  HK: 'Hong Kong', AE: 'Émirats A.U.'
+};
+function flagOf(cc){
+  if (!cc || cc.length !== 2) return '';
+  return String.fromCodePoint(...cc.toUpperCase().split('').map(c => c.charCodeAt(0) + 127397));
+}
+
+function renderActeursVictimes(){
+  const d = state.data;
+
+  // Top 8 acteurs : score = audience cumulee × log(1 + publications)
+  const byCompte = {};
+  d.publications.forEach(p => {
+    if (!byCompte[p.compte]) {
+      byCompte[p.compte] = {
+        compte: p.compte,
+        display: p.compte_display,
+        type: p.type,
+        ville: p.ville,
+        pays: p.pays,
+        plateforme: p.plateforme,
+        publications: 0,
+        audience: 0
+      };
+    }
+    byCompte[p.compte].publications += 1;
+    byCompte[p.compte].audience += p.audience_estimee || 0;
+  });
+  // mapping compte → cluster (premier reseau qui contient une de ses publis)
+  const compteCluster = {};
+  d.reseaux.forEach(r => {
+    r.comptes.forEach(c => { if (!compteCluster[c]) compteCluster[c] = r; });
+  });
+
+  // Selection equilibree : patient zero + top relais + top sites copie + top amplis
+  // pour raconter la chaine de propagation, pas seulement le volume.
+  const allActors = Object.values(byCompte)
+    .map(a => Object.assign(a, { score: a.audience * Math.log(1 + a.publications) }))
+    .sort((a, b) => b.score - a.score);
+  const pickByType = (type, n) => allActors.filter(a => a.type === type).slice(0, n);
+  const actorsArr = [
+    ...pickByType('patient_zero', 1),
+    ...pickByType('relai', 3),
+    ...pickByType('site_copie', 2),
+    ...pickByType('amplificateur', 2),
+  ];
+
+  const COLORS_BY_TYPE = {
+    patient_zero: 'linear-gradient(135deg,#6B3FA0,#3F2470)',
+    relai:        'linear-gradient(135deg,#8B5FBF,#6B3FA0)',
+    amplificateur:'linear-gradient(135deg,#2E84D4,#1A5FA0)',
+    site_copie:   'linear-gradient(135deg,#C94A4A,#8E2A2A)'
+  };
+  const TYPE_LBL = { patient_zero: 'Patient zéro', relai: 'Relais primaire', amplificateur: 'Amplificateur', site_copie: 'Site copie' };
+
+  const acteursWrap = document.getElementById('av-acteurs');
+  acteursWrap.innerHTML = actorsArr.map(a => {
+    const clusterName = compteCluster[a.compte]?.nom || '—';
+    const initial = (a.display || a.compte || '?').replace(/^[@]/, '').charAt(0).toUpperCase();
+    const audK = (a.audience / 1000).toFixed(0) + 'k';
+    const pays = (a.pays || '').split(' ')[0]; // au cas où "Inconnu (hébergement RU)"
+    const paysNom = PAYS_NOM[pays] || pays || '—';
+    const flagEm = flagOf(pays);
+    return `
+      <div class="av-item">
+        <div class="av-avatar" style="background:${COLORS_BY_TYPE[a.type] || COLORS_BY_TYPE.relai}">${escapeHtml(initial)}</div>
+        <div class="av-body">
+          <div class="av-name">${escapeHtml(a.display)}</div>
+          <div class="av-country"><span class="av-flag">${flagEm}</span>${escapeHtml(paysNom)} <span class="sep">·</span> ${escapeHtml(a.ville)}</div>
+          <div class="av-meta">${escapeHtml(clusterName)}<span class="sep">·</span>${a.publications} publi · ${audK} cumulé</div>
+        </div>
+        <div class="av-role" data-role="${a.type}">${TYPE_LBL[a.type] || a.type}</div>
+      </div>
+    `;
+  }).join('');
+
+  // Victimes : on prend depuis data si fourni, sinon fallback hardcode pour le cas demo
+  const victimes = d.victimes && d.victimes.length ? d.victimes : [
+    { type: 'marque', nom: 'Société Lumière', subtitle: 'Cible primaire de la campagne', narratifs: 'N01 · N03 · N04', impact: 'Allégations sanitaires sur les produits, mise en cause des pratiques industrielles', icon: 'building' },
+    { type: 'dirigeant', nom: 'Dirigeant (anonymisé)', subtitle: 'Cité nommément · documents falsifiés', narratifs: 'N02', impact: 'Mise en cause personnelle via faux documents joints aux relais', icon: 'user' },
+    { type: 'employes', nom: 'Cadres et salariés', subtitle: 'Cibles indirectes', narratifs: 'N02 · N05', impact: 'Suspicions par association, pression interne, hostilité réseaux sociaux', icon: 'users' },
+    { type: 'partenaires', nom: 'Partenaires commerciaux', subtitle: 'Distributeurs · sous-traitants', narratifs: 'N03 · N05', impact: 'Risque rupture de contrats, remise en question de la commande publique européenne', icon: 'link' },
+    { type: 'indirect', nom: 'Consommateurs', subtitle: 'Cibles informationnelles', narratifs: 'Tous narratifs', impact: 'Désinformation sur la sécurité des produits, érosion de confiance', icon: 'eye' },
+  ];
+
+  const ICONS = {
+    building: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/><path d="M10 21v-3h4v3"/></svg>',
+    user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
+    users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="3"/><path d="M2 20c0-3 3-5 7-5s7 2 7 5"/><path d="M14 15c2.5 0 6 1.5 6 5"/></svg>',
+    link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 1 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 1 0 5.66 5.66l1-1"/></svg>',
+    eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  };
+  const VLBL = { marque: 'Marque', dirigeant: 'Dirigeant', employes: 'Employés', partenaires: 'Partenaires', indirect: 'Indirect' };
+  const VGRAD = {
+    marque:    'linear-gradient(135deg,#C94A4A,#8E2A2A)',
+    dirigeant: 'linear-gradient(135deg,#D69E2E,#B5731F)',
+    employes:  'linear-gradient(135deg,#2E84D4,#1A5FA0)',
+    partenaires:'linear-gradient(135deg,#6B3FA0,#3F2470)',
+    indirect:  'linear-gradient(135deg,#6B6480,#4A4458)',
+  };
+
+  const victimesWrap = document.getElementById('av-victimes');
+  victimesWrap.innerHTML = victimes.map(v => `
+    <div class="av-item">
+      <div class="av-avatar" style="background:${VGRAD[v.type] || VGRAD.indirect}">${ICONS[v.icon] || ICONS.eye}</div>
+      <div class="av-body">
+        <div class="av-name">${escapeHtml(v.nom)}</div>
+        <div class="av-meta">${escapeHtml(v.subtitle || '')}<span class="sep">·</span>Narratifs ${escapeHtml(v.narratifs || '—')}</div>
+      </div>
+      <div class="av-role" data-victim="${v.type}">${VLBL[v.type] || v.type}</div>
+    </div>
+  `).join('');
 }
 
 /* ════ Timeline ════ */
