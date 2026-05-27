@@ -39,15 +39,19 @@
     gap: 16px;
   }
   .deb-fs-btn {
-    display: inline-flex; align-items: center; gap: 7px;
-    padding: 8px 12px;
-    background: #fff; color: var(--violet-d, #6B3FA0);
+    position: absolute; top: 16px; right: 16px;
+    z-index: 6;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 14px;
+    background: rgba(255,255,255,0.97);
+    color: var(--violet-d, #6B3FA0);
     border: 1px solid var(--violet-bd, rgba(107,63,160,0.22));
     border-radius: 100px; cursor: pointer;
-    font-family: 'Plus Jakarta Sans'; font-size: 12px; font-weight: 600;
+    font-family: 'Plus Jakarta Sans'; font-size: 13px; font-weight: 600;
     letter-spacing: -0.005em;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    box-shadow: 0 8px 20px -6px rgba(31,18,55,0.18);
     transition: background .15s ease, color .15s ease, border-color .15s ease, transform .12s ease;
-    flex-shrink: 0;
   }
   .deb-fs-btn:hover {
     background: var(--violet-d, #6B3FA0);
@@ -272,7 +276,7 @@
 
   /* Legend */
   #legend {
-    position: absolute; top: 16px; right: 16px;
+    position: absolute; top: 70px; right: 16px;
     background: rgba(255,255,255,0.96);
     -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
     border: 1px solid rgba(0,0,0,0.08);
@@ -794,11 +798,6 @@
         <div class="deb-top">
           <div class="deb-top__name" id="deb-top-name">—</div>
           <div class="deb-top__meta" id="deb-top-meta">—</div>
-          <button class="deb-fs-btn" id="deb-fs" type="button" aria-label="Plein écran" title="Plein écran (Échap pour quitter)">
-            <svg class="deb-fs-icon-expand" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2H2v4M14 6V2h-4M10 14h4v-4M2 10v4h4"/></svg>
-            <svg class="deb-fs-icon-shrink" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 6h4V2M10 2v4h4M14 10h-4v4M6 14v-4H2"/></svg>
-            <span class="deb-fs-lbl">Plein écran</span>
-          </button>
         </div>
 
         <div class="deb-body">
@@ -834,9 +833,10 @@
           <div class="deb-main">
             <div id="map"></div>
             <div id="map-loader">Chargement de la cartographie…</div>
-            <button class="deb-fs-close" id="deb-fs-close" type="button" aria-label="Quitter le plein écran" title="Échap pour quitter">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h4V2M10 2v4h4M14 10h-4v4M6 14v-4H2"/></svg>
-              Quitter
+            <button class="deb-fs-btn" id="deb-fs" type="button" aria-label="Plein écran" title="Plein écran (Échap pour quitter)">
+              <svg class="deb-fs-icon-expand" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2H2v4M14 6V2h-4M10 14h4v-4M2 10v4h4"/></svg>
+              <svg class="deb-fs-icon-shrink" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 6h4V2M10 2v4h4M14 10h-4v4M6 14v-4H2"/></svg>
+              <span class="deb-fs-lbl">Plein écran</span>
             </button>
             <div id="legend">
               <div class="lg-head">Légende</div>
