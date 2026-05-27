@@ -931,41 +931,18 @@ function buildFeatures(){
     return true;
   }).map(p => p.id));
 
-  // ── Points majeurs : entrée de chaque cluster (date min) + top compte du cluster ──
-  const hubIds = new Set();
-  d.reseaux.forEach(r => {
-    const clusterPubs = d.publications.filter(p => r.publications.includes(p.id) && visibleIds.has(p.id));
-    if (!clusterPubs.length) return;
-    // entrée du cluster (publication la plus ancienne)
-    const entry = clusterPubs.reduce((a, b) => new Date(a.date) < new Date(b.date) ? a : b);
-    hubIds.add(entry.id);
-    // top compte du cluster : 1 publication représentative (la plus visible)
-    const byCompte = {};
-    clusterPubs.forEach(p => { (byCompte[p.compte] = byCompte[p.compte] || []).push(p); });
-    let topCompte = null, topCount = 0;
-    Object.entries(byCompte).forEach(([c, arr]) => { if (arr.length > topCount) { topCount = arr.length; topCompte = c; } });
-    if (topCompte) {
-      const topPubs = byCompte[topCompte].sort((a, b) => (b.audience_estimee || 0) - (a.audience_estimee || 0));
-      if (topPubs.length) hubIds.add(topPubs[0].id);
-    }
-  });
-
   const points = {
     type: 'FeatureCollection',
-    features: d.publications.filter(p => visibleIds.has(p.id)).map(p => {
-      const isHub = hubIds.has(p.id);
-      return {
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
-        properties: {
-          ...p,
-          radius: isHub ? (p.type === 'patient_zero' ? 8 : 6) : radiusFor(p),
-          color: TYPE_COLOR[p.type] || '#8B5FBF',
-          is_pz: p.type === 'patient_zero' ? 1 : 0,
-          is_hub: isHub ? 1 : 0
-        }
-      };
-    })
+    features: d.publications.filter(p => visibleIds.has(p.id)).map(p => ({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
+      properties: {
+        ...p,
+        radius: radiusFor(p),
+        color: TYPE_COLOR[p.type] || '#8B5FBF',
+        is_pz: p.type === 'patient_zero' ? 1 : 0
+      }
+    }))
   };
 
   const arcs = {
@@ -1028,8 +1005,7 @@ function buildFeatures(){
 
 function radiusFor(p){
   // Points constants tres petits — l'essain visuel se forme par accumulation et dezoom.
-  if (p.type === 'patient_zero') return 5;
-  if (p.type === 'site_copie') return 3;
+  if (p.type === 'patient_zero') return 4;
   return 2.2;
 }
 function greatCircle(a, b, n){
@@ -1068,48 +1044,26 @@ function addLayers(){
     paint: { 'line-color': '#6B3FA0', 'line-width': 0.4, 'line-opacity': 0.18 }
   });
 
-  // Points : petits dots constants (avec essain visuel quand on dezoom)
+  // Points : tous les dots en taille constante (essain visuel par accumulation).
   map.addLayer({ id: 'points', type: 'circle', source: 'points',
-    filter: ['==', ['get', 'is_hub'], 0],
     paint: {
       'circle-radius': ['get', 'radius'],
       'circle-color': ['get', 'color'],
       'circle-opacity': 0.78,
       'circle-stroke-color': '#FFFFFF',
-      'circle-stroke-width': 0.5
+      'circle-stroke-width': 0.4
     }
   });
 
-  // Hubs : points majeurs (entree de cluster + top compte) — bien visibles
-  map.addLayer({ id: 'points-hub-halo', type: 'circle', source: 'points',
-    filter: ['==', ['get', 'is_hub'], 1],
-    paint: {
-      'circle-radius': ['+', ['get', 'radius'], 8],
-      'circle-color': ['get', 'color'],
-      'circle-opacity': 0.22,
-      'circle-blur': 0.5
-    }
-  });
-  map.addLayer({ id: 'points-hub', type: 'circle', source: 'points',
-    filter: ['==', ['get', 'is_hub'], 1],
-    paint: {
-      'circle-radius': ['get', 'radius'],
-      'circle-color': ['get', 'color'],
-      'circle-opacity': 0.98,
-      'circle-stroke-color': '#FFFFFF',
-      'circle-stroke-width': 2
-    }
-  });
-
-  // Patient zero : double ring violet
+  // Patient zero : seul point legerement plus gros + ring violet discret
   map.addLayer({ id: 'points-pz-ring', type: 'circle', source: 'points',
     filter: ['==', ['get', 'is_pz'], 1],
     paint: {
-      'circle-radius': 18,
+      'circle-radius': 14,
       'circle-color': 'transparent',
       'circle-stroke-color': '#6B3FA0',
-      'circle-stroke-width': 1.8,
-      'circle-stroke-opacity': 0.7
+      'circle-stroke-width': 1.2,
+      'circle-stroke-opacity': 0.5
     }
   });
 }
