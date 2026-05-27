@@ -55,9 +55,13 @@ CITIES = {
     "AE-DXB":  ("Dubaï",             "AE", 25.2048, 55.2708),   # hébergeur secondaire
 }
 
-def jitter(lat, lon, amount=0.04):
-    """Légère variation autour de la ville pour éviter superposition exacte."""
-    return (lat + random.uniform(-amount, amount), lon + random.uniform(-amount, amount))
+def jitter(lat, lon, amount=0.12):
+    """Variation autour de la ville pour former un essain visible quand on dézoome.
+    On utilise une distribution gaussienne pour densifier le centre."""
+    return (
+        lat + random.gauss(0, amount * 0.55),
+        lon + random.gauss(0, amount * 0.55)
+    )
 
 # ─── Comptes par cluster ────────────────────────────────────
 CLUSTERS = {
@@ -382,25 +386,27 @@ def build():
         "content_excerpt": "Premier post du fil. Texte source de toutes les reprises ultérieures (matched n-gram 8/8). Allégation initiale élaborée.",
     })
 
-    # ───── Cluster Russie amorce — 30 min à 4h après PZ ─────
+    # ───── Cluster Russie amorce — 30 min à 4h après PZ, 4-10 posts par compte ─────
     russie_pubs = []
     for i, compte in enumerate(CLUSTERS["cluster-russie-amorce"]["comptes"]):
-        city = CITIES[CLUSTERS["cluster-russie-amorce"]["ville"]]
-        lat, lon = jitter(city[2], city[3])
-        minutes_offset = 35 + i * 50 + random.randint(-12, 18)
-        date = dt.datetime(2026, 2, 14, 3, 12) + dt.timedelta(minutes=minutes_offset)
-        pid_ = next_id()
-        pubs.append({
-            "id": pid_, "url": f"https://t.me/{compte[0].lstrip('@')}-redacted/{1000+i*23}",
-            "plateforme": compte[2], "compte": compte[0], "compte_display": compte[1],
-            "date": date.isoformat() + "Z",
-            "lang": "ru", "pays": city[1], "ville": city[0],
-            "lat": round(lat, 4), "lon": round(lon, 4),
-            "type": "relai", "parent_id": pz_id,
-            "audience_estimee": random.randint(4000, 35000),
-            "content_excerpt": "Reprise russophone immédiate. Diffusion d'amorce.",
-        })
-        russie_pubs.append(pid_)
+        n_posts = random.randint(4, 10)
+        for k in range(n_posts):
+            city = CITIES[CLUSTERS["cluster-russie-amorce"]["ville"]]
+            lat, lon = jitter(city[2], city[3], amount=0.10)
+            minutes_offset = 30 + i * 35 + k * random.randint(40, 240) + random.randint(-10, 20)
+            date = dt.datetime(2026, 2, 14, 3, 12) + dt.timedelta(minutes=minutes_offset)
+            pid_ = next_id()
+            pubs.append({
+                "id": pid_, "url": f"https://t.me/{compte[0].lstrip('@')}-redacted/{1000+i*23+k}",
+                "plateforme": compte[2], "compte": compte[0], "compte_display": compte[1],
+                "date": date.isoformat() + "Z",
+                "lang": "ru", "pays": city[1], "ville": city[0],
+                "lat": round(lat, 4), "lon": round(lon, 4),
+                "type": "relai", "parent_id": pz_id if k == 0 else random.choice(russie_pubs + [pz_id]),
+                "audience_estimee": random.randint(3000, 35000),
+                "content_excerpt": random.choice(EXCERPTS_TPL),
+            })
+            russie_pubs.append(pid_)
 
     # ───── Clusters Est (Bucarest, Budapest, Belgrade, Sofia, Prague, Bratislava, Chisinau, Minsk) ─────
     east_cluster_keys = [
@@ -411,46 +417,50 @@ def build():
     cluster_first_id = {}
     cluster_pubs = {k: [] for k in east_cluster_keys}
 
-    # Premier passage : chaque cluster crée ses premiers relais (jour 1)
+    # Premier passage : chaque compte de cluster Est produit 6-14 posts sur jours 1-7
     for k in east_cluster_keys:
         cluster = CLUSTERS[k]
         city = CITIES[cluster["ville"]]
         parent_pool = [pz_id] + russie_pubs
         for j, compte in enumerate(cluster["comptes"]):
-            lat, lon = jitter(city[2], city[3])
-            parent = random.choice(parent_pool)
-            # Time spread on day 1 (hours 5-22)
-            hour = 5 + random.randint(0, 17)
-            minute = random.randint(0, 59)
-            date = dt.datetime(2026, 2, 14, hour, minute)
-            pid_ = next_id()
-            lang_map = {"RO":"ro","HU":"hu","RS":"sr","BG":"bg","CZ":"cs","SK":"sk","MD":"ro","BY":"ru"}
-            pub = {
-                "id": pid_, "url": f"https://t.me/{compte[0].lstrip('@')}-redacted/{2000+j*17}",
-                "plateforme": compte[2], "compte": compte[0], "compte_display": compte[1],
-                "date": date.isoformat() + "Z",
-                "lang": lang_map.get(city[1], "ru"), "pays": city[1], "ville": city[0],
-                "lat": round(lat, 4), "lon": round(lon, 4),
-                "type": "relai", "parent_id": parent,
-                "audience_estimee": random.randint(3500, 25000),
-                "content_excerpt": random.choice(EXCERPTS_TPL),
-            }
-            pubs.append(pub)
-            cluster_pubs[k].append(pid_)
-            if k not in cluster_first_id:
-                cluster_first_id[k] = pid_
+            n_posts = random.randint(6, 14)
+            for kp in range(n_posts):
+                lat, lon = jitter(city[2], city[3], amount=0.10)
+                parent = random.choice(parent_pool + cluster_pubs[k]) if cluster_pubs[k] else random.choice(parent_pool)
+                # Spread over first 7 days
+                day_offset = random.choices([0, 0, 0, 1, 1, 2, 3, 4, 5, 6], weights=[3,3,3,3,2,2,2,1,1,1])[0]
+                hour = 5 + random.randint(0, 17)
+                minute = random.randint(0, 59)
+                date = dt.datetime(2026, 2, 14, hour, minute) + dt.timedelta(days=day_offset)
+                pid_ = next_id()
+                lang_map = {"RO":"ro","HU":"hu","RS":"sr","BG":"bg","CZ":"cs","SK":"sk","MD":"ro","BY":"ru"}
+                pub = {
+                    "id": pid_, "url": f"https://t.me/{compte[0].lstrip('@')}-redacted/{2000+j*17+kp}",
+                    "plateforme": compte[2], "compte": compte[0], "compte_display": compte[1],
+                    "date": date.isoformat() + "Z",
+                    "lang": lang_map.get(city[1], "ru"), "pays": city[1], "ville": city[0],
+                    "lat": round(lat, 4), "lon": round(lon, 4),
+                    "type": "relai", "parent_id": parent,
+                    "audience_estimee": random.randint(2500, 25000),
+                    "content_excerpt": random.choice(EXCERPTS_TPL),
+                }
+                pubs.append(pub)
+                cluster_pubs[k].append(pid_)
+                if k not in cluster_first_id:
+                    cluster_first_id[k] = pid_
 
-    # ───── Sites copie — jour 1-5, plusieurs articles par site ─────
+    # ───── Sites copie — jour 1-30, 6-12 articles par site ─────
     sc_cluster = CLUSTERS["sites-copie"]
     sc_pubs = []
     for j, compte in enumerate(sc_cluster["comptes"]):
-        # 2 articles par site
-        for k_art in range(2):
+        n_art = random.randint(6, 12)
+        for k_art in range(n_art):
             ville_key = compte[3]
             city = CITIES[ville_key]
-            lat, lon = jitter(city[2], city[3])
-            day_offset = 2 + k_art * 7 + random.randint(0, 3)
-            date = dt.datetime(2026, 2, 14, 9, 0) + dt.timedelta(days=day_offset, hours=random.randint(-3, 7))
+            lat, lon = jitter(city[2], city[3], amount=0.18)
+            day_offset = 2 + k_art * 3 + random.randint(0, 4)
+            day_offset = min(day_offset, 52)
+            date = dt.datetime(2026, 2, 14, 9, 0) + dt.timedelta(days=day_offset, hours=random.randint(-6, 12))
             # parent : un relai aléatoire d'un cluster Est
             parent = random.choice(cluster_pubs[random.choice(east_cluster_keys)])
             lang_map = {"lemonde":"fr","figaro":"fr","zeit":"de","spiegel":"de","bild":"de","corriere":"it","elpais":"es","guardian":"en"}
@@ -479,12 +489,12 @@ def build():
         cluster = CLUSTERS[k]
         lang_map = {"amplificateurs-fr":"fr","amplificateurs-de":"de","amplificateurs-it":"it","amplificateurs-es":"es","amplificateurs-divers":"fr"}
         for j, compte in enumerate(cluster["comptes"]):
-            # 1-3 publications par compte sur la période
-            n_publis = random.choices([1, 2, 3], weights=[2, 3, 1])[0]
+            # 8-22 publications par compte sur la période — pour faire un essain dense
+            n_publis = random.randint(8, 22)
             for kp in range(n_publis):
                 ville_key = compte[3] if len(compte) >= 4 else cluster["ville"]
                 city = CITIES[ville_key]
-                lat, lon = jitter(city[2], city[3])
+                lat, lon = jitter(city[2], city[3], amount=0.15)
                 day_offset = 1 + random.randint(0, 50) + kp * random.randint(3, 10)
                 day_offset = min(day_offset, 53)
                 date = dt.datetime(2026, 2, 14, 9, 0) + dt.timedelta(days=day_offset, hours=random.randint(-7, 10), minutes=random.randint(0, 59))
@@ -508,11 +518,11 @@ def build():
     # ───── Relances dans les clusters Est sur jours 5-50 ─────
     for k in east_cluster_keys:
         for compte in CLUSTERS[k]["comptes"]:
-            # 0-3 relances par compte sur la période
-            n_rel = random.choices([0, 1, 2, 3], weights=[3, 4, 3, 1])[0]
+            # 4-10 relances par compte sur la période — densifie l'essain
+            n_rel = random.randint(4, 10)
             for kp in range(n_rel):
                 city = CITIES[CLUSTERS[k]["ville"]]
-                lat, lon = jitter(city[2], city[3])
+                lat, lon = jitter(city[2], city[3], amount=0.10)
                 day_offset = 5 + random.randint(0, 48)
                 date = dt.datetime(2026, 2, 14, 7, 0) + dt.timedelta(days=day_offset, hours=random.randint(-3, 12), minutes=random.randint(0, 59))
                 parent_pool = cluster_pubs[k] + sc_pubs
