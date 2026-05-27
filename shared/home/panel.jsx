@@ -345,7 +345,7 @@ function ThemeDetail({ theme }) {
                   {it.type === 'Carte'   && <MapIcon />}
                   {it.type === 'Rapport' && <DocIcon />}
                   {it.type === 'Graph'   && <GraphIcon />}
-                  {it.type === 'Reseau'  && <NetIcon />}
+                  {it.type === 'Réseau'  && <NetIcon />}
                 </span>
                 <span className="panel-row__body">
                   <span className="panel-row__title">{it.title}</span>

@@ -471,7 +471,7 @@ function ThemeDetail({
         background: `${theme.color}22`,
         color: theme.color
       }
-    }, it.type === 'Carte' && /*#__PURE__*/React.createElement(MapIcon, null), it.type === 'Rapport' && /*#__PURE__*/React.createElement(DocIcon, null), it.type === 'Graph' && /*#__PURE__*/React.createElement(GraphIcon, null), it.type === 'Reseau' && /*#__PURE__*/React.createElement(NetIcon, null)), /*#__PURE__*/React.createElement("span", {
+    }, it.type === 'Carte' && /*#__PURE__*/React.createElement(MapIcon, null), it.type === 'Rapport' && /*#__PURE__*/React.createElement(DocIcon, null), it.type === 'Graph' && /*#__PURE__*/React.createElement(GraphIcon, null), it.type === 'Réseau' && /*#__PURE__*/React.createElement(NetIcon, null)), /*#__PURE__*/React.createElement("span", {
       className: "panel-row__body"
     }, /*#__PURE__*/React.createElement("span", {
       className: "panel-row__title"

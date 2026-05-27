@@ -25,13 +25,13 @@ function PlatformView({ onBack }) {
             </h1>
           </div>
           <p className="platform__lede">
-            Cinq points d'entree pour naviguer dans les donnees Algor Int. Chacun ouvre un panneau lateral structure, avec recherche et navigation hierarchique.
+            Cinq points d'entree pour naviguer dans les donnees Algor Int. Chacun ouvre un panneau lateral structure, avec recherche et navigation hiérarchique.
           </p>
         </header>
 
         <div className="actions-grid">
           <ActionCard
-            num="01" name="Region" desc="Choisir un theatre operationnel : Sahel, Moyen-Orient, RDC, Madagascar, Afrique, Asie du Sud."
+            num="01" name="Region" desc="Choisir un théâtre opérationnel : Sahel, Moyen-Orient, RDC, Madagascar, Afrique, Asie du Sud."
             count={`${ZONES.length} zones`} icon={<RegionIcon />}
             onClick={() => openAction('region')} />
 
@@ -41,7 +41,7 @@ function PlatformView({ onBack }) {
             onClick={() => openAction('rapport')} />
 
           <ActionCard
-            num="03" name="Graph" desc="Visualisations, indicateurs et series : densites, flux, reseaux."
+            num="03" name="Graph" desc="Visualisations, indicateurs et séries : densités, flux, réseaux."
             count={`${Object.values(GRAPHS).flat().length} visualisations`} icon={<GraphIconLg />}
             onClick={() => openAction('graph')} />
 
@@ -51,13 +51,13 @@ function PlatformView({ onBack }) {
             onClick={() => openAction('theme')} />
 
           <ActionCard
-            num="05" name="Cartographie" desc="Acces direct aux cartes interactives : six theatres, calques et timeline."
+            num="05" name="Cartographie" desc="Accès direct aux cartes interactives : six théâtres, calques et timeline."
             count={`${ZONES.length} cartes`} icon={<CartoIconLg />}
             onClick={() => openAction('cartographie')} />
         </div>
 
         <div className="section-rule">
-          <span className="section-rule__label">Recemment consultes</span>
+          <span className="section-rule__label">Récemment consultés</span>
           <span className="section-rule__line" />
         </div>
 
@@ -76,7 +76,7 @@ function PlatformView({ onBack }) {
   );
 }
 
-// Cascade au survol : carte d'action -> sous-elements -> actions.
+// Cascade au survol : carte d'action -> sous-éléments -> actions.
 function cascadeFor(name) {
   const zoneName = id => (ZONES.find(z => z.id === id) || {}).name || id;
   const zoneHref = id => (ZONES.find(z => z.id === id) || {}).href || '#';

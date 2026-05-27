@@ -32,12 +32,12 @@ function PlatformView({
     className: "platform__title"
   }, "Que souhaitez-vous ", /*#__PURE__*/React.createElement("em", null, "consulter"), "\xA0?")), /*#__PURE__*/React.createElement("p", {
     className: "platform__lede"
-  }, "Cinq points d'entree pour naviguer dans les donnees Algor Int. Chacun ouvre un panneau lateral structure, avec recherche et navigation hierarchique.")), /*#__PURE__*/React.createElement("div", {
+  }, "Cinq points d'entree pour naviguer dans les donnees Algor Int. Chacun ouvre un panneau lateral structure, avec recherche et navigation hi\xE9rarchique.")), /*#__PURE__*/React.createElement("div", {
     className: "actions-grid"
   }, /*#__PURE__*/React.createElement(ActionCard, {
     num: "01",
     name: "Region",
-    desc: "Choisir un theatre operationnel : Sahel, Moyen-Orient, RDC, Madagascar, Afrique, Asie du Sud.",
+    desc: "Choisir un th\xE9\xE2tre op\xE9rationnel : Sahel, Moyen-Orient, RDC, Madagascar, Afrique, Asie du Sud.",
     count: `${ZONES.length} zones`,
     icon: /*#__PURE__*/React.createElement(RegionIcon, null),
     onClick: () => openAction('region')
@@ -51,7 +51,7 @@ function PlatformView({
   }), /*#__PURE__*/React.createElement(ActionCard, {
     num: "03",
     name: "Graph",
-    desc: "Visualisations, indicateurs et series : densites, flux, reseaux.",
+    desc: "Visualisations, indicateurs et s\xE9ries : densit\xE9s, flux, r\xE9seaux.",
     count: `${Object.values(GRAPHS).flat().length} visualisations`,
     icon: /*#__PURE__*/React.createElement(GraphIconLg, null),
     onClick: () => openAction('graph')
@@ -65,7 +65,7 @@ function PlatformView({
   }), /*#__PURE__*/React.createElement(ActionCard, {
     num: "05",
     name: "Cartographie",
-    desc: "Acces direct aux cartes interactives : six theatres, calques et timeline.",
+    desc: "Acc\xE8s direct aux cartes interactives : six th\xE9\xE2tres, calques et timeline.",
     count: `${ZONES.length} cartes`,
     icon: /*#__PURE__*/React.createElement(CartoIconLg, null),
     onClick: () => openAction('cartographie')
@@ -73,7 +73,7 @@ function PlatformView({
     className: "section-rule"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-rule__label"
-  }, "Recemment consultes"), /*#__PURE__*/React.createElement("span", {
+  }, "R\xE9cemment consult\xE9s"), /*#__PURE__*/React.createElement("span", {
     className: "section-rule__line"
   })), /*#__PURE__*/React.createElement("div", {
     className: "recent-grid"
@@ -108,7 +108,7 @@ function PlatformView({
   }));
 }
 
-// Cascade au survol : carte d'action -> sous-elements -> actions.
+// Cascade au survol : carte d'action -> sous-éléments -> actions.
 function cascadeFor(name) {
   const zoneName = id => (ZONES.find(z => z.id === id) || {}).name || id;
   const zoneHref = id => (ZONES.find(z => z.id === id) || {}).href || '#';

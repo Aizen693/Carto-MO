@@ -2155,6 +2155,83 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   max-width: 64ch;
 }
 
+/* — Hero chips : mini aperçu des formules sous les CTAs (toujours stack vertical) */
+.hero-chips {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 36px 0 0;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--line);
+  max-width: 360px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+}
+.hero-chips li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+.hero-chips__dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(107, 63, 160, 0.45);
+  display: inline-block;
+}
+.hero-chips__dot--strong {
+  background: var(--violet);
+  box-shadow: 0 0 0 4px rgba(107, 63, 160, 0.12);
+}
+
+/* — Trust band : chiffres cles sous le hero homepage */
+.trust-band {
+  border-top: 1px solid rgba(168, 130, 255, 0.18);
+  border-bottom: 1px solid rgba(168, 130, 255, 0.18);
+  background: linear-gradient(180deg, rgba(168, 130, 255, 0.035) 0%, rgba(168, 130, 255, 0) 100%);
+  padding: 28px 0;
+}
+.trust-band__wrap {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+.trust-band__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 0;
+}
+.trust-band__value {
+  font-family: var(--sans);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.05;
+}
+.trust-band__label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.4;
+}
+@media (max-width: 880px) {
+  .trust-band__wrap { grid-template-columns: repeat(2, 1fr); gap: 22px; padding: 0 22px; }
+  .trust-band__value { font-size: 24px; }
+}
+
 /* — A-propos / equipe : tour de plaques 3D (chaos -> structure) */
 .feature-row__visual .media-frame--plates,
 .media-frame--plates {

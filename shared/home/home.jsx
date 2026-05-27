@@ -20,24 +20,23 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
       <section className="hero">
         <div className="hero__copy">
           <h1 className="hero__title">
-            Anticiper les<br />
-            <em>risques operationnels</em>
+            Anticiper les risques<br />
+            <em>opérationnels</em>
           </h1>
 
           <p className="hero__lede">
-            Six theatres geopolitiques suivis en continu : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram, agreges sur une carte unique : chaque evenement source, date et auditable.
+            Six théâtres géopolitiques suivis en continu pour les directions sûreté, cabinets d'analyse et rédactions spécialisées. Imagerie satellite, ACLED, GDELT, presse régionale, OSINT social : chaque événement sourcé, daté et auditable.
           </p>
 
           <div className="hero__cta-row">
             <button className="btn btn--primary btn--lg btn--neon" onClick={onEnter}>
               <span className="btn-neon btn-neon--top" aria-hidden="true" />
-              Acceder au catalogue
+              Découvrir les théâtres
               <Arrow />
               <span className="btn-neon btn-neon--bottom" aria-hidden="true" />
             </button>
-            <a className="btn--ghost-link" href="#console"
-               onClick={(e) => { e.preventDefault(); onConsole(); }}>
-              Console interne
+            <a className="btn--ghost-link" href="/offres/">
+              Voir les formules
               <ArrowDiag />
             </a>
           </div>
@@ -55,6 +54,7 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
         </div>
       </section>
 
+      <TrustBand />
       <GetSection />
       <DiffSection />
       <AudienceSection />
@@ -62,6 +62,28 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
 
       <VideoBand style={videoStyle} />
     </main>
+  );
+}
+
+// ─── Trust band : chiffres clés juste sous le hero
+function TrustBand() {
+  const items = [
+    { value: '6',         label: 'Théâtres suivis en continu' },
+    { value: '500+',      label: 'Sources OSINT croisées' },
+    { value: 'Quotidien', label: 'Rythme de mise à jour' },
+    { value: '2005',      label: "Année d'historique la plus ancienne" },
+  ];
+  return (
+    <section className="trust-band">
+      <div className="trust-band__wrap">
+        {items.map((it, i) => (
+          <div className="trust-band__item" key={i}>
+            <div className="trust-band__value">{it.value}</div>
+            <div className="trust-band__label">{it.label}</div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -97,15 +119,15 @@ const HOME_GET = [
   { tag: "La carte",
     t: "Une carte de situation",
     d: "Chaque théâtre sur une carte interactive : la situation se lit dans son ensemble, là où il faudrait autrement compiler des dizaines d'articles.",
-    media: "Aperçu cartographie" },
+    média: "Aperçu cartographié" },
   { tag: "Le brief",
     t: "Des briefs prêts à l'emploi",
     d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
-    media: "Aperçu brief de sécurité" },
+    média: "Aperçu brief de sécurité" },
   { tag: "L'acces",
     t: "Un accès continu",
     d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
-    media: "Aperçu plateforme" },
+    média: "Aperçu plateforme" },
 ];
 
 function GetSection() {
@@ -327,10 +349,10 @@ function CompareSection() {
 
 const HOME_VIDEOS = [
   { cat: 'Veille',     title: 'Cartographie OSINT en temps reel',                meta: 'Plateforme · 2 min 14',    duration: '2:14' },
-  { cat: 'Influence',  title: 'Analyse multicouche du theatre sahelien',         meta: 'Etude de cas · 3 min 02',  duration: '3:02' },
+  { cat: 'Influence',  title: 'Analyse multicouche du théâtre sahelien',         meta: 'Etude de cas · 3 min 02',  duration: '3:02' },
   { cat: 'Protection', title: 'Evaluation de menaces sur les infrastructures',   meta: 'Mission · 4 min 28',       duration: '4:28' },
   { cat: 'Methode',    title: 'De la donnee brute au rapport decisionnel',       meta: 'Coulisses · 2 min 47',     duration: '2:47' },
-  { cat: 'Terrain',    title: 'Reseaux djihadistes au Sahel : pattern 2026',     meta: 'Decryptage · 5 min 12',    duration: '5:12' },
+  { cat: 'Terrain',    title: 'Réseaux djihadistes au Sahel : pattern 2026',     meta: 'Décryptage · 5 min 12',    duration: '5:12' },
 ];
 
 function VideoBand({ style = 'strip' }) {
@@ -437,7 +459,7 @@ function ConsoleTab({ href, soon, onClick, icon, label, popTitle, popText }) {
         {icon}
       </svg>
       {label}
-      {soon && <span className="console-tab__badge">Bientot</span>}
+      {soon && <span className="console-tab__badge">Bientôt</span>}
     </>
   );
   return (
@@ -468,7 +490,7 @@ function ConsoleView({ onBack, onArchives, onVeille }) {
           Console <em>interne</em>
         </h1>
         <p className="hero__lede">
-          Outil de travail des analystes Algor Int sur six theatres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement.
+          Outil de travail des analystes Algor Int sur six théâtres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agrégés sur une carte unique, sourcée, datée et auditable événement par événement.
         </p>
 
         <div className="console-tabs">
@@ -476,14 +498,14 @@ function ConsoleView({ onBack, onArchives, onVeille }) {
             href="/admin/"
             label="Carto"
             popTitle="Cartographie OSINT"
-            popText="Edition des points, acteurs et calques sur les 6 theatres. Ouvre la console d'administration cartographique."
+            popText="Edition des points, acteurs et calques sur les 6 théâtres. Ouvre la console d'administration cartographique."
             icon={<><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z" /><circle cx="12" cy="10" r="2.6" /></>}
           />
           <ConsoleTab
             onClick={onArchives}
             label="Archives"
             popTitle="Archives"
-            popText="Tous les points cartographies des 6 theatres, conserves en base. Consultable sous forme de tableau, par theatre."
+            popText="Tous les points cartographiés des 6 théâtres, conservés en base. Consultable sous forme de tableau, par théâtre."
             icon={<><path d="M21 8v13H3V8" /><path d="M1 3h22v5H1z" /><path d="M10 12h4" /></>}
           />
           <ConsoleTab
@@ -497,21 +519,21 @@ function ConsoleView({ onBack, onArchives, onVeille }) {
             href="/cloud/"
             label="Cloud"
             popTitle="Cloud"
-            popText="Plateforme collaborative de l'equipe : base de sources, documents, suivi client, comptes rendus et syntheses, synchronises."
+            popText="Plateforme collaborative de l'équipe : base de sources, documents, suivi client, comptes rendus et synthèses, synchronises."
             icon={<><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" /></>}
           />
           <ConsoleTab
             soon
             label="Rapport"
             popTitle="Rapport"
-            popText="Generation de rapports d'analyse decisionnels. Bientot disponible."
+            popText="Generation de rapports d'analyse decisionnels. Bientôt disponible."
             icon={<><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" /><path d="M14 2v5h5" /><path d="M9 13h6M9 17h6" /></>}
           />
           <ConsoleTab
             soon
             label="Graph"
             popTitle="Graph"
-            popText="Visualisation des reseaux et relations en graphes. Bientot disponible."
+            popText="Visualisation des réseaux et relations en graphes. Bientôt disponible."
             icon={<><circle cx="6" cy="6" r="2.5" /><circle cx="6" cy="18" r="2.5" /><circle cx="18" cy="12" r="2.5" /><path d="M8.2 7.3l7.6 3.4M8.2 16.7l7.6-3.4" /></>}
           />
         </div>
@@ -520,7 +542,7 @@ function ConsoleView({ onBack, onArchives, onVeille }) {
   );
 }
 
-// Page « Veille » — outil de veille OSINT (app Streamlit Algor Int) integre en cadre.
+// Page « Veille » — outil de veille OSINT (app Streamlit Algor Int) intégré en cadre.
 const VEILLE_URL = 'https://carto-mo-d95ewgm9x6zzfugtcpdst8.streamlit.app/';
 
 function VeilleView({ onBack }) {
@@ -541,7 +563,7 @@ function VeilleView({ onBack }) {
   );
 }
 
-// Page « Archives » — dashboard de tous les points, par theatre (lecture base Supabase).
+// Page « Archives » — dashboard de tous les points, par théâtre (lecture base Supabase).
 function ArchivesView({ onBack }) {
   const [points, setPoints] = useState(null);
   const [error, setError] = useState(null);
@@ -575,7 +597,7 @@ function ArchivesView({ onBack }) {
     return () => { cancelled = true; };
   }, []);
 
-  // Esc ferme le detail
+  // Esc ferme le détail
   useEffect(() => {
     if (!selected) return;
     const h = (e) => { if (e.key === 'Escape') setSelected(null); };
@@ -602,7 +624,7 @@ function ArchivesView({ onBack }) {
         </a>
         <h1 className="hero__title">Archives <em>des points</em></h1>
         <p className="hero__lede">
-          Tous les points cartographies, regroupes par theatre. Conserves en base meme apres retrait des cartes.
+          Tous les points cartographiés, regroupés par théâtre. Conserves en base même apres retrait des cartes.
         </p>
 
         {points && points.length > 0 && (
@@ -610,7 +632,7 @@ function ArchivesView({ onBack }) {
             <div className="search-input">
               <DashSearchIcon />
               <input
-                placeholder="Rechercher un point : nom, description, periode, theatre..."
+                placeholder="Rechercher un point : nom, description, période, théâtre..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
@@ -680,7 +702,7 @@ function ArchivesView({ onBack }) {
 }
 
 // Parse le champ description structure (Date / Pays / Evenement / Detail),
-// meme logique que l'ancien pop-up des cartes (shared/engine.js parseDesc).
+// même logique que l'ancien pop-up des cartes (shared/engine.js parseDesc).
 function parsePointDesc(raw) {
   if (!raw || raw === 'null') return null;
   const txt = raw.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '');
@@ -692,13 +714,13 @@ function parsePointDesc(raw) {
     const v = m[2].trim();
     if (k === 'date') r.date = v;
     else if (k === 'pays') r.pays = v;
-    else if (k === 'evenement' || k === 'événement') r.event = v;
-    else if (k === 'détail' || k === 'detail') r.detail = v;
+    else if (k === 'événement' || k === 'événement') r.event = v;
+    else if (k === 'détail' || k === 'détail') r.détail = v;
   });
   return Object.keys(r).length ? r : null;
 }
 
-// Popup detail d'un point — reprend le contenu de l'ancien pop-up des cartes.
+// Popup détail d'un point — reprend le contenu de l'ancien pop-up des cartes.
 function PointDetail({ point, onClose }) {
   const c = Array.isArray(point.coordinates) ? point.coordinates : [];
   const lng = c[0] != null ? Number(c[0]).toFixed(5) : '·';
@@ -713,7 +735,7 @@ function PointDetail({ point, onClose }) {
     if (d.date) eventRows.push(['Date', d.date]);
     if (d.pays) eventRows.push(['Pays', d.pays]);
     if (d.event) eventRows.push(['Evenement', d.event]);
-    if (d.detail) eventRows.push(['Detail', d.detail]);
+    if (d.détail) eventRows.push(['Detail', d.détail]);
   }
   const metaRows = [
     ['Theatre', ZONE_LABELS[point.zone] || point.zone],

@@ -52,7 +52,7 @@ function App() {
             <div className="brand__mark" />
             <div className="brand__body">
               <div className="brand__name">ALGOR INT</div>
-              <div className="brand__tag">Geopolitical Intelligence</div>
+              <div className="brand__tag">Renseignement géopolitique</div>
             </div>
           </div>
 
@@ -66,44 +66,11 @@ function App() {
           </nav>
 
           <div className="app-header__right">
-            {view !== 'console' && (
-            <div className="header-cta-wrap">
-              <a className="header-cta" href="/sahel/">
-                <svg className="header-cta__star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 2.5l2.9 5.9 6.6.95-4.75 4.63 1.12 6.52L12 17.9l-5.9 3.1 1.13-6.52L2.5 9.85l6.6-.95z" />
-                </svg>
-                Passer premium
-              </a>
-              <div className="cta-pop" role="tooltip">
-                <div className="cta-pop__card">
-                  <span className="cta-pop__kicker">Algor Access · Premium</span>
-                  <div className="cta-pop__title">Passez en premium</div>
-                  <p className="cta-pop__lede">Toute l'intelligence OSINT d'Algor, sans limite.</p>
-                  <ul className="cta-pop__list">
-                    <li><PopCheck />Les 6 theatres d'analyse en acces illimite</li>
-                    <li><PopCheck />Cartes, calques et chronologie interactifs</li>
-                    <li><PopCheck />Briefs de securite generes par IA</li>
-                    <li><PopCheck />Donnees OSINT actualisees en continu</li>
-                  </ul>
-                  <div className="cta-pop__custom">
-                    <span className="cta-pop__tag">Sur-mesure</span>
-                    Un besoin precis ? Nous realisons votre analyse sur commande, selon votre demande.
-                  </div>
-                </div>
-              </div>
-            </div>
-            )}
-            <div className="status-pill">
-              <span className="status-pill__group">
-                <span className="status-pill__dot" />
-                Systeme operationnel
-              </span>
-              <span className="status-pill__sep" />
-              <span className="status-pill__group">
-                <span className="status-pill__clock">{clock}</span>
-                <span className="status-pill__loc">Paris</span>
-              </span>
-            </div>
+            <a className="site-login" href="#console"
+               onClick={(e) => { e.preventDefault(); setView('console'); }}>
+              Connexion
+            </a>
+            <a className="site-cta" href="/offres/">Voir les offres</a>
           </div>
           <button className="site-burger" aria-label="Menu" aria-expanded={menuOpen}
                   onClick={() => setMenuOpen((o) => !o)}>

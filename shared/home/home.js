@@ -31,9 +31,9 @@ function HomeView({
     className: "hero__copy"
   }, /*#__PURE__*/React.createElement("h1", {
     className: "hero__title"
-  }, "Anticiper les", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "risques operationnels")), /*#__PURE__*/React.createElement("p", {
+  }, "Anticiper les risques", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "op\xE9rationnels")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Six theatres geopolitiques suivis en continu : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram, agreges sur une carte unique : chaque evenement source, date et auditable."), /*#__PURE__*/React.createElement("div", {
+  }, "Six th\xE9\xE2tres g\xE9opolitiques suivis en continu pour les directions s\xFBret\xE9, cabinets d'analyse et r\xE9dactions sp\xE9cialis\xE9es. Imagerie satellite, ACLED, GDELT, presse r\xE9gionale, OSINT social : chaque \xE9v\xE9nement sourc\xE9, dat\xE9 et auditable."), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
   }, /*#__PURE__*/React.createElement("button", {
     className: "btn btn--primary btn--lg btn--neon",
@@ -41,17 +41,13 @@ function HomeView({
   }, /*#__PURE__*/React.createElement("span", {
     className: "btn-neon btn-neon--top",
     "aria-hidden": "true"
-  }), "Acceder au catalogue", /*#__PURE__*/React.createElement(Arrow, null), /*#__PURE__*/React.createElement("span", {
+  }), "D\xE9couvrir les th\xE9\xE2tres", /*#__PURE__*/React.createElement(Arrow, null), /*#__PURE__*/React.createElement("span", {
     className: "btn-neon btn-neon--bottom",
     "aria-hidden": "true"
   })), /*#__PURE__*/React.createElement("a", {
     className: "btn--ghost-link",
-    href: "#console",
-    onClick: e => {
-      e.preventDefault();
-      onConsole();
-    }
-  }, "Console interne", /*#__PURE__*/React.createElement(ArrowDiag, null))), /*#__PURE__*/React.createElement("nav", {
+    href: "/offres/"
+  }, "Voir les formules", /*#__PURE__*/React.createElement(ArrowDiag, null))), /*#__PURE__*/React.createElement("nav", {
     className: "hero__foot-nav"
   }, /*#__PURE__*/React.createElement("a", {
     href: "/sahel/"
@@ -63,9 +59,38 @@ function HomeView({
     href: "/afrique/"
   }, "Afrique"))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"
-  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
+  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(TrustBand, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
     style: videoStyle
   }));
+}
+
+// ─── Trust band : chiffres clés juste sous le hero
+function TrustBand() {
+  const items = [{
+    value: '6',
+    label: 'Théâtres suivis en continu'
+  }, {
+    value: '500+',
+    label: 'Sources OSINT croisées'
+  }, {
+    value: 'Quotidien',
+    label: 'Rythme de mise à jour'
+  }, {
+    value: '2005',
+    label: "Année d'historique la plus ancienne"
+  }];
+  return /*#__PURE__*/React.createElement("section", {
+    className: "trust-band"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "trust-band__wrap"
+  }, items.map((it, i) => /*#__PURE__*/React.createElement("div", {
+    className: "trust-band__item",
+    key: i
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "trust-band__value"
+  }, it.value), /*#__PURE__*/React.createElement("div", {
+    className: "trust-band__label"
+  }, it.label)))));
 }
 
 // ─── Sections de presentation — structure marketing par sections (inspiration vigideep).
@@ -125,17 +150,17 @@ const HOME_GET = [{
   tag: "La carte",
   t: "Une carte de situation",
   d: "Chaque théâtre sur une carte interactive : la situation se lit dans son ensemble, là où il faudrait autrement compiler des dizaines d'articles.",
-  media: "Aperçu cartographie"
+  média: "Aperçu cartographié"
 }, {
   tag: "Le brief",
   t: "Des briefs prêts à l'emploi",
   d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
-  media: "Aperçu brief de sécurité"
+  média: "Aperçu brief de sécurité"
 }, {
   tag: "L'acces",
   t: "Un accès continu",
   d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
-  media: "Aperçu plateforme"
+  média: "Aperçu plateforme"
 }];
 function GetSection() {
   return /*#__PURE__*/React.createElement("section", {
@@ -485,7 +510,7 @@ const HOME_VIDEOS = [{
   duration: '2:14'
 }, {
   cat: 'Influence',
-  title: 'Analyse multicouche du theatre sahelien',
+  title: 'Analyse multicouche du théâtre sahelien',
   meta: 'Etude de cas · 3 min 02',
   duration: '3:02'
 }, {
@@ -500,8 +525,8 @@ const HOME_VIDEOS = [{
   duration: '2:47'
 }, {
   cat: 'Terrain',
-  title: 'Reseaux djihadistes au Sahel : pattern 2026',
-  meta: 'Decryptage · 5 min 12',
+  title: 'Réseaux djihadistes au Sahel : pattern 2026',
+  meta: 'Décryptage · 5 min 12',
   duration: '5:12'
 }];
 function VideoBand({
@@ -654,7 +679,7 @@ function ConsoleTab({
     "aria-hidden": "true"
   }, icon), label, soon && /*#__PURE__*/React.createElement("span", {
     className: "console-tab__badge"
-  }, "Bientot"));
+  }, "Bient\xF4t"));
   return /*#__PURE__*/React.createElement("div", {
     className: "console-tab-wrap"
   }, soon ? /*#__PURE__*/React.createElement("div", {
@@ -699,13 +724,13 @@ function ConsoleView({
     className: "hero__title"
   }, "Console ", /*#__PURE__*/React.createElement("em", null, "interne")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Outil de travail des analystes Algor Int sur six theatres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agreges sur une carte unique, sourcee, datee et auditable evenement par evenement."), /*#__PURE__*/React.createElement("div", {
+  }, "Outil de travail des analystes Algor Int sur six th\xE9\xE2tres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agr\xE9g\xE9s sur une carte unique, sourc\xE9e, dat\xE9e et auditable \xE9v\xE9nement par \xE9v\xE9nement."), /*#__PURE__*/React.createElement("div", {
     className: "console-tabs"
   }, /*#__PURE__*/React.createElement(ConsoleTab, {
     href: "/admin/",
     label: "Carto",
     popTitle: "Cartographie OSINT",
-    popText: "Edition des points, acteurs et calques sur les 6 theatres. Ouvre la console d'administration cartographique.",
+    popText: "Edition des points, acteurs et calques sur les 6 th\xE9\xE2tres. Ouvre la console d'administration cartographique.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"
     }), /*#__PURE__*/React.createElement("circle", {
@@ -717,7 +742,7 @@ function ConsoleView({
     onClick: onArchives,
     label: "Archives",
     popTitle: "Archives",
-    popText: "Tous les points cartographies des 6 theatres, conserves en base. Consultable sous forme de tableau, par theatre.",
+    popText: "Tous les points cartographi\xE9s des 6 th\xE9\xE2tres, conserv\xE9s en base. Consultable sous forme de tableau, par th\xE9\xE2tre.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M21 8v13H3V8"
     }), /*#__PURE__*/React.createElement("path", {
@@ -741,7 +766,7 @@ function ConsoleView({
     href: "/cloud/",
     label: "Cloud",
     popTitle: "Cloud",
-    popText: "Plateforme collaborative de l'equipe : base de sources, documents, suivi client, comptes rendus et syntheses, synchronises.",
+    popText: "Plateforme collaborative de l'\xE9quipe : base de sources, documents, suivi client, comptes rendus et synth\xE8ses, synchronises.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"
     }))
@@ -749,7 +774,7 @@ function ConsoleView({
     soon: true,
     label: "Rapport",
     popTitle: "Rapport",
-    popText: "Generation de rapports d'analyse decisionnels. Bientot disponible.",
+    popText: "Generation de rapports d'analyse decisionnels. Bient\xF4t disponible.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"
     }), /*#__PURE__*/React.createElement("path", {
@@ -761,7 +786,7 @@ function ConsoleView({
     soon: true,
     label: "Graph",
     popTitle: "Graph",
-    popText: "Visualisation des reseaux et relations en graphes. Bientot disponible.",
+    popText: "Visualisation des r\xE9seaux et relations en graphes. Bient\xF4t disponible.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("circle", {
       cx: "6",
       cy: "6",
@@ -780,7 +805,7 @@ function ConsoleView({
   }))));
 }
 
-// Page « Veille » — outil de veille OSINT (app Streamlit Algor Int) integre en cadre.
+// Page « Veille » — outil de veille OSINT (app Streamlit Algor Int) intégré en cadre.
 const VEILLE_URL = 'https://carto-mo-d95ewgm9x6zzfugtcpdst8.streamlit.app/';
 function VeilleView({
   onBack
@@ -799,7 +824,7 @@ function VeilleView({
   }, "\u2190 Retour a la console"))), document.body);
 }
 
-// Page « Archives » — dashboard de tous les points, par theatre (lecture base Supabase).
+// Page « Archives » — dashboard de tous les points, par théâtre (lecture base Supabase).
 function ArchivesView({
   onBack
 }) {
@@ -836,7 +861,7 @@ function ArchivesView({
     };
   }, []);
 
-  // Esc ferme le detail
+  // Esc ferme le détail
   useEffect(() => {
     if (!selected) return;
     const h = e => {
@@ -870,12 +895,12 @@ function ArchivesView({
     className: "hero__title"
   }, "Archives ", /*#__PURE__*/React.createElement("em", null, "des points")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Tous les points cartographies, regroupes par theatre. Conserves en base meme apres retrait des cartes."), points && points.length > 0 && /*#__PURE__*/React.createElement("div", {
+  }, "Tous les points cartographi\xE9s, regroup\xE9s par th\xE9\xE2tre. Conserves en base m\xEAme apres retrait des cartes."), points && points.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "dash-search"
   }, /*#__PURE__*/React.createElement("div", {
     className: "search-input"
   }, /*#__PURE__*/React.createElement(DashSearchIcon, null), /*#__PURE__*/React.createElement("input", {
-    placeholder: "Rechercher un point : nom, description, periode, theatre...",
+    placeholder: "Rechercher un point : nom, description, p\xE9riode, th\xE9\xE2tre...",
     value: query,
     onChange: e => setQuery(e.target.value)
   }), query && /*#__PURE__*/React.createElement("button", {
@@ -929,7 +954,7 @@ function ArchivesView({
 }
 
 // Parse le champ description structure (Date / Pays / Evenement / Detail),
-// meme logique que l'ancien pop-up des cartes (shared/engine.js parseDesc).
+// même logique que l'ancien pop-up des cartes (shared/engine.js parseDesc).
 function parsePointDesc(raw) {
   if (!raw || raw === 'null') return null;
   const txt = raw.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '');
@@ -939,12 +964,12 @@ function parsePointDesc(raw) {
     if (!m) return;
     const k = m[1].trim().toLowerCase();
     const v = m[2].trim();
-    if (k === 'date') r.date = v;else if (k === 'pays') r.pays = v;else if (k === 'evenement' || k === 'événement') r.event = v;else if (k === 'détail' || k === 'detail') r.detail = v;
+    if (k === 'date') r.date = v;else if (k === 'pays') r.pays = v;else if (k === 'événement' || k === 'événement') r.event = v;else if (k === 'détail' || k === 'détail') r.détail = v;
   });
   return Object.keys(r).length ? r : null;
 }
 
-// Popup detail d'un point — reprend le contenu de l'ancien pop-up des cartes.
+// Popup détail d'un point — reprend le contenu de l'ancien pop-up des cartes.
 function PointDetail({
   point,
   onClose
@@ -963,7 +988,7 @@ function PointDetail({
     if (d.date) eventRows.push(['Date', d.date]);
     if (d.pays) eventRows.push(['Pays', d.pays]);
     if (d.event) eventRows.push(['Evenement', d.event]);
-    if (d.detail) eventRows.push(['Detail', d.detail]);
+    if (d.détail) eventRows.push(['Detail', d.détail]);
   }
   const metaRows = [['Theatre', ZONE_LABELS[point.zone] || point.zone], ['Coordonnees', lat + ', ' + lng], ['Victimes', String(point.casualties || 0)], ['Statut', point.deleted ? 'Archive (retire des cartes)' : 'Actif'], ['Ajoute le', created]];
   return ReactDOM.createPortal(/*#__PURE__*/React.createElement("div", {

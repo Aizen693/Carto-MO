@@ -1,6 +1,6 @@
 (function () {
 /* global React */
-// Donnees reelles des 6 theatres Algor Int.
+// Donnees reelles des 6 théâtres Algor Int.
 // id correspond au dossier (/{id}/index.html) sauf 'afrique' = AIS maritime.
 
 const ZONES = [{
@@ -66,7 +66,7 @@ const REPORTS = {
     title: 'Rapport analytique Sahel · Q1 2026',
     date: '14 mars 2026',
     pages: 42,
-    tag: 'Synthese',
+    tag: 'Synthèse',
     href: '/sahel/rapport.html'
   }, {
     id: 'r-sh-01',
@@ -76,10 +76,10 @@ const REPORTS = {
     tag: 'Hebdo'
   }, {
     id: 'r-sh-02',
-    title: 'Mines auriferes, flux et acteurs',
+    title: 'Mines aurifères, flux et acteurs',
     date: '08 mars 2026',
     pages: 42,
-    tag: 'Synthese'
+    tag: 'Synthèse'
   }, {
     id: 'r-sh-03',
     title: 'Deplacements forces Q1 2026',
@@ -92,17 +92,17 @@ const REPORTS = {
     title: 'Rapport analytique Moyen-Orient',
     date: '12 mars 2026',
     pages: 56,
-    tag: 'Synthese',
+    tag: 'Synthèse',
     href: '/moyen-orient/rapport.html'
   }, {
     id: 'r-mo-01',
     title: 'Reconfiguration des forces chiites en Syrie',
     date: '12 mars 2026',
     pages: 36,
-    tag: 'Synthese'
+    tag: 'Synthèse'
   }, {
     id: 'r-mo-02',
-    title: 'Ports du Golfe, capacite et trafic',
+    title: 'Ports du Golfe, capacité et trafic',
     date: '04 mars 2026',
     pages: 22,
     tag: 'Hebdo'
@@ -112,7 +112,7 @@ const REPORTS = {
     title: 'Rapport analytique RDC',
     date: '11 mars 2026',
     pages: 34,
-    tag: 'Synthese',
+    tag: 'Synthèse',
     href: '/rdc/rapport.html'
   }, {
     id: 'r-cd-01',
@@ -123,17 +123,17 @@ const REPORTS = {
   }],
   madagascar: [{
     id: 'r-mg-01',
-    title: 'Madagascar, securite cotiere',
+    title: 'Madagascar, sécurité côtière',
     date: '09 mars 2026',
     pages: 19,
     tag: 'Note'
   }],
   'asie-sud': [{
     id: 'r-as-01',
-    title: 'Asie du Sud, tensions frontalieres',
+    title: 'Asie du Sud, tensions frontalières',
     date: '08 mars 2026',
     pages: 24,
-    tag: 'Synthese'
+    tag: 'Synthèse'
   }],
   afrique: [{
     id: 'r-af-01',
@@ -148,12 +148,12 @@ const REPORTS = {
 const GRAPHS = {
   sahel: [{
     id: 'g-sh-01',
-    title: 'Frontiere Mali-Guinee, densite d\'evts',
+    title: 'Frontière Mali-Guinée, densité d\'évts',
     type: 'Heatmap',
     scope: '90 jours'
   }, {
     id: 'g-sh-02',
-    title: 'Frontiere Cote d\'Ivoire-Mali, flux',
+    title: 'Frontière Côte d\'Ivoire-Mali, flux',
     type: 'Flow',
     scope: '90 jours'
   }, {
@@ -164,14 +164,14 @@ const GRAPHS = {
   }],
   'moyen-orient': [{
     id: 'g-mo-01',
-    title: 'Trafic maritime Detroit d\'Ormuz',
+    title: 'Trafic maritime Détroit d\'Ormuz',
     type: 'Timeline',
     scope: '12 mois'
   }, {
     id: 'g-mo-02',
     title: 'Acteurs chiites, graphe relations',
-    type: 'Reseau',
-    scope: 'Cumule'
+    type: 'Réseau',
+    scope: 'Cumulé'
   }],
   rdc: [{
     id: 'g-cd-01',
@@ -181,7 +181,7 @@ const GRAPHS = {
   }],
   madagascar: [{
     id: 'g-mg-01',
-    title: 'Madagascar, densite portuaire',
+    title: 'Madagascar, densité portuaire',
     type: 'Choropleth',
     scope: 'Annuel'
   }],
@@ -193,12 +193,12 @@ const GRAPHS = {
   }],
   afrique: [{
     id: 'g-af-01',
-    title: 'AIS temps reel · 6 categories navires',
+    title: 'AIS temps reel · 6 catégories navires',
     type: 'Carte',
     scope: 'Live'
   }, {
     id: 'g-af-02',
-    title: 'Ports, trafic compare',
+    title: 'Ports, trafic comparé',
     type: 'Barres',
     scope: '24 mois'
   }]
@@ -208,7 +208,7 @@ const GRAPHS = {
 const THEMES = [{
   id: 't-ports',
   name: 'Ports',
-  desc: 'Capacites, trafic, gouvernance maritime',
+  desc: 'Capacités, trafic, gouvernance maritime',
   count: 47,
   color: '#2E6FB8'
 }, {
@@ -220,7 +220,7 @@ const THEMES = [{
 }, {
   id: 't-jnim',
   name: 'JNIM',
-  desc: 'Groupe djihadiste transregional',
+  desc: 'Groupe djihadiste transrégional',
   count: 86,
   color: '#B83A4A'
 }, {
@@ -232,13 +232,13 @@ const THEMES = [{
 }, {
   id: 't-energie',
   name: 'Energie',
-  desc: 'Petrole, gaz, infrastructures critiques',
+  desc: 'Pétrole, gaz, infrastructures critiques',
   count: 22,
   color: '#0F7A7A'
 }, {
   id: 't-pop',
   name: 'Populations',
-  desc: 'Ethnies, deplacements, refugies',
+  desc: 'Ethnies, déplacements, réfugiés',
   count: 41,
   color: '#2F8A6B'
 }];
@@ -269,13 +269,13 @@ const THEME_DETAIL = {
     href: '/afrique/'
   }, {
     id: 'p-2',
-    title: 'Trafic compare · 24 mois',
+    title: 'Trafic comparé · 24 mois',
     type: 'Graph',
     meta: '12 ports'
   }],
   't-mines': [{
     id: 'm-1',
-    title: 'Sahel, sites auriferes',
+    title: 'Sahel, sites aurifères',
     type: 'Carte',
     meta: '78 sites',
     href: '/sahel/'
