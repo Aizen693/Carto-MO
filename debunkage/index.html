@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light" data-accent="violet">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Débunkage : cartographie de la désinformation · Algor Access</title>
+
+<link rel="icon" type="image/jpeg" href="../favicon.jpg" />
+
+<meta name="description" content="Algor Access — Débunkage. Remontée à la source des campagnes de désinformation, géolocalisation des relais, identification des acteurs. Cas démo navigable d'une campagne anonymisée." />
+<meta property="og:title" content="Débunkage : cartographie de la désinformation · Algor Access" />
+<meta property="og:description" content="Remonter à la source des campagnes hostiles. Cartographier les réseaux de relais. Exposer les acteurs. Cas démo navigable." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://algoracces.fr/debunkage/" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#FFFFFF" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="../shared/home/styles.css?v=20260527a" />
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+
+<style>
+  /* ── Locale Débunkage — additions au shared styles ── */
+  .deb-dossier {
+    border: 1px solid var(--border, rgba(0,0,0,0.08));
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 8px 32px -16px rgba(31,18,55,0.10);
+  }
+  .deb-top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border, rgba(0,0,0,0.06));
+    background: var(--violet-bg, rgba(107,63,160,0.04));
+  }
+  .deb-top__name {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 16px; font-weight: 600; color: #1F1437;
+    letter-spacing: -0.012em;
+  }
+  .deb-top__meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: #6B6480; letter-spacing: 0.02em;
+  }
+  .deb-top__meta strong { color: var(--violet, #6B3FA0); font-weight: 500; }
+  .deb-body {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    min-height: 720px;
+  }
+  .deb-side {
+    border-right: 1px solid var(--border, rgba(0,0,0,0.06));
+    overflow-y: auto; max-height: 720px;
+    background: #fdfcff;
+  }
+  .deb-side::-webkit-scrollbar { width: 0; }
+  .deb-sec {
+    padding: 20px 22px;
+    border-bottom: 1px solid var(--border, rgba(0,0,0,0.06));
+  }
+  .deb-sec:last-child { border-bottom: none; }
+  .deb-sec h3 {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: #8A8499; letter-spacing: 0.14em;
+    text-transform: uppercase; margin: 0 0 12px;
+    display: flex; align-items: baseline; justify-content: space-between;
+    font-weight: 500;
+  }
+  .deb-sec h3 .ct {
+    color: var(--violet-d, #6B3FA0); font-weight: 600;
+    background: var(--violet-bg, rgba(107,63,160,0.06));
+    padding: 2px 8px; border-radius: 100px;
+    font-size: 10px; letter-spacing: 0.05em;
+  }
+  .deb-camp__name {
+    font-family: 'Plus Jakarta Sans'; font-weight: 600;
+    font-size: 16px; line-height: 1.25; color: #1F1437;
+    letter-spacing: -0.014em; margin-bottom: 6px;
+  }
+  .deb-camp__meta {
+    font-family: 'JetBrains Mono'; font-size: 11px;
+    color: #6B6480; letter-spacing: 0.02em; margin-bottom: 12px;
+  }
+  .deb-camp__resume {
+    font-size: 13.5px; color: #4A4458; line-height: 1.55; font-weight: 400;
+  }
+
+  .deb-narr {
+    display: flex; gap: 12px; padding: 10px 0;
+    border-top: 1px solid var(--border, rgba(0,0,0,0.05));
+  }
+  .deb-narr:first-of-type { border-top: none; padding-top: 0; }
+  .deb-narr__ix {
+    font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 600;
+    color: var(--violet-d, #6B3FA0); flex-shrink: 0; width: 30px;
+    letter-spacing: 0.04em;
+  }
+  .deb-narr__tx {
+    font-size: 13.5px; color: #4A4458; line-height: 1.55; font-weight: 400;
+  }
+
+  .deb-net {
+    display: flex; align-items: flex-start; gap: 11px;
+    padding: 10px 0; cursor: pointer;
+    border-top: 1px solid var(--border, rgba(0,0,0,0.05));
+    transition: opacity .15s ease;
+  }
+  .deb-net:first-of-type { border-top: none; padding-top: 0; }
+  .deb-net:hover { opacity: 0.78; }
+  .deb-net.is-active { background: var(--violet-bg, rgba(107,63,160,0.06)); margin: 0 -8px; padding: 10px 8px; border-radius: 6px; border-top: none; }
+  .deb-net:not(.is-active).has-active { opacity: 0.4; }
+  .deb-net__sw {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    margin-top: 5px;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.02);
+  }
+  .deb-net__nm {
+    font-family: 'Plus Jakarta Sans'; font-weight: 600; font-size: 13.5px;
+    color: #1F1437; letter-spacing: -0.008em;
+  }
+  .deb-net__mt {
+    font-family: 'JetBrains Mono'; font-size: 10.5px;
+    color: #6B6480; letter-spacing: 0.02em; margin-top: 3px;
+  }
+  .deb-net__cf {
+    font-family: 'JetBrains Mono'; font-size: 10px;
+    color: #8A8499; letter-spacing: 0.04em; margin-top: 3px;
+  }
+
+  .deb-stat { display: flex; justify-content: space-between; padding: 7px 0; }
+  .deb-stat__lbl {
+    font-family: 'JetBrains Mono'; font-size: 11px;
+    color: #6B6480; letter-spacing: 0.02em;
+  }
+  .deb-stat__val {
+    font-family: 'JetBrains Mono'; font-size: 12.5px;
+    color: #1F1437; font-weight: 600; letter-spacing: -0.005em;
+  }
+
+  .deb-meth {
+    font-size: 13px; color: #4A4458; line-height: 1.55;
+  }
+
+  /* Map */
+  .deb-main { position: relative; min-height: 720px; }
+  #map { width: 100%; height: 100%; min-height: 720px; }
+  #map-loader {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: #fdfcff; color: #6B6480;
+    font-family: 'JetBrains Mono'; font-size: 11.5px;
+    letter-spacing: 0.06em; z-index: 5;
+  }
+
+  .mapboxgl-ctrl-group {
+    background: #fff !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px -4px rgba(31,18,55,0.10) !important;
+  }
+  .mapboxgl-popup-content {
+    background: #fff !important; color: #1F1437 !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    border-radius: 12px !important;
+    padding: 14px 16px !important;
+    font-family: 'Plus Jakarta Sans'; font-size: 13px; line-height: 1.5;
+    max-width: 300px;
+    box-shadow: 0 12px 32px -8px rgba(31,18,55,0.18) !important;
+  }
+  .mapboxgl-popup-tip { display: none !important; }
+  .mapboxgl-popup-close-button { color: #6B6480 !important; right: 6px !important; top: 4px !important; font-size: 18px !important; padding: 4px 8px !important; }
+  .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right { opacity: 0.55; }
+  .mapboxgl-ctrl-bottom-left:hover, .mapboxgl-ctrl-bottom-right:hover { opacity: 1; }
+
+  /* Tooltip */
+  #tooltip {
+    position: absolute; z-index: 10; pointer-events: none;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 12px 14px; max-width: 300px;
+    font-family: 'Plus Jakarta Sans'; font-size: 13px; line-height: 1.5;
+    color: #1F1437;
+    display: none;
+    box-shadow: 0 12px 32px -8px rgba(31,18,55,0.18);
+  }
+  #tooltip .tt-head {
+    font-weight: 600; font-size: 14px; color: #1F1437;
+    letter-spacing: -0.012em; margin-bottom: 4px;
+  }
+  #tooltip .tt-meta {
+    font-family: 'JetBrains Mono'; font-size: 10.5px;
+    color: var(--violet-d, #6B3FA0); letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+  #tooltip .tt-body { font-size: 12.5px; color: #4A4458; }
+  #tooltip .tt-foot {
+    font-family: 'JetBrains Mono'; font-size: 10px;
+    color: #8A8499; letter-spacing: 0.02em; margin-top: 8px;
+  }
+
+  /* Legend */
+  #legend {
+    position: absolute; top: 16px; right: 16px;
+    background: rgba(255,255,255,0.96);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 12px 14px; z-index: 4;
+    font-family: 'Plus Jakarta Sans'; font-size: 12px;
+    box-shadow: 0 8px 24px -8px rgba(31,18,55,0.12);
+  }
+  #legend .lg-head {
+    font-family: 'JetBrains Mono'; font-size: 10px;
+    color: var(--violet-d, #6B3FA0); letter-spacing: 0.14em;
+    text-transform: uppercase; margin-bottom: 10px; font-weight: 600;
+  }
+  .lg-row {
+    display: flex; align-items: center; gap: 9px;
+    padding: 3px 0; color: #4A4458; font-size: 12px;
+  }
+  .lg-row .sw { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .lg-row .arc { width: 16px; height: 2px; flex-shrink: 0; background: var(--violet-d, #6B3FA0); border-radius: 2px; }
+
+  /* Timeline */
+  #timeline {
+    border-top: 1px solid var(--border, rgba(0,0,0,0.06));
+    background: #fdfcff;
+    padding: 16px 22px 18px;
+  }
+  #timeline-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10px;
+  }
+  #timeline-head .lbl {
+    font-family: 'JetBrains Mono'; font-size: 11px; color: #6B6480;
+    letter-spacing: 0.04em;
+  }
+  #timeline-head .val {
+    font-family: 'JetBrains Mono'; font-size: 12px; color: var(--violet-d, #6B3FA0);
+    letter-spacing: 0.02em; font-weight: 600;
+  }
+  #timeline-track {
+    position: relative; height: 40px; cursor: pointer;
+    background: rgba(107,63,160,0.04);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .tl-tick {
+    position: absolute; bottom: 0; width: 2px;
+    opacity: 0.65; transition: opacity .12s;
+    border-radius: 1px;
+  }
+  .tl-tick.zero { width: 3px; opacity: 1; }
+  #timeline-handle {
+    position: absolute; top: -3px; bottom: -3px; width: 2px;
+    background: var(--violet-d, #6B3FA0);
+    pointer-events: none;
+    box-shadow: 0 0 12px rgba(107,63,160,0.55);
+  }
+  #timeline-handle::before {
+    content: ''; position: absolute; top: -6px; left: -4px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--violet-d, #6B3FA0);
+    box-shadow: 0 4px 12px rgba(107,63,160,0.4);
+  }
+  #timeline-axis {
+    display: flex; justify-content: space-between;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono'; font-size: 10px;
+    color: #8A8499; letter-spacing: 0.04em;
+  }
+
+  /* Hero stats card */
+  .deb-hero__aside {
+    background: #fff;
+    border: 1px solid var(--border, rgba(0,0,0,0.08));
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 12px 36px -16px rgba(31,18,55,0.14);
+  }
+  .deb-hero__head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 18px 22px 16px;
+    border-bottom: 1px solid var(--border, rgba(0,0,0,0.06));
+    background: var(--violet-bg, rgba(107,63,160,0.04));
+  }
+  .deb-hero__head .lbl {
+    font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 600;
+    color: var(--violet-d, #6B3FA0); letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .deb-hero__head .meta {
+    font-family: 'JetBrains Mono'; font-size: 11px;
+    color: #6B6480; letter-spacing: 0.02em;
+  }
+  .deb-hero__title {
+    padding: 22px 22px 4px;
+    font-family: 'Plus Jakarta Sans'; font-weight: 600;
+    font-size: 22px; line-height: 1.18;
+    letter-spacing: -0.018em; color: #1F1437;
+  }
+  .deb-hero__region {
+    padding: 0 22px 18px;
+    font-family: 'JetBrains Mono'; font-size: 11px;
+    color: #6B6480; letter-spacing: 0.02em;
+  }
+  .deb-hero__region .sep { color: #C8C2D8; padding: 0 6px; }
+  .deb-hero__grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid var(--border, rgba(0,0,0,0.06));
+  }
+  .deb-hero__cell {
+    padding: 18px 22px 16px;
+    border-right: 1px solid var(--border, rgba(0,0,0,0.06));
+  }
+  .deb-hero__cell:last-child { border-right: none; }
+  .deb-hero__cell .num {
+    font-family: 'Plus Jakarta Sans'; font-weight: 700;
+    font-size: 24px; color: #1F1437;
+    letter-spacing: -0.018em; line-height: 1;
+  }
+  .deb-hero__cell .lbl {
+    font-family: 'JetBrains Mono'; font-size: 10.5px;
+    color: #6B6480; letter-spacing: 0.04em; margin-top: 8px;
+  }
+  .deb-hero__foot {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 22px;
+    border-top: 1px solid var(--border, rgba(0,0,0,0.06));
+    font-family: 'JetBrains Mono'; font-size: 11px;
+    color: #6B6480; letter-spacing: 0.02em;
+  }
+  .deb-hero__foot a {
+    color: var(--violet-d, #6B3FA0); text-decoration: none;
+    font-weight: 600; transition: opacity .15s ease;
+  }
+  .deb-hero__foot a:hover { opacity: 0.78; }
+
+  /* Methode steps */
+  .deb-steps {
+    display: grid; grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .deb-step {
+    background: #fff;
+    border: 1px solid var(--border, rgba(0,0,0,0.08));
+    border-radius: 14px;
+    padding: 28px 26px;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .deb-step:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 34px -16px rgba(31,18,55,0.16);
+  }
+  .deb-step__num {
+    font-family: 'Plus Jakarta Sans'; font-weight: 700;
+    font-size: 44px; line-height: 1; letter-spacing: -0.03em;
+    color: var(--violet-d, #6B3FA0);
+    margin-bottom: 14px;
+  }
+  .deb-step__h {
+    font-family: 'Plus Jakarta Sans'; font-weight: 600;
+    font-size: 19px; color: #1F1437;
+    letter-spacing: -0.014em; margin: 0 0 10px;
+  }
+  .deb-step__p {
+    font-size: 14px; color: #4A4458; line-height: 1.6;
+    font-weight: 400; margin: 0;
+  }
+
+  /* Modal */
+  #modal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(31,20,55,0.55);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .22s ease;
+  }
+  #modal-overlay.open { opacity: 1; pointer-events: auto; }
+  #modal-overlay .modal {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 560px; width: 100%;
+    padding: 40px 44px 36px;
+    position: relative;
+    transform: translateY(10px);
+    transition: transform .22s ease;
+    box-shadow: 0 28px 72px -16px rgba(31,18,55,0.32);
+  }
+  #modal-overlay.open .modal { transform: translateY(0); }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px;
+    background: transparent; border: none;
+    color: #8A8499; cursor: pointer;
+    font: 400 24px/1 'Plus Jakarta Sans';
+    padding: 8px 12px;
+  }
+  .modal-close:hover { color: #1F1437; }
+  .modal-eyebrow {
+    font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; color: var(--violet-d, #6B3FA0);
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .modal-h {
+    font-family: 'Plus Jakarta Sans'; font-weight: 700;
+    font-size: 26px; line-height: 1.18; color: #1F1437;
+    letter-spacing: -0.018em; margin: 0 0 10px;
+  }
+  .modal-sub {
+    font-size: 14.5px; color: #4A4458; line-height: 1.55;
+    margin-bottom: 24px; font-weight: 400;
+  }
+  .deb-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+  .deb-field label {
+    font-family: 'JetBrains Mono'; font-size: 10.5px; font-weight: 600;
+    color: #6B6480; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .deb-field input, .deb-field textarea {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 10px;
+    color: #1F1437; padding: 11px 14px;
+    font-family: 'Plus Jakarta Sans'; font-size: 14px;
+    outline: none; transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .deb-field input:focus, .deb-field textarea:focus {
+    border-color: var(--violet, #6B3FA0);
+    box-shadow: 0 0 0 4px var(--violet-bg, rgba(107,63,160,0.10));
+  }
+  .deb-field textarea { min-height: 90px; resize: vertical; }
+  .modal-actions {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 24px;
+  }
+  .modal-note {
+    font-family: 'JetBrains Mono'; font-size: 10.5px;
+    color: #8A8499; letter-spacing: 0.02em;
+    margin-top: 14px;
+  }
+  #modal-success { display: none; padding: 20px 0; text-align: center; }
+  #modal-success.show { display: block; }
+  #modal-success .ok {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--violet-bg, rgba(107,63,160,0.10));
+    color: var(--violet-d, #6B3FA0);
+    margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 600;
+  }
+  #modal-success h3 {
+    font-family: 'Plus Jakarta Sans'; font-weight: 600;
+    font-size: 22px; color: #1F1437;
+    letter-spacing: -0.018em; margin: 0 0 8px;
+  }
+  #modal-success p {
+    font-size: 14.5px; color: #4A4458;
+    line-height: 1.55; max-width: 38ch; margin: 0 auto;
+  }
+
+  body.modal-open { overflow: hidden; }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .deb-body { grid-template-columns: 290px minmax(0, 1fr); }
+    .deb-steps { grid-template-columns: 1fr; gap: 16px; }
+    .deb-hero__cell { padding: 14px 18px 12px; }
+    .deb-hero__cell .num { font-size: 22px; }
+  }
+  @media (max-width: 760px) {
+    .deb-body { grid-template-columns: 1fr; min-height: auto; }
+    .deb-side { border-right: none; border-bottom: 1px solid var(--border, rgba(0,0,0,0.06)); max-height: none; }
+    .deb-main, #map { min-height: 480px; }
+    .deb-hero__head, .deb-hero__title, .deb-hero__region, .deb-hero__cell, .deb-hero__foot { padding-left: 16px; padding-right: 16px; }
+  }
+</style>
+</head>
+<body style="background-color:#FFFFFF">
+
+<!-- ─────────────────────────────────────── Header (shared) -->
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-brand" href="/">
+      <span class="site-brand__mark"></span>
+      <span class="site-brand__name">ALGOR INT</span>
+    </a>
+    <nav class="site-nav" aria-label="Rubriques">
+      <a href="/">Plateforme</a>
+      <a href="/methodologie/">Méthodologie</a>
+      <a href="/offres/">Offres</a>
+      <a href="/theatres/">Théâtres</a>
+      <a href="/a-propos/">A propos</a>
+      <a href="/contact/">Contact</a>
+    </nav>
+    <div class="site-header__right">
+      <a class="site-login" href="/">Connexion</a>
+      <a class="site-cta" href="#dossier">Voir le cas démo</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ─────────────────────────────────────── Hero -->
+  <section class="page-hero">
+    <div class="page-hero__wrap" style="display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:center">
+      <div class="page-hero__copy">
+        <span class="page-hero__eyebrow">Débunkage · Algora Access</span>
+        <h1 class="page-hero__title">Remonter à <em>la source</em> des campagnes hostiles</h1>
+        <p class="page-hero__lede">
+          Quand une marque, une institution ou un dirigeant est ciblé par une désinformation coordonnée, nous retraçons la chaîne jusqu'au patient zéro et cartographions le réseau d'amplification — pour comprendre, démentir, et — si nécessaire — agir.
+        </p>
+        <div class="page-hero__cta">
+          <button class="btn btn--primary btn--lg" onclick="openSubmitModal()">Soumettre une campagne</button>
+          <a class="btn btn--ghost btn--lg" href="#methode">Voir la méthode</a>
+        </div>
+        <ul class="hero-chips" aria-label="Méthodologie">
+          <li><span class="hero-chips__dot hero-chips__dot--strong"></span>Veille élargie</li>
+          <li><span class="hero-chips__dot"></span>Reconstruction de genèse</li>
+          <li><span class="hero-chips__dot"></span>Identification des relais</li>
+        </ul>
+      </div>
+
+      <aside class="deb-hero__aside" aria-label="Cas démo">
+        <div class="deb-hero__head">
+          <span class="lbl">Cas démo · anonymisé</span>
+          <span class="meta">06 clusters</span>
+        </div>
+        <div class="deb-hero__title" id="hs-title">—</div>
+        <div class="deb-hero__region" id="hs-region">—</div>
+        <div class="deb-hero__grid">
+          <div class="deb-hero__cell"><div class="num" id="hs-pub">—</div><div class="lbl">Publications</div></div>
+          <div class="deb-hero__cell"><div class="num" id="hs-acc">—</div><div class="lbl">Comptes</div></div>
+          <div class="deb-hero__cell"><div class="num" id="hs-aud">—</div><div class="lbl">Audience cumulée</div></div>
+        </div>
+        <div class="deb-hero__foot">
+          <span id="hs-period">—</span>
+          <a href="#dossier">Ouvrir le dossier →</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────── Méthode -->
+  <section class="home-sec" id="methode">
+    <div class="home-sec__wrap">
+      <div class="home-sec__head">
+        <span class="eyebrow">Méthode</span>
+        <h2 class="home-sec__title">Trois temps · <em>Veille, Genèse, Débunkage</em></h2>
+        <p class="home-sec__intro">
+          Brique facturable indépendamment, cumulables selon vos besoins — diagnostic ponctuel, veille récurrente, ou intervention de crise.
+        </p>
+      </div>
+      <div class="deb-steps">
+        <article class="deb-step">
+          <div class="deb-step__num">01</div>
+          <h3 class="deb-step__h">Détecter</h3>
+          <p class="deb-step__p">Vous transmettez les liens hostiles déjà identifiés. Nous élargissons la surveillance aux contenus connexes, comptes relais et reprises secondaires pour cartographier l'étendue réelle de la campagne.</p>
+        </article>
+        <article class="deb-step">
+          <div class="deb-step__num">02</div>
+          <h3 class="deb-step__h">Remonter</h3>
+          <p class="deb-step__p">Cœur différenciant. Reconstruction de la chaîne de diffusion par recoupement timestamp et similarité textuelle. Identification du contenu source — le patient zéro — et géolocalisation du point de départ.</p>
+        </article>
+        <article class="deb-step">
+          <div class="deb-step__num">03</div>
+          <h3 class="deb-step__h">Exposer</h3>
+          <p class="deb-step__p">Volet offensif. Analyse des acteurs, mise en lumière des comptes et entités d'amplification. Vous disposez d'éléments factuels pour réagir, démentir et — si nécessaire — agir en justice.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────── Dossier · cas démo -->
+  <section class="home-sec home-sec--alt" id="dossier">
+    <div class="home-sec__wrap">
+      <div class="home-sec__head">
+        <span class="eyebrow">Dossier · cas démo</span>
+        <h2 class="home-sec__title" id="dossier-h2">Cartographie de la <em>propagation</em></h2>
+        <p class="home-sec__intro" id="dossier-note">
+          Cas anonymisé · structure méthodologique réelle, inspirée des rapports publics Viginum, DFRLab et EU DisinfoLab. Glissez la timeline pour suivre la propagation jour après jour.
+        </p>
+      </div>
+
+      <div class="deb-dossier">
+        <div class="deb-top">
+          <div class="deb-top__name" id="deb-top-name">—</div>
+          <div class="deb-top__meta" id="deb-top-meta">—</div>
+        </div>
+
+        <div class="deb-body">
+          <aside class="deb-side" aria-label="Panneau dossier">
+            <div class="deb-sec deb-camp">
+              <h3>Campagne</h3>
+              <div class="deb-camp__name" id="ds-nm">—</div>
+              <div class="deb-camp__meta" id="ds-mt">—</div>
+              <div class="deb-camp__resume" id="ds-rs">—</div>
+            </div>
+
+            <div class="deb-sec">
+              <h3>Narratifs <span class="ct" id="ds-ct-narr">00</span></h3>
+              <div id="ds-narr-wrap"></div>
+            </div>
+
+            <div class="deb-sec">
+              <h3>Réseaux identifiés <span class="ct" id="ds-ct-net">00</span></h3>
+              <div id="ds-net-wrap"></div>
+            </div>
+
+            <div class="deb-sec">
+              <h3>Statistiques</h3>
+              <div id="ds-stats"></div>
+            </div>
+
+            <div class="deb-sec">
+              <h3>Méthodologie</h3>
+              <div class="deb-meth" id="ds-meth">—</div>
+            </div>
+          </aside>
+
+          <div class="deb-main">
+            <div id="map"></div>
+            <div id="map-loader">Chargement de la cartographie…</div>
+            <div id="legend">
+              <div class="lg-head">Légende</div>
+              <div class="lg-row"><span class="sw" style="background:#6B3FA0;box-shadow:0 0 0 4px rgba(107,63,160,0.15)"></span>Patient zéro</div>
+              <div class="lg-row"><span class="sw" style="background:#8B5FBF"></span>Relais primaire</div>
+              <div class="lg-row"><span class="sw" style="background:#2E84D4"></span>Amplificateur</div>
+              <div class="lg-row"><span class="sw" style="background:#C94A4A"></span>Site copie</div>
+              <div class="lg-row" style="margin-top:6px"><span class="arc"></span>Chaîne de diffusion</div>
+            </div>
+            <div id="tooltip"></div>
+          </div>
+        </div>
+
+        <div id="timeline">
+          <div id="timeline-head">
+            <span class="lbl" id="tl-range">Timeline</span>
+            <span class="val" id="tl-date">—</span>
+          </div>
+          <div id="timeline-track">
+            <div id="timeline-handle" style="left: 100%;"></div>
+          </div>
+          <div id="timeline-axis">
+            <span>14 fév</span><span>21 fév</span><span>28 fév</span><span>7 mars</span><span>14 mars</span><span>21 mars</span><span>28 mars</span><span>4 avr</span><span>10 avr</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────── CTA -->
+  <section class="cta-band">
+    <div class="cta-band__wrap">
+      <h2 class="cta-band__title">Votre organisation est ciblée ?</h2>
+      <p class="cta-band__text">Nous instruisons votre dossier sous 24h ouvrées — diagnostic, veille récurrente, ou intervention de crise.</p>
+      <div class="cta-band__row">
+        <button class="btn btn--lg btn--on-violet" onclick="openSubmitModal()">Soumettre une campagne</button>
+        <a class="btn btn--lg btn--ghost-violet" href="/contact/">Nous contacter</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ─────────────────────────────────────── Footer (shared) -->
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <div class="site-footer__brand-name"><span></span>ALGOR INT</div>
+      <p class="site-footer__blurb">
+        Algor Access : plateforme de cartographie OSINT. Six théâtres géopolitiques suivis en continu, chaque événement sourcé, daté et auditable.
+      </p>
+    </div>
+    <div class="site-footer__col">
+      <h4>Le site</h4>
+      <a href="/">Plateforme</a>
+      <a href="/methodologie/">Méthodologie</a>
+      <a href="/offres/">Offres</a>
+      <a href="/theatres/">Théâtres</a>
+      <a href="/a-propos/">A propos</a>
+      <a href="/contact/">Contact</a>
+    </div>
+    <div class="site-footer__col">
+      <h4>Theatres</h4>
+      <a href="/moyen-orient/">Moyen-Orient</a>
+      <a href="/sahel/">Sahel</a>
+      <a href="/rdc/">RDC</a>
+      <a href="/madagascar/">Madagascar</a>
+      <a href="/afrique/">Afrique Maritime</a>
+      <a href="/asie-sud/">Asie du Sud</a>
+    </div>
+    <div class="site-footer__col">
+      <h4>Acces</h4>
+      <a href="#" data-algor-login>Connexion</a>
+      <a href="/offres/">Voir les offres</a>
+      <a href="/contact/">Nous contacter</a>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <div class="site-footer__bottom-inner">
+      <span>© 2026 Algor Int · Débunkage</span>
+      <span>Diffusion restreinte · usage professionnel</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ─────────────────────────────────────── Modal lead form -->
+<div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-h">
+  <div class="modal">
+    <button class="modal-close" aria-label="Fermer" onclick="closeSubmitModal()">×</button>
+    <div id="modal-form">
+      <div class="modal-eyebrow">Algora Access · Débunkage</div>
+      <h2 class="modal-h" id="modal-h">Soumettre une campagne</h2>
+      <p class="modal-sub">Décrivez la campagne qui cible votre organisation. Un analyste Algor·Int vous recontacte sous 24h ouvrées pour cadrer le périmètre.</p>
+
+      <div class="deb-field">
+        <label for="f-org">Organisation</label>
+        <input type="text" id="f-org" autocomplete="organization" required>
+      </div>
+      <div class="deb-field">
+        <label for="f-contact">Contact (nom · fonction)</label>
+        <input type="text" id="f-contact" autocomplete="name" required>
+      </div>
+      <div class="deb-field">
+        <label for="f-email">Email professionnel</label>
+        <input type="email" id="f-email" autocomplete="email" required>
+      </div>
+      <div class="deb-field">
+        <label for="f-urls">Liens hostiles déjà identifiés (un par ligne)</label>
+        <textarea id="f-urls" placeholder="https://…"></textarea>
+      </div>
+      <div class="deb-field">
+        <label for="f-context">Contexte court</label>
+        <textarea id="f-context" placeholder="Quand a-t-elle commencé ? Quel est le narratif ?"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn--ghost" onclick="closeSubmitModal()">Annuler</button>
+        <button class="btn btn--primary" onclick="submitLead()">Envoyer la demande</button>
+      </div>
+      <div class="modal-note">Données traitées en confidentialité · hébergement UE · consentement explicite pour relance.</div>
+    </div>
+
+    <div id="modal-success">
+      <div class="ok">✓</div>
+      <h3>Demande reçue</h3>
+      <p>Un analyste Algor·Int vous recontacte sous 24h ouvrées pour cadrer la prestation.</p>
+      <div style="margin-top: 22px;"><button class="btn btn--ghost" onclick="closeSubmitModal()">Fermer</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="../shared/home/sitenav.js?v=20260525c"></script>
+
+<script>
+/* ════ Data + Map ════ */
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+
+const TYPE_COLOR = {
+  patient_zero: '#6B3FA0',
+  relai:        '#8B5FBF',
+  amplificateur:'#2E84D4',
+  site_copie:   '#C94A4A'
+};
+const TYPE_LABEL = {
+  patient_zero: 'Patient zéro',
+  relai:        'Relais primaire',
+  amplificateur:'Amplificateur',
+  site_copie:   'Site copie'
+};
+
+const state = {
+  data: null,
+  timelineProgress: 1.0,
+  activeReseaux: new Set()
+};
+
+let map;
+
+async function init() {
+  const res = await fetch('./data/cas-demo.json?v=' + Date.now());
+  state.data = await res.json();
+  renderHeroStats();
+  renderSidebar();
+  buildMap();
+  renderTimeline();
+}
+
+function renderHeroStats(){
+  const d = state.data;
+  document.getElementById('hs-title').textContent = d.campagne.nom;
+  document.getElementById('hs-region').innerHTML =
+    d.campagne.pays_implique.map(p => escapeHtml(p)).join('<span class="sep">·</span>');
+  document.getElementById('hs-pub').textContent = d.campagne.publications_total;
+  document.getElementById('hs-acc').textContent = d.campagne.comptes_total;
+  const totalAud = d.publications.reduce((s, p) => s + (p.audience_estimee || 0), 0);
+  document.getElementById('hs-aud').textContent = (totalAud / 1000).toFixed(0) + 'k';
+  document.getElementById('hs-period').textContent = fmtPeriod(d.campagne.date_debut, d.campagne.date_fin);
+  document.getElementById('deb-top-name').textContent = d.campagne.nom;
+  document.getElementById('deb-top-meta').innerHTML =
+    `${escapeHtml(d.campagne.secteur)} · <strong>${escapeHtml(fmtPeriod(d.campagne.date_debut, d.campagne.date_fin))}</strong>`;
+  document.getElementById('tl-range').textContent = 'Timeline · ' + fmtPeriod(d.campagne.date_debut, d.campagne.date_fin);
+}
+
+function renderSidebar(){
+  const d = state.data;
+  document.getElementById('ds-nm').textContent = d.campagne.nom;
+  document.getElementById('ds-mt').textContent = `${d.campagne.secteur} · ${fmtPeriod(d.campagne.date_debut, d.campagne.date_fin)}`;
+  document.getElementById('ds-rs').textContent = d.campagne.resume;
+  document.getElementById('ds-meth').textContent = d.campagne.methodologie;
+
+  document.getElementById('ds-ct-narr').textContent = String(d.campagne.narratifs.length).padStart(2,'0');
+  document.getElementById('ds-narr-wrap').innerHTML = d.campagne.narratifs.map((n, i) => `
+    <div class="deb-narr">
+      <span class="deb-narr__ix">N${String(i+1).padStart(2,'0')}</span>
+      <span class="deb-narr__tx">${escapeHtml(n)}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('ds-ct-net').textContent = String(d.reseaux.length).padStart(2,'0');
+  const netWrap = document.getElementById('ds-net-wrap');
+  netWrap.innerHTML = d.reseaux.map(r => `
+    <div class="deb-net" data-id="${r.id}">
+      <span class="deb-net__sw" style="background:${networkColor(r.id)}"></span>
+      <div>
+        <div class="deb-net__nm">${escapeHtml(r.nom)}</div>
+        <div class="deb-net__mt">${r.publications.length} publi · ${r.comptes.length} compte${r.comptes.length>1?'s':''} · ${escapeHtml(r.pays_estime)}</div>
+        <div class="deb-net__cf">Confiance ${escapeHtml(r.niveau_confiance)}</div>
+      </div>
+    </div>
+  `).join('');
+  netWrap.querySelectorAll('.deb-net').forEach(el => {
+    el.addEventListener('click', () => toggleReseau(el.dataset.id));
+  });
+
+  const totalAud = d.publications.reduce((s, p) => s + (p.audience_estimee || 0), 0);
+  document.getElementById('ds-stats').innerHTML = `
+    <div class="deb-stat"><span class="deb-stat__lbl">Publications</span><span class="deb-stat__val">${d.campagne.publications_total}</span></div>
+    <div class="deb-stat"><span class="deb-stat__lbl">Comptes coordonnés</span><span class="deb-stat__val">${d.campagne.comptes_total}</span></div>
+    <div class="deb-stat"><span class="deb-stat__lbl">Pays impliqués</span><span class="deb-stat__val">${d.campagne.pays_implique.length}</span></div>
+    <div class="deb-stat"><span class="deb-stat__lbl">Audience cumulée</span><span class="deb-stat__val">${(totalAud/1000).toFixed(0)}k</span></div>
+    <div class="deb-stat"><span class="deb-stat__lbl">Durée campagne</span><span class="deb-stat__val">${daysBetween(d.campagne.date_debut, d.campagne.date_fin)} j</span></div>
+    <div class="deb-stat"><span class="deb-stat__lbl">Délai PZ → FR</span><span class="deb-stat__val">35 h</span></div>
+  `;
+}
+
+function networkColor(id){
+  const map = {
+    'cluster-bucarest': '#8B5FBF',
+    'cluster-budapest': '#2E84D4',
+    'cluster-belgrade': '#5650C6',
+    'amplificateurs-fr': '#5A8FA8',
+    'sites-copie': '#C94A4A',
+    'patient-zero': '#6B3FA0'
+  };
+  return map[id] || '#8B5FBF';
+}
+
+function toggleReseau(id){
+  if (state.activeReseaux.has(id)) state.activeReseaux.delete(id);
+  else state.activeReseaux.add(id);
+  const hasActive = state.activeReseaux.size > 0;
+  document.querySelectorAll('.deb-net').forEach(el => {
+    el.classList.toggle('is-active', state.activeReseaux.has(el.dataset.id));
+    el.classList.toggle('has-active', hasActive);
+  });
+  applyFilters();
+}
+
+function buildMap(){
+  map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/light-v11',
+    center: [22, 49],
+    zoom: 3.6,
+    minZoom: 2,
+    maxZoom: 9,
+    attributionControl: false
+  });
+  map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-left');
+  map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
+  map.on('load', () => {
+    document.getElementById('map-loader').style.display = 'none';
+    addLayers();
+    bindMapHover();
+    fitToData();
+  });
+}
+
+function publiByReseau(pubId){
+  for (const r of state.data.reseaux) if (r.publications.includes(pubId)) return r;
+  return null;
+}
+
+function buildFeatures(){
+  const d = state.data;
+  const pubById = Object.fromEntries(d.publications.map(p => [p.id, p]));
+  const cutoffMs = timelineCutoffMs();
+
+  const visibleIds = new Set(d.publications.filter(p => {
+    if (new Date(p.date).getTime() > cutoffMs) return false;
+    if (state.activeReseaux.size > 0) {
+      const r = publiByReseau(p.id);
+      if (!r || !state.activeReseaux.has(r.id)) return false;
+    }
+    return true;
+  }).map(p => p.id));
+
+  const points = {
+    type: 'FeatureCollection',
+    features: d.publications.filter(p => visibleIds.has(p.id)).map(p => ({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
+      properties: {
+        ...p,
+        radius: radiusFor(p),
+        color: TYPE_COLOR[p.type] || '#8B5FBF',
+        is_pz: p.type === 'patient_zero' ? 1 : 0
+      }
+    }))
+  };
+
+  const arcs = {
+    type: 'FeatureCollection',
+    features: d.publications
+      .filter(p => p.parent_id && visibleIds.has(p.id) && visibleIds.has(p.parent_id))
+      .map(p => {
+        const parent = pubById[p.parent_id];
+        return {
+          type: 'Feature',
+          geometry: { type: 'LineString', coordinates: greatCircle([parent.lon, parent.lat], [p.lon, p.lat], 16) },
+          properties: { from: parent.id, to: p.id }
+        };
+      })
+  };
+  return { points, arcs };
+}
+
+function radiusFor(p){
+  const a = p.audience_estimee || 1000;
+  return Math.max(5, Math.min(20, Math.log(a) * 1.7));
+}
+function greatCircle(a, b, n){
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n;
+    pts.push([ a[0] + (b[0]-a[0]) * t, a[1] + (b[1]-a[1]) * t ]);
+  }
+  return pts;
+}
+
+function addLayers(){
+  const { points, arcs } = buildFeatures();
+  map.addSource('arcs', { type: 'geojson', data: arcs });
+  map.addSource('points', { type: 'geojson', data: points });
+
+  map.addLayer({ id: 'arcs-glow', type: 'line', source: 'arcs',
+    paint: { 'line-color': '#6B3FA0', 'line-width': 5, 'line-opacity': 0.10, 'line-blur': 2 }
+  });
+  map.addLayer({ id: 'arcs-line', type: 'line', source: 'arcs',
+    paint: { 'line-color': '#6B3FA0', 'line-width': 1.2, 'line-opacity': 0.55 }
+  });
+  map.addLayer({ id: 'points-halo', type: 'circle', source: 'points',
+    paint: {
+      'circle-radius': ['+', ['get', 'radius'], 8],
+      'circle-color': ['get', 'color'],
+      'circle-opacity': ['case', ['==', ['get', 'is_pz'], 1], 0.22, 0.0],
+      'circle-blur': 0.5
+    }
+  });
+  map.addLayer({ id: 'points', type: 'circle', source: 'points',
+    paint: {
+      'circle-radius': ['get', 'radius'],
+      'circle-color': ['get', 'color'],
+      'circle-opacity': 0.94,
+      'circle-stroke-color': '#FFFFFF',
+      'circle-stroke-width': 2
+    }
+  });
+  map.addLayer({ id: 'points-pz-ring', type: 'circle', source: 'points',
+    filter: ['==', ['get', 'is_pz'], 1],
+    paint: {
+      'circle-radius': ['+', ['get', 'radius'], 12],
+      'circle-color': 'transparent',
+      'circle-stroke-color': '#6B3FA0',
+      'circle-stroke-width': 1.5,
+      'circle-stroke-opacity': 0.6
+    }
+  });
+}
+
+function applyFilters(){
+  if (!map || !map.getSource || !map.getSource('points')) return;
+  const { points, arcs } = buildFeatures();
+  map.getSource('points').setData(points);
+  map.getSource('arcs').setData(arcs);
+}
+
+function fitToData(){
+  const lats = state.data.publications.map(p => p.lat);
+  const lons = state.data.publications.map(p => p.lon);
+  const bounds = [[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]];
+  map.fitBounds(bounds, { padding: { top: 60, right: 80, bottom: 60, left: 60 }, duration: 1200, maxZoom: 5 });
+}
+
+function bindMapHover(){
+  const tt = document.getElementById('tooltip');
+  map.on('mouseenter', 'points', () => { map.getCanvas().style.cursor = 'pointer'; });
+  map.on('mouseleave', 'points', () => { map.getCanvas().style.cursor = ''; tt.style.display = 'none'; });
+  map.on('mousemove', 'points', (e) => {
+    if (!e.features?.length) return;
+    const p = e.features[0].properties;
+    const date = new Date(p.date);
+    tt.innerHTML = `
+      <div class="tt-head">${escapeHtml(p.compte_display)}</div>
+      <div class="tt-meta">${TYPE_LABEL[p.type]} · ${escapeHtml((p.plateforme||'').toUpperCase())} · ${escapeHtml(p.ville)}</div>
+      <div class="tt-body">${escapeHtml(p.content_excerpt)}</div>
+      <div class="tt-foot">${fmtDateTime(date)} · ~${(p.audience_estimee/1000).toFixed(1)}k vues estimées</div>
+    `;
+    const rect = document.getElementById('map').getBoundingClientRect();
+    tt.style.left = (e.originalEvent.clientX - rect.left + 14) + 'px';
+    tt.style.top  = (e.originalEvent.clientY - rect.top + 14) + 'px';
+    tt.style.display = 'block';
+  });
+  map.on('click', 'points', (e) => {
+    const p = e.features[0].properties;
+    new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '320px' })
+      .setLngLat(e.features[0].geometry.coordinates)
+      .setHTML(`
+        <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:15px;color:#1F1437;letter-spacing:-0.012em;margin-bottom:4px">${escapeHtml(p.compte_display)}</div>
+        <div style="font-family:'JetBrains Mono';font-size:10.5px;color:#6B3FA0;letter-spacing:0.04em;margin-bottom:10px">${TYPE_LABEL[p.type]} · ${escapeHtml(p.plateforme)} · ${escapeHtml(p.ville)}</div>
+        <div style="font-size:13px;line-height:1.55;color:#4A4458;margin-bottom:10px">${escapeHtml(p.content_excerpt)}</div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;color:#8A8499;letter-spacing:0.02em">${fmtDateTime(new Date(p.date))}</div>
+      `)
+      .addTo(map);
+  });
+}
+
+/* ════ Timeline ════ */
+function renderTimeline(){
+  const track = document.getElementById('timeline-track');
+  const handle = document.getElementById('timeline-handle');
+  const d = state.data;
+  const t0 = new Date(d.campagne.date_debut).getTime();
+  const t1 = new Date(d.campagne.date_fin).getTime();
+
+  d.publications.forEach(p => {
+    const t = new Date(p.date).getTime();
+    const pct = (t - t0) / (t1 - t0) * 100;
+    const tick = document.createElement('div');
+    tick.className = 'tl-tick' + (p.type === 'patient_zero' ? ' zero' : '');
+    tick.style.left = `calc(${pct}% - 1px)`;
+    tick.style.height = (p.type === 'patient_zero' ? '100%' : (14 + radiusFor(p)) + 'px');
+    tick.style.background = TYPE_COLOR[p.type] || '#8B5FBF';
+    track.appendChild(tick);
+  });
+
+  function setProgress(pct){
+    pct = Math.max(0, Math.min(1, pct));
+    state.timelineProgress = pct;
+    handle.style.left = (pct * 100) + '%';
+    const ms = t0 + (t1 - t0) * pct;
+    document.getElementById('tl-date').textContent = fmtDate(new Date(ms));
+    applyFilters();
+  }
+
+  let dragging = false;
+  function onMove(clientX){
+    const r = track.getBoundingClientRect();
+    setProgress((clientX - r.left) / r.width);
+  }
+  track.addEventListener('mousedown', e => { dragging = true; onMove(e.clientX); });
+  window.addEventListener('mousemove', e => { if (dragging) onMove(e.clientX); });
+  window.addEventListener('mouseup', () => { dragging = false; });
+  track.addEventListener('touchstart', e => { onMove(e.touches[0].clientX); }, { passive: true });
+  track.addEventListener('touchmove', e => { onMove(e.touches[0].clientX); }, { passive: true });
+  setProgress(1);
+}
+
+function timelineCutoffMs(){
+  const d = state.data;
+  const t0 = new Date(d.campagne.date_debut).getTime();
+  const t1 = new Date(d.campagne.date_fin).getTime();
+  return t0 + (t1 - t0) * state.timelineProgress;
+}
+
+/* ════ Modal ════ */
+function openSubmitModal(){
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-form').style.display = 'block';
+  document.getElementById('modal-success').classList.remove('show');
+  document.body.classList.add('modal-open');
+}
+function closeSubmitModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.classList.remove('modal-open');
+}
+function submitLead(){
+  const payload = {
+    org: document.getElementById('f-org').value.trim(),
+    contact: document.getElementById('f-contact').value.trim(),
+    email: document.getElementById('f-email').value.trim(),
+    urls: document.getElementById('f-urls').value.trim(),
+    context: document.getElementById('f-context').value.trim(),
+    ts: new Date().toISOString()
+  };
+  if (!payload.org || !payload.contact || !payload.email) {
+    alert('Organisation, contact et email sont requis.');
+    return;
+  }
+  try { localStorage.setItem('debunkage_pending_submission', JSON.stringify(payload)); } catch (e) {}
+  console.log('[debunkage] soumission', payload);
+  document.getElementById('modal-form').style.display = 'none';
+  document.getElementById('modal-success').classList.add('show');
+}
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modal-overlay') closeSubmitModal();
+});
+
+/* ════ Helpers ════ */
+function escapeHtml(s){
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtDate(d){
+  const mois = ['jan','fév','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
+  return `${d.getUTCDate()} ${mois[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+function fmtDateTime(d){
+  return `${fmtDate(d)} · ${String(d.getUTCHours()).padStart(2,'0')}h${String(d.getUTCMinutes()).padStart(2,'0')} UTC`;
+}
+function fmtPeriod(a, b){
+  return `${fmtDate(new Date(a))} → ${fmtDate(new Date(b))}`;
+}
+function daysBetween(a, b){
+  return Math.round((new Date(b) - new Date(a)) / 86400000);
+}
+
+init().catch(err => {
+  console.error('[debunkage] init failed', err);
+  document.getElementById('map-loader').textContent = 'Erreur de chargement — recharger la page';
+});
+</script>
+
+</body>
+</html>
