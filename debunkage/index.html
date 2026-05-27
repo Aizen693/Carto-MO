@@ -57,7 +57,7 @@
   .deb-fs-btn:active { transform: scale(0.96); }
   .deb-fs-btn svg { width: 14px; height: 14px; }
 
-  /* Fullscreen state */
+  /* Fullscreen state — uniquement carte + timeline (curseur), pas la sidebar/header */
   .deb-dossier.is-fullscreen {
     position: fixed;
     top: 0; left: 0;
@@ -69,21 +69,40 @@
     box-shadow: none;
     overflow: hidden;
   }
-  .deb-dossier.is-fullscreen .deb-top { flex-shrink: 0; }
+  .deb-dossier.is-fullscreen .deb-top { display: none; }
+  .deb-dossier.is-fullscreen .deb-side { display: none; }
   .deb-dossier.is-fullscreen .deb-body {
     flex: 1; min-height: 0;
-    grid-template-columns: 340px minmax(0, 1fr);
+    grid-template-columns: 1fr; /* sidebar masquée */
   }
-  .deb-dossier.is-fullscreen .deb-side { max-height: none; }
   .deb-dossier.is-fullscreen .deb-main { min-height: 0; }
   .deb-dossier.is-fullscreen #map { min-height: 0; height: 100%; }
   .deb-dossier.is-fullscreen #timeline { flex-shrink: 0; }
+
+  /* Bouton fermer flottant en haut a droite de la carte en plein ecran */
+  .deb-fs-close {
+    display: none; position: absolute; top: 16px; right: 16px;
+    z-index: 50;
+    padding: 9px 14px; gap: 8px;
+    background: rgba(255,255,255,0.97);
+    color: var(--violet-d, #6B3FA0);
+    border: 1px solid var(--violet-bd, rgba(107,63,160,0.22));
+    border-radius: 100px; cursor: pointer;
+    font-family: 'Plus Jakarta Sans'; font-size: 13px; font-weight: 600;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    box-shadow: 0 8px 20px -6px rgba(31,18,55,0.18);
+    transition: background .15s ease, color .15s ease, transform .12s ease;
+    align-items: center;
+  }
+  .deb-fs-close svg { width: 14px; height: 14px; }
+  .deb-fs-close:hover { background: var(--violet-d, #6B3FA0); color: #fff; }
+  .deb-fs-close:active { transform: scale(0.96); }
+  .deb-dossier.is-fullscreen .deb-fs-close { display: inline-flex; }
+
   body.deb-fs-active { overflow: hidden; }
   @media (max-width: 760px) {
     .deb-fs-btn .deb-fs-lbl { display: none; }
     .deb-fs-btn { padding: 8px; }
-    .deb-dossier.is-fullscreen .deb-body { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-    .deb-dossier.is-fullscreen .deb-side { max-height: 38vh; overflow-y: auto; border-right: none; border-bottom: 1px solid var(--border, rgba(0,0,0,0.06)); }
   }
   .deb-top__name {
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -815,6 +834,10 @@
           <div class="deb-main">
             <div id="map"></div>
             <div id="map-loader">Chargement de la cartographie…</div>
+            <button class="deb-fs-close" id="deb-fs-close" type="button" aria-label="Quitter le plein écran" title="Échap pour quitter">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h4V2M10 2v4h4M14 10h-4v4M6 14v-4H2"/></svg>
+              Quitter
+            </button>
             <div id="legend">
               <div class="lg-head">Légende</div>
               <div class="lg-row"><span class="sw" style="background:#6B3FA0;box-shadow:0 0 0 4px rgba(107,63,160,0.15)"></span>Patient zéro</div>
@@ -1329,6 +1352,8 @@ function bindFullscreen(){
     setTimeout(() => { if (map && map.resize) map.resize(); }, 360);
   }
   btn.addEventListener('click', () => setFs(!card.classList.contains('is-fullscreen')));
+  const closeBtn = document.getElementById('deb-fs-close');
+  if (closeBtn) closeBtn.addEventListener('click', () => setFs(false));
   window.addEventListener('keydown', e => {
     if (e.key === 'Escape' && card.classList.contains('is-fullscreen')) setFs(false);
   });
