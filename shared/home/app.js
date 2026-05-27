@@ -24,6 +24,16 @@ function App() {
   const [view, setView] = useState(window.location.hash === '#console' ? 'console' : 'home');
   const [clock, setClock] = useState('--:--');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [authLoggedIn, setAuthLoggedIn] = useState(
+    !!(window.algorAuthState && window.algorAuthState.loggedIn)
+  );
+
+  // Reflète l'état de session sur le bouton « Connexion » (texte « Connecté »).
+  useEffect(() => {
+    const h = (e) => setAuthLoggedIn(!!(e.detail && e.detail.loggedIn));
+    window.addEventListener('algorAuthStateChanged', h);
+    return () => window.removeEventListener('algorAuthStateChanged', h);
+  }, []);
 
   // Lock theme + accent (no Tweaks panel in production).
   useEffect(() => {
@@ -86,10 +96,10 @@ function App() {
   }, "Contact")), /*#__PURE__*/React.createElement("div", {
     className: "app-header__right"
   }, /*#__PURE__*/React.createElement("a", {
-    className: "site-login",
+    className: 'site-login' + (authLoggedIn ? ' is-logged' : ''),
     href: "#",
     "data-algor-login": true
-  }, "Connexion"), /*#__PURE__*/React.createElement("a", {
+  }, authLoggedIn ? "Connect\xE9" : "Connexion"), /*#__PURE__*/React.createElement("a", {
     className: "site-cta",
     href: "/offres/"
   }, "Voir les offres")), /*#__PURE__*/React.createElement("button", {

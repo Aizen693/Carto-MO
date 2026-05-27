@@ -954,6 +954,27 @@ function startWireObserver() {
   }, true);
 }
 
+// Reflète l'état de session sur les boutons « Connexion » :
+//  - HTML statique : on remplace directement le textContent.
+//  - SPA React (sous #root) : on évite de toucher au DOM, le composant
+//    écoute l'événement « algorAuthStateChanged » et fait le rendu.
+async function notifyAuthState() {
+  try {
+    const { data } = await supabase.auth.getSession();
+    const loggedIn = !!data?.session?.user;
+    const email = data?.session?.user?.email || null;
+    window.algorAuthState = { loggedIn, email };
+    document.querySelectorAll('.site-login, [data-algor-login]').forEach((el) => {
+      if (el.closest('#root')) return; // géré par React via l'event
+      el.textContent = loggedIn ? 'Connecté' : 'Connexion';
+      el.classList.toggle('is-logged', loggedIn);
+    });
+    window.dispatchEvent(new CustomEvent('algorAuthStateChanged', { detail: { loggedIn, email } }));
+  } catch (_) { /* ignore */ }
+}
+// Premier check + re-check à chaque changement (login / logout via overlay).
+supabase.auth.onAuthStateChange(() => notifyAuthState());
+
 async function gateSite() {
   try {
     const { data } = await supabase.auth.getSession();
@@ -977,10 +998,12 @@ if (IS_GATED_PAGE) {
   // Pages théâtres / archive / rapports : overlay bloquant au chargement.
   gateSite();
 } else {
-  // Pages publiques (home, rubriques) : pas de gate, juste câbler les boutons.
+  // Pages publiques (home, rubriques) : pas de gate, juste câbler les boutons
+  // et refléter l'état de session sur le bouton « Connexion ».
+  const initPublic = () => { startWireObserver(); notifyAuthState(); };
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startWireObserver);
+    document.addEventListener('DOMContentLoaded', initPublic);
   } else {
-    startWireObserver();
+    initPublic();
   }
 }

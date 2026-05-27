@@ -18,6 +18,17 @@ function App() {
   );
   const [clock, setClock] = useState('--:--');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [authLoggedIn, setAuthLoggedIn] = useState(
+    !!(window.algorAuthState && window.algorAuthState.loggedIn)
+  );
+
+  // Reflète l'état de session sur le bouton « Connexion » (texte « Connecté »
+  // si une session est active). site-auth.js dispatch l'événement.
+  useEffect(() => {
+    const h = (e) => setAuthLoggedIn(!!(e.detail && e.detail.loggedIn));
+    window.addEventListener('algorAuthStateChanged', h);
+    return () => window.removeEventListener('algorAuthStateChanged', h);
+  }, []);
 
   // Lock theme + accent (no Tweaks panel in production).
   useEffect(() => {
@@ -66,8 +77,9 @@ function App() {
           </nav>
 
           <div className="app-header__right">
-            <a className="site-login" href="#" data-algor-login>
-              Connexion
+            <a className={'site-login' + (authLoggedIn ? ' is-logged' : '')}
+               href="#" data-algor-login>
+              {authLoggedIn ? 'Connecté' : 'Connexion'}
             </a>
             <a className="site-cta" href="/offres/">Voir les offres</a>
           </div>
