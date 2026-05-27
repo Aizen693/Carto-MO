@@ -66,8 +66,7 @@ function App() {
           </nav>
 
           <div className="app-header__right">
-            <a className="site-login" href="#console"
-               onClick={(e) => { e.preventDefault(); setView('console'); }}>
+            <a className="site-login" href="#" data-algor-login>
               Connexion
             </a>
             <a className="site-cta" href="/offres/">Voir les offres</a>

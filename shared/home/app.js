@@ -87,11 +87,8 @@ function App() {
     className: "app-header__right"
   }, /*#__PURE__*/React.createElement("a", {
     className: "site-login",
-    href: "#console",
-    onClick: e => {
-      e.preventDefault();
-      setView('console');
-    }
+    href: "#",
+    "data-algor-login": true
   }, "Connexion"), /*#__PURE__*/React.createElement("a", {
     className: "site-cta",
     href: "/offres/"

@@ -59,7 +59,8 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   },
 });
 
-// Expose for convenience (e.g. logout buttons across pages can call this)
+// Expose for convenience (e.g. logout buttons across pages can call this).
+// openLogin() est défini plus bas, après buildOverlay().
 window.algorAuth = {
   supabase,
   async logout() {
@@ -75,6 +76,8 @@ const ICON_EYE_OFF = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
 const ICON_ARROW = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
 const ICON_CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
 const ICON_STAR = `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2.5l2.9 5.9 6.6.95-4.75 4.63 1.12 6.52L12 17.9l-5.9 3.1 1.13-6.52L2.5 9.85l6.6-.95z"/></svg>`;
+const ICON_CLOSE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
+const ICON_USER  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
 
 const FIELD = (icon, input) =>
   `<div class="sa-field"><span class="sa-field-icon">${icon}</span>${input}</div>`;
@@ -124,6 +127,10 @@ const OVERLAY_HTML = `
       <div class="sa-card">
         <div class="sa-card-pattern" aria-hidden="true"></div>
 
+        <button type="button" class="sa-close" id="sa-close-btn" aria-label="Fermer">
+          ${ICON_CLOSE}
+        </button>
+
         <div class="sa-head">
           <div class="sa-logo">
             <img src="/shared/algor-mark.jpg" alt="Algor Access" decoding="async">
@@ -169,6 +176,24 @@ const OVERLAY_HTML = `
             <a href="#" id="sa-go-login" class="sa-link sa-link-strong">Se connecter</a>
           </p>
           <p class="sa-note">Le compte créé est gratuit. L'accès aux théâtres nécessite un passage premium.</p>
+        </div>
+
+        <!-- ── Vue : compte connecté (premium / admin / editor) ── -->
+        <div class="sa-view" id="sa-view-account">
+          <div class="sa-upgrade">
+            <div class="sa-upgrade-badge">${ICON_USER}</div>
+            <p class="sa-upgrade-lead">
+              Connecté en tant que <strong id="sa-account-email">…</strong>.<br>
+              <span class="sa-account-plan-line">Plan&nbsp;: <span id="sa-account-plan">…</span></span>
+            </p>
+            <button type="button" id="sa-goto-theatres" class="sa-submit">
+              <span class="sa-submit-content">
+                <span class="sa-btn-text">Accéder aux théâtres</span>
+                <span class="sa-btn-arrow">${ICON_ARROW}</span>
+              </span>
+            </button>
+            <a href="#" id="sa-account-logout" class="sa-link sa-upgrade-logout">Se déconnecter</a>
+          </div>
         </div>
 
         <!-- ── Vue : compte gratuit (upgrade premium) ── -->
@@ -345,6 +370,24 @@ const OVERLAY_CSS = `
     linear-gradient(45deg,  #fff 0.5px, transparent 0.5px);
   background-size: 30px 30px;
 }
+
+/* ── Bouton fermer (visible seulement en mode dismissible) ── */
+.sa-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 30px; height: 30px;
+  display: none; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 8px; padding: 0; cursor: pointer;
+  color: var(--sa-tx-d); z-index: 2;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.sa-close:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.22); }
+.sa-close svg { width: 15px; height: 15px; }
+#site-auth-overlay.is-dismissible .sa-close { display: flex; }
+
+/* En mode dismissible : fond plus discret pour ne pas masquer la page */
+#site-auth-overlay.is-dismissible { background: rgba(8,5,18,0.78); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+#site-auth-overlay.is-dismissible .sa-bg-gradient { opacity: 0.55; }
 
 /* ── En-tête ───────────────────────────────────────────── */
 .sa-head { position: relative; text-align: center; margin-bottom: 22px; }
@@ -564,6 +607,7 @@ const OVERLAY_CSS = `
 }
 .sa-perks li svg { width: 14px; height: 14px; flex: 0 0 14px; color: var(--v-soft); }
 .sa-upgrade-logout { display: inline-block; margin-top: 14px; }
+.sa-account-plan-line { font-size: 12px; color: var(--v-soft); }
 
 .sa-foot {
   display: flex; justify-content: center; gap: 9px;
@@ -599,7 +643,19 @@ const VIEWS = {
     sub: "Débloquez l'accès complet aux théâtres d'analyse.",
     focus: null,
   },
+  account: {
+    title: 'Votre compte',
+    sub: 'Vous êtes déjà connecté à Algor Access.',
+    focus: null,
+  },
 };
+
+// Pages gatées (overlay bloquant au chargement). Sur les autres pages
+// (homepage publique, rubriques marketing), site-auth.js expose seulement
+// algorAuth.openLogin() pour le bouton « Connexion ».
+const GATED_PREFIXES = ['/sahel/', '/moyen-orient/', '/rdc/', '/afrique/', '/madagascar/', '/asie-sud/', '/archive/'];
+const IS_GATED_PAGE = GATED_PREFIXES.some((p) => location.pathname.startsWith(p))
+                   || /-v2\.html$/.test(location.pathname);
 
 let overlayEl = null;
 
@@ -662,13 +718,41 @@ function setError(el, message, kind) {
 }
 function clearError(el) { el.className = 'sa-error'; }
 
-function buildOverlay() {
+function buildOverlay(opts) {
   injectStyles();
-  document.documentElement.classList.add('sa-pending');
+  const dismissible = !!(opts && opts.dismissible);
+  if (!dismissible) {
+    // Mode « gate » : on bloque toute la page sous l'overlay.
+    document.documentElement.classList.add('sa-pending');
+  }
   const wrapper = document.createElement('div');
   wrapper.innerHTML = OVERLAY_HTML;
   overlayEl = wrapper.firstElementChild;
+  if (dismissible) overlayEl.classList.add('is-dismissible');
   document.body.appendChild(overlayEl);
+
+  // Bouton fermer (visible seulement en mode dismissible — bouton « Connexion »).
+  overlayEl.querySelector('#sa-close-btn').addEventListener('click', () => {
+    removeOverlay({ silent: true });
+  });
+  // Esc ferme aussi en mode dismissible.
+  if (dismissible) {
+    const escHandler = (e) => {
+      if (e.key === 'Escape') { removeOverlay({ silent: true }); document.removeEventListener('keydown', escHandler); }
+    };
+    document.addEventListener('keydown', escHandler);
+  }
+
+  // Bouton « Accéder aux théâtres » (vue account).
+  overlayEl.querySelector('#sa-goto-theatres').addEventListener('click', () => {
+    location.href = '/sahel/';
+  });
+  // Bouton « Se déconnecter » de la vue account.
+  overlayEl.querySelector('#sa-account-logout').addEventListener('click', async (e) => {
+    e.preventDefault();
+    await supabase.auth.signOut();
+    location.reload();
+  });
 
   const loginForm = overlayEl.querySelector('#site-auth-form');
   const signupForm = overlayEl.querySelector('#site-auth-signup-form');
@@ -813,16 +897,61 @@ function buildOverlay() {
   });
 }
 
-function removeOverlay() {
+function removeOverlay(opts) {
   document.documentElement.classList.remove('sa-pending');
   if (!overlayEl) return;
   overlayEl.classList.add('sa-closing');
+  const silent = !!(opts && opts.silent);
   setTimeout(() => {
     overlayEl?.remove();
     overlayEl = null;
-    window.dispatchEvent(new CustomEvent('algorAuthReady'));
+    if (!silent) window.dispatchEvent(new CustomEvent('algorAuthReady'));
     if (window.map?.resize) try { window.map.resize(); } catch {}
   }, 320);
+}
+
+// Ouvre l'overlay à la demande (bouton « Connexion » sur pages publiques).
+// Choisit automatiquement la vue selon l'état de session.
+async function openLogin() {
+  if (overlayEl) return; // déjà ouvert
+  buildOverlay({ dismissible: true });
+  try {
+    const { data } = await supabase.auth.getSession();
+    if (data?.session?.user) {
+      const user = data.session.user;
+      const profile = await fetchProfile(user.id);
+      if (hasZoneAccess(profile)) {
+        // Connecté avec accès → vue récap compte.
+        overlayEl.querySelector('#sa-account-email').textContent = user.email || '—';
+        const planLabel = profile.role === 'admin' ? 'admin'
+                         : profile.role === 'editor' ? 'editor'
+                         : (profile.plan || 'premium');
+        overlayEl.querySelector('#sa-account-plan').textContent = planLabel;
+        switchView('account');
+        return;
+      }
+      // Connecté mais pas d'accès → vue upgrade.
+      switchView('upgrade');
+      return;
+    }
+  } catch (_) { /* fall through to login */ }
+  switchView('login');
+}
+window.algorAuth.openLogin = openLogin;
+
+// Auto-câblage : tout élément avec [data-algor-login] ou class .site-login
+// ouvre l'overlay au clic. On délègue depuis document pour ne PAS toucher
+// au DOM React (qui crash si on lui mute des attributs sous les pieds).
+function startWireObserver() {
+  window.__algorWireAttached = true;
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-algor-login], .site-login');
+    if (!t) return;
+    e.preventDefault();
+    e.stopPropagation();
+    window.__algorWireFired = (window.__algorWireFired || 0) + 1;
+    openLogin();
+  }, true);
 }
 
 async function gateSite() {
@@ -844,4 +973,14 @@ async function gateSite() {
   buildOverlay();
 }
 
-gateSite();
+if (IS_GATED_PAGE) {
+  // Pages théâtres / archive / rapports : overlay bloquant au chargement.
+  gateSite();
+} else {
+  // Pages publiques (home, rubriques) : pas de gate, juste câbler les boutons.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startWireObserver);
+  } else {
+    startWireObserver();
+  }
+}
