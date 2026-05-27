@@ -61,7 +61,12 @@
   .deb-fs-btn:active { transform: scale(0.96); }
   .deb-fs-btn svg { width: 14px; height: 14px; }
 
-  /* Fullscreen state — uniquement carte + timeline (curseur), pas la sidebar/header */
+  /* Fullscreen state — uniquement carte + timeline (curseur), pas la sidebar/header.
+     L'API Fullscreen du navigateur sort le card du flux DOM, donc on n'a pas a
+     se battre avec les containing block ancestors. .is-fullscreen fait office
+     de fallback pour les cas (rares) ou l'API n'est pas dispo. */
+  .deb-dossier:fullscreen,
+  .deb-dossier:-webkit-full-screen,
   .deb-dossier.is-fullscreen {
     position: fixed;
     top: 0; left: 0;
@@ -73,14 +78,26 @@
     box-shadow: none;
     overflow: hidden;
   }
+  .deb-dossier:fullscreen .deb-top,
+  .deb-dossier:-webkit-full-screen .deb-top,
   .deb-dossier.is-fullscreen .deb-top { display: none; }
+  .deb-dossier:fullscreen .deb-side,
+  .deb-dossier:-webkit-full-screen .deb-side,
   .deb-dossier.is-fullscreen .deb-side { display: none; }
+  .deb-dossier:fullscreen .deb-body,
+  .deb-dossier:-webkit-full-screen .deb-body,
   .deb-dossier.is-fullscreen .deb-body {
     flex: 1; min-height: 0;
-    grid-template-columns: 1fr; /* sidebar masquée */
+    grid-template-columns: 1fr;
   }
+  .deb-dossier:fullscreen .deb-main,
+  .deb-dossier:-webkit-full-screen .deb-main,
   .deb-dossier.is-fullscreen .deb-main { min-height: 0; }
+  .deb-dossier:fullscreen #map,
+  .deb-dossier:-webkit-full-screen #map,
   .deb-dossier.is-fullscreen #map { min-height: 0; height: 100%; }
+  .deb-dossier:fullscreen #timeline,
+  .deb-dossier:-webkit-full-screen #timeline,
   .deb-dossier.is-fullscreen #timeline { flex-shrink: 0; }
 
   /* Bouton fermer flottant en haut a droite de la carte en plein ecran */
@@ -1340,23 +1357,46 @@ function bindFullscreen(){
   const expandIcon = btn.querySelector('.deb-fs-icon-expand');
   const shrinkIcon = btn.querySelector('.deb-fs-icon-shrink');
   const label = btn.querySelector('.deb-fs-lbl');
-  function setFs(on) {
+
+  function updateUI(on) {
     card.classList.toggle('is-fullscreen', on);
     document.body.classList.toggle('deb-fs-active', on);
     if (expandIcon) expandIcon.style.display = on ? 'none' : 'block';
     if (shrinkIcon) shrinkIcon.style.display = on ? 'block' : 'none';
     if (label) label.textContent = on ? 'Quitter' : 'Plein écran';
     btn.setAttribute('aria-label', on ? 'Quitter le plein écran' : 'Plein écran');
-    // Mapbox a besoin d'un resize quand son container change de taille
     setTimeout(() => { if (map && map.resize) map.resize(); }, 60);
     setTimeout(() => { if (map && map.resize) map.resize(); }, 360);
   }
-  btn.addEventListener('click', () => setFs(!card.classList.contains('is-fullscreen')));
-  const closeBtn = document.getElementById('deb-fs-close');
-  if (closeBtn) closeBtn.addEventListener('click', () => setFs(false));
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && card.classList.contains('is-fullscreen')) setFs(false);
+
+  function isFsActive() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement);
+  }
+
+  function enterFs() {
+    if (card.requestFullscreen) return card.requestFullscreen();
+    if (card.webkitRequestFullscreen) return card.webkitRequestFullscreen();
+    // Fallback CSS si l'API Fullscreen n'est pas dispo (iframe sans allowfullscreen, etc.)
+    updateUI(true);
+  }
+  function exitFs() {
+    if (document.exitFullscreen) return document.exitFullscreen();
+    if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+    updateUI(false);
+  }
+
+  btn.addEventListener('click', () => {
+    if (isFsActive() || card.classList.contains('is-fullscreen')) exitFs();
+    else enterFs();
   });
+
+  // Sync UI quand l'utilisateur appuie sur Echap ou le bouton du navigateur
+  function onFsChange() {
+    const fs = document.fullscreenElement === card || document.webkitFullscreenElement === card;
+    updateUI(fs);
+  }
+  document.addEventListener('fullscreenchange', onFsChange);
+  document.addEventListener('webkitfullscreenchange', onFsChange);
 }
 
 function bindMapHover(){
