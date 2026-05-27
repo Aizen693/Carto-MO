@@ -2189,6 +2189,116 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   box-shadow: 0 0 0 4px rgba(107, 63, 160, 0.12);
 }
 
+/* — Badge "Dernière mise à jour" en haut du hero homepage */
+.last-update {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 24px;
+  padding: 5px 12px 5px 10px;
+  border: 1px solid rgba(107, 63, 160, 0.22);
+  border-radius: 999px;
+  background: rgba(168, 130, 255, 0.06);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+.last-update__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ED38C;
+  box-shadow: 0 0 0 3px rgba(78, 211, 140, 0.18);
+  animation: lastUpdatePulse 2.4s ease-in-out infinite;
+}
+@keyframes lastUpdatePulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(78, 211, 140, 0.18); }
+  50%      { box-shadow: 0 0 0 5px rgba(78, 211, 140, 0.08); }
+}
+.last-update__label {
+  white-space: nowrap;
+}
+
+/* — Production récente : 3 vignettes de notes en home */
+.prod-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.prod-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 26px 24px 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.18s var(--ease), transform 0.18s var(--ease), box-shadow 0.2s var(--ease);
+}
+.prod-card:hover {
+  border-color: var(--violet-bd);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-2);
+}
+.prod-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+.prod-card__zone {
+  color: var(--violet);
+  font-weight: 600;
+}
+.prod-card__date {
+  color: var(--muted);
+}
+.prod-card__title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.32;
+  color: var(--ink);
+  flex: 1;
+}
+.prod-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.prod-card__tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding: 4px 10px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+}
+.prod-card__arrow {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--violet-bg);
+  color: var(--violet);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 880px) {
+  .prod-grid { grid-template-columns: 1fr; }
+}
+
 /* — Trust band : chiffres cles sous le hero homepage */
 .trust-band {
   border-top: 1px solid rgba(168, 130, 255, 0.18);
@@ -2588,11 +2698,27 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 }
 .site-footer__bottom-inner {
   max-width: 1440px; margin: 0 auto;
-  padding: 22px 48px;
+  padding: 22px 48px 14px;
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
   font-family: var(--mono);
   font-size: 11.5px; letter-spacing: 0.04em; color: #5A5378;
 }
+.site-footer__legal-inner {
+  max-width: 1440px; margin: 0 auto;
+  padding: 6px 48px 22px;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px 26px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  font-family: var(--mono);
+  font-size: 10.5px; letter-spacing: 0.06em; color: #443D6A;
+  padding-top: 14px;
+  margin-top: 4px;
+}
+.site-footer__legal-inner a {
+  color: #5A5378;
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+.site-footer__legal-inner a:hover { color: #A88AFF; }
 
 /* ═══════════════════════════════════════════════════════
    PAGES RUBRIQUES — composants

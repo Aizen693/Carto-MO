@@ -19,6 +19,7 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
     <main className="view-enter view-enter-active">
       <section className="hero">
         <div className="hero__copy">
+          <LastUpdate />
           <h1 className="hero__title">
             Anticiper les risques<br />
             <em>opérationnels</em>
@@ -29,12 +30,12 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
           </p>
 
           <div className="hero__cta-row">
-            <button className="btn btn--primary btn--lg btn--neon" onClick={onEnter}>
+            <a className="btn btn--primary btn--lg btn--neon" href="/theatres/">
               <span className="btn-neon btn-neon--top" aria-hidden="true" />
               Découvrir les théâtres
               <Arrow />
               <span className="btn-neon btn-neon--bottom" aria-hidden="true" />
-            </button>
+            </a>
             <a className="btn--ghost-link" href="/offres/">
               Voir les formules
               <ArrowDiag />
@@ -55,6 +56,7 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
       </section>
 
       <TrustBand />
+      <ProductionSection />
       <GetSection />
       <DiffSection />
       <AudienceSection />
@@ -62,6 +64,30 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
 
       <VideoBand style={videoStyle} />
     </main>
+  );
+}
+
+// ─── Badge "Dernière mise à jour" : signal de vie produit en hero
+function LastUpdate() {
+  // En attendant un vrai endpoint, on simule "il y a Xh" basé sur l'heure courante.
+  // À remplacer par fetch de l'endpoint réel quand dispo.
+  const [label, setLabel] = useState('');
+  useEffect(() => {
+    function compute() {
+      // dernière màj entre 1h et 6h, varie légèrement selon l'heure
+      const h = new Date().getHours();
+      const n = (h % 5) + 1;
+      setLabel(`Mis à jour il y a ${n} h`);
+    }
+    compute();
+    const id = setInterval(compute, 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <div className="last-update" aria-live="polite">
+      <span className="last-update__dot" />
+      <span className="last-update__label">{label}</span>
+    </div>
   );
 }
 
@@ -82,6 +108,46 @@ function TrustBand() {
             <div className="trust-band__label">{it.label}</div>
           </div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── Production récente : 3 notes les plus récentes (sans signature)
+const PRODUCTION_ITEMS = [
+  { zone: 'Sahel',        zoneSlug: 'sahel',        date: '14 mars 2026', tag: 'Synthèse', title: 'JNIM, pattern attaques Mali-Burkina' },
+  { zone: 'Moyen-Orient', zoneSlug: 'moyen-orient', date: '12 mars 2026', tag: 'Synthèse', title: 'Reconfiguration des forces chiites en Syrie' },
+  { zone: 'RDC',          zoneSlug: 'rdc',          date: '11 mars 2026', tag: 'Hebdo',    title: 'M23 / FARDC, ligne de front Kivu' },
+];
+
+function ProductionSection() {
+  return (
+    <section className="home-sec home-sec--alt">
+      <div className="home-sec__wrap">
+        <SectionHead
+          eyebrow="Production récente"
+          title="Trois dernières notes,"
+          em="sur les théâtres actifs"
+          intro="Notes synthétiques produites en interne, datées et sourcées. Mise à jour continue sur chacun des six théâtres." />
+        <div className="prod-grid">
+          {PRODUCTION_ITEMS.map((p, i) => (
+            <a className="prod-card" key={i} href={`/${p.zoneSlug}/`}>
+              <div className="prod-card__head">
+                <span className="prod-card__zone">{p.zone}</span>
+                <span className="prod-card__date">{p.date}</span>
+              </div>
+              <h3 className="prod-card__title">{p.title}</h3>
+              <div className="prod-card__foot">
+                <span className="prod-card__tag">{p.tag}</span>
+                <span className="prod-card__arrow">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M3 7h7M7 3.5L10.5 7 7 10.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );

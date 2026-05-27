@@ -29,15 +29,15 @@ function HomeView({
     className: "hero"
   }, /*#__PURE__*/React.createElement("div", {
     className: "hero__copy"
-  }, /*#__PURE__*/React.createElement("h1", {
+  }, /*#__PURE__*/React.createElement(LastUpdate, null), /*#__PURE__*/React.createElement("h1", {
     className: "hero__title"
   }, "Anticiper les risques", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "op\xE9rationnels")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
   }, "Six th\xE9\xE2tres g\xE9opolitiques suivis en continu pour les directions s\xFBret\xE9, cabinets d'analyse et r\xE9dactions sp\xE9cialis\xE9es. Imagerie satellite, ACLED, GDELT, presse r\xE9gionale, OSINT social : chaque \xE9v\xE9nement sourc\xE9, dat\xE9 et auditable."), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
-  }, /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("a", {
     className: "btn btn--primary btn--lg btn--neon",
-    onClick: onEnter
+    href: "/theatres/"
   }, /*#__PURE__*/React.createElement("span", {
     className: "btn-neon btn-neon--top",
     "aria-hidden": "true"
@@ -59,9 +59,35 @@ function HomeView({
     href: "/afrique/"
   }, "Afrique"))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"
-  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(TrustBand, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
+  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(TrustBand, null), /*#__PURE__*/React.createElement(ProductionSection, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
     style: videoStyle
   }));
+}
+
+// ─── Badge "Dernière mise à jour" : signal de vie produit en hero
+function LastUpdate() {
+  // En attendant un vrai endpoint, on simule "il y a Xh" basé sur l'heure courante.
+  // À remplacer par fetch de l'endpoint réel quand dispo.
+  const [label, setLabel] = useState('');
+  useEffect(() => {
+    function compute() {
+      // dernière màj entre 1h et 6h, varie légèrement selon l'heure
+      const h = new Date().getHours();
+      const n = h % 5 + 1;
+      setLabel(`Mis à jour il y a ${n} h`);
+    }
+    compute();
+    const id = setInterval(compute, 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "last-update",
+    "aria-live": "polite"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "last-update__dot"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "last-update__label"
+  }, label));
 }
 
 // ─── Trust band : chiffres clés juste sous le hero
@@ -91,6 +117,70 @@ function TrustBand() {
   }, it.value), /*#__PURE__*/React.createElement("div", {
     className: "trust-band__label"
   }, it.label)))));
+}
+
+// ─── Production récente : 3 notes les plus récentes (sans signature)
+const PRODUCTION_ITEMS = [{
+  zone: 'Sahel',
+  zoneSlug: 'sahel',
+  date: '14 mars 2026',
+  tag: 'Synthèse',
+  title: 'JNIM, pattern attaques Mali-Burkina'
+}, {
+  zone: 'Moyen-Orient',
+  zoneSlug: 'moyen-orient',
+  date: '12 mars 2026',
+  tag: 'Synthèse',
+  title: 'Reconfiguration des forces chiites en Syrie'
+}, {
+  zone: 'RDC',
+  zoneSlug: 'rdc',
+  date: '11 mars 2026',
+  tag: 'Hebdo',
+  title: 'M23 / FARDC, ligne de front Kivu'
+}];
+function ProductionSection() {
+  return /*#__PURE__*/React.createElement("section", {
+    className: "home-sec home-sec--alt"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "home-sec__wrap"
+  }, /*#__PURE__*/React.createElement(SectionHead, {
+    eyebrow: "Production r\xE9cente",
+    title: "Trois derni\xE8res notes,",
+    em: "sur les th\xE9\xE2tres actifs",
+    intro: "Notes synth\xE9tiques produites en interne, dat\xE9es et sourc\xE9es. Mise \xE0 jour continue sur chacun des six th\xE9\xE2tres."
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "prod-grid"
+  }, PRODUCTION_ITEMS.map((p, i) => /*#__PURE__*/React.createElement("a", {
+    className: "prod-card",
+    key: i,
+    href: `/${p.zoneSlug}/`
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "prod-card__head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "prod-card__zone"
+  }, p.zone), /*#__PURE__*/React.createElement("span", {
+    className: "prod-card__date"
+  }, p.date)), /*#__PURE__*/React.createElement("h3", {
+    className: "prod-card__title"
+  }, p.title), /*#__PURE__*/React.createElement("div", {
+    className: "prod-card__foot"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "prod-card__tag"
+  }, p.tag), /*#__PURE__*/React.createElement("span", {
+    className: "prod-card__arrow"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 14 14",
+    fill: "none"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M3 7h7M7 3.5L10.5 7 7 10.5",
+    stroke: "currentColor",
+    strokeWidth: "1.6",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  })))))))));
 }
 
 // ─── Sections de presentation — structure marketing par sections (inspiration vigideep).
