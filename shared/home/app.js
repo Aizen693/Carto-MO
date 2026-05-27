@@ -68,7 +68,7 @@ function App() {
     className: "brand__name"
   }, "ALGOR INT"), /*#__PURE__*/React.createElement("div", {
     className: "brand__tag"
-  }, "Renseignement g\xE9opolitique"))), /*#__PURE__*/React.createElement("nav", {
+  }, "Renseignement geopolitique"))), /*#__PURE__*/React.createElement("nav", {
     className: "site-nav",
     "aria-label": "Rubriques"
   }, /*#__PURE__*/React.createElement("a", {

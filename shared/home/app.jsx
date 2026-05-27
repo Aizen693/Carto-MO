@@ -52,7 +52,7 @@ function App() {
             <div className="brand__mark" />
             <div className="brand__body">
               <div className="brand__name">ALGOR INT</div>
-              <div className="brand__tag">Renseignement géopolitique</div>
+              <div className="brand__tag">Renseignement geopolitique</div>
             </div>
           </div>
 
