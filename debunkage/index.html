@@ -21,7 +21,6 @@
 
 <link rel="stylesheet" href="../shared/home/styles.css?v=20260527a" />
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 
 <style>
   /* ── Locale Débunkage — additions au shared styles ── */
@@ -671,51 +670,8 @@
     </div>
   </section>
 
-</main>
 
-<!-- ─────────────────────────────────────── Footer (shared) -->
-<footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__brand">
-      <div class="site-footer__brand-name"><span></span>ALGOR INT</div>
-      <p class="site-footer__blurb">
-        Algor Access : plateforme de cartographie OSINT. Six théâtres géopolitiques suivis en continu, chaque événement sourcé, daté et auditable.
-      </p>
-    </div>
-    <div class="site-footer__col">
-      <h4>Le site</h4>
-      <a href="/">Plateforme</a>
-      <a href="/debunkage/">Débunkage</a>
-      <a href="/methodologie/">Méthodologie</a>
-      <a href="/offres/">Offres</a>
-      <a href="/theatres/">Théâtres</a>
-      <a href="/a-propos/">A propos</a>
-      <a href="/contact/">Contact</a>
-    </div>
-    <div class="site-footer__col">
-      <h4>Theatres</h4>
-      <a href="/moyen-orient/">Moyen-Orient</a>
-      <a href="/sahel/">Sahel</a>
-      <a href="/rdc/">RDC</a>
-      <a href="/madagascar/">Madagascar</a>
-      <a href="/afrique/">Afrique Maritime</a>
-      <a href="/asie-sud/">Asie du Sud</a>
-    </div>
-    <div class="site-footer__col">
-      <h4>Acces</h4>
-      <a href="#" data-algor-login>Connexion</a>
-      <a href="/offres/">Voir les offres</a>
-      <a href="/contact/">Nous contacter</a>
-    </div>
-  </div>
-  <div class="site-footer__bottom">
-    <div class="site-footer__bottom-inner">
-      <span>© 2026 Algor Int · Débunkage</span>
-      <span>Diffusion restreinte · usage professionnel</span>
-    </div>
-  </div>
-</footer>
-
+  <!-- ── Modal lead form (dans main pour SPA) ──────────── -->
 <!-- ─────────────────────────────────────── Modal lead form -->
 <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-h">
   <div class="modal">
@@ -761,11 +717,68 @@
     </div>
   </div>
 </div>
+</main>
 
-<script src="../shared/home/sitenav.js?v=20260527d"></script>
+<!-- ─────────────────────────────────────── Footer (shared) -->
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <div class="site-footer__brand-name"><span></span>ALGOR INT</div>
+      <p class="site-footer__blurb">
+        Algor Access : plateforme de cartographie OSINT. Six théâtres géopolitiques suivis en continu, chaque événement sourcé, daté et auditable.
+      </p>
+    </div>
+    <div class="site-footer__col">
+      <h4>Le site</h4>
+      <a href="/">Plateforme</a>
+      <a href="/debunkage/">Débunkage</a>
+      <a href="/methodologie/">Méthodologie</a>
+      <a href="/offres/">Offres</a>
+      <a href="/theatres/">Théâtres</a>
+      <a href="/a-propos/">A propos</a>
+      <a href="/contact/">Contact</a>
+    </div>
+    <div class="site-footer__col">
+      <h4>Theatres</h4>
+      <a href="/moyen-orient/">Moyen-Orient</a>
+      <a href="/sahel/">Sahel</a>
+      <a href="/rdc/">RDC</a>
+      <a href="/madagascar/">Madagascar</a>
+      <a href="/afrique/">Afrique Maritime</a>
+      <a href="/asie-sud/">Asie du Sud</a>
+    </div>
+    <div class="site-footer__col">
+      <h4>Acces</h4>
+      <a href="#" data-algor-login>Connexion</a>
+      <a href="/offres/">Voir les offres</a>
+      <a href="/contact/">Nous contacter</a>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <div class="site-footer__bottom-inner">
+      <span>© 2026 Algor Int · Débunkage</span>
+      <span>Diffusion restreinte · usage professionnel</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script src="../shared/home/sitenav.js?v=20260527e"></script>
 
 <script>
-/* ════ Data + Map ════ */
+/* ════ Data + Map ════
+   IIFE pour permettre la re-execution en SPA (sitenav.js) sans collisions
+   de const/let. Les fonctions appelées via onclick (modal) sont exposees
+   explicitement sur window. */
+(function () {
+function _whenMapboxReady(cb, tries) {
+  tries = tries || 0;
+  if (typeof mapboxgl !== 'undefined' && mapboxgl.Map) { cb(); return; }
+  if (tries > 120) { console.error('[debunkage] mapboxgl jamais chargé'); return; }
+  setTimeout(function () { _whenMapboxReady(cb, tries + 1); }, 50);
+}
+_whenMapboxReady(function () {
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
 const TYPE_COLOR = {
@@ -1226,7 +1239,8 @@ function submitLead(){
   document.getElementById('modal-form').style.display = 'none';
   document.getElementById('modal-success').classList.add('show');
 }
-document.getElementById('modal-overlay').addEventListener('click', (e) => {
+const _modalOverlay = document.getElementById('modal-overlay');
+if (_modalOverlay) _modalOverlay.addEventListener('click', (e) => {
   if (e.target.id === 'modal-overlay') closeSubmitModal();
 });
 
@@ -1248,10 +1262,19 @@ function daysBetween(a, b){
   return Math.round((new Date(b) - new Date(a)) / 86400000);
 }
 
+// Expose les handlers utilises par onclick (modal)
+window.openSubmitModal = openSubmitModal;
+window.closeSubmitModal = closeSubmitModal;
+window.submitLead = submitLead;
+
 init().catch(err => {
   console.error('[debunkage] init failed', err);
-  document.getElementById('map-loader').textContent = 'Erreur de chargement — recharger la page';
+  const ml = document.getElementById('map-loader');
+  if (ml) ml.textContent = 'Erreur de chargement — recharger la page';
 });
+
+}); // end _whenMapboxReady
+})();
 </script>
 
 </body>

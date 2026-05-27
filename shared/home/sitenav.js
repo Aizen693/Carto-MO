@@ -23,7 +23,9 @@
         return {
           main: doc.querySelector('main'),
           title: doc.title || document.title,
-          bodyScripts: Array.from(doc.querySelectorAll('body > script'))
+          bodyScripts: Array.from(doc.querySelectorAll('body > script')),
+          // Styles specifiques de la nouvelle page (link + inline) — injectes en SPA
+          headStyles: Array.from(doc.querySelectorAll('head style, head link[rel="stylesheet"]'))
         };
       })
       .catch(function () { return null; });
@@ -70,12 +72,47 @@
         document.adoptNode(newMain);
         oldMain.replaceWith(newMain);
 
+        // Inject head styles specifiques de la nouvelle page si pas deja la
+        (data.headStyles || []).forEach(function (s) {
+          if (s.tagName === 'LINK') {
+            var href = s.getAttribute('href');
+            if (!href) return;
+            try {
+              var abs = new URL(href, url.href).href;
+              if (document.querySelector('head link[rel="stylesheet"][href]')) {
+                // dedupe : compare href absolu
+                var existing = Array.from(document.querySelectorAll('head link[rel="stylesheet"]'))
+                  .some(function (l) { return l.href === abs; });
+                if (existing) return;
+              }
+              var nl = document.createElement('link');
+              nl.rel = 'stylesheet'; nl.href = abs;
+              nl.setAttribute('data-spa-injected', '1');
+              document.head.appendChild(nl);
+            } catch (_) {}
+          } else if (s.tagName === 'STYLE') {
+            var content = s.textContent || '';
+            if (!content.trim()) return;
+            // dedupe : empreinte simple (taille + 64 premiers chars)
+            var key = 'k' + content.length + '_' + content.replace(/\s+/g, '').slice(0, 64);
+            if (document.querySelector('head style[data-spa-key="' + CSS.escape(key) + '"]')) return;
+            var ns = document.createElement('style');
+            ns.setAttribute('data-spa-key', key);
+            ns.setAttribute('data-spa-injected', '1');
+            ns.textContent = content;
+            document.head.appendChild(ns);
+          }
+        });
+
         // Re-execute body scripts (idempotent grace au cleanup dans chaque script)
         // EXCEPT sitenav lui-meme — il tourne deja.
         data.bodyScripts.forEach(function (s) {
           var src = s.getAttribute('src') || '';
           if (src.indexOf('sitenav.js') !== -1) return;
           var ns = document.createElement('script');
+          // Maintenir l'ordre d'exec : externes en async=false pour qu'un script
+          // qui depend du precedent (ex: code inline depend de mapbox-gl.js) marche.
+          ns.async = false;
           if (s.src) {
             ns.src = new URL(s.getAttribute('src'), url.href).href;
           } else if (s.textContent && s.textContent.trim()) {
