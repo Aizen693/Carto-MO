@@ -1339,10 +1339,14 @@ function applyFilters(){
 }
 
 function fitToData(){
-  const lats = state.data.publications.map(p => p.lat);
-  const lons = state.data.publications.map(p => p.lon);
+  // Cadrage serré sur le hub Libreville / Owendo (zoom élevé). Le réseau d'usines
+  // et le corridor restent accessibles en dézoomant.
+  const core = state.data.publications.filter(p => p.lon > 9 && p.lon < 10 && p.lat > -0.5 && p.lat < 1);
+  const pts = core.length ? core : state.data.publications;
+  const lats = pts.map(p => p.lat);
+  const lons = pts.map(p => p.lon);
   const bounds = [[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]];
-  map.fitBounds(bounds, { padding: { top: 70, right: 90, bottom: 70, left: 70 }, duration: 1200, maxZoom: 7.5 });
+  map.fitBounds(bounds, { padding: { top: 80, right: 90, bottom: 80, left: 90 }, duration: 1200, maxZoom: 11 });
 }
 
 function bindFullscreen(){
