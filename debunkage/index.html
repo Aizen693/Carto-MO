@@ -753,7 +753,7 @@
       <aside class="deb-hero__aside" aria-label="Cas démo">
         <div class="deb-hero__head">
           <span class="lbl">Cas démo · anonymisé</span>
-          <span class="meta">06 clusters</span>
+          <span class="meta" id="hs-meta">—</span>
         </div>
         <div class="deb-hero__title" id="hs-title">—</div>
         <div class="deb-hero__region" id="hs-region">—</div>
@@ -884,9 +884,7 @@
           <div id="timeline-track">
             <div id="timeline-handle" style="left: 100%;"></div>
           </div>
-          <div id="timeline-axis">
-            <span>14 fév</span><span>21 fév</span><span>28 fév</span><span>7 mars</span><span>14 mars</span><span>21 mars</span><span>28 mars</span><span>4 avr</span><span>10 avr</span>
-          </div>
+          <div id="timeline-axis"></div>
         </div>
       </div>
     </div>
@@ -1087,6 +1085,7 @@ function renderHeroStats(){
   const totalAud = d.publications.reduce((s, p) => s + (p.audience_estimee || 0), 0);
   document.getElementById('hs-aud').textContent = (totalAud / 1000).toFixed(0) + 'k';
   document.getElementById('hs-period').textContent = fmtPeriod(d.campagne.date_debut, d.campagne.date_fin);
+  document.getElementById('hs-meta').textContent = d.reseaux.length + ' clusters';
   document.getElementById('deb-top-name').textContent = d.campagne.nom;
   document.getElementById('deb-top-meta').innerHTML =
     `${escapeHtml(d.campagne.secteur)} · <strong>${escapeHtml(fmtPeriod(d.campagne.date_debut, d.campagne.date_fin))}</strong>`;
@@ -1125,13 +1124,22 @@ function renderSidebar(){
   });
 
   const totalAud = d.publications.reduce((s, p) => s + (p.audience_estimee || 0), 0);
+  const pz = d.publications.find(p => p.type === 'patient_zero');
+  const firstAmp = d.publications
+    .filter(p => p.type === 'amplificateur')
+    .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+  let delaiTxt = '—';
+  if (pz && firstAmp) {
+    const h = Math.round((new Date(firstAmp.date) - new Date(pz.date)) / 3600000);
+    delaiTxt = h < 72 ? h + ' h' : (h / 24).toFixed(1).replace('.', ',') + ' j';
+  }
   document.getElementById('ds-stats').innerHTML = `
     <div class="deb-stat"><span class="deb-stat__lbl">Publications</span><span class="deb-stat__val">${d.campagne.publications_total}</span></div>
     <div class="deb-stat"><span class="deb-stat__lbl">Comptes coordonnés</span><span class="deb-stat__val">${d.campagne.comptes_total}</span></div>
     <div class="deb-stat"><span class="deb-stat__lbl">Pays impliqués</span><span class="deb-stat__val">${d.campagne.pays_implique.length}</span></div>
     <div class="deb-stat"><span class="deb-stat__lbl">Audience cumulée</span><span class="deb-stat__val">${(totalAud/1000).toFixed(0)}k</span></div>
     <div class="deb-stat"><span class="deb-stat__lbl">Durée campagne</span><span class="deb-stat__val">${daysBetween(d.campagne.date_debut, d.campagne.date_fin)} j</span></div>
-    <div class="deb-stat"><span class="deb-stat__lbl">Délai PZ → FR</span><span class="deb-stat__val">35 h</span></div>
+    <div class="deb-stat"><span class="deb-stat__lbl">Délai PZ → diaspora</span><span class="deb-stat__val">${delaiTxt}</span></div>
   `;
 }
 
@@ -1162,9 +1170,9 @@ function buildMap(){
   map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v11',
-    center: [22, 49],
-    zoom: 3.6,
-    minZoom: 2,
+    center: [20, 8],
+    zoom: 2.5,
+    minZoom: 1.5,
     maxZoom: 9,
     attributionControl: false
   });
@@ -1559,6 +1567,17 @@ function renderTimeline(){
   const d = state.data;
   const t0 = new Date(d.campagne.date_debut).getTime();
   const t1 = new Date(d.campagne.date_fin).getTime();
+
+  // Axe : labels de dates répartis dynamiquement sur la période
+  const axis = document.getElementById('timeline-axis');
+  if (axis) {
+    const mois = ['jan','fév','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
+    const N = 8;
+    axis.innerHTML = Array.from({ length: N + 1 }, (_, i) => {
+      const dd = new Date(t0 + (t1 - t0) * (i / N));
+      return `<span>${dd.getUTCDate()} ${mois[dd.getUTCMonth()]}</span>`;
+    }).join('');
+  }
 
   d.publications.forEach(p => {
     const t = new Date(p.date).getTime();
