@@ -1405,12 +1405,24 @@ function bindMapHover(){
   map.on('mousemove', 'points', (e) => {
     if (!e.features?.length) return;
     const p = e.features[0].properties;
-    const date = new Date(p.date);
+    // Pop-up de ville : on regroupe tous les points proches (même localité)
+    const DIST = 0.13;
+    const here = state.data.publications.filter(q =>
+      Math.abs(q.lat - p.lat) < DIST && Math.abs(q.lon - p.lon) < DIST
+    );
+    const ville = (p.ville || '').split(' / ')[0].split(' (')[0];
+    const MAX = 8;
+    const list = here.slice(0, MAX).map(q =>
+      `<div style="display:flex;align-items:center;gap:7px;padding:1px 0">
+         <span style="width:7px;height:7px;border-radius:50%;background:${TYPE_COLOR[q.type]||'#8B5FBF'};flex:0 0 auto"></span>
+         <span>${escapeHtml(q.compte_display)}</span>
+         <span style="opacity:.55;font-size:11px">· ${escapeHtml(TYPE_LABEL[q.type]||q.type)}</span>
+       </div>`).join('');
+    const more = here.length > MAX ? `<div style="opacity:.55;margin-top:3px">+ ${here.length - MAX} autre(s)…</div>` : '';
     tt.innerHTML = `
-      <div class="tt-head">${escapeHtml(p.compte_display)}</div>
-      <div class="tt-meta">${escapeHtml(TYPE_LABEL[p.type]||p.type)} · ${escapeHtml(p.plateforme||'')} · ${escapeHtml(p.ville)}</div>
-      <div class="tt-body">${escapeHtml(p.content_excerpt)}</div>
-      <div class="tt-foot">Niveau de preuve : ${escapeHtml(p.niveau_preuve||'—')} · ${fmtDate(date)}</div>
+      <div class="tt-head">${escapeHtml(ville)}</div>
+      <div class="tt-meta">${here.length} élément${here.length > 1 ? 's' : ''} cartographié${here.length > 1 ? 's' : ''} · cliquer pour le détail</div>
+      <div class="tt-body">${list}${more}</div>
     `;
     const rect = document.getElementById('map').getBoundingClientRect();
     tt.style.left = (e.originalEvent.clientX - rect.left + 14) + 'px';
