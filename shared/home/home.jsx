@@ -19,7 +19,6 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
     <main className="view-enter view-enter-active">
       <section className="hero">
         <div className="hero__copy">
-          <LastUpdate />
           <h1 className="hero__title">
             Anticiper les risques<br />
             <em>opérationnels</em>
@@ -64,30 +63,6 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
 
       <VideoBand style={videoStyle} />
     </main>
-  );
-}
-
-// ─── Badge "Dernière mise à jour" : signal de vie produit en hero
-function LastUpdate() {
-  // En attendant un vrai endpoint, on simule "il y a Xh" basé sur l'heure courante.
-  // À remplacer par fetch de l'endpoint réel quand dispo.
-  const [label, setLabel] = useState('');
-  useEffect(() => {
-    function compute() {
-      // dernière màj entre 1h et 6h, varie légèrement selon l'heure
-      const h = new Date().getHours();
-      const n = (h % 5) + 1;
-      setLabel(`Mis à jour il y a ${n} h`);
-    }
-    compute();
-    const id = setInterval(compute, 60 * 1000);
-    return () => clearInterval(id);
-  }, []);
-  return (
-    <div className="last-update" aria-live="polite">
-      <span className="last-update__dot" />
-      <span className="last-update__label">{label}</span>
-    </div>
   );
 }
 

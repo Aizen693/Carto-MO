@@ -29,7 +29,7 @@ function HomeView({
     className: "hero"
   }, /*#__PURE__*/React.createElement("div", {
     className: "hero__copy"
-  }, /*#__PURE__*/React.createElement(LastUpdate, null), /*#__PURE__*/React.createElement("h1", {
+  }, /*#__PURE__*/React.createElement("h1", {
     className: "hero__title"
   }, "Anticiper les risques", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "op\xE9rationnels")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
@@ -62,32 +62,6 @@ function HomeView({
   }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(TrustBand, null), /*#__PURE__*/React.createElement(ProductionSection, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
     style: videoStyle
   }));
-}
-
-// ─── Badge "Dernière mise à jour" : signal de vie produit en hero
-function LastUpdate() {
-  // En attendant un vrai endpoint, on simule "il y a Xh" basé sur l'heure courante.
-  // À remplacer par fetch de l'endpoint réel quand dispo.
-  const [label, setLabel] = useState('');
-  useEffect(() => {
-    function compute() {
-      // dernière màj entre 1h et 6h, varie légèrement selon l'heure
-      const h = new Date().getHours();
-      const n = h % 5 + 1;
-      setLabel(`Mis à jour il y a ${n} h`);
-    }
-    compute();
-    const id = setInterval(compute, 60 * 1000);
-    return () => clearInterval(id);
-  }, []);
-  return /*#__PURE__*/React.createElement("div", {
-    className: "last-update",
-    "aria-live": "polite"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "last-update__dot"
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "last-update__label"
-  }, label));
 }
 
 // ─── Trust band : chiffres clés juste sous le hero
