@@ -1205,7 +1205,7 @@ function buildMap(){
     center: [11.6, -0.4],
     zoom: 5.6,
     minZoom: 3,
-    maxZoom: 10,
+    maxZoom: 18,
     attributionControl: false
   });
   map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-left');
@@ -1329,6 +1329,12 @@ function addLayers(){
       'circle-stroke-opacity': 0.5
     }
   });
+
+  // Cible de clic/survol invisible : les dots visibles sont minuscules (2.2px),
+  // cette couche elargit la zone interactive pour rendre le clic fiable (desktop + tactile).
+  map.addLayer({ id: 'points-hit', type: 'circle', source: 'points',
+    paint: { 'circle-radius': 13, 'circle-color': '#000000', 'circle-opacity': 0 }
+  });
 }
 
 function applyFilters(){
@@ -1400,10 +1406,15 @@ function bindFullscreen(){
 
 function bindMapHover(){
   const tt = document.getElementById('tooltip');
-  map.on('mouseenter', 'points', () => { map.getCanvas().style.cursor = 'pointer'; });
-  map.on('mouseleave', 'points', () => { map.getCanvas().style.cursor = ''; tt.style.display = 'none'; });
-  map.on('mousemove', 'points', (e) => {
+  // Au-dela de ce zoom on masque la pop-up groupee par localite : les points
+  // sont assez ecartes pour etre lus individuellement, le detail reste au clic.
+  const TOOLTIP_MAX_ZOOM = 13;
+  map.on('mouseenter', 'points-hit', () => { map.getCanvas().style.cursor = 'pointer'; });
+  map.on('mouseleave', 'points-hit', () => { map.getCanvas().style.cursor = ''; tt.style.display = 'none'; });
+  map.on('zoom', () => { if (map.getZoom() >= TOOLTIP_MAX_ZOOM) tt.style.display = 'none'; });
+  map.on('mousemove', 'points-hit', (e) => {
     if (!e.features?.length) return;
+    if (map.getZoom() >= TOOLTIP_MAX_ZOOM) { tt.style.display = 'none'; return; }
     const p = e.features[0].properties;
     // Pop-up de ville : on regroupe tous les points proches (même localité)
     const DIST = 0.13;
@@ -1429,7 +1440,7 @@ function bindMapHover(){
     tt.style.top  = (e.originalEvent.clientY - rect.top + 14) + 'px';
     tt.style.display = 'block';
   });
-  map.on('click', 'points', (e) => {
+  map.on('click', 'points-hit', (e) => {
     const p = e.features[0].properties;
     new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '320px' })
       .setLngLat(e.features[0].geometry.coordinates)
