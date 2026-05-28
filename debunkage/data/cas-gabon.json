@@ -30,6 +30,7 @@
     { "type": "incident",   "label": "Incident informationnel", "couleur": "#C94A4A" }
   ],
   "legende_arc": "Relation / dépendance",
+  "legende_flux": "Flux informationnel (riposte / propagation)",
   "hero_cells": [
     { "num": "15", "lbl": "Nœuds cartographiés" },
     { "num": "5",  "lbl": "Incidents confirmés" },
@@ -48,42 +49,42 @@
       "id": "e_castel", "compte": "e_castel", "compte_display": "Groupe Castel", "plateforme": "maison mère",
       "type": "entite", "parent_id": null, "niveau_preuve": "Confirmé",
       "date": "2022-05-01T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville",
-      "lat": 0.5200, "lon": 9.4000, "audience_estimee": 24000,
+      "lat": 0.5600, "lon": 9.3800, "audience_estimee": 24000,
       "content_excerpt": "Maison mère. Présence au Gabon via plusieurs sociétés de boissons. Périmètre : 21 marques, ~93 références produites localement."
     },
     {
       "id": "e_sobraga", "compte": "e_sobraga", "compte_display": "SOBRAGA", "plateforme": "filiale opérationnelle",
       "type": "entite", "parent_id": "e_castel", "niveau_preuve": "Confirmé",
       "date": "2022-05-01T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville",
-      "lat": 0.4162, "lon": 9.4673, "audience_estimee": 30000,
+      "lat": 0.4500, "lon": 9.4700, "audience_estimee": 30000,
       "content_excerpt": "Filiale opérationnelle, centre de gravité du dossier. Six usines, ~1 500 emplois directs. Boissons alcoolisées et non alcoolisées."
     },
     {
       "id": "e_sovingab", "compte": "e_sovingab", "compte_display": "SOVINGAB", "plateforme": "société Castel Gabon",
       "type": "entite", "parent_id": "e_castel", "niveau_preuve": "Confirmé",
       "date": "2022-05-01T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville",
-      "lat": 0.3920, "lon": 9.4520, "audience_estimee": 9000,
+      "lat": 0.5400, "lon": 9.5600, "audience_estimee": 9000,
       "content_excerpt": "Une des trois principales sociétés productrices localement, citée par SOBRAGA."
     },
     {
       "id": "e_soboleco", "compte": "e_soboleco", "compte_display": "SOBOLECO", "plateforme": "société Castel Gabon",
       "type": "entite", "parent_id": "e_castel", "niveau_preuve": "Confirmé",
       "date": "2022-05-01T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville",
-      "lat": 0.4410, "lon": 9.4950, "audience_estimee": 9000,
+      "lat": 0.3800, "lon": 9.5850, "audience_estimee": 9000,
       "content_excerpt": "Une des trois principales sociétés productrices localement, citée par SOBRAGA."
     },
     {
       "id": "e_jaffret", "compte": "e_jaffret", "compte_display": "Xavier Jaffret", "plateforme": "Directeur Général",
       "type": "dirigeant", "parent_id": "e_sobraga", "niveau_preuve": "Confirmé",
       "date": "2022-05-01T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville",
-      "lat": 0.4260, "lon": 9.4600, "audience_estimee": 12000,
+      "lat": 0.5200, "lon": 9.4550, "audience_estimee": 12000,
       "content_excerpt": "Directeur Général Groupe Castel Gabon / SOBRAGA depuis juillet 2025 (profil public LinkedIn). Parole officielle et gestion de crise."
     },
     {
       "id": "s_usines", "compte": "s_usines", "compte_display": "Usines SOBRAGA (6)", "plateforme": "site industriel",
       "type": "site", "parent_id": "e_sobraga", "niveau_preuve": "Confirmé",
       "date": "2022-05-01T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville / national",
-      "lat": 0.4550, "lon": 9.4850, "audience_estimee": 20000,
+      "lat": 0.4100, "lon": 9.5850, "audience_estimee": 20000,
       "content_excerpt": "Six usines réparties dans le pays (localisation exhaustive non publique). Forte exposition médiatique. Sensibilité élevée."
     },
     {
@@ -104,53 +105,59 @@
       "id": "s_owendo", "compte": "s_owendo", "compte_display": "Terminus rail / port — Owendo", "plateforme": "logistique",
       "type": "site", "parent_id": "s_franceville", "niveau_preuve": "Confirmé",
       "date": "2022-05-01T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Owendo (Libreville)",
-      "lat": 0.2833, "lon": 9.5000, "audience_estimee": 14000,
+      "lat": 0.2700, "lon": 9.5150, "audience_estimee": 14000,
       "content_excerpt": "Arrivée du corridor près de Libreville. Dernier maillon logistique de l'approvisionnement en eau Andza vers la capitale."
     },
     {
       "id": "c_officiels", "compte": "c_officiels", "compte_display": "Comptes officiels SOBRAGA", "plateforme": "Facebook / Instagram / LinkedIn / site",
       "type": "canal", "parent_id": "e_sobraga", "niveau_preuve": "Confirmé",
       "date": "2022-05-01T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville",
-      "lat": 0.4080, "lon": 9.4720, "audience_estimee": 11000,
+      "lat": 0.3000, "lon": 9.4700, "audience_estimee": 11000,
       "content_excerpt": "Canal de référence : correction, vigilance, diffusion des alertes (faux recrutements, démentis). Nœud de validation officielle des informations."
     },
     {
       "id": "i_coca", "compte": "i_coca", "compte_display": "Fin du partenariat Coca-Cola", "plateforme": "incident corporate",
       "type": "incident", "parent_id": "e_sobraga", "niveau_preuve": "Confirmé",
       "date": "2022-06-01T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville",
-      "lat": 0.4020, "lon": 9.4780, "audience_estimee": 13000,
+      "lat": 0.5750, "lon": 9.4750, "audience_estimee": 13000,
       "content_excerpt": "INC-004 — Fin du partenariat historique Castel/SOBRAGA – The Coca-Cola Company (mai-juin 2022). Contexte de fragilisation narrative (NAR-004, probable)."
     },
     {
       "id": "i_eau", "compte": "i_eau", "compte_display": "Fake news arrêt / cession eau minérale", "plateforme": "désinformation",
       "type": "incident", "parent_id": "s_andza", "niveau_preuve": "Confirmé",
       "date": "2022-06-20T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville / national",
-      "lat": 0.4320, "lon": 9.4610, "audience_estimee": 17000,
+      "lat": 0.3400, "lon": 9.3550, "audience_estimee": 17000,
       "content_excerpt": "INC-001 — Rumeur sur réseaux sociaux et certains médias : arrêt ou cession de l'activité eau minérale. Démenti officiel SOBRAGA (NAR-001, confirmé)."
     },
     {
       "id": "i_penurie", "compte": "i_penurie", "compte_display": "Risque de pénurie Andza (Transgabonais)", "plateforme": "logistique → informationnel",
       "type": "incident", "parent_id": "s_owendo", "niveau_preuve": "Confirmé",
       "date": "2023-01-15T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville",
-      "lat": 0.4480, "lon": 9.4520, "audience_estimee": 15000,
+      "lat": 0.4700, "lon": 9.6100, "audience_estimee": 15000,
       "content_excerpt": "INC-002 — Interruption ferroviaire provoquant un risque de rupture de stock Andza à Libreville. Forte sensibilité narrative (NAR-002, confirmé)."
     },
     {
       "id": "i_rh", "compte": "i_rh", "compte_display": "Fausses offres d'emploi SOBRAGA", "plateforme": "usurpation d'identité",
       "type": "incident", "parent_id": "c_officiels", "niveau_preuve": "Confirmé",
       "date": "2024-09-01T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Libreville / en ligne",
-      "lat": 0.4180, "lon": 9.4920, "audience_estimee": 14000,
+      "lat": 0.2850, "lon": 9.5600, "audience_estimee": 14000,
       "content_excerpt": "INC-003 — Offres d'emploi frauduleuses diffusées au nom de SOBRAGA (2024-2025). Alertes publiques de la société (NAR-003, confirmé)."
     },
     {
       "id": "i_suspension", "compte": "i_suspension", "compte_display": "Suspension des réseaux sociaux au Gabon", "plateforme": "contexte national",
       "type": "incident", "parent_id": "e_sobraga", "niveau_preuve": "Confirmé",
       "date": "2026-02-15T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Gabon (national)",
-      "lat": 0.3880, "lon": 9.4660, "audience_estimee": 12000,
+      "lat": 0.3000, "lon": 9.3500, "audience_estimee": 12000,
       "content_excerpt": "INC-005 — Mesure des autorités gabonaises (fév. 2026) motivée notamment par la lutte contre les fake news. Impact potentiel sur la contre-communication corporate."
     }
   ],
   "patient_zero": "e_sobraga",
+  "flux": [
+    { "from": "i_eau", "to": "c_officiels", "type": "riposte", "label": "Démenti officiel — rumeur eau" },
+    { "from": "i_rh", "to": "c_officiels", "type": "riposte", "label": "Alerte publique — faux recrutements" },
+    { "from": "i_suspension", "to": "c_officiels", "type": "contexte", "label": "Suspension → contre-communication entravée" },
+    { "from": "i_penurie", "to": "s_andza", "type": "propagation", "label": "Narratif pénurie ↔ source Andza (Léconi)" }
+  ],
   "reseaux": [
     {
       "id": "perimetre-corporate", "nom": "Périmètre corporate",
