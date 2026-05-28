@@ -31,6 +31,12 @@
     { "type": "incident",  "label": "Incident informationnel",   "couleur": "#C94A4A" }
   ],
   "legende_arc": "Relation / appartenance",
+  "legende_relations": [
+    { "label": "Appartenance / structure", "couleur": "#6B3FA0" },
+    { "label": "Dépendance logistique (corridor)", "couleur": "#2E84D4" },
+    { "label": "Cible d'un incident", "couleur": "#C94A4A" },
+    { "label": "Riposte / démenti officiel", "couleur": "#3E9B7A" }
+  ],
   "hero_cells": [
     { "num": "30", "lbl": "Nœuds cartographiés" },
     { "num": "6",  "lbl": "Usines & sites" },
@@ -77,6 +83,52 @@
     { "id": "i_suspension", "compte": "i_suspension", "compte_display": "Suspension réseaux sociaux Gabon", "plateforme": "contexte national", "type": "incident", "parent_id": "e_sobraga", "niveau_preuve": "Confirmé", "date": "2026-02-15T00:00:00Z", "lang": "fr", "pays": "GA", "ville": "Gabon (national)", "lat": 0.4400, "lon": 9.4300, "audience_estimee": 12000, "content_excerpt": "INC-005 — Mesure des autorités gabonaises (fév. 2026), motivée notamment par la lutte contre les fake news. Impact sur la contre-communication corporate." }
   ],
   "patient_zero": "e_sobraga",
+  "relations": [
+    { "from": "e_sobraga", "to": "e_castel", "type": "appartenance", "label": "Filiale du groupe Castel" },
+    { "from": "e_sovingab", "to": "e_castel", "type": "appartenance", "label": "" },
+    { "from": "e_soboleco", "to": "e_castel", "type": "appartenance", "label": "" },
+    { "from": "e_castel_afrique", "to": "e_castel", "type": "appartenance", "label": "" },
+    { "from": "e_jaffret", "to": "e_sobraga", "type": "appartenance", "label": "Dirige SOBRAGA" },
+    { "from": "s_owendo_usine", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "s_franceville", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "s_portgentil", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "s_oyem", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "s_mouila", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "m_regab", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "m_castelbeer", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "m_33export", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "m_guinness", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "m_akewa", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "m_vitale", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "m_aningeau", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "c_facebook", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "c_instagram", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "c_linkedin", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "c_site", "to": "e_sobraga", "type": "appartenance", "label": "" },
+    { "from": "c_presse", "to": "e_sobraga", "type": "appartenance", "label": "" },
+
+    { "from": "s_andza", "to": "s_franceville", "type": "dependance", "label": "Rail Léconi → Franceville" },
+    { "from": "s_franceville", "to": "s_owendo_usine", "type": "dependance", "label": "Transgabonais → Owendo" },
+    { "from": "m_andza", "to": "s_andza", "type": "dependance", "label": "Eau Andza issue de Léconi" },
+
+    { "from": "i_eau", "to": "m_andza", "type": "cible", "label": "Rumeur « arrêt de l'eau »" },
+    { "from": "i_eau", "to": "s_andza", "type": "cible", "label": "Vise la production de Léconi" },
+    { "from": "i_penurie", "to": "m_andza", "type": "cible", "label": "Rumeur de pénurie" },
+    { "from": "i_penurie", "to": "s_andza", "type": "cible", "label": "Sensibilité logistique" },
+    { "from": "i_rh", "to": "e_sobraga", "type": "cible", "label": "Usurpation marque employeur" },
+
+    { "from": "i_coca", "to": "e_sobraga", "type": "contexte", "label": "Fin partenariat Coca-Cola" },
+    { "from": "i_suspension", "to": "e_sobraga", "type": "contexte", "label": "Contexte national" },
+
+    { "from": "i_eau", "to": "c_site", "type": "riposte", "label": "Démenti officiel" },
+    { "from": "i_eau", "to": "c_facebook", "type": "riposte", "label": "Démenti réseaux" },
+    { "from": "i_eau", "to": "c_presse", "type": "riposte", "label": "Correction presse" },
+    { "from": "i_rh", "to": "c_linkedin", "type": "riposte", "label": "Alerte officielle" },
+    { "from": "i_rh", "to": "c_facebook", "type": "riposte", "label": "Alerte publique" },
+    { "from": "i_penurie", "to": "c_facebook", "type": "riposte", "label": "Communication d'approvisionnement" },
+    { "from": "i_suspension", "to": "c_facebook", "type": "riposte", "label": "Canal entravé" },
+    { "from": "i_suspension", "to": "c_instagram", "type": "riposte", "label": "Canal entravé" }
+  ],
   "reseaux": [
     {
       "id": "perimetre-corporate", "nom": "Périmètre corporate",

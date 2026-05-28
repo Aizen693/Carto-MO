@@ -1084,7 +1084,8 @@ function applyLegende(){
   if (box && lg.length) {
     box.innerHTML = '<div class="lg-head">Légende</div>'
       + lg.map(l => `<div class="lg-row"><span class="sw" style="background:${l.couleur}"></span>${escapeHtml(l.label)}</div>`).join('')
-      + `<div class="lg-row" style="margin-top:6px"><span class="arc"></span>${escapeHtml(state.data.legende_arc || 'Relation')}</div>`;
+      + (state.data.legende_relations || [{ label: state.data.legende_arc || 'Relation', couleur: '#6B3FA0' }])
+          .map((r, i) => `<div class="lg-row"${i === 0 ? ' style="margin-top:6px"' : ''}><span class="arc" style="background:${r.couleur}"></span>${escapeHtml(r.label)}</div>`).join('');
   }
 }
 
@@ -1251,62 +1252,32 @@ function buildFeatures(){
     }))
   };
 
+  // Relations typées entre nœuds réels (graphe précis, sans agrégat de centroïdes)
+  const RSTYLE = {
+    appartenance: { color: '#6B3FA0', opacity: 0.22, width: 0.6 },
+    dependance:   { color: '#2E84D4', opacity: 0.65, width: 1.5 },
+    cible:        { color: '#C94A4A', opacity: 0.55, width: 1.1 },
+    riposte:      { color: '#3E9B7A', opacity: 0.65, width: 1.2 },
+    contexte:     { color: '#8A8499', opacity: 0.45, width: 0.9 }
+  };
+  const edges = (d.relations && d.relations.length)
+    ? d.relations
+    : d.publications.filter(p => p.parent_id).map(p => ({ from: p.parent_id, to: p.id, type: 'appartenance', label: '' }));
   const arcs = {
     type: 'FeatureCollection',
-    features: d.publications
-      .filter(p => p.parent_id && visibleIds.has(p.id) && visibleIds.has(p.parent_id))
-      .map(p => {
-        const parent = pubById[p.parent_id];
-        return {
-          type: 'Feature',
-          geometry: { type: 'LineString', coordinates: greatCircle([parent.lon, parent.lat], [p.lon, p.lat], 8) },
-          properties: { from: parent.id, to: p.id }
-        };
-      })
-  };
-
-  // Agregat arcs entre essaims : centroides par reseau + traits ponderes par nb d'arcs
-  const reseauById = (() => {
-    const map = {};
-    d.reseaux.forEach(r => { r.publications.forEach(pid => { map[pid] = r.id; }); });
-    return map;
-  })();
-  const centroidByCluster = (() => {
-    const sum = {}, count = {};
-    d.publications.filter(p => visibleIds.has(p.id)).forEach(p => {
-      const rid = reseauById[p.id];
-      if (!rid) return;
-      sum[rid] = sum[rid] || [0, 0];
-      sum[rid][0] += p.lon; sum[rid][1] += p.lat;
-      count[rid] = (count[rid] || 0) + 1;
-    });
-    const out = {};
-    Object.keys(sum).forEach(rid => { out[rid] = [sum[rid][0]/count[rid], sum[rid][1]/count[rid]]; });
-    return out;
-  })();
-  const pairCounts = {};
-  d.publications.filter(p => p.parent_id && visibleIds.has(p.id) && visibleIds.has(p.parent_id)).forEach(p => {
-    const fromCluster = reseauById[p.parent_id];
-    const toCluster = reseauById[p.id];
-    if (!fromCluster || !toCluster || fromCluster === toCluster) return;
-    const key = fromCluster + '→' + toCluster;
-    pairCounts[key] = (pairCounts[key] || 0) + 1;
-  });
-  const clusterArcs = {
-    type: 'FeatureCollection',
-    features: Object.entries(pairCounts).map(([key, weight]) => {
-      const [from, to] = key.split('→');
-      const a = centroidByCluster[from], b = centroidByCluster[to];
-      if (!a || !b) return null;
+    features: edges.map(e => {
+      const A = pubById[e.from], B = pubById[e.to];
+      if (!A || !B || !visibleIds.has(A.id) || !visibleIds.has(B.id)) return null;
+      const st = RSTYLE[e.type] || RSTYLE.appartenance;
       return {
         type: 'Feature',
-        geometry: { type: 'LineString', coordinates: greatCircle(a, b, 24) },
-        properties: { from, to, weight }
+        geometry: { type: 'LineString', coordinates: greatCircle([A.lon, A.lat], [B.lon, B.lat], 12) },
+        properties: { from: e.from, to: e.to, rtype: e.type || 'appartenance', label: e.label || '', rcolor: st.color, ropacity: st.opacity, rwidth: st.width }
       };
     }).filter(Boolean)
   };
 
-  return { points, arcs, clusterArcs };
+  return { points, arcs };
 }
 
 function radiusFor(p){
@@ -1324,30 +1295,16 @@ function greatCircle(a, b, n){
 }
 
 function addLayers(){
-  const { points, arcs, clusterArcs } = buildFeatures();
+  const { points, arcs } = buildFeatures();
   map.addSource('arcs', { type: 'geojson', data: arcs });
-  map.addSource('cluster-arcs', { type: 'geojson', data: clusterArcs });
   map.addSource('points', { type: 'geojson', data: points });
 
-  // Arcs inter-essaims : aggregat entre centroides de clusters — gros traits
-  map.addLayer({ id: 'cluster-arcs-glow', type: 'line', source: 'cluster-arcs',
-    paint: {
-      'line-color': '#6B3FA0',
-      'line-width': ['interpolate', ['linear'], ['get', 'weight'], 1, 4, 30, 12],
-      'line-opacity': 0.10, 'line-blur': 3
-    }
+  // Relations entre nœuds réels — couleur/épaisseur par type de relation
+  map.addLayer({ id: 'arcs-glow', type: 'line', source: 'arcs',
+    paint: { 'line-color': ['get', 'rcolor'], 'line-width': ['*', ['get', 'rwidth'], 3], 'line-opacity': 0.07, 'line-blur': 2 }
   });
-  map.addLayer({ id: 'cluster-arcs-line', type: 'line', source: 'cluster-arcs',
-    paint: {
-      'line-color': '#6B3FA0',
-      'line-width': ['interpolate', ['linear'], ['get', 'weight'], 1, 0.6, 30, 2.2],
-      'line-opacity': 0.55
-    }
-  });
-
-  // Arcs par publication : tres fins, web subtil entre les dots
   map.addLayer({ id: 'arcs-line', type: 'line', source: 'arcs',
-    paint: { 'line-color': '#6B3FA0', 'line-width': 0.4, 'line-opacity': 0.18 }
+    paint: { 'line-color': ['get', 'rcolor'], 'line-width': ['get', 'rwidth'], 'line-opacity': ['get', 'ropacity'] }
   });
 
   // Points : tous les dots en taille constante (essain visuel par accumulation).
@@ -1376,10 +1333,9 @@ function addLayers(){
 
 function applyFilters(){
   if (!map || !map.getSource || !map.getSource('points')) return;
-  const { points, arcs, clusterArcs } = buildFeatures();
+  const { points, arcs } = buildFeatures();
   map.getSource('points').setData(points);
   map.getSource('arcs').setData(arcs);
-  map.getSource('cluster-arcs').setData(clusterArcs);
 }
 
 function fitToData(){
