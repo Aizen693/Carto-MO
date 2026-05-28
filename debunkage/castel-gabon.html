@@ -1084,8 +1084,7 @@ function applyLegende(){
   if (box && lg.length) {
     box.innerHTML = '<div class="lg-head">Légende</div>'
       + lg.map(l => `<div class="lg-row"><span class="sw" style="background:${l.couleur}"></span>${escapeHtml(l.label)}</div>`).join('')
-      + `<div class="lg-row" style="margin-top:6px"><span class="arc"></span>${escapeHtml(state.data.legende_arc || 'Relation')}</div>`
-      + (state.data.legende_flux ? `<div class="lg-row"><span class="arc" style="background:#1F8A70;opacity:.85"></span>${escapeHtml(state.data.legende_flux)}</div>` : '');
+      + `<div class="lg-row" style="margin-top:6px"><span class="arc"></span>${escapeHtml(state.data.legende_arc || 'Relation')}</div>`;
   }
 }
 
@@ -1260,7 +1259,7 @@ function buildFeatures(){
         const parent = pubById[p.parent_id];
         return {
           type: 'Feature',
-          geometry: { type: 'LineString', coordinates: greatCircle([parent.lon, parent.lat], [p.lon, p.lat], 16) },
+          geometry: { type: 'LineString', coordinates: greatCircle([parent.lon, parent.lat], [p.lon, p.lat], 8) },
           properties: { from: parent.id, to: p.id }
         };
       })
@@ -1307,49 +1306,27 @@ function buildFeatures(){
     }).filter(Boolean)
   };
 
-  const fluxArcs = {
-    type: 'FeatureCollection',
-    features: (d.flux || []).map(fx => {
-      const A = pubById[fx.from], B = pubById[fx.to];
-      if (!A || !B || !visibleIds.has(A.id) || !visibleIds.has(B.id)) return null;
-      return {
-        type: 'Feature',
-        geometry: { type: 'LineString', coordinates: greatCircle([A.lon, A.lat], [B.lon, B.lat], 22) },
-        properties: { from: fx.from, to: fx.to, label: fx.label || '' }
-      };
-    }).filter(Boolean)
-  };
-
-  return { points, arcs, clusterArcs, fluxArcs };
+  return { points, arcs, clusterArcs };
 }
 
 function radiusFor(p){
-  // Cas réel (peu de nœuds) : taille lisible, modulée par l'importance.
-  const a = p.audience_estimee || 8000;
-  return Math.max(5, Math.min(13, Math.log(a) * 1.25));
+  // Points constants tres petits — l'essain visuel se forme par accumulation et dezoom.
+  if (p.type === 'patient_zero') return 4;
+  return 2.2;
 }
 function greatCircle(a, b, n){
-  const dx = b[0]-a[0], dy = b[1]-a[1];
-  const mx = (a[0]+b[0])/2, my = (a[1]+b[1])/2;
-  // point de contrôle décalé perpendiculairement → arc courbé élégant
-  const k = 0.16;
-  const cx = mx - dy * k, cy = my + dx * k;
   const pts = [];
   for (let i = 0; i <= n; i++) {
-    const t = i / n, u = 1 - t;
-    pts.push([
-      u*u*a[0] + 2*u*t*cx + t*t*b[0],
-      u*u*a[1] + 2*u*t*cy + t*t*b[1]
-    ]);
+    const t = i / n;
+    pts.push([ a[0] + (b[0]-a[0]) * t, a[1] + (b[1]-a[1]) * t ]);
   }
   return pts;
 }
 
 function addLayers(){
-  const { points, arcs, clusterArcs, fluxArcs } = buildFeatures();
+  const { points, arcs, clusterArcs } = buildFeatures();
   map.addSource('arcs', { type: 'geojson', data: arcs });
   map.addSource('cluster-arcs', { type: 'geojson', data: clusterArcs });
-  map.addSource('flux', { type: 'geojson', data: fluxArcs });
   map.addSource('points', { type: 'geojson', data: points });
 
   // Arcs inter-essaims : aggregat entre centroides de clusters — gros traits
@@ -1363,25 +1340,14 @@ function addLayers(){
   map.addLayer({ id: 'cluster-arcs-line', type: 'line', source: 'cluster-arcs',
     paint: {
       'line-color': '#6B3FA0',
-      'line-width': ['interpolate', ['linear'], ['get', 'weight'], 1, 0.5, 30, 1.6],
-      'line-opacity': 0.22
+      'line-width': ['interpolate', ['linear'], ['get', 'weight'], 1, 0.6, 30, 2.2],
+      'line-opacity': 0.55
     }
   });
 
-  // Arcs par nœud : relations / dépendances (flux structurels)
-  map.addLayer({ id: 'arcs-glow', type: 'line', source: 'arcs',
-    paint: { 'line-color': '#6B3FA0', 'line-width': 5, 'line-opacity': 0.08, 'line-blur': 2.5 }
-  });
+  // Arcs par publication : tres fins, web subtil entre les dots
   map.addLayer({ id: 'arcs-line', type: 'line', source: 'arcs',
-    paint: { 'line-color': '#6B3FA0', 'line-width': 1.3, 'line-opacity': 0.5 }
-  });
-
-  // Flux informationnels : riposte / propagation (pointillés)
-  map.addLayer({ id: 'flux-glow', type: 'line', source: 'flux',
-    paint: { 'line-color': '#1F8A70', 'line-width': 5, 'line-opacity': 0.10, 'line-blur': 2.5 }
-  });
-  map.addLayer({ id: 'flux-line', type: 'line', source: 'flux',
-    paint: { 'line-color': '#1F8A70', 'line-width': 1.7, 'line-opacity': 0.8, 'line-dasharray': [1.4, 1.4] }
+    paint: { 'line-color': '#6B3FA0', 'line-width': 0.4, 'line-opacity': 0.18 }
   });
 
   // Points : tous les dots en taille constante (essain visuel par accumulation).
@@ -1389,9 +1355,9 @@ function addLayers(){
     paint: {
       'circle-radius': ['get', 'radius'],
       'circle-color': ['get', 'color'],
-      'circle-opacity': 0.92,
+      'circle-opacity': 0.78,
       'circle-stroke-color': '#FFFFFF',
-      'circle-stroke-width': 1.2
+      'circle-stroke-width': 0.4
     }
   });
 
@@ -1410,11 +1376,10 @@ function addLayers(){
 
 function applyFilters(){
   if (!map || !map.getSource || !map.getSource('points')) return;
-  const { points, arcs, clusterArcs, fluxArcs } = buildFeatures();
+  const { points, arcs, clusterArcs } = buildFeatures();
   map.getSource('points').setData(points);
   map.getSource('arcs').setData(arcs);
   map.getSource('cluster-arcs').setData(clusterArcs);
-  if (map.getSource('flux')) map.getSource('flux').setData(fluxArcs);
 }
 
 function fitToData(){
