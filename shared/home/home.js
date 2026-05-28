@@ -500,10 +500,10 @@ const HOME_AUD = [{
   d: "Arbitrer rapidement sur un risque-pays, sans avoir à dépouiller la presse."
 }, {
   t: "Sûreté & sécurité",
-  d: "Evaluer la menace sur des sites, des trajets et des implantations."
+  d: "Évaluer la menace sur des sites, des trajets et des implantations."
 }, {
   t: "Conseil & due diligence",
-  d: "Etayer une recommandation avec des sources datées et sourcées."
+  d: "Étayer une recommandation avec des sources datées et sourcées."
 }, {
   t: "Opérateurs sur zone",
   d: "ONG, industriels et logisticiens présents sur des théâtres sensibles."
@@ -516,7 +516,7 @@ function AudienceSection() {
     className: "home-sec__wrap"
   }, /*#__PURE__*/React.createElement(SectionHead, {
     eyebrow: "Pour qui",
-    title: "A qui s'adresse",
+    title: "\xC0 qui s'adresse",
     em: "Algor Access",
     intro: "Des profils diff\xE9rents, un m\xEAme besoin : une lecture fiable et dat\xE9e des th\xE9\xE2tres \xE0 risque."
   }), /*#__PURE__*/React.createElement("div", {
@@ -569,22 +569,22 @@ function CompareSection() {
 }
 const HOME_VIDEOS = [{
   cat: 'Veille',
-  title: 'Cartographie OSINT en temps reel',
+  title: 'Cartographie OSINT en temps réel',
   meta: 'Plateforme · 2 min 14',
   duration: '2:14'
 }, {
   cat: 'Influence',
-  title: 'Analyse multicouche du théâtre sahelien',
-  meta: 'Etude de cas · 3 min 02',
+  title: 'Analyse multicouche du théâtre sahélien',
+  meta: 'Étude de cas · 3 min 02',
   duration: '3:02'
 }, {
   cat: 'Protection',
-  title: 'Evaluation de menaces sur les infrastructures',
+  title: 'Évaluation de menaces sur les infrastructures',
   meta: 'Mission · 4 min 28',
   duration: '4:28'
 }, {
-  cat: 'Methode',
-  title: 'De la donnee brute au rapport decisionnel',
+  cat: 'Méthode',
+  title: 'De la donnée brute au rapport décisionnel',
   meta: 'Coulisses · 2 min 47',
   duration: '2:47'
 }, {
@@ -604,9 +604,9 @@ function VideoBand({
     className: "eyebrow"
   }, "Notre travail en images"), /*#__PURE__*/React.createElement("h2", {
     className: "video-band__title"
-  }, "Capsules ", /*#__PURE__*/React.createElement("em", null, "videos"), " \xB7 activites Algor Int")), /*#__PURE__*/React.createElement("p", {
+  }, "Capsules ", /*#__PURE__*/React.createElement("em", null, "vid\xE9os"), " \xB7 activit\xE9s Algor Int")), /*#__PURE__*/React.createElement("p", {
     className: "video-band__intro"
-  }, "Cinq formats courts pour comprendre nos methodes, nos terrains et nos livrables. Glissez horizontalement pour parcourir.")), /*#__PURE__*/React.createElement("div", {
+  }, "Cinq formats courts pour comprendre nos m\xE9thodes, nos terrains et nos livrables. Glissez horizontalement pour parcourir.")), /*#__PURE__*/React.createElement("div", {
     className: "video-band__strip"
   }, HOME_VIDEOS.map((v, i) => /*#__PURE__*/React.createElement(VideoCard, _extends({
     key: i

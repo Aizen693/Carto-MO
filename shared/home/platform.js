@@ -24,7 +24,7 @@ function PlatformView({
   }, /*#__PURE__*/React.createElement("button", {
     className: "platform__back",
     onClick: onBack
-  }, /*#__PURE__*/React.createElement(ArrowBack, null), " Retour a l'accueil"), /*#__PURE__*/React.createElement("header", {
+  }, /*#__PURE__*/React.createElement(ArrowBack, null), " Retour \xE0 l'accueil"), /*#__PURE__*/React.createElement("header", {
     className: "platform__intro"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
     className: "eyebrow"
@@ -32,7 +32,7 @@ function PlatformView({
     className: "platform__title"
   }, "Que souhaitez-vous ", /*#__PURE__*/React.createElement("em", null, "consulter"), "\xA0?")), /*#__PURE__*/React.createElement("p", {
     className: "platform__lede"
-  }, "Cinq points d'entree pour naviguer dans les donnees Algor Int. Chacun ouvre un panneau lateral structure, avec recherche et navigation hi\xE9rarchique.")), /*#__PURE__*/React.createElement("div", {
+  }, "Cinq points d'entr\xE9e pour naviguer dans les donn\xE9es Algor Int. Chacun ouvre un panneau lat\xE9ral structur\xE9, avec recherche et navigation hi\xE9rarchique.")), /*#__PURE__*/React.createElement("div", {
     className: "actions-grid"
   }, /*#__PURE__*/React.createElement(ActionCard, {
     num: "01",
@@ -44,7 +44,7 @@ function PlatformView({
   }), /*#__PURE__*/React.createElement(ActionCard, {
     num: "02",
     name: "Rapport",
-    desc: "Documents analytiques classes par zone puis par sujet.",
+    desc: "Documents analytiques class\xE9s par zone puis par sujet.",
     count: `${Object.values(REPORTS).flat().length} documents`,
     icon: /*#__PURE__*/React.createElement(DocIconLg, null),
     onClick: () => openAction('rapport')
@@ -58,8 +58,8 @@ function PlatformView({
   }), /*#__PURE__*/React.createElement(ActionCard, {
     num: "04",
     name: "Theme",
-    desc: "Lectures transversales : Ports, Mines, JNIM, Routes, Energie...",
-    count: `${THEMES.length} themes`,
+    desc: "Lectures transversales : Ports, Mines, JNIM, Routes, \xC9nergie...",
+    count: `${THEMES.length} thèmes`,
     icon: /*#__PURE__*/React.createElement(ThemeIconLg, null),
     onClick: () => openAction('theme')
   }), /*#__PURE__*/React.createElement(ActionCard, {
@@ -95,7 +95,7 @@ function PlatformView({
     href: "/rdc/"
   }), /*#__PURE__*/React.createElement(RecentItem, {
     icon: /*#__PURE__*/React.createElement(MapIconSm, null),
-    title: "Afrique Maritime : AIS temps reel",
+    title: "Afrique Maritime : AIS temps r\xE9el",
     href: "/afrique/"
   }), /*#__PURE__*/React.createElement(RecentItem, {
     icon: /*#__PURE__*/React.createElement(MapIconSm, null),
@@ -158,7 +158,7 @@ function cascadeFor(name) {
       const detail = THEME_DETAIL[t.id] || [];
       return {
         label: t.name,
-        meta: `${t.count} entrees`,
+        meta: `${t.count} entrées`,
         actions: detail.length ? detail.map(d => ({
           label: d.title,
           meta: `${d.type} · ${d.meta}`,

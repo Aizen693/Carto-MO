@@ -8,7 +8,7 @@ const ZONES = [
   { id: 'rdc',          code: 'CD', name: 'RDC',             countries: 'Kivu · Ituri · Tanganyika',                    events: 47,  period: '2023-2026',   status: 'active', href: '/rdc/' },
   { id: 'madagascar',   code: 'MG', name: 'Madagascar',      countries: 'Antananarivo · Toamasina · Mahajanga',         events: 28,  period: '2024-2026',   status: 'active', href: '/madagascar/' },
   { id: 'asie-sud',     code: 'AS', name: 'Asie du Sud',     countries: 'Inde · Pakistan · Bangladesh · Sri Lanka',     events: 64,  period: '2023-2026',   status: 'active', href: '/asie-sud/' },
-  { id: 'afrique',      code: 'AF', name: 'Afrique Maritime', countries: 'AIS temps reel · 2 360 navires',              events: 2360, period: 'Temps reel',  status: 'active', href: '/afrique/' },
+  { id: 'afrique',      code: 'AF', name: 'Afrique Maritime', countries: 'AIS temps réel · 2 360 navires',              events: 2360, period: 'Temps réel',  status: 'active', href: '/afrique/' },
 ];
 
 // Rapports par zone, pointe vers /{id}/rapport.html quand il existe.
@@ -17,7 +17,7 @@ const REPORTS = {
     { id: 'r-sh-rap',  title: 'Rapport analytique Sahel · Q1 2026',        date: '14 mars 2026', pages: 42, tag: 'Synthèse', href: '/sahel/rapport.html' },
     { id: 'r-sh-01',   title: 'JNIM, pattern attaques Mali-Burkina',       date: '14 mars 2026', pages: 28, tag: 'Hebdo' },
     { id: 'r-sh-02',   title: 'Mines aurifères, flux et acteurs',          date: '08 mars 2026', pages: 42, tag: 'Synthèse' },
-    { id: 'r-sh-03',   title: 'Deplacements forces Q1 2026',                date: '02 mars 2026', pages: 17, tag: 'Note' },
+    { id: 'r-sh-03',   title: 'Déplacements forces Q1 2026',                date: '02 mars 2026', pages: 17, tag: 'Note' },
   ],
   'moyen-orient': [
     { id: 'r-mo-rap',  title: 'Rapport analytique Moyen-Orient',            date: '12 mars 2026', pages: 56, tag: 'Synthèse', href: '/moyen-orient/rapport.html' },
@@ -35,7 +35,7 @@ const REPORTS = {
     { id: 'r-as-01',   title: 'Asie du Sud, tensions frontalières',        date: '08 mars 2026', pages: 24, tag: 'Synthèse' },
   ],
   afrique: [
-    { id: 'r-af-01',   title: 'Afrique maritime, couverture AIS',          date: '15 mars 2026', pages: 54, tag: 'Reference' },
+    { id: 'r-af-01',   title: 'Afrique maritime, couverture AIS',          date: '15 mars 2026', pages: 54, tag: 'Référence' },
   ],
 };
 
@@ -51,7 +51,7 @@ const GRAPHS = {
     { id: 'g-mo-02', title: 'Acteurs chiites, graphe relations', type: 'Réseau',    scope: 'Cumulé' },
   ],
   rdc: [
-    { id: 'g-cd-01', title: 'Densite M23 sur l\'axe Goma-Bunia', type: 'Heatmap', scope: '60 jours' },
+    { id: 'g-cd-01', title: 'Densité M23 sur l\'axe Goma-Bunia', type: 'Heatmap', scope: '60 jours' },
   ],
   madagascar: [
     { id: 'g-mg-01', title: 'Madagascar, densité portuaire', type: 'Choropleth', scope: 'Annuel' },
@@ -60,7 +60,7 @@ const GRAPHS = {
     { id: 'g-as-01', title: 'Asie du Sud, corridors logistiques', type: 'Flow',   scope: '12 mois' },
   ],
   afrique: [
-    { id: 'g-af-01', title: 'AIS temps reel · 6 catégories navires', type: 'Carte',  scope: 'Live' },
+    { id: 'g-af-01', title: 'AIS temps réel · 6 catégories navires', type: 'Carte',  scope: 'Live' },
     { id: 'g-af-02', title: 'Ports, trafic comparé',                type: 'Barres', scope: '24 mois' },
   ],
 };
@@ -71,7 +71,7 @@ const THEMES = [
   { id: 't-mines',   name: 'Mines',         desc: 'Or, uranium, cobalt, terres rares',        count: 34, color: '#C97E2A' },
   { id: 't-jnim',    name: 'JNIM',          desc: 'Groupe djihadiste transrégional',          count: 86, color: '#B83A4A' },
   { id: 't-routes',  name: 'Routes & flux', desc: 'Corridors logistiques, armes, drogues',    count: 29, color: '#6B3FA0' },
-  { id: 't-energie', name: 'Energie',       desc: 'Pétrole, gaz, infrastructures critiques',  count: 22, color: '#0F7A7A' },
+  { id: 't-energie', name: 'Énergie',       desc: 'Pétrole, gaz, infrastructures critiques',  count: 22, color: '#0F7A7A' },
   { id: 't-pop',     name: 'Populations',   desc: 'Ethnies, déplacements, réfugiés',          count: 41, color: '#2F8A6B' },
 ];
 

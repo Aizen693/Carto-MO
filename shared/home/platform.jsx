@@ -14,7 +14,7 @@ function PlatformView({ onBack }) {
     <main className="view-enter view-enter-active">
       <div className="platform">
         <button className="platform__back" onClick={onBack}>
-          <ArrowBack /> Retour a l'accueil
+          <ArrowBack /> Retour à l'accueil
         </button>
 
         <header className="platform__intro">
@@ -25,7 +25,7 @@ function PlatformView({ onBack }) {
             </h1>
           </div>
           <p className="platform__lede">
-            Cinq points d'entree pour naviguer dans les donnees Algor Int. Chacun ouvre un panneau lateral structure, avec recherche et navigation hiérarchique.
+            Cinq points d'entrée pour naviguer dans les données Algor Int. Chacun ouvre un panneau latéral structuré, avec recherche et navigation hiérarchique.
           </p>
         </header>
 
@@ -36,7 +36,7 @@ function PlatformView({ onBack }) {
             onClick={() => openAction('region')} />
 
           <ActionCard
-            num="02" name="Rapport" desc="Documents analytiques classes par zone puis par sujet."
+            num="02" name="Rapport" desc="Documents analytiques classés par zone puis par sujet."
             count={`${Object.values(REPORTS).flat().length} documents`} icon={<DocIconLg />}
             onClick={() => openAction('rapport')} />
 
@@ -46,8 +46,8 @@ function PlatformView({ onBack }) {
             onClick={() => openAction('graph')} />
 
           <ActionCard
-            num="04" name="Theme" desc="Lectures transversales : Ports, Mines, JNIM, Routes, Energie..."
-            count={`${THEMES.length} themes`} icon={<ThemeIconLg />}
+            num="04" name="Theme" desc="Lectures transversales : Ports, Mines, JNIM, Routes, Énergie..."
+            count={`${THEMES.length} thèmes`} icon={<ThemeIconLg />}
             onClick={() => openAction('theme')} />
 
           <ActionCard
@@ -66,7 +66,7 @@ function PlatformView({ onBack }) {
           <RecentItem icon={<DocIconSm />}   title="Sahel : Rapport analytique Q1 2026"       href="/sahel/rapport.html" />
           <RecentItem icon={<MapIconSm />}   title="Moyen-Orient : Carte interactive"         href="/moyen-orient/" />
           <RecentItem icon={<MapIconSm />}   title="RDC : Carte interactive"                  href="/rdc/" />
-          <RecentItem icon={<MapIconSm />}   title="Afrique Maritime : AIS temps reel"        href="/afrique/" />
+          <RecentItem icon={<MapIconSm />}   title="Afrique Maritime : AIS temps réel"        href="/afrique/" />
           <RecentItem icon={<MapIconSm />}   title="Asie du Sud : Carte interactive"          href="/asie-sud/" />
         </div>
       </div>
@@ -111,7 +111,7 @@ function cascadeFor(name) {
     return THEMES.map(t => {
       const detail = THEME_DETAIL[t.id] || [];
       return {
-        label: t.name, meta: `${t.count} entrees`,
+        label: t.name, meta: `${t.count} entrées`,
         actions: detail.length
           ? detail.map(d => ({ label: d.title, meta: `${d.type} · ${d.meta}`, href: d.href || null }))
           : [{ label: t.desc, meta: 'Lecture transverse', href: null }],

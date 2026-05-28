@@ -52,9 +52,9 @@ const ZONES = [{
   id: 'afrique',
   code: 'AF',
   name: 'Afrique Maritime',
-  countries: 'AIS temps reel · 2 360 navires',
+  countries: 'AIS temps réel · 2 360 navires',
   events: 2360,
-  period: 'Temps reel',
+  period: 'Temps réel',
   status: 'active',
   href: '/afrique/'
 }];
@@ -82,7 +82,7 @@ const REPORTS = {
     tag: 'Synthèse'
   }, {
     id: 'r-sh-03',
-    title: 'Deplacements forces Q1 2026',
+    title: 'Déplacements forces Q1 2026',
     date: '02 mars 2026',
     pages: 17,
     tag: 'Note'
@@ -140,7 +140,7 @@ const REPORTS = {
     title: 'Afrique maritime, couverture AIS',
     date: '15 mars 2026',
     pages: 54,
-    tag: 'Reference'
+    tag: 'Référence'
   }]
 };
 
@@ -175,7 +175,7 @@ const GRAPHS = {
   }],
   rdc: [{
     id: 'g-cd-01',
-    title: 'Densite M23 sur l\'axe Goma-Bunia',
+    title: 'Densité M23 sur l\'axe Goma-Bunia',
     type: 'Heatmap',
     scope: '60 jours'
   }],
@@ -193,7 +193,7 @@ const GRAPHS = {
   }],
   afrique: [{
     id: 'g-af-01',
-    title: 'AIS temps reel · 6 catégories navires',
+    title: 'AIS temps réel · 6 catégories navires',
     type: 'Carte',
     scope: 'Live'
   }, {
@@ -231,7 +231,7 @@ const THEMES = [{
   color: '#6B3FA0'
 }, {
   id: 't-energie',
-  name: 'Energie',
+  name: 'Énergie',
   desc: 'Pétrole, gaz, infrastructures critiques',
   count: 22,
   color: '#0F7A7A'

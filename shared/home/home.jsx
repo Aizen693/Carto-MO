@@ -320,9 +320,9 @@ const HOME_AUD = [
   { t: "Décideurs & directions",
     d: "Arbitrer rapidement sur un risque-pays, sans avoir à dépouiller la presse." },
   { t: "Sûreté & sécurité",
-    d: "Evaluer la menace sur des sites, des trajets et des implantations." },
+    d: "Évaluer la menace sur des sites, des trajets et des implantations." },
   { t: "Conseil & due diligence",
-    d: "Etayer une recommandation avec des sources datées et sourcées." },
+    d: "Étayer une recommandation avec des sources datées et sourcées." },
   { t: "Opérateurs sur zone",
     d: "ONG, industriels et logisticiens présents sur des théâtres sensibles." },
 ];
@@ -333,7 +333,7 @@ function AudienceSection() {
       <div className="home-sec__wrap">
         <SectionHead
           eyebrow="Pour qui"
-          title="A qui s'adresse"
+          title="À qui s'adresse"
           em="Algor Access"
           intro="Des profils différents, un même besoin : une lecture fiable et datée des théâtres à risque." />
         <div className="aud-grid">
@@ -389,10 +389,10 @@ function CompareSection() {
 }
 
 const HOME_VIDEOS = [
-  { cat: 'Veille',     title: 'Cartographie OSINT en temps reel',                meta: 'Plateforme · 2 min 14',    duration: '2:14' },
-  { cat: 'Influence',  title: 'Analyse multicouche du théâtre sahelien',         meta: 'Etude de cas · 3 min 02',  duration: '3:02' },
-  { cat: 'Protection', title: 'Evaluation de menaces sur les infrastructures',   meta: 'Mission · 4 min 28',       duration: '4:28' },
-  { cat: 'Methode',    title: 'De la donnee brute au rapport decisionnel',       meta: 'Coulisses · 2 min 47',     duration: '2:47' },
+  { cat: 'Veille',     title: 'Cartographie OSINT en temps réel',                meta: 'Plateforme · 2 min 14',    duration: '2:14' },
+  { cat: 'Influence',  title: 'Analyse multicouche du théâtre sahélien',         meta: 'Étude de cas · 3 min 02',  duration: '3:02' },
+  { cat: 'Protection', title: 'Évaluation de menaces sur les infrastructures',   meta: 'Mission · 4 min 28',       duration: '4:28' },
+  { cat: 'Méthode',    title: 'De la donnée brute au rapport décisionnel',       meta: 'Coulisses · 2 min 47',     duration: '2:47' },
   { cat: 'Terrain',    title: 'Réseaux djihadistes au Sahel : pattern 2026',     meta: 'Décryptage · 5 min 12',    duration: '5:12' },
 ];
 
@@ -403,11 +403,11 @@ function VideoBand({ style = 'strip' }) {
         <div>
           <span className="eyebrow">Notre travail en images</span>
           <h2 className="video-band__title">
-            Capsules <em>videos</em> · activites Algor Int
+            Capsules <em>vidéos</em> · activités Algor Int
           </h2>
         </div>
         <p className="video-band__intro">
-          Cinq formats courts pour comprendre nos methodes, nos terrains et nos livrables. Glissez horizontalement pour parcourir.
+          Cinq formats courts pour comprendre nos méthodes, nos terrains et nos livrables. Glissez horizontalement pour parcourir.
         </p>
       </div>
 
