@@ -1406,6 +1406,9 @@ function bindFullscreen(){
 
 function bindMapHover(){
   const tt = document.getElementById('tooltip');
+  // Popup de detail (clic) en cours : tant qu'elle est ouverte on ne montre pas
+  // le tooltip groupe, pour ne jamais avoir deux pop-up en meme temps.
+  let activePopup = null;
   // Au-dela de ce zoom on masque la pop-up groupee par localite : les points
   // sont assez ecartes pour etre lus individuellement, le detail reste au clic.
   const TOOLTIP_MAX_ZOOM = 13;
@@ -1414,6 +1417,7 @@ function bindMapHover(){
   map.on('zoom', () => { if (map.getZoom() >= TOOLTIP_MAX_ZOOM) tt.style.display = 'none'; });
   map.on('mousemove', 'points-hit', (e) => {
     if (!e.features?.length) return;
+    if (activePopup) { tt.style.display = 'none'; return; }
     if (map.getZoom() >= TOOLTIP_MAX_ZOOM) { tt.style.display = 'none'; return; }
     const p = e.features[0].properties;
     // Pop-up de ville : on regroupe tous les points proches (même localité)
@@ -1441,8 +1445,10 @@ function bindMapHover(){
     tt.style.display = 'block';
   });
   map.on('click', 'points-hit', (e) => {
+    tt.style.display = 'none';
+    if (activePopup) activePopup.remove();
     const p = e.features[0].properties;
-    new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '320px' })
+    activePopup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '320px' })
       .setLngLat(e.features[0].geometry.coordinates)
       .setHTML(`
         <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:15px;color:#1F1437;letter-spacing:-0.012em;margin-bottom:4px">${escapeHtml(p.compte_display)}</div>
@@ -1451,6 +1457,7 @@ function bindMapHover(){
         <div style="font-family:'JetBrains Mono';font-size:10px;color:#8A8499;letter-spacing:0.02em">Niveau de preuve : ${escapeHtml(p.niveau_preuve||'—')} · ${fmtDate(new Date(p.date))}</div>
       `)
       .addTo(map);
+    activePopup.on('close', () => { activePopup = null; });
   });
 }
 
