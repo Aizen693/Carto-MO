@@ -1,8 +1,8 @@
 {
   "campagne": {
-    "id": "demo-baobab-2026",
-    "nom": "Campagne anti-Baobab Boissons",
-    "client": "Groupe Baobab Boissons (fictif — cas démo anonymisé)",
+    "id": "demo-bdc-2026",
+    "nom": "Campagne anti-Brasseries du Continent",
+    "client": "Brasseries du Continent (fictif — cas démo anonymisé)",
     "secteur": "Boissons / Grande consommation",
     "date_debut": "2026-03-02",
     "date_fin": "2026-04-22",
@@ -13755,7 +13755,7 @@
   "victimes": [
     {
       "type": "marque",
-      "nom": "Groupe Baobab Boissons",
+      "nom": "Brasseries du Continent",
       "subtitle": "Cible primaire · 5 marchés africains",
       "narratifs": "N01 · N02 · N06",
       "impact": "Fausses allégations de contamination et faux retrait de produit ; érosion de confiance sur le Sénégal, le Gabon, l'Angola, l'Éthiopie et Madagascar.",

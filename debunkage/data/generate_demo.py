@@ -215,7 +215,7 @@ NARRATIFS = [
 
 # ─── Victimes (cibles de la campagne) ──────────────────────
 VICTIMES = [
-    {"type": "marque", "nom": "Groupe Baobab Boissons", "subtitle": "Cible primaire · 5 marchés africains", "narratifs": "N01 · N02 · N06", "impact": "Fausses allégations de contamination et faux retrait de produit ; érosion de confiance sur le Sénégal, le Gabon, l'Angola, l'Éthiopie et Madagascar.", "icon": "building"},
+    {"type": "marque", "nom": "Brasseries du Continent", "subtitle": "Cible primaire · 5 marchés africains", "narratifs": "N01 · N02 · N06", "impact": "Fausses allégations de contamination et faux retrait de produit ; érosion de confiance sur le Sénégal, le Gabon, l'Angola, l'Éthiopie et Madagascar.", "icon": "building"},
     {"type": "dirigeant", "nom": "Direction générale (anonymisée)", "subtitle": "Mise en cause · documents falsifiés", "narratifs": "N05", "impact": "Faux lien fabriqué avec une affaire de corruption autour d'un marché public.", "icon": "user"},
     {"type": "employes", "nom": "Cadres et salariés locaux", "subtitle": "Cibles indirectes", "narratifs": "N04", "impact": "Fausses rumeurs de licenciements et de conditions de travail, pression sur les sites de production.", "icon": "users"},
     {"type": "partenaires", "nom": "Distributeurs et embouteilleurs", "subtitle": "Réseaux locaux · sous-traitants", "narratifs": "N03 · N06", "impact": "Risque de rupture de contrats, accusations environnementales sur les sites, rumeurs de pénurie.", "icon": "link"},
@@ -453,9 +453,9 @@ def main():
 
     out = {
         "campagne": {
-            "id": "demo-baobab-2026",
-            "nom": "Campagne anti-Baobab Boissons",
-            "client": "Groupe Baobab Boissons (fictif — cas démo anonymisé)",
+            "id": "demo-bdc-2026",
+            "nom": "Campagne anti-Brasseries du Continent",
+            "client": "Brasseries du Continent (fictif — cas démo anonymisé)",
             "secteur": "Boissons / Grande consommation",
             "date_debut": DATE_DEBUT,
             "date_fin": DATE_FIN,
