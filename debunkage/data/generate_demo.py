@@ -10,9 +10,33 @@ Inspiration méthodologique : Viginum, DFRLab, EU DisinfoLab, Code for Africa, A
 
 import json
 import random
+import sys
 import datetime as dt
 
 random.seed(42)  # reproductibilité
+
+# ─── Profils de sortie ──────────────────────────────────────
+# Usage : python3 generate_demo.py [demo|castel]
+PROFILES = {
+    "demo": {
+        "out": "cas-demo.json",
+        "id": "demo-bdc-2026",
+        "nom": "Campagne anti-Brasseries du Continent",
+        "client": "Brasseries du Continent (fictif — cas démo anonymisé)",
+        "marque": "Brasseries du Continent",
+        "illustratif": False,
+    },
+    "castel": {
+        "out": "cas-castel.json",
+        "id": "castel-illustratif-2026",
+        "nom": "Cartographie des attaques réputationnelles — Groupe Castel",
+        "client": "Groupe Castel (client — SCÉNARIO ILLUSTRATIF, données d'exemple)",
+        "marque": "Groupe Castel",
+        "illustratif": True,
+    },
+}
+PROFILE = sys.argv[1] if len(sys.argv) > 1 else "demo"
+CFG = PROFILES.get(PROFILE, PROFILES["demo"])
 
 # ─── Géographie ─────────────────────────────────────────────
 CITIES = {
@@ -451,11 +475,15 @@ def main():
             "notes": c["notes"],
         })
 
+    victimes = [dict(v) for v in VICTIMES]
+    victimes[0]["nom"] = CFG["marque"]
+
     out = {
         "campagne": {
-            "id": "demo-bdc-2026",
-            "nom": "Campagne anti-Brasseries du Continent",
-            "client": "Brasseries du Continent (fictif — cas démo anonymisé)",
+            "id": CFG["id"],
+            "nom": CFG["nom"],
+            "client": CFG["client"],
+            "illustratif": CFG["illustratif"],
             "secteur": "Boissons / Grande consommation",
             "date_debut": DATE_DEBUT,
             "date_fin": DATE_FIN,
@@ -463,13 +491,15 @@ def main():
             "comptes_total": len(comptes_uniques),
             "pays_implique": sorted(pays_set),
             "resume": (
-                "Vague de désinformation coordonnée alléguant la nocivité des produits du groupe, "
+                f"Vague de désinformation coordonnée alléguant la nocivité des produits de {CFG['marque']}, "
                 "propagée sur cinq marchés africains — Sénégal, Gabon, Angola, Éthiopie, Madagascar — "
                 "puis amplifiée par la diaspora francophone et un relais lusophone. Cinq clusters locaux "
                 "identifiés (Dakar plaque tournante, Libreville, Luanda, Addis-Abeba, Antananarivo), "
                 "plusieurs faux médias (template Doppelganger, hébergement offshore) et une nébuleuse de "
                 "comptes amplificateurs. Patient zéro tracé à un compte anonyme, 2 mars 2026 à 03h12 UTC — "
                 "soit environ cinq heures avant la première reprise organique."
+                + (" — SCÉNARIO ILLUSTRATIF : données d'exemple, à remplacer par les données réelles de veille."
+                   if CFG["illustratif"] else "")
             ),
             "narratifs": NARRATIFS,
             "methodologie": (
@@ -484,10 +514,10 @@ def main():
         "publications": pubs,
         "patient_zero": pz_id,
         "reseaux": reseaux,
-        "victimes": VICTIMES,
+        "victimes": victimes,
     }
-    print(f"Publications: {len(pubs)}, Comptes uniques: {len(comptes_uniques)}, Pays: {len(pays_set)}, Clusters: {len(reseaux)}")
-    with open("cas-demo.json", "w") as fh:
+    print(f"[{PROFILE}] -> {CFG['out']} | Publications: {len(pubs)}, Comptes: {len(comptes_uniques)}, Pays: {len(pays_set)}, Clusters: {len(reseaux)}")
+    with open(CFG["out"], "w") as fh:
         json.dump(out, fh, ensure_ascii=False, indent=2)
 
 

@@ -1,9 +1,9 @@
 {
   "campagne": {
-    "id": "demo-bdc-2026",
-    "nom": "Campagne anti-Brasseries du Continent",
-    "client": "Brasseries du Continent (fictif — cas démo anonymisé)",
-    "illustratif": false,
+    "id": "castel-illustratif-2026",
+    "nom": "Cartographie des attaques réputationnelles — Groupe Castel",
+    "client": "Groupe Castel (client — SCÉNARIO ILLUSTRATIF, données d'exemple)",
+    "illustratif": true,
     "secteur": "Boissons / Grande consommation",
     "date_debut": "2026-03-02",
     "date_fin": "2026-04-22",
@@ -21,7 +21,7 @@
       "PT",
       "SN"
     ],
-    "resume": "Vague de désinformation coordonnée alléguant la nocivité des produits de Brasseries du Continent, propagée sur cinq marchés africains — Sénégal, Gabon, Angola, Éthiopie, Madagascar — puis amplifiée par la diaspora francophone et un relais lusophone. Cinq clusters locaux identifiés (Dakar plaque tournante, Libreville, Luanda, Addis-Abeba, Antananarivo), plusieurs faux médias (template Doppelganger, hébergement offshore) et une nébuleuse de comptes amplificateurs. Patient zéro tracé à un compte anonyme, 2 mars 2026 à 03h12 UTC — soit environ cinq heures avant la première reprise organique.",
+    "resume": "Vague de désinformation coordonnée alléguant la nocivité des produits de Groupe Castel, propagée sur cinq marchés africains — Sénégal, Gabon, Angola, Éthiopie, Madagascar — puis amplifiée par la diaspora francophone et un relais lusophone. Cinq clusters locaux identifiés (Dakar plaque tournante, Libreville, Luanda, Addis-Abeba, Antananarivo), plusieurs faux médias (template Doppelganger, hébergement offshore) et une nébuleuse de comptes amplificateurs. Patient zéro tracé à un compte anonyme, 2 mars 2026 à 03h12 UTC — soit environ cinq heures avant la première reprise organique. — SCÉNARIO ILLUSTRATIF : données d'exemple, à remplacer par les données réelles de veille.",
     "narratifs": [
       "Allégations sanitaires fabriquées : contamination d'un lot, ingrédient nocif inventé (faux rapport de laboratoire)",
       "Faux communiqué d'une autorité sanitaire annonçant un retrait de produit (PDF officiel fabriqué)",
@@ -13756,7 +13756,7 @@
   "victimes": [
     {
       "type": "marque",
-      "nom": "Brasseries du Continent",
+      "nom": "Groupe Castel",
       "subtitle": "Cible primaire · 5 marchés africains",
       "narratifs": "N01 · N02 · N06",
       "impact": "Fausses allégations de contamination et faux retrait de produit ; érosion de confiance sur le Sénégal, le Gabon, l'Angola, l'Éthiopie et Madagascar.",

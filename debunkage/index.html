@@ -1066,13 +1066,25 @@ const state = {
 let map;
 
 async function init() {
-  const res = await fetch('./data/cas-demo.json?v=' + Date.now());
+  const caseParam = (new URLSearchParams(location.search).get('case') || 'demo').replace(/[^a-z0-9_-]/gi, '');
+  const file = caseParam === 'demo' ? 'cas-demo.json' : 'cas-' + caseParam + '.json';
+  const res = await fetch('./data/' + file + '?v=' + Date.now());
   state.data = await res.json();
+  if (state.data.campagne && state.data.campagne.illustratif) showIllustratifBanner();
   renderHeroStats();
   renderSidebar();
   buildMap();
   renderTimeline();
   renderActeursVictimes();
+}
+
+function showIllustratifBanner(){
+  if (document.getElementById('illustratif-banner')) return;
+  const b = document.createElement('div');
+  b.id = 'illustratif-banner';
+  b.textContent = "SCÉNARIO ILLUSTRATIF — données d'exemple, non vérifiées. À remplacer par les données réelles de veille. Page privée, non indexée.";
+  b.style.cssText = "position:sticky;top:0;z-index:9999;background:#8E2A2A;color:#fff;font:600 12px/1.4 'Plus Jakarta Sans',-apple-system,sans-serif;letter-spacing:.02em;padding:9px 16px;text-align:center;";
+  document.body.prepend(b);
 }
 
 function renderHeroStats(){
