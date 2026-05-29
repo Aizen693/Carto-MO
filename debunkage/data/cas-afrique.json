@@ -6,7 +6,7 @@
     "reel": true,
     "secteur": "Boissons / Grande consommation · présence Castel Afrique",
     "date_debut": "2022-05-01",
-    "date_fin": "2026-02-28",
+    "date_fin": "2026-05-31",
     "publications_total": 30,
     "comptes_total": 30,
     "pays_implique": [
@@ -105,7 +105,7 @@
       "lbl": "Atteinte directe confirmée"
     },
     {
-      "num": "39",
+      "num": "45",
       "lbl": "Incidents cartographiés"
     }
   ],
@@ -128,7 +128,7 @@
     },
     {
       "lbl": "Incidents cartographiés",
-      "val": "39"
+      "val": "45"
     },
     {
       "lbl": "Acteurs hostiles",
@@ -819,6 +819,114 @@
       "audience_estimee": 0,
       "r": 3.4,
       "content_excerpt": "Distribution forcée d'Africa Ti L'Or dans les bars de Bangui par des livreurs à tricycle motorisé armés. Pression physique sur les commerçants."
+    },
+    {
+      "id": "rca_inc_6",
+      "cc": "rca",
+      "compte_display": "Mars 2023 — Incendie de la brasserie MOCAF (cocktails Molotov)",
+      "plateforme": "incident physique",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2023-03-06",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.351,
+      "lon": 18.601,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Incendie de la brasserie MOCAF (nuit du 5-6 mars 2023) : hommes en tenue type Wagner lançant des cocktails Molotov. Escalade physique de la campagne anti-Castel."
+    },
+    {
+      "id": "rca_inc_7",
+      "cc": "rca",
+      "compte_display": "Avr. 2023 — Manifestations orchestrées « Castel = terrorisme »",
+      "plateforme": "mobilisation orchestrée",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2023-04-15",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.402,
+      "lon": 18.558,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Manifestations orchestrées : protestataires déversant des bouteilles MOCAF, slogans « Castel = terrorisme ». Mobilisation coordonnée avec les tracts."
+    },
+    {
+      "id": "rca_inc_8",
+      "cc": "rca",
+      "compte_display": "Mars 2024 — VIGINUM : portail pravda-cf.com (Portal Kombat)",
+      "plateforme": "infrastructure FIMI",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2024-03-15",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.328,
+      "lon": 18.512,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "VIGINUM/SGDSN documente pravda-cf.com (réseau Portal Kombat) ciblant la RCA. Infrastructure de désinformation pérenne."
+    },
+    {
+      "id": "rca_inc_9",
+      "cc": "rca",
+      "compte_display": "Avr. 2026 — PNAT classe sans suite l'enquête visant Castel",
+      "plateforme": "décision judiciaire",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-04-22",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.373,
+      "lon": 18.563,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "PNAT classe sans suite l'enquête contre Castel — infractions « insuffisamment caractérisées ». Les avocats relèvent une « cible idéale » pour Wagner (Le Monde, 22.04.2026)."
+    },
+    {
+      "id": "rca_inc_10",
+      "cc": "rca",
+      "compte_display": "Fév. 2026 — Fuite « Africa Politology » : méthodologie FIMI",
+      "plateforme": "fuite documentaire",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-21",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.418,
+      "lon": 18.534,
+      "audience_estimee": 0,
+      "r": 3.8,
+      "content_excerpt": "Fuite « Africa Politology » (~1 500 pages, authentifiées par Forbidden Stories / All Eyes On Wagner / iStories) : méthodologie FIMI de l'appareil ayant porté la campagne anti-Castel (Africanews, 21.02.2026)."
+    },
+    {
+      "id": "rca_inc_11",
+      "cc": "rca",
+      "compte_display": "Mai 2026 — Humanitaire J. Figueira instrumentalisé par Wagner",
+      "plateforme": "instrumentalisation",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-05-26",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Zemio",
+      "lat": 5.0289,
+      "lon": 25.1361,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Instrumentalisation de l'humanitaire J. Figueira (FHI 360), enlevé à Zemio en mai 2024, libéré vers Lisbonne le 8 avr. 2026 — présenté en « espion » par le même appareil Wagner que celui visant Castel (AllAfrica, 26.05.2026)."
     },
     {
       "id": "mali_filiale",
@@ -2975,8 +3083,16 @@
           "txt": "<strong>VIGINUM/SGDSN</strong> : création de <code style=\"font-size:11px;font-family:'JetBrains Mono',monospace\">pravda-cf.com</code>, portail Portal Kombat ciblant la RCA. Telegram + VK associés. IP serveur russe 178.21.15.85."
         },
         {
+          "date": "Fév. 2026",
+          "txt": "<strong>Fuite « Africa Politology »</strong> : ~1 500 pages de documents internes russes (fuite oct. 2025) authentifiées par Forbidden Stories, All Eyes On Wagner, Dossier Center, openDemocracy et iStories. Elles détaillent la méthodologie FIMI déployée en RCA — contenus fabriqués, articles commandés, mobilisations rémunérées : l'appareil même qui a porté la campagne anti-Castel (<a href=\"https://www.africanews.com/2026/02/21/investigation-russian-spy-agency-takes-over-wagner-operations-in-africa/\" target=\"_blank\">Africanews, 21.02.2026</a>)."
+        },
+        {
           "date": "Avr. 2026",
           "txt": "<strong>PNAT classe sans suite</strong> l'enquête — infractions \"insuffisamment caractérisées\". Les avocats de la défense confirment publiquement que Castel était \"cible idéale pour la campagne de dénigrement de Wagner\" (<a href=\"https://www.lemonde.fr/afrique/article/2026/04/22/centrafrique-l-enquete-visant-le-groupe-castel-pour-complicite-de-crimes-contre-l-humanite-classee_6682418_3212.html\" target=\"_blank\">Le Monde, 22.04.2026</a>)."
+        },
+        {
+          "date": "Mai 2026",
+          "txt": "<strong>Instrumentalisation de Joseph Figueira</strong> : l'humanitaire belgo-portugais (ONG FHI 360), enlevé le 26 mai 2024 à Zemio et libéré vers Lisbonne le 8 avr. 2026 après 22 mois, a été présenté par les réseaux pro-russes comme « espion américain » lié aux rébellions — même appareil de désinformation Wagner que celui visant Castel (<a href=\"https://fr.allafrica.com/stories/202605260355.html\" target=\"_blank\">AllAfrica, 26.05.2026</a>)."
         }
       ],
       "context": "La RCA est le seul cas où l'instrumentalisation de Castel par une puissance étrangère est intégralement documentée et confirmée par des sources primaires indépendantes, des décisions judiciaires et des investigations de renseignement occidental.",
@@ -2987,7 +3103,9 @@
         "WSJ sept. 2023",
         "Brauwelt juil. 2023",
         "VIGINUM avr. 2024",
-        "PNAT fév. 2026"
+        "PNAT fév. 2026",
+        "Africanews fév. 2026",
+        "AllAfrica mai 2026"
       ],
       "lon": 18.5582,
       "lat": 4.3947,
