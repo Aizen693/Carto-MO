@@ -5,15 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Castel Afrique — Désinformation (FIMI) & réputation · CONFIDENTIEL</title>
 
-<link rel="icon" type="image/jpeg" href="../favicon.jpg" />
 
 <meta name="description" content="Cartographie continentale — présence Groupe Castel (16 pays) croisée avec les campagnes de désinformation (FIMI) en Afrique. Document interne, sources publiques ouvertes." />
 <meta property="og:title" content="Castel Afrique — Désinformation (FIMI) & réputation" />
 <meta property="og:description" content="Entités, actifs critiques, incidents et narratifs — sources publiques ouvertes. Usage interne." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://algoracces.fr/debunkage/castel-gabon.html" />
 <meta name="robots" content="noindex, nofollow" />
 <meta name="theme-color" content="#FFFFFF" />
+
+<!-- Verrou equipe interne : masque le contenu immediatement (fail-closed),
+     leve seulement par shared/staff-gate.js si compte admin/editor. -->
+<style>html.staff-pending body{visibility:hidden}</style>
+<script>document.documentElement.classList.add('staff-pending')</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -729,25 +732,16 @@
 </head>
 <body style="background-color:#FFFFFF">
 
-<!-- ─────────────────────────────────────── Header (shared) -->
+<!-- ─────────────────────────────────────── Header (confidentiel) -->
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="site-brand" href="/">
-      <span class="site-brand__mark"></span>
-      <span class="site-brand__name">ALGOR INT</span>
-    </a>
-    <nav class="site-nav" aria-label="Rubriques">
-      <a href="/">Plateforme</a>
-      <a href="/debunkage/" class="is-active" aria-current="page">Débunkage</a>
-      <a href="/methodologie/">Méthodologie</a>
-      <a href="/offres/">Offres</a>
-      <a href="/theatres/">Théâtres</a>
-      <a href="/a-propos/">A propos</a>
-      <a href="/contact/">Contact</a>
-    </nav>
+    <span class="site-brand">
+      <span class="site-brand__mark" style="background:linear-gradient(135deg,#6B3FA0,#2E1857);display:flex;align-items:center;justify-content:center;color:#fff;font:700 16px/1 'Plus Jakarta Sans',sans-serif">C</span>
+      <span class="site-brand__name">CASTEL</span>
+    </span>
     <div class="site-header__right">
-      <a class="site-login" href="/">Connexion</a>
-      <a class="site-cta" href="#dossier">Voir le cas démo</a>
+      <span class="site-conf-badge" style="font:600 11px/1 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:#8E2A2A;background:rgba(142,42,42,.08);border:1px solid rgba(142,42,42,.25);border-radius:6px;padding:6px 10px;">Diffusion restreinte · Confidentiel</span>
+      <a class="site-cta" href="#dossier">Ouvrir le dossier</a>
     </div>
   </div>
 </header>
@@ -758,13 +752,13 @@
   <section class="page-hero">
     <div class="page-hero__wrap" style="display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:center">
       <div class="page-hero__copy">
-        <span class="page-hero__eyebrow">Débunkage · Algora Access</span>
-        <h1 class="page-hero__title">Remonter à <em>la source</em> des campagnes hostiles</h1>
+        <span class="page-hero__eyebrow">Dossier réputationnel · CONFIDENTIEL</span>
+        <h1 class="page-hero__title">Groupe Castel — <em>FIMI &amp; réputation</em> en Afrique</h1>
         <p class="page-hero__lede">
-          Quand une marque, une institution ou un dirigeant est ciblé par une désinformation coordonnée, nous retraçons la chaîne jusqu'au patient zéro et cartographions le réseau d'amplification — pour comprendre, démentir, et — si nécessaire — agir.
+          Cartographie des campagnes de désinformation (FIMI) et du climat anti-français visant les marchés du groupe Castel : chaîne de diffusion remontée jusqu'au patient zéro, réseau d'amplification, et niveau d'atteinte pays par pays — sur sources publiques ouvertes.
         </p>
         <div class="page-hero__cta">
-          <button class="btn btn--primary btn--lg" onclick="openSubmitModal()">Soumettre une campagne</button>
+          <a class="btn btn--primary btn--lg" href="#dossier">Ouvrir le dossier</a>
           <a class="btn btn--ghost btn--lg" href="#methode">Voir la méthode</a>
         </div>
         <ul class="hero-chips" aria-label="Méthodologie">
@@ -959,112 +953,20 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────────────── CTA -->
-  <section class="cta-band">
-    <div class="cta-band__wrap">
-      <h2 class="cta-band__title">Votre organisation est ciblée ?</h2>
-      <p class="cta-band__text">Nous instruisons votre dossier sous 24h ouvrées — diagnostic, veille récurrente, ou intervention de crise.</p>
-      <div class="cta-band__row">
-        <button class="btn btn--lg btn--on-violet" onclick="openSubmitModal()">Soumettre une campagne</button>
-        <a class="btn btn--lg btn--ghost-violet" href="/contact/">Nous contacter</a>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ── Modal lead form (dans main pour SPA) ──────────── -->
-<!-- ─────────────────────────────────────── Modal lead form -->
-<div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-h">
-  <div class="modal">
-    <button class="modal-close" aria-label="Fermer" onclick="closeSubmitModal()">×</button>
-    <div id="modal-form">
-      <div class="modal-eyebrow">Algora Access · Débunkage</div>
-      <h2 class="modal-h" id="modal-h">Soumettre une campagne</h2>
-      <p class="modal-sub">Décrivez la campagne qui cible votre organisation. Un analyste Algor·Int vous recontacte sous 24h ouvrées pour cadrer le périmètre.</p>
-
-      <div class="deb-field">
-        <label for="f-org">Organisation</label>
-        <input type="text" id="f-org" autocomplete="organization" required>
-      </div>
-      <div class="deb-field">
-        <label for="f-contact">Contact (nom · fonction)</label>
-        <input type="text" id="f-contact" autocomplete="name" required>
-      </div>
-      <div class="deb-field">
-        <label for="f-email">Email professionnel</label>
-        <input type="email" id="f-email" autocomplete="email" required>
-      </div>
-      <div class="deb-field">
-        <label for="f-urls">Liens hostiles déjà identifiés (un par ligne)</label>
-        <textarea id="f-urls" placeholder="https://…"></textarea>
-      </div>
-      <div class="deb-field">
-        <label for="f-context">Contexte court</label>
-        <textarea id="f-context" placeholder="Quand a-t-elle commencé ? Quel est le narratif ?"></textarea>
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn btn--ghost" onclick="closeSubmitModal()">Annuler</button>
-        <button class="btn btn--primary" onclick="submitLead()">Envoyer la demande</button>
-      </div>
-      <div class="modal-note">Données traitées en confidentialité · hébergement UE · consentement explicite pour relance.</div>
-    </div>
-
-    <div id="modal-success">
-      <div class="ok">✓</div>
-      <h3>Demande reçue</h3>
-      <p>Un analyste Algor·Int vous recontacte sous 24h ouvrées pour cadrer la prestation.</p>
-      <div style="margin-top: 22px;"><button class="btn btn--ghost" onclick="closeSubmitModal()">Fermer</button></div>
-    </div>
-  </div>
-</div>
 </main>
 
-<!-- ─────────────────────────────────────── Footer (shared) -->
+<!-- ─────────────────────────────────────── Footer (confidentiel) -->
 <footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__brand">
-      <div class="site-footer__brand-name"><span></span>ALGOR INT</div>
-      <p class="site-footer__blurb">
-        Algor Access : plateforme de cartographie OSINT. Six théâtres géopolitiques suivis en continu, chaque événement sourcé, daté et auditable.
-      </p>
-    </div>
-    <div class="site-footer__col">
-      <h4>Le site</h4>
-      <a href="/">Plateforme</a>
-      <a href="/debunkage/">Débunkage</a>
-      <a href="/methodologie/">Méthodologie</a>
-      <a href="/offres/">Offres</a>
-      <a href="/theatres/">Théâtres</a>
-      <a href="/a-propos/">A propos</a>
-      <a href="/contact/">Contact</a>
-    </div>
-    <div class="site-footer__col">
-      <h4>Theatres</h4>
-      <a href="/moyen-orient/">Moyen-Orient</a>
-      <a href="/sahel/">Sahel</a>
-      <a href="/rdc/">RDC</a>
-      <a href="/madagascar/">Madagascar</a>
-      <a href="/afrique/">Afrique Maritime</a>
-      <a href="/asie-sud/">Asie du Sud</a>
-    </div>
-    <div class="site-footer__col">
-      <h4>Acces</h4>
-      <a href="#" data-algor-login>Connexion</a>
-      <a href="/offres/">Voir les offres</a>
-      <a href="/contact/">Nous contacter</a>
-    </div>
-  </div>
   <div class="site-footer__bottom">
     <div class="site-footer__bottom-inner">
-      <span>© 2026 Algor Int · Débunkage</span>
-      <span>Diffusion restreinte · usage professionnel</span>
+      <span>Dossier réputationnel — Groupe Castel</span>
+      <span>Diffusion restreinte · CONFIDENTIEL · sources publiques ouvertes</span>
     </div>
   </div>
 </footer>
 
+<script type="module" src="../shared/staff-gate.js?v=20260529a"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
-<script src="../shared/home/sitenav.js?v=20260527e"></script>
 
 <script>
 /* ════ Data + Map ════
@@ -1935,40 +1837,6 @@ function timelineCutoffMs(){
   return t0 + (t1 - t0) * state.timelineProgress;
 }
 
-/* ════ Modal ════ */
-function openSubmitModal(){
-  document.getElementById('modal-overlay').classList.add('open');
-  document.getElementById('modal-form').style.display = 'block';
-  document.getElementById('modal-success').classList.remove('show');
-  document.body.classList.add('modal-open');
-}
-function closeSubmitModal(){
-  document.getElementById('modal-overlay').classList.remove('open');
-  document.body.classList.remove('modal-open');
-}
-function submitLead(){
-  const payload = {
-    org: document.getElementById('f-org').value.trim(),
-    contact: document.getElementById('f-contact').value.trim(),
-    email: document.getElementById('f-email').value.trim(),
-    urls: document.getElementById('f-urls').value.trim(),
-    context: document.getElementById('f-context').value.trim(),
-    ts: new Date().toISOString()
-  };
-  if (!payload.org || !payload.contact || !payload.email) {
-    alert('Organisation, contact et email sont requis.');
-    return;
-  }
-  try { localStorage.setItem('debunkage_pending_submission', JSON.stringify(payload)); } catch (e) {}
-  console.log('[debunkage] soumission', payload);
-  document.getElementById('modal-form').style.display = 'none';
-  document.getElementById('modal-success').classList.add('show');
-}
-const _modalOverlay = document.getElementById('modal-overlay');
-if (_modalOverlay) _modalOverlay.addEventListener('click', (e) => {
-  if (e.target.id === 'modal-overlay') closeSubmitModal();
-});
-
 /* ════ Helpers ════ */
 function escapeHtml(s){
   return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1986,11 +1854,6 @@ function fmtPeriod(a, b){
 function daysBetween(a, b){
   return Math.round((new Date(b) - new Date(a)) / 86400000);
 }
-
-// Expose les handlers utilises par onclick (modal)
-window.openSubmitModal = openSubmitModal;
-window.closeSubmitModal = closeSubmitModal;
-window.submitLead = submitLead;
 
 init().catch(err => {
   console.error('[debunkage] init failed', err);

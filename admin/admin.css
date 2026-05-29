@@ -1450,3 +1450,27 @@ select.admin-input option { background: var(--bg); color: var(--txh); }
   transition: color .1s, border-color .1s;
 }
 .kbd-help-btn:hover { color: var(--ac); border-color: var(--ac); }
+
+/* Dossiers clients (acces interne) */
+.dossier-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px; border: 1px solid var(--ln1); border-radius: 12px;
+  background: var(--bg1); text-decoration: none; color: inherit;
+  transition: border-color .12s, box-shadow .12s, transform .12s;
+}
+.dossier-card:hover {
+  border-color: var(--acb);
+  box-shadow: 0 6px 18px rgba(46,24,87,0.08);
+  transform: translateY(-1px);
+}
+.dossier-card__mark {
+  flex: none; width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #6B3FA0, #2E1857);
+  color: #fff; font: 700 17px/1 var(--bc);
+}
+.dossier-card__body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.dossier-card__title { font: 600 13.5px/1.3 var(--bc); color: var(--txh); }
+.dossier-card__sub { font: 400 11.5px/1.3 var(--m); color: var(--tx1); }
+.dossier-card__arrow { margin-left: auto; color: var(--tx2); font-size: 16px; }
+.dossier-card:hover .dossier-card__arrow { color: var(--ac); }

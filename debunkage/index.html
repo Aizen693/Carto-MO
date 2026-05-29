@@ -1066,8 +1066,13 @@ const state = {
 let map;
 
 async function init() {
-  const caseParam = (new URLSearchParams(location.search).get('case') || 'demo').replace(/[^a-z0-9_-]/gi, '');
-  const file = caseParam === 'demo' ? 'cas-demo.json' : 'cas-' + caseParam + '.json';
+  // Vitrine publique : seul le cas demo (Societe Lumiere) est servi ici.
+  // Les dossiers clients (Castel, etc.) ne sont JAMAIS accessibles depuis cette page,
+  // meme via ?case=… — ils vivent derriere le verrou staff (cf. carte-afrique.html).
+  const PUBLIC_CASES = ['demo'];
+  const requested = (new URLSearchParams(location.search).get('case') || 'demo').replace(/[^a-z0-9_-]/gi, '');
+  const caseParam = PUBLIC_CASES.includes(requested) ? requested : 'demo';
+  const file = 'cas-' + caseParam + '.json';
   const res = await fetch('./data/' + file + '?v=' + Date.now());
   state.data = await res.json();
   if (state.data.campagne && state.data.campagne.illustratif) showIllustratifBanner();
