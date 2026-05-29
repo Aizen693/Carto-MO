@@ -958,11 +958,16 @@ function startWireObserver() {
 //  - HTML statique : on remplace directement le textContent.
 //  - SPA React (sous #root) : on évite de toucher au DOM, le composant
 //    écoute l'événement « algorAuthStateChanged » et fait le rendu.
-async function notifyAuthState() {
+async function notifyAuthState(session) {
   try {
-    const { data } = await supabase.auth.getSession();
-    const loggedIn = !!data?.session?.user;
-    const email = data?.session?.user?.email || null;
+    // Appel sans argument (init au chargement) : on lit la session une fois.
+    // C'est hors callback onAuthStateChange, donc aucun risque de deadlock.
+    if (arguments.length === 0) {
+      const { data } = await supabase.auth.getSession();
+      session = data?.session || null;
+    }
+    const loggedIn = !!session?.user;
+    const email = session?.user?.email || null;
     window.algorAuthState = { loggedIn, email };
     document.querySelectorAll('.site-login, [data-algor-login]').forEach((el) => {
       if (el.closest('#root')) return; // géré par React via l'event
@@ -972,8 +977,12 @@ async function notifyAuthState() {
     window.dispatchEvent(new CustomEvent('algorAuthStateChanged', { detail: { loggedIn, email } }));
   } catch (_) { /* ignore */ }
 }
-// Premier check + re-check à chaque changement (login / logout via overlay).
-supabase.auth.onAuthStateChange(() => notifyAuthState());
+// Re-check à chaque changement (login / logout via overlay).
+// IMPORTANT : on n'appelle JAMAIS getSession()/from() dans ce callback —
+// supabase-js v2 tient un verrou pendant l'event et toute requete qui le
+// redemande provoque un deadlock (bouton qui tourne sans fin). On se sert
+// donc directement de la session fournie par l'event.
+supabase.auth.onAuthStateChange((_event, session) => notifyAuthState(session));
 
 async function gateSite() {
   try {
