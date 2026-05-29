@@ -1509,13 +1509,35 @@ function addLayers(){
     map.addLayer({ id: 'pays-lever', type: 'circle', source: 'pays', maxzoom: 7,
       filter: ['==', ['get', 'direct_n'], 1],
       paint: { 'circle-radius': 16, 'circle-color': 'transparent', 'circle-stroke-color': '#C8392B', 'circle-stroke-width': 1.6, 'circle-stroke-opacity': 0.85 } });
+    // Ping radar animé autour des pays à atteinte DIRECTE (les gros points) : attire l'œil.
+    map.addLayer({ id: 'pays-pulse', type: 'circle', source: 'pays', maxzoom: 7,
+      filter: ['==', ['get', 'direct_n'], 1],
+      paint: { 'circle-radius': 14, 'circle-color': 'transparent', 'circle-stroke-color': '#C8392B', 'circle-stroke-width': 2, 'circle-stroke-opacity': 0.7 } });
     map.addLayer({ id: 'pays-label', type: 'symbol', source: 'pays', maxzoom: 6.5,
       layout: { 'text-field': ['get', 'name'], 'text-size': 11, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
         'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-optional': true },
       paint: { 'text-color': '#3A3450', 'text-halo-color': '#FFFFFF', 'text-halo-width': 1.4 } });
     map.addLayer({ id: 'pays-hit', type: 'circle', source: 'pays', maxzoom: 7,
       paint: { 'circle-radius': 18, 'circle-color': '#000000', 'circle-opacity': 0 } });
+    animateDirectPulse();
   }
+}
+
+// Anime la couche « pays-pulse » : un anneau rouge qui s'agrandit et s'estompe en
+// boucle autour des pays à atteinte directe (RCA, Gabon) — effet radar/clignotant.
+let _pulseRAF = null;
+function animateDirectPulse(){
+  if (_pulseRAF) return;
+  const PERIOD = 1700, MINR = 13, MAXR = 34;
+  const step = (ts) => {
+    if (map && map.getLayer && map.getLayer('pays-pulse') && map.getZoom() < 7) {
+      const t = (ts % PERIOD) / PERIOD;            // 0 → 1
+      map.setPaintProperty('pays-pulse', 'circle-radius', MINR + (MAXR - MINR) * t);
+      map.setPaintProperty('pays-pulse', 'circle-stroke-opacity', 0.7 * (1 - t));
+    }
+    _pulseRAF = requestAnimationFrame(step);
+  };
+  _pulseRAF = requestAnimationFrame(step);
 }
 
 function applyFilters(){
