@@ -250,14 +250,16 @@
     border-radius: 8px !important;
     box-shadow: 0 4px 12px -4px rgba(31,18,55,0.10) !important;
   }
+  @keyframes debPopIn { from { opacity: 0; transform: translateY(7px) scale(.985); } to { opacity: 1; transform: none; } }
   .mapboxgl-popup-content {
     background: #fff !important; color: #1F1437 !important;
-    border: 1px solid rgba(0,0,0,0.08) !important;
-    border-radius: 12px !important;
-    padding: 14px 16px !important;
+    border: 1px solid rgba(0,0,0,0.07) !important;
+    border-radius: 14px !important;
+    padding: 15px 17px !important;
     font-family: 'Plus Jakarta Sans'; font-size: 13px; line-height: 1.5;
     max-width: 300px;
-    box-shadow: 0 12px 32px -8px rgba(31,18,55,0.18) !important;
+    box-shadow: 0 16px 40px -12px rgba(31,18,55,0.22), 0 2px 6px -2px rgba(31,18,55,0.06) !important;
+    animation: debPopIn .18s cubic-bezier(.2,.7,.3,1);
   }
   .mapboxgl-popup-tip { display: none !important; }
   .mapboxgl-popup-close-button { color: #6B6480 !important; right: 6px !important; top: 4px !important; font-size: 18px !important; padding: 4px 8px !important; }
@@ -267,14 +269,16 @@
   /* Tooltip */
   #tooltip {
     position: absolute; z-index: 10; pointer-events: none;
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 12px;
+    background: rgba(255,255,255,0.98);
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 13px;
     padding: 12px 14px; max-width: 300px;
     font-family: 'Plus Jakarta Sans'; font-size: 13px; line-height: 1.5;
     color: #1F1437;
     display: none;
-    box-shadow: 0 12px 32px -8px rgba(31,18,55,0.18);
+    box-shadow: 0 14px 36px -12px rgba(31,18,55,0.20);
+    animation: debPopIn .14s cubic-bezier(.2,.7,.3,1);
   }
   #tooltip .tt-head {
     font-weight: 600; font-size: 14px; color: #1F1437;
@@ -294,25 +298,31 @@
   /* Legend */
   #legend {
     position: absolute; top: 70px; right: 16px;
-    background: rgba(255,255,255,0.96);
-    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-    border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 12px;
-    padding: 12px 14px; z-index: 4;
+    background: rgba(255,255,255,0.97);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 13px;
+    padding: 13px 15px; z-index: 4;
     font-family: 'Plus Jakarta Sans'; font-size: 12px;
-    box-shadow: 0 8px 24px -8px rgba(31,18,55,0.12);
+    box-shadow: 0 10px 30px -10px rgba(31,18,55,0.14);
+    transition: box-shadow .2s ease;
   }
+  .lg-sec[hidden] { display: none; }
+  .lg-sec { animation: debFade .22s ease; }
+  @keyframes debFade { from { opacity: 0; } to { opacity: 1; } }
   #legend .lg-head {
     font-family: 'JetBrains Mono'; font-size: 10px;
     color: var(--violet-d, #6B3FA0); letter-spacing: 0.14em;
-    text-transform: uppercase; margin-bottom: 10px; font-weight: 600;
+    text-transform: uppercase; margin-bottom: 9px; font-weight: 600;
   }
   .lg-row {
     display: flex; align-items: center; gap: 9px;
-    padding: 3px 0; color: #4A4458; font-size: 12px;
+    padding: 2.5px 0; color: #4A4458; font-size: 12px;
   }
   .lg-row .sw { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .lg-row .ring { background: transparent !important; box-shadow: inset 0 0 0 1.6px #C8392B; }
   .lg-row .arc { width: 16px; height: 2px; flex-shrink: 0; background: var(--violet-d, #6B3FA0); border-radius: 2px; }
+  .lg-foot { font-family: 'JetBrains Mono'; font-size: 9px; color: #A19DB0; letter-spacing: .02em; margin-top: 8px; }
 
   /* Timeline */
   #timeline {
@@ -528,6 +538,20 @@
     font-family: 'Plus Jakarta Sans'; font-weight: 600;
     font-size: 22px; line-height: 1.1; color: #1F1437;
     letter-spacing: -0.018em; margin: 8px 0 0;
+  }
+  .syn-table { display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.07); border-radius: 12px; overflow: hidden; background: #fff; }
+  .syn-row { display: grid; grid-template-columns: 26px 1.4fr 1.1fr 1fr 0.7fr; gap: 14px; align-items: center; padding: 13px 18px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+  .syn-row:last-child { border-bottom: none; }
+  .syn-row--head { background: #F7F4FB; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; color: #8A8499; padding: 10px 18px; }
+  .syn-dot { width: 14px; height: 14px; border-radius: 50%; }
+  .syn-pays { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #1F1437; }
+  .syn-pays small { display: block; font-weight: 400; font-size: 11px; color: #8A8499; }
+  .syn-status { font-size: 13px; font-weight: 600; }
+  .syn-cell { font-size: 12.5px; color: #4A4458; }
+  .syn-proof { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: .03em; padding: 2px 8px; border-radius: 4px; justify-self: start; }
+  @media (max-width: 720px) {
+    .syn-row { grid-template-columns: 22px 1.3fr 1fr; }
+    .syn-row > .syn-cell.syn-hide, .syn-row--head > .syn-hide { display: none; }
   }
   .av-list { padding: 6px 0; }
   .av-item {
@@ -890,6 +914,20 @@
     </div>
   </section>
 
+  <!-- ─────────────────────────────────────── Synthèse décisionnelle -->
+  <section class="home-sec home-sec--alt" id="synthese-castel">
+    <div class="home-sec__wrap">
+      <div class="home-sec__head">
+        <span class="eyebrow">Lecture décisionnelle</span>
+        <h2 class="home-sec__title">Atteinte au groupe Castel — <em>pays par pays</em></h2>
+        <p class="home-sec__intro">
+          Classement des marchés Castel par niveau d'atteinte : du levier confirmé (filiale instrumentalisée) à l'exposition indirecte au climat anti-français. Chaque ligne indique la nature de l'atteinte et son niveau de preuve OSINT.
+        </p>
+      </div>
+      <div id="synthese-table" class="syn-table"></div>
+    </div>
+  </section>
+
   <!-- ─────────────────────────────────────── Acteurs & Victimes -->
   <section class="home-sec" id="acteurs-victimes">
     <div class="home-sec__wrap">
@@ -1074,27 +1112,76 @@ async function init() {
   renderSidebar();
   buildMap();
   renderTimeline();
+  renderSynthese();
   renderActeursVictimes();
 }
 
+function renderSynthese(){
+  const box = document.getElementById('synthese-table');
+  if (!box || !state.data.pays) return;
+  const PROOF = { 'Confirmé': '#C8392B', 'Probable': '#D69E2E', 'Indirect': '#8B5FBF' };
+  const rows = [...state.data.pays].sort((a, b) =>
+    (b.castel_harm || 0) - (a.castel_harm || 0) || (b.disinfo || 0) - (a.disinfo || 0));
+  const head = `<div class="syn-row syn-row--head">
+    <span></span><span>Pays · filiale</span><span>Nature de l'atteinte</span>
+    <span class="syn-hide">Incidents / flux</span><span>Preuve</span></div>`;
+  const body = rows.map(c => {
+    const hc = HARM_COLOR[c.castel_harm] || '#B9AFC9';
+    const pc = PROOF[c.proof] || '#8A8499';
+    const incCount = (c.incidents || []).length;
+    const incTxt = incCount ? `${incCount} incident${incCount > 1 ? 's' : ''} documenté${incCount > 1 ? 's' : ''}`
+      : 'Climat anti-France (contexte)';
+    return `<div class="syn-row">
+      <span class="syn-dot" style="background:${hc}"></span>
+      <span class="syn-pays">${escapeHtml(c.flag || '')} ${escapeHtml(c.name)}<small>${escapeHtml(c.subsidiary || '')}</small></span>
+      <span class="syn-status" style="color:${hc}">${escapeHtml(c.castel_status_label || '')}</span>
+      <span class="syn-cell syn-hide">${escapeHtml(incTxt)}</span>
+      <span class="syn-proof" style="color:${pc};background:${pc}1A">${escapeHtml((c.proof || '').toUpperCase())}</span>
+    </div>`;
+  }).join('');
+  box.innerHTML = head + body;
+}
+
 function applyLegende(){
+  // On conserve le mapping couleur/label pour les popups, mais la légende affichée
+  // est recentrée sur l'INCIDENT (le corporate est masqué au rendu détaillé).
   const lg = state.data.legende || [];
   lg.forEach(l => { TYPE_COLOR[l.type] = l.couleur; TYPE_LABEL[l.type] = l.label; });
   const box = document.getElementById('legend');
-  if (box && lg.length) {
-    box.innerHTML = '<div class="lg-head">Légende</div>'
-      + lg.map(l => `<div class="lg-row"><span class="sw" style="background:${l.couleur}"></span>${escapeHtml(l.label)}</div>`).join('')
-      + (state.data.legende_relations || [{ label: state.data.legende_arc || 'Relation', couleur: '#6B3FA0' }])
-          .map((r, i) => `<div class="lg-row"${i === 0 ? ' style="margin-top:6px"' : ''}><span class="arc" style="background:${r.couleur}"></span>${escapeHtml(r.label)}</div>`).join('');
-    if (state.data.pays && state.data.pays.length) {
-      box.innerHTML += '<div class="lg-head" style="margin-top:10px">Exposition FIMI · pays</div>'
-        + '<div class="lg-row"><span class="sw" style="background:#C8392B"></span>Critique</div>'
-        + '<div class="lg-row"><span class="sw" style="background:#E0652C"></span>Élevée</div>'
-        + '<div class="lg-row"><span class="sw" style="background:#D69E2E"></span>Modérée</div>'
-        + '<div class="lg-row"><span class="sw" style="background:#8B5FBF"></span>Faible</div>'
-        + '<div class="lg-row"><span class="sw" style="background:transparent;box-shadow:inset 0 0 0 1.5px #C8392B"></span>Levier Castel confirmé</div>';
-    }
+  if (!box) return;
+  // Deux sections exclusives : on n'affiche que celle qui correspond à l'échelle visible
+  // (continentale vs détail), pilotée par le zoom — la légende reste courte et lisible.
+  let cont = '';
+  if (state.data.pays && state.data.pays.length) {
+    cont = '<div class="lg-sec" data-sec="continental">'
+      + '<div class="lg-head">Atteinte au groupe Castel</div>'
+      + '<div class="lg-row"><span class="sw" style="background:#C8392B"></span>Directe — levier confirmé</div>'
+      + '<div class="lg-row"><span class="sw" style="background:#E0652C"></span>Directe — incidents réels</div>'
+      + '<div class="lg-row"><span class="sw" style="background:#D69E2E"></span>Ciblage sectoriel</div>'
+      + '<div class="lg-row"><span class="sw" style="background:#8B5FBF"></span>Indirecte forte</div>'
+      + '<div class="lg-row"><span class="sw" style="background:#B9AFC9"></span>Indirecte</div>'
+      + '<div class="lg-foot">⊙ anneau rouge = atteinte directe confirmée · cliquer un pays</div>'
+      + '</div>';
   }
+  const detail = '<div class="lg-sec" data-sec="detail" hidden>'
+    + '<div class="lg-head">Incidents &amp; flux</div>'
+    + '<div class="lg-row"><span class="sw" style="background:#C94A4A"></span>Incident informationnel</div>'
+    + '<div class="lg-row"><span class="sw" style="background:#8E2A2A"></span>Acteur / source hostile</div>'
+    + '<div class="lg-row"><span class="sw" style="background:#B9AFC9"></span>Cible Castel touchée</div>'
+    + '<div class="lg-row" style="margin-top:5px"><span class="arc" style="background:#C94A4A"></span>Flux informationnel</div>'
+    + '</div>';
+  box.innerHTML = cont + detail;
+}
+
+// Bascule la légende selon le zoom : vue continentale (pays) sous le seuil, vue
+// détail (réseau d'incidents) au-delà — pour ne montrer que ce qui est à l'écran.
+function updateLegendZoom(){
+  if (!map) return;
+  const detailView = map.getZoom() >= 6.3;
+  document.querySelectorAll('#legend .lg-sec').forEach(s => {
+    const isDetail = s.dataset.sec === 'detail';
+    s.hidden = detailView ? !isDetail : isDetail;
+  });
 }
 
 function showRealBanner(){
@@ -1119,7 +1206,8 @@ function renderHeroStats(){
   const d = state.data;
   document.getElementById('hs-title').textContent = d.campagne.nom;
   document.getElementById('hs-region').innerHTML =
-    d.campagne.pays_implique.map(p => escapeHtml(p === 'GA' ? 'Gabon' : p)).join('<span class="sep">·</span>');
+    [`${d.campagne.pays_implique.length} marchés Castel`, 'Afrique subsaharienne &amp; Maghreb']
+      .join('<span class="sep">·</span>');
   const cells = document.querySelectorAll('.deb-hero__cell');
   if (d.hero_cells && cells.length) {
     d.hero_cells.forEach((c, i) => {
@@ -1223,6 +1311,8 @@ function buildMap(){
     addLayers();
     bindMapHover();
     bindFullscreen();
+    updateLegendZoom();
+    map.on('zoom', updateLegendZoom);
     fitToData();
     // Le conteneur peut finir sa mise en page après le 'load' (vue continentale
     // sensible à la largeur) : on recadre une fois les dimensions stabilisées.
@@ -1236,67 +1326,71 @@ function publiByReseau(pubId){
   return null;
 }
 
+// Vue détail RECENTRÉE INCIDENT : on n'affiche que les incidents, les acteurs/sources
+// hostiles et les cibles Castel réellement touchées (extrémités des liens « cible »).
+// Tout le corporate (entité, dirigeant, usine, marque, canal non visé) est masqué au rendu —
+// les données restent intactes dans le JSON. Les flux = liens « cible », tous en rouge.
 function buildFeatures(){
   const d = state.data;
   const pubById = Object.fromEntries(d.publications.map(p => [p.id, p]));
   const cutoffMs = timelineCutoffMs();
 
-  const visibleIds = new Set(d.publications.filter(p => {
-    if (new Date(p.date).getTime() > cutoffMs) return false;
-    if (state.activeReseaux.size > 0) {
-      const r = publiByReseau(p.id);
-      if (!r || !state.activeReseaux.has(r.id)) return false;
-    }
-    return true;
-  }).map(p => p.id));
+  const edges = (d.relations && d.relations.length)
+    ? d.relations
+    : d.publications.filter(p => p.parent_id).map(p => ({ from: p.parent_id, to: p.id, type: 'cible', label: '' }));
+  // Extrémités des liens « cible » = cibles Castel touchées (et sources reliées à un incident).
+  const cibleEndpoints = new Set();
+  edges.forEach(e => { if (e.type === 'cible') { cibleEndpoints.add(e.from); cibleEndpoints.add(e.to); } });
+
+  const inTime = p => new Date(p.date).getTime() <= cutoffMs;
+  const inReseau = p => {
+    if (state.activeReseaux.size === 0) return true;
+    const r = publiByReseau(p.id);
+    return r && state.activeReseaux.has(r.id);
+  };
+  // Nœud retenu : incident, acteur/source, ou cible Castel touchée par un incident.
+  const keepNode = p => p.type === 'incident' || p.type === 'acteur' || cibleEndpoints.has(p.id);
+
+  const visibleIds = new Set(d.publications
+    .filter(p => keepNode(p) && inTime(p) && inReseau(p))
+    .map(p => p.id));
+
+  // Rayon/couleur : l'incident domine, l'acteur est marqué, la cible recule (gris).
+  const styleFor = p => {
+    if (p.type === 'incident') return { radius: p.r ? Math.max(p.r, 6) : 6.5, color: '#C94A4A' };
+    if (p.type === 'acteur')   return { radius: p.r ? Math.max(p.r, 5.5) : 6, color: '#8E2A2A' };
+    return { radius: 3, color: '#B9AFC9' }; // cible Castel touchée
+  };
 
   const points = {
     type: 'FeatureCollection',
-    features: d.publications.filter(p => visibleIds.has(p.id)).map(p => ({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
-      properties: {
-        ...p,
-        radius: radiusFor(p),
-        color: TYPE_COLOR[p.type] || '#8B5FBF',
-        is_pz: p.type === 'patient_zero' ? 1 : 0
-      }
-    }))
+    features: d.publications.filter(p => visibleIds.has(p.id)).map(p => {
+      const st = styleFor(p);
+      return {
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
+        properties: { ...p, radius: st.radius, color: st.color,
+          is_incident: p.type === 'incident' ? 1 : 0, is_pz: 0 }
+      };
+    })
   };
 
-  // Relations typées entre nœuds réels (graphe précis, sans agrégat de centroïdes)
-  const RSTYLE = {
-    appartenance: { color: '#6B3FA0', opacity: 0.22, width: 0.6 },
-    dependance:   { color: '#2E84D4', opacity: 0.65, width: 1.5 },
-    cible:        { color: '#C94A4A', opacity: 0.55, width: 1.1 },
-    riposte:      { color: '#3E9B7A', opacity: 0.65, width: 1.2 },
-    contexte:     { color: '#8A8499', opacity: 0.45, width: 0.9 }
-  };
-  const edges = (d.relations && d.relations.length)
-    ? d.relations
-    : d.publications.filter(p => p.parent_id).map(p => ({ from: p.parent_id, to: p.id, type: 'appartenance', label: '' }));
+  // Flux = uniquement les liens « cible », tous rouges (flux informationnel).
   const arcs = {
     type: 'FeatureCollection',
-    features: edges.map(e => {
+    features: edges.filter(e => e.type === 'cible').map(e => {
       const A = pubById[e.from], B = pubById[e.to];
       if (!A || !B || !visibleIds.has(A.id) || !visibleIds.has(B.id)) return null;
-      const st = RSTYLE[e.type] || RSTYLE.appartenance;
       return {
         type: 'Feature',
         geometry: { type: 'LineString', coordinates: greatCircle([A.lon, A.lat], [B.lon, B.lat], 12) },
-        properties: { from: e.from, to: e.to, rtype: e.type || 'appartenance', label: e.label || '', rcolor: st.color, ropacity: st.opacity, rwidth: st.width }
+        properties: { from: e.from, to: e.to, rtype: 'cible', label: e.label || '',
+          rcolor: '#C94A4A', ropacity: 0.6, rwidth: 1.3 }
       };
     }).filter(Boolean)
   };
 
   return { points, arcs };
-}
-
-function radiusFor(p){
-  // Rayon explicite (nœuds générés des graphes pays) sinon constant pour le réseau SOBRAGA.
-  if (p.r) return p.r;
-  if (p.type === 'patient_zero') return 4;
-  return 2.2;
 }
 function greatCircle(a, b, n){
   const pts = [];
@@ -1309,7 +1403,9 @@ function greatCircle(a, b, n){
 
 /* ════ Calque continental : pays Castel × exposition FIMI ════ */
 const ACTOR_LABEL = { RU: 'Russie', CN: 'Chine', GCC: 'États du Golfe' };
-const FIMI_COLOR_EXPR = ['match', ['get', 'disinfo'], 5, '#C8392B', 4, '#E0652C', 3, '#D69E2E', 2, '#8B5FBF', '#9B8FB0'];
+// Couleur des pays par NIVEAU D'ATTEINTE AU GROUPE CASTEL (pas l'intensité FIMI brute).
+// 5 levier confirmé · 4 incidents réels · 3 ciblage sectoriel · 2 atteinte indirecte forte · 1 atteinte indirecte
+const CASTEL_HARM_COLOR = ['match', ['get', 'harm'], 5, '#C8392B', 4, '#E0652C', 3, '#D69E2E', 2, '#8B5FBF', '#B9AFC9'];
 
 function buildPaysFeatures(){
   const arr = state.data.pays || [];
@@ -1319,33 +1415,40 @@ function buildPaysFeatures(){
       type: 'Feature',
       geometry: { type: 'Point', coordinates: [c.lon, c.lat] },
       properties: { id: c.id, name: c.name, flag: c.flag, region: c.region,
-        disinfo: c.disinfo, sentiment: c.sentiment, lever_n: c.lever ? 1 : 0 }
+        harm: c.castel_harm || 0, status_label: c.castel_status_label || '',
+        proof: c.proof || '', atteinte: c.atteinte_type || '',
+        direct_n: (c.castel_harm >= 4) ? 1 : 0,
+        disinfo: c.disinfo, sentiment: c.sentiment }
     }))
   };
 }
 
+const HARM_COLOR = { 5: '#C8392B', 4: '#E0652C', 3: '#D69E2E', 2: '#8B5FBF', 1: '#B9AFC9', 0: '#B9AFC9' };
 function renderPaysPopup(c){
-  const actors = (c.actors || []).map(a => ACTOR_LABEL[a] || a).join(' · ');
   const dots = (n, col) => Array.from({ length: 5 }, (_, i) =>
-    `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:2px;background:${i < n ? col : '#E3DEEC'}"></span>`).join('');
-  const narr = (c.narratives || []).map(n =>
-    `<span style="display:inline-block;background:#F2EEF8;color:#4A4458;font-size:11px;border-radius:4px;padding:2px 7px;margin:0 4px 4px 0">${escapeHtml(n)}</span>`).join('');
+    `<span style="display:inline-block;width:6px;height:6px;border-radius:50%;margin-left:2px;background:${i < n ? col : '#E3DEEC'}"></span>`).join('');
   const inc = (c.incidents || []).map(it =>
-    `<div style="margin-bottom:7px"><span style="font-family:'JetBrains Mono';font-size:9.5px;color:#8A8499;letter-spacing:.03em">${escapeHtml(it.date)}</span><div style="font-size:12px;line-height:1.5;color:#4A4458">${it.txt}</div></div>`).join('');
-  const lever = c.lever ? `<div style="display:inline-block;font-family:'JetBrains Mono';font-size:9px;font-weight:700;letter-spacing:.05em;color:#C8392B;background:rgba(200,57,43,.12);border:1px solid rgba(200,57,43,.35);border-radius:3px;padding:2px 6px;margin-bottom:9px">LEVIER CASTEL CONFIRMÉ</div>` : '';
-  const src = (c.sources || []).length ? `<div style="font-family:'JetBrains Mono';font-size:9.5px;color:#8A8499;letter-spacing:.02em;margin-top:9px">Sources : ${c.sources.map(escapeHtml).join(' · ')}</div>` : '';
+    `<div style="margin-bottom:6px"><span style="font-family:'JetBrains Mono';font-size:9px;color:#A19DB0;letter-spacing:.03em">${escapeHtml(it.date)}</span><div style="font-size:12px;line-height:1.45;color:#4A4458">${escapeHtml(it.txt)}</div></div>`).join('');
+  // En-tête = NIVEAU D'ATTEINTE AU GROUPE CASTEL (direct / indirect + niveau de preuve).
+  const hc = HARM_COLOR[c.castel_harm] || '#B9AFC9';
+  const atteinteLabel = { directe: 'Atteinte directe', sectorielle: 'Atteinte sectorielle', indirecte: 'Atteinte indirecte' }[c.atteinte_type] || '';
+  const badge = `<span style="display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono';font-size:9px;font-weight:700;letter-spacing:.05em;color:${hc};background:${hc}1F;border:1px solid ${hc}59;border-radius:3px;padding:2px 8px">
+      <span style="width:7px;height:7px;border-radius:50%;background:${hc}"></span>${escapeHtml((c.castel_status_label || '').toUpperCase())}</span>`;
+  // Contexte FIMI condensé en une seule ligne (substance des pays à atteinte indirecte).
+  const fimi = (c.disinfo || c.sentiment)
+    ? `<div style="font-size:10.5px;color:#8A8499;margin-top:9px">Climat FIMI anti-France · intensité${dots(c.disinfo, '#8B5FBF')} · sentiment${dots(c.sentiment, '#8B5FBF')}</div>`
+    : '';
+  const src = (c.sources || []).length
+    ? `<div style="font-family:'JetBrains Mono';font-size:9px;color:#A19DB0;letter-spacing:.02em;margin-top:10px">Sources · ${c.sources.map(escapeHtml).join(' · ')}</div>` : '';
   return `
-    <div style="max-height:62vh;overflow-y:auto;padding-right:4px">
+    <div style="max-height:60vh;overflow-y:auto;padding-right:2px">
       <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:16px;color:#1F1437;letter-spacing:-0.012em;margin-bottom:2px">${escapeHtml(c.flag || '')} ${escapeHtml(c.name)}</div>
-      <div style="font-family:'JetBrains Mono';font-size:10px;color:#6B3FA0;letter-spacing:0.04em;margin-bottom:9px">${escapeHtml(c.region)} · filiale ${escapeHtml(c.subsidiary)}</div>
-      ${lever}
-      <div style="font-size:11px;color:#6B6480;margin-bottom:3px">Intensité FIMI${dots(c.disinfo, '#C8392B')}</div>
-      <div style="font-size:11px;color:#6B6480;margin-bottom:8px">Sentiment anti-France${dots(c.sentiment, '#E0652C')}</div>
-      <div style="font-size:10px;color:#8A8499;margin-bottom:9px">Acteur(s) : ${escapeHtml(actors) || '—'}</div>
-      <div style="font-size:12.5px;line-height:1.55;color:#4A4458;margin-bottom:9px">${escapeHtml(c.operations || '')}</div>
-      ${narr ? `<div style="margin-bottom:9px">${narr}</div>` : ''}
-      ${inc ? `<div style="border-top:1px solid #ECE7F4;padding-top:9px;margin-bottom:2px">${inc}</div>` : ''}
-      <div style="font-size:11.5px;line-height:1.5;color:#6B6480;font-style:italic">${escapeHtml(c.context || '')}</div>
+      <div style="font-family:'JetBrains Mono';font-size:10px;color:#6B3FA0;letter-spacing:0.04em;margin-bottom:10px">${escapeHtml(c.region)} · ${escapeHtml(c.subsidiary || '')}</div>
+      ${badge}
+      <div style="font-size:11px;color:#6B6480;margin-top:9px">${escapeHtml(atteinteLabel)}${dots(c.castel_harm, hc)}<span style="font-size:10px;color:#8A8499;margin-left:6px">${escapeHtml(c.proof || '')}</span></div>
+      ${inc ? `<div style="border-top:1px solid #ECE7F4;padding-top:9px;margin-top:10px">${inc}</div>` : ''}
+      ${c.context ? `<div style="font-size:11px;line-height:1.5;color:#8A8499;font-style:italic;margin-top:${inc ? '9px' : '10px'}">${escapeHtml(c.context)}</div>` : ''}
+      ${fimi}
       ${src}
     </div>`;
 }
@@ -1375,15 +1478,15 @@ function addLayers(){
     }
   });
 
-  // Patient zero : seul point legerement plus gros + ring violet discret
+  // Incident : anneau rouge pour le faire ressortir comme objet central de la carte.
   map.addLayer({ id: 'points-pz-ring', type: 'circle', source: 'points', minzoom: 6,
-    filter: ['==', ['get', 'is_pz'], 1],
+    filter: ['==', ['get', 'is_incident'], 1],
     paint: {
-      'circle-radius': 14,
+      'circle-radius': 12,
       'circle-color': 'transparent',
-      'circle-stroke-color': '#6B3FA0',
-      'circle-stroke-width': 1.2,
-      'circle-stroke-opacity': 0.5
+      'circle-stroke-color': '#C94A4A',
+      'circle-stroke-width': 1.4,
+      'circle-stroke-opacity': 0.55
     }
   });
 
@@ -1393,18 +1496,18 @@ function addLayers(){
     paint: { 'circle-radius': 13, 'circle-color': '#000000', 'circle-opacity': 0 }
   });
 
-  // ── Calque continental : 16 pays Castel colorés par intensité FIMI ──
-  // Cappé à zoom 7 : au-delà on est dans un pays, on laisse place au réseau détaillé.
+  // ── Calque continental : pays Castel colorés par NIVEAU D'ATTEINTE AU GROUPE CASTEL ──
+  // Cappé à zoom 7 : au-delà on est dans un pays, on laisse place au réseau d'incidents.
   if (state.data.pays && state.data.pays.length) {
     map.addSource('pays', { type: 'geojson', data: buildPaysFeatures() });
     map.addLayer({ id: 'pays-glow', type: 'circle', source: 'pays', maxzoom: 7,
-      paint: { 'circle-radius': ['match', ['get', 'disinfo'], 5, 22, 4, 19, 3, 16, 2, 13, 11],
-        'circle-color': FIMI_COLOR_EXPR, 'circle-opacity': 0.12, 'circle-blur': 0.6 } });
+      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 22, 4, 19, 3, 16, 2, 13, 11],
+        'circle-color': CASTEL_HARM_COLOR, 'circle-opacity': 0.12, 'circle-blur': 0.6 } });
     map.addLayer({ id: 'pays-fill', type: 'circle', source: 'pays', maxzoom: 7,
-      paint: { 'circle-radius': ['match', ['get', 'disinfo'], 5, 11, 4, 9.5, 3, 8, 2, 6.5, 5.5],
-        'circle-color': FIMI_COLOR_EXPR, 'circle-opacity': 0.9, 'circle-stroke-color': '#FFFFFF', 'circle-stroke-width': 1.2 } });
+      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 11, 4, 9.5, 3, 8, 2, 6.5, 5.5],
+        'circle-color': CASTEL_HARM_COLOR, 'circle-opacity': 0.9, 'circle-stroke-color': '#FFFFFF', 'circle-stroke-width': 1.2 } });
     map.addLayer({ id: 'pays-lever', type: 'circle', source: 'pays', maxzoom: 7,
-      filter: ['==', ['get', 'lever_n'], 1],
+      filter: ['==', ['get', 'direct_n'], 1],
       paint: { 'circle-radius': 16, 'circle-color': 'transparent', 'circle-stroke-color': '#C8392B', 'circle-stroke-width': 1.6, 'circle-stroke-opacity': 0.85 } });
     map.addLayer({ id: 'pays-label', type: 'symbol', source: 'pays', maxzoom: 6.5,
       layout: { 'text-field': ['get', 'name'], 'text-size': 11, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
@@ -1490,6 +1593,48 @@ function bindFullscreen(){
   document.addEventListener('webkitfullscreenchange', onFsChange);
 }
 
+// Popup détail centré incident : qui propage (source) → quoi (incident) → ce qui est touché (cible).
+function renderNodePopup(p){
+  const rels = state.data.relations || [];
+  const byId = Object.fromEntries((state.data.publications || []).map(x => [x.id, x]));
+  const nm = id => (byId[id] && byId[id].compte_display) || id;
+  const PROOF_COL = { 'Confirmé': '#C8392B', 'Confirmé comme catégorie': '#C8392B', 'Probable': '#D69E2E', 'Indirect': '#8B5FBF' };
+  const head = (title, kicker, kcol) => `
+    <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:15.5px;color:#1F1437;letter-spacing:-0.012em;margin-bottom:3px">${escapeHtml(title)}</div>
+    <div style="font-family:'JetBrains Mono';font-size:10px;color:${kcol};letter-spacing:0.04em;margin-bottom:9px">${escapeHtml(kicker)}</div>`;
+  const line = (lbl, val) => `<div style="font-size:11.5px;color:#6B6480;margin-bottom:5px"><span style="color:#8A8499">${lbl} :</span> ${val}</div>`;
+  const proofTag = pr => pr ? `<span style="display:inline-block;font-family:'JetBrains Mono';font-size:9px;font-weight:700;letter-spacing:.04em;color:${PROOF_COL[pr]||'#8A8499'};background:rgba(0,0,0,.04);border:1px solid ${PROOF_COL[pr]||'#ccc'}55;border-radius:3px;padding:1px 6px">${escapeHtml(pr)}</span>` : '';
+  const date = p.date ? fmtDate(new Date(p.date)) : '';
+
+  if (p.type === 'incident') {
+    const cibles = rels.filter(r => r.from === p.id && r.type === 'cible').map(r => nm(r.to));
+    const sources = rels.filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'acteur').map(r => nm(r.from));
+    return `<div style="max-height:60vh;overflow-y:auto;padding-right:4px">
+      ${head(p.compte_display, 'Incident informationnel · ' + (p.ville || '') + (date ? ' · ' + date : ''), '#C94A4A')}
+      <div style="font-size:13px;line-height:1.55;color:#4A4458;margin-bottom:10px">${escapeHtml(p.content_excerpt || '')}</div>
+      ${sources.length ? line('Source', escapeHtml([...new Set(sources)].join(', '))) : ''}
+      ${cibles.length ? line('Cible Castel touchée', '<strong style="color:#4A4458">' + escapeHtml([...new Set(cibles)].join(', ')) + '</strong>') : ''}
+      <div style="margin-top:8px">${proofTag(p.niveau_preuve)}</div>
+    </div>`;
+  }
+  if (p.type === 'acteur') {
+    const incs = rels.filter(r => r.from === p.id && r.type === 'cible' && byId[r.to] && byId[r.to].type === 'incident').map(r => nm(r.to));
+    return `<div style="max-height:60vh;overflow-y:auto;padding-right:4px">
+      ${head(p.compte_display, 'Acteur / source hostile · ' + (p.plateforme || ''), '#8E2A2A')}
+      <div style="font-size:13px;line-height:1.55;color:#4A4458;margin-bottom:10px">${escapeHtml(p.content_excerpt || '')}</div>
+      ${incs.length ? line('Incidents propagés', escapeHtml([...new Set(incs)].join(' · '))) : ''}
+      <div style="margin-top:8px">${proofTag(p.niveau_preuve)}</div>
+    </div>`;
+  }
+  // Cible Castel touchée (marque / usine / entité visée)
+  const hits = rels.filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'incident').map(r => nm(r.from));
+  return `<div style="max-height:60vh;overflow-y:auto;padding-right:4px">
+    ${head(p.compte_display, 'Cible Castel touchée · ' + (TYPE_LABEL[p.type] || p.type), '#6B6480')}
+    ${p.content_excerpt ? `<div style="font-size:12.5px;line-height:1.5;color:#4A4458;margin-bottom:10px">${escapeHtml(p.content_excerpt)}</div>` : ''}
+    ${hits.length ? line('Visée par', escapeHtml([...new Set(hits)].join(' · '))) : ''}
+  </div>`;
+}
+
 function bindMapHover(){
   const tt = document.getElementById('tooltip');
   // Popup de detail (clic) en cours : tant qu'elle est ouverte on ne montre pas
@@ -1509,6 +1654,7 @@ function bindMapHover(){
     // Pop-up de ville : on regroupe tous les points proches (même localité)
     const DIST = 0.13;
     const here = state.data.publications.filter(q =>
+      (q.type === 'incident' || q.type === 'acteur') &&
       Math.abs(q.lat - p.lat) < DIST && Math.abs(q.lon - p.lon) < DIST
     );
     const ville = (p.ville || '').split(' / ')[0].split(' (')[0];
@@ -1534,14 +1680,9 @@ function bindMapHover(){
     tt.style.display = 'none';
     if (activePopup) activePopup.remove();
     const p = e.features[0].properties;
-    activePopup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '320px' })
+    activePopup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '340px' })
       .setLngLat(e.features[0].geometry.coordinates)
-      .setHTML(`
-        <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:15px;color:#1F1437;letter-spacing:-0.012em;margin-bottom:4px">${escapeHtml(p.compte_display)}</div>
-        <div style="font-family:'JetBrains Mono';font-size:10.5px;color:#6B3FA0;letter-spacing:0.04em;margin-bottom:10px">${escapeHtml(TYPE_LABEL[p.type]||p.type)} · ${escapeHtml(p.plateforme)} · ${escapeHtml(p.ville)}</div>
-        <div style="font-size:13px;line-height:1.55;color:#4A4458;margin-bottom:10px">${escapeHtml(p.content_excerpt)}</div>
-        <div style="font-family:'JetBrains Mono';font-size:10px;color:#8A8499;letter-spacing:0.02em">Niveau de preuve : ${escapeHtml(p.niveau_preuve||'—')} · ${fmtDate(new Date(p.date))}</div>
-      `)
+      .setHTML(renderNodePopup(p))
       .addTo(map);
     activePopup.on('close', () => { activePopup = null; });
   });
@@ -1682,7 +1823,7 @@ function renderTimeline(){
     const tick = document.createElement('div');
     tick.className = 'tl-tick' + (p.type === 'patient_zero' ? ' zero' : '');
     tick.style.left = `calc(${pct}% - 1px)`;
-    tick.style.height = (p.type === 'patient_zero' ? '100%' : (14 + radiusFor(p)) + 'px');
+    tick.style.height = (p.type === 'incident' ? '100%' : (p.r ? 14 + p.r : 16) + 'px');
     tick.style.background = TYPE_COLOR[p.type] || '#8B5FBF';
     track.appendChild(tick);
   });

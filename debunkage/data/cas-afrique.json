@@ -27,7 +27,7 @@
       "ET",
       "MG"
     ],
-    "resume": "Cartographie croisant la présence industrielle du Groupe Castel (16 pays, filiales brassicoles et sucrières) avec les campagnes de manipulation de l'information (FIMI) documentées en Afrique subsaharienne (2022-2026). La Russie (Wagner / Africa Corps) concentre ~40 % des opérations, surtout au Sahel. La Centrafrique (SUCAF / MOCAF) est le seul cas confirmé d'instrumentalisation d'une filiale Castel comme levier narratif anti-français (campagne Wagner 2023). Cliquez un pays pour zoomer sur son réseau ; le Gabon déploie le réseau SOBRAGA détaillé.",
+    "resume": "Cartographie de l'atteinte au groupe Castel en Afrique : on distingue l'atteinte DIRECTE (filiale instrumentalisee ou incidents informationnels visant nommement Castel) de l'atteinte INDIRECTE (climat de desinformation anti-France qui fragilise le groupe par association). Atteinte directe confirmee : Centrafrique (SUCAF/MOCAF, levier Wagner) et Gabon (incidents SOBRAGA reels). Atteinte sectorielle probable : Maroc (pression anti-alcool). Ailleurs : exposition indirecte au narratif anti-francais. Couleur = niveau d'atteinte ; cliquez un pays pour voir les incidents et les flux informationnels.",
     "narratifs": [
       "NAR-001 · Arrêt / cession de l'activité eau minérale (confirmé)",
       "NAR-002 · Pénurie durable / rupture du produit Andza (confirmé)",
@@ -97,42 +97,42 @@
   ],
   "hero_cells": [
     {
-      "num": "30",
-      "lbl": "Nœuds cartographiés"
+      "num": "16",
+      "lbl": "Pays Castel suivis"
     },
     {
-      "num": "6",
-      "lbl": "Usines & sites"
+      "num": "2",
+      "lbl": "Atteinte directe confirmée"
     },
     {
-      "num": "8",
-      "lbl": "Marques suivies"
+      "num": "39",
+      "lbl": "Incidents cartographiés"
     }
   ],
   "stats": [
     {
-      "lbl": "Entités corporate",
-      "val": "6"
+      "lbl": "Pays Castel suivis",
+      "val": "16"
     },
     {
-      "lbl": "Usines & sites",
-      "val": "6"
+      "lbl": "Atteinte directe confirmée",
+      "val": "2"
     },
     {
-      "lbl": "Marques",
-      "val": "8"
+      "lbl": "Ciblage sectoriel",
+      "val": "1"
     },
     {
-      "lbl": "Canaux officiels",
-      "val": "5"
+      "lbl": "Atteinte indirecte",
+      "val": "13"
     },
     {
-      "lbl": "Incidents (2022→2026)",
-      "val": "5"
+      "lbl": "Incidents cartographiés",
+      "val": "39"
     },
     {
-      "lbl": "Vulnérabilités",
-      "val": "7"
+      "lbl": "Acteurs hostiles",
+      "val": "18"
     }
   ],
   "publications": [
@@ -2990,7 +2990,12 @@
         "PNAT fév. 2026"
       ],
       "lon": 18.5582,
-      "lat": 4.3947
+      "lat": 4.3947,
+      "castel_harm": 5,
+      "castel_status": "levier_confirme",
+      "castel_status_label": "Levier confirmé",
+      "proof": "Confirmé",
+      "atteinte_type": "directe"
     },
     {
       "id": "mali",
@@ -3049,7 +3054,12 @@
         "Meta CIB reports"
       ],
       "lon": -8.0029,
-      "lat": 12.6392
+      "lat": 12.6392,
+      "castel_harm": 2,
+      "castel_status": "atteinte_indirecte_forte",
+      "castel_status_label": "Atteinte indirecte forte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "bfa",
@@ -3107,7 +3117,12 @@
         "Africa Center 2024"
       ],
       "lon": -1.5197,
-      "lat": 12.3714
+      "lat": 12.3714,
+      "castel_harm": 2,
+      "castel_status": "atteinte_indirecte_forte",
+      "castel_status_label": "Atteinte indirecte forte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "niger",
@@ -3164,7 +3179,12 @@
         "défensa.gob.es 2025"
       ],
       "lon": 2.1128,
-      "lat": 13.5128
+      "lat": 13.5128,
+      "castel_harm": 2,
+      "castel_status": "atteinte_indirecte_forte",
+      "castel_status_label": "Atteinte indirecte forte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "cam",
@@ -3211,7 +3231,12 @@
         "EEAS 2025"
       ],
       "lon": 9.7679,
-      "lat": 4.0511
+      "lat": 4.0511,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "civ",
@@ -3257,7 +3282,12 @@
         "EEAS 2025"
       ],
       "lon": -4.0083,
-      "lat": 5.36
+      "lat": 5.36,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "sen",
@@ -3303,7 +3333,12 @@
         "EEAS 2025"
       ],
       "lon": -17.4677,
-      "lat": 14.7167
+      "lat": 14.7167,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "tcad",
@@ -3348,7 +3383,12 @@
         "Africa Center 2024"
       ],
       "lon": 15.0557,
-      "lat": 12.1348
+      "lat": 12.1348,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "gab",
@@ -3379,12 +3419,24 @@
       ],
       "incidents": [
         {
-          "date": "Août 2023",
-          "txt": "<strong>Coup d'État</strong> général Brice Oligui Nguema. Canaux russes amplifient : \"Fin de la françafrique au Gabon.\""
+          "date": "Mai-juin 2022",
+          "txt": "INC-004 — Fin du partenariat historique Castel/SOBRAGA – The Coca-Cola Company (mai-juin 2022). Contexte de fragilisation narrative (NAR-004, probable)."
         },
         {
-          "date": "2024",
-          "txt": "Ambassade russe maintient une présence active sur les réseaux dans ce contexte de post-coup."
+          "date": "Juin 2022",
+          "txt": "INC-001 — Rumeur (réseaux sociaux + certains médias) d'arrêt/cession de l'activité eau minérale. Démenti officiel SOBRAGA (NAR-001, confirmé)."
+        },
+        {
+          "date": "Jan. 2023",
+          "txt": "INC-002 — Interruption ferroviaire (Transgabonais) → risque de rupture de stock Andza à Libreville. Forte sensibilité narrative (NAR-002, confirmé)."
+        },
+        {
+          "date": "2024-2025",
+          "txt": "INC-003 — Offres d'emploi frauduleuses au nom de SOBRAGA (2024-2025). Alertes publiques de la société (NAR-003, confirmé)."
+        },
+        {
+          "date": "Fev. 2026",
+          "txt": "INC-005 — Mesure des autorités gabonaises (fév. 2026), motivée notamment par la lutte contre les fake news. Impact sur la contre-communication corporate."
         }
       ],
       "context": "Post-coup, Gabon reste dans une zone grise. SOBRAGA = marque Castel dominant. Risque de ciblage si rapprochement Gabon–AES.",
@@ -3392,7 +3444,12 @@
         "Africa Center 2024"
       ],
       "lon": 9.4673,
-      "lat": 0.4162
+      "lat": 0.4162,
+      "castel_harm": 4,
+      "castel_status": "incidents_reels",
+      "castel_status_label": "Incidents réels",
+      "proof": "Confirmé",
+      "atteinte_type": "directe"
     },
     {
       "id": "guin",
@@ -3438,7 +3495,12 @@
         "Africa Center 2024"
       ],
       "lon": -13.5784,
-      "lat": 9.6412
+      "lat": 9.6412,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "cog",
@@ -3479,7 +3541,12 @@
         "EEAS 2025"
       ],
       "lon": 15.2429,
-      "lat": -4.2634
+      "lat": -4.2634,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "tgo",
@@ -3513,7 +3580,12 @@
         "Africa Center 2024"
       ],
       "lon": 1.2123,
-      "lat": 6.1375
+      "lat": 6.1375,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "mar",
@@ -3560,7 +3632,12 @@
         "Africa Center 2024"
       ],
       "lon": -7.5898,
-      "lat": 33.5731
+      "lat": 33.5731,
+      "castel_harm": 3,
+      "castel_status": "ciblage_sectoriel",
+      "castel_status_label": "Ciblage sectoriel",
+      "proof": "Probable",
+      "atteinte_type": "sectorielle"
     },
     {
       "id": "dza",
@@ -3604,7 +3681,12 @@
         "Africa Center 2024"
       ],
       "lon": 3.0588,
-      "lat": 36.7538
+      "lat": 36.7538,
+      "castel_harm": 2,
+      "castel_status": "atteinte_indirecte_forte",
+      "castel_status_label": "Atteinte indirecte forte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "eth",
@@ -3646,7 +3728,12 @@
         "Senate SFRC juil. 2025"
       ],
       "lon": 38.7469,
-      "lat": 9.025
+      "lat": 9.025,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     },
     {
       "id": "mad",
@@ -3685,7 +3772,12 @@
         "Africa Center 2024"
       ],
       "lon": 47.5079,
-      "lat": -18.8792
+      "lat": -18.8792,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
     }
   ]
 }
