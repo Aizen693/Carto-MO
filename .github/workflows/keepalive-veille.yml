@@ -1,0 +1,19 @@
+name: Keep Veille Streamlit awake
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit app
+        run: |
+          URL="https://carto-mo-d95ewgm9x6zzfugtcpdst8.streamlit.app/"
+          echo "Pinging $URL"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -A "Mozilla/5.0 (keepalive-bot)" --max-time 30 "$URL" || echo "fail")
+          echo "HTTP status: $STATUS"
+          echo "Ping registered"
+        
