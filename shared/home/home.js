@@ -835,6 +835,18 @@ function ConsoleView({
       d: "M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"
     }))
   }), /*#__PURE__*/React.createElement(ConsoleTab, {
+    href: "/debunkage/carte-afrique.html",
+    label: "Dossiers",
+    popTitle: "Dossiers clients",
+    popText: "Dossiers d'analyse reserves a l'equipe interne. Acces verrouille (compte editeur ou admin).",
+    icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+      d: "M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M9 13a3 3 0 1 1 6 0"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M12 13v3"
+    }))
+  }), /*#__PURE__*/React.createElement(ConsoleTab, {
     soon: true,
     label: "Rapport",
     popTitle: "Rapport",
