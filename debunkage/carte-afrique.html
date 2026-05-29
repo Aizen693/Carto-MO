@@ -375,6 +375,22 @@
     transition: background .15s ease, color .15s ease;
   }
   .tl-speed:hover { background: var(--violet-bg, rgba(107,63,160,0.08)); color: var(--violet-d, #6B3FA0); }
+  /* Légende des phases du mode opératoire — s'illumine au fil du curseur. */
+  .phase-legend { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .phase-legend[hidden] { display: none; }
+  .phase-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'JetBrains Mono'; font-size: 10px; letter-spacing: 0.03em;
+    color: #8A8499; background: #fff;
+    border: 1px solid rgba(0,0,0,0.08); border-radius: 100px;
+    padding: 4px 10px 4px 8px;
+    opacity: 0.45; transition: opacity .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .phase-chip .pc-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    background: var(--pc, #C94A4A);
+  }
+  .phase-chip.on { opacity: 1; color: #3A3450; border-color: var(--pc, #C94A4A); }
   #timeline-track {
     position: relative; height: 40px; cursor: pointer;
     background: rgba(107,63,160,0.04);
@@ -899,6 +915,7 @@
             <span class="lbl" id="tl-range">Timeline</span>
             <span class="val" id="tl-date">—</span>
           </div>
+          <div id="phase-legend" class="phase-legend" hidden></div>
           <div id="timeline-track">
             <div id="timeline-handle" style="left: 100%;"></div>
           </div>
@@ -1014,6 +1031,7 @@ async function init() {
   renderSidebar();
   buildMap();
   renderTimeline();
+  renderPhaseLegend();
   renderSynthese();
   renderActeursVictimes();
 }
@@ -1228,6 +1246,52 @@ function publiByReseau(pubId){
   return null;
 }
 
+/* ════ Moteur de phases (mode opératoire FIMI) ════
+   Taxonomie réutilisable (cf. Storm-1516). INERTE tant que la matrice n'est pas
+   renseignée : tant qu'aucune relation ne porte de `phase`, tous les flux restent
+   « non phasés » → visibles en permanence et rouges, exactement comme aujourd'hui.
+   Pour activer : ajouter `data.phases` (n°/nom/couleur) + `phase` sur les relations. */
+const PHASE_ORDER = ['1', '2', '3', '4', '5', 'target'];
+const PHASE_COLOR = { '1': '#8B5FBF', '2': '#6B3FA0', '3': '#D69E2E', '4': '#E0652C', '5': '#C8392B', 'target': '#C94A4A' };
+function phasesDef(){ return (state.data && Array.isArray(state.data.phases) && state.data.phases.length) ? state.data.phases : null; }
+function phaseKeys(){ const d = phasesDef(); return d ? d.map(p => String(p.n)) : PHASE_ORDER; }
+// Nombre de phases révélées selon la position du curseur (au moins 1).
+function activePhaseCount(){ return Math.max(1, Math.ceil(state.timelineProgress * phaseKeys().length)); }
+// Un flux non phasé est toujours visible (état actuel). Un flux phasé n'apparaît
+// qu'une fois sa phase atteinte par le curseur.
+function phaseVisible(phase){
+  if (phase == null || phase === '') return true;
+  const idx = phaseKeys().indexOf(String(phase));
+  return idx < 0 ? true : idx < activePhaseCount();
+}
+function phaseColor(phase){
+  if (phase == null || phase === '') return '#C94A4A';
+  const d = phasesDef();
+  if (d) { const f = d.find(p => String(p.n) === String(phase)); if (f && f.couleur) return f.couleur; }
+  return PHASE_COLOR[String(phase)] || '#C94A4A';
+}
+// Légende : une puce par phase. Reste masquée si la matrice (data.phases) est absente.
+function renderPhaseLegend(){
+  const wrap = document.getElementById('phase-legend');
+  if (!wrap) return;
+  const d = phasesDef();
+  if (!d) { wrap.hidden = true; wrap.innerHTML = ''; return; }
+  wrap.hidden = false;
+  wrap.innerHTML = d.map(p => {
+    const col = p.couleur || phaseColor(p.n);
+    return `<span class="phase-chip" data-p="${escapeHtml(String(p.n))}" style="--pc:${escapeHtml(col)}">
+      <span class="pc-dot"></span>${escapeHtml((p.nom || ('Phase ' + p.n)))}</span>`;
+  }).join('');
+  updatePhaseLegendActive();
+}
+// Illumine les puces jusqu'à la phase atteinte par le curseur.
+function updatePhaseLegendActive(){
+  const wrap = document.getElementById('phase-legend');
+  if (!wrap || wrap.hidden) return;
+  const n = activePhaseCount();
+  [...wrap.querySelectorAll('.phase-chip')].forEach((el, i) => el.classList.toggle('on', i < n));
+}
+
 // Vue détail RECENTRÉE INCIDENT : on n'affiche que les incidents, les acteurs/sources
 // hostiles et les cibles Castel réellement touchées (extrémités des liens « cible »).
 // Tout le corporate (entité, dirigeant, usine, marque, canal non visé) est masqué au rendu —
@@ -1277,17 +1341,20 @@ function buildFeatures(){
     })
   };
 
-  // Flux = uniquement les liens « cible », tous rouges (flux informationnel).
+  // Flux = liens « cible ». Couleur + apparition pilotées par la PHASE quand elle
+  // est renseignée ; sinon rouge et toujours visible (comportement actuel).
   const arcs = {
     type: 'FeatureCollection',
     features: edges.filter(e => e.type === 'cible').map(e => {
       const A = pubById[e.from], B = pubById[e.to];
       if (!A || !B || !visibleIds.has(A.id) || !visibleIds.has(B.id)) return null;
+      if (!phaseVisible(e.phase)) return null;
       return {
         type: 'Feature',
         geometry: { type: 'LineString', coordinates: greatCircle([A.lon, A.lat], [B.lon, B.lat], 12) },
         properties: { from: e.from, to: e.to, rtype: 'cible', label: e.label || '',
-          rcolor: '#C94A4A', ropacity: 0.6, rwidth: 1.3 }
+          phase: e.phase || null,
+          rcolor: phaseColor(e.phase), ropacity: 0.6, rwidth: 1.3 }
       };
     }).filter(Boolean)
   };
@@ -1320,6 +1387,7 @@ function buildPaysFeatures(){
         harm: c.castel_harm || 0, status_label: c.castel_status_label || '',
         proof: c.proof || '', atteinte: c.atteinte_type || '',
         direct_n: (c.castel_harm >= 4) ? 1 : 0,
+        incidents: (c.incidents || []).length,
         disinfo: c.disinfo, sentiment: c.sentiment }
     }))
   };
@@ -1419,6 +1487,15 @@ function addLayers(){
       layout: { 'text-field': ['get', 'name'], 'text-size': 11, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
         'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-optional': true },
       paint: { 'text-color': '#3A3450', 'text-halo-color': '#FFFFFF', 'text-halo-width': 1.4 } });
+    // Compteur d'incidents : chiffre blanc centré dans le point pays (n'apparaît que si ≥ 1).
+    map.addLayer({ id: 'pays-count', type: 'symbol', source: 'pays', maxzoom: 7,
+      filter: ['>=', ['get', 'incidents'], 1],
+      layout: {
+        'text-field': ['to-string', ['get', 'incidents']],
+        'text-size': ['match', ['get', 'harm'], 5, 12, 4, 11, 3, 10.5, 2, 9.5, 9],
+        'text-font': ['DIN Pro Bold', 'Arial Unicode MS Regular'],
+        'text-allow-overlap': true, 'text-ignore-placement': true },
+      paint: { 'text-color': '#FFFFFF', 'text-halo-color': 'rgba(0,0,0,0.35)', 'text-halo-width': 1 } });
     map.addLayer({ id: 'pays-hit', type: 'circle', source: 'pays', maxzoom: 7,
       paint: { 'circle-radius': 18, 'circle-color': '#000000', 'circle-opacity': 0 } });
     animateDirectPulse();
@@ -1758,6 +1835,7 @@ function renderTimeline(){
     handle.style.left = (pct * 100) + '%';
     const ms = t0 + (t1 - t0) * pct;
     document.getElementById('tl-date').textContent = fmtDate(new Date(ms));
+    updatePhaseLegendActive();
     applyFilters();
   }
 
