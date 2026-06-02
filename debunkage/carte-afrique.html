@@ -269,35 +269,6 @@
   .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right { opacity: 0.55; }
   .mapboxgl-ctrl-bottom-left:hover, .mapboxgl-ctrl-bottom-right:hover { opacity: 1; }
 
-  /* Tooltip */
-  #tooltip {
-    position: absolute; z-index: 10; pointer-events: none;
-    background: rgba(255,255,255,0.98);
-    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-    border: 1px solid rgba(0,0,0,0.07);
-    border-radius: 13px;
-    padding: 12px 14px; max-width: 300px;
-    font-family: 'Plus Jakarta Sans'; font-size: 13px; line-height: 1.5;
-    color: #1F1437;
-    display: none;
-    box-shadow: 0 14px 36px -12px rgba(31,18,55,0.20);
-    animation: debPopIn .14s cubic-bezier(.2,.7,.3,1);
-  }
-  #tooltip .tt-head {
-    font-weight: 600; font-size: 14px; color: #1F1437;
-    letter-spacing: -0.012em; margin-bottom: 4px;
-  }
-  #tooltip .tt-meta {
-    font-family: 'JetBrains Mono'; font-size: 10.5px;
-    color: var(--violet-d, #6B3FA0); letter-spacing: 0.04em;
-    margin-bottom: 8px;
-  }
-  #tooltip .tt-body { font-size: 12.5px; color: #4A4458; }
-  #tooltip .tt-foot {
-    font-family: 'JetBrains Mono'; font-size: 10px;
-    color: #8A8499; letter-spacing: 0.02em; margin-top: 8px;
-  }
-
   /* Legend */
   #legend {
     position: absolute; top: 70px; right: 16px;
@@ -325,6 +296,9 @@
   .lg-row .sw { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .lg-row .ring { background: transparent !important; box-shadow: inset 0 0 0 1.6px #C8392B; }
   .lg-row .arc { width: 16px; height: 2px; flex-shrink: 0; background: var(--violet-d, #6B3FA0); border-radius: 2px; }
+  .lg-row .lg-arrow { width: 16px; flex-shrink: 0; text-align: center; font-size: 12px; line-height: 1; color: var(--violet-d, #6B3FA0); }
+  .lg-row .ph-num { width: 16px; flex-shrink: 0; text-align: center; font-size: 14px; line-height: 1; font-weight: 700; }
+  .lg-foot .lg-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; vertical-align: middle; margin-right: 1px; }
   .lg-foot { font-family: 'JetBrains Mono'; font-size: 9px; color: #A19DB0; letter-spacing: .02em; margin-top: 8px; }
 
   /* Timeline */
@@ -375,22 +349,56 @@
     transition: background .15s ease, color .15s ease;
   }
   .tl-speed:hover { background: var(--violet-bg, rgba(107,63,160,0.08)); color: var(--violet-d, #6B3FA0); }
-  /* Légende des phases du mode opératoire — s'illumine au fil du curseur. */
-  .phase-legend { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  /* Stepper des phases du mode opératoire — schéma d'identification, s'illumine au fil du curseur. */
+  .phase-legend { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
   .phase-legend[hidden] { display: none; }
-  .phase-chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: 'JetBrains Mono'; font-size: 10px; letter-spacing: 0.03em;
-    color: #8A8499; background: #fff;
-    border: 1px solid rgba(0,0,0,0.08); border-radius: 100px;
-    padding: 4px 10px 4px 8px;
-    opacity: 0.45; transition: opacity .2s ease, color .2s ease, border-color .2s ease;
+  .ps-track { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; align-items: stretch; gap: 0; }
+  .ps-seg {
+    position: relative; display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px 6px 6px;
+    opacity: 0.4; transition: opacity .25s ease;
   }
-  .phase-chip .pc-dot {
-    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  /* Trait de liaison entre étapes. */
+  .ps-seg:not(:last-child)::after {
+    content: ''; position: absolute; right: -1px; top: 50%; transform: translateY(-50%);
+    width: 14px; height: 2px; border-radius: 1px;
+    background: linear-gradient(90deg, var(--pc, #C94A4A), rgba(0,0,0,0.10));
+    opacity: 0.55;
+  }
+  .ps-badge {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono'; font-weight: 700; font-size: 13px; color: #fff;
     background: var(--pc, #C94A4A);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+    transition: transform .2s ease, box-shadow .2s ease;
   }
-  .phase-chip.on { opacity: 1; color: #3A3450; border-color: var(--pc, #C94A4A); }
+  .ps-meta { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+  .ps-name {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11.5px;
+    color: #2C2640; letter-spacing: 0.01em; white-space: nowrap;
+  }
+  .ps-period {
+    font-family: 'JetBrains Mono'; font-size: 9.5px; letter-spacing: 0.04em; color: #8A8499;
+  }
+  .ps-stat {
+    font-family: 'JetBrains Mono'; font-size: 9.5px; font-weight: 600; letter-spacing: 0.02em;
+    color: var(--pc, #6B3FA0); margin-top: 1px; white-space: nowrap;
+  }
+  .ps-seg.reached { opacity: 1; }
+  .ps-seg.current .ps-badge {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--pc, #C94A4A) 22%, transparent), 0 2px 6px rgba(0,0,0,0.25);
+  }
+  /* Ligne descriptive de la phase courante. */
+  .ps-desc {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11.5px; line-height: 1.45;
+    color: #4A4360; padding: 8px 12px; border-radius: 8px;
+    background: var(--pc-bg, rgba(107,63,160,0.07));
+    border-left: 3px solid var(--pc, #6B3FA0);
+    transition: border-color .25s ease, background .25s ease;
+  }
+  .ps-desc strong { color: var(--pc, #6B3FA0); font-weight: 700; }
   #timeline-track {
     position: relative; height: 40px; cursor: pointer;
     background: rgba(107,63,160,0.04);
@@ -897,7 +905,6 @@
               <div class="lg-row"><span class="sw" style="background:#C94A4A"></span>Site copie</div>
               <div class="lg-row" style="margin-top:6px"><span class="arc"></span>Chaîne de diffusion</div>
             </div>
-            <div id="tooltip"></div>
           </div>
         </div>
 
@@ -1083,12 +1090,19 @@ function applyLegende(){
       + '<div class="lg-foot">⊙ anneau rouge = atteinte directe confirmée · cliquer un pays</div>'
       + '</div>';
   }
+  // Deux blocs : (1) la NATURE du flux = la forme (pointe ▶ = attaque structurelle,
+  // trait coloré = stratégie phasée), (2) la PHASE chronologique = la couleur du faisceau,
+  // révélée progressivement au curseur (le faisceau d'un acteur s'éventaille vers ses cibles).
+  const phCom = (phasesDef() || []).map(p =>
+    `<div class="lg-row"><span class="ph-num" style="color:${escapeHtml(p.couleur)}">${escapeHtml(String(p.nom).trim().charAt(0))}</span>${escapeHtml(String(p.nom).replace(/^\S+\s*/, ''))}</div>`
+  ).join('');
   const detail = '<div class="lg-sec" data-sec="detail" hidden>'
-    + '<div class="lg-head">Incidents &amp; flux</div>'
-    + '<div class="lg-row"><span class="sw" style="background:#C94A4A"></span>Incident informationnel</div>'
-    + '<div class="lg-row"><span class="sw" style="background:#8E2A2A"></span>Acteur / source hostile</div>'
-    + '<div class="lg-row"><span class="sw" style="background:#B9AFC9"></span>Cible Castel touchée</div>'
-    + '<div class="lg-row" style="margin-top:5px"><span class="arc" style="background:#C94A4A"></span>Flux informationnel</div>'
+    + '<div class="lg-head">Nature du flux</div>'
+    + '<div class="lg-row"><span class="lg-arrow">▶</span>Attaque — vise un actif Castel</div>'
+    + '<div class="lg-row"><span class="arc"></span>Stratégie — monte un incident (phasée)</div>'
+    + '<div class="lg-head" style="margin-top:12px">Phase <span style="text-transform:none;color:#A19DB0;letter-spacing:0">(couleur du faisceau)</span></div>'
+    + phCom
+    + '<div class="lg-foot"><span class="lg-dot" style="background:#C94A4A"></span> incident&nbsp;&nbsp;<span class="lg-dot" style="background:#8E2A2A"></span> acteur&nbsp;&nbsp;<span class="lg-dot" style="background:#B9AFC9"></span> cible Castel</div>'
     + '</div>';
   box.innerHTML = cont + detail;
 }
@@ -1255,6 +1269,24 @@ const PHASE_ORDER = ['1', '2', '3', '4', '5', 'target'];
 const PHASE_COLOR = { '1': '#8B5FBF', '2': '#6B3FA0', '3': '#D69E2E', '4': '#E0652C', '5': '#C8392B', 'target': '#C94A4A' };
 function phasesDef(){ return (state.data && Array.isArray(state.data.phases) && state.data.phases.length) ? state.data.phases : null; }
 function phaseKeys(){ const d = phasesDef(); return d ? d.map(p => String(p.n)) : PHASE_ORDER; }
+// Volumétrie réelle par phase (calculée depuis les liens « cible » phasés) :
+// nombre d'incidents et nombre de pays touchés. Sert à chiffrer honnêtement le stepper.
+function phaseStats(){
+  const out = {};
+  phaseKeys().forEach(k => out[k] = { n: 0, pays: new Set() });
+  const d = state.data;
+  if (!d || !d.relations) return out;
+  const pubs = Object.fromEntries((d.publications || []).map(p => [p.id, p]));
+  d.relations.forEach(r => {
+    if (r.type !== 'cible' || r.phase == null || r.phase === '') return;
+    const k = String(r.phase);
+    if (!out[k]) return;
+    out[k].n++;
+    const t = pubs[r.to];
+    if (t && t.cc) out[k].pays.add(t.cc);
+  });
+  return out;
+}
 // Nombre de phases révélées selon la position du curseur (au moins 1).
 function activePhaseCount(){ return Math.max(1, Math.ceil(state.timelineProgress * phaseKeys().length)); }
 // Un flux non phasé est toujours visible (état actuel). Un flux phasé n'apparaît
@@ -1264,32 +1296,70 @@ function phaseVisible(phase){
   const idx = phaseKeys().indexOf(String(phase));
   return idx < 0 ? true : idx < activePhaseCount();
 }
+// Phase chronologique d'une date (mêmes bornes que le re-tag des relations).
+function phaseOfDate(dateStr){
+  const y = new Date(dateStr).getUTCFullYear();
+  if (!y || isNaN(y)) return null;
+  if (y <= 2021) return '1';
+  if (y === 2022) return '2';
+  if (y === 2023) return '3';
+  return '4';
+}
 function phaseColor(phase){
   if (phase == null || phase === '') return '#C94A4A';
   const d = phasesDef();
   if (d) { const f = d.find(p => String(p.n) === String(phase)); if (f && f.couleur) return f.couleur; }
   return PHASE_COLOR[String(phase)] || '#C94A4A';
 }
-// Légende : une puce par phase. Reste masquée si la matrice (data.phases) est absente.
+// Découpe le libellé d'une phase « ① Amorçage · ≤2021 » en { nom, période }.
+function splitPhaseLabel(nom, n){
+  const raw = String(nom || ('Phase ' + n)).replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, '');
+  const parts = raw.split('·');
+  return { name: (parts[0] || '').trim() || ('Phase ' + n), period: (parts[1] || '').trim() };
+}
+// Stepper du schéma d'identification des phases. Masqué si data.phases est absent.
 function renderPhaseLegend(){
   const wrap = document.getElementById('phase-legend');
   if (!wrap) return;
   const d = phasesDef();
   if (!d) { wrap.hidden = true; wrap.innerHTML = ''; return; }
   wrap.hidden = false;
-  wrap.innerHTML = d.map(p => {
+  const stats = phaseStats();
+  const track = d.map(p => {
     const col = p.couleur || phaseColor(p.n);
-    return `<span class="phase-chip" data-p="${escapeHtml(String(p.n))}" style="--pc:${escapeHtml(col)}">
-      <span class="pc-dot"></span>${escapeHtml((p.nom || ('Phase ' + p.n)))}</span>`;
+    const { name, period } = splitPhaseLabel(p.nom, p.n);
+    const s = stats[String(p.n)] || { n: 0, pays: new Set() };
+    const stat = `${s.n} incident${s.n > 1 ? 's' : ''} · ${s.pays.size} pays`;
+    return `<div class="ps-seg" data-p="${escapeHtml(String(p.n))}" style="--pc:${escapeHtml(col)}">
+      <span class="ps-badge">${escapeHtml(String(p.n))}</span>
+      <span class="ps-meta"><span class="ps-name">${escapeHtml(name)}</span>${period ? `<span class="ps-period">${escapeHtml(period)}</span>` : ''}<span class="ps-stat">${escapeHtml(stat)}</span></span>
+    </div>`;
   }).join('');
+  wrap.innerHTML = `<div class="ps-track">${track}</div><div class="ps-desc" id="phase-desc"></div>`;
   updatePhaseLegendActive();
 }
-// Illumine les puces jusqu'à la phase atteinte par le curseur.
+// Illumine les étapes atteintes par le curseur, met en avant la phase courante,
+// et affiche sa description (le « schéma » lu par la direction).
 function updatePhaseLegendActive(){
   const wrap = document.getElementById('phase-legend');
   if (!wrap || wrap.hidden) return;
+  const d = phasesDef(); if (!d) return;
   const n = activePhaseCount();
-  [...wrap.querySelectorAll('.phase-chip')].forEach((el, i) => el.classList.toggle('on', i < n));
+  const segs = [...wrap.querySelectorAll('.ps-seg')];
+  segs.forEach((el, i) => {
+    el.classList.toggle('reached', i < n);
+    el.classList.toggle('current', i === n - 1);
+  });
+  const cur = d[Math.min(n, d.length) - 1];
+  const desc = document.getElementById('phase-desc');
+  if (cur && desc){
+    const col = cur.couleur || phaseColor(cur.n);
+    const { name } = splitPhaseLabel(cur.nom, cur.n);
+    desc.style.setProperty('--pc', col);
+    desc.style.setProperty('--pc-bg', `color-mix(in srgb, ${col} 9%, transparent)`);
+    const tag = cur.marqueur ? `${name} · ${cur.marqueur}` : name;
+    desc.innerHTML = `<strong>${escapeHtml(tag)}</strong> — ${escapeHtml(cur.desc || '')}`;
+  }
 }
 
 // Vue détail RECENTRÉE INCIDENT : on n'affiche que les incidents, les acteurs/sources
@@ -1321,11 +1391,12 @@ function buildFeatures(){
     .filter(p => keepNode(p) && inTime(p) && inReseau(p))
     .map(p => p.id));
 
-  // Rayon/couleur : l'incident domine, l'acteur est marqué, la cible recule (gris).
+  // Rayon/couleur : l'incident porte SA PHASE (couleur = période), l'acteur est un
+  // nœud-source sombre, la cible Castel recule (gris).
   const styleFor = p => {
-    if (p.type === 'incident') return { radius: p.r ? Math.max(p.r, 6) : 6.5, color: '#C94A4A' };
-    if (p.type === 'acteur')   return { radius: p.r ? Math.max(p.r, 5.5) : 6, color: '#8E2A2A' };
-    return { radius: 3, color: '#B9AFC9' }; // cible Castel touchée
+    if (p.type === 'incident') return { radius: p.r ? Math.max(p.r, 7) : 7.5, color: phaseColor(phaseOfDate(p.date)) };
+    if (p.type === 'acteur')   return { radius: p.r ? Math.max(p.r, 6) : 6.5, color: '#3A2257' };
+    return { radius: 3.2, color: '#B9AFC9' }; // cible Castel touchée
   };
 
   const points = {
@@ -1335,37 +1406,67 @@ function buildFeatures(){
       return {
         type: 'Feature',
         geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
-        properties: { ...p, radius: st.radius, color: st.color,
-          is_incident: p.type === 'incident' ? 1 : 0, is_pz: 0 }
+        properties: { ...p, radius: st.radius, color: st.color, pcolor: st.color,
+          is_incident: p.type === 'incident' ? 1 : 0,
+          is_acteur: p.type === 'acteur' ? 1 : 0, is_pz: 0 }
       };
     })
   };
 
-  // Flux = liens « cible ». Couleur + apparition pilotées par la PHASE quand elle
-  // est renseignée ; sinon rouge et toujours visible (comportement actuel).
+  // Flux = liens « cible », rendus en FAISCEAUX RAMIFIÉS : tous les arcs d'un même
+  // acteur-source partagent l'origine et s'éventaillent (courbure indexée) → effet
+  // de ramification. Couleur + apparition pilotées par la PHASE (chronologique) pour
+  // les flux STRATÉGIE ; les flux ATTAQUE (vers un actif Castel) sont la pression
+  // structurelle permanente : couleur neutre, pointe de flèche, toujours visibles.
+  const cibleEdges = edges.filter(e => e.type === 'cible');
+  // Index stable de chaque arc dans le faisceau de sa source (pour que l'éventail ne
+  // bouge pas quand le curseur révèle/masque des arcs).
+  const bySource = {};
+  cibleEdges.forEach(e => { (bySource[e.from] || (bySource[e.from] = [])).push(e); });
+  Object.values(bySource).forEach(arr => arr.sort((a, b) => String(a.to).localeCompare(String(b.to))));
+  const fanIndex = new Map();
+  Object.values(bySource).forEach(arr => arr.forEach((e, i) => fanIndex.set(e, { i, n: arr.length })));
+
+  const ATTAQUE_COLOR = '#7A5BA6'; // violet sourd = pression structurelle (hors phase)
   const arcs = {
     type: 'FeatureCollection',
-    features: edges.filter(e => e.type === 'cible').map(e => {
+    features: cibleEdges.map(e => {
       const A = pubById[e.from], B = pubById[e.to];
       if (!A || !B || !visibleIds.has(A.id) || !visibleIds.has(B.id)) return null;
       if (!phaseVisible(e.phase)) return null;
+      const nature = (B.type === 'incident') ? 'strategie' : 'attaque';
+      // Courbure de l'arc : éventail symétrique autour de la source.
+      const fi = fanIndex.get(e) || { i: 0, n: 1 };
+      const t = fi.n > 1 ? (fi.i / (fi.n - 1)) - 0.5 : 0; // -0.5 … +0.5
+      const bend = fi.n > 1 ? t * 0.62 : 0.16;
+      const isStrat = nature === 'strategie';
       return {
         type: 'Feature',
-        geometry: { type: 'LineString', coordinates: greatCircle([A.lon, A.lat], [B.lon, B.lat], 12) },
+        geometry: { type: 'LineString', coordinates: arcCurve([A.lon, A.lat], [B.lon, B.lat], bend, 24) },
         properties: { from: e.from, to: e.to, rtype: 'cible', label: e.label || '',
-          phase: e.phase || null,
-          rcolor: phaseColor(e.phase), ropacity: 0.6, rwidth: 1.3 }
+          phase: e.phase || null, nature,
+          rcolor: isStrat ? phaseColor(e.phase) : ATTAQUE_COLOR,
+          ropacity: isStrat ? 0.95 : 0.8,
+          rwidth: isStrat ? 3.0 : 2.2 }
       };
     }).filter(Boolean)
   };
 
   return { points, arcs };
 }
-function greatCircle(a, b, n){
+// Arc courbé (Bézier quadratique) : point de contrôle décalé perpendiculairement à la
+// corde A→B d'une fraction `bend` de sa longueur. bend signé = côté de la courbure.
+function arcCurve(a, b, bend, n){
+  const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+  const dx = b[0] - a[0], dy = b[1] - a[1];
+  const cx = mx - dy * bend, cy = my + dx * bend; // contrôle perpendiculaire
   const pts = [];
   for (let i = 0; i <= n; i++) {
-    const t = i / n;
-    pts.push([ a[0] + (b[0]-a[0]) * t, a[1] + (b[1]-a[1]) * t ]);
+    const t = i / n, u = 1 - t;
+    pts.push([
+      u*u*a[0] + 2*u*t*cx + t*t*b[0],
+      u*u*a[1] + 2*u*t*cy + t*t*b[1]
+    ]);
   }
   return pts;
 }
@@ -1431,32 +1532,76 @@ function addLayers(){
   // Relations entre nœuds réels — couleur/épaisseur par type de relation.
   // minzoom 6 : le réseau détaillé reste caché en vue continentale (chaque pays = un rond).
   map.addLayer({ id: 'arcs-glow', type: 'line', source: 'arcs', minzoom: 6,
-    paint: { 'line-color': ['get', 'rcolor'], 'line-width': ['*', ['get', 'rwidth'], 3], 'line-opacity': 0.07, 'line-blur': 2 }
+    layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: { 'line-color': ['get', 'rcolor'], 'line-width': ['*', ['get', 'rwidth'], 3.2], 'line-opacity': 0.13, 'line-blur': 2.6 }
   });
   map.addLayer({ id: 'arcs-line', type: 'line', source: 'arcs', minzoom: 6,
+    layout: { 'line-cap': 'round', 'line-join': 'round' },
     paint: { 'line-color': ['get', 'rcolor'], 'line-width': ['get', 'rwidth'], 'line-opacity': ['get', 'ropacity'] }
   });
+  // Flux animé (pointillé qui défile A→cible) sur les faisceaux STRATÉGIE phasés :
+  // donne le sens de propagation et rend les ramifications « vivantes ».
+  map.addLayer({ id: 'arcs-flow', type: 'line', source: 'arcs', minzoom: 6,
+    filter: ['==', ['get', 'nature'], 'strategie'],
+    layout: { 'line-cap': 'round' },
+    paint: { 'line-color': '#FFFFFF', 'line-width': ['*', ['get', 'rwidth'], 0.6],
+      'line-opacity': 0.55, 'line-dasharray': [0, 4, 3] }
+  });
+  // Pointe de flèche orientée le long du trait — uniquement sur les flux ATTAQUE
+  // (qui visent un actif Castel). Les flux STRATÉGIE (vers un incident) restent nus.
+  map.addLayer({ id: 'arcs-arrow', type: 'symbol', source: 'arcs', minzoom: 6,
+    filter: ['==', ['get', 'nature'], 'attaque'],
+    layout: {
+      'symbol-placement': 'line-center',
+      'text-field': '▶',
+      'text-size': 17,
+      'text-font': ['Arial Unicode MS Regular'],
+      'text-rotation-alignment': 'map',
+      'text-keep-upright': false,
+      'text-allow-overlap': true,
+      'text-ignore-placement': true
+    },
+    paint: {
+      'text-color': ['get', 'rcolor'],
+      'text-opacity': ['get', 'ropacity'],
+      'text-halo-color': '#FFFFFF',
+      'text-halo-width': 0.8
+    }
+  });
 
-  // Points : tous les dots en taille constante (essain visuel par accumulation).
+  // Points : incidents colorés par phase, contour blanc net pour ressortir.
   map.addLayer({ id: 'points', type: 'circle', source: 'points', minzoom: 6,
     paint: {
       'circle-radius': ['get', 'radius'],
       'circle-color': ['get', 'color'],
-      'circle-opacity': 0.78,
+      'circle-opacity': 0.92,
       'circle-stroke-color': '#FFFFFF',
-      'circle-stroke-width': 0.4
+      'circle-stroke-width': 1.1
     }
   });
 
-  // Incident : anneau rouge pour le faire ressortir comme objet central de la carte.
+  // Incident : anneau de la COULEUR DE SA PHASE pour le faire ressortir.
   map.addLayer({ id: 'points-pz-ring', type: 'circle', source: 'points', minzoom: 6,
     filter: ['==', ['get', 'is_incident'], 1],
     paint: {
-      'circle-radius': 12,
+      'circle-radius': 13,
       'circle-color': 'transparent',
-      'circle-stroke-color': '#C94A4A',
+      'circle-stroke-color': ['get', 'pcolor'],
+      'circle-stroke-width': 1.6,
+      'circle-stroke-opacity': 0.6
+    }
+  });
+
+  // Acteur-source : halo violet pour marquer l'origine des faisceaux.
+  map.addLayer({ id: 'points-act-halo', type: 'circle', source: 'points', minzoom: 6,
+    filter: ['==', ['get', 'is_acteur'], 1],
+    paint: {
+      'circle-radius': 15,
+      'circle-color': '#3A2257',
+      'circle-opacity': 0.1,
+      'circle-stroke-color': '#3A2257',
       'circle-stroke-width': 1.4,
-      'circle-stroke-opacity': 0.55
+      'circle-stroke-opacity': 0.5
     }
   });
 
@@ -1500,6 +1645,7 @@ function addLayers(){
       paint: { 'circle-radius': 18, 'circle-color': '#000000', 'circle-opacity': 0 } });
     animateDirectPulse();
   }
+  animateArcFlow();
 }
 
 // Anime la couche « pays-pulse » : un anneau rouge qui s'agrandit et s'estompe en
@@ -1517,6 +1663,26 @@ function animateDirectPulse(){
     _pulseRAF = requestAnimationFrame(step);
   };
   _pulseRAF = requestAnimationFrame(step);
+}
+
+// Anime la couche « arcs-flow » : un pointillé blanc qui défile le long des faisceaux
+// stratégie (sens acteur → cible). Cycle de motifs dasharray (technique Mapbox).
+let _flowRAF = null;
+function animateArcFlow(){
+  if (_flowRAF) return;
+  const seq = [
+    [0,4,3],[0.5,4,2.5],[1,4,2],[1.5,4,1.5],[2,4,1],[2.5,4,0.5],[3,4,0],
+    [0,0.5,3,3.5],[0,1,3,3],[0,1.5,3,2.5],[0,2,3,2],[0,2.5,3,1.5],[0,3,3,1],[0,3.5,3,0.5]
+  ];
+  let step = -1;
+  const tick = (ts) => {
+    if (map && map.getLayer && map.getLayer('arcs-flow') && map.getZoom() >= 6) {
+      const s = Math.floor((ts / 70) % seq.length);
+      if (s !== step) { map.setPaintProperty('arcs-flow', 'line-dasharray', seq[s]); step = s; }
+    }
+    _flowRAF = requestAnimationFrame(tick);
+  };
+  _flowRAF = requestAnimationFrame(tick);
 }
 
 function applyFilters(){
@@ -1637,48 +1803,12 @@ function renderNodePopup(p){
 }
 
 function bindMapHover(){
-  const tt = document.getElementById('tooltip');
-  // Popup de detail (clic) en cours : tant qu'elle est ouverte on ne montre pas
-  // le tooltip groupe, pour ne jamais avoir deux pop-up en meme temps.
   let activePopup = null;
-  // Au-dela de ce zoom on masque la pop-up groupee par localite : les points
-  // sont assez ecartes pour etre lus individuellement, le detail reste au clic.
-  const TOOLTIP_MAX_ZOOM = 13;
+  // Survol : on change seulement le curseur. Pas de pop-up de survol (le détail
+  // d'un nœud reste accessible au clic) — la lecture des phases passe par le stepper.
   map.on('mouseenter', 'points-hit', () => { map.getCanvas().style.cursor = 'pointer'; });
-  map.on('mouseleave', 'points-hit', () => { map.getCanvas().style.cursor = ''; tt.style.display = 'none'; });
-  map.on('zoom', () => { if (map.getZoom() >= TOOLTIP_MAX_ZOOM) tt.style.display = 'none'; });
-  map.on('mousemove', 'points-hit', (e) => {
-    if (!e.features?.length) return;
-    if (activePopup) { tt.style.display = 'none'; return; }
-    if (map.getZoom() >= TOOLTIP_MAX_ZOOM) { tt.style.display = 'none'; return; }
-    const p = e.features[0].properties;
-    // Pop-up de ville : on regroupe tous les points proches (même localité)
-    const DIST = 0.13;
-    const here = state.data.publications.filter(q =>
-      (q.type === 'incident' || q.type === 'acteur') &&
-      Math.abs(q.lat - p.lat) < DIST && Math.abs(q.lon - p.lon) < DIST
-    );
-    const ville = (p.ville || '').split(' / ')[0].split(' (')[0];
-    const MAX = 8;
-    const list = here.slice(0, MAX).map(q =>
-      `<div style="display:flex;align-items:center;gap:7px;padding:1px 0">
-         <span style="width:7px;height:7px;border-radius:50%;background:${TYPE_COLOR[q.type]||'#8B5FBF'};flex:0 0 auto"></span>
-         <span>${escapeHtml(q.compte_display)}</span>
-         <span style="opacity:.55;font-size:11px">· ${escapeHtml(TYPE_LABEL[q.type]||q.type)}</span>
-       </div>`).join('');
-    const more = here.length > MAX ? `<div style="opacity:.55;margin-top:3px">+ ${here.length - MAX} autre(s)…</div>` : '';
-    tt.innerHTML = `
-      <div class="tt-head">${escapeHtml(ville)}</div>
-      <div class="tt-meta">${here.length} élément${here.length > 1 ? 's' : ''} cartographié${here.length > 1 ? 's' : ''} · cliquer pour le détail</div>
-      <div class="tt-body">${list}${more}</div>
-    `;
-    const rect = document.getElementById('map').getBoundingClientRect();
-    tt.style.left = (e.originalEvent.clientX - rect.left + 14) + 'px';
-    tt.style.top  = (e.originalEvent.clientY - rect.top + 14) + 'px';
-    tt.style.display = 'block';
-  });
+  map.on('mouseleave', 'points-hit', () => { map.getCanvas().style.cursor = ''; });
   map.on('click', 'points-hit', (e) => {
-    tt.style.display = 'none';
     if (activePopup) activePopup.remove();
     const p = e.features[0].properties;
     activePopup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '340px' })
@@ -1692,7 +1822,6 @@ function bindMapHover(){
   map.on('mouseenter', 'pays-hit', () => { map.getCanvas().style.cursor = 'pointer'; });
   map.on('mouseleave', 'pays-hit', () => { map.getCanvas().style.cursor = ''; });
   map.on('click', 'pays-hit', (e) => {
-    tt.style.display = 'none';
     if (activePopup) activePopup.remove();
     const id = e.features[0].properties.id;
     const c = (state.data.pays || []).find(x => x.id === id);

@@ -98,33 +98,31 @@
   "phases": [
     {
       "n": "1",
-      "nom": "Planification",
-      "couleur": "#8B5FBF"
+      "nom": "① Amorçage · ≤2021",
+      "couleur": "#6B3FA0",
+      "desc": "Climat anti-France installé en arrière-plan dès 2014 (arrangements sécuritaires SUCAF RCA, rapport The Sentry juil. 2021) et premiers réseaux de faux comptes (Totem, démantelé par Meta en 2021). Aucun actif Castel encore nommé.",
+      "marqueur": "Mise en place du terrain informationnel"
     },
     {
       "n": "2",
-      "nom": "Primo-diffusion",
-      "couleur": "#6B3FA0"
+      "nom": "② Montée · 2022",
+      "couleur": "#2F9E8F",
+      "desc": "Premières atteintes nommant directement des actifs Castel : enquête préliminaire du PNAT (fév. 2022) et brasserie Wagner installée au nord de la RCA (fin 2022). Consolidation des relais au Mali, Burkina et en Guinée.",
+      "marqueur": "Castel entre dans la cible"
     },
     {
       "n": "3",
-      "nom": "Blanchiment",
-      "couleur": "#D69E2E"
+      "nom": "③ Bascule · 2023",
+      "couleur": "#E0652C",
+      "desc": "Structuration et coordination multi-pays : campagne FIMI à réseau de comptes coordonnés en RCA (jan. 2023), distribution forcée de boissons concurrentes, exploitation des coups d'État au Niger (juil. et oct. 2023).",
+      "marqueur": "Coordination et passage à l'échelle"
     },
     {
       "n": "4",
-      "nom": "Amplification",
-      "couleur": "#E0652C"
-    },
-    {
-      "n": "5",
-      "nom": "Reprises",
-      "couleur": "#C8392B"
-    },
-    {
-      "n": "target",
-      "nom": "Cibles",
-      "couleur": "#C94A4A"
+      "nom": "④ Pic · 2024+",
+      "couleur": "#C8392B",
+      "desc": "Industrialisation de la diffusion : Africa Corps succède à Wagner, écosystème Portal Kombat (pravda-bf.com, pravda-ne.com) et African Initiative. Récits récurrents et usurpation de marque, du Sahel jusqu'au Sénégal et au Maroc.",
+      "marqueur": "Diffusion généralisée et récurrente"
     }
   ],
   "hero_cells": [
@@ -2180,35 +2178,35 @@
       "to": "m_andza",
       "type": "cible",
       "label": "Rumeur « arrêt de l'eau »",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "i_eau",
       "to": "s_andza",
       "type": "cible",
       "label": "Vise la production de Léconi",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "i_penurie",
       "to": "m_andza",
       "type": "cible",
       "label": "Rumeur de pénurie",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "i_penurie",
       "to": "s_andza",
       "type": "cible",
       "label": "Sensibilité logistique",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "i_rh",
       "to": "e_sobraga",
       "type": "cible",
       "label": "Usurpation marque employeur",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "i_coca",
@@ -2275,14 +2273,14 @@
       "to": "rca_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "rca_act_RU",
       "to": "rca_inc_0",
       "type": "cible",
       "label": "2014–2021",
-      "phase": "2"
+      "phase": "1"
     },
     {
       "from": "rca_inc_0",
@@ -2295,7 +2293,7 @@
       "to": "rca_inc_1",
       "type": "cible",
       "label": "Juil. 2021",
-      "phase": "2"
+      "phase": "1"
     },
     {
       "from": "rca_inc_1",
@@ -2334,7 +2332,7 @@
       "to": "rca_inc_4",
       "type": "cible",
       "label": "Jan. 2023",
-      "phase": "2"
+      "phase": "3"
     },
     {
       "from": "rca_inc_4",
@@ -2347,7 +2345,7 @@
       "to": "rca_inc_5",
       "type": "cible",
       "label": "Jan.–Fév. 2023",
-      "phase": "2"
+      "phase": "3"
     },
     {
       "from": "rca_inc_5",
@@ -2360,14 +2358,14 @@
       "to": "mali_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "mali_act_RU",
       "to": "mali_inc_0",
       "type": "cible",
       "label": "2021",
-      "phase": "2"
+      "phase": "1"
     },
     {
       "from": "mali_inc_0",
@@ -2393,7 +2391,7 @@
       "to": "mali_inc_2",
       "type": "cible",
       "label": "2023",
-      "phase": "2"
+      "phase": "3"
     },
     {
       "from": "mali_inc_2",
@@ -2406,7 +2404,7 @@
       "to": "mali_inc_3",
       "type": "cible",
       "label": "2024",
-      "phase": "2"
+      "phase": "4"
     },
     {
       "from": "mali_inc_3",
@@ -2419,7 +2417,7 @@
       "to": "bfa_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "bfa_act_RU",
@@ -2439,7 +2437,7 @@
       "to": "bfa_inc_1",
       "type": "cible",
       "label": "Jan. 2024",
-      "phase": "2"
+      "phase": "4"
     },
     {
       "from": "bfa_inc_1",
@@ -2452,7 +2450,7 @@
       "to": "bfa_inc_2",
       "type": "cible",
       "label": "Mars 2024",
-      "phase": "2"
+      "phase": "4"
     },
     {
       "from": "bfa_inc_2",
@@ -2465,7 +2463,7 @@
       "to": "bfa_inc_3",
       "type": "cible",
       "label": "2024–2026",
-      "phase": "2"
+      "phase": "4"
     },
     {
       "from": "bfa_inc_3",
@@ -2478,14 +2476,14 @@
       "to": "niger_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "niger_act_RU",
       "to": "niger_inc_0",
       "type": "cible",
       "label": "Juil. 2023",
-      "phase": "2"
+      "phase": "3"
     },
     {
       "from": "niger_inc_0",
@@ -2498,7 +2496,7 @@
       "to": "niger_inc_1",
       "type": "cible",
       "label": "Oct. 2023",
-      "phase": "2"
+      "phase": "3"
     },
     {
       "from": "niger_inc_1",
@@ -2511,7 +2509,7 @@
       "to": "niger_inc_2",
       "type": "cible",
       "label": "Avr. 2024",
-      "phase": "2"
+      "phase": "4"
     },
     {
       "from": "niger_inc_2",
@@ -2524,7 +2522,7 @@
       "to": "niger_inc_3",
       "type": "cible",
       "label": "Mars 2024",
-      "phase": "2"
+      "phase": "4"
     },
     {
       "from": "niger_inc_3",
@@ -2537,21 +2535,21 @@
       "to": "cam_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "cam_act_CN",
       "to": "cam_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "4"
+      "phase": null
     },
     {
       "from": "cam_act_RU",
       "to": "cam_inc_0",
       "type": "cible",
       "label": "2019–2026",
-      "phase": "2"
+      "phase": "1"
     },
     {
       "from": "cam_inc_0",
@@ -2564,7 +2562,7 @@
       "to": "cam_inc_1",
       "type": "cible",
       "label": "2023–2024",
-      "phase": "2"
+      "phase": "3"
     },
     {
       "from": "cam_inc_1",
@@ -2577,14 +2575,14 @@
       "to": "civ_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "civ_act_RU",
       "to": "civ_inc_0",
       "type": "cible",
       "label": "2020",
-      "phase": "2"
+      "phase": "1"
     },
     {
       "from": "civ_inc_0",
@@ -2597,7 +2595,7 @@
       "to": "civ_inc_1",
       "type": "cible",
       "label": "2023",
-      "phase": "2"
+      "phase": "3"
     },
     {
       "from": "civ_inc_1",
@@ -2610,14 +2608,14 @@
       "to": "sen_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "sen_act_RU",
       "to": "sen_inc_0",
       "type": "cible",
       "label": "2023–2024",
-      "phase": "2"
+      "phase": "3"
     },
     {
       "from": "sen_inc_0",
@@ -2630,7 +2628,7 @@
       "to": "sen_inc_1",
       "type": "cible",
       "label": "2024",
-      "phase": "2"
+      "phase": "4"
     },
     {
       "from": "sen_inc_1",
@@ -2643,14 +2641,14 @@
       "to": "tcad_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "tcad_act_RU",
       "to": "tcad_inc_0",
       "type": "cible",
       "label": "2021",
-      "phase": "2"
+      "phase": "1"
     },
     {
       "from": "tcad_inc_0",
@@ -2663,7 +2661,7 @@
       "to": "tcad_inc_1",
       "type": "cible",
       "label": "2023–2024",
-      "phase": "2"
+      "phase": "3"
     },
     {
       "from": "tcad_inc_1",
@@ -2676,14 +2674,14 @@
       "to": "guin_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "guin_act_RU",
       "to": "guin_inc_0",
       "type": "cible",
       "label": "2021",
-      "phase": "2"
+      "phase": "1"
     },
     {
       "from": "guin_inc_0",
@@ -2709,21 +2707,21 @@
       "to": "cog_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "cog_act_CN",
       "to": "cog_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "4"
+      "phase": null
     },
     {
       "from": "cog_act_RU",
       "to": "cog_inc_0",
       "type": "cible",
       "label": "2023–2024",
-      "phase": "2"
+      "phase": "3"
     },
     {
       "from": "cog_inc_0",
@@ -2736,21 +2734,21 @@
       "to": "tgo_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "mar_act_GCC",
       "to": "mar_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "5"
+      "phase": null
     },
     {
       "from": "mar_act_GCC",
       "to": "mar_inc_0",
       "type": "cible",
       "label": "2023",
-      "phase": "5"
+      "phase": "3"
     },
     {
       "from": "mar_inc_0",
@@ -2763,7 +2761,7 @@
       "to": "mar_inc_1",
       "type": "cible",
       "label": "2024",
-      "phase": "5"
+      "phase": "4"
     },
     {
       "from": "mar_inc_1",
@@ -2776,21 +2774,21 @@
       "to": "dza_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "dza_act_GCC",
       "to": "dza_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "5"
+      "phase": null
     },
     {
       "from": "dza_act_RU",
       "to": "dza_inc_0",
       "type": "cible",
       "label": "2021–2026",
-      "phase": "2"
+      "phase": "1"
     },
     {
       "from": "dza_inc_0",
@@ -2803,14 +2801,14 @@
       "to": "eth_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "4"
+      "phase": null
     },
     {
       "from": "eth_act_CN",
       "to": "eth_inc_0",
       "type": "cible",
       "label": "2020–2022",
-      "phase": "4"
+      "phase": "1"
     },
     {
       "from": "eth_inc_0",
@@ -2823,14 +2821,14 @@
       "to": "mad_filiale",
       "type": "cible",
       "label": "pression informationnelle",
-      "phase": "2"
+      "phase": null
     },
     {
       "from": "mad_act_RU",
       "to": "mad_inc_0",
       "type": "cible",
       "label": "2019–2024",
-      "phase": "2"
+      "phase": "1"
     },
     {
       "from": "mad_inc_0",
