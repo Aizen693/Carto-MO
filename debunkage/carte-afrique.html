@@ -392,9 +392,23 @@
     color: var(--pc, #6B3FA0); margin-top: 1px; white-space: nowrap;
   }
   .ps-seg.reached { opacity: 1; }
+  .ps-seg { cursor: pointer; border-radius: 8px; }
+  .ps-seg:hover { opacity: 1; background: rgba(107,63,160,0.05); }
   .ps-seg.current .ps-badge {
     transform: scale(1.15);
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--pc, #C94A4A) 22%, transparent), 0 2px 6px rgba(0,0,0,0.25);
+  }
+  /* Mode « phase isolée » : on estompe les autres, on met la phase cliquée en avant. */
+  .phase-legend.has-solo .ps-seg { opacity: 0.28; }
+  .phase-legend.has-solo .ps-seg.solo {
+    opacity: 1; background: color-mix(in srgb, var(--pc, #6B3FA0) 12%, #fff);
+    box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--pc, #6B3FA0) 45%, transparent);
+  }
+  .phase-legend.has-solo .ps-seg.solo .ps-badge { transform: scale(1.15); }
+  .ps-solo-tag {
+    display: inline-block; margin-left: 8px;
+    font-family: 'JetBrains Mono'; font-size: 9px; font-weight: 700; letter-spacing: 0.03em;
+    color: var(--pc, #6B3FA0); text-transform: uppercase; opacity: 0.85;
   }
   /* Ligne descriptive de la phase courante. */
   .ps-desc {
@@ -411,6 +425,18 @@
     border: 1px solid rgba(0,0,0,0.06);
     border-radius: 6px;
     overflow: hidden;
+  }
+  /* Bandes de phase : 4 quartiles colorés sous la piste (alignés sur le déroulé). */
+  .tl-zone {
+    position: absolute; top: 0; bottom: 0;
+    display: flex; align-items: flex-start; justify-content: center;
+    pointer-events: none;
+  }
+  .tl-zone:not(:first-child) { border-left: 1px dashed rgba(0,0,0,0.14); }
+  .tl-zone-num {
+    margin-top: 3px;
+    font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 700;
+    line-height: 1; opacity: 0.9;
   }
   .tl-tick {
     position: absolute; bottom: 0; width: 2px;
@@ -1088,6 +1114,7 @@ const TYPE_LABEL = {
 const state = {
   data: null,
   timelineProgress: 1.0,
+  soloPhase: null,          // clic sur une phase → on n'affiche QUE celle-ci sur la carte
   activeReseaux: new Set()
 };
 
@@ -1357,6 +1384,12 @@ function activePhaseCount(){ return Math.max(1, Math.ceil(state.timelineProgress
 // Un flux non phasé est toujours visible (état actuel). Un flux phasé n'apparaît
 // qu'une fois sa phase atteinte par le curseur.
 function phaseVisible(phase){
+  // Mode ISOLÉ (clic sur une phase) : seule la phase choisie est rendue ; les
+  // éléments sans phase (acteurs, cibles Castel) restent affichés comme contexte.
+  if (state.soloPhase != null) {
+    if (phase == null || phase === '') return true;
+    return String(phase) === String(state.soloPhase);
+  }
   if (phase == null || phase === '') return true;
   const idx = phaseKeys().indexOf(String(phase));
   return idx < 0 ? true : idx < activePhaseCount();
@@ -1419,21 +1452,43 @@ function renderPhaseLegend(){
     </div>`;
   }).join('');
   wrap.innerHTML = `<div class="ps-track">${track}</div><div class="ps-desc" id="phase-desc"></div>`;
+  // Clic sur une étape → on ISOLE cette phase sur la carte (re-clic = on revient
+  // à la vue cumulée pilotée par la timeline).
+  wrap.querySelectorAll('.ps-seg').forEach(el => {
+    el.addEventListener('click', () => {
+      const key = el.dataset.p;
+      setSoloPhase(String(state.soloPhase) === String(key) ? null : key);
+    });
+  });
   updatePhaseLegendActive();
 }
-// Illumine les étapes atteintes par le curseur, met en avant la phase courante,
-// et affiche sa description (le « schéma » lu par la direction).
+// Isole une seule phase sur la carte (ou repasse en vue cumulée si key == null).
+function setSoloPhase(key){
+  state.soloPhase = key;
+  const wrap = document.getElementById('phase-legend');
+  if (wrap) wrap.classList.toggle('has-solo', key != null);
+  applyFilters();
+  updatePhaseLegendActive();
+}
+// Illumine les étapes atteintes par le curseur, met en avant la phase courante (ou
+// la phase isolée), et affiche sa description (le « schéma » lu par la direction).
 function updatePhaseLegendActive(){
   const wrap = document.getElementById('phase-legend');
   if (!wrap || wrap.hidden) return;
   const d = phasesDef(); if (!d) return;
+  const solo = state.soloPhase;
   const n = activePhaseCount();
   const segs = [...wrap.querySelectorAll('.ps-seg')];
   segs.forEach((el, i) => {
-    el.classList.toggle('reached', i < n);
-    el.classList.toggle('current', i === n - 1);
+    const isSolo = solo != null && String(el.dataset.p) === String(solo);
+    el.classList.toggle('solo', isSolo);
+    el.classList.toggle('reached', solo != null ? isSolo : i < n);
+    el.classList.toggle('current', solo != null ? isSolo : i === n - 1);
   });
-  const cur = d[Math.min(n, d.length) - 1];
+  const curIdx = solo != null
+    ? Math.max(0, d.findIndex(p => String(p.n) === String(solo)))
+    : Math.min(n, d.length) - 1;
+  const cur = d[curIdx];
   const desc = document.getElementById('phase-desc');
   if (cur && desc){
     const col = cur.couleur || phaseColor(cur.n);
@@ -1441,7 +1496,8 @@ function updatePhaseLegendActive(){
     desc.style.setProperty('--pc', col);
     desc.style.setProperty('--pc-bg', `color-mix(in srgb, ${col} 9%, transparent)`);
     const tag = cur.marqueur ? `${name} · ${cur.marqueur}` : name;
-    desc.innerHTML = `<strong>${escapeHtml(tag)}</strong> — ${escapeHtml(cur.desc || '')}`;
+    const solotag = solo != null ? '<span class="ps-solo-tag">phase isolée · re-cliquez pour tout voir</span> ' : '';
+    desc.innerHTML = `${solotag}<strong>${escapeHtml(tag)}</strong> — ${escapeHtml(cur.desc || '')}`;
   }
 }
 
@@ -1461,7 +1517,8 @@ function buildFeatures(){
   const cibleEndpoints = new Set();
   edges.forEach(e => { if (e.type === 'cible') { cibleEndpoints.add(e.from); cibleEndpoints.add(e.to); } });
 
-  const inTime = p => new Date(p.date).getTime() <= cutoffMs;
+  // En mode ISOLÉ on ignore le curseur de temps : on montre toute la phase choisie.
+  const inTime = p => state.soloPhase != null ? true : new Date(p.date).getTime() <= cutoffMs;
   const inReseau = p => {
     if (state.activeReseaux.size === 0) return true;
     const r = publiByReseau(p.id);
@@ -1603,9 +1660,14 @@ function buildFeatures(){
   });
 
   // Émet les arcs d'arbre visibles (nœuds présents + phase atteinte par le curseur).
+  // En mode ISOLÉ, l'arc d'une phase s'affiche dès que son ENFANT (le nœud de cette
+  // phase) est visible, même si son parent appartient à une phase masquée → on voit
+  // d'où part chaque incident de la phase choisie.
+  const soloMode = state.soloPhase != null;
   treeEdges.forEach(te => {
-    if (!visibleIds.has(te.parent.id) || !visibleIds.has(te.child.id)) return;
     if (!phaseVisible(te.phase)) return;
+    if (soloMode) { if (!visibleIds.has(te.child.id)) return; }
+    else if (!visibleIds.has(te.parent.id) || !visibleIds.has(te.child.id)) return;
     arcFeats.push(mkArc(te.parent, te.child, te.bend != null ? te.bend : 0.16, {
       from: te.parent.id, to: te.child.id, rtype: 'cible', label: '',
       phase: te.phase || null, nature: 'strategie',
@@ -2069,7 +2131,7 @@ function revealFromAmorce(){
   const reset = document.getElementById('tl-reset');
   const play = document.getElementById('tl-play');
   if (reset) reset.click();                         // curseur à 0 → amorçage seul
-  setTimeout(() => { if (play) play.click(); }, 800); // laisse le cadrage démarrer puis déroule
+  setTimeout(() => { if (play) play.click(); }, 300); // laisse le cadrage démarrer puis déroule
 }
 window.debOpenAttack = function(cc, id){
   if (activePopup) { activePopup.remove(); activePopup = null; }
@@ -2298,6 +2360,20 @@ function renderTimeline(){
     }).join('');
   }
 
+  // Bandes de phase : 4 quartiles colorés, alignés sur le déroulé (activePhaseCount = ceil(progress×4)).
+  const NUM_GLYPH = { '1': '①', '2': '②', '3': '③', '4': '④', '5': '⑤' };
+  const pkeys = phaseKeys();
+  pkeys.forEach((key, i) => {
+    const col = phaseColor(key);
+    const z = document.createElement('div');
+    z.className = 'tl-zone';
+    z.style.left = (i / pkeys.length * 100) + '%';
+    z.style.width = (100 / pkeys.length) + '%';
+    z.style.background = `linear-gradient(180deg, ${col}26 0%, ${col}10 55%, ${col}05 100%)`;
+    z.innerHTML = `<span class="tl-zone-num" style="color:${col}">${NUM_GLYPH[String(key)] || key}</span>`;
+    track.appendChild(z);
+  });
+
   d.publications.forEach(p => {
     if (p.cc && p.cc !== 'gab') return; // timeline focalisée sur le cas réel SOBRAGA (Gabon)
     const t = new Date(p.date).getTime();
@@ -2311,6 +2387,12 @@ function renderTimeline(){
   });
 
   function setProgress(pct){
+    // toute manip de la timeline (play/reset/drag) sort du mode « phase isolée »
+    if (state.soloPhase != null) {
+      state.soloPhase = null;
+      const wrap = document.getElementById('phase-legend');
+      if (wrap) wrap.classList.remove('has-solo');
+    }
     pct = Math.max(0, Math.min(1, pct));
     state.timelineProgress = pct;
     handle.style.left = (pct * 100) + '%';
@@ -2338,7 +2420,7 @@ function renderTimeline(){
   const SPEEDS = [1, 2, 4, 0.5]; // multiplicateurs
   let speedIdx = 0;
   let playInterval = null;
-  const BASE_DURATION_MS = 16000; // 16s pour parcourir toute la timeline a 1x
+  const BASE_DURATION_MS = 6000; // 6s pour parcourir toute la timeline a 1x
   const FRAME_MS = 60;
 
   function playIconHTML(playing) {
