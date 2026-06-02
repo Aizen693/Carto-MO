@@ -1425,22 +1425,28 @@ function buildFeatures(){
   };
 
   // Flux = liens « cible ». Deux natures :
-  //   • STRATÉGIE (cible = incident) : rendue en CASCADE CHRONOLOGIQUE par source.
-  //     Au lieu d'un éventail partant d'un seul point, on enchaîne les maillons —
-  //     acteur → incident P1 → incident P2 → … → incident Pn — pour que chaque phase
-  //     émerge visuellement de la précédente. Couleur + apparition = phase d'arrivée.
+  //   • STRATÉGIE (cible = incident) : rendue en ARBRE DE PROPAGATION qui S'ÉLARGIT
+  //     par phase. Modèle FIMI : 1 source (l'acteur) → quelques incidents P1 →
+  //     davantage en P2 → … → diffusion généralisée au pic. Chaque incident d'une
+  //     phase se rattache au nœud LE PLUS PROCHE de la phase précédente (P1 à la
+  //     racine acteur) → ramification nette, sans éventail ni chaîne linéaire.
   //   • ATTAQUE (cible = actif Castel : entité/marque/site) : pression structurelle
   //     permanente, arc violet à pointe, toujours visible (hors phase).
   const ATTAQUE_COLOR = '#7A5BA6';
   const phaseRank = ph => { const i = phaseKeys().indexOf(String(ph)); return i < 0 ? 99 : i; };
-  const dateMs = id => { const p = pubById[id]; return p ? new Date(p.date).getTime() : 0; };
+  const dist2 = (a, b) => { const dx = a.lon - b.lon, dy = a.lat - b.lat; return dx*dx + dy*dy; };
+  const nearest = (node, cands) => {
+    let best = null, bd = Infinity;
+    cands.forEach(c => { const dd = dist2(node, c); if (dd < bd) { bd = dd; best = c; } });
+    return best;
+  };
   const mkArc = (A, B, bend, props) => ({
     type: 'Feature',
     geometry: { type: 'LineString', coordinates: arcCurve([A.lon, A.lat], [B.lon, B.lat], bend, 24) },
     properties: props
   });
 
-  // Sépare les cibles « incident » (stratégie, à chaîner) des cibles corporate (attaque).
+  // Sépare les cibles « incident » (stratégie, à arborer) des cibles corporate (attaque).
   const stratBySource = {};
   const attaqueEdges = [];
   cibleEdges.forEach(e => {
@@ -1450,61 +1456,70 @@ function buildFeatures(){
   });
 
   const arcFeats = [];
-  const chainedIncidents = new Set(); // incidents déjà placés dans une cascade d'acteur
+  const chainedIncidents = new Set(); // incidents placés dans un arbre d'acteur
+  const treeEdges = [];               // {parent, child, phase} — rattachements de l'arbre
 
-  // (A) Cascade STRATÉGIE pilotée par un acteur : acteur → incident P1 → P2 → … → Pn.
-  // Tri (phase, date) puis maillon-à-maillon. Un maillon masqué (phase non atteinte)
-  // n'avance pas la chaîne : le maillon visible suivant repart du dernier nœud visible.
+  // (A) Arbre par ACTEUR : racine = acteur ; chaque incident se rattache au nœud le
+  // plus proche de la phase précédente (les incidents de la 1ʳᵉ phase présente à la
+  // racine). Plus une phase est tardive, plus elle compte d'incidents → l'arbre s'ouvre.
   Object.entries(stratBySource).forEach(([srcId, list]) => {
-    list.sort((a, b) => {
-      const pr = phaseRank(a.phase) - phaseRank(b.phase);
-      return pr !== 0 ? pr : dateMs(a.to) - dateMs(b.to);
-    });
-    let prevId = srcId;
-    list.forEach((e, idx) => {
-      chainedIncidents.add(e.to);
-      const B = pubById[e.to];
-      if (!B || !visibleIds.has(B.id) || !phaseVisible(e.phase)) return;
-      const A = pubById[prevId];
-      if (A && visibleIds.has(A.id)) {
-        const bend = (idx % 2 ? -1 : 1) * 0.16; // S-curve : les segments ne se chevauchent pas
-        arcFeats.push(mkArc(A, B, bend, {
-          from: prevId, to: e.to, rtype: 'cible', label: e.label || '',
-          phase: e.phase || null, nature: 'strategie',
-          rcolor: phaseColor(e.phase), ropacity: 0.95, rwidth: 3.0
-        }));
-      }
-      prevId = e.to;
+    const root = pubById[srcId];
+    const nodes = list.map(e => ({ id: e.to, node: pubById[e.to], pr: phaseRank(e.phase), phase: e.phase }))
+                      .filter(x => x.node);
+    nodes.forEach(x => chainedIncidents.add(x.id));
+    const byLevel = {};
+    nodes.forEach(x => (byLevel[x.pr] || (byLevel[x.pr] = [])).push(x));
+    const levels = Object.keys(byLevel).map(Number).sort((a, b) => a - b);
+    levels.forEach((lvl, li) => {
+      byLevel[lvl].forEach(x => {
+        const parent = (li === 0) ? root : nearest(x.node, byLevel[levels[li - 1]].map(y => y.node));
+        if (parent) treeEdges.push({ parent, child: x.node, phase: x.phase });
+      });
     });
   });
 
-  // (B) Cascade pour les incidents SANS acteur orchestrateur (ex. marché domestique
-  // gabonais) : on enchaîne par PAYS, amorçage→pic, comme partout ailleurs — pour
-  // qu'aucune situation ne reste un éventail. La couleur du maillon = phase d'arrivée.
+  // (B) Arbre pour les incidents SANS acteur (marché domestique gabonais) : même
+  // logique, mais les incidents de la phase la plus précoce sont les sources locales
+  // (sans arc entrant) ; les suivants se rattachent au plus proche de la phase d'avant.
   const orphanByCc = {};
   d.publications.forEach(p => {
-    if (p.type === 'incident' && visibleIds.has(p.id) && !chainedIncidents.has(p.id)) {
+    if (p.type === 'incident' && !chainedIncidents.has(p.id)) {
       (orphanByCc[p.cc || '?'] || (orphanByCc[p.cc || '?'] = [])).push(p);
     }
   });
   Object.values(orphanByCc).forEach(list => {
-    list.sort((a, b) => {
-      const pr = phaseRank(phaseOfIncident(a)) - phaseRank(phaseOfIncident(b));
-      return pr !== 0 ? pr : new Date(a.date).getTime() - new Date(b.date).getTime();
+    const nodes = list.map(p => ({ node: p, pr: phaseRank(phaseOfIncident(p)), phase: phaseOfIncident(p) }));
+    const byLevel = {};
+    nodes.forEach(x => (byLevel[x.pr] || (byLevel[x.pr] = [])).push(x));
+    const levels = Object.keys(byLevel).map(Number).sort((a, b) => a - b);
+    levels.forEach((lvl, li) => {
+      if (li === 0) return; // phase la plus précoce = sources locales, pas d'arc entrant
+      byLevel[lvl].forEach(x => {
+        const parent = nearest(x.node, byLevel[levels[li - 1]].map(y => y.node));
+        if (parent) treeEdges.push({ parent, child: x.node, phase: x.phase });
+      });
     });
-    let prev = null;
-    list.forEach((p, idx) => {
-      const ph = phaseOfIncident(p);
-      if (prev && phaseVisible(ph)) {
-        const bend = (idx % 2 ? -1 : 1) * 0.16;
-        arcFeats.push(mkArc(prev, p, bend, {
-          from: prev.id, to: p.id, rtype: 'cible', label: '',
-          phase: ph || null, nature: 'strategie',
-          rcolor: phaseColor(ph), ropacity: 0.95, rwidth: 3.0
-        }));
-      }
-      prev = p; // le 1er incident du pays = départ de la cascade (amorçage local)
-    });
+  });
+
+  // Éventail des frères : les enfants d'un même parent s'écartent symétriquement →
+  // chaque nœud « fleurit » en branches plutôt que d'empiler des traits superposés.
+  const byParent = {};
+  treeEdges.forEach(te => (byParent[te.parent.id] || (byParent[te.parent.id] = [])).push(te));
+  Object.values(byParent).forEach(sibs => {
+    sibs.sort((a, b) => String(a.child.id).localeCompare(String(b.child.id)));
+    const n = sibs.length;
+    sibs.forEach((te, i) => { te.bend = n > 1 ? ((i / (n - 1)) - 0.5) * 0.5 : 0.16; });
+  });
+
+  // Émet les arcs d'arbre visibles (nœuds présents + phase atteinte par le curseur).
+  treeEdges.forEach(te => {
+    if (!visibleIds.has(te.parent.id) || !visibleIds.has(te.child.id)) return;
+    if (!phaseVisible(te.phase)) return;
+    arcFeats.push(mkArc(te.parent, te.child, te.bend != null ? te.bend : 0.16, {
+      from: te.parent.id, to: te.child.id, rtype: 'cible', label: '',
+      phase: te.phase || null, nature: 'strategie',
+      rcolor: phaseColor(te.phase), ropacity: 0.95, rwidth: 3.0
+    }));
   });
 
   // (C) Arcs ATTAQUE (incident → actif Castel, acteur → filiale) : pression
