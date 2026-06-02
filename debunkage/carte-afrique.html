@@ -804,6 +804,33 @@
     transition: filter .12s ease; }
   .atk-allbtn:hover { filter: brightness(1.08); }
 
+  /* ── Panneau gauche : liste des attaques + fiche détail (remplace les pop-ups) ── */
+  .ds-panel { font-family: 'Plus Jakarta Sans'; }
+  .ds-listhead h3 { font-family: 'JetBrains Mono'; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    color: #6B3FA0; font-weight: 600; margin: 0 0 2px; display: flex; align-items: center; gap: 8px; }
+  .ds-listhead h3 .ct { font-size: 10px; color: #fff; background: #6B3FA0; border-radius: 10px; padding: 1px 7px; font-weight: 700; }
+  .ds-hint { font-size: 12px; line-height: 1.45; color: #8A8499; margin: 4px 0 10px; }
+  .ds-clear { background: none; border: none; cursor: pointer; padding: 6px 0 8px; color: #6B3FA0;
+    font-family: 'Plus Jakarta Sans'; font-size: 12px; font-weight: 600; }
+  .ds-clear:hover { text-decoration: underline; }
+  .ds-grp { margin-top: 14px; }
+  .ds-grp:first-of-type { margin-top: 6px; }
+  .ds-grp__h { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; color: #2C2640;
+    padding: 6px 4px; border-top: 1px solid #ECE7F4; }
+  .ds-grp__h .n { margin-left: auto; font-family: 'JetBrains Mono'; font-size: 10px; color: #A19DB0; font-weight: 600; }
+  .ds-grp .atk-list { max-height: none; margin: 0; }
+  .ds-back { display: inline-flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer;
+    padding: 2px 0 12px; color: #6B3FA0; font-family: 'Plus Jakarta Sans'; font-size: 12.5px; font-weight: 600; }
+  .ds-back:hover { text-decoration: underline; }
+  /* Fiche réutilisée dans la colonne étroite (override des tailles de la modale) */
+  .ds-panel .fiche-title { font-size: 18px; margin: 0 0 4px; line-height: 1.2; }
+  .ds-panel .fiche-meta { margin: 12px 0 14px; }
+  .ds-panel .fiche-section { padding-top: 13px; margin-top: 13px; }
+  .ds-panel .fiche-body { font-size: 13px; line-height: 1.6; }
+  .ds-panel .fiche-grid { grid-template-columns: 1fr; gap: 9px 0; }
+  .ds-panel .fiche-flow { font-size: 12.5px; gap: 6px; }
+  .ds-panel .fiche-flow .node { padding: 4px 9px; }
+
   /* ── Bouton « fiche complète » au pied d'un pop-up nœud ── */
   .fiche-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 8px 14px;
     border-radius: 9px; border: none; cursor: pointer; background: var(--violet-d, #6B3FA0); color: #fff;
@@ -951,32 +978,7 @@
 
         <div class="deb-body">
           <aside class="deb-side" aria-label="Panneau dossier">
-            <div class="deb-sec deb-camp">
-              <h3>Campagne</h3>
-              <div class="deb-camp__name" id="ds-nm">—</div>
-              <div class="deb-camp__meta" id="ds-mt">—</div>
-              <div class="deb-camp__resume" id="ds-rs">—</div>
-            </div>
-
-            <div class="deb-sec">
-              <h3>Narratifs <span class="ct" id="ds-ct-narr">00</span></h3>
-              <div id="ds-narr-wrap"></div>
-            </div>
-
-            <div class="deb-sec">
-              <h3>Réseaux identifiés <span class="ct" id="ds-ct-net">00</span></h3>
-              <div id="ds-net-wrap"></div>
-            </div>
-
-            <div class="deb-sec">
-              <h3>Statistiques</h3>
-              <div id="ds-stats"></div>
-            </div>
-
-            <div class="deb-sec">
-              <h3>Méthodologie</h3>
-              <div class="deb-meth" id="ds-meth">—</div>
-            </div>
+            <div id="ds-panel" class="ds-panel"></div>
           </aside>
 
           <div class="deb-main">
@@ -1115,7 +1117,9 @@ const state = {
   data: null,
   timelineProgress: 1.0,
   soloPhase: null,          // clic sur une phase → on n'affiche QUE celle-ci sur la carte
-  activeReseaux: new Set()
+  activeReseaux: new Set(),
+  selectedNode: null,       // nœud affiché dans le panneau gauche (fiche détail)
+  panelFilterCc: null       // pays filtrant la liste du panneau gauche (null = tous)
 };
 
 let map;
@@ -1255,46 +1259,101 @@ function renderHeroStats(){
   document.getElementById('tl-range').textContent = 'Timeline · ' + fmtPeriod(d.campagne.date_debut, d.campagne.date_fin);
 }
 
+// Le panneau de gauche n'affiche plus le texte de campagne : il sert de LISTE
+// des attaques (par défaut) puis de FICHE détail quand on clique un point/une
+// attaque (sur la carte ou dans la liste). Plus aucune pop-up sur la carte.
 function renderSidebar(){
-  const d = state.data;
-  document.getElementById('ds-nm').textContent = d.campagne.nom;
-  document.getElementById('ds-mt').textContent = `${d.campagne.secteur} · ${fmtPeriod(d.campagne.date_debut, d.campagne.date_fin)}`;
-  document.getElementById('ds-rs').textContent = d.campagne.resume;
-  document.getElementById('ds-meth').textContent = d.campagne.methodologie;
+  renderDossierList();
+}
 
-  document.getElementById('ds-ct-narr').textContent = String(d.campagne.narratifs.length).padStart(2,'0');
-  document.getElementById('ds-narr-wrap').innerHTML = d.campagne.narratifs.map((n, i) => `
-    <div class="deb-narr">
-      <span class="deb-narr__ix">N${String(i+1).padStart(2,'0')}</span>
-      <span class="deb-narr__tx">${escapeHtml(n)}</span>
-    </div>
-  `).join('');
+// Métadonnées pays (nom + drapeau) indexées par id, pour la liste.
+function paysMeta(cc){
+  const c = (state.data.pays || []).find(x => x.id === cc);
+  return c || { name: cc || '—', flag: '' };
+}
 
-  document.getElementById('ds-ct-net').textContent = String(d.reseaux.length).padStart(2,'0');
-  const netWrap = document.getElementById('ds-net-wrap');
-  netWrap.innerHTML = d.reseaux.map(r => `
-    <div class="deb-net" data-id="${r.id}">
-      <span class="deb-net__sw" style="background:${networkColor(r.id)}"></span>
-      <div>
-        <div class="deb-net__nm">${escapeHtml(r.nom)}</div>
-        <div class="deb-net__mt">${r.publications.length} publi · ${r.comptes.length} compte${r.comptes.length>1?'s':''} · ${escapeHtml(r.pays_estime)}</div>
-        <div class="deb-net__cf">Confiance ${escapeHtml(r.niveau_confiance)}</div>
-      </div>
+// Tous les incidents du dossier, triés par date (filtrables par pays).
+function dossierIncidents(cc){
+  let incs = (state.data.publications || []).filter(p => p.type === 'incident');
+  if (cc) incs = incs.filter(p => p.cc === cc);
+  return incs.sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+
+function attackRowHTML(p, withPays){
+  const key = phaseOfNode(p);
+  const col = phaseColor(key);
+  const num = /^[1-4]$/.test(String(key)) ? String(key) : '·';
+  const dt = p.date ? fmtDate(new Date(p.date)) : '';
+  const pm = paysMeta(p.cc);
+  const sub = withPays ? `${escapeHtml(dt)} · ${escapeHtml(pm.flag || '')} ${escapeHtml(pm.name)}` : escapeHtml(dt);
+  return `<button class="atk-item" data-id="${p.id}" data-cc="${p.cc}">
+    <span class="atk-num" style="background:${col}">${num}</span>
+    <span class="atk-txt"><span class="atk-date">${sub}</span><span class="atk-title">${escapeHtml(p.compte_display || p.id)}</span></span>
+    <span class="atk-chev">›</span></button>`;
+}
+
+// Vue LISTE du panneau gauche. cc = pays filtrant (null → tout le dossier, groupé par pays).
+function renderDossierList(cc){
+  const panel = document.getElementById('ds-panel');
+  if (!panel) return;
+  state.selectedNode = null;
+  state.panelFilterCc = cc || null;
+
+  let body, headExtra;
+  if (cc){
+    const incs = dossierIncidents(cc);
+    body = `<div class="atk-list">${incs.map(p => attackRowHTML(p, false)).join('')}</div>`;
+    headExtra = `<button class="ds-clear" id="ds-allpays">← Tous les pays</button>`;
+  } else {
+    // Groupé par pays, pays les plus touchés en premier.
+    const incs = dossierIncidents();
+    const groups = {};
+    incs.forEach(p => { (groups[p.cc] = groups[p.cc] || []).push(p); });
+    const order = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length);
+    body = order.map(g => {
+      const pm = paysMeta(g);
+      const rows = groups[g].map(p => attackRowHTML(p, false)).join('');
+      return `<div class="ds-grp">
+        <div class="ds-grp__h">${escapeHtml(pm.flag || '')} ${escapeHtml(pm.name)}<span class="n">${groups[g].length}</span></div>
+        <div class="atk-list">${rows}</div>
+      </div>`;
+    }).join('');
+    headExtra = `<p class="ds-hint">Cliquez une attaque pour voir le détail ici et la dérouler dans l'arbre.</p>`;
+  }
+
+  const total = dossierIncidents(cc).length;
+  const title = cc ? `${escapeHtml(paysMeta(cc).flag || '')} ${escapeHtml(paysMeta(cc).name)}` : 'Attaques recensées';
+  panel.innerHTML = `
+    <div class="ds-listhead">
+      <h3>${title} <span class="ct">${String(total).padStart(2, '0')}</span></h3>
+      ${headExtra}
     </div>
-  `).join('');
-  netWrap.querySelectorAll('.deb-net').forEach(el => {
-    el.addEventListener('click', () => toggleReseau(el.dataset.id));
+    ${body}`;
+
+  panel.querySelectorAll('.atk-item').forEach(el => {
+    el.addEventListener('click', () => {
+      renderDetailInPanel(el.dataset.id);
+      window.debOpenAttack(el.dataset.cc, el.dataset.id);   // entrée dans l'arbre (zoom + déroulé)
+    });
   });
+  const allBtn = document.getElementById('ds-allpays');
+  if (allBtn) allBtn.addEventListener('click', () => renderDossierList());
+}
 
-  const statsArr = d.stats || [
-    { lbl: 'Publications', val: String(d.campagne.publications_total) },
-    { lbl: 'Comptes', val: String(d.campagne.comptes_total) },
-    { lbl: 'Pays impliqués', val: String(d.campagne.pays_implique.length) },
-    { lbl: 'Durée', val: daysBetween(d.campagne.date_debut, d.campagne.date_fin) + ' j' }
-  ];
-  document.getElementById('ds-stats').innerHTML = statsArr.map(s =>
-    `<div class="deb-stat"><span class="deb-stat__lbl">${escapeHtml(s.lbl)}</span><span class="deb-stat__val">${escapeHtml(s.val)}</span></div>`
-  ).join('');
+// Vue FICHE du panneau gauche : détail d'un nœud (réutilise ficheHTML), avec retour.
+function renderDetailInPanel(id){
+  const p = (state.data.publications || []).find(x => x.id === id);
+  const panel = document.getElementById('ds-panel');
+  if (!p || !panel) return;
+  state.selectedNode = id;
+  const backLabel = state.panelFilterCc
+    ? `← ${escapeHtml(paysMeta(state.panelFilterCc).name)}`
+    : '← Liste des attaques';
+  panel.innerHTML = `
+    <button class="ds-back" type="button" id="ds-back">${backLabel}</button>
+    <div class="ds-fiche">${ficheHTML(p)}</div>`;
+  panel.scrollTop = 0;
+  document.getElementById('ds-back').addEventListener('click', () => renderDossierList(state.panelFilterCc));
 }
 
 function networkColor(id){
@@ -2230,30 +2289,20 @@ function bindMapHover(){
   // Survol : on change seulement le curseur. Le détail d'un nœud passe par le clic.
   map.on('mouseenter', 'points-hit', () => { map.getCanvas().style.cursor = 'pointer'; });
   map.on('mouseleave', 'points-hit', () => { map.getCanvas().style.cursor = ''; });
+  // Clic sur un point → fiche détail dans le PANNEAU GAUCHE (plus de pop-up carte).
   map.on('click', 'points-hit', (e) => {
-    if (activePopup) activePopup.remove();
     const p = e.features[0].properties;
-    activePopup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '340px' })
-      .setLngLat(e.features[0].geometry.coordinates)
-      .setHTML(renderNodePopup(p))
-      .addTo(map);
-    activePopup.on('close', () => { activePopup = null; });
+    renderDetailInPanel(p.id);
   });
 
-  // ── Pays continentaux : clic → pop-up LISTE DES ATTAQUES (pas de zoom auto). ──
-  // Le zoom vers l'arbre se fait quand on clique une attaque dans la liste.
+  // ── Pays continentaux : clic → la LISTE DES ATTAQUES du pays s'affiche à gauche
+  // (filtrée). Le zoom vers l'arbre se fait quand on clique une attaque. ──
   map.on('mouseenter', 'pays-hit', () => { map.getCanvas().style.cursor = 'pointer'; });
   map.on('mouseleave', 'pays-hit', () => { map.getCanvas().style.cursor = ''; });
   map.on('click', 'pays-hit', (e) => {
-    if (activePopup) activePopup.remove();
     const id = e.features[0].properties.id;
-    const c = (state.data.pays || []).find(x => x.id === id);
-    if (!c) return;
-    activePopup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '360px' })
-      .setLngLat(e.features[0].geometry.coordinates)
-      .setHTML(renderPaysAttacksPopup(c, id))
-      .addTo(map);
-    activePopup.on('close', () => { activePopup = null; });
+    if (!(state.data.pays || []).some(x => x.id === id)) return;
+    renderDossierList(id);
   });
 }
 
