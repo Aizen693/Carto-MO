@@ -707,6 +707,63 @@
       "cc": "gab"
     },
     {
+      "id": "gab_act_diffuseurs",
+      "compte": "gab_act_diffuseurs",
+      "compte_display": "Diffuseurs anonymes (réseaux sociaux)",
+      "plateforme": "comptes anonymes / réseaux sociaux",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé comme catégorie",
+      "date": "2022-06-10T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Gabon (en ligne)",
+      "lat": 0.52,
+      "lon": 9.38,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Catégorie d'acteur — sans attribution nominative. Propagation initiale de la rumeur d'arrêt / cession de l'activité eau minérale (NAR-001). Statut : confirmé comme catégorie (démentis publics et reprises médiatiques).",
+      "cc": "gab"
+    },
+    {
+      "id": "gab_act_medias",
+      "compte": "gab_act_medias",
+      "compte_display": "Médias en ligne mal informés",
+      "plateforme": "presse en ligne",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé comme catégorie",
+      "date": "2022-06-18T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Gabon (en ligne)",
+      "lat": 0.5,
+      "lon": 9.56,
+      "audience_estimee": 0,
+      "r": 4,
+      "content_excerpt": "Catégorie d'acteur — relais, non hostile prouvé. Reprise et amplification de contenus inexacts sur l'eau minérale avant les démentis (NAR-001). Statut : confirmé comme catégorie.",
+      "cc": "gab"
+    },
+    {
+      "id": "gab_act_rh",
+      "compte": "gab_act_rh",
+      "compte_display": "Usurpateurs d'identité RH",
+      "plateforme": "faux comptes / usurpation",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé comme catégorie",
+      "date": "2024-09-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Gabon (en ligne)",
+      "lat": 0.55,
+      "lon": 9.46,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Catégorie d'acteur — sans attribution nominative. Diffusion de fausses offres d'emploi au nom de SOBRAGA (NAR-003). Statut : confirmé comme catégorie (alertes publiques SOBRAGA 2024-2025).",
+      "cc": "gab"
+    },
+    {
       "id": "rca_filiale",
       "cc": "rca",
       "compte_display": "SUCAF RCA / MOCAF",
@@ -2221,6 +2278,27 @@
       "type": "cible",
       "label": "Réseaux sociaux suspendus — contre-com. entravée",
       "phase": null
+    },
+    {
+      "from": "gab_act_diffuseurs",
+      "to": "i_eau",
+      "type": "cible",
+      "label": "Juin 2022 — propagation initiale",
+      "phase": "2"
+    },
+    {
+      "from": "gab_act_medias",
+      "to": "i_eau",
+      "type": "cible",
+      "label": "Juin 2022 — reprise / amplification",
+      "phase": "2"
+    },
+    {
+      "from": "gab_act_rh",
+      "to": "i_rh",
+      "type": "cible",
+      "label": "2024–2025 — usurpation RH",
+      "phase": "4"
     },
     {
       "from": "i_eau",
