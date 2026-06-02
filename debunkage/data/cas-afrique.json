@@ -2211,14 +2211,16 @@
     {
       "from": "i_coca",
       "to": "e_sobraga",
-      "type": "contexte",
-      "label": "Fin partenariat Coca-Cola"
+      "type": "cible",
+      "label": "Fragilisation post-Coca-Cola (NAR-004)",
+      "phase": null
     },
     {
       "from": "i_suspension",
       "to": "e_sobraga",
-      "type": "contexte",
-      "label": "Contexte national"
+      "type": "cible",
+      "label": "Réseaux sociaux suspendus — contre-com. entravée",
+      "phase": null
     },
     {
       "from": "i_eau",
@@ -2352,6 +2354,48 @@
       "to": "rca_filiale",
       "type": "contexte",
       "label": ""
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_6",
+      "type": "cible",
+      "label": "Mars 2023",
+      "phase": "3"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_7",
+      "type": "cible",
+      "label": "Avr. 2023",
+      "phase": "3"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_8",
+      "type": "cible",
+      "label": "Mars 2024",
+      "phase": "4"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_10",
+      "type": "cible",
+      "label": "Fév. 2026",
+      "phase": "4"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_9",
+      "type": "cible",
+      "label": "Avr. 2026",
+      "phase": "4"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_11",
+      "type": "cible",
+      "label": "Mai 2026",
+      "phase": "4"
     },
     {
       "from": "mali_act_RU",

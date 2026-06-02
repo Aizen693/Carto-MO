@@ -1391,10 +1391,21 @@ function buildFeatures(){
     .filter(p => keepNode(p) && inTime(p) && inReseau(p))
     .map(p => p.id));
 
+  // Phase d'un incident = phase portée par son lien « cible » entrant (vérité
+  // analytique), à défaut sa date. Garantit que la couleur du POINT et celle de
+  // l'arc qui l'atteint coïncident → cascade lisible (violet→vert→orange→rouge).
+  const cibleEdges = edges.filter(e => e.type === 'cible');
+  const incidentPhase = {};
+  cibleEdges.forEach(e => {
+    const B = pubById[e.to];
+    if (B && B.type === 'incident' && e.phase != null && e.phase !== '') incidentPhase[e.to] = String(e.phase);
+  });
+  const phaseOfIncident = p => incidentPhase[p.id] || phaseOfDate(p.date);
+
   // Rayon/couleur : l'incident porte SA PHASE (couleur = période), l'acteur est un
   // nœud-source sombre, la cible Castel recule (gris).
   const styleFor = p => {
-    if (p.type === 'incident') return { radius: p.r ? Math.max(p.r, 7) : 7.5, color: phaseColor(phaseOfDate(p.date)) };
+    if (p.type === 'incident') return { radius: p.r ? Math.max(p.r, 7) : 7.5, color: phaseColor(phaseOfIncident(p)) };
     if (p.type === 'acteur')   return { radius: p.r ? Math.max(p.r, 6) : 6.5, color: '#3A2257' };
     return { radius: 3.2, color: '#B9AFC9' }; // cible Castel touchée
   };
@@ -1413,44 +1424,71 @@ function buildFeatures(){
     })
   };
 
-  // Flux = liens « cible », rendus en FAISCEAUX RAMIFIÉS : tous les arcs d'un même
-  // acteur-source partagent l'origine et s'éventaillent (courbure indexée) → effet
-  // de ramification. Couleur + apparition pilotées par la PHASE (chronologique) pour
-  // les flux STRATÉGIE ; les flux ATTAQUE (vers un actif Castel) sont la pression
-  // structurelle permanente : couleur neutre, pointe de flèche, toujours visibles.
-  const cibleEdges = edges.filter(e => e.type === 'cible');
-  // Index stable de chaque arc dans le faisceau de sa source (pour que l'éventail ne
-  // bouge pas quand le curseur révèle/masque des arcs).
-  const bySource = {};
-  cibleEdges.forEach(e => { (bySource[e.from] || (bySource[e.from] = [])).push(e); });
-  Object.values(bySource).forEach(arr => arr.sort((a, b) => String(a.to).localeCompare(String(b.to))));
-  const fanIndex = new Map();
-  Object.values(bySource).forEach(arr => arr.forEach((e, i) => fanIndex.set(e, { i, n: arr.length })));
+  // Flux = liens « cible ». Deux natures :
+  //   • STRATÉGIE (cible = incident) : rendue en CASCADE CHRONOLOGIQUE par source.
+  //     Au lieu d'un éventail partant d'un seul point, on enchaîne les maillons —
+  //     acteur → incident P1 → incident P2 → … → incident Pn — pour que chaque phase
+  //     émerge visuellement de la précédente. Couleur + apparition = phase d'arrivée.
+  //   • ATTAQUE (cible = actif Castel : entité/marque/site) : pression structurelle
+  //     permanente, arc violet à pointe, toujours visible (hors phase).
+  const ATTAQUE_COLOR = '#7A5BA6';
+  const phaseRank = ph => { const i = phaseKeys().indexOf(String(ph)); return i < 0 ? 99 : i; };
+  const dateMs = id => { const p = pubById[id]; return p ? new Date(p.date).getTime() : 0; };
+  const mkArc = (A, B, bend, props) => ({
+    type: 'Feature',
+    geometry: { type: 'LineString', coordinates: arcCurve([A.lon, A.lat], [B.lon, B.lat], bend, 24) },
+    properties: props
+  });
 
-  const ATTAQUE_COLOR = '#7A5BA6'; // violet sourd = pression structurelle (hors phase)
-  const arcs = {
-    type: 'FeatureCollection',
-    features: cibleEdges.map(e => {
-      const A = pubById[e.from], B = pubById[e.to];
-      if (!A || !B || !visibleIds.has(A.id) || !visibleIds.has(B.id)) return null;
-      if (!phaseVisible(e.phase)) return null;
-      const nature = (B.type === 'incident') ? 'strategie' : 'attaque';
-      // Courbure de l'arc : éventail symétrique autour de la source.
-      const fi = fanIndex.get(e) || { i: 0, n: 1 };
-      const t = fi.n > 1 ? (fi.i / (fi.n - 1)) - 0.5 : 0; // -0.5 … +0.5
-      const bend = fi.n > 1 ? t * 0.62 : 0.16;
-      const isStrat = nature === 'strategie';
-      return {
-        type: 'Feature',
-        geometry: { type: 'LineString', coordinates: arcCurve([A.lon, A.lat], [B.lon, B.lat], bend, 24) },
-        properties: { from: e.from, to: e.to, rtype: 'cible', label: e.label || '',
-          phase: e.phase || null, nature,
-          rcolor: isStrat ? phaseColor(e.phase) : ATTAQUE_COLOR,
-          ropacity: isStrat ? 0.95 : 0.8,
-          rwidth: isStrat ? 3.0 : 2.2 }
-      };
-    }).filter(Boolean)
-  };
+  // Sépare les cibles « incident » (stratégie, à chaîner) des cibles corporate (attaque).
+  const stratBySource = {};
+  const attaqueEdges = [];
+  cibleEdges.forEach(e => {
+    const B = pubById[e.to];
+    if (B && B.type === 'incident') (stratBySource[e.from] || (stratBySource[e.from] = [])).push(e);
+    else attaqueEdges.push(e);
+  });
+
+  const arcFeats = [];
+
+  // Cascade stratégie : tri (phase, date) puis maillon-à-maillon depuis la source.
+  // Un maillon masqué (phase non atteinte / hors timeline) n'avance pas la chaîne :
+  // le maillon visible suivant repart du dernier nœud visible → pas de trou.
+  Object.entries(stratBySource).forEach(([srcId, list]) => {
+    list.sort((a, b) => {
+      const pr = phaseRank(a.phase) - phaseRank(b.phase);
+      return pr !== 0 ? pr : dateMs(a.to) - dateMs(b.to);
+    });
+    let prevId = srcId;
+    list.forEach((e, idx) => {
+      const B = pubById[e.to];
+      if (!B || !visibleIds.has(B.id) || !phaseVisible(e.phase)) return;
+      const A = pubById[prevId];
+      if (A && visibleIds.has(A.id)) {
+        const bend = (idx % 2 ? -1 : 1) * 0.16; // S-curve : les segments ne se chevauchent pas
+        arcFeats.push(mkArc(A, B, bend, {
+          from: prevId, to: e.to, rtype: 'cible', label: e.label || '',
+          phase: e.phase || null, nature: 'strategie',
+          rcolor: phaseColor(e.phase), ropacity: 0.95, rwidth: 3.0
+        }));
+      }
+      prevId = e.to;
+    });
+  });
+
+  // Arcs attaque (vers actif Castel) : directs, structurels, toujours visibles.
+  attaqueEdges.forEach(e => {
+    const A = pubById[e.from], B = pubById[e.to];
+    if (!A || !B || !visibleIds.has(A.id) || !visibleIds.has(B.id)) return;
+    if (!phaseVisible(e.phase)) return;
+    arcFeats.push(mkArc(A, B, 0.16, {
+      from: e.from, to: e.to, rtype: 'cible', label: e.label || '',
+      phase: e.phase || null, nature: 'attaque',
+      rcolor: ATTAQUE_COLOR, ropacity: 0.8, rwidth: 2.2
+    }));
+  });
+
+  const arcs = { type: 'FeatureCollection', features: arcFeats };
 
   return { points, arcs };
 }
