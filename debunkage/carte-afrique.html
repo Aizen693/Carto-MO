@@ -822,14 +822,27 @@
   .ds-back { display: inline-flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer;
     padding: 2px 0 12px; color: #6B3FA0; font-family: 'Plus Jakarta Sans'; font-size: 12.5px; font-weight: 600; }
   .ds-back:hover { text-decoration: underline; }
-  /* Fiche réutilisée dans la colonne étroite (override des tailles de la modale) */
-  .ds-panel .fiche-title { font-size: 18px; margin: 0 0 4px; line-height: 1.2; }
-  .ds-panel .fiche-meta { margin: 12px 0 14px; }
-  .ds-panel .fiche-section { padding-top: 13px; margin-top: 13px; }
-  .ds-panel .fiche-body { font-size: 13px; line-height: 1.6; }
-  .ds-panel .fiche-grid { grid-template-columns: 1fr; gap: 9px 0; }
+  /* Fiche réutilisée dans la colonne étroite — esthétique soignée, scopée au panneau. */
+  .ds-fiche { padding-bottom: 6px; }
+  .ds-panel .fiche-kicker { font-size: 9.5px; letter-spacing: .09em; font-weight: 600; margin-bottom: 8px; opacity: .92; }
+  .ds-panel .fiche-title { font-size: 19px; font-weight: 700; line-height: 1.22; margin: 0 0 11px; color: #1F1437; }
+  .ds-panel .fiche-meta { gap: 7px; margin: 0 0 7px; }
+  .ds-panel .fiche-tag { font-size: 9.5px; padding: 4px 9px; border-radius: 5px; }
+  .ds-panel .fiche-preuve { border: 1px solid; }
+  .ds-panel .fiche-loc { font-family: 'JetBrains Mono'; font-size: 10px; color: #A19DB0; letter-spacing: .02em; margin: 0 0 2px; }
+  .ds-panel .fiche-section { border-top: 1px solid #EFEAF6; padding-top: 15px; margin-top: 15px; }
+  .ds-panel .fiche-section--first { border-top: none; padding-top: 8px; margin-top: 14px; }
+  .ds-panel .fiche-h { font-size: 9.5px; letter-spacing: .13em; color: #9070C0; font-weight: 700; margin-bottom: 9px; }
+  .ds-panel .fiche-body { font-size: 13px; line-height: 1.62; color: #4A4458; }
   .ds-panel .fiche-flow { font-size: 12.5px; gap: 6px; }
-  .ds-panel .fiche-flow .node { padding: 4px 9px; }
+  .ds-panel .fiche-flow .node { padding: 5px 10px; border-radius: 7px; background: #F4F0FB; }
+  /* Détails : liste clé→valeur alignée, plus de grille bancale. */
+  .ds-panel .fiche-grid { display: block; }
+  .ds-panel .fiche-row { display: flex; justify-content: space-between; align-items: baseline; gap: 14px;
+    padding: 7px 0; border-bottom: 1px solid #F3EFF8; }
+  .ds-panel .fiche-row:last-child { border-bottom: none; }
+  .ds-panel .fiche-row .k { font-size: 11.5px; color: #9A93AC; margin: 0; flex-shrink: 0; }
+  .ds-panel .fiche-row .v { font-size: 12.5px; color: #2C2640; font-weight: 600; text-align: right; }
 
   /* ── Bouton « fiche complète » au pied d'un pop-up nœud ── */
   .fiche-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 8px 14px;
@@ -2255,15 +2268,16 @@ function ficheHTML(p){
     const hits = [...new Set(rels.filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'incident').map(r => nm(r.from)))];
     flow = (hits.length ? node(hits.join(', ')) + '<span class="arr">▶</span>' : '') + node(p.compte_display || p.id);
   }
+  // Bandeau méta épuré : pastille de phase + niveau de preuve, puis une ligne
+  // sobre « date · ville · pays » (au lieu d'une rangée de boîtes multicolores).
   const tags = [];
   if (phaseKey) tags.push(phaseChipHTML(phaseKey));
-  if (date) tags.push(`<span class="fiche-tag" style="color:#6B6480;background:rgba(0,0,0,.05)">${escapeHtml(date)}</span>`);
-  const loc = [p.ville || '', pays ? pays.name : ''].filter(Boolean).join(' · ');
-  if (loc) tags.push(`<span class="fiche-tag" style="color:#6B6480;background:rgba(0,0,0,.05)">${escapeHtml(loc)}</span>`);
   if (p.niveau_preuve) {
     const pc = { 'Confirmé': '#C8392B', 'Confirmé comme catégorie': '#C8392B', 'Probable': '#D69E2E', 'Indirect': '#8B5FBF' }[p.niveau_preuve] || '#8A8499';
-    tags.push(`<span class="fiche-tag" style="color:${pc};background:${pc}1F"><span class="dot" style="background:${pc}"></span>${escapeHtml(p.niveau_preuve)}</span>`);
+    tags.push(`<span class="fiche-tag fiche-preuve" style="color:${pc};background:${pc}14;border-color:${pc}40"><span class="dot" style="background:${pc}"></span>${escapeHtml(p.niveau_preuve)}</span>`);
   }
+  const loc = [p.ville || '', pays ? pays.name : ''].filter(Boolean).join(' · ');
+  const metaLine = [date, loc].filter(Boolean).join('  ·  ');
   const rowsArr = [];
   if (p.plateforme) rowsArr.push(['Vecteur', p.plateforme]);
   if (p.audience_estimee) rowsArr.push(['Audience estimée', Number(p.audience_estimee).toLocaleString('fr-FR')]);
@@ -2274,8 +2288,9 @@ function ficheHTML(p){
   return `
     <div class="fiche-kicker" style="color:${kcol}">${escapeHtml(TYPELABEL[p.type] || p.type)}</div>
     <h2 class="fiche-title">${escapeHtml(p.compte_display || p.id)}</h2>
-    <div class="fiche-meta">${tags.join('')}</div>
-    <div class="fiche-section" style="border-top:none;padding-top:0;margin-top:2px">
+    ${tags.length ? `<div class="fiche-meta">${tags.join('')}</div>` : ''}
+    ${metaLine ? `<div class="fiche-loc">${escapeHtml(metaLine)}</div>` : ''}
+    <div class="fiche-section fiche-section--first">
       <div class="fiche-h">Chaîne de propagation</div>
       <div class="fiche-flow">${flow}</div>
     </div>
