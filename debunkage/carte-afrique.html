@@ -300,6 +300,12 @@
   .lg-row .ph-num { width: 16px; flex-shrink: 0; text-align: center; font-size: 14px; line-height: 1; font-weight: 700; }
   .lg-foot .lg-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; vertical-align: middle; margin-right: 1px; }
   .lg-foot { font-family: 'JetBrains Mono'; font-size: 9px; color: #A19DB0; letter-spacing: .02em; margin-top: 8px; }
+  /* Légende continentale : phrase d'explication + glose sous chaque niveau, pour un lecteur novice. */
+  .lg-sub { font-size: 11px; color: #6E6880; line-height: 1.4; margin: -4px 0 11px; max-width: 232px; }
+  .lg-row.lg-row2 { align-items: flex-start; padding: 3px 0; }
+  .lg-row.lg-row2 .sw { margin-top: 3px; }
+  .lg-row .lg-txt { display: flex; flex-direction: column; line-height: 1.25; }
+  .lg-row .lg-gloss { color: #8A8499; font-size: 10px; font-weight: 400; margin-top: 1px; }
 
   /* Timeline */
   #timeline {
@@ -752,6 +758,64 @@
     .deb-main, #map { min-height: 480px; }
     .deb-hero__head, .deb-hero__title, .deb-hero__region, .deb-hero__cell, .deb-hero__foot { padding-left: 16px; padding-right: 16px; }
   }
+
+  /* ── Pop-up « liste des attaques » d'un pays ── */
+  .atk-list { max-height: 52vh; overflow-y: auto; margin: 4px -4px 0; padding: 0 4px; }
+  .atk-item { display: flex; align-items: flex-start; gap: 9px; width: 100%; text-align: left;
+    background: none; border: none; border-top: 1px solid #ECE7F4; cursor: pointer;
+    padding: 9px 4px; font-family: 'Plus Jakarta Sans'; transition: background .12s ease; }
+  .atk-item:first-child { border-top: none; }
+  .atk-item:hover { background: #F6F2FC; }
+  .atk-num { flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 700; color: #fff; }
+  .atk-txt { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+  .atk-date { font-family: 'JetBrains Mono'; font-size: 9px; color: #A19DB0; letter-spacing: .03em; }
+  .atk-title { font-size: 12.5px; color: #2C2640; font-weight: 500; }
+  .atk-chev { margin-left: auto; flex-shrink: 0; color: #B9AFC9; font-size: 14px; align-self: center; }
+  .atk-allbtn { width: 100%; margin-top: 11px; padding: 9px; border-radius: 9px; border: none; cursor: pointer;
+    background: var(--violet-d, #6B3FA0); color: #fff; font-family: 'Plus Jakarta Sans'; font-weight: 600; font-size: 12px;
+    transition: filter .12s ease; }
+  .atk-allbtn:hover { filter: brightness(1.08); }
+
+  /* ── Bouton « fiche complète » au pied d'un pop-up nœud ── */
+  .fiche-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 8px 14px;
+    border-radius: 9px; border: none; cursor: pointer; background: var(--violet-d, #6B3FA0); color: #fff;
+    font-family: 'Plus Jakarta Sans'; font-weight: 600; font-size: 12px; transition: filter .12s ease; }
+  .fiche-link:hover { filter: brightness(1.08); }
+
+  /* ── Modale plein écran « grosse fiche d'information » ── */
+  #fiche-modal { position: fixed; inset: 0; z-index: 10000; display: none; }
+  #fiche-modal.is-open { display: flex; align-items: center; justify-content: center; }
+  .fiche-backdrop { position: absolute; inset: 0; background: rgba(24,14,46,0.55); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+  .fiche-card { position: relative; z-index: 1; width: min(760px, 92vw); max-height: 88vh; overflow-y: auto;
+    background: #fff; border-radius: 18px; box-shadow: 0 30px 80px -20px rgba(20,10,40,0.5);
+    padding: 30px 34px 34px; font-family: 'Plus Jakarta Sans'; animation: ficheIn .22s ease; }
+  @keyframes ficheIn { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+  .fiche-close { position: absolute; top: 16px; right: 16px; width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.08); background: #fff; color: #6B6480; cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center; transition: all .12s ease; }
+  .fiche-close:hover { background: var(--violet-d, #6B3FA0); color: #fff; }
+  .fiche-kicker { font-family: 'JetBrains Mono'; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+  .fiche-title { font-size: 26px; font-weight: 600; color: #1F1437; letter-spacing: -0.02em; line-height: 1.15; margin: 0 40px 4px 0; }
+  .fiche-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 18px; }
+  .fiche-tag { font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 700; letter-spacing: .04em;
+    border-radius: 4px; padding: 4px 9px; display: inline-flex; align-items: center; gap: 6px; }
+  .fiche-tag .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .fiche-section { border-top: 1px solid #ECE7F4; padding-top: 16px; margin-top: 16px; }
+  .fiche-h { font-family: 'JetBrains Mono'; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #6B3FA0; margin-bottom: 8px; font-weight: 600; }
+  .fiche-body { font-size: 14.5px; line-height: 1.65; color: #3A3450; }
+  .fiche-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 22px; }
+  .fiche-row .k { font-size: 11px; color: #8A8499; margin-bottom: 2px; }
+  .fiche-row .v { font-size: 14px; color: #2C2640; font-weight: 500; }
+  .fiche-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13.5px; }
+  .fiche-flow .node { padding: 5px 11px; border-radius: 8px; background: #F4F0FB; color: #2C2640; font-weight: 500; }
+  .fiche-flow .arr { color: #B9AFC9; font-size: 15px; }
+  @media (max-width: 620px) {
+    .fiche-card { padding: 24px 20px 26px; border-radius: 14px; }
+    .fiche-title { font-size: 21px; }
+    .fiche-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body style="background-color:#FFFFFF">
@@ -1081,13 +1145,14 @@ function applyLegende(){
   let cont = '';
   if (state.data.pays && state.data.pays.length) {
     cont = '<div class="lg-sec" data-sec="continental">'
-      + '<div class="lg-head">Atteinte au groupe Castel</div>'
-      + '<div class="lg-row"><span class="sw" style="background:#C8392B"></span>Directe — levier confirmé</div>'
-      + '<div class="lg-row"><span class="sw" style="background:#E0652C"></span>Directe — incidents réels</div>'
-      + '<div class="lg-row"><span class="sw" style="background:#D69E2E"></span>Ciblage sectoriel</div>'
-      + '<div class="lg-row"><span class="sw" style="background:#8B5FBF"></span>Indirecte forte</div>'
-      + '<div class="lg-row"><span class="sw" style="background:#B9AFC9"></span>Indirecte</div>'
-      + '<div class="lg-foot">⊙ anneau rouge = atteinte directe confirmée · cliquer un pays</div>'
+      + '<div class="lg-head">Couleur des pays</div>'
+      + '<div class="lg-sub">Chaque pays est coloré selon la gravité de l\'atteinte à Castel — du plus grave (rouge) au plus diffus (mauve).</div>'
+      + '<div class="lg-row lg-row2"><span class="sw" style="background:#C8392B"></span><span class="lg-txt">Castel visé directement — prouvé<span class="lg-gloss">filiale instrumentalisée, preuves solides</span></span></div>'
+      + '<div class="lg-row lg-row2"><span class="sw" style="background:#E0652C"></span><span class="lg-txt">Castel directement touché<span class="lg-gloss">incidents réels contre le groupe</span></span></div>'
+      + '<div class="lg-row lg-row2"><span class="sw" style="background:#D69E2E"></span><span class="lg-txt">Secteur boissons ciblé<span class="lg-gloss">la filière visée, pas Castel nommément</span></span></div>'
+      + '<div class="lg-row lg-row2"><span class="sw" style="background:#8B5FBF"></span><span class="lg-txt">Climat hostile — fort<span class="lg-gloss">Castel fragilisé par association</span></span></div>'
+      + '<div class="lg-row lg-row2"><span class="sw" style="background:#B9AFC9"></span><span class="lg-txt">Climat hostile — diffus<span class="lg-gloss">exposition indirecte générale</span></span></div>'
+      + '<div class="lg-foot">⊙ anneau rouge clignotant = atteinte directe prouvée · cliquez un pays pour le détail</div>'
       + '</div>';
   }
   // Deux blocs : (1) la NATURE du flux = la forme (pointe ▶ = attaque structurelle,
@@ -1317,6 +1382,24 @@ function splitPhaseLabel(nom, n){
   const parts = raw.split('·');
   return { name: (parts[0] || '').trim() || ('Phase ' + n), period: (parts[1] || '').trim() };
 }
+// Phase d'un incident, lisible partout (pop-ups, fiche) : portée par son lien
+// « cible » entrant, à défaut sa date. Même logique que buildFeatures.
+function phaseOfNode(p){
+  if (!p || p.type !== 'incident') return null;
+  const edges = (state.data && state.data.relations) || [];
+  const e = edges.find(r => r.type === 'cible' && r.to === p.id && r.phase != null && r.phase !== '');
+  return e ? String(e.phase) : phaseOfDate(p.date);
+}
+// Petit chip coloré « ② Montée · 2022 » pour une clé de phase.
+function phaseChipHTML(key){
+  if (!key) return '';
+  const d = phasesDef();
+  const def = d ? d.find(p => String(p.n) === String(key)) : null;
+  const num = { '1': '①', '2': '②', '3': '③', '4': '④', '5': '⑤' }[String(key)] || '';
+  const sp = def ? splitPhaseLabel(def.nom, def.n) : { name: 'Phase ' + key, period: '' };
+  const col = phaseColor(key);
+  return `<span style="display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono';font-size:10px;font-weight:700;letter-spacing:.03em;color:${col};background:${col}1F;border:1px solid ${col}55;border-radius:4px;padding:2px 8px">${num} ${escapeHtml(sp.name)}${sp.period ? ' · ' + escapeHtml(sp.period) : ''}</span>`;
+}
 // Stepper du schéma d'identification des phases. Masqué si data.phases est absent.
 function renderPhaseLegend(){
   const wrap = document.getElementById('phase-legend');
@@ -1384,13 +1467,6 @@ function buildFeatures(){
     const r = publiByReseau(p.id);
     return r && state.activeReseaux.has(r.id);
   };
-  // Nœud retenu : incident, acteur/source, ou cible Castel touchée par un incident.
-  const keepNode = p => p.type === 'incident' || p.type === 'acteur' || cibleEndpoints.has(p.id);
-
-  const visibleIds = new Set(d.publications
-    .filter(p => keepNode(p) && inTime(p) && inReseau(p))
-    .map(p => p.id));
-
   // Phase d'un incident = phase portée par son lien « cible » entrant (vérité
   // analytique), à défaut sa date. Garantit que la couleur du POINT et celle de
   // l'arc qui l'atteint coïncident → cascade lisible (violet→vert→orange→rouge).
@@ -1401,6 +1477,18 @@ function buildFeatures(){
     if (B && B.type === 'incident' && e.phase != null && e.phase !== '') incidentPhase[e.to] = String(e.phase);
   });
   const phaseOfIncident = p => incidentPhase[p.id] || phaseOfDate(p.date);
+
+  // Nœud retenu : incident, acteur/source, ou cible Castel touchée par un incident.
+  const keepNode = p => p.type === 'incident' || p.type === 'acteur' || cibleEndpoints.has(p.id);
+  // Un incident n'apparaît qu'une fois sa PHASE atteinte par le curseur (comme les
+  // arcs) : indispensable car les nœuds synthétiques partagent une même date — sans
+  // ce filtre l'amorçage (phase 1) et les phases 2→4 surgiraient tous d'un coup.
+  // Acteurs / cibles Castel n'ont pas de phase → toujours visibles dans le temps.
+  const nodeInPhase = p => p.type !== 'incident' ? true : phaseVisible(phaseOfIncident(p));
+
+  const visibleIds = new Set(d.publications
+    .filter(p => keepNode(p) && inTime(p) && inReseau(p) && nodeInPhase(p))
+    .map(p => p.id));
 
   // Rayon/couleur : l'incident porte SA PHASE (couleur = période), l'acteur est un
   // nœud-source sombre, la cible Castel recule (gris).
@@ -1414,12 +1502,15 @@ function buildFeatures(){
     type: 'FeatureCollection',
     features: d.publications.filter(p => visibleIds.has(p.id)).map(p => {
       const st = styleFor(p);
+      const ph = p.type === 'incident' ? phaseOfIncident(p) : '';
+      const pnum = /^[1-4]$/.test(String(ph)) ? String(ph) : '';   // badge ①②③④ (chiffre)
       return {
         type: 'Feature',
         geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
         properties: { ...p, radius: st.radius, color: st.color, pcolor: st.color,
           is_incident: p.type === 'incident' ? 1 : 0,
-          is_acteur: p.type === 'acteur' ? 1 : 0, is_pz: 0 }
+          is_acteur: p.type === 'acteur' ? 1 : 0, is_pz: 0,
+          pnum, is_amorce: pnum === '1' ? 1 : 0 }
       };
     })
   };
@@ -1690,6 +1781,28 @@ function addLayers(){
     }
   });
 
+  // Amorçage (phase 1) : double anneau + halo violet pulsé pour qu'on le repère
+  // EN PREMIER. C'est le point de départ de toute la campagne.
+  map.addLayer({ id: 'points-amorce-pulse', type: 'circle', source: 'points', minzoom: 6,
+    filter: ['==', ['get', 'is_amorce'], 1],
+    paint: { 'circle-radius': 16, 'circle-color': 'transparent',
+      'circle-stroke-color': '#6B3FA0', 'circle-stroke-width': 2, 'circle-stroke-opacity': 0.6 } });
+  map.addLayer({ id: 'points-amorce-label', type: 'symbol', source: 'points', minzoom: 6,
+    filter: ['==', ['get', 'is_amorce'], 1],
+    layout: { 'text-field': 'Amorçage', 'text-size': 10,
+      'text-font': ['DIN Pro Bold', 'Arial Unicode MS Regular'],
+      'text-offset': [0, -1.9], 'text-anchor': 'bottom',
+      'text-allow-overlap': true, 'text-ignore-placement': true },
+    paint: { 'text-color': '#6B3FA0', 'text-halo-color': '#FFFFFF', 'text-halo-width': 1.4 } });
+
+  // Badge de PHASE (chiffre 1→4 dans le point) : dissocie nettement les 4 phases.
+  map.addLayer({ id: 'points-phasenum', type: 'symbol', source: 'points', minzoom: 6,
+    filter: ['==', ['get', 'is_incident'], 1],
+    layout: { 'text-field': ['get', 'pnum'], 'text-size': 10,
+      'text-font': ['DIN Pro Bold', 'Arial Unicode MS Regular'],
+      'text-allow-overlap': true, 'text-ignore-placement': true },
+    paint: { 'text-color': '#FFFFFF', 'text-halo-color': 'rgba(0,0,0,0.28)', 'text-halo-width': 0.6 } });
+
   // Cible de clic/survol invisible : les dots visibles sont minuscules (2.2px),
   // cette couche elargit la zone interactive pour rendre le clic fiable (desktop + tactile).
   map.addLayer({ id: 'points-hit', type: 'circle', source: 'points', minzoom: 6,
@@ -1731,6 +1844,7 @@ function addLayers(){
     animateDirectPulse();
   }
   animateArcFlow();
+  animateAmorcePulse();
 }
 
 // Anime la couche « pays-pulse » : un anneau rouge qui s'agrandit et s'estompe en
@@ -1748,6 +1862,23 @@ function animateDirectPulse(){
     _pulseRAF = requestAnimationFrame(step);
   };
   _pulseRAF = requestAnimationFrame(step);
+}
+
+// Anime la couche « points-amorce-pulse » : anneau violet qui s'agrandit autour des
+// points d'amorçage (phase 1) une fois zoomé sur un réseau — pour les repérer en premier.
+let _amorceRAF = null;
+function animateAmorcePulse(){
+  if (_amorceRAF) return;
+  const PERIOD = 1900, MINR = 13, MAXR = 30;
+  const step = (ts) => {
+    if (map && map.getLayer && map.getLayer('points-amorce-pulse') && map.getZoom() >= 6) {
+      const t = (ts % PERIOD) / PERIOD;
+      map.setPaintProperty('points-amorce-pulse', 'circle-radius', MINR + (MAXR - MINR) * t);
+      map.setPaintProperty('points-amorce-pulse', 'circle-stroke-opacity', 0.55 * (1 - t));
+    }
+    _amorceRAF = requestAnimationFrame(step);
+  };
+  _amorceRAF = requestAnimationFrame(step);
 }
 
 // Anime la couche « arcs-flow » : un pointillé blanc qui défile le long des faisceaux
@@ -1845,52 +1976,196 @@ function bindFullscreen(){
   document.addEventListener('webkitfullscreenchange', onFsChange);
 }
 
-// Popup détail centré incident : qui propage (source) → quoi (incident) → ce qui est touché (cible).
+// Pop-up nœud SIMPLE : titre, chip de phase, une phrase, la chaîne source→cible,
+// puis un lien vers la « grosse fiche » (modale plein écran avec tous les détails).
+let activePopup = null;
 function renderNodePopup(p){
   const rels = state.data.relations || [];
   const byId = Object.fromEntries((state.data.publications || []).map(x => [x.id, x]));
   const nm = id => (byId[id] && byId[id].compte_display) || id;
-  const PROOF_COL = { 'Confirmé': '#C8392B', 'Confirmé comme catégorie': '#C8392B', 'Probable': '#D69E2E', 'Indirect': '#8B5FBF' };
-  const head = (title, kicker, kcol) => `
-    <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:15.5px;color:#1F1437;letter-spacing:-0.012em;margin-bottom:3px">${escapeHtml(title)}</div>
-    <div style="font-family:'JetBrains Mono';font-size:10px;color:${kcol};letter-spacing:0.04em;margin-bottom:9px">${escapeHtml(kicker)}</div>`;
-  const line = (lbl, val) => `<div style="font-size:11.5px;color:#6B6480;margin-bottom:5px"><span style="color:#8A8499">${lbl} :</span> ${val}</div>`;
-  const proofTag = pr => pr ? `<span style="display:inline-block;font-family:'JetBrains Mono';font-size:9px;font-weight:700;letter-spacing:.04em;color:${PROOF_COL[pr]||'#8A8499'};background:rgba(0,0,0,.04);border:1px solid ${PROOF_COL[pr]||'#ccc'}55;border-radius:3px;padding:1px 6px">${escapeHtml(pr)}</span>` : '';
-  const date = p.date ? fmtDate(new Date(p.date)) : '';
-
+  const phaseKey = phaseOfNode(p);
+  const kcol = p.type === 'incident' ? '#C94A4A' : (p.type === 'acteur' ? '#8E2A2A' : '#6B6480');
+  const kicker = p.type === 'incident' ? 'Incident informationnel'
+    : (p.type === 'acteur' ? 'Acteur / source hostile' : 'Cible Castel touchée');
+  const ex = p.content_excerpt || '';
+  const excerpt = ex.length > 130 ? escapeHtml(ex.slice(0, 130)) + '…' : escapeHtml(ex);
+  let rel = '';
   if (p.type === 'incident') {
-    const cibles = rels.filter(r => r.from === p.id && r.type === 'cible').map(r => nm(r.to));
-    const sources = rels.filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'acteur').map(r => nm(r.from));
-    return `<div style="max-height:60vh;overflow-y:auto;padding-right:4px">
-      ${head(p.compte_display, 'Incident informationnel · ' + (p.ville || '') + (date ? ' · ' + date : ''), '#C94A4A')}
-      <div style="font-size:13px;line-height:1.55;color:#4A4458;margin-bottom:10px">${escapeHtml(p.content_excerpt || '')}</div>
-      ${sources.length ? line('Source', escapeHtml([...new Set(sources)].join(', '))) : ''}
-      ${cibles.length ? line('Cible Castel touchée', '<strong style="color:#4A4458">' + escapeHtml([...new Set(cibles)].join(', ')) + '</strong>') : ''}
-      <div style="margin-top:8px">${proofTag(p.niveau_preuve)}</div>
-    </div>`;
+    const src = [...new Set(rels.filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'acteur').map(r => nm(r.from)))];
+    const cib = [...new Set(rels.filter(r => r.from === p.id && r.type === 'cible').map(r => nm(r.to)))];
+    const bits = [];
+    if (src.length) bits.push('<strong style="color:#4A4458">' + escapeHtml(src[0]) + '</strong>');
+    bits.push('cet incident');
+    if (cib.length) bits.push('vise <strong style="color:#4A4458">' + escapeHtml(cib[0]) + '</strong>');
+    rel = `<div style="font-size:11.5px;color:#8A8499;margin-top:9px">${bits.join(' → ')}</div>`;
   }
-  if (p.type === 'acteur') {
-    const incs = rels.filter(r => r.from === p.id && r.type === 'cible' && byId[r.to] && byId[r.to].type === 'incident').map(r => nm(r.to));
-    return `<div style="max-height:60vh;overflow-y:auto;padding-right:4px">
-      ${head(p.compte_display, 'Acteur / source hostile · ' + (p.plateforme || ''), '#8E2A2A')}
-      <div style="font-size:13px;line-height:1.55;color:#4A4458;margin-bottom:10px">${escapeHtml(p.content_excerpt || '')}</div>
-      ${incs.length ? line('Incidents propagés', escapeHtml([...new Set(incs)].join(' · '))) : ''}
-      <div style="margin-top:8px">${proofTag(p.niveau_preuve)}</div>
-    </div>`;
-  }
-  // Cible Castel touchée (marque / usine / entité visée)
-  const hits = rels.filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'incident').map(r => nm(r.from));
-  return `<div style="max-height:60vh;overflow-y:auto;padding-right:4px">
-    ${head(p.compte_display, 'Cible Castel touchée · ' + (TYPE_LABEL[p.type] || p.type), '#6B6480')}
-    ${p.content_excerpt ? `<div style="font-size:12.5px;line-height:1.5;color:#4A4458;margin-bottom:10px">${escapeHtml(p.content_excerpt)}</div>` : ''}
-    ${hits.length ? line('Visée par', escapeHtml([...new Set(hits)].join(' · '))) : ''}
+  return `<div style="max-width:300px">
+    <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:15px;color:#1F1437;letter-spacing:-0.01em;margin-bottom:6px">${escapeHtml(p.compte_display || p.id)}</div>
+    <div style="margin-bottom:9px">${phaseKey ? phaseChipHTML(phaseKey) : `<span style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:.04em;color:${kcol}">${escapeHtml(kicker)}</span>`}</div>
+    ${excerpt ? `<div style="font-size:12.5px;line-height:1.5;color:#4A4458">${excerpt}</div>` : ''}
+    ${rel}
+    <button class="fiche-link" onclick="debOpenFiche('${p.id}')">Voir la fiche complète →</button>
   </div>`;
 }
 
+// Pop-up PAYS : liste cliquable des attaques (incidents). Clic sur une attaque →
+// on entre dans l'arbre du pays (amorçage d'abord, puis déroulé phase par phase).
+function renderPaysAttacksPopup(c, paysId){
+  const incs = (state.data.publications || [])
+    .filter(p => p.type === 'incident' && p.cc === paysId)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+  const rows = incs.map(p => {
+    const key = phaseOfNode(p);
+    const col = phaseColor(key);
+    const num = /^[1-4]$/.test(String(key)) ? String(key) : '·';
+    const dt = p.date ? fmtDate(new Date(p.date)) : '';
+    return `<button class="atk-item" onclick="debOpenAttack('${paysId}','${p.id}')">
+      <span class="atk-num" style="background:${col}">${num}</span>
+      <span class="atk-txt"><span class="atk-date">${escapeHtml(dt)}</span><span class="atk-title">${escapeHtml(p.compte_display || p.id)}</span></span>
+      <span class="atk-chev">›</span></button>`;
+  }).join('');
+  const n = incs.length;
+  return `<div style="padding-right:2px">
+    <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:16px;color:#1F1437;letter-spacing:-0.012em">${escapeHtml(c.flag || '')} ${escapeHtml(c.name)}</div>
+    <div style="font-family:'JetBrains Mono';font-size:10px;color:#6B3FA0;letter-spacing:.04em;margin:2px 0 4px">${n} attaque${n > 1 ? 's' : ''} recensée${n > 1 ? 's' : ''}${c.subsidiary ? ' · ' + escapeHtml(c.subsidiary) : ''}</div>
+    ${n ? `<div class="atk-list">${rows}</div>` : '<div style="font-size:12px;color:#8A8499;margin-top:6px">Aucun incident cartographié pour ce pays.</div>'}
+    ${n ? `<button class="atk-allbtn" onclick="debOpenAttack('${paysId}','')">Voir tout le réseau du pays →</button>` : ''}
+  </div>`;
+}
+
+// Entrer dans l'arbre d'un pays : cadrer sur son réseau, puis dérouler depuis
+// l'amorçage (reset timeline → phase 1 seule, puis lecture automatique 1→4).
+function zoomToCountryNetwork(cc){
+  const all = (state.data.publications || []).filter(p => p.cc === cc);
+  if (!all.length) return;
+  // On cadre sur l'ARBRE du pays = ses incidents (les sites/marques dispersés
+  // élargiraient trop la vue et feraient retomber sous le minzoom du réseau).
+  const incs = all.filter(p => p.type === 'incident' && p.lon != null && p.lat != null);
+  const pool = incs.length ? incs : all.filter(p => p.lon != null && p.lat != null);
+  if (!pool.length) return;
+  // Centre de l'arbre = barycentre des AMORÇAGES (phase 1) ; à défaut des incidents.
+  const amorces = pool.filter(p => String(phaseOfNode(p)) === '1');
+  const seed = amorces.length ? amorces : pool;
+  const cLon = seed.reduce((s, p) => s + p.lon, 0) / seed.length;
+  const cLat = seed.reduce((s, p) => s + p.lat, 0) / seed.length;
+  // On ignore les branches très éloignées (un ou deux incidents isolés
+  // dézoomeraient toute la vue) pour cadrer sur le cœur dense de l'arbre.
+  const dist = p => Math.hypot(p.lon - cLon, p.lat - cLat);
+  const ds = pool.map(dist).sort((a, b) => a - b);
+  const med = ds[Math.floor(ds.length / 2)] || 0;
+  const cap = Math.max(0.35, med * 3);
+  const core = pool.filter(p => dist(p) <= cap);
+  const fit = core.length ? core : pool;
+  const lons = fit.map(p => p.lon), lats = fit.map(p => p.lat);
+  const bounds = [[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]];
+  const pad = { top: 120, right: 110, bottom: 96, left: 84 };
+  const cam = map.cameraForBounds(bounds, { padding: pad, maxZoom: 8.5 });
+  let z = cam ? cam.zoom : 7.5;
+  if (z < 6.9) z = 6.9;          // toujours au-dessus du minzoom réseau (6) → l'arbre reste visible
+  if (z > 8.5) z = 8.5;
+  map.easeTo({ center: cam ? cam.center : [cLon, cLat], zoom: z, duration: 1100, essential: true });
+}
+function revealFromAmorce(){
+  const reset = document.getElementById('tl-reset');
+  const play = document.getElementById('tl-play');
+  if (reset) reset.click();                         // curseur à 0 → amorçage seul
+  setTimeout(() => { if (play) play.click(); }, 800); // laisse le cadrage démarrer puis déroule
+}
+window.debOpenAttack = function(cc, id){
+  if (activePopup) { activePopup.remove(); activePopup = null; }
+  zoomToCountryNetwork(cc);
+  revealFromAmorce();
+};
+
+// ── Modale plein écran « grosse fiche d'information » ──────────────────────────
+function ensureFicheModal(){
+  let m = document.getElementById('fiche-modal');
+  if (m) return m;
+  m = document.createElement('div');
+  m.id = 'fiche-modal';
+  m.innerHTML = '<div class="fiche-backdrop"></div>'
+    + '<div class="fiche-card" role="dialog" aria-modal="true"><button class="fiche-close" aria-label="Fermer la fiche">✕</button><div class="fiche-content"></div></div>';
+  document.body.appendChild(m);
+  m.querySelector('.fiche-backdrop').addEventListener('click', closeFicheModal);
+  m.querySelector('.fiche-close').addEventListener('click', closeFicheModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFicheModal(); });
+  return m;
+}
+function closeFicheModal(){
+  const m = document.getElementById('fiche-modal');
+  if (!m) return;
+  m.classList.remove('is-open');
+  document.body.classList.remove('modal-open');
+}
+window.debOpenFiche = function(id){
+  const p = (state.data.publications || []).find(x => x.id === id);
+  if (!p) return;
+  if (activePopup) { activePopup.remove(); activePopup = null; }
+  const m = ensureFicheModal();
+  m.querySelector('.fiche-content').innerHTML = ficheHTML(p);
+  m.scrollTop = 0;
+  m.querySelector('.fiche-card').scrollTop = 0;
+  m.classList.add('is-open');
+  document.body.classList.add('modal-open');
+};
+function ficheHTML(p){
+  const rels = state.data.relations || [];
+  const byId = Object.fromEntries((state.data.publications || []).map(x => [x.id, x]));
+  const nm = id => (byId[id] && byId[id].compte_display) || id;
+  const pays = (state.data.pays || []).find(c => c.id === p.cc);
+  const date = p.date ? fmtDate(new Date(p.date)) : '';
+  const TYPELABEL = { incident: 'Incident informationnel', acteur: 'Acteur / source hostile', entite: 'Cible Castel', marque: 'Marque Castel', site: 'Site Castel', canal: 'Canal de diffusion', dirigeant: 'Dirigeant' };
+  const kcol = p.type === 'incident' ? '#C94A4A' : (p.type === 'acteur' ? '#8E2A2A' : '#6B6480');
+  const phaseKey = phaseOfNode(p);
+  const node = (txt, bg) => `<span class="node"${bg ? ` style="background:${bg}"` : ''}>${escapeHtml(txt)}</span>`;
+  let flow = '';
+  if (p.type === 'incident') {
+    const src = [...new Set(rels.filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'acteur').map(r => nm(r.from)))];
+    const cib = [...new Set(rels.filter(r => r.from === p.id && r.type === 'cible').map(r => nm(r.to)))];
+    const parts = [];
+    if (src.length) parts.push(node(src.join(', ')));
+    parts.push(node(p.compte_display || p.id, phaseColor(phaseKey) + '26'));
+    if (cib.length) parts.push(node(cib.join(', ')));
+    flow = parts.join('<span class="arr">▶</span>');
+  } else if (p.type === 'acteur') {
+    const incs = rels.filter(r => r.from === p.id && r.type === 'cible' && byId[r.to] && byId[r.to].type === 'incident');
+    flow = node(p.compte_display || p.id) + (incs.length ? `<span class="arr">▶</span>` + node(incs.length + ' incident' + (incs.length > 1 ? 's' : '') + ' propagé' + (incs.length > 1 ? 's' : '')) : '');
+  } else {
+    const hits = [...new Set(rels.filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'incident').map(r => nm(r.from)))];
+    flow = (hits.length ? node(hits.join(', ')) + '<span class="arr">▶</span>' : '') + node(p.compte_display || p.id);
+  }
+  const tags = [];
+  if (phaseKey) tags.push(phaseChipHTML(phaseKey));
+  if (date) tags.push(`<span class="fiche-tag" style="color:#6B6480;background:rgba(0,0,0,.05)">${escapeHtml(date)}</span>`);
+  const loc = [p.ville || '', pays ? pays.name : ''].filter(Boolean).join(' · ');
+  if (loc) tags.push(`<span class="fiche-tag" style="color:#6B6480;background:rgba(0,0,0,.05)">${escapeHtml(loc)}</span>`);
+  if (p.niveau_preuve) {
+    const pc = { 'Confirmé': '#C8392B', 'Confirmé comme catégorie': '#C8392B', 'Probable': '#D69E2E', 'Indirect': '#8B5FBF' }[p.niveau_preuve] || '#8A8499';
+    tags.push(`<span class="fiche-tag" style="color:${pc};background:${pc}1F"><span class="dot" style="background:${pc}"></span>${escapeHtml(p.niveau_preuve)}</span>`);
+  }
+  const rowsArr = [];
+  if (p.plateforme) rowsArr.push(['Vecteur', p.plateforme]);
+  if (p.audience_estimee) rowsArr.push(['Audience estimée', Number(p.audience_estimee).toLocaleString('fr-FR')]);
+  if (p.lang) rowsArr.push(['Langue', String(p.lang).toUpperCase()]);
+  if (pays && pays.subsidiary) rowsArr.push(['Filiale Castel', pays.subsidiary]);
+  const grid = rowsArr.map(([k, v]) => `<div class="fiche-row"><div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(String(v))}</div></div>`).join('');
+  const sources = (pays && Array.isArray(pays.sources)) ? pays.sources : [];
+  return `
+    <div class="fiche-kicker" style="color:${kcol}">${escapeHtml(TYPELABEL[p.type] || p.type)}</div>
+    <h2 class="fiche-title">${escapeHtml(p.compte_display || p.id)}</h2>
+    <div class="fiche-meta">${tags.join('')}</div>
+    <div class="fiche-section" style="border-top:none;padding-top:0;margin-top:2px">
+      <div class="fiche-h">Chaîne de propagation</div>
+      <div class="fiche-flow">${flow}</div>
+    </div>
+    ${p.content_excerpt ? `<div class="fiche-section"><div class="fiche-h">Description</div><div class="fiche-body">${escapeHtml(p.content_excerpt)}</div></div>` : ''}
+    ${grid ? `<div class="fiche-section"><div class="fiche-h">Détails</div><div class="fiche-grid">${grid}</div></div>` : ''}
+    ${sources.length ? `<div class="fiche-section"><div class="fiche-h">Sources OSINT</div><div class="fiche-body" style="font-size:12.5px;color:#6B6480">${sources.map(escapeHtml).join(' · ')}</div></div>` : ''}
+  `;
+}
+
 function bindMapHover(){
-  let activePopup = null;
-  // Survol : on change seulement le curseur. Pas de pop-up de survol (le détail
-  // d'un nœud reste accessible au clic) — la lecture des phases passe par le stepper.
+  // Survol : on change seulement le curseur. Le détail d'un nœud passe par le clic.
   map.on('mouseenter', 'points-hit', () => { map.getCanvas().style.cursor = 'pointer'; });
   map.on('mouseleave', 'points-hit', () => { map.getCanvas().style.cursor = ''; });
   map.on('click', 'points-hit', (e) => {
@@ -1903,26 +2178,18 @@ function bindMapHover(){
     activePopup.on('close', () => { activePopup = null; });
   });
 
-  // ── Pays continentaux : survol + clic (popup intel riche) ──
+  // ── Pays continentaux : clic → pop-up LISTE DES ATTAQUES (pas de zoom auto). ──
+  // Le zoom vers l'arbre se fait quand on clique une attaque dans la liste.
   map.on('mouseenter', 'pays-hit', () => { map.getCanvas().style.cursor = 'pointer'; });
   map.on('mouseleave', 'pays-hit', () => { map.getCanvas().style.cursor = ''; });
   map.on('click', 'pays-hit', (e) => {
     if (activePopup) activePopup.remove();
     const id = e.features[0].properties.id;
     const c = (state.data.pays || []).find(x => x.id === id);
-    // Zoom sur le réseau du pays : on cadre sur ses nœuds détaillés (cc === id).
-    const nodes = (state.data.publications || []).filter(p => p.cc === id);
-    if (nodes.length) {
-      const lons = nodes.map(p => p.lon), lats = nodes.map(p => p.lat);
-      const bounds = [[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]];
-      map.fitBounds(bounds, { padding: { top: 110, right: 110, bottom: 80, left: 70 }, duration: 1100, maxZoom: 9 });
-    } else {
-      map.flyTo({ center: e.features[0].geometry.coordinates, zoom: 7.6, duration: 1100 });
-    }
     if (!c) return;
     activePopup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '360px' })
       .setLngLat(e.features[0].geometry.coordinates)
-      .setHTML(renderPaysPopup(c))
+      .setHTML(renderPaysAttacksPopup(c, id))
       .addTo(map);
     activePopup.on('close', () => { activePopup = null; });
   });
