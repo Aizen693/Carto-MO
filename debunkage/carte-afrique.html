@@ -947,10 +947,18 @@
   .fl-chip--cur { background: color-mix(in srgb, var(--c) 16%, #fff); font-weight: 700; }
   .fl-link { width: 2px; height: 16px; margin: 0 0 0 20px; background: #D2C9E6; position: relative; }
   .fl-link::after { content: '▾'; position: absolute; bottom: -6px; left: -4px; color: #B0A6C8; font-size: 11px; line-height: 1; }
-  /* ── Filière en graphe façon Obsidian (futuriste, sombre) ── */
+  /* ── Filière en graphe façon Obsidian (même design que la sphère complète) ── */
   .flx-wrap { margin: 18px 0 4px; border-radius: 18px; overflow: hidden;
-    background: radial-gradient(130% 120% at 28% 0%, #2A1A52 0%, #160C32 52%, #0B0620 100%);
+    background: radial-gradient(130% 120% at 50% 0%, #1B1140 0%, #0C0722 58%, #060313 100%);
     border: 1px solid #2E2150; box-shadow: inset 0 0 70px rgba(130,90,230,0.16), 0 10px 30px -12px rgba(20,8,50,.5); }
+  #branch-canvas { display: block; width: 100%; }
+  /* Bouton « Voir le réseau complet » sous le graphe, aligné à droite */
+  .flx-actions { display: flex; justify-content: flex-end; margin-top: 14px; }
+  .flx-fullbtn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 100px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, #6B3FA0, #8B5FBF); color: #fff;
+    font-family: 'Plus Jakarta Sans'; font-weight: 600; font-size: 13px;
+    box-shadow: 0 8px 20px -8px rgba(46,24,87,.5); transition: filter .15s, transform .15s; }
+  .flx-fullbtn:hover { filter: brightness(1.1); transform: translateY(-1px); }
   .flx-svg { width: 100%; height: auto; display: block; }
   .flx-edge { fill: none; stroke: #8C7AD8; stroke-opacity: .5; stroke-width: 1.3; }
   .flx-node { cursor: default; transition: stroke-opacity .15s; }
@@ -1112,7 +1120,6 @@
           <div class="deb-main">
             <div id="map"></div>
             <div id="map-loader">Chargement de la cartographie…</div>
-            <button class="deb-netbtn" type="button" onclick="openNetGraph()" aria-label="Voir le réseau complet"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="3" r="1.8"/><circle cx="3" cy="12" r="1.8"/><circle cx="13" cy="12" r="1.8"/><circle cx="8" cy="8.5" r="1.8"/><path d="M8 4.8v2M6.7 9.6 4 10.8M9.3 9.6 12 10.8"/></svg>Réseau complet</button>
             <button class="deb-fs-btn" id="deb-fs" type="button" aria-label="Plein écran" title="Plein écran (Échap pour quitter)">
               <svg class="deb-fs-icon-expand" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2H2v4M14 6V2h-4M10 14h4v-4M2 10v4h4"/></svg>
               <svg class="deb-fs-icon-shrink" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 6h4V2M10 2v4h4M14 10h-4v4M6 14v-4H2"/></svg>
@@ -2373,6 +2380,7 @@ function closeFicheModal(){
   if (!m) return;
   m.classList.remove('is-open');
   document.body.classList.remove('modal-open');
+  if (_branchRAF) { cancelAnimationFrame(_branchRAF); _branchRAF = null; }
 }
 window.debOpenFiche = function(id){
   const p = (state.data.publications || []).find(x => x.id === id);
@@ -2454,23 +2462,56 @@ function layeredLayout(nodes, edges, W, H, nLayers){
   }
 }
 function flxLabel(s){ s = String(s).split(/\s[:—–]\s/)[0]; return s.length > 24 ? s.slice(0, 22) + '…' : s; }
-function filiereGraphHTML(p){
-  const W = 680, H = 470;
+// La BRANCHE (filière d'une attaque) rendue dans le MÊME design que la sphère
+// complète : canvas, nœuds lumineux, liens néon, fond sombre. Disposition par
+// niveaux de rôle souples (lisible) + interactif (survol isole, glisser un nœud).
+let _branchRAF = null;
+function startBranchGraph(p){
+  const wrap = document.getElementById('branch-wrap');
+  const canvas = document.getElementById('branch-canvas');
+  if (!wrap || !canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  function size(){ const w = wrap.clientWidth || 640, h = 430; canvas.width = w * dpr; canvas.height = h * dpr; canvas.style.width = w + 'px'; canvas.style.height = h + 'px'; }
+  size();
   const { nodes, edges, nLayers } = filiereGraph(p);
-  layeredLayout(nodes, edges, W, H, nLayers);
   const idx = Object.fromEntries(nodes.map((n, i) => [n.id, i]));
-  const paths = edges.map(e => { const a = nodes[idx[e.from]], b = nodes[idx[e.to]];
-    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2 - 10;
-    return `<path d="M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q ${mx.toFixed(1)} ${my.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}" class="flx-edge"/>`; }).join('');
-  const tierLab = {}; nodes.forEach(n => { tierLab[n.tier] = { role: n.role, y: n.y }; });
-  const tlabels = Object.values(tierLab).map(t => `<text x="13" y="${(t.y + 3).toFixed(1)}" class="flx-tier">${escapeHtml(t.role)}</text>`).join('');
-  const els = nodes.map(n => { const r = n.cur ? 13 : 9;
-    return `<circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${r + 11}" fill="${n.color}" opacity="0.2" filter="url(#flxblur)"/>`
-      + `<circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${r}" fill="${n.color}" stroke="#fff" stroke-opacity="0.9" stroke-width="${n.cur ? 2.2 : 1.2}" class="flx-node"><title>${escapeHtml(n.label)}</title></circle>`
-      + `<text x="${n.x.toFixed(1)}" y="${(n.y + r + 13).toFixed(1)}" text-anchor="middle" class="flx-lbl${n.cur ? ' flx-lbl--cur' : ''}">${escapeHtml(flxLabel(n.label))}</text>`; }).join('');
-  return `<div class="flx-wrap"><svg viewBox="0 0 ${W} ${H}" class="flx-svg">
-    <defs><filter id="flxblur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5.5"/></filter></defs>
-    <g class="flx-edges">${paths}</g>${tlabels}<g>${els}</g></svg></div>`;
+  const adj = {}; nodes.forEach(n => adj[n.id] = new Set()); edges.forEach(e => { adj[e.from].add(e.to); adj[e.to].add(e.from); });
+  const W = () => canvas.width / dpr, H = () => canvas.height / dpr, top = 44, bot = () => H() - 34;
+  const yFor = t => nLayers <= 1 ? H() / 2 : top + (bot() - top) * (t / (nLayers - 1));
+  const byTier = {}; nodes.forEach(n => { (byTier[n.tier] = byTier[n.tier] || []).push(n); });
+  const blab = s => { s = String(s).split(/\s[:—–]\s/)[0].replace(/\s*\(.*$/, ''); return s.length > 17 ? s.slice(0, 16) + '…' : s; };
+  Object.values(byTier).forEach(arr => arr.forEach((n, i) => { n.tx = arr.length === 1 ? W() / 2 : W() * (0.12 + 0.76 * (i / (arr.length - 1))); n.li = i; n.tlen = arr.length; n.x = n.tx; n.y = yFor(n.tier); n.r = n.cur ? 13 : 9; n.vx = 0; n.vy = 0; }));
+  let hover = null, drag = null, alpha = 1;
+  function step(a){
+    const n = nodes.length;
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++){ let dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y, d2 = dx * dx + dy * dy || 1; if (d2 > 90000) continue; let d = Math.sqrt(d2), f = 1600 / d2 * a, fx = f * dx / d, fy = f * dy / d; nodes[i].vx += fx; nodes[i].vy += fy; nodes[j].vx -= fx; nodes[j].vy -= fy; }
+    edges.forEach(e => { const A = nodes[idx[e.from]], B = nodes[idx[e.to]]; let dy = B.y - A.y, dx = B.x - A.x, d = Math.hypot(dx, dy) || 1, f = 0.01 * (d - 88) * a, fx = f * dx / d, fy = f * dy / d; A.vx += fx; A.vy += fy; B.vx -= fx; B.vy -= fy; });
+    nodes.forEach(nd => { if (nd === drag) { nd.vx = 0; nd.vy = 0; return; } nd.vy += (yFor(nd.tier) - nd.y) * 0.14 * a; nd.vx += (nd.tx - nd.x) * 0.14 * a; nd.vx *= 0.78; nd.vy *= 0.78; nd.x += nd.vx; nd.y += nd.vy; nd.x = Math.max(44, Math.min(W() - 44, nd.x)); });
+  }
+  for (let k = 0; k < 150; k++) step(1);
+  function draw(){
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.textAlign = 'left'; ctx.font = '700 8.5px "JetBrains Mono", monospace';
+    Object.keys(byTier).forEach(t => { ctx.fillStyle = 'rgba(162,148,212,0.55)'; ctx.fillText((byTier[t][0].role || '').toUpperCase(), 13, yFor(+t) + 3); });
+    ctx.lineCap = 'round';
+    edges.forEach(e => { const A = nodes[idx[e.from]], B = nodes[idx[e.to]]; const hl = hover && (e.from === hover.id || e.to === hover.id); ctx.lineWidth = hl ? 1.8 : 1; ctx.strokeStyle = hl ? 'rgba(206,188,255,0.85)' : 'rgba(150,130,224,0.18)'; ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke(); });
+    nodes.forEach(nd => { const near = !hover || nd.id === hover.id || adj[hover.id].has(nd.id); ctx.globalAlpha = near ? 1 : 0.2;
+      ctx.beginPath(); ctx.arc(nd.x, nd.y, nd.r + 5, 0, 7); ctx.fillStyle = nd.color + '2e'; ctx.fill();
+      ctx.beginPath(); ctx.arc(nd.x, nd.y, nd.r, 0, 7); ctx.fillStyle = nd.color; ctx.fill();
+      ctx.lineWidth = (hover && nd.id === hover.id) ? 2.6 : 1.4; ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.stroke(); ctx.globalAlpha = 1; });
+    ctx.textAlign = 'center';
+    nodes.forEach(nd => { const near = hover && (nd.id === hover.id || adj[hover.id].has(nd.id)); ctx.globalAlpha = (!hover || near) ? 0.96 : 0.18; ctx.font = '600 ' + (nd.cur ? 12 : 10.5) + 'px "Plus Jakarta Sans", sans-serif'; ctx.fillStyle = nd.cur ? '#fff' : '#E2DAF4';
+      const yoff = (nd.tlen > 2 && (nd.li % 2)) ? nd.r + 26 : nd.r + 13;
+      ctx.fillText(blab(nd.label), nd.x, nd.y + yoff); ctx.globalAlpha = 1; });
+  }
+  function loop(){ step(alpha); alpha = Math.max(0.05, alpha * 0.94); draw(); _branchRAF = requestAnimationFrame(loop); }
+  if (_branchRAF) cancelAnimationFrame(_branchRAF); loop();
+  function rel(e){ const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  function nodeAt(mx, my){ let b = null, bd = 1e9; nodes.forEach(nd => { const d = Math.hypot(nd.x - mx, nd.y - my); if (d < nd.r + 6 && d < bd) { bd = d; b = nd; } }); return b; }
+  canvas.onmousedown = e => { const m = rel(e), nd = nodeAt(m.x, m.y); if (nd) { drag = nd; alpha = Math.max(alpha, 0.5); } };
+  canvas.onmousemove = e => { const m = rel(e); if (drag) { drag.x = m.x; drag.y = m.y; drag.vx = 0; drag.vy = 0; alpha = Math.max(alpha, 0.4); } else { hover = nodeAt(m.x, m.y); canvas.style.cursor = hover ? 'pointer' : 'default'; } };
+  canvas.onmouseup = () => { drag = null; }; canvas.onmouseleave = () => { drag = null; hover = null; };
 }
 
 // ════ Réseau complet INTERACTIF façon Obsidian (canvas, physique temps réel) ════
@@ -2525,6 +2566,9 @@ function closeNetGraph(){
   if (_ngRAF) { cancelAnimationFrame(_ngRAF); _ngRAF = null; }
   if (_ngCleanup) { _ngCleanup(); _ngCleanup = null; }
 }
+// Depuis la Filière → ferme la fiche puis ouvre le réseau complet. Exposé sur window
+// car closeFicheModal est dans le scope du module (inaccessible à un onclick inline).
+window.debOpenFull = function(){ closeFicheModal(); openNetGraph(); };
 function startNetGraph(){
   const ov = document.getElementById('netgraph-overlay');
   const canvas = ov.querySelector('#netgraph-canvas');
@@ -2609,11 +2653,13 @@ window.debOpenMindmap = function(id){
       <div class="fiche-kicker" style="color:#6B3FA0">Filière de l'attaque · ${escapeHtml((pays && pays.name) || '')}</div>
       <h2 class="fiche-title">${escapeHtml(ficheTitle(p))}</h2>
       <div class="fl-intro">De l'État commanditaire jusqu'à la cible Castel — acteurs réels documentés.</div>
-      ${filiereGraphHTML(p)}
+      <div class="flx-wrap" id="branch-wrap"><canvas id="branch-canvas"></canvas></div>
+      <div class="flx-actions"><button class="flx-fullbtn" type="button" onclick="debOpenFull()"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="3" r="1.7"/><circle cx="3" cy="12" r="1.7"/><circle cx="13" cy="12" r="1.7"/><circle cx="8" cy="8.4" r="1.7"/><path d="M8 4.7v2M6.7 9.5 4 10.8M9.3 9.5 12 10.8"/></svg>Voir le réseau complet</button></div>
     </div>`;
   m.querySelector('.fiche-card').scrollTop = 0;
   m.classList.add('is-open');
   document.body.classList.add('modal-open');
+  startBranchGraph(p);
 };
 // Titre court et net pour la fiche détail (jamais tronqué par « … ») : on prend
 // le « titre » avant le premier « : » / « — », sinon la 1re phrase.
