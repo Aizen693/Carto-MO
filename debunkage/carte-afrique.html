@@ -2650,7 +2650,7 @@ window.debOpenMindmap = function(id){
   const m = ensureFicheModal();
   m.querySelector('.fiche-content').innerHTML = `
     <div class="rap-doc">
-      <div class="fiche-kicker" style="color:#6B3FA0">Filière de l'attaque · ${escapeHtml((pays && pays.name) || '')}</div>
+      <div class="fiche-kicker" style="color:#6B3FA0">Carte mentale de l'attaque · ${escapeHtml((pays && pays.name) || '')}</div>
       <h2 class="fiche-title">${escapeHtml(ficheTitle(p))}</h2>
       <div class="fl-intro">De l'État commanditaire jusqu'à la cible Castel — acteurs réels documentés.</div>
       <div class="flx-wrap" id="branch-wrap"><canvas id="branch-canvas"></canvas></div>
@@ -2844,7 +2844,7 @@ function ficheHTML(p){
     ${sources.length ? `<div class="fiche-section"><div class="fiche-h">Sources OSINT</div><div class="fiche-body fiche-sources">${sources.map(sourceLink).join(' · ')}</div></div>` : ''}
     ${p.type === 'incident' ? `<div class="rap-actions">
       <button class="rap-btn" onclick="debOpenFiche('${p.id}')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 1.5h5L13 5v9.5H4z"/><path d="M9 1.5V5h4M6 8h5M6 11h5"/></svg>Rapport complet</button>
-      <button class="rap-btn rap-btn--alt" onclick="debOpenMindmap('${p.id}')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="3.2" r="2"/><circle cx="3.2" cy="12.8" r="2"/><circle cx="12.8" cy="12.8" r="2"/><path d="M8 5.2v2.8M8 8 4.4 11.2M8 8l3.6 3.2"/></svg>Filière</button>
+      <button class="rap-btn rap-btn--alt" onclick="debOpenMindmap('${p.id}')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="3.2" r="2"/><circle cx="3.2" cy="12.8" r="2"/><circle cx="12.8" cy="12.8" r="2"/><path d="M8 5.2v2.8M8 8 4.4 11.2M8 8l3.6 3.2"/></svg>Carte mentale</button>
     </div>` : ''}
   `;
 }
