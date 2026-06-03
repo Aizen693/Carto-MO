@@ -853,6 +853,11 @@
   .ds-panel .fiche-section--first { border-top: none; padding-top: 8px; margin-top: 14px; }
   .ds-panel .fiche-h { font-size: 9.5px; letter-spacing: .13em; color: #9070C0; font-weight: 700; margin-bottom: 9px; }
   .ds-panel .fiche-body { font-size: 13px; line-height: 1.62; color: #4A4458; }
+  /* Sources OSINT cliquables */
+  .ds-panel .fiche-sources { font-size: 12px; color: #6B6480; line-height: 1.85; }
+  .fiche-src { color: #6B3FA0; text-decoration: none; font-weight: 500;
+    border-bottom: 1px solid rgba(107,63,160,0.28); transition: color .15s, border-color .15s; }
+  .fiche-src:hover { color: #8B5FBF; border-bottom-color: #8B5FBF; }
   .ds-panel .fiche-flow { font-size: 12.5px; gap: 6px; }
   .ds-panel .fiche-flow .node { padding: 5px 10px; border-radius: 7px; background: #F4F0FB; }
   /* Détails : liste clé→valeur alignée, plus de grille bancale. */
@@ -896,10 +901,76 @@
   .fiche-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13.5px; }
   .fiche-flow .node { padding: 5px 11px; border-radius: 8px; background: #F4F0FB; color: #2C2640; font-weight: 500; }
   .fiche-flow .arr { color: #B9AFC9; font-size: 15px; }
+
+  /* ── Mind map d'attaque : commanditaire → attaque → cible → groupe ── */
+  .mindmap { display: flex; flex-direction: column; align-items: stretch; margin: 4px 0 2px; }
+  .mm-node { border: 1px solid color-mix(in srgb, var(--c, #6B3FA0) 28%, #E9E4F2);
+    border-left: 3px solid var(--c, #6B3FA0); border-radius: 9px; padding: 8px 11px; background: #fff; }
+  .mm-role { font-family: 'JetBrains Mono'; font-size: 8.5px; font-weight: 700; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--c, #6B3FA0); margin-bottom: 3px; }
+  .mm-name { font-family: 'Plus Jakarta Sans'; font-weight: 600; font-size: 12.5px; line-height: 1.3; color: #1F1437;
+    display: flex; align-items: center; gap: 7px; }
+  .mm-badge { flex-shrink: 0; width: 17px; height: 17px; border-radius: 50%; color: #fff;
+    font-family: 'JetBrains Mono'; font-weight: 700; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+  .mm-link { width: 2px; height: 15px; margin: 0 0 0 19px; background: #D2C9E6; position: relative; }
+  .mm-link::after { content: '▾'; position: absolute; bottom: -6px; left: -4px; color: #B0A6C8; font-size: 10px; line-height: 1; }
+  .mindmap--big .mm-node { padding: 12px 15px; border-radius: 11px; }
+  .mindmap--big .mm-role { font-size: 9.5px; margin-bottom: 5px; }
+  .mindmap--big .mm-name { font-size: 15px; }
+  .mindmap--big .mm-badge { width: 20px; height: 20px; font-size: 11px; }
+  .mindmap--big .mm-link { height: 20px; }
+
+  /* ── Bouton « Rapport complet » (panneau) ── */
+  .rap-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; width: 100%; margin-top: 18px;
+    padding: 11px 14px; border-radius: 10px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, #6B3FA0, #8B5FBF); color: #fff;
+    font-family: 'Plus Jakarta Sans'; font-weight: 600; font-size: 13px;
+    box-shadow: 0 6px 16px -6px rgba(107,63,160,.5); transition: filter .12s, transform .12s; }
+  .rap-btn:hover { filter: brightness(1.07); transform: translateY(-1px); }
+  .rap-actions { display: flex; gap: 9px; margin-top: 18px; }
+  .rap-actions .rap-btn { flex: 1; margin-top: 0; padding: 11px 10px; }
+  .rap-btn--alt { background: #fff; color: #6B3FA0; border: 1px solid rgba(107,63,160,.32); box-shadow: none; }
+  .rap-btn--alt:hover { background: rgba(107,63,160,.06); filter: none; }
+  .mm-view { max-width: 440px; margin: 20px auto 4px; }
+  /* ── Filière de l'attaque : appareil par niveau de rôle ── */
+  .fl-intro { font-size: 13px; color: #6B6480; line-height: 1.5; margin: 6px 0 4px; }
+  .filiere { display: flex; flex-direction: column; align-items: stretch; margin: 16px 0 4px; }
+  .fl-band { border: 1px solid color-mix(in srgb, var(--c) 26%, #E9E4F2); border-left: 4px solid var(--c);
+    border-radius: 11px; padding: 10px 14px; background: #fff; }
+  .fl-band--cur { background: color-mix(in srgb, var(--c) 7%, #fff); box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--c) 30%, transparent); }
+  .fl-role { font-family: 'JetBrains Mono'; font-size: 9px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--c); margin-bottom: 7px; }
+  .fl-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .fl-chip { font-family: 'Plus Jakarta Sans'; font-size: 13px; font-weight: 600; color: #2C2640;
+    background: color-mix(in srgb, var(--c) 9%, #fff); border: 1px solid color-mix(in srgb, var(--c) 28%, transparent);
+    border-radius: 8px; padding: 5px 11px; }
+  .fl-chip--cur { background: color-mix(in srgb, var(--c) 16%, #fff); font-weight: 700; }
+  .fl-link { width: 2px; height: 16px; margin: 0 0 0 20px; background: #D2C9E6; position: relative; }
+  .fl-link::after { content: '▾'; position: absolute; bottom: -6px; left: -4px; color: #B0A6C8; font-size: 11px; line-height: 1; }
+
+  /* ── Rapport = document texte en blocs titrés (très peu de graphisme) ── */
+  .rap-doc { font-family: 'Plus Jakarta Sans'; }
+  .rap-sec { border-top: 1px solid #ECE7F4; padding-top: 15px; margin-top: 17px; }
+  .rap-h { font-family: 'JetBrains Mono'; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: #6B3FA0; font-weight: 700; margin-bottom: 9px; }
+  .rap-text { font-size: 14.5px; line-height: 1.72; color: #3A3450; }
+  .rap-text + .rap-text { margin-top: 10px; }
+  .rap-text strong { color: #1F1437; font-weight: 700; }
+  .rap-strong { font-family: 'Plus Jakarta Sans'; font-weight: 700; font-size: 15px; color: #1F1437; margin-bottom: 6px; }
+  .rap-row { display: flex; gap: 14px; padding: 6px 0; border-bottom: 1px solid #F3EFF8; font-size: 14px; }
+  .rap-row:last-child { border-bottom: none; }
+  .rap-k { color: #8A8499; min-width: 140px; flex-shrink: 0; }
+  .rap-v { color: #2C2640; font-weight: 500; }
+  .rap-list { margin: 2px 0 0; padding-left: 18px; }
+  .rap-list li { font-size: 14px; line-height: 1.6; color: #3A3450; margin-bottom: 4px; }
+  .rap-doc .rap-text a { color: #6B3FA0; text-decoration: none; border-bottom: 1px solid rgba(107,63,160,.28); }
+  .rap-doc .rap-text a:hover { color: #8B5FBF; border-bottom-color: #8B5FBF; }
+
   @media (max-width: 620px) {
     .fiche-card { padding: 24px 20px 26px; border-radius: 14px; }
     .fiche-title { font-size: 21px; }
     .fiche-grid { grid-template-columns: 1fr; }
+    .rap-grid { grid-template-columns: 1fr; gap: 18px; }
   }
 </style>
 </head>
@@ -1195,7 +1266,7 @@ function renderSynthese(){
       : 'Climat anti-France (contexte)';
     return `<div class="syn-row">
       <span class="syn-dot" style="background:${hc}"></span>
-      <span class="syn-pays">${escapeHtml(c.flag || '')} ${escapeHtml(c.name)}<small>${escapeHtml(c.subsidiary || '')}</small></span>
+      <span class="syn-pays">${escapeHtml(c.name)} ${escapeHtml(c.flag || '')}<small>${escapeHtml(c.subsidiary || '')}</small></span>
       <span class="syn-status" style="color:${hc}">${escapeHtml(c.castel_status_label || '')}</span>
       <span class="syn-cell syn-hide">${escapeHtml(incTxt)}</span>
       <span class="syn-proof" style="color:${pc};background:${pc}1A">${escapeHtml((c.proof || '').toUpperCase())}</span>
@@ -1336,7 +1407,7 @@ function attackRowHTML(p, withPays, compact){
   const num = /^[1-4]$/.test(String(key)) ? String(key) : '·';
   const dt = p.date ? fmtDate(new Date(p.date)) : '';
   const pm = paysMeta(p.cc);
-  const sub = withPays ? `${escapeHtml(dt)} · ${escapeHtml(pm.flag || '')} ${escapeHtml(pm.name)}` : escapeHtml(dt);
+  const sub = withPays ? `${escapeHtml(dt)} · ${escapeHtml(pm.name)} ${escapeHtml(pm.flag || '')}` : escapeHtml(dt);
   // compact : la phase est déjà portée par le sous-titre du groupe → simple puce colorée
   const lead = compact
     ? `<span class="atk-dot" style="background:${col}"></span>`
@@ -1388,7 +1459,7 @@ function renderDossierList(cc){
     body = order.map(g => {
       const pm = paysMeta(g);
       return `<div class="ds-grp">
-        <div class="ds-grp__h">${escapeHtml(pm.flag || '')} ${escapeHtml(pm.name)}<span class="n">${groups[g].length}</span></div>
+        <div class="ds-grp__h">${escapeHtml(pm.name)} ${escapeHtml(pm.flag || '')}<span class="n">${groups[g].length}</span></div>
         ${phaseSubgroupsHTML(groups[g])}
       </div>`;
     }).join('');
@@ -1396,7 +1467,7 @@ function renderDossierList(cc){
   }
 
   const total = dossierIncidents(cc).length;
-  const title = cc ? `${escapeHtml(paysMeta(cc).flag || '')} ${escapeHtml(paysMeta(cc).name)}` : 'Attaques recensées';
+  const title = cc ? `${escapeHtml(paysMeta(cc).name)} ${escapeHtml(paysMeta(cc).flag || '')}` : 'Attaques recensées';
   panel.innerHTML = `
     <div class="ds-listhead">
       <h3>${title} <span class="ct">${String(total).padStart(2, '0')}</span></h3>
@@ -1884,7 +1955,7 @@ function renderPaysPopup(c){
     ? `<div style="font-family:'JetBrains Mono';font-size:9px;color:#A19DB0;letter-spacing:.02em;margin-top:10px">Sources · ${c.sources.map(escapeHtml).join(' · ')}</div>` : '';
   return `
     <div style="max-height:60vh;overflow-y:auto;padding-right:2px">
-      <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:16px;color:#1F1437;letter-spacing:-0.012em;margin-bottom:2px">${escapeHtml(c.flag || '')} ${escapeHtml(c.name)}</div>
+      <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:16px;color:#1F1437;letter-spacing:-0.012em;margin-bottom:2px">${escapeHtml(c.name)} ${escapeHtml(c.flag || '')}</div>
       <div style="font-family:'JetBrains Mono';font-size:10px;color:#6B3FA0;letter-spacing:0.04em;margin-bottom:10px">${escapeHtml(c.region)} · ${escapeHtml(c.subsidiary || '')}</div>
       ${badge}
       <div style="font-size:11px;color:#6B6480;margin-top:9px">${escapeHtml(atteinteLabel)}${dots(c.castel_harm, hc)}<span style="font-size:10px;color:#8A8499;margin-left:6px">${escapeHtml(c.proof || '')}</span></div>
@@ -2197,7 +2268,7 @@ function renderPaysAttacksPopup(c, paysId){
   }).join('');
   const n = incs.length;
   return `<div style="padding-right:2px">
-    <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:16px;color:#1F1437;letter-spacing:-0.012em">${escapeHtml(c.flag || '')} ${escapeHtml(c.name)}</div>
+    <div style="font-family:'Plus Jakarta Sans';font-weight:600;font-size:16px;color:#1F1437;letter-spacing:-0.012em">${escapeHtml(c.name)} ${escapeHtml(c.flag || '')}</div>
     <div style="font-family:'JetBrains Mono';font-size:10px;color:#6B3FA0;letter-spacing:.04em;margin:2px 0 4px">${n} attaque${n > 1 ? 's' : ''} recensée${n > 1 ? 's' : ''}${c.subsidiary ? ' · ' + escapeHtml(c.subsidiary) : ''}</div>
     ${n ? `<div class="atk-list">${rows}</div>` : '<div style="font-size:12px;color:#8A8499;margin-top:6px">Aucun incident cartographié pour ce pays.</div>'}
     ${n ? `<button class="atk-allbtn" onclick="debOpenAttack('${paysId}','')">Voir tout le réseau du pays →</button>` : ''}
@@ -2273,12 +2344,212 @@ window.debOpenFiche = function(id){
   if (!p) return;
   if (activePopup) { activePopup.remove(); activePopup = null; }
   const m = ensureFicheModal();
-  m.querySelector('.fiche-content').innerHTML = ficheHTML(p);
+  m.querySelector('.fiche-content').innerHTML = (p.type === 'incident') ? rapportHTML(p) : ficheHTML(p);
   m.scrollTop = 0;
   m.querySelector('.fiche-card').scrollTop = 0;
   m.classList.add('is-open');
   document.body.classList.add('modal-open');
 };
+// ── Filière de l'attaque : l'appareil RÉEL par niveau de rôle ───────────────────
+// Détection des acteurs documentés (opérations + textes du pays). Aucun ajout inventé.
+const APPARATUS = [
+  { re: /Wagner/i,              label: 'Wagner',               tier: 'pmc' },
+  { re: /Africa Corps/i,        label: 'Africa Corps',         tier: 'pmc' },
+  { re: /African Initiative/i,  label: 'African Initiative',   tier: 'info' },
+  { re: /Portal Kombat/i,       label: 'Portal Kombat',        tier: 'info' },
+  { re: /Sputnik/i,             label: 'Sputnik Afrique',      tier: 'info' },
+  { re: /CGTN/i,                label: 'CGTN',                 tier: 'info' },
+  { re: /Xinhua/i,              label: 'Xinhua',               tier: 'info' },
+  { re: /Totem/i,               label: 'Réseau Totem',         tier: 'infra' },
+  { re: /BEARS/i,               label: 'Unité BEARS',          tier: 'infra' },
+  { re: /Africa Ti/i,           label: "Africa Ti L'Or (marque-proxy)", tier: 'infra' },
+  { re: /Sytyi/i,               label: 'D. Sytyi (façade)',    tier: 'infra' },
+  { re: /comptes coordonn/i,    label: 'Comptes coordonnés',   tier: 'infra' }
+];
+const TIER_META = {
+  etat:  { label: 'État commanditaire',     color: '#8E2A2A' },
+  pmc:   { label: 'Bras armé · PMC',        color: '#A8392B' },
+  info:  { label: 'Appareil informationnel', color: '#C8392B' },
+  infra: { label: 'Infrastructure & relais', color: '#D9663C' },
+  cible: { label: 'Cible Castel',           color: '#6B3FA0' }
+};
+function filiereData(p){
+  const pays = (state.data.pays || []).find(c => c.id === p.cc);
+  const { commanditaires, cibles } = attackActors(p);
+  const blob = (pays ? (pays.operations || '') : '') + ' ' + (pays && pays.incidents ? pays.incidents.map(i => i.txt || '').join(' ') : '');
+  const tiers = { etat: [], pmc: [], info: [], infra: [] };
+  commanditaires.forEach(a => tiers.etat.push(withFlag(a.compte_display || a.id)));
+  const seen = new Set();
+  APPARATUS.forEach(x => { if (x.re.test(blob) && !seen.has(x.label)) { tiers[x.tier].push(x.label); seen.add(x.label); } });
+  [...new Set((blob.match(/pravda-[a-z]+\.[a-z]+/gi) || []))].forEach(dm => tiers.infra.push(dm));
+  return { tiers, cibles };
+}
+function filiereHTML(p){
+  const { tiers, cibles } = filiereData(p);
+  const phaseKey = phaseOfNode(p), pcol = phaseColor(phaseKey);
+  const sp = phaseKey ? splitPhaseLabel((phaseDefOf(phaseKey) || {}).nom, phaseKey) : { name: '' };
+  const chips = (arr, color) => arr.map(t => `<span class="fl-chip" style="--c:${color}">${escapeHtml(t)}</span>`).join('');
+  const band = (label, color, inner, cur) => `<div class="fl-band${cur ? ' fl-band--cur' : ''}" style="--c:${color}"><div class="fl-role">${escapeHtml(label)}</div><div class="fl-chips">${inner}</div></div>`;
+  const link = '<div class="fl-link"></div>';
+  const parts = [];
+  if (tiers.etat.length)  parts.push(band(TIER_META.etat.label,  TIER_META.etat.color,  chips(tiers.etat,  TIER_META.etat.color)));
+  if (tiers.pmc.length)   parts.push(band(TIER_META.pmc.label,   TIER_META.pmc.color,   chips(tiers.pmc,   TIER_META.pmc.color)));
+  if (tiers.info.length)  parts.push(band(TIER_META.info.label,  TIER_META.info.color,  chips(tiers.info,  TIER_META.info.color)));
+  if (tiers.infra.length) parts.push(band(TIER_META.infra.label, TIER_META.infra.color, chips(tiers.infra, TIER_META.infra.color)));
+  parts.push(band('Attaque' + (sp.name ? ' · ' + sp.name : ''), pcol, `<span class="fl-chip fl-chip--cur" style="--c:${pcol}">${escapeHtml(ficheTitle(p))}</span>`, true));
+  const cibInner = (cibles.length ? chips(cibles.map(c => c.compte_display || c.id), '#6B3FA0') : '') + `<span class="fl-chip" style="--c:#2E1857">Groupe Castel</span>`;
+  parts.push(band(TIER_META.cible.label, '#6B3FA0', cibInner));
+  return `<div class="filiere">${parts.join(link)}</div>`;
+}
+
+// Mind map en grand (modale) — graphe d'acteurs façon Obsidian, à côté du bouton Rapport.
+window.debOpenMindmap = function(id){
+  const p = (state.data.publications || []).find(x => x.id === id);
+  if (!p) return;
+  if (activePopup) { activePopup.remove(); activePopup = null; }
+  const pays = (state.data.pays || []).find(c => c.id === p.cc);
+  const m = ensureFicheModal();
+  m.querySelector('.fiche-content').innerHTML = `
+    <div class="rap-doc">
+      <div class="fiche-kicker" style="color:#6B3FA0">Filière de l'attaque · ${escapeHtml((pays && pays.name) || '')}</div>
+      <h2 class="fiche-title">${escapeHtml(ficheTitle(p))}</h2>
+      <div class="fl-intro">De l'État commanditaire jusqu'à la cible Castel — acteurs réels documentés.</div>
+      ${filiereHTML(p)}
+    </div>`;
+  m.querySelector('.fiche-card').scrollTop = 0;
+  m.classList.add('is-open');
+  document.body.classList.add('modal-open');
+};
+// Titre court et net pour la fiche détail (jamais tronqué par « … ») : on prend
+// le « titre » avant le premier « : » / « — », sinon la 1re phrase.
+function ficheTitle(p){
+  let base = p.compte_display || p.id || '';
+  if (/…\s*$/.test(base)) base = (p.content_excerpt || '').replace(/^INC[-\s]?\d+\s*[—–-]\s*/i, '').trim();
+  let head = base.split(/\s[:—–]\s/)[0];
+  head = head.split(/(?<=\.)\s/)[0];
+  return head.replace(/\s*[.:]\s*$/, '');
+}
+// URLs d'articles connues (sinon recherche web). Sources OSINT → liens cliquables.
+const SOURCE_URLS = {
+  'Le Monde avr. 2026': 'https://www.lemonde.fr/afrique/article/2026/04/22/centrafrique-l-enquete-visant-le-groupe-castel-pour-complicite-de-crimes-contre-l-humanite-classee_6682418_3212.html',
+  'Africanews fév. 2026': 'https://www.africanews.com/2026/02/21/investigation-russian-spy-agency-takes-over-wagner-operations-in-africa/',
+  'AllAfrica mai 2026': 'https://fr.allafrica.com/stories/202605260355.html'
+};
+function sourceLink(label){
+  const url = SOURCE_URLS[label] || ('https://duckduckgo.com/?q=' + encodeURIComponent(label));
+  return `<a class="fiche-src" href="${url}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+}
+// Drapeau du pays commanditaire dans la chaîne de propagation (la nationalité de
+// l'acteur, pas le pays ciblé). « États du Golfe » = multi-États → sans drapeau.
+const ACTOR_FLAG = { 'Russie': '🇷🇺', 'Chine': '🇨🇳' };
+function withFlag(name){ return name + (ACTOR_FLAG[name] ? ' ' + ACTOR_FLAG[name] : ''); }
+const STATE_ACTORS = ['Russie', 'Chine', 'États du Golfe'];
+function phaseDefOf(key){ return (phasesDef() || []).find(x => String(x.n) === String(key)) || null; }
+
+// Acteurs reliés à une attaque : commanditaire(s) (acteur → incident) et cible(s)
+// Castel (incident → entité/marque/site).
+function attackActors(p){
+  const rels = state.data.relations || [];
+  const byId = Object.fromEntries((state.data.publications || []).map(x => [x.id, x]));
+  const commanditaires = [...new Map(rels
+    .filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'acteur')
+    .map(r => [byId[r.from].id, byId[r.from]])).values()];
+  const cibles = [...new Map(rels
+    .filter(r => r.from === p.id && (r.type === 'cible' || r.type === 'contexte') && byId[r.to] && ['entite', 'marque', 'site'].includes(byId[r.to].type))
+    .map(r => [byId[r.to].id, byId[r.to]])).values()];
+  return { commanditaires, cibles };
+}
+
+// Mind map FOCALISÉE sur l'attaque : Commanditaire → Attaque (phase) → Cible Castel → Groupe.
+// HTML/CSS (pas de SVG) pour rester net et responsive dans le panneau étroit.
+function mindmapHTML(p, big){
+  const { commanditaires, cibles } = attackActors(p);
+  const phaseKey = phaseOfNode(p);
+  const pcol = phaseColor(phaseKey);
+  const num = /^[1-4]$/.test(String(phaseKey)) ? String(phaseKey) : '·';
+  const sp = phaseKey ? splitPhaseLabel((phaseDefOf(phaseKey) || {}).nom, phaseKey) : { name: '' };
+  const nodeHTML = (role, inner, color) =>
+    `<div class="mm-node" style="--c:${color}"><div class="mm-role">${escapeHtml(role)}</div><div class="mm-name">${inner}</div></div>`;
+  const link = '<div class="mm-link"></div>';
+  const parts = [];
+  // 1) Commanditaire / source
+  if (commanditaires.length) {
+    const isState = commanditaires.some(a => STATE_ACTORS.includes(a.compte_display));
+    const names = commanditaires.map(a => escapeHtml(withFlag(a.compte_display || a.id))).join(' · ');
+    parts.push(nodeHTML(isState ? 'Commanditaire' : 'Source', names, '#8E2A2A'));
+  }
+  // 2) L'attaque
+  parts.push(nodeHTML('Attaque · ' + (sp.name || ('Phase ' + num)),
+    `<span class="mm-badge" style="background:${pcol}">${escapeHtml(num)}</span>${escapeHtml(ficheTitle(p))}`, pcol));
+  // 3) Cible Castel
+  if (cibles.length) parts.push(nodeHTML('Cible Castel', escapeHtml(cibles.map(c => c.compte_display || c.id).join(' · ')), '#6B3FA0'));
+  // 4) Groupe Castel
+  parts.push(nodeHTML('Groupe', 'Groupe Castel', '#2E1857'));
+  return `<div class="mindmap${big ? ' mindmap--big' : ''}">${parts.join(link)}</div>`;
+}
+
+// Texte LONG d'une attaque : pays.incidents[i].txt (riche, avec gras/liens), aligné
+// par index sur les incidents du pays. Fallback : la description courte.
+function richIncident(p){
+  const pays = (state.data.pays || []).find(c => c.id === p.cc);
+  if (!pays || !Array.isArray(pays.incidents)) return null;
+  const incs = (state.data.publications || []).filter(x => x.cc === p.cc && x.type === 'incident');
+  const idx = incs.findIndex(x => x.id === p.id);
+  return (idx >= 0 && idx < pays.incidents.length) ? pays.incidents[idx] : null;
+}
+
+// Rapport COMPLET (modale plein écran) : note rédigée — le fait (texte long), contexte
+// du pays, mode opératoire, narratifs, mind map, détails, sources. Donnée existante uniquement.
+function rapportHTML(p){
+  const pays = (state.data.pays || []).find(c => c.id === p.cc);
+  const date = p.date ? fmtDate(new Date(p.date)) : '';
+  const phaseKey = phaseOfNode(p);
+  const pdef = phaseDefOf(phaseKey);
+  const tags = [];
+  if (phaseKey) tags.push(phaseChipHTML(phaseKey));
+  if (p.niveau_preuve) {
+    const pc = { 'Confirmé': '#C8392B', 'Confirmé comme catégorie': '#C8392B', 'Probable': '#D69E2E', 'Indirect': '#8B5FBF' }[p.niveau_preuve] || '#8A8499';
+    tags.push(`<span class="fiche-tag fiche-preuve" style="color:${pc};background:${pc}14;border-color:${pc}40"><span class="dot" style="background:${pc}"></span>${escapeHtml(p.niveau_preuve)}</span>`);
+  }
+  const flagR = pays ? (pays.flag || '') : '';
+  const loc = [p.ville || '', pays ? (pays.name + (flagR ? ' ' + flagR : '')) : ''].filter(Boolean).join(' · ');
+  const metaLine = [date, loc].filter(Boolean).join('  ·  ');
+  const rowsArr = [];
+  if (p.plateforme) rowsArr.push(['Vecteur', p.plateforme]);
+  if (p.audience_estimee) rowsArr.push(['Audience estimée', Number(p.audience_estimee).toLocaleString('fr-FR')]);
+  if (p.lang) rowsArr.push(['Langue', String(p.lang).toUpperCase()]);
+  if (pays && pays.subsidiary) rowsArr.push(['Filiale Castel', pays.subsidiary]);
+  const grid = rowsArr.map(([k, v]) => `<div class="fiche-row"><div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(String(v))}</div></div>`).join('');
+  const sources = (pays && Array.isArray(pays.sources)) ? pays.sources : [];
+  const rich = richIncident(p);
+  const fait = (rich && rich.txt) ? rich.txt : (p.content_excerpt ? escapeHtml(p.content_excerpt) : '');
+  const { commanditaires, cibles } = attackActors(p);
+  const cmd = commanditaires.length ? commanditaires.map(a => escapeHtml(withFlag(a.compte_display || a.id))).join(', ') : '—';
+  const cib = cibles.length ? escapeHtml(cibles.map(c => c.compte_display || c.id).join(', ')) : '—';
+  const sp = phaseKey ? splitPhaseLabel((pdef || {}).nom, phaseKey) : { name: '', period: '' };
+  const rows = [['Commanditaire', cmd], ['Cible Castel', cib], ['Groupe', 'Groupe Castel'],
+    ['Phase', (sp.name || '—') + (sp.period ? ' · ' + sp.period : '')]];
+  rowsArr.forEach(r => rows.push(r));
+  const rowsHTML = rows.map(([k, v]) => `<div class="rap-row"><span class="rap-k">${escapeHtml(k)}</span><span class="rap-v">${v}</span></div>`).join('');
+  const narrList = (pays && Array.isArray(pays.narratives) && pays.narratives.length)
+    ? `<ul class="rap-list">${pays.narratives.map(n => `<li>${escapeHtml(n)}</li>`).join('')}</ul>` : '';
+  const sec = (title, inner) => inner ? `<div class="rap-sec"><div class="rap-h">${escapeHtml(title)}</div>${inner}</div>` : '';
+  return `
+    <div class="rap-doc">
+      <div class="fiche-kicker" style="color:#C94A4A">Rapport d'attaque · ${escapeHtml((pays && pays.name) || '')}</div>
+      <h2 class="fiche-title">${escapeHtml(ficheTitle(p))}</h2>
+      <div class="fiche-meta">${tags.join('')}</div>
+      ${metaLine ? `<div class="fiche-loc">${escapeHtml(metaLine)}</div>` : ''}
+      ${sec('Le fait', fait ? `<div class="rap-text">${fait}</div>` : '')}
+      ${pdef ? sec('Objectif de la phase', `${pdef.marqueur ? `<div class="rap-strong">${escapeHtml(pdef.marqueur)}</div>` : ''}${pdef.desc ? `<div class="rap-text">${escapeHtml(pdef.desc)}</div>` : ''}`) : ''}
+      ${pays && pays.context ? sec('Contexte', `<div class="rap-text">${escapeHtml(pays.context)}</div>`) : ''}
+      ${pays && pays.operations ? sec('Mode opératoire de la campagne', `<div class="rap-text">${escapeHtml(pays.operations)}</div>`) : ''}
+      ${sec('Narratifs exploités', narrList)}
+      ${sec('Acteurs & cible', rowsHTML)}
+      ${sources.length ? sec('Sources OSINT', `<div class="rap-text fiche-sources">${sources.map(sourceLink).join(' · ')}</div>`) : ''}
+    </div>
+  `;
+}
 function ficheHTML(p){
   const rels = state.data.relations || [];
   const byId = Object.fromEntries((state.data.publications || []).map(x => [x.id, x]));
@@ -2294,13 +2565,13 @@ function ficheHTML(p){
     const src = [...new Set(rels.filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'acteur').map(r => nm(r.from)))];
     const cib = [...new Set(rels.filter(r => r.from === p.id && r.type === 'cible').map(r => nm(r.to)))];
     const parts = [];
-    if (src.length) parts.push(node(src.join(', ')));
-    parts.push(node(p.compte_display || p.id, phaseColor(phaseKey) + '26'));
+    if (src.length) parts.push(node(src.map(withFlag).join(', ')));
+    parts.push(node(ficheTitle(p), phaseColor(phaseKey) + '26'));
     if (cib.length) parts.push(node(cib.join(', ')));
     flow = parts.join('<span class="arr">▶</span>');
   } else if (p.type === 'acteur') {
     const incs = rels.filter(r => r.from === p.id && r.type === 'cible' && byId[r.to] && byId[r.to].type === 'incident');
-    flow = node(p.compte_display || p.id) + (incs.length ? `<span class="arr">▶</span>` + node(incs.length + ' incident' + (incs.length > 1 ? 's' : '') + ' propagé' + (incs.length > 1 ? 's' : '')) : '');
+    flow = node(withFlag(p.compte_display || p.id)) + (incs.length ? `<span class="arr">▶</span>` + node(incs.length + ' incident' + (incs.length > 1 ? 's' : '') + ' propagé' + (incs.length > 1 ? 's' : '')) : '');
   } else {
     const hits = [...new Set(rels.filter(r => r.to === p.id && r.type === 'cible' && byId[r.from] && byId[r.from].type === 'incident').map(r => nm(r.from)))];
     flow = (hits.length ? node(hits.join(', ')) + '<span class="arr">▶</span>' : '') + node(p.compte_display || p.id);
@@ -2324,16 +2595,16 @@ function ficheHTML(p){
   const sources = (pays && Array.isArray(pays.sources)) ? pays.sources : [];
   return `
     <div class="fiche-kicker" style="color:${kcol}">${escapeHtml(TYPELABEL[p.type] || p.type)}</div>
-    <h2 class="fiche-title">${escapeHtml(atkTitle(p))}</h2>
+    <h2 class="fiche-title">${escapeHtml(ficheTitle(p))}</h2>
     ${tags.length ? `<div class="fiche-meta">${tags.join('')}</div>` : ''}
     ${metaLine ? `<div class="fiche-loc">${escapeHtml(metaLine)}</div>` : ''}
-    <div class="fiche-section fiche-section--first">
-      <div class="fiche-h">Chaîne de propagation</div>
-      <div class="fiche-flow">${flow}</div>
-    </div>
-    ${p.content_excerpt ? `<div class="fiche-section"><div class="fiche-h">Description</div><div class="fiche-body">${escapeHtml(p.content_excerpt)}</div></div>` : ''}
+    ${p.content_excerpt ? `<div class="fiche-section fiche-section--first"><div class="fiche-h">Description</div><div class="fiche-body">${escapeHtml(p.content_excerpt)}</div></div>` : ''}
     ${grid ? `<div class="fiche-section"><div class="fiche-h">Détails</div><div class="fiche-grid">${grid}</div></div>` : ''}
-    ${sources.length ? `<div class="fiche-section"><div class="fiche-h">Sources OSINT</div><div class="fiche-body" style="font-size:12.5px;color:#6B6480">${sources.map(escapeHtml).join(' · ')}</div></div>` : ''}
+    ${sources.length ? `<div class="fiche-section"><div class="fiche-h">Sources OSINT</div><div class="fiche-body fiche-sources">${sources.map(sourceLink).join(' · ')}</div></div>` : ''}
+    ${p.type === 'incident' ? `<div class="rap-actions">
+      <button class="rap-btn" onclick="debOpenFiche('${p.id}')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 1.5h5L13 5v9.5H4z"/><path d="M9 1.5V5h4M6 8h5M6 11h5"/></svg>Rapport complet</button>
+      <button class="rap-btn rap-btn--alt" onclick="debOpenMindmap('${p.id}')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="3.2" r="2"/><circle cx="3.2" cy="12.8" r="2"/><circle cx="12.8" cy="12.8" r="2"/><path d="M8 5.2v2.8M8 8 4.4 11.2M8 8l3.6 3.2"/></svg>Filière</button>
+    </div>` : ''}
   `;
 }
 
