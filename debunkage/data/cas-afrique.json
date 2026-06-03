@@ -631,7 +631,7 @@
       "lat": 0.385,
       "lon": 9.5,
       "audience_estimee": 13000,
-      "content_excerpt": "INC-004 — Fin du partenariat historique Castel/SOBRAGA – The Coca-Cola Company (mai-juin 2022). Contexte de fragilisation narrative (NAR-004, probable).",
+      "content_excerpt": "Rupture du partenariat Castel/SOBRAGA–Coca-Cola (mai-juin 2022). Exploitée pour accréditer un déclin du groupe.",
       "cc": "gab"
     },
     {
@@ -649,7 +649,7 @@
       "lat": 0.415,
       "lon": 9.472,
       "audience_estimee": 17000,
-      "content_excerpt": "INC-001 — Rumeur (réseaux sociaux + certains médias) d'arrêt/cession de l'activité eau minérale. Démenti officiel SOBRAGA (NAR-001, confirmé).",
+      "content_excerpt": "Fausse rumeur d'arrêt/cession de l'activité eau minérale (réseaux + médias). Démentie par SOBRAGA.",
       "cc": "gab"
     },
     {
@@ -667,7 +667,7 @@
       "lat": 0.295,
       "lon": 9.505,
       "audience_estimee": 15000,
-      "content_excerpt": "INC-002 — Interruption ferroviaire (Transgabonais) → risque de rupture de stock Andza à Libreville. Forte sensibilité narrative (NAR-002, confirmé).",
+      "content_excerpt": "Transgabonais interrompu → menace d'approvisionnement Andza à Libreville. Fort potentiel de récupération hostile.",
       "cc": "gab"
     },
     {
@@ -685,7 +685,7 @@
       "lat": 0.425,
       "lon": 9.48,
       "audience_estimee": 14000,
-      "content_excerpt": "INC-003 — Offres d'emploi frauduleuses au nom de SOBRAGA (2024-2025). Alertes publiques de la société (NAR-003, confirmé).",
+      "content_excerpt": "Fausses offres d'emploi au nom de SOBRAGA (2024-2025). Société contrainte d'alerter publiquement.",
       "cc": "gab"
     },
     {
@@ -703,7 +703,7 @@
       "lat": 0.44,
       "lon": 9.43,
       "audience_estimee": 12000,
-      "content_excerpt": "INC-005 — Mesure des autorités gabonaises (fév. 2026), motivée notamment par la lutte contre les fake news. Impact sur la contre-communication corporate.",
+      "content_excerpt": "Réseaux sociaux suspendus par les autorités (fév. 2026) au nom de la lutte anti-fake news. Bride la contre-communication du groupe.",
       "cc": "gab"
     },
     {
@@ -815,7 +815,7 @@
       "lon": 18.5674,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "SUCAF RCA maintient des arrangements sécuritaires avec l'UPC (milice). The Sentry documente des paiements indirects pour la protection des installations sucrières."
+      "content_excerpt": "SUCAF RCA → arrangements sécuritaires avec la milice UPC. Paiements indirects pour protéger les sucreries (The Sentry)."
     },
     {
       "id": "rca_inc_1",
@@ -833,7 +833,7 @@
       "lon": 18.62,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "The Sentry publie \"Cultivating Atrocities\" — rapport accusant Castel/SUCAF de financement indirect de l'UPC. Ce rapport deviendra le socle narratif de la campagne Wagner."
+      "content_excerpt": "Rapport « Cultivating Atrocities » (The Sentry) : Castel/SUCAF accusé de financer indirectement l'UPC. Devient le socle narratif de la campagne Wagner."
     },
     {
       "id": "rca_inc_2",
@@ -851,7 +851,7 @@
       "lon": 21.9914,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "PNAT ouvre une enquête préliminaire pour complicité de crimes contre l'humanité contre la filiale centrafricaine de Castel."
+      "content_excerpt": "PNAT → enquête préliminaire pour complicité de crimes contre l'humanité visant la filiale centrafricaine."
     },
     {
       "id": "rca_inc_3",
@@ -869,7 +869,7 @@
       "lon": 18.6436,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Wagner inaugure sa brasserie au nord de Bangui (~$25–35M d'investissement). Marque : Africa Ti L'Or / \"Bière Russe\". Propriétaire de façade : Dmitri Sytyi, attaché culturel russe et opérateur Wagner."
+      "content_excerpt": "Brasserie concurrente Wagner au nord de Bangui (25–35 M$). Marque Africa Ti L'Or (« Bière Russe »). Façade : D. Sytyi, opérateur Wagner."
     },
     {
       "id": "rca_inc_4",
@@ -887,7 +887,7 @@
       "lon": 18.5682,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Campagne FIMI : réseau de comptes coordonnés diffuse simultanément \"Castel soutient le terrorisme\". Flyers avec Kalachnikov chargée de bouteilles MOCAF : \"Chaque bouteille achetée est une balle dans le fusil des bandits.\""
+      "content_excerpt": "Campagne FIMI coordonnée : « Castel soutient le terrorisme ». Tracts kalachnikov-bouteilles MOCAF : « chaque bouteille = une balle pour les bandits »."
     },
     {
       "id": "rca_inc_5",
@@ -905,7 +905,7 @@
       "lon": 18.3854,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Distribution forcée d'Africa Ti L'Or dans les bars de Bangui par des livreurs à tricycle motorisé armés. Pression physique sur les commerçants."
+      "content_excerpt": "Distribution forcée d'Africa Ti L'Or dans les bars de Bangui par livreurs armés. Pression physique sur les commerçants."
     },
     {
       "id": "rca_inc_6",
@@ -923,7 +923,7 @@
       "lon": 18.601,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Incendie de la brasserie MOCAF (nuit du 5-6 mars 2023) : hommes en tenue type Wagner lançant des cocktails Molotov. Escalade physique de la campagne anti-Castel."
+      "content_excerpt": "Incendie de la brasserie MOCAF (nuit du 5-6 mars 2023) : cocktails Molotov, hommes en tenue type Wagner. Passage à la violence physique."
     },
     {
       "id": "rca_inc_7",
@@ -941,7 +941,7 @@
       "lon": 18.558,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Manifestations orchestrées : protestataires déversant des bouteilles MOCAF, slogans « Castel = terrorisme ». Mobilisation coordonnée avec les tracts."
+      "content_excerpt": "Manifestations orchestrées : bouteilles MOCAF déversées, slogans « Castel = terrorisme ». Coordonnées avec les tracts."
     },
     {
       "id": "rca_inc_8",
@@ -959,7 +959,7 @@
       "lon": 18.512,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "VIGINUM/SGDSN documente pravda-cf.com (réseau Portal Kombat) ciblant la RCA. Infrastructure de désinformation pérenne."
+      "content_excerpt": "pravda-cf.com (réseau Portal Kombat) ciblant la RCA, documenté par VIGINUM/SGDSN. Infrastructure de désinformation pérenne."
     },
     {
       "id": "rca_inc_9",
@@ -977,7 +977,7 @@
       "lon": 18.563,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "PNAT classe sans suite l'enquête contre Castel — infractions « insuffisamment caractérisées ». Les avocats relèvent une « cible idéale » pour Wagner (Le Monde, 22.04.2026)."
+      "content_excerpt": "PNAT classe l'enquête sans suite — infractions « insuffisamment caractérisées ». Castel décrit en « cible idéale » de Wagner (Le Monde, 22.04.26)."
     },
     {
       "id": "rca_inc_10",
@@ -995,7 +995,7 @@
       "lon": 18.534,
       "audience_estimee": 0,
       "r": 3.8,
-      "content_excerpt": "Fuite « Africa Politology » (~1 500 pages, authentifiées par Forbidden Stories / All Eyes On Wagner / iStories) : méthodologie FIMI de l'appareil ayant porté la campagne anti-Castel (Africanews, 21.02.2026)."
+      "content_excerpt": "Fuite « Africa Politology » (~1 500 pages, authentifiées Forbidden Stories / iStories) → méthodologie FIMI de l'appareil anti-Castel (Africanews, 21.02.26)."
     },
     {
       "id": "rca_inc_11",
@@ -1013,7 +1013,7 @@
       "lon": 25.1361,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Instrumentalisation de l'humanitaire J. Figueira (FHI 360), enlevé à Zemio en mai 2024, libéré vers Lisbonne le 8 avr. 2026 — présenté en « espion » par le même appareil Wagner que celui visant Castel (AllAfrica, 26.05.2026)."
+      "content_excerpt": "Humanitaire J. Figueira (FHI 360 ; enlevé à Zemio 2024, libéré avr. 2026) présenté en « espion » par l'appareil Wagner visant Castel (AllAfrica, 26.05.26)."
     },
     {
       "id": "mali_filiale",
@@ -1067,7 +1067,7 @@
       "lon": -7.9935,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Meta supprime le réseau Totem — 500+ faux comptes Facebook coordonnés liés à Wagner ciblant le Mali."
+      "content_excerpt": "Meta démantèle le réseau Totem : 500+ faux comptes Facebook liés à Wagner ciblant le Mali."
     },
     {
       "id": "mali_inc_1",
@@ -1085,7 +1085,7 @@
       "lon": -7.9156,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Wagner consolide sa présence à Bamako. Victoire de Kidal (fin 2023) exploitée comme argument de légitimité."
+      "content_excerpt": "Wagner consolide sa présence à Bamako. Prise de Kidal (fin 2023) exploitée comme preuve de légitimité."
     },
     {
       "id": "mali_inc_2",
@@ -1103,7 +1103,7 @@
       "lon": 1.4078,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Expulsion forces françaises et MINUSMA. Narratifs FIMI en soutien aux décisions de la junte."
+      "content_excerpt": "Expulsion des forces françaises et de la MINUSMA. FIMI en appui des décisions de la junte."
     },
     {
       "id": "mali_inc_3",
@@ -1121,7 +1121,7 @@
       "lon": -8.1795,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Africa Corps remplace Wagner formellement. Base élargie aéroport international Bamako."
+      "content_excerpt": "Africa Corps remplace formellement Wagner. Emprise élargie à l'aéroport international de Bamako."
     },
     {
       "id": "bfa_filiale",
@@ -1175,7 +1175,7 @@
       "lon": -1.5103,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Coup d'État du capitaine Traoré. Narratifs FIMI amplifient : \"La France a soutenu l'ancien régime.\""
+      "content_excerpt": "Coup d'État du capitaine Traoré. FIMI martèle « la France soutenait l'ancien régime »."
     },
     {
       "id": "bfa_inc_1",
@@ -1193,7 +1193,7 @@
       "lon": -1.4325,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "100 soldats Africa Corps arrivent à Ouagadougou + unité BEARS (81e brigade spetsnaz)."
+      "content_excerpt": "Arrivée de 100 soldats Africa Corps à Ouagadougou + unité BEARS (81e brigade Spetsnaz)."
     },
     {
       "id": "bfa_inc_2",
@@ -1211,7 +1211,7 @@
       "lon": -1.6296,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "pravda-bf.com créé (Portal Kombat) — Telegram + VK associés, IP russe."
+      "content_excerpt": "Création de pravda-bf.com (Portal Kombat) — Telegram + VK associés, IP russe."
     },
     {
       "id": "bfa_inc_3",
@@ -1229,7 +1229,7 @@
       "lon": -1.6961,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "African Initiative maintient un bureau actif et forme des journalistes locaux (EEAS 2025)."
+      "content_excerpt": "African Initiative : bureau actif, formation de journalistes locaux (EEAS 2025)."
     },
     {
       "id": "niger_filiale",
@@ -1283,7 +1283,7 @@
       "lon": 2.1222,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Coup d'État général Tchiani. Infographies FIMI : \"Le Niger reprend son uranium à la France.\""
+      "content_excerpt": "Coup d'État du général Tchiani. Infographies FIMI : « le Niger reprend son uranium à la France »."
     },
     {
       "id": "niger_inc_1",
@@ -1301,7 +1301,7 @@
       "lon": 7.9904,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Expulsion forces françaises. Amplification massive sur TG/FB."
+      "content_excerpt": "Expulsion des forces françaises. Amplification massive sur Telegram/Facebook."
     },
     {
       "id": "niger_inc_2",
@@ -1319,7 +1319,7 @@
       "lon": 2.2004,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Africa Corps arrive officiellement à Niamey (missions formation et équipement)."
+      "content_excerpt": "Africa Corps officiellement à Niamey (formation et équipement)."
     },
     {
       "id": "niger_inc_3",
@@ -1337,7 +1337,7 @@
       "lon": 1.9356,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "pravda-ne.com (Portal Kombat) créé avec Telegram associé."
+      "content_excerpt": "Création de pravda-ne.com (Portal Kombat), Telegram associé."
     },
     {
       "id": "cam_filiale",
@@ -1409,7 +1409,7 @@
       "lon": 11.5021,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Crise anglophone amplifiée par canaux russes pour fragiliser l'axe Paris-Yaoundé."
+      "content_excerpt": "Crise anglophone amplifiée par les canaux russes → fragilisation de l'axe Paris-Yaoundé."
     },
     {
       "id": "cam_inc_1",
@@ -1427,7 +1427,7 @@
       "lon": 11.4504,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "CGTN intensifie sa présence éditoriale au Cameroun, narratif investissement chinois."
+      "content_excerpt": "CGTN intensifie sa présence éditoriale au Cameroun — narratif pro-investissement chinois."
     },
     {
       "id": "civ_filiale",
@@ -1481,7 +1481,7 @@
       "lon": -3.9991,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Présidentielle 2020 : faux articles attribuant à des médias ivoiriens des contenus pro-Kremlin."
+      "content_excerpt": "Présidentielle 2020 : faux articles prêtant à des médias ivoiriens des contenus pro-Kremlin."
     },
     {
       "id": "civ_inc_1",
@@ -1499,7 +1499,7 @@
       "lon": -5.2767,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Tension CEDEAO/AES exploitée pour amplifier sentiment anti-France en Côte d'Ivoire."
+      "content_excerpt": "Tensions CEDEAO/AES exploitées → amplification du sentiment anti-France en Côte d'Ivoire."
     },
     {
       "id": "sen_filiale",
@@ -1553,7 +1553,7 @@
       "lon": -17.4582,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Crise Sonko/Faye : canaux pro-Kremlin amplifient les narratifs \"France manipule la justice sénégalaise.\""
+      "content_excerpt": "Crise Sonko/Faye : canaux pro-Kremlin diffusent « la France manipule la justice sénégalaise »."
     },
     {
       "id": "sen_inc_1",
@@ -1571,7 +1571,7 @@
       "lon": -17.3796,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Retrait France de la base militaire de Dakar. FIMI dans la couverture."
+      "content_excerpt": "Retrait français de la base de Dakar. Présence FIMI dans la couverture."
     },
     {
       "id": "tcad_filiale",
@@ -1625,7 +1625,7 @@
       "lon": 15.0651,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Mort d'Idriss Déby : narratifs russes : \"La France savait et n'a pas prévenu.\" Amplifiés sur FB/TG."
+      "content_excerpt": "Mort d'Idriss Déby : narratif russe « la France savait et n'a pas prévenu », amplifié sur Facebook/Telegram."
     },
     {
       "id": "tcad_inc_1",
@@ -1643,7 +1643,7 @@
       "lon": 16.0876,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Pression pour rapprochement avec AES. FIMI amplifie dissidents anti-Déby fils."
+      "content_excerpt": "Pression pour un rapprochement avec l'AES. FIMI amplifie les dissidents anti-Déby fils."
     },
     {
       "id": "guin_filiale",
@@ -1697,7 +1697,7 @@
       "lon": -13.5691,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Coup Doumbouya : canaux pro-Kremlin encensent la junte comme \"patriote contre la francophonie.\""
+      "content_excerpt": "Coup d'État Doumbouya : canaux pro-Kremlin érigent la junte en « patriote contre la francophonie »."
     },
     {
       "id": "guin_inc_1",
@@ -1715,7 +1715,7 @@
       "lon": -13.492,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Consolidation narrative anti-France sur FB/TG en Conakry."
+      "content_excerpt": "Consolidation du narratif anti-France sur Facebook/Telegram à Conakry."
     },
     {
       "id": "cog_filiale",
@@ -1787,7 +1787,7 @@
       "lon": 15.3283,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "CGTN développe couverture positive projets infrastructure chinois au Congo."
+      "content_excerpt": "CGTN développe une couverture favorable aux projets d'infrastructure chinois au Congo."
     },
     {
       "id": "tgo_filiale",
@@ -1877,7 +1877,7 @@
       "lon": -7.9811,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Tensions diplomatiques France-Maroc (Marrakech séisme, visas). Canaux du Golfe amplifient narratifs anti-France."
+      "content_excerpt": "Tensions diplomatiques France-Maroc (séisme de Marrakech, visas). Canaux du Golfe amplifient l'anti-France."
     },
     {
       "id": "mar_inc_1",
@@ -1895,7 +1895,7 @@
       "lon": -6.8416,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Campagnes sur YT/FB islamiques ciblant production d'alcool au Maroc."
+      "content_excerpt": "Campagnes islamiques sur YouTube/Facebook visant la production d'alcool au Maroc."
     },
     {
       "id": "dza_filiale",
@@ -1967,7 +1967,7 @@
       "lon": 3.1651,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Crises récurrentes France-Algérie (mémoire coloniale, visas) systématiquement amplifiées par canaux russes et du Golfe."
+      "content_excerpt": "Crises récurrentes France-Algérie (mémoire coloniale, visas), systématiquement amplifiées par canaux russes et du Golfe."
     },
     {
       "id": "eth_filiale",
@@ -2021,7 +2021,7 @@
       "lon": 38.7562,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Conflit Tigré : CGTN/Xinhua diffuse la position d'Addis, contrant les narratifs occidentaux de \"crimes de guerre.\""
+      "content_excerpt": "Conflit du Tigré : CGTN/Xinhua relaient la position d'Addis-Abeba, contrant les accusations occidentales de « crimes de guerre »."
     },
     {
       "id": "mad_filiale",
@@ -2075,7 +2075,7 @@
       "lon": 47.5176,
       "audience_estimee": 0,
       "r": 3.4,
-      "content_excerpt": "Sputnik Afrique amplifie tensions Paris-Antananarivo lors des cycles électoraux."
+      "content_excerpt": "Sputnik Afrique amplifie les tensions Paris-Antananarivo pendant les cycles électoraux."
     }
   ],
   "patient_zero": "e_sobraga",
