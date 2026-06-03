@@ -309,6 +309,7 @@
   .lg-sub { font-size: 11px; color: #6E6880; line-height: 1.4; margin: -4px 0 11px; max-width: 232px; }
   .lg-row.lg-row2 { align-items: flex-start; padding: 3px 0; }
   .lg-row.lg-row2 .sw { margin-top: 3px; }
+  .lg-pic { width: 27px; height: 27px; flex-shrink: 0; margin-top: 0; }
   .lg-row .lg-txt { display: flex; flex-direction: column; line-height: 1.25; }
   .lg-row .lg-gloss { color: #8A8499; font-size: 10px; font-weight: 400; margin-top: 1px; }
 
@@ -1327,14 +1328,15 @@ function applyLegende(){
   // (continentale vs détail), pilotée par le zoom — la légende reste courte et lisible.
   let cont = '';
   if (state.data.pays && state.data.pays.length) {
+    const lgPic = (k, txt) => `<div class="lg-row lg-row2"><img class="lg-pic" width="22" height="22" alt="" src="${pictoDataURL(k)}"><span class="lg-txt">${txt}</span></div>`;
     cont = '<div class="lg-sec" data-sec="continental">'
       + '<div class="lg-head">Gravité de l\'atteinte</div>'
-      + '<div class="lg-row lg-row2"><span class="sw" style="background:#C8392B"></span><span class="lg-txt">Castel visé directement</span></div>'
-      + '<div class="lg-row lg-row2"><span class="sw" style="background:#E0652C"></span><span class="lg-txt">Castel touché</span></div>'
-      + '<div class="lg-row lg-row2"><span class="sw" style="background:#D69E2E"></span><span class="lg-txt">Secteur boissons ciblé</span></div>'
-      + '<div class="lg-row lg-row2"><span class="sw" style="background:#8B5FBF"></span><span class="lg-txt">Climat hostile</span></div>'
-      + '<div class="lg-row lg-row2"><span class="sw" style="background:#B9AFC9"></span><span class="lg-txt">Exposition diffuse</span></div>'
-      + '<div class="lg-foot">Le chiffre = nombre d\'incidents.<br>Cliquez un pays pour voir ses flux par phase.</div>'
+      + lgPic('5', 'Castel visé directement')
+      + lgPic('4', 'Castel touché')
+      + lgPic('3', 'Secteur boissons ciblé')
+      + lgPic('2', 'Climat hostile')
+      + lgPic('1', 'Exposition diffuse')
+      + '<div class="lg-foot">Cliquez un pays pour voir ses flux par phase.</div>'
       + '</div>';
   }
   // Deux blocs : (1) la NATURE du flux = la forme (pointe ▶ = attaque structurelle,
@@ -1959,6 +1961,31 @@ const ACTOR_LABEL = { RU: 'Russie', CN: 'Chine', GCC: 'États du Golfe' };
 // Couleur des pays par NIVEAU D'ATTEINTE AU GROUPE CASTEL (pas l'intensité FIMI brute).
 // 5 levier confirmé · 4 incidents réels · 3 ciblage sectoriel · 2 atteinte indirecte forte · 1 atteinte indirecte
 const CASTEL_HARM_COLOR = ['match', ['get', 'harm'], 5, '#C8392B', 4, '#E0652C', 3, '#D69E2E', 2, '#8B5FBF', '#B9AFC9'];
+const PAYS_NEUTRAL = '#6B4E9E';
+// Pictogrammes de gravité (badge blanc + icône violette, style épuré) :
+// 5=cible · 4=croix de visée · 3=bouteille · 2=éclair · 1=ondes.
+const PICTO_DRAW = {
+  5: x => { x.beginPath(); x.arc(0, 0, 10.5, 0, 7); x.stroke(); x.beginPath(); x.arc(0, 0, 6, 0, 7); x.stroke(); x.beginPath(); x.arc(0, 0, 2, 0, 7); x.fill(); },
+  4: x => { for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; x.beginPath(); x.moveTo(Math.cos(a) * 4.5, Math.sin(a) * 4.5); x.lineTo(Math.cos(a) * 12.5, Math.sin(a) * 12.5); x.stroke(); } x.beginPath(); x.arc(0, 0, 2.6, 0, 7); x.fill(); },
+  3: x => { x.beginPath(); x.moveTo(-2.6, -13); x.lineTo(-2.6, -8.4); x.quadraticCurveTo(-6.4, -6, -6.4, -1); x.lineTo(-6.4, 10); x.quadraticCurveTo(-6.4, 13, -3.4, 13); x.lineTo(3.4, 13); x.quadraticCurveTo(6.4, 13, 6.4, 10); x.lineTo(6.4, -1); x.quadraticCurveTo(6.4, -6, 2.6, -8.4); x.lineTo(2.6, -13); x.stroke(); x.beginPath(); x.moveTo(-2.6, -13); x.lineTo(2.6, -13); x.stroke(); x.beginPath(); x.moveTo(-6.4, 0.5); x.lineTo(6.4, 0.5); x.stroke(); },
+  2: x => { x.beginPath(); x.moveTo(2.5, -13); x.lineTo(-6, 2.5); x.lineTo(-0.5, 2.5); x.lineTo(-2.5, 13); x.lineTo(7, -3); x.lineTo(1.5, -3); x.closePath(); x.fill(); },
+  1: x => { [5, 9.5, 13.5].forEach(r => { x.beginPath(); x.arc(0, 5, r, Math.PI * 1.22, Math.PI * 1.78); x.stroke(); }); x.beginPath(); x.arc(0, 5, 1.7, 0, 7); x.fill(); }
+};
+// Pas de couleur (réservée aux phases) : badge neutre sombre + icône blanche.
+// La dissociation des catégories se fait UNIQUEMENT par la forme.
+function drawPictoBadge(x, k){
+  // Dégradé violet → bleu (--violet-grad du site : titres + logo).
+  const grad = x.createLinearGradient(-13, -15, 13, 15);
+  grad.addColorStop(0, '#6B3FA0'); grad.addColorStop(0.48, '#5650C6'); grad.addColorStop(1, '#2E84D4');
+  x.save(); x.shadowColor = 'rgba(18,10,36,0.42)'; x.shadowBlur = 5; x.shadowOffsetY = 1.5;
+  x.beginPath(); x.arc(0, 0, 18, 0, 7); x.fillStyle = grad; x.fill(); x.restore();
+  x.beginPath(); x.arc(0, 0, 18, 0, 7); x.lineWidth = 2; x.strokeStyle = '#FFFFFF'; x.stroke();
+  x.strokeStyle = '#FFFFFF'; x.fillStyle = '#FFFFFF'; x.lineWidth = 2.4; x.lineCap = 'round'; x.lineJoin = 'round';
+  PICTO_DRAW[k](x);
+}
+function pictoImage(k){ const S = 48, c = document.createElement('canvas'); c.width = S; c.height = S; const x = c.getContext('2d'); x.translate(S / 2, S / 2); drawPictoBadge(x, k); return x.getImageData(0, 0, S, S); }
+function pictoDataURL(k){ const S = 48, c = document.createElement('canvas'); c.width = S; c.height = S; const x = c.getContext('2d'); x.translate(S / 2, S / 2); drawPictoBadge(x, k); return c.toDataURL(); }
+function ensurePictos(){ Object.keys(PICTO_DRAW).forEach(k => { const n = 'picto' + k; if (!map.hasImage(n)) map.addImage(n, pictoImage(k), { pixelRatio: 2.4 }); }); }
 
 function buildPaysFeatures(){
   const arr = state.data.pays || [];
@@ -2120,35 +2147,20 @@ function addLayers(){
   // Cappé à zoom 7 : au-delà on est dans un pays, on laisse place au réseau d'incidents.
   if (state.data.pays && state.data.pays.length) {
     map.addSource('pays', { type: 'geojson', data: buildPaysFeatures() });
-    map.addLayer({ id: 'pays-glow', type: 'circle', source: 'pays', maxzoom: 7,
-      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 32, 4, 28, 3, 25, 2, 22, 19],
-        'circle-color': CASTEL_HARM_COLOR, 'circle-opacity': 0.12, 'circle-blur': 0.6 } });
-    // Anneau de SURVOL (piloté par filtre) : halo coloré qui apparaît sous la pastille
-    // au passage de la souris → ressenti réactif sans repaint permanent.
+    ensurePictos();
+    // Anneau de SURVOL (piloté par filtre) autour du pictogramme.
     map.addLayer({ id: 'pays-hover', type: 'circle', source: 'pays', maxzoom: 7,
       filter: ['==', ['get', 'id'], '__none__'],
-      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 27, 4, 25, 3, 23, 2, 21, 19],
-        'circle-color': 'transparent', 'circle-stroke-color': CASTEL_HARM_COLOR,
-        'circle-stroke-width': 2.5, 'circle-stroke-opacity': 0.55 } });
-    map.addLayer({ id: 'pays-fill', type: 'circle', source: 'pays', maxzoom: 7,
-      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 19, 4, 17, 3, 15, 2, 13, 11],
-        'circle-color': CASTEL_HARM_COLOR, 'circle-opacity': 0.92, 'circle-stroke-color': '#FFFFFF', 'circle-stroke-width': 2 } });
-    map.addLayer({ id: 'pays-lever', type: 'circle', source: 'pays', maxzoom: 7,
-      filter: ['==', ['get', 'direct_n'], 1],
-      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 24, 4, 22, 20], 'circle-color': 'transparent', 'circle-stroke-color': '#C8392B', 'circle-stroke-width': 1.8, 'circle-stroke-opacity': 0.85 } });
+      paint: { 'circle-radius': 17, 'circle-color': 'transparent', 'circle-stroke-color': '#6B3FA0', 'circle-stroke-width': 2.5, 'circle-stroke-opacity': 0.6 } });
     map.addLayer({ id: 'pays-label', type: 'symbol', source: 'pays', maxzoom: 6.5,
       layout: { 'text-field': ['get', 'name'], 'text-size': 11.5, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
-        'text-offset': [0, 2.1], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-optional': true },
+        'text-offset': [0, 2.4], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-optional': true },
       paint: { 'text-color': '#3A3450', 'text-halo-color': '#FFFFFF', 'text-halo-width': 1.4 } });
-    // Compteur d'incidents : chiffre blanc centré dans le point pays (n'apparaît que si ≥ 1).
-    map.addLayer({ id: 'pays-count', type: 'symbol', source: 'pays', maxzoom: 7,
-      filter: ['>=', ['get', 'incidents'], 1],
-      layout: {
-        'text-field': ['to-string', ['get', 'incidents']],
-        'text-size': ['match', ['get', 'harm'], 5, 17, 4, 16, 3, 15, 2, 14, 13],
-        'text-font': ['DIN Pro Bold', 'Arial Unicode MS Regular'],
-        'text-allow-overlap': true, 'text-ignore-placement': true },
-      paint: { 'text-color': '#FFFFFF', 'text-halo-color': 'rgba(0,0,0,0.35)', 'text-halo-width': 1 } });
+    // Le PICTOGRAMME de gravité EST le marqueur du pays (plus de cercle ni de chiffre).
+    map.addLayer({ id: 'pays-picto', type: 'symbol', source: 'pays', maxzoom: 7,
+      layout: { 'icon-image': ['concat', 'picto', ['to-string', ['get', 'harm']]],
+        'icon-size': ['match', ['get', 'harm'], 5, 1.6, 4, 1.5, 3, 1.42, 2, 1.34, 1.26],
+        'icon-allow-overlap': true, 'icon-ignore-placement': true } });
     map.addLayer({ id: 'pays-hit', type: 'circle', source: 'pays', maxzoom: 7,
       paint: { 'circle-radius': 22, 'circle-color': '#000000', 'circle-opacity': 0 } });
   }
@@ -2502,7 +2514,7 @@ function startBranchGraph(p){
     ctx.textAlign = 'center';
     nodes.forEach(nd => { const near = hover && (nd.id === hover.id || adj[hover.id].has(nd.id)); ctx.globalAlpha = (!hover || near) ? 0.96 : 0.18; ctx.font = '600 ' + (nd.cur ? 12 : 10.5) + 'px "Plus Jakarta Sans", sans-serif'; ctx.fillStyle = nd.cur ? '#fff' : '#E2DAF4';
       const yoff = (nd.tlen > 2 && (nd.li % 2)) ? nd.r + 26 : nd.r + 13;
-      ctx.fillText(blab(nd.label), nd.x, nd.y + yoff); ctx.globalAlpha = 1; });
+      ctx.fillText(near ? nd.label : blab(nd.label), nd.x, nd.y + yoff); ctx.globalAlpha = 1; });
   }
   function loop(){ step(alpha); alpha = Math.max(0.05, alpha * 0.94); draw(); _branchRAF = requestAnimationFrame(loop); }
   if (_branchRAF) cancelAnimationFrame(_branchRAF); loop();
@@ -2583,26 +2595,31 @@ function startNetGraph(){
   const R0 = 320;
   nodes.forEach((nd, i) => { const y = 1 - 2 * (i + 0.5) / N, rad = Math.sqrt(Math.max(0, 1 - y * y)), th = Math.PI * (1 + Math.sqrt(5)) * i;
     nd.x = R0 * Math.cos(th) * rad; nd.y = R0 * y; nd.z = R0 * Math.sin(th) * rad; nd.vx = nd.vy = nd.vz = 0; });
-  let ry = 0.6, rx = -0.3, zoom = 1, hover = null, dragging = false, lastM = null, alpha = 1, autorot = true, focal = 1200, sphereR = R0, baseScale = 1;
+  let ry = 0.6, rx = -0.3, zoom = 1, hover = null, dragging = false, lastM = null, alpha = 1, autorot = true, focal = 1800, sphereR = R0, baseScale = 1;
   const cx = () => canvas.width / dpr / 2, cy = () => canvas.height / dpr / 2;
   // Physique 3D : répulsion + ressorts (longs = aéré) + rappel vers le centre → boule pleine.
   function step(a){
     for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++){
       let dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y, dz = nodes[i].z - nodes[j].z, d2 = dx * dx + dy * dy + dz * dz || 1; if (d2 > 360000) continue;
-      let d = Math.sqrt(d2), f = 1700 / d2 * a, fx = f * dx / d, fy = f * dy / d, fz = f * dz / d;
+      let d = Math.sqrt(d2), f = 2400 / d2 * a, fx = f * dx / d, fy = f * dy / d, fz = f * dz / d;
       nodes[i].vx += fx; nodes[i].vy += fy; nodes[i].vz += fz; nodes[j].vx -= fx; nodes[j].vy -= fy; nodes[j].vz -= fz;
     }
-    edges.forEach(e => { const A = nodes[idx[e.from]], B = nodes[idx[e.to]]; let dx = B.x - A.x, dy = B.y - A.y, dz = B.z - A.z, d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1, f = 0.03 * (d - 78) * a, fx = f * dx / d, fy = f * dy / d, fz = f * dz / d; A.vx += fx; A.vy += fy; A.vz += fz; B.vx -= fx; B.vy -= fy; B.vz -= fz; });
-    nodes.forEach(nd => { nd.vx += -nd.x * 0.0015 * a; nd.vy += -nd.y * 0.0015 * a; nd.vz += -nd.z * 0.0015 * a; nd.vx *= 0.84; nd.vy *= 0.84; nd.vz *= 0.84; nd.x += nd.vx; nd.y += nd.vy; nd.z += nd.vz; });
+    edges.forEach(e => { const A = nodes[idx[e.from]], B = nodes[idx[e.to]]; let dx = B.x - A.x, dy = B.y - A.y, dz = B.z - A.z, d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1, f = 0.024 * (d - 108) * a, fx = f * dx / d, fy = f * dy / d, fz = f * dz / d; A.vx += fx; A.vy += fy; A.vz += fz; B.vx -= fx; B.vy -= fy; B.vz -= fz; });
+    const CAP = 330;
+    nodes.forEach(nd => { nd.vx += -nd.x * 0.0016 * a; nd.vy += -nd.y * 0.0016 * a; nd.vz += -nd.z * 0.0016 * a; nd.vx *= 0.84; nd.vy *= 0.84; nd.vz *= 0.84; nd.x += nd.vx; nd.y += nd.vy; nd.z += nd.vz;
+      const rr = Math.sqrt(nd.x * nd.x + nd.y * nd.y + nd.z * nd.z); if (rr > CAP) { const k = CAP / rr; nd.x *= k; nd.y *= k; nd.z *= k; } });
   }
   for (let k = 0; k < 300; k++) step(1);
-  function recalc(){ let m = 1; nodes.forEach(nd => { const r = Math.sqrt(nd.x * nd.x + nd.y * nd.y + nd.z * nd.z); if (r > m) m = r; }); sphereR = m; baseScale = (Math.min(canvas.width / dpr, canvas.height / dpr) * 0.4) / m; }
+  function recalc(){ let m = 1; nodes.forEach(nd => { const r = Math.sqrt(nd.x * nd.x + nd.y * nd.y + nd.z * nd.z); if (r > m) m = r; }); sphereR = m;
+    // Cadrage sur l'extension MAX (rien ne déborde, quelle que soit la rotation) + marge titre/légende.
+    const H = canvas.height / dpr, maxPersp = focal / Math.max(1, focal - m);
+    baseScale = (H * 0.5 - 80) / (m * maxPersp); }
   recalc();
   function project(nd){
     const cosy = Math.cos(ry), siny = Math.sin(ry); let x1 = nd.x * cosy - nd.z * siny, z1 = nd.x * siny + nd.z * cosy;
     const cosx = Math.cos(rx), sinx = Math.sin(rx); let y1 = nd.y * cosx - z1 * sinx, z2 = nd.y * sinx + z1 * cosx;
-    const persp = focal / (focal + z2), s = persp * zoom * baseScale;
-    return { sx: cx() + x1 * s, sy: cy() + y1 * s, z: z2, s };
+    const persp = focal / (focal + z2), s = persp * zoom * baseScale, XSTRETCH = 1.5;
+    return { sx: cx() + x1 * s * XSTRETCH, sy: cy() + y1 * s, z: z2, s };
   }
   function nodeAt(mx, my){ let best = null, bd = 1e9; nodes.forEach(nd => { const p = project(nd), rr = Math.max(3, nd.r * p.s), d = Math.hypot(p.sx - mx, p.sy - my); if (d < rr + 5 && d < bd) { bd = d; best = nd; } }); return best; }
   function draw(){
@@ -2624,7 +2641,7 @@ function startNetGraph(){
       const show = (nd.r >= 13 && front) || near || (zoom > 1.7 && front); if (!show) return;
       ctx.globalAlpha = (!hover || near) ? 0.95 : 0.14; const fs = Math.max(8, nd.r >= 13 ? 12.5 : 10.5);
       ctx.font = '600 ' + fs + 'px "Plus Jakarta Sans", sans-serif'; ctx.fillStyle = '#ECE6FA';
-      ctx.fillText(flxLabel(nd.label), p.sx, p.sy + nd.r * p.s + 12); ctx.globalAlpha = 1; });
+      ctx.fillText(near ? nd.label : flxLabel(nd.label), p.sx, p.sy + nd.r * p.s + 12); ctx.globalAlpha = 1; });
   }
   function loop(){ step(alpha); alpha = Math.max(0.04, alpha * 0.97); if (autorot && !dragging) ry += 0.0024; draw(); _ngRAF = requestAnimationFrame(loop); }
   if (_ngRAF) cancelAnimationFrame(_ngRAF); loop();
