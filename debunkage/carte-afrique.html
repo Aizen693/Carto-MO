@@ -947,6 +947,40 @@
   .fl-chip--cur { background: color-mix(in srgb, var(--c) 16%, #fff); font-weight: 700; }
   .fl-link { width: 2px; height: 16px; margin: 0 0 0 20px; background: #D2C9E6; position: relative; }
   .fl-link::after { content: '▾'; position: absolute; bottom: -6px; left: -4px; color: #B0A6C8; font-size: 11px; line-height: 1; }
+  /* ── Filière en graphe façon Obsidian (futuriste, sombre) ── */
+  .flx-wrap { margin: 18px 0 4px; border-radius: 18px; overflow: hidden;
+    background: radial-gradient(130% 120% at 28% 0%, #2A1A52 0%, #160C32 52%, #0B0620 100%);
+    border: 1px solid #2E2150; box-shadow: inset 0 0 70px rgba(130,90,230,0.16), 0 10px 30px -12px rgba(20,8,50,.5); }
+  .flx-svg { width: 100%; height: auto; display: block; }
+  .flx-edge { fill: none; stroke: #8C7AD8; stroke-opacity: .5; stroke-width: 1.3; }
+  .flx-node { cursor: default; transition: stroke-opacity .15s; }
+  .flx-node:hover { stroke-opacity: 1; }
+  .flx-lbl { font-family: 'Plus Jakarta Sans'; font-size: 11px; fill: #DAD2F2; font-weight: 600; pointer-events: none; }
+  .flx-lbl--cur { fill: #fff; font-weight: 700; font-size: 12px; }
+  .flx-tier { font-family: 'JetBrains Mono'; font-size: 8.5px; fill: #8E81BE; letter-spacing: .08em; text-transform: uppercase; }
+  /* ── Réseau complet interactif (overlay plein écran) ── */
+  #netgraph-overlay { position: fixed; inset: 0; z-index: 11000; display: none;
+    background: radial-gradient(130% 120% at 50% 0%, #1B1140 0%, #0C0722 58%, #060313 100%); }
+  #netgraph-overlay.open { display: block; }
+  #netgraph-canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+  #netgraph-title { position: absolute; top: 20px; left: 24px; color: #ECE6FA; pointer-events: none;
+    font-family: 'Plus Jakarta Sans'; font-weight: 700; font-size: 15px; letter-spacing: -.01em; }
+  #netgraph-title span { font-weight: 400; font-size: 12px; color: #9C8FC8; }
+  #netgraph-legend { position: absolute; bottom: 20px; left: 24px; display: flex; flex-wrap: wrap; gap: 16px;
+    font-family: 'JetBrains Mono'; font-size: 10px; color: #B6ABD8; pointer-events: none; }
+  #netgraph-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  #netgraph-legend i { width: 9px; height: 9px; border-radius: 50%; }
+  #netgraph-close { position: absolute; top: 18px; right: 18px; width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid rgba(180,150,230,0.3); background: rgba(255,255,255,0.06); color: #E8E2F6; cursor: pointer;
+    font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background .15s; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  #netgraph-close:hover { background: rgba(255,255,255,0.14); }
+  /* ── Bouton flottant « Réseau complet » (bas droite de la carte) ── */
+  .deb-netbtn { position: absolute; right: 16px; bottom: 16px; z-index: 6;
+    display: inline-flex; align-items: center; gap: 8px; padding: 10px 15px; border-radius: 100px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, #2E1857, #6B3FA0); color: #fff;
+    font-family: 'Plus Jakarta Sans'; font-weight: 600; font-size: 13px;
+    box-shadow: 0 10px 24px -8px rgba(46,24,87,.6); transition: filter .15s, transform .15s; }
+  .deb-netbtn:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
   /* ── Rapport = document texte en blocs titrés (très peu de graphisme) ── */
   .rap-doc { font-family: 'Plus Jakarta Sans'; }
@@ -1078,6 +1112,7 @@
           <div class="deb-main">
             <div id="map"></div>
             <div id="map-loader">Chargement de la cartographie…</div>
+            <button class="deb-netbtn" type="button" onclick="openNetGraph()" aria-label="Voir le réseau complet"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="3" r="1.8"/><circle cx="3" cy="12" r="1.8"/><circle cx="13" cy="12" r="1.8"/><circle cx="8" cy="8.5" r="1.8"/><path d="M8 4.8v2M6.7 9.6 4 10.8M9.3 9.6 12 10.8"/></svg>Réseau complet</button>
             <button class="deb-fs-btn" id="deb-fs" type="button" aria-label="Plein écran" title="Plein écran (Échap pour quitter)">
               <svg class="deb-fs-icon-expand" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2H2v4M14 6V2h-4M10 14h4v-4M2 10v4h4"/></svg>
               <svg class="deb-fs-icon-shrink" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 6h4V2M10 2v4h4M14 10h-4v4M6 14v-4H2"/></svg>
@@ -2384,22 +2419,182 @@ function filiereData(p){
   [...new Set((blob.match(/pravda-[a-z]+\.[a-z]+/gi) || []))].forEach(dm => tiers.infra.push(dm));
   return { tiers, cibles };
 }
-function filiereHTML(p){
+// Graphe de la filière (façon Obsidian, futuriste) : mêmes acteurs réels, disposés
+// en niveaux de rôle (Y = niveau, X = forces). Nœuds lumineux, liens néon, fond sombre.
+const FLX_COL = { etat: '#FF6B4A', pmc: '#FF8A3D', info: '#F4B83C', infra: '#E8D24A', cible: '#B79BFF', groupe: '#8B6BF0' };
+function filiereGraph(p){
   const { tiers, cibles } = filiereData(p);
   const phaseKey = phaseOfNode(p), pcol = phaseColor(phaseKey);
-  const sp = phaseKey ? splitPhaseLabel((phaseDefOf(phaseKey) || {}).nom, phaseKey) : { name: '' };
-  const chips = (arr, color) => arr.map(t => `<span class="fl-chip" style="--c:${color}">${escapeHtml(t)}</span>`).join('');
-  const band = (label, color, inner, cur) => `<div class="fl-band${cur ? ' fl-band--cur' : ''}" style="--c:${color}"><div class="fl-role">${escapeHtml(label)}</div><div class="fl-chips">${inner}</div></div>`;
-  const link = '<div class="fl-link"></div>';
-  const parts = [];
-  if (tiers.etat.length)  parts.push(band(TIER_META.etat.label,  TIER_META.etat.color,  chips(tiers.etat,  TIER_META.etat.color)));
-  if (tiers.pmc.length)   parts.push(band(TIER_META.pmc.label,   TIER_META.pmc.color,   chips(tiers.pmc,   TIER_META.pmc.color)));
-  if (tiers.info.length)  parts.push(band(TIER_META.info.label,  TIER_META.info.color,  chips(tiers.info,  TIER_META.info.color)));
-  if (tiers.infra.length) parts.push(band(TIER_META.infra.label, TIER_META.infra.color, chips(tiers.infra, TIER_META.infra.color)));
-  parts.push(band('Attaque' + (sp.name ? ' · ' + sp.name : ''), pcol, `<span class="fl-chip fl-chip--cur" style="--c:${pcol}">${escapeHtml(ficheTitle(p))}</span>`, true));
-  const cibInner = (cibles.length ? chips(cibles.map(c => c.compte_display || c.id), '#6B3FA0') : '') + `<span class="fl-chip" style="--c:#2E1857">Groupe Castel</span>`;
-  parts.push(band(TIER_META.cible.label, '#6B3FA0', cibInner));
-  return `<div class="filiere">${parts.join(link)}</div>`;
+  const layers = [];
+  const addLayer = (arr, color, role) => { if (arr.length) layers.push(arr.map(l => ({ label: l, color, role }))); };
+  addLayer(tiers.etat, FLX_COL.etat, 'État');
+  addLayer(tiers.pmc, FLX_COL.pmc, 'PMC');
+  addLayer(tiers.info, FLX_COL.info, 'Appareil info');
+  addLayer(tiers.infra, FLX_COL.infra, 'Infrastructure');
+  layers.push([{ label: ficheTitle(p), color: pcol, role: 'Attaque', cur: true }]);
+  const cib = cibles.map(c => ({ label: c.compte_display || c.id, color: FLX_COL.cible, role: 'Cible' }));
+  cib.push({ label: 'Groupe Castel', color: FLX_COL.groupe, role: 'Groupe' });
+  layers.push(cib);
+  const nodes = [], edges = [];
+  layers.forEach((layer, li) => layer.forEach((n, ni) => { n.id = 'n' + li + '_' + ni; n.tier = li; nodes.push(n); }));
+  for (let li = 0; li < layers.length - 1; li++) layers[li].forEach(a => layers[li + 1].forEach(b => edges.push({ from: a.id, to: b.id })));
+  return { nodes, edges, nLayers: layers.length };
+}
+function layeredLayout(nodes, edges, W, H, nLayers){
+  const top = 50, bot = H - 44;
+  const yFor = t => nLayers <= 1 ? H / 2 : top + (bot - top) * (t / (nLayers - 1));
+  const byTier = {}; nodes.forEach(n => { (byTier[n.tier] = byTier[n.tier] || []).push(n); });
+  Object.values(byTier).forEach(arr => arr.forEach((n, i) => { n.x = W * ((i + 1) / (arr.length + 1)); n.y = yFor(n.tier); n.vx = 0; }));
+  const idx = Object.fromEntries(nodes.map((n, i) => [n.id, i]));
+  for (let it = 0; it < 170; it++){
+    Object.values(byTier).forEach(arr => { for (let i = 0; i < arr.length; i++) for (let j = i + 1; j < arr.length; j++){
+      let dx = arr[i].x - arr[j].x || 0.1, f = 2200 / dx; arr[i].vx += f; arr[j].vx -= f; } });
+    edges.forEach(e => { const a = nodes[idx[e.from]], b = nodes[idx[e.to]]; let f = 0.018 * (b.x - a.x); a.vx += f; b.vx -= f; });
+    nodes.forEach(n => { n.vx += (W / 2 - n.x) * 0.006; n.vx *= 0.82; n.x += n.vx; n.x = Math.max(46, Math.min(W - 46, n.x)); });
+  }
+}
+function flxLabel(s){ s = String(s).split(/\s[:—–]\s/)[0]; return s.length > 24 ? s.slice(0, 22) + '…' : s; }
+function filiereGraphHTML(p){
+  const W = 680, H = 470;
+  const { nodes, edges, nLayers } = filiereGraph(p);
+  layeredLayout(nodes, edges, W, H, nLayers);
+  const idx = Object.fromEntries(nodes.map((n, i) => [n.id, i]));
+  const paths = edges.map(e => { const a = nodes[idx[e.from]], b = nodes[idx[e.to]];
+    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2 - 10;
+    return `<path d="M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q ${mx.toFixed(1)} ${my.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}" class="flx-edge"/>`; }).join('');
+  const tierLab = {}; nodes.forEach(n => { tierLab[n.tier] = { role: n.role, y: n.y }; });
+  const tlabels = Object.values(tierLab).map(t => `<text x="13" y="${(t.y + 3).toFixed(1)}" class="flx-tier">${escapeHtml(t.role)}</text>`).join('');
+  const els = nodes.map(n => { const r = n.cur ? 13 : 9;
+    return `<circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${r + 11}" fill="${n.color}" opacity="0.2" filter="url(#flxblur)"/>`
+      + `<circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${r}" fill="${n.color}" stroke="#fff" stroke-opacity="0.9" stroke-width="${n.cur ? 2.2 : 1.2}" class="flx-node"><title>${escapeHtml(n.label)}</title></circle>`
+      + `<text x="${n.x.toFixed(1)}" y="${(n.y + r + 13).toFixed(1)}" text-anchor="middle" class="flx-lbl${n.cur ? ' flx-lbl--cur' : ''}">${escapeHtml(flxLabel(n.label))}</text>`; }).join('');
+  return `<div class="flx-wrap"><svg viewBox="0 0 ${W} ${H}" class="flx-svg">
+    <defs><filter id="flxblur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5.5"/></filter></defs>
+    <g class="flx-edges">${paths}</g>${tlabels}<g>${els}</g></svg></div>`;
+}
+
+// ════ Réseau complet INTERACTIF façon Obsidian (canvas, physique temps réel) ════
+// Tous les noeuds : Groupe Castel ← filiales ← incidents ← commanditaires → appareil.
+function buildFullGraph(){
+  const pubs = state.data.publications || [], pays = state.data.pays || [];
+  const nodes = [], edges = [], map = {};
+  const N = (id, label, type, color, r) => { if (map[id]) return map[id]; const nd = { id, label, type, color, r }; map[id] = nd; nodes.push(nd); return nd; };
+  const E = (a, b) => { if (a && b && a !== b) edges.push({ from: a.id, to: b.id }); };
+  const castel = N('__castel', 'Groupe Castel', 'groupe', '#8B6BF0', 17);
+  pays.forEach(c => {
+    const incs = pubs.filter(x => x.cc === c.id && x.type === 'incident');
+    let fil = null;
+    if (incs.length || c.subsidiary) { fil = N('fil_' + c.id, c.subsidiary || c.name, 'filiale', '#B79BFF', 11); E(fil, castel); }
+    incs.forEach(inc => { const n = N(inc.id, ficheTitle(inc), 'incident', phaseColor(phaseOfNode(inc)), 5.5); E(n, fil || castel); });
+    const blob = (c.operations || '') + ' ' + (c.incidents || []).map(i => i.txt || '').join(' ');
+    pubs.filter(x => x.cc === c.id && x.type === 'acteur').forEach(a => {
+      const disp = a.compte_display || a.id;
+      if (STATE_ACTORS.includes(disp)) {
+        const sn = N('state_' + disp, withFlag(disp), 'etat', '#FF6B4A', 14);
+        incs.forEach(inc => E(map[inc.id], sn));
+        APPARATUS.forEach(x => { if (x.re.test(blob)) E(N('app_' + x.label, x.label, 'app', '#F4B83C', 7.5), sn); });
+        [...new Set((blob.match(/pravda-[a-z]+\.[a-z]+/gi) || []))].forEach(dm => E(N('app_' + dm, dm, 'app', '#E8D24A', 6.5), sn));
+      } else {
+        const an = N(a.id, disp, 'local', '#7C7498', 6.5);
+        incs.forEach(inc => E(an, map[inc.id]));
+      }
+    });
+  });
+  return { nodes, edges };
+}
+let _ngRAF = null, _ngCleanup = null;
+window.openNetGraph = function(){
+  let ov = document.getElementById('netgraph-overlay');
+  if (!ov){
+    ov = document.createElement('div'); ov.id = 'netgraph-overlay';
+    ov.innerHTML = '<canvas id="netgraph-canvas"></canvas>'
+      + '<div id="netgraph-title">Réseau complet · Castel Afrique<span> — glisser pour faire tourner · molette pour zoomer · survol pour isoler</span></div>'
+      + '<div id="netgraph-legend"><span><i style="background:#FF6B4A"></i>Commanditaire</span><span><i style="background:#F4B83C"></i>Appareil / relais</span><span><i style="background:#C8392B"></i>Incident</span><span><i style="background:#B79BFF"></i>Filiale</span><span><i style="background:#8B6BF0"></i>Groupe Castel</span></div>'
+      + '<button id="netgraph-close" aria-label="Fermer">✕</button>';
+    document.body.appendChild(ov);
+    ov.querySelector('#netgraph-close').addEventListener('click', closeNetGraph);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) closeNetGraph(); });
+  }
+  ov.classList.add('open'); document.body.classList.add('modal-open');
+  startNetGraph();
+};
+function closeNetGraph(){
+  const ov = document.getElementById('netgraph-overlay');
+  if (ov) ov.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  if (_ngRAF) { cancelAnimationFrame(_ngRAF); _ngRAF = null; }
+  if (_ngCleanup) { _ngCleanup(); _ngCleanup = null; }
+}
+function startNetGraph(){
+  const ov = document.getElementById('netgraph-overlay');
+  const canvas = ov.querySelector('#netgraph-canvas');
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){ const w = ov.clientWidth, h = ov.clientHeight; canvas.width = w * dpr; canvas.height = h * dpr; canvas.style.width = w + 'px'; canvas.style.height = h + 'px'; }
+  resize();
+  const { nodes, edges } = buildFullGraph();
+  const N = nodes.length;
+  const idx = Object.fromEntries(nodes.map((n, i) => [n.id, i]));
+  const adj = {}; nodes.forEach(n => adj[n.id] = new Set()); edges.forEach(e => { adj[e.from].add(e.to); adj[e.to].add(e.from); });
+  // Init des positions sur une sphère (spirale de Fibonacci) → forme de boule dès le départ.
+  const R0 = 320;
+  nodes.forEach((nd, i) => { const y = 1 - 2 * (i + 0.5) / N, rad = Math.sqrt(Math.max(0, 1 - y * y)), th = Math.PI * (1 + Math.sqrt(5)) * i;
+    nd.x = R0 * Math.cos(th) * rad; nd.y = R0 * y; nd.z = R0 * Math.sin(th) * rad; nd.vx = nd.vy = nd.vz = 0; });
+  let ry = 0.6, rx = -0.3, zoom = 1, hover = null, dragging = false, lastM = null, alpha = 1, autorot = true, focal = 1200, sphereR = R0, baseScale = 1;
+  const cx = () => canvas.width / dpr / 2, cy = () => canvas.height / dpr / 2;
+  // Physique 3D : répulsion + ressorts (longs = aéré) + rappel vers le centre → boule pleine.
+  function step(a){
+    for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++){
+      let dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y, dz = nodes[i].z - nodes[j].z, d2 = dx * dx + dy * dy + dz * dz || 1; if (d2 > 360000) continue;
+      let d = Math.sqrt(d2), f = 1700 / d2 * a, fx = f * dx / d, fy = f * dy / d, fz = f * dz / d;
+      nodes[i].vx += fx; nodes[i].vy += fy; nodes[i].vz += fz; nodes[j].vx -= fx; nodes[j].vy -= fy; nodes[j].vz -= fz;
+    }
+    edges.forEach(e => { const A = nodes[idx[e.from]], B = nodes[idx[e.to]]; let dx = B.x - A.x, dy = B.y - A.y, dz = B.z - A.z, d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1, f = 0.03 * (d - 78) * a, fx = f * dx / d, fy = f * dy / d, fz = f * dz / d; A.vx += fx; A.vy += fy; A.vz += fz; B.vx -= fx; B.vy -= fy; B.vz -= fz; });
+    nodes.forEach(nd => { nd.vx += -nd.x * 0.0015 * a; nd.vy += -nd.y * 0.0015 * a; nd.vz += -nd.z * 0.0015 * a; nd.vx *= 0.84; nd.vy *= 0.84; nd.vz *= 0.84; nd.x += nd.vx; nd.y += nd.vy; nd.z += nd.vz; });
+  }
+  for (let k = 0; k < 300; k++) step(1);
+  function recalc(){ let m = 1; nodes.forEach(nd => { const r = Math.sqrt(nd.x * nd.x + nd.y * nd.y + nd.z * nd.z); if (r > m) m = r; }); sphereR = m; baseScale = (Math.min(canvas.width / dpr, canvas.height / dpr) * 0.4) / m; }
+  recalc();
+  function project(nd){
+    const cosy = Math.cos(ry), siny = Math.sin(ry); let x1 = nd.x * cosy - nd.z * siny, z1 = nd.x * siny + nd.z * cosy;
+    const cosx = Math.cos(rx), sinx = Math.sin(rx); let y1 = nd.y * cosx - z1 * sinx, z2 = nd.y * sinx + z1 * cosx;
+    const persp = focal / (focal + z2), s = persp * zoom * baseScale;
+    return { sx: cx() + x1 * s, sy: cy() + y1 * s, z: z2, s };
+  }
+  function nodeAt(mx, my){ let best = null, bd = 1e9; nodes.forEach(nd => { const p = project(nd), rr = Math.max(3, nd.r * p.s), d = Math.hypot(p.sx - mx, p.sy - my); if (d < rr + 5 && d < bd) { bd = d; best = nd; } }); return best; }
+  function draw(){
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const proj = nodes.map(nd => ({ nd, p: project(nd) })); const pm = {}; proj.forEach(o => pm[o.nd.id] = o.p);
+    ctx.lineCap = 'round';
+    edges.forEach(e => { const A = pm[e.from], B = pm[e.to]; if (!A || !B) return; const hl = hover && (e.from === hover.id || e.to === hover.id);
+      ctx.lineWidth = hl ? 1.7 : 0.8; ctx.strokeStyle = hl ? 'rgba(206,188,255,0.85)' : 'rgba(150,130,224,0.13)';
+      ctx.beginPath(); ctx.moveTo(A.sx, A.sy); ctx.lineTo(B.sx, B.sy); ctx.stroke(); });
+    const ordered = proj.slice().sort((a, b) => b.p.z - a.p.z);
+    ordered.forEach(o => { const nd = o.nd, p = o.p, near = !hover || nd.id === hover.id || adj[hover.id].has(nd.id);
+      let da = 0.4 + 0.6 * (1 - (p.z + sphereR) / (2 * sphereR)); da = Math.max(0.28, Math.min(1, da));
+      ctx.globalAlpha = near ? da : da * 0.16; const rr = Math.max(1.5, nd.r * p.s);
+      ctx.beginPath(); ctx.arc(p.sx, p.sy, rr + 4, 0, 7); ctx.fillStyle = nd.color + '2b'; ctx.fill();
+      ctx.beginPath(); ctx.arc(p.sx, p.sy, rr, 0, 7); ctx.fillStyle = nd.color; ctx.fill();
+      ctx.lineWidth = (hover && nd.id === hover.id) ? 2.4 : 1.1; ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.stroke(); ctx.globalAlpha = 1; });
+    ctx.textAlign = 'center';
+    ordered.forEach(o => { const nd = o.nd, p = o.p, near = hover && (nd.id === hover.id || adj[hover.id].has(nd.id)), front = p.z < sphereR * 0.2;
+      const show = (nd.r >= 13 && front) || near || (zoom > 1.7 && front); if (!show) return;
+      ctx.globalAlpha = (!hover || near) ? 0.95 : 0.14; const fs = Math.max(8, nd.r >= 13 ? 12.5 : 10.5);
+      ctx.font = '600 ' + fs + 'px "Plus Jakarta Sans", sans-serif'; ctx.fillStyle = '#ECE6FA';
+      ctx.fillText(flxLabel(nd.label), p.sx, p.sy + nd.r * p.s + 12); ctx.globalAlpha = 1; });
+  }
+  function loop(){ step(alpha); alpha = Math.max(0.04, alpha * 0.97); if (autorot && !dragging) ry += 0.0024; draw(); _ngRAF = requestAnimationFrame(loop); }
+  if (_ngRAF) cancelAnimationFrame(_ngRAF); loop();
+  function onMove(e){ if (!ov.classList.contains('open')) return; const r = canvas.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    if (dragging && lastM) { ry += (e.clientX - lastM.x) * 0.006; rx += (e.clientY - lastM.y) * 0.006; rx = Math.max(-1.45, Math.min(1.45, rx)); lastM = { x: e.clientX, y: e.clientY }; }
+    else { hover = nodeAt(mx, my); canvas.style.cursor = hover ? 'pointer' : 'grab'; } }
+  function onDown(e){ dragging = true; autorot = false; lastM = { x: e.clientX, y: e.clientY }; canvas.style.cursor = 'grabbing'; }
+  function onUp(){ dragging = false; setTimeout(() => { if (!dragging) autorot = true; }, 2500); }
+  function onWheel(e){ e.preventDefault(); zoom = Math.max(0.45, Math.min(4, zoom * Math.exp(-e.deltaY * 0.0015))); }
+  canvas.addEventListener('mousedown', onDown); window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp); canvas.addEventListener('wheel', onWheel, { passive: false });
+  window.addEventListener('resize', function onR(){ resize(); recalc(); });
+  _ngCleanup = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
 }
 
 // Mind map en grand (modale) — graphe d'acteurs façon Obsidian, à côté du bouton Rapport.
@@ -2414,7 +2609,7 @@ window.debOpenMindmap = function(id){
       <div class="fiche-kicker" style="color:#6B3FA0">Filière de l'attaque · ${escapeHtml((pays && pays.name) || '')}</div>
       <h2 class="fiche-title">${escapeHtml(ficheTitle(p))}</h2>
       <div class="fl-intro">De l'État commanditaire jusqu'à la cible Castel — acteurs réels documentés.</div>
-      ${filiereHTML(p)}
+      ${filiereGraphHTML(p)}
     </div>`;
   m.querySelector('.fiche-card').scrollTop = 0;
   m.classList.add('is-open');
