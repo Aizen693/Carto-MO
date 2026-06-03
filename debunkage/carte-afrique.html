@@ -1281,7 +1281,6 @@ async function init() {
   const res = await fetch('./data/cas-afrique.json?v=' + Date.now());
   state.data = await res.json();
   applyLegende();
-  if (state.data.campagne && state.data.campagne.reel) showRealBanner();
   renderHeroStats();
   renderSidebar();
   buildMap();
