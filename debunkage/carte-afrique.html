@@ -802,7 +802,8 @@
     font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 700; color: #fff; }
   .atk-txt { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
   .atk-date { font-family: 'JetBrains Mono'; font-size: 9px; color: #A19DB0; letter-spacing: .03em; }
-  .atk-title { font-size: 12.5px; color: #2C2640; font-weight: 500; }
+  .atk-title { font-size: 12.5px; color: #2C2640; font-weight: 500;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .atk-chev { margin-left: auto; flex-shrink: 0; color: #B9AFC9; font-size: 14px; align-self: center; }
   .atk-allbtn { width: 100%; margin-top: 11px; padding: 9px; border-radius: 9px; border: none; cursor: pointer;
     background: var(--violet-d, #6B3FA0); color: #fff; font-family: 'Plus Jakarta Sans'; font-weight: 600; font-size: 12px;
@@ -811,6 +812,9 @@
 
   /* ── Panneau gauche : liste des attaques + fiche détail (remplace les pop-ups) ── */
   .ds-panel { font-family: 'Plus Jakarta Sans'; padding: 18px 22px; }
+  /* Fondu doux à chaque changement de contenu (liste ↔ détail ↔ pays) */
+  @keyframes dsPanelFade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+  #ds-panel > * { animation: dsPanelFade .2s ease both; }
   .ds-listhead h3 { font-family: 'JetBrains Mono'; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
     color: #6B3FA0; font-weight: 600; margin: 0 0 2px; display: flex; align-items: center; gap: 8px; }
   .ds-listhead h3 .ct { font-size: 10px; color: #fff; background: #6B3FA0; border-radius: 10px; padding: 1px 7px; font-weight: 700; }
@@ -822,8 +826,18 @@
   .ds-grp:first-of-type { margin-top: 6px; }
   .ds-grp__h { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; color: #2C2640;
     padding: 6px 4px; border-top: 1px solid #ECE7F4; }
-  .ds-grp__h .n { margin-left: auto; font-family: 'JetBrains Mono'; font-size: 10px; color: #A19DB0; font-weight: 600; }
+  .ds-grp__h .n { margin-left: auto; font-family: 'JetBrains Mono'; font-size: 10px; color: #fff; background: #6B3FA0; border-radius: 9px; padding: 1px 7px; font-weight: 700; }
   .ds-grp .atk-list { max-height: none; margin: 0; }
+  /* Sous-groupe PHASE dans un pays : barre colorée, en-tête unique (jamais répété) */
+  .ds-ph { margin: 7px 0 2px; padding-left: 11px; border-left: 2.5px solid var(--pc); }
+  .ds-ph__h { display: flex; align-items: center; gap: 6px; margin: 3px 0 2px; }
+  .ds-ph__num { color: var(--pc); font-size: 13px; font-weight: 700; line-height: 1; }
+  .ds-ph__nom { font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--pc); }
+  .ds-ph__per { font-family: 'JetBrains Mono'; font-size: 9px; color: #A19DB0; letter-spacing: .02em; }
+  .ds-ph__n { margin-left: auto; font-family: 'JetBrains Mono'; font-size: 9.5px; color: #A19DB0; font-weight: 600; }
+  .ds-ph .atk-list { max-height: none; margin: 0; }
+  .atk-dot { flex-shrink: 0; width: 7px; height: 7px; border-radius: 50%; margin-top: 5px; }
+  .atk-item--c { gap: 8px; padding-top: 5px; padding-bottom: 5px; }
   .ds-back { display: inline-flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer;
     padding: 2px 0 12px; color: #6B3FA0; font-family: 'Plus Jakarta Sans'; font-size: 12.5px; font-weight: 600; }
   .ds-back:hover { text-decoration: underline; }
@@ -900,7 +914,6 @@
     </span>
     <div class="site-header__right">
       <span class="site-conf-badge" style="font:600 11px/1 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:#8E2A2A;background:rgba(142,42,42,.08);border:1px solid rgba(142,42,42,.25);border-radius:6px;padding:6px 10px;">Diffusion restreinte · Confidentiel</span>
-      <a class="site-cta" href="#dossier">Ouvrir le dossier</a>
     </div>
   </div>
 </header>
@@ -980,14 +993,6 @@
   <!-- ─────────────────────────────────────── Dossier · cas démo -->
   <section class="home-sec home-sec--alt" id="dossier">
     <div class="home-sec__wrap">
-      <div class="home-sec__head">
-        <span class="eyebrow">Dossier · Castel Afrique</span>
-        <h2 class="home-sec__title" id="dossier-h2">Cartographie <em>FIMI &amp; réputationnelle</em></h2>
-        <p class="home-sec__intro" id="dossier-note">
-          Cartographie sur sources publiques ouvertes (OSINT). Niveaux de preuve distingués (confirmé / probable / hypothèse). Glissez la timeline pour suivre les incidents de 2022 à 2026.
-        </p>
-      </div>
-
       <div class="deb-dossier" id="deb-dossier">
         <div class="deb-top">
           <div class="deb-top__name" id="deb-top-name">—</div>
@@ -1088,6 +1093,23 @@
   </section>
 
 </main>
+
+<!-- Outil opérationnel : on ouvre DIRECTEMENT sur la carte. La section dossier
+     remonte en tête de <main> ; le hero marketing + la méthode (sales) sont
+     masqués pour aller droit à l'essentiel. -->
+<script>
+  (function(){
+    var main = document.querySelector('main');
+    var dossier = document.getElementById('dossier');
+    if (main && dossier && main.firstElementChild !== dossier) {
+      main.insertBefore(dossier, main.firstElementChild);
+    }
+    var hero = document.querySelector('.page-hero');
+    var methode = document.getElementById('methode');
+    if (hero) hero.style.display = 'none';
+    if (methode) methode.style.display = 'none';
+  })();
+</script>
 
 <!-- ─────────────────────────────────────── Footer (confidentiel) -->
 <footer class="site-footer">
@@ -1194,14 +1216,13 @@ function applyLegende(){
   let cont = '';
   if (state.data.pays && state.data.pays.length) {
     cont = '<div class="lg-sec" data-sec="continental">'
-      + '<div class="lg-head">Couleur des pays</div>'
-      + '<div class="lg-sub">Chaque pays est coloré selon la gravité de l\'atteinte à Castel — du plus grave (rouge) au plus diffus (mauve).</div>'
-      + '<div class="lg-row lg-row2"><span class="sw" style="background:#C8392B"></span><span class="lg-txt">Castel visé directement — prouvé<span class="lg-gloss">filiale instrumentalisée, preuves solides</span></span></div>'
-      + '<div class="lg-row lg-row2"><span class="sw" style="background:#E0652C"></span><span class="lg-txt">Castel directement touché<span class="lg-gloss">incidents réels contre le groupe</span></span></div>'
-      + '<div class="lg-row lg-row2"><span class="sw" style="background:#D69E2E"></span><span class="lg-txt">Secteur boissons ciblé<span class="lg-gloss">la filière visée, pas Castel nommément</span></span></div>'
-      + '<div class="lg-row lg-row2"><span class="sw" style="background:#8B5FBF"></span><span class="lg-txt">Climat hostile — fort<span class="lg-gloss">Castel fragilisé par association</span></span></div>'
-      + '<div class="lg-row lg-row2"><span class="sw" style="background:#B9AFC9"></span><span class="lg-txt">Climat hostile — diffus<span class="lg-gloss">exposition indirecte générale</span></span></div>'
-      + '<div class="lg-foot">⊙ anneau rouge clignotant = atteinte directe prouvée · cliquez un pays pour le détail</div>'
+      + '<div class="lg-head">Gravité de l\'atteinte</div>'
+      + '<div class="lg-row lg-row2"><span class="sw" style="background:#C8392B"></span><span class="lg-txt">Castel visé directement</span></div>'
+      + '<div class="lg-row lg-row2"><span class="sw" style="background:#E0652C"></span><span class="lg-txt">Castel touché</span></div>'
+      + '<div class="lg-row lg-row2"><span class="sw" style="background:#D69E2E"></span><span class="lg-txt">Secteur boissons ciblé</span></div>'
+      + '<div class="lg-row lg-row2"><span class="sw" style="background:#8B5FBF"></span><span class="lg-txt">Climat hostile</span></div>'
+      + '<div class="lg-row lg-row2"><span class="sw" style="background:#B9AFC9"></span><span class="lg-txt">Exposition diffuse</span></div>'
+      + '<div class="lg-foot">Le chiffre = nombre d\'incidents.<br>Cliquez un pays pour voir ses flux par phase.</div>'
       + '</div>';
   }
   // Deux blocs : (1) la NATURE du flux = la forme (pointe ▶ = attaque structurelle,
@@ -1236,8 +1257,8 @@ function showRealBanner(){
   if (document.getElementById('real-banner')) return;
   const b = document.createElement('div');
   b.id = 'real-banner';
-  b.textContent = "DONNÉES RÉELLES — sources publiques ouvertes (OSINT). Usage interne · Direction Sûreté Castel · page non indexée. Acteurs hostiles en catégories fonctionnelles, sans attribution nominative.";
-  b.style.cssText = "position:sticky;top:0;z-index:9999;background:#3F2470;color:#fff;font:600 12px/1.4 'Plus Jakarta Sans',-apple-system,sans-serif;letter-spacing:.02em;padding:9px 16px;text-align:center;";
+  b.textContent = "CONFIDENTIEL · Direction Sûreté Castel — sources publiques ouvertes (OSINT)";
+  b.style.cssText = "position:sticky;top:0;z-index:9999;background:#3F2470;color:#fff;font:600 11.5px/1.4 'Plus Jakarta Sans',-apple-system,sans-serif;letter-spacing:.03em;padding:7px 16px;text-align:center;";
   document.body.prepend(b);
 }
 
@@ -1297,17 +1318,53 @@ function dossierIncidents(cc){
   return incs.sort((a, b) => new Date(a.date) - new Date(b.date));
 }
 
-function attackRowHTML(p, withPays){
+// Titre propre pour la liste : 34 des titres stockés (compte_display) sont coupés
+// en plein mot par un « … ». Quand c'est le cas, on reconstruit un titre lisible à
+// partir de content_excerpt (1re phrase). Aucune modif de la donnée.
+function atkTitle(p){
+  const disp = p.compte_display || p.id || '';
+  if (!/…\s*$/.test(disp)) return disp;
+  const ex = (p.content_excerpt || '').replace(/^INC[-\s]?\d+\s*[—–-]\s*/i, '').trim();
+  if (!ex) return disp.replace(/\s*…\s*$/, '');
+  const firstSentence = ex.split(/(?<=\.)\s/)[0];
+  if (firstSentence.length <= 92) return firstSentence;
+  return ex.slice(0, 80).replace(/\s+\S*$/, '') + '…';
+}
+function attackRowHTML(p, withPays, compact){
   const key = phaseOfNode(p);
   const col = phaseColor(key);
   const num = /^[1-4]$/.test(String(key)) ? String(key) : '·';
   const dt = p.date ? fmtDate(new Date(p.date)) : '';
   const pm = paysMeta(p.cc);
   const sub = withPays ? `${escapeHtml(dt)} · ${escapeHtml(pm.flag || '')} ${escapeHtml(pm.name)}` : escapeHtml(dt);
-  return `<button class="atk-item" data-id="${p.id}" data-cc="${p.cc}">
-    <span class="atk-num" style="background:${col}">${num}</span>
-    <span class="atk-txt"><span class="atk-date">${sub}</span><span class="atk-title">${escapeHtml(p.compte_display || p.id)}</span></span>
+  // compact : la phase est déjà portée par le sous-titre du groupe → simple puce colorée
+  const lead = compact
+    ? `<span class="atk-dot" style="background:${col}"></span>`
+    : `<span class="atk-num" style="background:${col}">${num}</span>`;
+  return `<button class="atk-item${compact ? ' atk-item--c' : ''}" data-id="${p.id}" data-cc="${p.cc}">
+    ${lead}
+    <span class="atk-txt"><span class="atk-date">${sub}</span><span class="atk-title">${escapeHtml(atkTitle(p))}</span></span>
     <span class="atk-chev">›</span></button>`;
+}
+// Sous-groupes par PHASE pour un pays : chaque phase (1→4) apparaît UNE fois,
+// avec dessous ses attaques. Les phases absentes du pays sont omises.
+function phaseSubgroupsHTML(incs){
+  const byPhase = {};
+  incs.forEach(p => { const k = String(phaseOfNode(p) || '·'); (byPhase[k] = byPhase[k] || []).push(p); });
+  const defs = phasesDef() || [];
+  const NUM = { '1': '①', '2': '②', '3': '③', '4': '④', '5': '⑤' };
+  return phaseKeys().map(k => {
+    const list = byPhase[k];
+    if (!list || !list.length) return '';
+    const def = defs.find(x => String(x.n) === k) || {};
+    const col = phaseColor(k);
+    const sp = splitPhaseLabel(def.nom, k);
+    const rows = list.map(p => attackRowHTML(p, false, true)).join('');
+    return `<div class="ds-ph" style="--pc:${col}">
+      <div class="ds-ph__h"><span class="ds-ph__num">${NUM[k] || k}</span><span class="ds-ph__nom">${escapeHtml(sp.name)}</span>${sp.period ? `<span class="ds-ph__per">${escapeHtml(sp.period)}</span>` : ''}<span class="ds-ph__n">${list.length}</span></div>
+      <div class="atk-list">${rows}</div>
+    </div>`;
+  }).join('');
 }
 
 // Vue LISTE du panneau gauche. cc = pays filtrant (null → tout le dossier, groupé par pays).
@@ -1319,24 +1376,23 @@ function renderDossierList(cc){
 
   let body, headExtra;
   if (cc){
-    const incs = dossierIncidents(cc);
-    body = `<div class="atk-list">${incs.map(p => attackRowHTML(p, false)).join('')}</div>`;
+    // Un seul pays : directement ses phases (1→4), chacune une fois.
+    body = phaseSubgroupsHTML(dossierIncidents(cc));
     headExtra = `<button class="ds-clear" id="ds-allpays">← Tous les pays</button>`;
   } else {
-    // Groupé par pays, pays les plus touchés en premier.
+    // Groupé par pays (les plus touchés d'abord), puis par phase à l'intérieur.
     const incs = dossierIncidents();
     const groups = {};
     incs.forEach(p => { (groups[p.cc] = groups[p.cc] || []).push(p); });
     const order = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length);
     body = order.map(g => {
       const pm = paysMeta(g);
-      const rows = groups[g].map(p => attackRowHTML(p, false)).join('');
       return `<div class="ds-grp">
         <div class="ds-grp__h">${escapeHtml(pm.flag || '')} ${escapeHtml(pm.name)}<span class="n">${groups[g].length}</span></div>
-        <div class="atk-list">${rows}</div>
+        ${phaseSubgroupsHTML(groups[g])}
       </div>`;
     }).join('');
-    headExtra = `<p class="ds-hint">Cliquez une attaque pour voir le détail ici et la dérouler dans l'arbre.</p>`;
+    headExtra = `<p class="ds-hint">Pays par pays, attaques regroupées par phase. Cliquez-en une pour la voir sur la carte.</p>`;
   }
 
   const total = dossierIncidents(cc).length;
@@ -1953,71 +2009,46 @@ function addLayers(){
   if (state.data.pays && state.data.pays.length) {
     map.addSource('pays', { type: 'geojson', data: buildPaysFeatures() });
     map.addLayer({ id: 'pays-glow', type: 'circle', source: 'pays', maxzoom: 7,
-      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 22, 4, 19, 3, 16, 2, 13, 11],
+      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 32, 4, 28, 3, 25, 2, 22, 19],
         'circle-color': CASTEL_HARM_COLOR, 'circle-opacity': 0.12, 'circle-blur': 0.6 } });
+    // Anneau de SURVOL (piloté par filtre) : halo coloré qui apparaît sous la pastille
+    // au passage de la souris → ressenti réactif sans repaint permanent.
+    map.addLayer({ id: 'pays-hover', type: 'circle', source: 'pays', maxzoom: 7,
+      filter: ['==', ['get', 'id'], '__none__'],
+      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 27, 4, 25, 3, 23, 2, 21, 19],
+        'circle-color': 'transparent', 'circle-stroke-color': CASTEL_HARM_COLOR,
+        'circle-stroke-width': 2.5, 'circle-stroke-opacity': 0.55 } });
     map.addLayer({ id: 'pays-fill', type: 'circle', source: 'pays', maxzoom: 7,
-      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 11, 4, 9.5, 3, 8, 2, 6.5, 5.5],
-        'circle-color': CASTEL_HARM_COLOR, 'circle-opacity': 0.9, 'circle-stroke-color': '#FFFFFF', 'circle-stroke-width': 1.2 } });
+      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 19, 4, 17, 3, 15, 2, 13, 11],
+        'circle-color': CASTEL_HARM_COLOR, 'circle-opacity': 0.92, 'circle-stroke-color': '#FFFFFF', 'circle-stroke-width': 2 } });
     map.addLayer({ id: 'pays-lever', type: 'circle', source: 'pays', maxzoom: 7,
       filter: ['==', ['get', 'direct_n'], 1],
-      paint: { 'circle-radius': 16, 'circle-color': 'transparent', 'circle-stroke-color': '#C8392B', 'circle-stroke-width': 1.6, 'circle-stroke-opacity': 0.85 } });
-    // Ping radar animé autour des pays à atteinte DIRECTE (les gros points) : attire l'œil.
-    map.addLayer({ id: 'pays-pulse', type: 'circle', source: 'pays', maxzoom: 7,
-      filter: ['==', ['get', 'direct_n'], 1],
-      paint: { 'circle-radius': 14, 'circle-color': 'transparent', 'circle-stroke-color': '#C8392B', 'circle-stroke-width': 2, 'circle-stroke-opacity': 0.7 } });
+      paint: { 'circle-radius': ['match', ['get', 'harm'], 5, 24, 4, 22, 20], 'circle-color': 'transparent', 'circle-stroke-color': '#C8392B', 'circle-stroke-width': 1.8, 'circle-stroke-opacity': 0.85 } });
     map.addLayer({ id: 'pays-label', type: 'symbol', source: 'pays', maxzoom: 6.5,
-      layout: { 'text-field': ['get', 'name'], 'text-size': 11, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
-        'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-optional': true },
+      layout: { 'text-field': ['get', 'name'], 'text-size': 11.5, 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
+        'text-offset': [0, 2.1], 'text-anchor': 'top', 'text-allow-overlap': false, 'text-optional': true },
       paint: { 'text-color': '#3A3450', 'text-halo-color': '#FFFFFF', 'text-halo-width': 1.4 } });
     // Compteur d'incidents : chiffre blanc centré dans le point pays (n'apparaît que si ≥ 1).
     map.addLayer({ id: 'pays-count', type: 'symbol', source: 'pays', maxzoom: 7,
       filter: ['>=', ['get', 'incidents'], 1],
       layout: {
         'text-field': ['to-string', ['get', 'incidents']],
-        'text-size': ['match', ['get', 'harm'], 5, 12, 4, 11, 3, 10.5, 2, 9.5, 9],
+        'text-size': ['match', ['get', 'harm'], 5, 17, 4, 16, 3, 15, 2, 14, 13],
         'text-font': ['DIN Pro Bold', 'Arial Unicode MS Regular'],
         'text-allow-overlap': true, 'text-ignore-placement': true },
       paint: { 'text-color': '#FFFFFF', 'text-halo-color': 'rgba(0,0,0,0.35)', 'text-halo-width': 1 } });
     map.addLayer({ id: 'pays-hit', type: 'circle', source: 'pays', maxzoom: 7,
-      paint: { 'circle-radius': 18, 'circle-color': '#000000', 'circle-opacity': 0 } });
-    animateDirectPulse();
+      paint: { 'circle-radius': 22, 'circle-color': '#000000', 'circle-opacity': 0 } });
   }
   animateArcFlow();
-  animateAmorcePulse();
+  if (!map.__animSync) { map.__animSync = true; map.on('zoom', syncMapAnimations); }
 }
 
-// Anime la couche « pays-pulse » : un anneau rouge qui s'agrandit et s'estompe en
-// boucle autour des pays à atteinte directe (RCA, Gabon) — effet radar/clignotant.
-let _pulseRAF = null;
-function animateDirectPulse(){
-  if (_pulseRAF) return;
-  const PERIOD = 1700, MINR = 13, MAXR = 34;
-  const step = (ts) => {
-    if (map && map.getLayer && map.getLayer('pays-pulse') && map.getZoom() < 7) {
-      const t = (ts % PERIOD) / PERIOD;            // 0 → 1
-      map.setPaintProperty('pays-pulse', 'circle-radius', MINR + (MAXR - MINR) * t);
-      map.setPaintProperty('pays-pulse', 'circle-stroke-opacity', 0.7 * (1 - t));
-    }
-    _pulseRAF = requestAnimationFrame(step);
-  };
-  _pulseRAF = requestAnimationFrame(step);
-}
-
-// Anime la couche « points-amorce-pulse » : anneau violet qui s'agrandit autour des
-// points d'amorçage (phase 1) une fois zoomé sur un réseau — pour les repérer en premier.
-let _amorceRAF = null;
-function animateAmorcePulse(){
-  if (_amorceRAF) return;
-  const PERIOD = 1900, MINR = 13, MAXR = 30;
-  const step = (ts) => {
-    if (map && map.getLayer && map.getLayer('points-amorce-pulse') && map.getZoom() >= 6) {
-      const t = (ts % PERIOD) / PERIOD;
-      map.setPaintProperty('points-amorce-pulse', 'circle-radius', MINR + (MAXR - MINR) * t);
-      map.setPaintProperty('points-amorce-pulse', 'circle-stroke-opacity', 0.55 * (1 - t));
-    }
-    _amorceRAF = requestAnimationFrame(step);
-  };
-  _amorceRAF = requestAnimationFrame(step);
+// Relance la (les) boucle(s) pertinente(s) selon le zoom courant. Les boucles
+// hors plage se sont auto-stoppées : pas de repaint inutile à l'arrêt.
+function syncMapAnimations(){
+  if (!map || !map.getZoom) return;
+  if (map.getZoom() >= 6) animateArcFlow();   // seul le flux s'anime, et seulement zoomé
 }
 
 // Anime la couche « arcs-flow » : un pointillé blanc qui défile le long des faisceaux
@@ -2031,10 +2062,11 @@ function animateArcFlow(){
   ];
   let step = -1;
   const tick = (ts) => {
-    if (map && map.getLayer && map.getLayer('arcs-flow') && map.getZoom() >= 6) {
-      const s = Math.floor((ts / 70) % seq.length);
-      if (s !== step) { map.setPaintProperty('arcs-flow', 'line-dasharray', seq[s]); step = s; }
+    if (!(map && map.getLayer && map.getLayer('arcs-flow') && map.getZoom() >= 6)) {
+      _flowRAF = null; return;
     }
+    const s = Math.floor((ts / 70) % seq.length);
+    if (s !== step) { map.setPaintProperty('arcs-flow', 'line-dasharray', seq[s]); step = s; }
     _flowRAF = requestAnimationFrame(tick);
   };
   _flowRAF = requestAnimationFrame(tick);
@@ -2160,7 +2192,7 @@ function renderPaysAttacksPopup(c, paysId){
     const dt = p.date ? fmtDate(new Date(p.date)) : '';
     return `<button class="atk-item" onclick="debOpenAttack('${paysId}','${p.id}')">
       <span class="atk-num" style="background:${col}">${num}</span>
-      <span class="atk-txt"><span class="atk-date">${escapeHtml(dt)}</span><span class="atk-title">${escapeHtml(p.compte_display || p.id)}</span></span>
+      <span class="atk-txt"><span class="atk-date">${escapeHtml(dt)}</span><span class="atk-title">${escapeHtml(atkTitle(p))}</span></span>
       <span class="atk-chev">›</span></button>`;
   }).join('');
   const n = incs.length;
@@ -2292,7 +2324,7 @@ function ficheHTML(p){
   const sources = (pays && Array.isArray(pays.sources)) ? pays.sources : [];
   return `
     <div class="fiche-kicker" style="color:${kcol}">${escapeHtml(TYPELABEL[p.type] || p.type)}</div>
-    <h2 class="fiche-title">${escapeHtml(p.compte_display || p.id)}</h2>
+    <h2 class="fiche-title">${escapeHtml(atkTitle(p))}</h2>
     ${tags.length ? `<div class="fiche-meta">${tags.join('')}</div>` : ''}
     ${metaLine ? `<div class="fiche-loc">${escapeHtml(metaLine)}</div>` : ''}
     <div class="fiche-section fiche-section--first">
@@ -2317,12 +2349,21 @@ function bindMapHover(){
 
   // ── Pays continentaux : clic → la LISTE DES ATTAQUES du pays s'affiche à gauche
   // (filtrée). Le zoom vers l'arbre se fait quand on clique une attaque. ──
-  map.on('mouseenter', 'pays-hit', () => { map.getCanvas().style.cursor = 'pointer'; });
-  map.on('mouseleave', 'pays-hit', () => { map.getCanvas().style.cursor = ''; });
+  map.on('mousemove', 'pays-hit', (e) => {
+    map.getCanvas().style.cursor = 'pointer';
+    const id = e.features[0] && e.features[0].properties.id;
+    if (id && map.getLayer('pays-hover')) map.setFilter('pays-hover', ['==', ['get', 'id'], id]);
+  });
+  map.on('mouseleave', 'pays-hit', () => {
+    map.getCanvas().style.cursor = '';
+    if (map.getLayer('pays-hover')) map.setFilter('pays-hover', ['==', ['get', 'id'], '__none__']);
+  });
   map.on('click', 'pays-hit', (e) => {
     const id = e.features[0].properties.id;
     if (!(state.data.pays || []).some(x => x.id === id)) return;
-    renderDossierList(id);
+    renderDossierList(id);                 // liste des attaques du pays à gauche
+    zoomToCountryNetwork(id);              // on entre dans les flux de la zone…
+    revealFromAmorce();                    // …déroulés phase par phase
   });
 }
 
