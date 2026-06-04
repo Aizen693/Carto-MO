@@ -2869,8 +2869,22 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 .site-nav a:hover { color: var(--ink); }
 .site-nav a.is-active { color: var(--ink); font-weight: 600; }
 .site-header__right { margin-left: auto; display: flex; align-items: center; gap: 22px; }
-.site-login { font-size: 14px; font-weight: 500; color: var(--ink-2); transition: color 0.15s; }
-.site-login:hover { color: var(--violet); }
+.site-login {
+  font-size: 14px; font-weight: 600; color: var(--ink-2);
+  border: 1.5px solid var(--line-2);
+  border-radius: 10px;
+  padding: 8px 16px;
+  background: transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.site-login:hover { color: var(--violet); border-color: var(--violet-bd); }
+/* Connecté : contour en dégradé (intérieur = fond, donc seul le contour est coloré) */
+.site-login.is-logged {
+  border-color: transparent;
+  background: linear-gradient(var(--bg), var(--bg)) padding-box,
+              var(--violet-grad) border-box;
+}
+.site-login.is-logged:hover { color: var(--violet); }
 .site-cta {
   padding: 10px 18px;
   border-radius: var(--r-sm);
