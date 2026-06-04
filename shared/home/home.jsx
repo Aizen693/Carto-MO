@@ -227,9 +227,9 @@ const HOME_GET = [
   { tag: "La carte",
     t: "Une carte de situation",
     d: "Chaque théâtre sur une carte interactive : la situation se lit dans son ensemble, là où il faudrait autrement compiler des dizaines d'articles.",
-    img: "/shared/home/assets/get-carte.jpg?v=20260604m",
-    vid: "/shared/home/assets/get-carte.mp4?v=20260604m",
-    alt: "Carte de situation Madagascar : acteurs, événements et flux de trafics géolocalisés" },
+    img: "/shared/home/assets/get-carte.jpg?v=20260604q",
+    vid: "/shared/home/assets/get-carte.mp4?v=20260604q",
+    alt: "Cartes de situation Algor Int : Sahel, Moyen-Orient et Madagascar — incidents et flux géolocalisés" },
   { tag: "Le brief",
     t: "Des briefs prêts à l'emploi",
     d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
@@ -239,9 +239,9 @@ const HOME_GET = [
   { tag: "L'accès",
     t: "Un accès continu",
     d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
-    img: "/shared/home/assets/get-acces.jpg",
-    vid: "/shared/home/assets/preview-theme.mp4",
-    alt: "Plateforme : carte du Sahel avec calques d'analyse activés" },
+    img: "/shared/home/assets/get-acces.jpg?v=20260604q",
+    vid: "/shared/home/assets/get-acces.mp4?v=20260604q",
+    alt: "Plateforme Afrique Maritime : navires AIS et zones de risque en mer" },
 ];
 
 function GetSection() {
