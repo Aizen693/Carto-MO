@@ -47,7 +47,9 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
                  strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
               <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
-            <span>Essayez la démo : tapez <strong>n'importe quelle ville, région ou pays du monde</strong> dans la barre de recherche, en bas du globe.</span>
+            <span>Essayez la démo : tapez <strong>n'importe quelle ville, région ou pays du monde</strong> dans la barre de recherche, en bas du globe.
+              <em className="hero__demo-warn">Données fictives, à titre d'illustration du rendu de nos cartes.</em>
+            </span>
           </div>
 
           <nav className="hero__foot-nav">

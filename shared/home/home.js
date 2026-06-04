@@ -67,7 +67,9 @@ function HomeView({
     y1: "21",
     x2: "16.65",
     y2: "16.65"
-  })), /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : tapez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, en bas du globe.")), /*#__PURE__*/React.createElement("nav", {
+  })), /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : tapez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, en bas du globe.", /*#__PURE__*/React.createElement("em", {
+    className: "hero__demo-warn"
+  }, "Donn\xE9es fictives, \xE0 titre d'illustration du rendu de nos cartes."))), /*#__PURE__*/React.createElement("nav", {
     className: "hero__foot-nav"
   }, /*#__PURE__*/React.createElement("a", {
     href: "/sahel/"

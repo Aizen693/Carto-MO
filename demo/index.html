@@ -168,11 +168,16 @@
 
   /* Filigrane honnête (bas centre) */
   .watermark {
-    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 3;
-    font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted-2); opacity: 0; transition: opacity .6s ease; pointer-events: none;
+    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 6;
+    display: flex; align-items: center; gap: 7px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase;
+    color: #8a5a00; background: rgba(255,248,235,0.96);
+    border: 1px solid rgba(200,140,20,0.35); border-radius: 999px; padding: 6px 14px;
+    box-shadow: 0 4px 14px -5px rgba(31,18,55,0.18);
+    opacity: 0; transition: opacity .6s ease; pointer-events: none; white-space: nowrap; max-width: 94%;
   }
-  .watermark.show { opacity: 0.7; }
+  .watermark.show { opacity: 1; }
+  .watermark::before { content: '⚠'; font-size: 12px; }
 
   /* Écran fallback (zone introuvable) */
   .fallback { text-align: center; max-width: 360px; padding: 0 20px; }
@@ -215,7 +220,7 @@
     <a class="ov-back" href="/">← Retour</a>
 
     <div class="stat-chip" id="stat-chip"></div>
-    <div class="watermark" id="watermark">Démonstration · données fictives</div>
+    <div class="watermark" id="watermark">Démonstration · données 100 % fictives, à titre d'illustration</div>
 
     <div class="narration" id="narration">
       <span class="narration__step" id="nar-step">Démonstration</span>
