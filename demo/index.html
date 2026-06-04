@@ -529,7 +529,7 @@
       const b = map.getBounds(), w = b.getWest(), s = b.getSouth(), e = b.getEast(), n = b.getNorth();
       const spanX = e - w, spanY = n - s, pad = 0.14;
       const feats = [], foyers = [];
-      const nF = 3 + ((rnd() * 2) | 0); // 3-4 foyers
+      const nF = 5 + ((rnd() * 2) | 0); // 5-6 foyers répartis (points partout, comme la vraie carte)
       const mkPoint = (lng, lat, dom) => {
         const act = (dom && rnd() < 0.66) ? dom : pickActor(rnd);
         return { type: 'Feature', geometry: { type: 'Point', coordinates: [lng, lat] }, properties: {
@@ -545,12 +545,14 @@
         }
         if (!fx) continue;
         const dom = pickActor(rnd);
-        foyers.push({ center: fx, color: dom.color });
+        const foyer = { center: fx, color: dom.color, pts: [] };
+        foyers.push(foyer);
         const csz = Math.min(spanX, spanY) * 0.05;
         const cnt = 8 + ((rnd() * 4) | 0);
         for (let i = 0; i < cnt; i++) {
           const pt = [fx[0] + (rnd() + rnd() + rnd() - 1.5) * csz, fx[1] + (rnd() + rnd() + rnd() - 1.5) * csz];
           if (!onLand(pt)) continue;
+          foyer.pts.push(pt);
           feats.push(mkPoint(pt[0], pt[1], dom));
         }
       }
@@ -561,89 +563,84 @@
       return { fc: { type: 'FeatureCollection', features: feats }, foyers };
     }
 
-    // Arc courbe (Bézier) entre deux foyers — élégant, jamais une ligne droite qui se croise
-    function makeArc(a, bb, color) {
+    // Arc à peine galbé entre deux points (routes longues, comme sur la vraie carte)
+    function makeArc(a, bb, color, bend, dashed) {
       const mid = [(a[0] + bb[0]) / 2, (a[1] + bb[1]) / 2];
-      const dx = bb[0] - a[0], dy = bb[1] - a[1], bend = 0.16;
+      const dx = bb[0] - a[0], dy = bb[1] - a[1];
       const ctrl = [mid[0] - dy * bend, mid[1] + dx * bend];
-      const N = 50, coords = [];
+      const N = 40, coords = [];
       for (let i = 0; i <= N; i++) { const t = i / N, u = 1 - t;
         coords.push([u * u * a[0] + 2 * u * t * ctrl[0] + t * t * bb[0], u * u * a[1] + 2 * u * t * ctrl[1] + t * t * bb[1]]); }
-      return { coords, color };
+      return { coords, color, dashed: !!dashed };
     }
+    // Réseau type carte réelle : peu de longues routes entre villes (chaque hub → ses 2 voisins)
     function buildArcs(foyers) {
-      if (foyers.length < 2) return [];
       const arcs = [];
-      for (let i = 1; i < foyers.length; i++) arcs.push(makeArc(foyers[0].center, foyers[i].center, foyers[i].color)); // hub → foyers
-      for (let i = 1; i < foyers.length - 1; i++) arcs.push(makeArc(foyers[i].center, foyers[i + 1].center, foyers[i].color)); // chaîne
+      if (foyers.length < 2) {
+        if (foyers.length === 1) { const f = foyers[0]; (f.pts || []).slice(0, 5).forEach((p, i) => arcs.push(makeArc(f.center, p, f.color, 0.05, i % 4 === 0))); }
+        return arcs;
+      }
+      const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+      const seen = new Set();
+      foyers.forEach((h, hi) => {
+        const near = foyers.map((f, fi) => ({ fi, d: dist(h.center, f.center) })).filter(o => o.fi !== hi).sort((a, b) => a.d - b.d).slice(0, 2);
+        near.forEach(o => {
+          const key = hi < o.fi ? hi + '-' + o.fi : o.fi + '-' + hi;
+          if (seen.has(key)) return; seen.add(key);
+          arcs.push(makeArc(h.center, foyers[o.fi].center, h.color, 0.12, seen.size % 4 === 0)); // ~1/4 pointillé gris
+        });
+      });
+      // quelques antennes courtes depuis les 2 plus gros foyers
+      foyers.slice(0, 2).forEach(h => (h.pts || []).slice(0, 3).forEach(p => arcs.push(makeArc(h.center, p, h.color, 0.05, false))));
       return arcs;
     }
 
-    // Flux : particules lumineuses qui circulent le long des arcs (lit fluxArcs, màj possible)
-    let fluxArcs = [];
-    function startFlux() {
-      map.addSource('demo-flux', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-      map.addLayer({ id: 'demo-flux-glow', type: 'circle', source: 'demo-flux', paint: {
-        'circle-radius': 7, 'circle-color': ['get', 'color'], 'circle-opacity': 0.28, 'circle-blur': 1 } });
-      map.addLayer({ id: 'demo-flux-core', type: 'circle', source: 'demo-flux', paint: {
-        'circle-radius': 2.6, 'circle-color': '#ffffff', 'circle-opacity': 0.95,
-        'circle-stroke-color': ['get', 'color'], 'circle-stroke-width': 2 } });
-      let t = 0;
-      (function anim() {
-        const src = map.getSource('demo-flux'); if (!src) return;
-        const feats = [];
-        fluxArcs.forEach((a, ai) => {
-          const N = a.coords.length;
-          for (const off of [0, 0.45]) {
-            const p = (t + off + ai * 0.13) % 1;
-            const idx = Math.min(N - 1, Math.floor(p * (N - 1)));
-            feats.push({ type: 'Feature', geometry: { type: 'Point', coordinates: a.coords[idx] }, properties: { color: a.color } });
-          }
-        });
-        src.setData({ type: 'FeatureCollection', features: feats });
-        t = (t + 0.0045) % 1;
-        requestAnimationFrame(anim);
-      })();
-    }
     const arcsToFC = (arcs) => ({ type: 'FeatureCollection',
-      features: arcs.map(a => ({ type: 'Feature', geometry: { type: 'LineString', coordinates: a.coords }, properties: { color: a.color } })) });
+      features: arcs.map(a => ({ type: 'Feature', geometry: { type: 'LineString', coordinates: a.coords }, properties: { color: a.color, dashed: a.dashed } })) });
 
     // L'IA a répondu : on régénère la scène (mêmes positions, seed déterministe) avec les nouveaux acteurs
     function refineActors(pf) {
       ACTIVE = { actors: pf.actors, events: pf.events };
       const scene = generateScene();
       if (map.getSource('demo-points')) map.getSource('demo-points').setData(scene.fc);
-      fluxArcs = buildArcs(scene.foyers);
-      if (map.getSource('demo-arcs')) map.getSource('demo-arcs').setData(arcsToFC(fluxArcs));
+      if (map.getSource('demo-arcs')) map.getSource('demo-arcs').setData(arcsToFC(buildArcs(scene.foyers)));
       buildLegend();
     }
 
     function addDemoLayers(scene) {
       map.addSource('demo-points', { type: 'geojson', data: scene.fc });
 
-      // ── ARCS (sous les points) ──
-      fluxArcs = buildArcs(scene.foyers);
-      map.addSource('demo-arcs', { type: 'geojson', data: arcsToFC(fluxArcs) });
-      map.addLayer({ id: 'demo-arc-glow', type: 'line', source: 'demo-arcs', layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': ['get', 'color'], 'line-width': 5, 'line-blur': 3, 'line-opacity': 0.14 } });
-      map.addLayer({ id: 'demo-arc-line', type: 'line', source: 'demo-arcs', layout: { 'line-cap': 'round' },
-        paint: { 'line-color': ['get', 'color'], 'line-width': 1.4, 'line-opacity': 0.5 } });
+      // ── FLUX = réseau de lignes (solides colorées + pointillés gris), comme la vraie carte ──
+      map.addSource('demo-arcs', { type: 'geojson', data: arcsToFC(buildArcs(scene.foyers)) });
+      map.addLayer({ id: 'demo-arc-glow', type: 'line', source: 'demo-arcs', filter: ['!', ['get', 'dashed']],
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': ['get', 'color'], 'line-width': 4, 'line-blur': 3, 'line-opacity': 0.10 } });
+      map.addLayer({ id: 'demo-arc-solid', type: 'line', source: 'demo-arcs', filter: ['!', ['get', 'dashed']],
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': ['get', 'color'], 'line-width': 2.1, 'line-opacity': 0.78 } });
+      map.addLayer({ id: 'demo-arc-dash', type: 'line', source: 'demo-arcs', filter: ['get', 'dashed'],
+        layout: { 'line-cap': 'round' },
+        paint: { 'line-color': '#8c8c8c', 'line-width': 1.2, 'line-opacity': 0.55, 'line-dasharray': [2.5, 2] } });
 
-      // ── POINTS premium (glow + anneau pulsé + dot net) ──
+      // ── POINTS — tailles authentiques engine.js + anneau sur les plus intenses ──
+      map.addLayer({ id: 'demo-ring', type: 'circle', source: 'demo-points',
+        filter: ['>=', ['get', '_casualties'], 120],
+        paint: { 'circle-radius': 13, 'circle-color': 'transparent',
+          'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 1.4, 'circle-stroke-opacity': 0.55 } });
       map.addLayer({ id: 'demo-glow', type: 'circle', source: 'demo-points', paint: {
-        'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 9, 7, 16, 12, 26],
-        'circle-color': ['get', '_color'], 'circle-opacity': 0.22, 'circle-blur': 1 } });
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 5, 7, 9, 12, 14],
+        'circle-color': ['get', '_color'], 'circle-opacity': 0.14, 'circle-blur': 0.8 } });
       map.addLayer({ id: 'demo-pulse', type: 'circle', source: 'demo-points', paint: {
-        'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 11, 7, 18, 12, 28],
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 7, 7, 12, 12, 18],
         'circle-color': ['get', '_color'], 'circle-opacity': 0,
-        'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 1.6, 'circle-stroke-opacity': 0.25 } });
+        'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 1, 'circle-stroke-opacity': 0.22 } });
       map.addLayer({ id: 'demo-dots', type: 'circle', source: 'demo-points', paint: {
         'circle-radius': ['interpolate', ['linear'], ['zoom'],
-          3,  ['interpolate', ['linear'], ['get', '_casualties'], 0, 4, 100, 6, 1000, 8],
-          7,  ['interpolate', ['linear'], ['get', '_casualties'], 0, 6, 100, 8.5, 1000, 12],
-          12, ['interpolate', ['linear'], ['get', '_casualties'], 0, 8, 100, 12, 1000, 18]],
+          3,  ['interpolate', ['linear'], ['get', '_casualties'], 0, 3.5, 10, 4, 100, 4.5, 500, 5, 1000, 5.5, 10000, 6.5],
+          7,  ['interpolate', ['linear'], ['get', '_casualties'], 0, 5, 10, 5.5, 100, 6.5, 500, 7.5, 1000, 8.5, 10000, 10],
+          12, ['interpolate', ['linear'], ['get', '_casualties'], 0, 7, 10, 8, 100, 9.5, 500, 11, 1000, 13, 10000, 16]],
         'circle-color': ['get', '_color'], 'circle-stroke-color': '#ffffff',
-        'circle-stroke-width': 1.8, 'circle-opacity': 0.96 } });
+        'circle-stroke-width': 1.5, 'circle-opacity': 0.96 } });
 
       // pulsation de l'anneau
       let op = 0.1, dir = 1;
@@ -654,7 +651,6 @@
         requestAnimationFrame(pulse);
       })();
 
-      startFlux(); // particules au-dessus (lit fluxArcs)
 
       // curseur + popup fictif au clic
       map.on('mouseenter', 'demo-dots', () => { map.getCanvas().style.cursor = 'pointer'; });
