@@ -217,12 +217,12 @@ img, svg { display: block; max-width: 100%; }
 .brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   cursor: pointer;
 }
 .brand__mark {
-  width: 44px; height: 44px;
-  border-radius: 10px;
+  width: 52px; height: 52px;
+  border-radius: 12px;
   background-image: url('../../favicon.jpg');
   background-size: cover;
   background-position: center;
@@ -233,13 +233,12 @@ img, svg { display: block; max-width: 100%; }
 .brand__body { display: flex; flex-direction: column; gap: 5px; line-height: 1; }
 .brand__name {
   font-family: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-size: 22px;
+  font-size: 34px;
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   color: #0c0a14;
   line-height: 1;
-  text-align: justify;
-  text-align-last: justify;
+  white-space: nowrap;
 }
 .brand__name span { color: inherit; }
 .brand__tag {
@@ -249,7 +248,8 @@ img, svg { display: block; max-width: 100%; }
   letter-spacing: 0.16em;
   text-transform: uppercase;
   line-height: 1;
-  white-space: nowrap;
+  text-align: justify;
+  text-align-last: justify;
 }
 .app-header__nav {
   display: flex;
