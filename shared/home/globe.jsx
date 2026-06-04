@@ -112,10 +112,19 @@ function zoneZoom(z) {
   return Math.round((2.2 + z.s * 1.9) * 10) / 10;   // continent ~4.1, pays ~5, ville ~6.2
 }
 
+// — zones des 4 coins du globe : défilent en dégradé dans la barre (faux placeholder)
+const SEARCH_EXAMPLES = ['Tokyo', 'Bogotá', 'Kinshasa', 'Ukraine', 'Alaska', 'Beyrouth', 'Mexico', 'Sahel', 'Cachemire', 'Somalie', 'Caracas', 'Mali'];
+
 function Globe() {
   const canvasRef = useRefGlobe(null);
   const [query, setQuery] = useStateGlobe('');
   const [notFound, setNotFound] = useStateGlobe(false);
+  const [phEx, setPhEx] = useStateGlobe(0);
+
+  useEffectGlobe(() => {
+    const id = setInterval(() => setPhEx(i => (i + 1) % SEARCH_EXAMPLES.length), 2400);
+    return () => clearInterval(id);
+  }, []);
 
   const onSubmit = (e) => {
     if (e) e.preventDefault();
@@ -589,14 +598,20 @@ function Globe() {
              strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
           <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input type="text" value={query} aria-label="Rechercher une zone"
-               placeholder="Tapez un pays, une région ou une ville…"
-               onChange={(e) => { setQuery(e.target.value); setNotFound(false); }} />
+        <span className="globe-search__field">
+          <input type="text" value={query} aria-label="Rechercher une zone" placeholder=""
+                 onChange={(e) => { setQuery(e.target.value); setNotFound(false); }} />
+          {!query && (
+            <span className="globe-search__ph" aria-hidden="true">
+              Tapez une zone, comme&nbsp;<span className="globe-search__ph-zone" key={phEx}>{SEARCH_EXAMPLES[phEx]}</span>
+            </span>
+          )}
+        </span>
         <button type="submit">Démo</button>
       </form>
       {notFound && (
         <div className="globe-search__hint">
-          Saisissez une zone — pays, ville, région ou quartier, partout dans le monde.
+          Saisissez une ville, une région ou un pays, partout dans le monde.
         </div>
       )}
     </div>

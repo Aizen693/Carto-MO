@@ -324,7 +324,7 @@
       if (!z) { showFallback(rawQ); return; }
 
       document.getElementById('zone-label').textContent = z.label;
-      document.title = 'Démo — ' + z.label + ' · Algor Int';
+      document.title = 'Démo ' + z.label + ' · Algor Int';
       seed = seedFrom(norm(z.label || rawQ || 'algor'));
 
       // Profil cohérent : table instantanée si dispo, sinon IA en parallèle (repli générique)
@@ -681,9 +681,9 @@
     // ── narration (explications qui se tapent) ──
     const STEPS = [
       { step: '01 · Acteurs',   title: 'Qui est présent',     body: "Nous cartographions les groupes armés, factions et forces en présence sur la zone, et nous les tenons à jour en continu." },
-      { step: '02 · Incidents', title: 'Ce qui se passe',     body: "Chaque événement est sourcé, daté et géolocalisé : presse régionale, ACLED, GDELT, OSINT social — chaque point reste auditable." },
+      { step: '02 · Incidents', title: 'Ce qui se passe',     body: "Chaque événement est sourcé, daté et géolocalisé : presse régionale, ACLED, GDELT, OSINT social. Chaque point reste auditable." },
       { step: '03 · Flux',      title: 'Comment ça circule',  body: "Routes logistiques, mouvements transfrontaliers et points de tension émergents sont reliés pour lire la dynamique d'ensemble." },
-      { step: '04 · Analyse',   title: 'Ce que vous en tirez',body: "Une lecture décisionnelle pour les directions sûreté : qui, où, et quelle tendance — bien au-delà du flux brut." }
+      { step: '04 · Analyse',   title: 'Ce que vous en tirez',body: "Une lecture décisionnelle pour les directions sûreté : qui, où, et quelle tendance, bien au-delà du flux brut." }
     ];
     let narI = 0, narTimers = [];
     const clearNar = () => { narTimers.forEach(clearTimeout); narTimers = []; };

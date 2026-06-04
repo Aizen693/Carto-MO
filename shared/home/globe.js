@@ -475,10 +475,18 @@ function resolveZone(raw) {
 function zoneZoom(z) {
   return Math.round((2.2 + z.s * 1.9) * 10) / 10; // continent ~4.1, pays ~5, ville ~6.2
 }
+
+// — zones des 4 coins du globe : défilent en dégradé dans la barre (faux placeholder)
+const SEARCH_EXAMPLES = ['Tokyo', 'Bogotá', 'Kinshasa', 'Ukraine', 'Alaska', 'Beyrouth', 'Mexico', 'Sahel', 'Cachemire', 'Somalie', 'Caracas', 'Mali'];
 function Globe() {
   const canvasRef = useRefGlobe(null);
   const [query, setQuery] = useStateGlobe('');
   const [notFound, setNotFound] = useStateGlobe(false);
+  const [phEx, setPhEx] = useStateGlobe(0);
+  useEffectGlobe(() => {
+    const id = setInterval(() => setPhEx(i => (i + 1) % SEARCH_EXAMPLES.length), 2400);
+    return () => clearInterval(id);
+  }, []);
   const onSubmit = e => {
     if (e) e.preventDefault();
     const q = query.trim();
@@ -989,20 +997,28 @@ function Globe() {
     y1: "21",
     x2: "16.65",
     y2: "16.65"
-  })), /*#__PURE__*/React.createElement("input", {
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "globe-search__field"
+  }, /*#__PURE__*/React.createElement("input", {
     type: "text",
     value: query,
     "aria-label": "Rechercher une zone",
-    placeholder: "Tapez un pays, une r\xE9gion ou une ville\u2026",
+    placeholder: "",
     onChange: e => {
       setQuery(e.target.value);
       setNotFound(false);
     }
-  }), /*#__PURE__*/React.createElement("button", {
+  }), !query && /*#__PURE__*/React.createElement("span", {
+    className: "globe-search__ph",
+    "aria-hidden": "true"
+  }, "Tapez une zone, comme\xA0", /*#__PURE__*/React.createElement("span", {
+    className: "globe-search__ph-zone",
+    key: phEx
+  }, SEARCH_EXAMPLES[phEx]))), /*#__PURE__*/React.createElement("button", {
     type: "submit"
   }, "D\xE9mo")), notFound && /*#__PURE__*/React.createElement("div", {
     className: "globe-search__hint"
-  }, "Saisissez une zone \u2014 pays, ville, r\xE9gion ou quartier, partout dans le monde."));
+  }, "Saisissez une ville, une r\xE9gion ou un pays, partout dans le monde."));
 }
 Object.assign(window, {
   Globe

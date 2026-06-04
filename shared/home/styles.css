@@ -649,14 +649,31 @@ img, svg { display: block; max-width: 100%; }
   z-index: 5;
 }
 .globe-search svg { flex: 0 0 auto; color: var(--violet); opacity: 0.85; }
+.globe-search__field { position: relative; flex: 1; min-width: 0; display: flex; }
 .globe-search input {
-  flex: 1; min-width: 0;
+  flex: 1; min-width: 0; width: 100%;
   background: none; border: none; outline: none;
   color: #F3EFFB;                 /* HUD toujours sombre → texte clair fixe */
   font-family: var(--sans);
   font-size: 13px;
 }
 .globe-search input::placeholder { color: #8079A0; }
+/* Faux placeholder superposé : permet un dégradé animé (impossible sur un vrai placeholder) */
+.globe-search__ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center;
+  pointer-events: none;
+  font-family: var(--sans); font-size: 13px; color: #8079A0;
+  white-space: nowrap; overflow: hidden;
+}
+.globe-search__ph-zone {
+  font-weight: 700;
+  background: linear-gradient(120deg, #C8B0EA 0%, #9C9BF0 38%, #5BB0F2 62%, #9C9BF0 86%, #C8B0EA 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  animation: demoZoneFlow 3.5s linear infinite, demoZoneIn 0.45s ease both;
+}
 .globe-search button {
   flex: 0 0 auto;
   font-family: var(--mono);
