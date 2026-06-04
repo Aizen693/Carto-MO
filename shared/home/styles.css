@@ -238,7 +238,8 @@ img, svg { display: block; max-width: 100%; }
   letter-spacing: -0.015em;
   color: #0c0a14;
   line-height: 1;
-  white-space: nowrap;
+  text-align: justify;
+  text-align-last: justify;
 }
 .brand__name span { color: inherit; }
 .brand__tag {
