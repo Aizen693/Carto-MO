@@ -338,7 +338,7 @@
           <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-cn" onclick="toggleLayer('nav-cn')"></div>
         </div>
         <div class="sb-sublayer-row">
-          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#2e8b8b"></span>Etats-Unis</span>
+          <span class="sb-sub-label"><span class="sb-sub-dot" style="background:#2e8b8b"></span>États-Unis</span>
           <div class="sb-toggle sb-toggle-sm" id="sb-toggle-nav-us" onclick="toggleLayer('nav-us')"></div>
         </div>
       </div>
@@ -477,7 +477,7 @@ const CATALOG = {
     children: [
       { id:'pirate-somalie',    label:'Somalie',     file:'piraterie-somalie.geojson',    kind:'zone', color:'#e63946', defaultOn:false },
       { id:'pirate-mozambique', label:'Mozambique',  file:'piraterie-mozambique.geojson', kind:'zone', color:'#e63946', defaultOn:false },
-      { id:'pirate-guinee',     label:'Guinee',      file:'piraterie-guinee.geojson',     kind:'zone', color:'#e63946', defaultOn:false }
+      { id:'pirate-guinee',     label:'Guinée',      file:'piraterie-guinee.geojson',     kind:'zone', color:'#e63946', defaultOn:false }
     ]
   },
   navale: {
@@ -485,7 +485,7 @@ const CATALOG = {
     children: [
       { id:'nav-fr', label:'France',      file:'navale-france.geojson', kind:'nav', color:'#1a4d7a', defaultOn:false },
       { id:'nav-cn', label:'Chine',       file:'navale-chine.geojson',  kind:'nav', color:'#8b2e3c', defaultOn:false },
-      { id:'nav-us', label:'Etats-Unis',  file:'navale-usa.geojson',    kind:'nav', color:'#2e8b8b', defaultOn:false }
+      { id:'nav-us', label:'États-Unis',  file:'navale-usa.geojson',    kind:'nav', color:'#2e8b8b', defaultOn:false }
     ]
   },
   hubs: {
@@ -762,7 +762,7 @@ function makePopup(props, subId) {
   const color = ALL_CHILDREN[subId]?.color || '#c49a3c';
   const name = props.name || props.Name || 'Point';
   const skip = ['name','Name','sources','Sources','source'];
-  const labelMap = { type:'Type', pays:'Pays', description:'Description', detail:'Detail', volume:'Volume', objet:'Objet', rank:'Niveau', zone:'Zone', evolution_15j:'Δ 15j', statut:'Statut', operateur:'Operateur', ville:'Ville' };
+  const labelMap = { type:'Type', pays:'Pays', description:'Description', detail:'Détail', volume:'Volume', objet:'Objet', rank:'Niveau', zone:'Zone', evolution_15j:'Δ 15j', statut:'Statut', operateur:'Opérateur', ville:'Ville' };
   const order = ['type','pays','description','detail','volume','objet','rank','zone','evolution_15j','statut','operateur'];
   const seen = {};
   let body = '';
@@ -941,61 +941,61 @@ const AIS_CATEGORIES = {
 // Table ITU Maritime Identification Digits (MID) : 3 premiers chiffres du MMSI = pays.
 // Liste complete des indicatifs maritimes (Annexe 1 a l'Article 19 du RR UIT).
 const AIS_MID_COUNTRIES = {
-  201:'Albanie', 202:'Andorre', 203:'Autriche', 204:'Acores', 205:'Belgique', 206:'Belarus',
+  201:'Albanie', 202:'Andorre', 203:'Autriche', 204:'Açores', 205:'Belgique', 206:'Bélarus',
   207:'Bulgarie', 208:'Vatican', 209:'Chypre', 210:'Chypre', 211:'Allemagne', 212:'Chypre',
-  213:'Georgie', 214:'Moldavie', 215:'Malte', 216:'Armenie', 218:'Allemagne', 219:'Danemark',
+  213:'Géorgie', 214:'Moldavie', 215:'Malte', 216:'Arménie', 218:'Allemagne', 219:'Danemark',
   220:'Danemark', 224:'Espagne', 225:'Espagne', 226:'France', 227:'France', 228:'France',
-  229:'Malte', 230:'Finlande', 231:'Feroe', 232:'Royaume-Uni', 233:'Royaume-Uni', 234:'Royaume-Uni',
-  235:'Royaume-Uni', 236:'Gibraltar', 237:'Grece', 238:'Croatie', 239:'Grece', 240:'Grece',
-  241:'Grece', 242:'Maroc', 243:'Hongrie', 244:'Pays-Bas', 245:'Pays-Bas', 246:'Pays-Bas',
+  229:'Malte', 230:'Finlande', 231:'Féroé', 232:'Royaume-Uni', 233:'Royaume-Uni', 234:'Royaume-Uni',
+  235:'Royaume-Uni', 236:'Gibraltar', 237:'Grèce', 238:'Croatie', 239:'Grèce', 240:'Grèce',
+  241:'Grèce', 242:'Maroc', 243:'Hongrie', 244:'Pays-Bas', 245:'Pays-Bas', 246:'Pays-Bas',
   247:'Italie', 248:'Malte', 249:'Malte', 250:'Irlande', 251:'Islande', 252:'Liechtenstein',
-  253:'Luxembourg', 254:'Monaco', 255:'Madere', 256:'Malte', 257:'Norvege', 258:'Norvege',
-  259:'Norvege', 261:'Pologne', 262:'Montenegro', 263:'Portugal', 264:'Roumanie', 265:'Suede',
-  266:'Suede', 267:'Slovaquie', 268:'San Marino', 269:'Suisse', 270:'Tchequie', 271:'Turquie',
-  272:'Ukraine', 273:'Russie', 274:'Macedoine N.', 275:'Lettonie', 276:'Estonie', 277:'Lituanie',
-  278:'Slovenie', 279:'Serbie',
-  301:'Anguilla', 303:'Alaska', 304:'Antigua-Barbuda', 305:'Antigua-Barbuda', 306:'Curacao',
+  253:'Luxembourg', 254:'Monaco', 255:'Madère', 256:'Malte', 257:'Norvège', 258:'Norvège',
+  259:'Norvège', 261:'Pologne', 262:'Monténégro', 263:'Portugal', 264:'Roumanie', 265:'Suède',
+  266:'Suède', 267:'Slovaquie', 268:'San Marino', 269:'Suisse', 270:'Tchéquie', 271:'Turquie',
+  272:'Ukraine', 273:'Russie', 274:'Macédoine N.', 275:'Lettonie', 276:'Estonie', 277:'Lituanie',
+  278:'Slovénie', 279:'Serbie',
+  301:'Anguilla', 303:'Alaska', 304:'Antigua-Barbuda', 305:'Antigua-Barbuda', 306:'Curaçao',
   307:'Aruba', 308:'Bahamas', 309:'Bahamas', 310:'Bermudes', 311:'Bahamas', 312:'Belize',
-  314:'Barbade', 316:'Canada', 319:'Iles Caimans', 321:'Costa Rica', 323:'Cuba', 325:'Dominique',
-  327:'Rep. Dominicaine', 329:'Guadeloupe', 330:'Grenade', 331:'Groenland', 332:'Guatemala',
-  334:'Honduras', 336:'Haiti', 338:'Etats-Unis', 339:'Jamaique', 341:'Saint-Kitts-Nevis',
+  314:'Barbade', 316:'Canada', 319:'Îles Caïmans', 321:'Costa Rica', 323:'Cuba', 325:'Dominique',
+  327:'Rép. Dominicaine', 329:'Guadeloupe', 330:'Grenade', 331:'Groenland', 332:'Guatemala',
+  334:'Honduras', 336:'Haïti', 338:'États-Unis', 339:'Jamaïque', 341:'Saint-Kitts-Nevis',
   343:'Sainte-Lucie', 345:'Mexique', 347:'Martinique', 348:'Montserrat', 350:'Nicaragua',
   351:'Panama', 352:'Panama', 353:'Panama', 354:'Panama', 355:'Panama', 356:'Panama',
   357:'Panama', 358:'Porto Rico', 359:'El Salvador', 361:'Saint-Pierre-et-Miquelon',
-  362:'Trinite-et-Tobago', 364:'Iles Turques-et-Caiques', 366:'Etats-Unis', 367:'Etats-Unis',
-  368:'Etats-Unis', 369:'Etats-Unis', 370:'Panama', 371:'Panama', 372:'Panama', 373:'Panama',
+  362:'Trinité-et-Tobago', 364:'Îles Turques-et-Caïques', 366:'États-Unis', 367:'États-Unis',
+  368:'États-Unis', 369:'États-Unis', 370:'Panama', 371:'Panama', 372:'Panama', 373:'Panama',
   374:'Panama', 375:'Saint-Vincent', 376:'Saint-Vincent', 377:'Saint-Vincent',
-  378:'Iles Vierges Brit.', 379:'Iles Vierges US',
-  401:'Afghanistan', 403:'Arabie Saoudite', 405:'Bangladesh', 408:'Bahrein', 410:'Bhoutan',
-  412:'Chine', 413:'Chine', 414:'Chine', 416:'Taiwan', 417:'Sri Lanka', 419:'Inde',
-  422:'Iran', 423:'Azerbaidjan', 425:'Irak', 428:'Israel', 431:'Japon', 432:'Japon',
-  434:'Turkmenistan', 436:'Kazakhstan', 437:'Ouzbekistan', 438:'Jordanie', 440:'Coree du Sud',
-  441:'Coree du Sud', 443:'Palestine', 445:'Coree du Nord', 447:'Koweit', 450:'Liban',
-  451:'Kirghizstan', 453:'Macao', 455:'Maldives', 457:'Mongolie', 459:'Nepal', 461:'Oman',
-  463:'Pakistan', 466:'Qatar', 468:'Syrie', 470:'Emirats Arabes Unis', 471:'Emirats Arabes Unis',
-  472:'Tadjikistan', 473:'Yemen', 475:'Yemen', 477:'Hong Kong', 478:'Bosnie-Herzegovine',
-  501:'Antarctique Adelie', 503:'Australie', 506:'Myanmar', 508:'Brunei', 510:'Micronesie',
-  511:'Palaos', 512:'Nouvelle-Zelande', 514:'Cambodge', 515:'Cambodge', 516:'Iles Christmas',
-  518:'Iles Cook', 520:'Fidji', 523:'Iles Cocos', 525:'Indonesie', 529:'Kiribati', 531:'Laos',
-  533:'Malaisie', 536:'Iles Mariannes Nord', 538:'Iles Marshall', 540:'Nouvelle-Caledonie',
-  542:'Niue', 544:'Nauru', 546:'Polynesie francaise', 548:'Philippines', 553:'Papouasie-N.G.',
-  555:'Pitcairn', 557:'Iles Salomon', 559:'Samoa americaines', 561:'Samoa', 563:'Singapour',
-  564:'Singapour', 565:'Singapour', 566:'Singapour', 567:'Thailande', 570:'Tonga', 572:'Tuvalu',
+  378:'Îles Vierges Brit.', 379:'Îles Vierges US',
+  401:'Afghanistan', 403:'Arabie Saoudite', 405:'Bangladesh', 408:'Bahreïn', 410:'Bhoutan',
+  412:'Chine', 413:'Chine', 414:'Chine', 416:'Taïwan', 417:'Sri Lanka', 419:'Inde',
+  422:'Iran', 423:'Azerbaïdjan', 425:'Irak', 428:'Israël', 431:'Japon', 432:'Japon',
+  434:'Turkménistan', 436:'Kazakhstan', 437:'Ouzbékistan', 438:'Jordanie', 440:'Corée du Sud',
+  441:'Corée du Sud', 443:'Palestine', 445:'Corée du Nord', 447:'Koweït', 450:'Liban',
+  451:'Kirghizstan', 453:'Macao', 455:'Maldives', 457:'Mongolie', 459:'Népal', 461:'Oman',
+  463:'Pakistan', 466:'Qatar', 468:'Syrie', 470:'Émirats Arabes Unis', 471:'Émirats Arabes Unis',
+  472:'Tadjikistan', 473:'Yémen', 475:'Yémen', 477:'Hong Kong', 478:'Bosnie-Herzégovine',
+  501:'Antarctique Adélie', 503:'Australie', 506:'Myanmar', 508:'Brunei', 510:'Micronésie',
+  511:'Palaos', 512:'Nouvelle-Zélande', 514:'Cambodge', 515:'Cambodge', 516:'Îles Christmas',
+  518:'Îles Cook', 520:'Fidji', 523:'Îles Cocos', 525:'Indonésie', 529:'Kiribati', 531:'Laos',
+  533:'Malaisie', 536:'Îles Mariannes Nord', 538:'Îles Marshall', 540:'Nouvelle-Calédonie',
+  542:'Niue', 544:'Nauru', 546:'Polynésie française', 548:'Philippines', 553:'Papouasie-N.G.',
+  555:'Pitcairn', 557:'Îles Salomon', 559:'Samoa américaines', 561:'Samoa', 563:'Singapour',
+  564:'Singapour', 565:'Singapour', 566:'Singapour', 567:'Thaïlande', 570:'Tonga', 572:'Tuvalu',
   574:'Vietnam', 576:'Vanuatu', 577:'Vanuatu', 578:'Wallis-et-Futuna',
-  601:'Afrique du Sud', 603:'Angola', 605:'Algerie', 607:'Iles Saint-Paul', 608:'Ascension',
-  609:'Burundi', 610:'Benin', 611:'Botswana', 612:'Centrafrique', 613:'Cameroun', 615:'Congo',
-  616:'Comores', 617:'Cap-Vert', 618:'Antarctique Crozet', 619:'Cote d\'Ivoire', 620:'Comores',
-  621:'Djibouti', 622:'Egypte', 624:'Ethiopie', 625:'Erythree', 626:'Gabon', 627:'Ghana',
-  629:'Gambie', 630:'Guinee-Bissau', 631:'Guinee Equatoriale', 632:'Guinee', 633:'Burkina Faso',
-  634:'Kenya', 635:'Antarctique Kerguelen', 636:'Liberia', 637:'Liberia', 638:'Soudan du Sud',
+  601:'Afrique du Sud', 603:'Angola', 605:'Algérie', 607:'Îles Saint-Paul', 608:'Ascension',
+  609:'Burundi', 610:'Bénin', 611:'Botswana', 612:'Centrafrique', 613:'Cameroun', 615:'Congo',
+  616:'Comores', 617:'Cap-Vert', 618:'Antarctique Crozet', 619:'Côte d\'Ivoire', 620:'Comores',
+  621:'Djibouti', 622:'Égypte', 624:'Éthiopie', 625:'Érythrée', 626:'Gabon', 627:'Ghana',
+  629:'Gambie', 630:'Guinée-Bissau', 631:'Guinée Équatoriale', 632:'Guinée', 633:'Burkina Faso',
+  634:'Kenya', 635:'Antarctique Kerguelen', 636:'Libéria', 637:'Libéria', 638:'Soudan du Sud',
   642:'Libye', 644:'Lesotho', 645:'Maurice', 647:'Madagascar', 649:'Mali', 650:'Mozambique',
-  654:'Mauritanie', 655:'Malawi', 656:'Niger', 657:'Nigeria', 659:'Namibie', 660:'Reunion',
-  661:'Rwanda', 662:'Soudan', 663:'Senegal', 664:'Seychelles', 665:'Sainte-Helene',
-  666:'Somalie', 667:'Sierra Leone', 668:'Sao Tome-et-Principe', 669:'Eswatini', 670:'Tchad',
+  654:'Mauritanie', 655:'Malawi', 656:'Niger', 657:'Nigeria', 659:'Namibie', 660:'Réunion',
+  661:'Rwanda', 662:'Soudan', 663:'Sénégal', 664:'Seychelles', 665:'Sainte-Hélène',
+  666:'Somalie', 667:'Sierra Leone', 668:'Sao Tomé-et-Principe', 669:'Eswatini', 670:'Tchad',
   671:'Togo', 672:'Tunisie', 673:'Tanzanie', 674:'Tanzanie', 675:'Ouganda', 676:'RDC',
   677:'Tanzanie', 678:'Zambie', 679:'Zimbabwe',
-  701:'Argentine', 710:'Bresil', 720:'Bolivie', 725:'Chili', 730:'Colombie', 735:'Equateur',
-  740:'Falkland', 745:'Guyane francaise', 750:'Guyana', 755:'Paraguay', 760:'Perou',
+  701:'Argentine', 710:'Brésil', 720:'Bolivie', 725:'Chili', 730:'Colombie', 735:'Équateur',
+  740:'Falkland', 745:'Guyane française', 750:'Guyana', 755:'Paraguay', 760:'Pérou',
   765:'Suriname', 770:'Uruguay', 775:'Venezuela'
 };
 
