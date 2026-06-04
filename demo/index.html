@@ -158,11 +158,13 @@
   .narration__cta {
     display: block; margin: 11px 0 2px; text-align: center; text-decoration: none;
     font-family: var(--sans); font-size: 12.5px; font-weight: 600; color: #fff;
-    background: var(--violet); border-radius: 9px; padding: 10px 12px;
-    box-shadow: 0 6px 18px -6px rgba(107,63,160,0.5);
-    transition: background .15s, transform .15s;
+    background: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #2E84D4 100%);
+    background-size: 160% auto; background-position: 0% center;
+    border-radius: 9px; padding: 10px 12px;
+    box-shadow: 0 6px 18px -6px rgba(86,80,198,0.55);
+    transition: background-position .35s ease, transform .15s, box-shadow .15s;
   }
-  .narration__cta:hover { background: var(--violet-h); transform: translateY(-1px); }
+  .narration__cta:hover { background-position: 100% center; transform: translateY(-1px); box-shadow: 0 8px 22px -6px rgba(46,132,212,0.55); }
 
   /* Filigrane honnête (bas centre) */
   .watermark {
@@ -485,6 +487,21 @@
     let ACTIVE = { actors: GENERIC.actors, events: GENERIC.events };
     function applyProfile(z) { const pf = profileFor(z); ACTIVE = { actors: pf.actors, events: pf.events }; }
 
+    // Zones réellement couvertes (les 6 théâtres premium d'Algor Int) → CTA « en premium ».
+    // Les autres → CTA commercial (demande / devis).
+    const COVERED = new Set([
+      'ML', 'BF', 'NE', 'TD', 'MR',                                  // Sahel
+      'SY', 'IQ', 'LB', 'IL', 'PS', 'YE', 'IR', 'SA', 'JO', 'TR', 'AE', 'OM', 'QA', 'BH', 'KW', // Moyen-Orient
+      'CD',                                                          // RDC
+      'MG',                                                          // Madagascar
+      'AF', 'PK', 'IN', 'BD', 'LK', 'NP'                             // Asie du Sud
+    ]);
+    const COVERED_ALIASES = new Set(['sahel', 'moyen orient', 'proche orient', 'rdc', 'grands lacs', 'madagascar', 'asie du sud', 'afrique']);
+    function isCoveredZone(z) {
+      if (z.countryCode && COVERED.has(z.countryCode)) return true;
+      return COVERED_ALIASES.has(norm(z.region || z.label || ''));
+    }
+
     // Repli IA : zones non câblées → acteurs générés par Gemini (edge function publique), avec cache
     const FN_BASE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1';
     async function resolveProfileAI(z) {
@@ -750,7 +767,15 @@
       addDemoLayers(generateScene());
       buildLegend();
       const cta = document.getElementById('nar-cta');
-      if (cta && z && z.label) cta.textContent = 'Débloquer ' + z.label + ' en premium →';
+      if (cta && z && z.label) {
+        if (isCoveredZone(z)) {
+          cta.textContent = 'Débloquer ' + z.label + ' en premium →';
+          cta.href = '/offres/';
+        } else {
+          cta.textContent = 'Demander une carte sur ' + z.label + ' →';
+          cta.href = '/contact/';
+        }
+      }
       ['stat-chip', 'legend', 'narration', 'watermark'].forEach(id => {
         const el = document.getElementById(id); if (el) el.classList.add('show');
       });
