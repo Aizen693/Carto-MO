@@ -263,6 +263,9 @@ img, svg { display: block; max-width: 100%; }
   align-items: center;
   gap: 20px;
 }
+/* Nav recentré : espaces égaux entre logo et connexion */
+.app-header__inner .site-nav { margin-left: auto; margin-right: auto; }
+.app-header__inner .app-header__right { margin-left: 0; }
 .header-cta {
   display: inline-flex;
   align-items: center;
