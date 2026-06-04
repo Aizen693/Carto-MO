@@ -262,18 +262,21 @@ const HOME_GET = [{
   t: "Une carte de situation",
   d: "Chaque théâtre sur une carte interactive : la situation se lit dans son ensemble, là où il faudrait autrement compiler des dizaines d'articles.",
   img: "/shared/home/assets/get-carte.jpg",
+  vid: "/shared/home/assets/preview-region.mp4",
   alt: "Carte de situation du Moyen-Orient : incidents géolocalisés par acteur"
 }, {
   tag: "Le brief",
   t: "Des briefs prêts à l'emploi",
   d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
   img: "/shared/home/assets/get-brief.jpg",
+  vid: "/shared/home/assets/preview-rapport.mp4",
   alt: "Rapport analytique : répartition des événements par type et par pays"
 }, {
   tag: "L'accès",
   t: "Un accès continu",
   d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
   img: "/shared/home/assets/get-acces.jpg",
+  vid: "/shared/home/assets/preview-theme.mp4",
   alt: "Plateforme : carte du Sahel avec calques d'analyse activés"
 }];
 function GetSection() {
@@ -291,16 +294,47 @@ function GetSection() {
     className: "get-grid"
   }, HOME_GET.map((g, i) => /*#__PURE__*/React.createElement("article", {
     className: "get-card get-card--solo",
-    key: i
+    key: i,
+    onMouseEnter: e => {
+      const v = e.currentTarget.querySelector('video');
+      if (v) v.play().catch(() => {});
+    },
+    onMouseLeave: e => {
+      const v = e.currentTarget.querySelector('video');
+      if (v) {
+        v.pause();
+        v.currentTime = 0;
+      }
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: "get-card__media"
-  }, /*#__PURE__*/React.createElement("img", {
-    src: g.img,
-    alt: g.alt,
-    loading: "lazy",
-    width: "760",
-    height: "475"
-  })), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("video", {
+    poster: g.img,
+    muted: true,
+    loop: true,
+    playsInline: true,
+    preload: "none",
+    "aria-label": g.alt,
+    tabIndex: 0,
+    onFocus: e => e.currentTarget.play().catch(() => {}),
+    onBlur: e => {
+      e.currentTarget.pause();
+      e.currentTarget.currentTime = 0;
+    }
+  }, /*#__PURE__*/React.createElement("source", {
+    src: g.vid,
+    type: "video/mp4"
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "get-card__playhint",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "13",
+    height: "13",
+    viewBox: "0 0 18 18",
+    fill: "currentColor"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M5 3.5v11l10-5.5z"
+  })), "Survoler pour voir")), /*#__PURE__*/React.createElement("div", {
     className: "get-card__body"
   }, /*#__PURE__*/React.createElement("span", {
     className: "get-card__tag"
