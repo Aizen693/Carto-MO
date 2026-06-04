@@ -217,15 +217,18 @@ const HOME_GET = [
   { tag: "La carte",
     t: "Une carte de situation",
     d: "Chaque théâtre sur une carte interactive : la situation se lit dans son ensemble, là où il faudrait autrement compiler des dizaines d'articles.",
-    média: "Aperçu cartographié" },
+    img: "/shared/home/assets/get-carte.jpg",
+    alt: "Carte de situation du Moyen-Orient : incidents géolocalisés par acteur" },
   { tag: "Le brief",
     t: "Des briefs prêts à l'emploi",
     d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
-    média: "Aperçu brief de sécurité" },
+    img: "/shared/home/assets/get-brief.jpg",
+    alt: "Rapport analytique : répartition des événements par type et par pays" },
   { tag: "L'accès",
     t: "Un accès continu",
     d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
-    média: "Aperçu plateforme" },
+    img: "/shared/home/assets/get-acces.jpg",
+    alt: "Plateforme : carte du Sahel avec calques d'analyse activés" },
 ];
 
 function GetSection() {
@@ -240,6 +243,9 @@ function GetSection() {
         <div className="get-grid">
           {HOME_GET.map((g, i) => (
             <article className="get-card get-card--solo" key={i}>
+              <div className="get-card__media">
+                <img src={g.img} alt={g.alt} loading="lazy" width="760" height="475" />
+              </div>
               <div className="get-card__body">
                 <span className="get-card__tag">{g.tag}</span>
                 <h3 className="get-card__title">{g.t}</h3>
