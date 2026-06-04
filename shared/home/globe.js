@@ -979,25 +979,7 @@ function Globe() {
   }), /*#__PURE__*/React.createElement("form", {
     className: "globe-search",
     onSubmit: onSubmit
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "14",
-    height: "14",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2.2",
-    strokeLinecap: "round",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("circle", {
-    cx: "11",
-    cy: "11",
-    r: "7"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "21",
-    y1: "21",
-    x2: "16.65",
-    y2: "16.65"
-  })), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", {
     className: "globe-search__field"
   }, /*#__PURE__*/React.createElement("input", {
     type: "text",
@@ -1015,8 +997,27 @@ function Globe() {
     className: "globe-search__ph-zone",
     key: phEx
   }, SEARCH_EXAMPLES[phEx]))), /*#__PURE__*/React.createElement("button", {
-    type: "submit"
-  }, "D\xE9mo")), notFound && /*#__PURE__*/React.createElement("div", {
+    type: "submit",
+    "aria-label": "Lancer la d\xE9mo"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "16",
+    height: "16",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.4",
+    strokeLinecap: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "11",
+    cy: "11",
+    r: "7"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "21",
+    y1: "21",
+    x2: "16.65",
+    y2: "16.65"
+  })))), notFound && /*#__PURE__*/React.createElement("div", {
     className: "globe-search__hint"
   }, "Saisissez une ville, une r\xE9gion ou un pays, partout dans le monde."));
 }

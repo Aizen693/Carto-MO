@@ -594,10 +594,6 @@ function Globe() {
               role="img" aria-label="Globe interactif — six theatres OSINT" />
 
       <form className="globe-search" onSubmit={onSubmit}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
         <span className="globe-search__field">
           <input type="text" value={query} aria-label="Rechercher une zone" placeholder=""
                  onChange={(e) => { setQuery(e.target.value); setNotFound(false); }} />
@@ -607,7 +603,12 @@ function Globe() {
             </span>
           )}
         </span>
-        <button type="submit">Démo</button>
+        <button type="submit" aria-label="Lancer la démo">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
       </form>
       {notFound && (
         <div className="globe-search__hint">
