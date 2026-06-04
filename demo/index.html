@@ -327,13 +327,24 @@
       document.title = 'Démo — ' + z.label + ' · Algor Int';
       seed = seedFrom(norm(z.label || rawQ || 'algor'));
 
+      // Profil cohérent : table instantanée si dispo, sinon IA en parallèle (repli générique)
+      const curated = profileFor(z);
+      const pfPromise = (curated !== GENERIC) ? Promise.resolve(curated) : resolveProfileAI(z);
+      ACTIVE = { actors: curated.actors, events: curated.events }; // table câblée, ou générique provisoire
+
       document.getElementById('map-loader').style.display = 'none';
       frameZone(z);
 
       let built = false;
-      const build = () => { if (built) return; built = true; startDemo(z); };
+      const build = () => {
+        if (built) return; built = true;
+        startDemo(z); // rendu immédiat
+        // zones non câblées : l'IA affine les acteurs dès qu'elle répond
+        // (mêmes positions grâce au seed déterministe, seules couleurs/noms changent)
+        if (curated === GENERIC) pfPromise.then(pf => { if (pf && pf !== GENERIC && pf.actors) refineActors(pf); }).catch(() => {});
+      };
       map.once('moveend', build);
-      setTimeout(build, 3400); // filet si moveend ne se déclenche pas
+      setTimeout(build, 3400);
     });
 
     // — plein écran natif sur le stage
@@ -474,6 +485,33 @@
     let ACTIVE = { actors: GENERIC.actors, events: GENERIC.events };
     function applyProfile(z) { const pf = profileFor(z); ACTIVE = { actors: pf.actors, events: pf.events }; }
 
+    // Repli IA : zones non câblées → acteurs générés par Gemini (edge function publique), avec cache
+    const FN_BASE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1';
+    async function resolveProfileAI(z) {
+      const label = z.label || z.region || '';
+      if (label.length < 2) return GENERIC;
+      const key = 'demoai:' + norm(label);
+      try { const c = localStorage.getItem(key); if (c) { const p = JSON.parse(c); if (p && p.actors && p.actors.length >= 3) return p; } } catch (_) {}
+      try {
+        const ctrl = new AbortController();
+        const to = setTimeout(() => ctrl.abort(), 9000); // tolère le cold start de la function
+        const res = await fetch(FN_BASE + '/demo-actors', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ label: z.label, region: z.region, countryCode: z.countryCode }),
+          signal: ctrl.signal,
+        });
+        clearTimeout(to);
+        if (res.ok) {
+          const p = await res.json();
+          if (p && Array.isArray(p.actors) && p.actors.length >= 3) {
+            try { localStorage.setItem(key, JSON.stringify(p)); } catch (_) {}
+            return p;
+          }
+        }
+      } catch (_) { /* timeout / réseau → repli générique */ }
+      return GENERIC;
+    }
+
     const MONTHS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin'];
     // RNG déterministe : une même zone ⇒ une même démo
     function seedFrom(str) { let h = 1779033703; for (let i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); } return h >>> 0; }
@@ -541,8 +579,9 @@
       return arcs;
     }
 
-    // Flux : particules lumineuses qui circulent le long des arcs
-    function startFlux(arcs) {
+    // Flux : particules lumineuses qui circulent le long des arcs (lit fluxArcs, màj possible)
+    let fluxArcs = [];
+    function startFlux() {
       map.addSource('demo-flux', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'demo-flux-glow', type: 'circle', source: 'demo-flux', paint: {
         'circle-radius': 7, 'circle-color': ['get', 'color'], 'circle-opacity': 0.28, 'circle-blur': 1 } });
@@ -553,7 +592,7 @@
       (function anim() {
         const src = map.getSource('demo-flux'); if (!src) return;
         const feats = [];
-        arcs.forEach((a, ai) => {
+        fluxArcs.forEach((a, ai) => {
           const N = a.coords.length;
           for (const off of [0, 0.45]) {
             const p = (t + off + ai * 0.13) % 1;
@@ -566,14 +605,25 @@
         requestAnimationFrame(anim);
       })();
     }
+    const arcsToFC = (arcs) => ({ type: 'FeatureCollection',
+      features: arcs.map(a => ({ type: 'Feature', geometry: { type: 'LineString', coordinates: a.coords }, properties: { color: a.color } })) });
+
+    // L'IA a répondu : on régénère la scène (mêmes positions, seed déterministe) avec les nouveaux acteurs
+    function refineActors(pf) {
+      ACTIVE = { actors: pf.actors, events: pf.events };
+      const scene = generateScene();
+      if (map.getSource('demo-points')) map.getSource('demo-points').setData(scene.fc);
+      fluxArcs = buildArcs(scene.foyers);
+      if (map.getSource('demo-arcs')) map.getSource('demo-arcs').setData(arcsToFC(fluxArcs));
+      buildLegend();
+    }
 
     function addDemoLayers(scene) {
       map.addSource('demo-points', { type: 'geojson', data: scene.fc });
 
       // ── ARCS (sous les points) ──
-      const arcs = buildArcs(scene.foyers);
-      map.addSource('demo-arcs', { type: 'geojson', data: { type: 'FeatureCollection',
-        features: arcs.map(a => ({ type: 'Feature', geometry: { type: 'LineString', coordinates: a.coords }, properties: { color: a.color } })) } });
+      fluxArcs = buildArcs(scene.foyers);
+      map.addSource('demo-arcs', { type: 'geojson', data: arcsToFC(fluxArcs) });
       map.addLayer({ id: 'demo-arc-glow', type: 'line', source: 'demo-arcs', layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: { 'line-color': ['get', 'color'], 'line-width': 5, 'line-blur': 3, 'line-opacity': 0.14 } });
       map.addLayer({ id: 'demo-arc-line', type: 'line', source: 'demo-arcs', layout: { 'line-cap': 'round' },
@@ -604,7 +654,7 @@
         requestAnimationFrame(pulse);
       })();
 
-      startFlux(arcs); // particules au-dessus
+      startFlux(); // particules au-dessus (lit fluxArcs)
 
       // curseur + popup fictif au clic
       map.on('mouseenter', 'demo-dots', () => { map.getCanvas().style.cursor = 'pointer'; });
@@ -679,7 +729,7 @@
 
     function startDemo(z) {
       if (map.getSource('demo-points')) return;   // une seule fois
-      applyProfile(z);                            // acteurs cohérents avec la zone
+      // ACTIVE déjà résolu (table câblée ou IA) dans le handler 'load'
       addDemoLayers(generateScene());
       buildLegend();
       const cta = document.getElementById('nar-cta');
