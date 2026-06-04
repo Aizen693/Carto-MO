@@ -16,6 +16,7 @@ const ZONE_LABELS = {
 
 function HomeView({ onEnter, onConsole, clock, videoStyle }) {
   return (
+    <>
     <main className="view-enter view-enter-active">
       <section className="hero">
         <div className="hero__copy">
@@ -63,6 +64,62 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
 
       <VideoBand style={videoStyle} />
     </main>
+    <SiteFooter />
+    </>
+  );
+}
+
+// ─── Pied de page — sobre, dans la DA client (violet/blanc/Jakarta).
+const FOOT_COLS = [
+  { head: 'Plateforme', links: [
+    ['Théâtres', '/theatres/'],
+    ['Offres', '/offres/'],
+    ['Méthodologie', '/methodologie/'],
+    ['La plateforme', '/plateforme/'],
+  ] },
+  { head: 'Théâtres suivis', links: [
+    ['Sahel', '/sahel/'],
+    ['Moyen-Orient', '/moyen-orient/'],
+    ['RDC', '/rdc/'],
+    ['Afrique', '/afrique/'],
+  ] },
+  { head: 'Société', links: [
+    ['À propos', '/a-propos/'],
+    ['Débunkage', '/debunkage/'],
+    ['Contact', '/contact/'],
+  ] },
+];
+
+function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <div className="site-footer__wrap">
+        <div className="site-footer__brand">
+          <div className="brand__name">ALGOR INT</div>
+          <p className="site-footer__tag">
+            Renseignement géopolitique. Six théâtres à risque suivis en continu, chaque événement sourcé, daté et auditable.
+          </p>
+        </div>
+        <nav className="site-footer__cols" aria-label="Liens de pied de page">
+          {FOOT_COLS.map((c) => (
+            <div className="site-footer__col" key={c.head}>
+              <div className="site-footer__head">{c.head}</div>
+              {c.links.map(([label, href]) => (
+                <a className="site-footer__link" href={href} key={href}>{label}</a>
+              ))}
+            </div>
+          ))}
+        </nav>
+      </div>
+      <div className="site-footer__bar">
+        <span>© 2026 Algor Int — Tous droits réservés</span>
+        <span className="site-footer__legal">
+          <a href="/contact/">Mentions légales</a>
+          <a href="/contact/">Confidentialité</a>
+          <a href="/contact/">Contact</a>
+        </span>
+      </div>
+    </footer>
   );
 }
 
@@ -165,7 +222,7 @@ const HOME_GET = [
     t: "Des briefs prêts à l'emploi",
     d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
     média: "Aperçu brief de sécurité" },
-  { tag: "L'acces",
+  { tag: "L'accès",
     t: "Un accès continu",
     d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
     média: "Aperçu plateforme" },
@@ -525,13 +582,13 @@ function ConsoleView({ onBack, onArchives, onVeille }) {
     <main className="view-enter view-enter-active">
       <section className="console-page">
         <a className="console-back" href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>
-          &larr; Retour a l'accueil
+          &larr; Retour à l'accueil
         </a>
         <h1 className="hero__title">
           Console <em>interne</em>
         </h1>
         <p className="hero__lede">
-          Outil de travail des analystes Algor Int sur six théâtres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agrégés sur une carte unique, sourcée, datée et auditable événement par événement.
+          Outil de travail des analystes Algor Int sur six théâtres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'État, OSINT social et flux Telegram sont agrégés sur une carte unique, sourcée, datée et auditable événement par événement.
         </p>
 
         <div className="console-tabs">
@@ -603,7 +660,7 @@ function VeilleView({ onBack }) {
       />
       <div className="veille-fs__bar">
         <button className="veille-fs__btn" onClick={onBack}>
-          &larr; Retour a la console
+          &larr; Retour à la console
         </button>
       </div>
     </div>,
@@ -668,11 +725,11 @@ function ArchivesView({ onBack }) {
     <main className="view-enter view-enter-active">
       <section className="console-page">
         <a className="console-back" href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>
-          &larr; Retour a la console
+          &larr; Retour à la console
         </a>
         <h1 className="hero__title">Archives <em>des points</em></h1>
         <p className="hero__lede">
-          Tous les points cartographiés, regroupés par théâtre. Conserves en base même apres retrait des cartes.
+          Tous les points cartographiés, regroupés par théâtre. Conservés en base même après retrait des cartes.
         </p>
 
         {points && points.length > 0 && (
@@ -700,7 +757,7 @@ function ArchivesView({ onBack }) {
         {!points && !error && <div className="dash-msg">Chargement des points...</div>}
         {points && points.length === 0 && <div className="dash-msg">Aucun point en base.</div>}
         {points && points.length > 0 && zones.length === 0 && (
-          <div className="dash-msg">Aucun resultat pour « {query} ».</div>
+          <div className="dash-msg">Aucun résultat pour « {query} ».</div>
         )}
 
         {points && zones.map((z) => (
@@ -713,7 +770,7 @@ function ArchivesView({ onBack }) {
               <table className="dash-table">
                 <thead>
                   <tr>
-                    <th>Nom</th><th>Periode</th><th>Latitude</th>
+                    <th>Nom</th><th>Période</th><th>Latitude</th>
                     <th>Longitude</th><th>Victimes</th><th>Statut</th>
                   </tr>
                 </thead>
@@ -731,7 +788,7 @@ function ArchivesView({ onBack }) {
                         <td>{p.casualties || 0}</td>
                         <td>
                           {p.deleted
-                            ? <span className="dash-tag dash-tag--archived">Archive</span>
+                            ? <span className="dash-tag dash-tag--archived">Archivé</span>
                             : <span className="dash-tag dash-tag--live">Actif</span>}
                         </td>
                       </tr>
@@ -762,8 +819,8 @@ function parsePointDesc(raw) {
     const v = m[2].trim();
     if (k === 'date') r.date = v;
     else if (k === 'pays') r.pays = v;
-    else if (k === 'événement' || k === 'événement') r.event = v;
-    else if (k === 'détail' || k === 'détail') r.détail = v;
+    else if (k === 'événement' || k === 'evenement') r.event = v;
+    else if (k === 'détail' || k === 'detail') r.détail = v;
   });
   return Object.keys(r).length ? r : null;
 }
@@ -782,15 +839,15 @@ function PointDetail({ point, onClose }) {
   if (d) {
     if (d.date) eventRows.push(['Date', d.date]);
     if (d.pays) eventRows.push(['Pays', d.pays]);
-    if (d.event) eventRows.push(['Evenement', d.event]);
-    if (d.détail) eventRows.push(['Detail', d.détail]);
+    if (d.event) eventRows.push(['Événement', d.event]);
+    if (d.détail) eventRows.push(['Détail', d.détail]);
   }
   const metaRows = [
-    ['Theatre', ZONE_LABELS[point.zone] || point.zone],
-    ['Coordonnees', lat + ', ' + lng],
+    ['Théâtre', ZONE_LABELS[point.zone] || point.zone],
+    ['Coordonnées', lat + ', ' + lng],
     ['Victimes', String(point.casualties || 0)],
-    ['Statut', point.deleted ? 'Archive (retire des cartes)' : 'Actif'],
-    ['Ajoute le', created],
+    ['Statut', point.deleted ? 'Archivé (retiré des cartes)' : 'Actif'],
+    ['Ajouté le', created],
   ];
 
   return ReactDOM.createPortal(

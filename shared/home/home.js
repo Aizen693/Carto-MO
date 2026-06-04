@@ -23,7 +23,7 @@ function HomeView({
   clock,
   videoStyle
 }) {
-  return /*#__PURE__*/React.createElement("main", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("main", {
     className: "view-enter view-enter-active"
   }, /*#__PURE__*/React.createElement("section", {
     className: "hero"
@@ -61,7 +61,54 @@ function HomeView({
     className: "hero__visual"
   }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(TrustBand, null), /*#__PURE__*/React.createElement(ProductionSection, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
     style: videoStyle
-  }));
+  })), /*#__PURE__*/React.createElement(SiteFooter, null));
+}
+
+// ─── Pied de page — sobre, dans la DA client (violet/blanc/Jakarta).
+const FOOT_COLS = [{
+  head: 'Plateforme',
+  links: [['Théâtres', '/theatres/'], ['Offres', '/offres/'], ['Méthodologie', '/methodologie/'], ['La plateforme', '/plateforme/']]
+}, {
+  head: 'Théâtres suivis',
+  links: [['Sahel', '/sahel/'], ['Moyen-Orient', '/moyen-orient/'], ['RDC', '/rdc/'], ['Afrique', '/afrique/']]
+}, {
+  head: 'Société',
+  links: [['À propos', '/a-propos/'], ['Débunkage', '/debunkage/'], ['Contact', '/contact/']]
+}];
+function SiteFooter() {
+  return /*#__PURE__*/React.createElement("footer", {
+    className: "site-footer"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "site-footer__wrap"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "site-footer__brand"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "brand__name"
+  }, "ALGOR INT"), /*#__PURE__*/React.createElement("p", {
+    className: "site-footer__tag"
+  }, "Renseignement g\xE9opolitique. Six th\xE9\xE2tres \xE0 risque suivis en continu, chaque \xE9v\xE9nement sourc\xE9, dat\xE9 et auditable.")), /*#__PURE__*/React.createElement("nav", {
+    className: "site-footer__cols",
+    "aria-label": "Liens de pied de page"
+  }, FOOT_COLS.map(c => /*#__PURE__*/React.createElement("div", {
+    className: "site-footer__col",
+    key: c.head
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "site-footer__head"
+  }, c.head), c.links.map(([label, href]) => /*#__PURE__*/React.createElement("a", {
+    className: "site-footer__link",
+    href: href,
+    key: href
+  }, label)))))), /*#__PURE__*/React.createElement("div", {
+    className: "site-footer__bar"
+  }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 Algor Int \u2014 Tous droits r\xE9serv\xE9s"), /*#__PURE__*/React.createElement("span", {
+    className: "site-footer__legal"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "/contact/"
+  }, "Mentions l\xE9gales"), /*#__PURE__*/React.createElement("a", {
+    href: "/contact/"
+  }, "Confidentialit\xE9"), /*#__PURE__*/React.createElement("a", {
+    href: "/contact/"
+  }, "Contact"))));
 }
 
 // ─── Trust band : chiffres clés juste sous le hero
@@ -221,7 +268,7 @@ const HOME_GET = [{
   d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
   média: "Aperçu brief de sécurité"
 }, {
-  tag: "L'acces",
+  tag: "L'accès",
   t: "Un accès continu",
   d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
   média: "Aperçu plateforme"
@@ -784,11 +831,11 @@ function ConsoleView({
       e.preventDefault();
       onBack();
     }
-  }, "\u2190 Retour a l'accueil"), /*#__PURE__*/React.createElement("h1", {
+  }, "\u2190 Retour \xE0 l'accueil"), /*#__PURE__*/React.createElement("h1", {
     className: "hero__title"
   }, "Console ", /*#__PURE__*/React.createElement("em", null, "interne")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Outil de travail des analystes Algor Int sur six th\xE9\xE2tres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'Etat, OSINT social et flux Telegram sont agr\xE9g\xE9s sur une carte unique, sourc\xE9e, dat\xE9e et auditable \xE9v\xE9nement par \xE9v\xE9nement."), /*#__PURE__*/React.createElement("div", {
+  }, "Outil de travail des analystes Algor Int sur six th\xE9\xE2tres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'\xC9tat, OSINT social et flux Telegram sont agr\xE9g\xE9s sur une carte unique, sourc\xE9e, dat\xE9e et auditable \xE9v\xE9nement par \xE9v\xE9nement."), /*#__PURE__*/React.createElement("div", {
     className: "console-tabs"
   }, /*#__PURE__*/React.createElement(ConsoleTab, {
     href: "/admin/",
@@ -897,7 +944,7 @@ function VeilleView({
   }, /*#__PURE__*/React.createElement("button", {
     className: "veille-fs__btn",
     onClick: onBack
-  }, "\u2190 Retour a la console"))), document.body);
+  }, "\u2190 Retour \xE0 la console"))), document.body);
 }
 
 // Page « Archives » — dashboard de tous les points, par théâtre (lecture base Supabase).
@@ -967,11 +1014,11 @@ function ArchivesView({
       e.preventDefault();
       onBack();
     }
-  }, "\u2190 Retour a la console"), /*#__PURE__*/React.createElement("h1", {
+  }, "\u2190 Retour \xE0 la console"), /*#__PURE__*/React.createElement("h1", {
     className: "hero__title"
   }, "Archives ", /*#__PURE__*/React.createElement("em", null, "des points")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Tous les points cartographi\xE9s, regroup\xE9s par th\xE9\xE2tre. Conserves en base m\xEAme apres retrait des cartes."), points && points.length > 0 && /*#__PURE__*/React.createElement("div", {
+  }, "Tous les points cartographi\xE9s, regroup\xE9s par th\xE9\xE2tre. Conserv\xE9s en base m\xEAme apr\xE8s retrait des cartes."), points && points.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "dash-search"
   }, /*#__PURE__*/React.createElement("div", {
     className: "search-input"
@@ -995,7 +1042,7 @@ function ArchivesView({
     className: "dash-msg"
   }, "Aucun point en base."), points && points.length > 0 && zones.length === 0 && /*#__PURE__*/React.createElement("div", {
     className: "dash-msg"
-  }, "Aucun resultat pour \xAB ", query, " \xBB."), points && zones.map(z => /*#__PURE__*/React.createElement("div", {
+  }, "Aucun r\xE9sultat pour \xAB ", query, " \xBB."), points && zones.map(z => /*#__PURE__*/React.createElement("div", {
     className: "dash-zone",
     key: z
   }, /*#__PURE__*/React.createElement("div", {
@@ -1008,7 +1055,7 @@ function ArchivesView({
     className: "dash-table-wrap"
   }, /*#__PURE__*/React.createElement("table", {
     className: "dash-table"
-  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Nom"), /*#__PURE__*/React.createElement("th", null, "Periode"), /*#__PURE__*/React.createElement("th", null, "Latitude"), /*#__PURE__*/React.createElement("th", null, "Longitude"), /*#__PURE__*/React.createElement("th", null, "Victimes"), /*#__PURE__*/React.createElement("th", null, "Statut"))), /*#__PURE__*/React.createElement("tbody", null, groups[z].map(p => {
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Nom"), /*#__PURE__*/React.createElement("th", null, "P\xE9riode"), /*#__PURE__*/React.createElement("th", null, "Latitude"), /*#__PURE__*/React.createElement("th", null, "Longitude"), /*#__PURE__*/React.createElement("th", null, "Victimes"), /*#__PURE__*/React.createElement("th", null, "Statut"))), /*#__PURE__*/React.createElement("tbody", null, groups[z].map(p => {
     const c = Array.isArray(p.coordinates) ? p.coordinates : [];
     return /*#__PURE__*/React.createElement("tr", {
       key: p.id,
@@ -1020,7 +1067,7 @@ function ArchivesView({
       }
     }, /*#__PURE__*/React.createElement("td", null, p.name || '·'), /*#__PURE__*/React.createElement("td", null, p.period || '·'), /*#__PURE__*/React.createElement("td", null, c[1] != null ? Number(c[1]).toFixed(4) : '·'), /*#__PURE__*/React.createElement("td", null, c[0] != null ? Number(c[0]).toFixed(4) : '·'), /*#__PURE__*/React.createElement("td", null, p.casualties || 0), /*#__PURE__*/React.createElement("td", null, p.deleted ? /*#__PURE__*/React.createElement("span", {
       className: "dash-tag dash-tag--archived"
-    }, "Archive") : /*#__PURE__*/React.createElement("span", {
+    }, "Archiv\xE9") : /*#__PURE__*/React.createElement("span", {
       className: "dash-tag dash-tag--live"
     }, "Actif")));
   }))))))), selected && /*#__PURE__*/React.createElement(PointDetail, {
@@ -1040,7 +1087,7 @@ function parsePointDesc(raw) {
     if (!m) return;
     const k = m[1].trim().toLowerCase();
     const v = m[2].trim();
-    if (k === 'date') r.date = v;else if (k === 'pays') r.pays = v;else if (k === 'événement' || k === 'événement') r.event = v;else if (k === 'détail' || k === 'détail') r.détail = v;
+    if (k === 'date') r.date = v;else if (k === 'pays') r.pays = v;else if (k === 'événement' || k === 'evenement') r.event = v;else if (k === 'détail' || k === 'detail') r.détail = v;
   });
   return Object.keys(r).length ? r : null;
 }
@@ -1063,10 +1110,10 @@ function PointDetail({
   if (d) {
     if (d.date) eventRows.push(['Date', d.date]);
     if (d.pays) eventRows.push(['Pays', d.pays]);
-    if (d.event) eventRows.push(['Evenement', d.event]);
-    if (d.détail) eventRows.push(['Detail', d.détail]);
+    if (d.event) eventRows.push(['Événement', d.event]);
+    if (d.détail) eventRows.push(['Détail', d.détail]);
   }
-  const metaRows = [['Theatre', ZONE_LABELS[point.zone] || point.zone], ['Coordonnees', lat + ', ' + lng], ['Victimes', String(point.casualties || 0)], ['Statut', point.deleted ? 'Archive (retire des cartes)' : 'Actif'], ['Ajoute le', created]];
+  const metaRows = [['Théâtre', ZONE_LABELS[point.zone] || point.zone], ['Coordonnées', lat + ', ' + lng], ['Victimes', String(point.casualties || 0)], ['Statut', point.deleted ? 'Archivé (retiré des cartes)' : 'Actif'], ['Ajouté le', created]];
   return ReactDOM.createPortal(/*#__PURE__*/React.createElement("div", {
     className: "point-modal-overlay",
     onClick: onClose

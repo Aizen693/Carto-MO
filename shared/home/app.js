@@ -92,7 +92,7 @@ function App() {
     href: "/theatres/"
   }, "Th\xE9\xE2tres"), /*#__PURE__*/React.createElement("a", {
     href: "/a-propos/"
-  }, "A propos"), /*#__PURE__*/React.createElement("a", {
+  }, "\xC0 propos"), /*#__PURE__*/React.createElement("a", {
     href: "/contact/"
   }, "Contact")), /*#__PURE__*/React.createElement("div", {
     className: "app-header__right"
