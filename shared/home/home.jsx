@@ -51,13 +51,6 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
               <em className="hero__demo-warn">Données fictives, à titre d'illustration du rendu de nos cartes.</em>
             </span>
           </div>
-
-          <nav className="hero__foot-nav">
-            <a href="/sahel/">Sahel</a>
-            <a href="/moyen-orient/">Moyen-Orient</a>
-            <a href="/rdc/">RDC</a>
-            <a href="/afrique/">Afrique</a>
-          </nav>
         </div>
 
         <div className="hero__visual">

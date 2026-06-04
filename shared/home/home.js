@@ -69,17 +69,7 @@ function HomeView({
     y2: "16.65"
   })), /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : tapez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, en bas du globe.", /*#__PURE__*/React.createElement("em", {
     className: "hero__demo-warn"
-  }, "Donn\xE9es fictives, \xE0 titre d'illustration du rendu de nos cartes."))), /*#__PURE__*/React.createElement("nav", {
-    className: "hero__foot-nav"
-  }, /*#__PURE__*/React.createElement("a", {
-    href: "/sahel/"
-  }, "Sahel"), /*#__PURE__*/React.createElement("a", {
-    href: "/moyen-orient/"
-  }, "Moyen-Orient"), /*#__PURE__*/React.createElement("a", {
-    href: "/rdc/"
-  }, "RDC"), /*#__PURE__*/React.createElement("a", {
-    href: "/afrique/"
-  }, "Afrique"))), /*#__PURE__*/React.createElement("div", {
+  }, "Donn\xE9es fictives, \xE0 titre d'illustration du rendu de nos cartes.")))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"
   }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(TrustBand, null), /*#__PURE__*/React.createElement(ProductionSection, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
     style: videoStyle
