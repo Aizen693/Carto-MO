@@ -119,14 +119,11 @@ function Globe() {
 
   const onSubmit = (e) => {
     if (e) e.preventDefault();
-    const z = resolveZone(query);
-    if (!z) { setNotFound(true); return; }
+    const q = query.trim();
+    if (!q) { setNotFound(true); return; }
     setNotFound(false);
-    // La recherche ouvre la carte de démonstration (map blanche) sur la zone.
-    const params = new URLSearchParams({
-      lon: String(z.lon), lat: String(z.lat), z: String(zoneZoom(z)), label: z.label
-    });
-    window.location.href = '/demo/?' + params.toString();
+    // La recherche ouvre la démo : géocodage mondial côté /demo/.
+    window.location.href = '/demo/?q=' + encodeURIComponent(q);
   };
 
   useEffectGlobe(() => {
@@ -599,7 +596,7 @@ function Globe() {
       </form>
       {notFound && (
         <div className="globe-search__hint">
-          Zone non reconnue. Essayez : Sahel · Liban · RDC · Amérique latine · Yémen
+          Saisissez une zone — pays, ville, région ou quartier, partout dans le monde.
         </div>
       )}
     </div>

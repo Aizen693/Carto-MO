@@ -17,6 +17,7 @@
     --ink:      #1F1437;
     --ink-2:    #4A4460;
     --muted:    #6B6480;
+    --muted-2:  #9089AA;
     --line:     rgba(123,90,189,0.18);
     --violet:   #6B3FA0;
     --violet-h: #5A3290;
@@ -43,6 +44,18 @@
     font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em;
     text-transform: uppercase;
   }
+
+  /* Pastille de statistiques (haut centre) */
+  .stat-chip {
+    position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 4;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-2); background: #fff; backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px;
+    box-shadow: 0 4px 14px -4px rgba(31,18,55,0.12);
+    opacity: 0; transition: opacity .5s ease; pointer-events: none; white-space: nowrap;
+  }
+  .stat-chip.show { opacity: 1; }
 
   /* En-tête flottant discret (haut gauche) */
   .ov-title {
@@ -81,6 +94,7 @@
     font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em;
     color: var(--muted); text-decoration: none;
     background: rgba(255,255,255,0.85); backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 1px solid var(--line); border-radius: 999px;
     padding: 6px 12px;
     transition: color 0.15s;
@@ -98,9 +112,83 @@
   .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right { opacity: 0.5; }
   .mapboxgl-ctrl-bottom-left:hover, .mapboxgl-ctrl-bottom-right:hover { opacity: 1; }
 
+  /* ── Légende (bas droite) ── */
+  .legend {
+    position: absolute; right: 14px; bottom: 16px; z-index: 4;
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px 14px; box-shadow: 0 6px 22px -6px rgba(46,24,87,0.16);
+    min-width: 196px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .4s ease, transform .4s ease;
+  }
+  .legend.show { opacity: 1; transform: none; }
+  .legend h4 {
+    margin: 0 0 9px; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 500;
+  }
+  .legend-row { display: flex; align-items: center; gap: 9px; margin: 7px 0; font-size: 12px; color: var(--ink-2); }
+  .legend-dot { width: 11px; height: 11px; border-radius: 50%; flex: 0 0 auto; box-shadow: 0 0 0 3px rgba(0,0,0,0.04); }
+
+  /* ── Cartouche narration / explications (bas gauche) ── */
+  .narration {
+    position: absolute; left: 14px; bottom: 16px; z-index: 4;
+    width: 308px; max-width: calc(100% - 28px);
+    background: #fff; border: 1px solid var(--line); border-left: 3px solid var(--violet);
+    border-radius: 12px; padding: 14px 16px;
+    box-shadow: 0 8px 26px -8px rgba(46,24,87,0.20);
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .4s ease, transform .4s ease;
+  }
+  .narration.show { opacity: 1; transform: none; }
+  .narration__step { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--violet); }
+  .narration__title { margin: 4px 0 5px; font-size: 15px; font-weight: 600; color: var(--ink); }
+  .narration__body { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-2); min-height: 56px; }
+  .narration__caret { color: var(--violet); }
+  .narration__nav { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .narration__dots { display: flex; gap: 5px; flex: 1; }
+  .narration__dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(107,63,160,0.22); cursor: pointer; transition: background .2s, width .2s; }
+  .narration__dot.on { background: var(--violet); width: 16px; border-radius: 3px; }
+  .narration__btn {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em;
+    color: var(--violet); background: none; border: 1px solid rgba(107,63,160,0.3);
+    border-radius: 999px; padding: 5px 11px; cursor: pointer; transition: background .15s;
+  }
+  .narration__btn:hover { background: rgba(107,63,160,0.07); }
+  .narration__cta {
+    display: block; margin: 11px 0 2px; text-align: center; text-decoration: none;
+    font-family: var(--sans); font-size: 12.5px; font-weight: 600; color: #fff;
+    background: var(--violet); border-radius: 9px; padding: 10px 12px;
+    box-shadow: 0 6px 18px -6px rgba(107,63,160,0.5);
+    transition: background .15s, transform .15s;
+  }
+  .narration__cta:hover { background: var(--violet-h); transform: translateY(-1px); }
+
+  /* Filigrane honnête (bas centre) */
+  .watermark {
+    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 3;
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted-2); opacity: 0; transition: opacity .6s ease; pointer-events: none;
+  }
+  .watermark.show { opacity: 0.7; }
+
+  /* Écran fallback (zone introuvable) */
+  .fallback { text-align: center; max-width: 360px; padding: 0 20px; }
+  .fallback__t { font-size: 20px; font-weight: 600; color: var(--ink); }
+  .fallback__s { margin: 8px 0 16px; font-family: var(--sans); font-size: 13px; color: var(--muted); text-transform: none; letter-spacing: 0; }
+  .fallback__chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .fallback__chips a {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-transform: none;
+    color: var(--violet); text-decoration: none;
+    background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 7px 13px;
+    transition: border-color .15s, color .15s;
+  }
+  .fallback__chips a:hover { border-color: rgba(107,63,160,0.4); color: var(--violet-h); }
+
   @media (max-width: 640px) {
     .ov-title { left: 14px; top: 56px; }
     .mapboxgl-ctrl-top-left { top: 96px; }
+    .legend { display: none; }
+    .narration { width: calc(100% - 28px); }
   }
 </style>
 </head>
@@ -122,6 +210,25 @@
     </button>
 
     <a class="ov-back" href="/">← Retour</a>
+
+    <div class="stat-chip" id="stat-chip"></div>
+    <div class="watermark" id="watermark">Démonstration · données fictives</div>
+
+    <div class="narration" id="narration">
+      <span class="narration__step" id="nar-step">Démonstration</span>
+      <h3 class="narration__title" id="nar-title"></h3>
+      <p class="narration__body" id="nar-body"></p>
+      <a class="narration__cta" id="nar-cta" href="/offres/">Débloquer cette zone en premium →</a>
+      <div class="narration__nav">
+        <div class="narration__dots" id="nar-dots"></div>
+        <button class="narration__btn" id="nar-replay" type="button">Rejouer</button>
+      </div>
+    </div>
+
+    <div class="legend" id="legend">
+      <h4>Acteurs présents</h4>
+      <div id="legend-rows"></div>
+    </div>
   </div>
 
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
@@ -129,55 +236,104 @@
   (function () {
     mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
-    // — paramètres de zone passés par la recherche du globe d'accueil
+    // — requête : ?q=<zone> (géocodage mondial) ; compat ?lon/lat/label
     const qs = new URLSearchParams(location.search);
-    const lon   = parseFloat(qs.get('lon'));
-    const lat   = parseFloat(qs.get('lat'));
-    const zoom  = parseFloat(qs.get('z'));
-    const label = qs.get('label');
+    const rawQ = qs.get('q');
+    const lon0 = parseFloat(qs.get('lon')), lat0 = parseFloat(qs.get('lat'));
+    const label0 = qs.get('label');
+    const TOKEN = mapboxgl.accessToken;
 
-    const hasZone = Number.isFinite(lon) && Number.isFinite(lat);
-    if (label) document.getElementById('zone-label').textContent = label;
-
-    // Vue d'ouverture : large, le temps que le vol se déclenche
     const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/light-v11',
-      projection: 'globe',
-      center: hasZone ? [lon, lat] : [17, 3],
-      zoom: hasZone ? 2.2 : 2.6,
-      minZoom: 1.4,
-      maxZoom: 16,
-      attributionControl: false
+      container: 'map', style: 'mapbox://styles/mapbox/light-v11', projection: 'globe',
+      center: [17, 3], zoom: 2.4, pitch: 0, minZoom: 1.4, maxZoom: 16, attributionControl: false
     });
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-left');
     map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
 
+    // ── Style « premium light » : fond blanc tuné DA Algoracces (eau + frontières violet) ──
+    function paintSafe(layer, prop, val) { try { if (map.getLayer(layer)) map.setPaintProperty(layer, prop, val); } catch (e) {} }
+    function tunePremiumLight() {
+      paintSafe('water', 'fill-color', '#E7E1F2');
+      paintSafe('admin-0-boundary', 'line-color', '#9B86C4');
+      paintSafe('admin-0-boundary-bg', 'line-color', '#D2C7E8');
+      paintSafe('admin-1-boundary', 'line-color', '#BBA9D9');
+      paintSafe('road-primary', 'line-color', '#E6E2EE');
+      paintSafe('road-secondary-tertiary', 'line-color', '#EBE8F2');
+    }
     map.on('style.load', () => {
-      // léger halo atmosphérique, cohérent avec un fond clair
-      map.setFog({
-        color: 'rgb(247,245,252)',
-        'high-color': 'rgb(225,220,240)',
-        'horizon-blend': 0.04,
-        'space-color': 'rgb(247,245,252)',
-        'star-intensity': 0
-      });
+      tunePremiumLight();
+      map.setFog({ color: 'rgb(247,245,252)', 'high-color': 'rgb(225,220,240)',
+        'horizon-blend': 0.04, 'space-color': 'rgb(247,245,252)', 'star-intensity': 0 });
     });
 
-    map.on('load', () => {
-      document.getElementById('map-loader').style.display = 'none';
+    // ── Géocodage mondial (Mapbox Geocoding v6) + alias pour régions floues ──
+    const norm = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    const ALIASES = {
+      'sahel': { center: [2, 16], zoom: 5.2, type: 'region', label: 'Sahel', pk: 'ML' },
+      'moyen orient': { center: [44, 31], zoom: 4.6, type: 'region', label: 'Moyen-Orient', pk: 'SY' },
+      'proche orient': { center: [38, 33], zoom: 5.2, type: 'region', label: 'Proche-Orient', pk: 'SY' },
+      'maghreb': { center: [5, 31], zoom: 4.6, type: 'region', label: 'Maghreb', pk: 'LY' },
+      'corne de l afrique': { center: [45, 8], zoom: 4.8, type: 'region', label: "Corne de l'Afrique", pk: 'SO' },
+      'amerique latine': { center: [-62, -15], zoom: 3.2, type: 'region', label: 'Amérique latine', pk: 'CO' },
+      'amerique du sud': { center: [-60, -15], zoom: 3.2, type: 'region', label: 'Amérique du Sud', pk: 'CO' },
+      'afrique de l ouest': { center: [-4, 13], zoom: 4.4, type: 'region', label: "Afrique de l'Ouest", pk: 'ML' },
+      'grands lacs': { center: [29, -2], zoom: 5.4, type: 'region', label: 'Grands Lacs', pk: 'CD' }
+    };
+    const MAXZOOM = { country: 4.6, region: 5.4, district: 6.6, postcode: 8, place: 9.2, locality: 10.5, neighborhood: 11.5, street: 13, address: 13.5, poi: 13.5 };
+    const SMALL = ['place', 'locality', 'neighborhood', 'street', 'address', 'poi', 'postcode'];
+
+    async function geocode(q) {
+      const a = ALIASES[norm(q)];
+      if (a) return { center: a.center, bbox: null, type: a.type, label: a.label, zoom: a.zoom, pk: a.pk, region: a.label, countryCode: null };
+      const url = 'https://api.mapbox.com/search/geocode/v6/forward?q=' + encodeURIComponent(q) +
+        '&limit=1&language=fr&access_token=' + TOKEN;
+      const r = await fetch(url).then(r => r.json()).catch(() => null);
+      const f = r && r.features && r.features[0];
+      if (!f) return null;
+      const ctx = f.properties.context || {};
+      const cc = (ctx.country && ctx.country.country_code) ? ctx.country.country_code.toUpperCase() : null;
+      return { center: f.geometry.coordinates, bbox: f.properties.bbox, type: f.properties.feature_type,
+        label: f.properties.name, countryCode: cc, region: (ctx.region && ctx.region.name) || f.properties.name };
+    }
+    function frameZone(z) {
+      const mz = MAXZOOM[z.type] || 8;
+      if (z.bbox && !SMALL.includes(z.type))
+        map.fitBounds(z.bbox, { padding: 90, maxZoom: mz, duration: 2800, curve: 1.5, essential: true });
+      else
+        map.flyTo({ center: z.center, zoom: z.zoom || mz, duration: 2800, curve: 1.5, essential: true });
+    }
+    function escapeHtml(s) { return (s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+    function showFallback(q) {
+      const loader = document.getElementById('map-loader');
+      const chips = ['Sahel', 'Liban', 'RDC', 'Amérique latine', 'Kinshasa', 'Alaska']
+        .map(z => '<a href="?q=' + encodeURIComponent(z) + '">' + z + '</a>').join('');
+      loader.innerHTML = '<div class="fallback"><div class="fallback__t">Zone introuvable</div>' +
+        '<div class="fallback__s">« ' + escapeHtml(q || '') + ' » n\'a pas pu être localisée. Essayez :</div>' +
+        '<div class="fallback__chips">' + chips + '</div></div>';
+      loader.style.display = 'flex';
+    }
+
+    let seed = 1234567;
+
+    map.on('load', async () => {
       map.resize();
-      // vol cinématique vers la zone recherchée
-      if (hasZone) {
-        map.flyTo({
-          center: [lon, lat],
-          zoom: Number.isFinite(zoom) ? zoom : 4.5,
-          duration: 2600,
-          curve: 1.5,
-          essential: true
-        });
-      }
-      // base propre : aucun point pour l'instant — on ajoute les éléments ensuite.
+      let z = null;
+      if (rawQ) z = await geocode(rawQ);
+      else if (Number.isFinite(lon0) && Number.isFinite(lat0))
+        z = { center: [lon0, lat0], bbox: null, type: 'place', label: label0 || 'Zone', zoom: parseFloat(qs.get('z')) || 6 };
+      if (!z) { showFallback(rawQ); return; }
+
+      document.getElementById('zone-label').textContent = z.label;
+      document.title = 'Démo — ' + z.label + ' · Algor Int';
+      seed = seedFrom(norm(z.label || rawQ || 'algor'));
+
+      document.getElementById('map-loader').style.display = 'none';
+      frameZone(z);
+
+      let built = false;
+      const build = () => { if (built) return; built = true; startDemo(z); };
+      map.once('moveend', build);
+      setTimeout(build, 3400); // filet si moveend ne se déclenche pas
     });
 
     // — plein écran natif sur le stage
@@ -192,6 +348,349 @@
       fsLabel.textContent = on ? 'Quitter' : 'Plein écran';
       setTimeout(() => map.resize(), 120);
     });
+
+    // ════════════════════════════════════════════════════════
+    //  DÉMO : points fictifs + flux + légende + explications
+    //  100 % fictif — uniquement à des fins de démonstration.
+    // ════════════════════════════════════════════════════════
+    // ── Profils par zone : acteurs + lexique d'événements crédibles selon la région ──
+    const A = (name, color) => ({ name, color });
+    const P = (actors, events) => ({ actors, events });
+    const SAHEL = P([A('JNIM','#e63946'),A('État islamique au Sahel','#9d0208'),A('FAMa / forces nationales','#2e7d32'),A('Africa Corps (Wagner)','#6c757d'),A("Groupes d'autodéfense (VDP)",'#8e24aa')],
+      ['Attaque jihadiste','Engin explosif (IED)','Embuscade','Enlèvement','Raid sur village','Mouvement de troupes']);
+    const NARCO_CO = P([A('Clan del Golfo','#e63946'),A('Dissidences FARC','#f48c06'),A('ELN','#c1121f'),A('Forces armées','#2e7d32'),A('Police nationale','#1d7ed8')],
+      ['Saisie de cocaïne','Affrontement narco','Extorsion','Assassinat ciblé','Laboratoire démantelé','Embuscade']);
+    const NARCO_MX = P([A('Cartel de Sinaloa','#e63946'),A('CJNG','#f48c06'),A('Cartel du Golfe','#c1121f'),A('Garde nationale','#2e7d32'),A('Forces fédérales','#1d7ed8')],
+      ['Saisie de drogue','Affrontement entre cartels','Disparition','Exécution','Checkpoint','Embuscade']);
+    const RDC_EST = P([A('M23','#e63946'),A('ADF','#9d0208'),A('FDLR','#c1121f'),A('FARDC (armée)','#2e7d32'),A('Wazalendo','#8e24aa'),A('MONUSCO','#1d7ed8')],
+      ['Affrontement M23','Attaque de village','Déplacement de population','Embuscade','Prise de localité','Pillage minier']);
+    const NIGERIA = P([A('Boko Haram','#e63946'),A('ISWAP','#9d0208'),A('Bandits armés','#f48c06'),A('Forces armées','#2e7d32'),A("Milices d'autodéfense",'#8e24aa')],
+      ['Attaque','Enlèvement de masse','Raid','Engin explosif','Affrontement','Pillage']);
+    const SOMALIE = P([A('Al-Shabaab','#e63946'),A('EI-Somalie','#9d0208'),A('Armée somalienne (SNA)','#2e7d32'),A('ATMIS','#1d7ed8'),A('Milices claniques','#8e24aa')],
+      ['Attentat','Engin explosif','Raid','Embuscade','Assassinat ciblé','Mouvement']);
+    const SYRIE = P([A('Forces du régime','#c1121f'),A('HTS','#e63946'),A('FDS (kurdes)','#1d7ed8'),A('Daesh','#6c757d'),A('Milices pro-iraniennes','#9d0208'),A('Forces turques','#f48c06')],
+      ['Frappe aérienne','Affrontement','Tir d\'artillerie','Attentat','Mouvement de troupes','Prise de position']);
+    const IRAK = P([A('Daesh','#6c757d'),A('PMF / Hashd','#9d0208'),A('Forces irakiennes','#2e7d32'),A('Coalition','#1d7ed8'),A('Milices pro-iraniennes','#e63946')],
+      ['Embuscade','Engin explosif','Frappe','Raid antiterroriste','Tir de roquette','Mouvement']);
+    const AFGHA = P([A('Taliban','#2e7d32'),A('EI-Khorasan (ISKP)','#e63946'),A('Front de résistance (NRF)','#1d7ed8'),A('Milices locales','#8e24aa')],
+      ['Attentat','Affrontement','Engin explosif','Exécution','Raid','Mouvement']);
+    const UKRAINE = P([A('Forces ukrainiennes','#1d7ed8'),A('Forces russes','#e63946'),A('Groupe Wagner','#6c757d'),A('Frappes de drones','#f48c06')],
+      ['Frappe de missile','Attaque de drone','Combat','Bombardement','Avancée','Contre-offensive']);
+    const YEMEN = P([A('Houthis','#e63946'),A('Forces gouvernementales','#2e7d32'),A('Conseil de transition du Sud','#8e24aa'),A('Coalition saoudienne','#1d7ed8'),A('AQPA','#9d0208')],
+      ['Frappe','Attaque de drone','Affrontement','Tir de missile','Mouvement','Embuscade']);
+    const LIBAN = P([A('Hezbollah','#e63946'),A('Forces israéliennes (FDI)','#1d7ed8'),A('Armée libanaise','#2e7d32'),A('FINUL','#8e24aa')],
+      ['Frappe israélienne','Tir de roquette','Affrontement frontalier','Interception','Mouvement','Reconnaissance']);
+    const ISR = P([A('Tsahal (FDI)','#1d7ed8'),A('Hamas','#e63946'),A('Jihad islamique','#9d0208'),A('Hezbollah','#c1121f')],
+      ['Frappe aérienne','Tir de roquette','Opération terrestre','Affrontement','Interception','Raid']);
+    const SOUDAN = P([A('FSR (RSF)','#e63946'),A('Forces armées (SAF)','#2e7d32'),A('Mouvements armés','#8e24aa'),A('Milices','#9d0208')],
+      ['Affrontement FSR / armée','Bombardement','Pillage','Déplacement','Prise de ville','Embuscade']);
+    const MYANMAR = P([A('Junte (Tatmadaw)','#c1121f'),A('Forces de défense (PDF)','#1d7ed8'),A('Armées ethniques','#e63946'),A('Résistance locale','#8e24aa')],
+      ['Frappe aérienne','Affrontement','Raid','Embuscade','Prise de base','Mouvement']);
+    const LIBYE = P([A('GNU (Tripoli)','#1d7ed8'),A('ANL (Haftar)','#e63946'),A('Milices','#8e24aa'),A('Mercenaires','#6c757d'),A('Daesh','#9d0208')],
+      ['Affrontement de milices','Frappe','Mouvement','Prise de terminal','Embuscade','Tension']);
+    const MOZA = P([A('Ansar al-Sunna','#e63946'),A('Forces armées (FADM)','#2e7d32'),A('Force régionale (SAMIM)','#1d7ed8'),A('Rwanda','#8e24aa')],
+      ['Attaque jihadiste','Raid','Embuscade','Déplacement','Prise de localité','Incendie']);
+    const HAITI = P([A('Gangs (G9)','#e63946'),A('Gangs (G-Pèp)','#9d0208'),A('Police nationale (PNH)','#1d7ed8'),A('Mission MSS','#2e7d32')],
+      ['Affrontement de gangs','Enlèvement','Pillage','Barrage','Exécution','Mouvement']);
+    const ARCTIC = P([A('Forces armées US','#1d7ed8'),A('NORAD','#2e6fb8'),A('Aviation russe','#e63946'),A('Marine russe','#c1121f'),A('Garde-côtes US','#2e7d32')],
+      ['Interception aérienne (ADIZ)','Survol stratégique','Patrouille maritime','Exercice militaire','Tension frontalière','Reconnaissance']);
+    const ETHIO = P([A('Forces fédérales (ENDF)','#2e7d32'),A('Fano (Amhara)','#e63946'),A('OLA (Oromo)','#f48c06'),A('Forces tigréennes','#1d7ed8')],
+      ['Affrontement','Raid','Embuscade','Massacre','Mouvement','Blocus']);
+    const PAKI = P([A('TTP','#e63946'),A('EI-Khorasan','#9d0208'),A('Séparatistes baloutches (BLA)','#f48c06'),A('Forces armées','#2e7d32')],
+      ['Attentat','Embuscade','Engin explosif','Raid','Affrontement','Assassinat ciblé']);
+    const KASHMIR = P([A('Groupes armés','#e63946'),A('Armée indienne','#1d7ed8'),A('Armée pakistanaise','#2e7d32'),A('Milices','#8e24aa')],
+      ['Échange de tirs','Infiltration','Embuscade','Couvre-feu','Affrontement','Frappe']);
+    const GENERIC = P([A('Groupe armé non étatique','#e63946'),A('Insurrection locale','#f48c06'),A('Forces gouvernementales','#2e7d32'),A('Force internationale','#1d7ed8'),A('Milice / faction','#8e24aa'),A('Acteur paramilitaire','#6c757d')],
+      ['Affrontement armé','Attaque ciblée','Mouvement de troupes','Tension communautaire','Engin explosif','Prise de localité']);
+
+    const MAGHREB = P([A('AQMI','#e63946'),A('Groupes salafistes','#9d0208'),A('Forces de sécurité','#2e7d32'),A('Gendarmerie','#1d7ed8')],
+      ['Affrontement','Engin explosif','Embuscade','Opération antiterroriste','Arrestation','Mouvement']);
+    const EGYPT = P([A('Province du Sinaï (EI)','#e63946'),A('Forces armées égyptiennes','#2e7d32'),A('Bédouins armés','#8e24aa'),A('Police','#1d7ed8')],
+      ['Attentat','Engin explosif','Raid','Affrontement','Frappe','Embuscade']);
+    const CMR = P([A('Ambazonie (séparatistes)','#e63946'),A('Boko Haram','#9d0208'),A('Forces armées (BIR)','#2e7d32'),A("Milices d'autodéfense",'#8e24aa')],
+      ['Affrontement séparatiste','Enlèvement','Attaque','Engin explosif','Raid','Incendie']);
+    const CAR = P([A('Coalition CPC (rebelles)','#e63946'),A('FACA (armée)','#2e7d32'),A('Africa Corps (Wagner)','#6c757d'),A('MINUSCA','#1d7ed8'),A('Anti-Balaka','#8e24aa')],
+      ['Embuscade','Affrontement','Pillage','Attaque de convoi','Prise de localité','Mouvement']);
+    const KENYA = P([A('Al-Shabaab','#e63946'),A('Forces de sécurité (KDF)','#2e7d32'),A('Milices communautaires','#8e24aa'),A('Police','#1d7ed8')],
+      ['Attentat','Raid transfrontalier','Embuscade','Vol de bétail armé','Affrontement','Engin explosif']);
+    const MADA = P([A('Dahalo (bandits)','#e63946'),A('Forces de sécurité','#2e7d32'),A('Milices villageoises','#8e24aa'),A('Gendarmerie','#1d7ed8')],
+      ['Razzia de zébus','Embuscade','Raid','Affrontement','Pillage','Mouvement']);
+    const UGANDA = P([A('ADF','#e63946'),A('Forces armées (UPDF)','#2e7d32'),A('Milices','#8e24aa'),A('Police','#1d7ed8')],
+      ['Attaque','Engin explosif','Embuscade','Raid','Affrontement','Enlèvement']);
+    const IRAN = P([A('IRGC (Gardiens)','#c1121f'),A('Jaish al-Adl (baloutches)','#e63946'),A('PJAK (kurdes)','#f48c06'),A('Forces de sécurité','#2e7d32'),A('Manifestants','#8e24aa')],
+      ['Affrontement','Attentat','Frappe','Répression','Embuscade','Arrestation']);
+    const TURKEY = P([A('PKK','#e63946'),A('Forces armées (TSK)','#2e7d32'),A('Daesh','#6c757d'),A('Police','#1d7ed8')],
+      ['Affrontement','Frappe','Attentat','Opération transfrontalière','Embuscade','Engin explosif']);
+    const INDIA = P([A('Naxalites (maoïstes)','#e63946'),A('Insurgés du Nord-Est','#f48c06'),A('Forces de sécurité','#2e7d32'),A('Groupes séparatistes','#8e24aa'),A('Police','#1d7ed8')],
+      ['Embuscade','Engin explosif','Affrontement','Raid','Attentat','Opération']);
+    const THAILAND = P([A('Insurgés du Sud (BRN)','#e63946'),A('Forces de sécurité','#2e7d32'),A('Milices','#8e24aa'),A('Police','#1d7ed8')],
+      ['Attentat','Engin explosif','Embuscade','Assassinat ciblé','Affrontement','Raid']);
+    const PHIL = P([A('Abu Sayyaf','#e63946'),A('NPA (communistes)','#9d0208'),A('BIFF','#f48c06'),A('Forces armées (AFP)','#2e7d32'),A('Police','#1d7ed8')],
+      ['Attentat','Embuscade','Affrontement','Enlèvement','Raid','Engin explosif']);
+    const INDO = P([A('JAD (jihadistes)','#e63946'),A('Séparatistes papous (OPM)','#f48c06'),A('Forces armées (TNI)','#2e7d32'),A('Police (Densus 88)','#1d7ed8')],
+      ['Attentat','Affrontement','Embuscade','Raid','Arrestation','Mouvement']);
+    const KOREA = P([A('Armée nord-coréenne','#e63946'),A('Forces sud-coréennes','#1d7ed8'),A('Forces US','#2e6fb8'),A('Garde-frontière','#2e7d32')],
+      ['Tir de missile','Provocation','Incident à la DMZ','Exercice militaire','Interception','Reconnaissance']);
+    const CAUCASE = P([A('Forces azerbaïdjanaises','#1d7ed8'),A('Forces arméniennes','#e63946'),A('Séparatistes','#8e24aa'),A('Casques bleus russes','#6c757d')],
+      ['Échange de tirs','Frappe','Affrontement','Violation de cessez-le-feu','Mouvement','Embuscade']);
+    const BRAZIL = P([A('Comando Vermelho','#e63946'),A('PCC','#9d0208'),A('Milices','#8e24aa'),A('Police militaire','#1d7ed8'),A('Forces armées','#2e7d32')],
+      ['Affrontement','Saisie de drogue','Exécution','Opération de police','Trafic','Fusillade']);
+    const PERU = P([A('Sentier lumineux (VRAEM)','#e63946'),A('Narcotrafiquants','#f48c06'),A('Forces armées','#2e7d32'),A('Police','#1d7ed8')],
+      ['Embuscade','Saisie de drogue','Affrontement','Raid','Mouvement','Engin explosif']);
+    const MARAS = P([A('MS-13','#e63946'),A('Barrio 18','#9d0208'),A('Cartels','#f48c06'),A('Forces de sécurité','#2e7d32'),A('Police','#1d7ed8')],
+      ['Affrontement de gangs','Extorsion','Exécution','Saisie','Opération','Enlèvement']);
+
+    const PROFILES = {
+      // Sahel & spillover côtier
+      ML:SAHEL, BF:SAHEL, NE:SAHEL, TD:SAHEL, MR:SAHEL, BJ:SAHEL, TG:SAHEL, CI:SAHEL, GH:SAHEL, SN:SAHEL,
+      // Amérique latine
+      CO:NARCO_CO, MX:NARCO_MX, VE:NARCO_CO, EC:NARCO_CO, BR:BRAZIL, PE:PERU,
+      HN:MARAS, SV:MARAS, GT:MARAS, NI:MARAS,
+      // Afrique
+      CD:RDC_EST, NG:NIGERIA, SO:SOMALIE, ET:ETHIO, MZ:MOZA, SD:SOUDAN, LY:LIBYE,
+      CM:CMR, CF:CAR, KE:KENYA, MG:MADA, UG:UGANDA, EG:EGYPT, DZ:MAGHREB, TN:MAGHREB,
+      // Moyen-Orient
+      SY:SYRIE, IQ:IRAK, YE:YEMEN, LB:LIBAN, IL:ISR, PS:ISR, IR:IRAN, TR:TURKEY,
+      // Asie
+      AF:AFGHA, PK:PAKI, IN:INDIA, TH:THAILAND, PH:PHIL, ID:INDO, MM:MYANMAR,
+      KP:KOREA, KR:KOREA,
+      // Europe / Caucase / Arctique
+      UA:UKRAINE, RU:UKRAINE, AM:CAUCASE, AZ:CAUCASE, GE:CAUCASE,
+      AK:ARCTIC, KASHMIR:KASHMIR, HT:HAITI,
+      DEFAULT:GENERIC
+    };
+    const OVERRIDES = { 'alaska':'AK','nord kivu':'CD','sud kivu':'CD','kivu':'CD','ituri':'CD',
+      'cabo delgado':'MZ','cachemire':'KASHMIR','jammu et cachemire':'KASHMIR',
+      'tigre':'ET','amhara':'ET','donbass':'UA','donetsk':'UA','louhansk':'UA',
+      'sinai':'EG','sinaï':'EG','haut karabakh':'CAUCASE','nagorno karabakh':'CAUCASE',
+      'mindanao':'PH','rakhine':'MM','baloutchistan':'PK','vraem':'PE' };
+    function profileFor(z) {
+      if (z.pk && PROFILES[z.pk]) return PROFILES[z.pk];
+      const ov = OVERRIDES[norm(z.region)];
+      if (ov && PROFILES[ov]) return PROFILES[ov];
+      if (z.countryCode && PROFILES[z.countryCode]) return PROFILES[z.countryCode];
+      return PROFILES.DEFAULT;
+    }
+    let ACTIVE = { actors: GENERIC.actors, events: GENERIC.events };
+    function applyProfile(z) { const pf = profileFor(z); ACTIVE = { actors: pf.actors, events: pf.events }; }
+
+    const MONTHS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin'];
+    // RNG déterministe : une même zone ⇒ une même démo
+    function seedFrom(str) { let h = 1779033703; for (let i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); } return h >>> 0; }
+    function rngMake(s) { return () => { s |= 0; s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+    // Masque terre : rejette les points rendus sur l'eau (gratuit, sans API)
+    function onLand(ll) { if (!map.getLayer('water')) return true; const p = map.project(ll); return map.queryRenderedFeatures(p, { layers: ['water'] }).length === 0; }
+    // Acteur pondéré : les premiers de la liste sont les plus fréquents
+    function pickActor(rnd) { const arr = ACTIVE.actors, n = arr.length, total = n * (n + 1) / 2; let r = rnd() * total; for (let i = 0; i < n; i++) { if ((r -= (n - i)) <= 0) return arr[i]; } return arr[0]; }
+
+    let DEMO_STATS = { events: 0, actors: 0 };
+
+    // Scène : foyers denses dans la vue, sur la terre, acteurs cohérents avec la zone
+    function generateScene() {
+      const rnd = rngMake(seed);
+      const b = map.getBounds(), w = b.getWest(), s = b.getSouth(), e = b.getEast(), n = b.getNorth();
+      const spanX = e - w, spanY = n - s, pad = 0.14;
+      const feats = [], foyers = [];
+      const nF = 3 + ((rnd() * 2) | 0); // 3-4 foyers
+      const mkPoint = (lng, lat, dom) => {
+        const act = (dom && rnd() < 0.66) ? dom : pickActor(rnd);
+        return { type: 'Feature', geometry: { type: 'Point', coordinates: [lng, lat] }, properties: {
+          name: act.name, _color: act.color, _casualties: Math.floor(Math.pow(rnd(), 2) * 280),
+          event: ACTIVE.events[(rnd() * ACTIVE.events.length) | 0],
+          date: (2 + (rnd() * 26 | 0)) + ' ' + MONTHS[(rnd() * MONTHS.length) | 0] + ' 2026' } };
+      };
+      for (let c = 0; c < nF; c++) {
+        let fx = null;
+        for (let t = 0; t < 18; t++) {
+          const cand = [w + spanX * (pad + rnd() * (1 - 2 * pad)), s + spanY * (pad + rnd() * (1 - 2 * pad))];
+          if (onLand(cand)) { fx = cand; break; }
+        }
+        if (!fx) continue;
+        const dom = pickActor(rnd);
+        foyers.push({ center: fx, color: dom.color });
+        const csz = Math.min(spanX, spanY) * 0.05;
+        const cnt = 8 + ((rnd() * 4) | 0);
+        for (let i = 0; i < cnt; i++) {
+          const pt = [fx[0] + (rnd() + rnd() + rnd() - 1.5) * csz, fx[1] + (rnd() + rnd() + rnd() - 1.5) * csz];
+          if (!onLand(pt)) continue;
+          feats.push(mkPoint(pt[0], pt[1], dom));
+        }
+      }
+      if (feats.length < 8) {
+        for (let i = 0; i < 24; i++) feats.push(mkPoint(w + spanX * (0.2 + rnd() * 0.6), s + spanY * (0.2 + rnd() * 0.6), null));
+      }
+      DEMO_STATS = { events: feats.length, actors: new Set(feats.map(f => f.properties.name)).size };
+      return { fc: { type: 'FeatureCollection', features: feats }, foyers };
+    }
+
+    // Arc courbe (Bézier) entre deux foyers — élégant, jamais une ligne droite qui se croise
+    function makeArc(a, bb, color) {
+      const mid = [(a[0] + bb[0]) / 2, (a[1] + bb[1]) / 2];
+      const dx = bb[0] - a[0], dy = bb[1] - a[1], bend = 0.16;
+      const ctrl = [mid[0] - dy * bend, mid[1] + dx * bend];
+      const N = 50, coords = [];
+      for (let i = 0; i <= N; i++) { const t = i / N, u = 1 - t;
+        coords.push([u * u * a[0] + 2 * u * t * ctrl[0] + t * t * bb[0], u * u * a[1] + 2 * u * t * ctrl[1] + t * t * bb[1]]); }
+      return { coords, color };
+    }
+    function buildArcs(foyers) {
+      if (foyers.length < 2) return [];
+      const arcs = [];
+      for (let i = 1; i < foyers.length; i++) arcs.push(makeArc(foyers[0].center, foyers[i].center, foyers[i].color)); // hub → foyers
+      for (let i = 1; i < foyers.length - 1; i++) arcs.push(makeArc(foyers[i].center, foyers[i + 1].center, foyers[i].color)); // chaîne
+      return arcs;
+    }
+
+    // Flux : particules lumineuses qui circulent le long des arcs
+    function startFlux(arcs) {
+      map.addSource('demo-flux', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+      map.addLayer({ id: 'demo-flux-glow', type: 'circle', source: 'demo-flux', paint: {
+        'circle-radius': 7, 'circle-color': ['get', 'color'], 'circle-opacity': 0.28, 'circle-blur': 1 } });
+      map.addLayer({ id: 'demo-flux-core', type: 'circle', source: 'demo-flux', paint: {
+        'circle-radius': 2.6, 'circle-color': '#ffffff', 'circle-opacity': 0.95,
+        'circle-stroke-color': ['get', 'color'], 'circle-stroke-width': 2 } });
+      let t = 0;
+      (function anim() {
+        const src = map.getSource('demo-flux'); if (!src) return;
+        const feats = [];
+        arcs.forEach((a, ai) => {
+          const N = a.coords.length;
+          for (const off of [0, 0.45]) {
+            const p = (t + off + ai * 0.13) % 1;
+            const idx = Math.min(N - 1, Math.floor(p * (N - 1)));
+            feats.push({ type: 'Feature', geometry: { type: 'Point', coordinates: a.coords[idx] }, properties: { color: a.color } });
+          }
+        });
+        src.setData({ type: 'FeatureCollection', features: feats });
+        t = (t + 0.0045) % 1;
+        requestAnimationFrame(anim);
+      })();
+    }
+
+    function addDemoLayers(scene) {
+      map.addSource('demo-points', { type: 'geojson', data: scene.fc });
+
+      // ── ARCS (sous les points) ──
+      const arcs = buildArcs(scene.foyers);
+      map.addSource('demo-arcs', { type: 'geojson', data: { type: 'FeatureCollection',
+        features: arcs.map(a => ({ type: 'Feature', geometry: { type: 'LineString', coordinates: a.coords }, properties: { color: a.color } })) } });
+      map.addLayer({ id: 'demo-arc-glow', type: 'line', source: 'demo-arcs', layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': ['get', 'color'], 'line-width': 5, 'line-blur': 3, 'line-opacity': 0.14 } });
+      map.addLayer({ id: 'demo-arc-line', type: 'line', source: 'demo-arcs', layout: { 'line-cap': 'round' },
+        paint: { 'line-color': ['get', 'color'], 'line-width': 1.4, 'line-opacity': 0.5 } });
+
+      // ── POINTS premium (glow + anneau pulsé + dot net) ──
+      map.addLayer({ id: 'demo-glow', type: 'circle', source: 'demo-points', paint: {
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 9, 7, 16, 12, 26],
+        'circle-color': ['get', '_color'], 'circle-opacity': 0.22, 'circle-blur': 1 } });
+      map.addLayer({ id: 'demo-pulse', type: 'circle', source: 'demo-points', paint: {
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 11, 7, 18, 12, 28],
+        'circle-color': ['get', '_color'], 'circle-opacity': 0,
+        'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 1.6, 'circle-stroke-opacity': 0.25 } });
+      map.addLayer({ id: 'demo-dots', type: 'circle', source: 'demo-points', paint: {
+        'circle-radius': ['interpolate', ['linear'], ['zoom'],
+          3,  ['interpolate', ['linear'], ['get', '_casualties'], 0, 4, 100, 6, 1000, 8],
+          7,  ['interpolate', ['linear'], ['get', '_casualties'], 0, 6, 100, 8.5, 1000, 12],
+          12, ['interpolate', ['linear'], ['get', '_casualties'], 0, 8, 100, 12, 1000, 18]],
+        'circle-color': ['get', '_color'], 'circle-stroke-color': '#ffffff',
+        'circle-stroke-width': 1.8, 'circle-opacity': 0.96 } });
+
+      // pulsation de l'anneau
+      let op = 0.1, dir = 1;
+      (function pulse() {
+        if (!map.getLayer('demo-pulse')) return;
+        op += 0.015 * dir; if (op > 0.6) dir = -1; if (op < 0.05) dir = 1;
+        map.setPaintProperty('demo-pulse', 'circle-stroke-opacity', op);
+        requestAnimationFrame(pulse);
+      })();
+
+      startFlux(arcs); // particules au-dessus
+
+      // curseur + popup fictif au clic
+      map.on('mouseenter', 'demo-dots', () => { map.getCanvas().style.cursor = 'pointer'; });
+      map.on('mouseleave', 'demo-dots', () => { map.getCanvas().style.cursor = ''; });
+      map.on('click', 'demo-dots', (e) => {
+        const p = e.features[0].properties;
+        new mapboxgl.Popup({ offset: 12, closeButton: true })
+          .setLngLat(e.features[0].geometry.coordinates)
+          .setHTML(
+            '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:' + p._color + '">' + p.name + '</div>' +
+            '<div style="font-weight:600;margin:3px 0 2px;color:#1F1437">' + p.event + '</div>' +
+            '<div style="font-size:12px;color:#4A4460">' + p.date + '</div>' +
+            '<div style="margin-top:7px;font-size:10px;color:#9089AA">Donnée fictive · démonstration</div>'
+          )
+          .addTo(map);
+      });
+    }
+
+    function buildLegend() {
+      const stat = document.getElementById('stat-chip');
+      if (stat) stat.textContent = DEMO_STATS.events + ' événements · ' + DEMO_STATS.actors + ' acteurs · 30 jours';
+      const rows = ACTIVE.actors.map(c =>
+        '<div class="legend-row"><span class="legend-dot" style="background:' + c.color + '"></span>' + c.name + '</div>'
+      ).join('');
+      document.getElementById('legend-rows').innerHTML = rows;
+    }
+
+    // ── narration (explications qui se tapent) ──
+    const STEPS = [
+      { step: '01 · Acteurs',   title: 'Qui est présent',     body: "Nous cartographions les groupes armés, factions et forces en présence sur la zone, et nous les tenons à jour en continu." },
+      { step: '02 · Incidents', title: 'Ce qui se passe',     body: "Chaque événement est sourcé, daté et géolocalisé : presse régionale, ACLED, GDELT, OSINT social — chaque point reste auditable." },
+      { step: '03 · Flux',      title: 'Comment ça circule',  body: "Routes logistiques, mouvements transfrontaliers et points de tension émergents sont reliés pour lire la dynamique d'ensemble." },
+      { step: '04 · Analyse',   title: 'Ce que vous en tirez',body: "Une lecture décisionnelle pour les directions sûreté : qui, où, et quelle tendance — bien au-delà du flux brut." }
+    ];
+    let narI = 0, narTimers = [];
+    const clearNar = () => { narTimers.forEach(clearTimeout); narTimers = []; };
+
+    function buildDots() {
+      const c = document.getElementById('nar-dots');
+      c.innerHTML = '';
+      STEPS.forEach((_, i) => {
+        const d = document.createElement('span');
+        d.className = 'narration__dot';
+        d.addEventListener('click', () => playNarration(i));
+        c.appendChild(d);
+      });
+    }
+    function updateDots() {
+      [...document.getElementById('nar-dots').children].forEach((d, i) =>
+        d.classList.toggle('on', i === narI));
+    }
+    function typeBody(text) {
+      const el = document.getElementById('nar-body');
+      let i = 0;
+      (function tick() {
+        el.innerHTML = text.slice(0, i) + '<span class="narration__caret">▍</span>';
+        if (i++ < text.length) narTimers.push(setTimeout(tick, 16));
+        else el.textContent = text;
+      })();
+    }
+    function playNarration(idx) {
+      clearNar();
+      narI = idx;
+      const s = STEPS[idx];
+      document.getElementById('nar-step').textContent = s.step;
+      document.getElementById('nar-title').textContent = s.title;
+      typeBody(s.body);
+      updateDots();
+      const dur = 2600 + s.body.length * 16;
+      narTimers.push(setTimeout(() => { if (narI < STEPS.length - 1) playNarration(narI + 1); }, dur));
+    }
+
+    function startDemo(z) {
+      if (map.getSource('demo-points')) return;   // une seule fois
+      applyProfile(z);                            // acteurs cohérents avec la zone
+      addDemoLayers(generateScene());
+      buildLegend();
+      const cta = document.getElementById('nar-cta');
+      if (cta && z && z.label) cta.textContent = 'Débloquer ' + z.label + ' en premium →';
+      ['stat-chip', 'legend', 'narration', 'watermark'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.classList.add('show');
+      });
+      buildDots();
+      playNarration(0);
+    }
+    document.getElementById('nar-replay').addEventListener('click', () => playNarration(0));
 
     window.__demoMap = map; // accès console pour itérer
   })();

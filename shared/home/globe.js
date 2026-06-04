@@ -481,20 +481,14 @@ function Globe() {
   const [notFound, setNotFound] = useStateGlobe(false);
   const onSubmit = e => {
     if (e) e.preventDefault();
-    const z = resolveZone(query);
-    if (!z) {
+    const q = query.trim();
+    if (!q) {
       setNotFound(true);
       return;
     }
     setNotFound(false);
-    // La recherche ouvre la carte de démonstration (map blanche) sur la zone.
-    const params = new URLSearchParams({
-      lon: String(z.lon),
-      lat: String(z.lat),
-      z: String(zoneZoom(z)),
-      label: z.label
-    });
-    window.location.href = '/demo/?' + params.toString();
+    // La recherche ouvre la démo : géocodage mondial côté /demo/.
+    window.location.href = '/demo/?q=' + encodeURIComponent(q);
   };
   useEffectGlobe(() => {
     const canvas = canvasRef.current;
@@ -1008,7 +1002,7 @@ function Globe() {
     type: "submit"
   }, "D\xE9mo")), notFound && /*#__PURE__*/React.createElement("div", {
     className: "globe-search__hint"
-  }, "Zone non reconnue. Essayez : Sahel \xB7 Liban \xB7 RDC \xB7 Am\xE9rique latine \xB7 Y\xE9men"));
+  }, "Saisissez une zone \u2014 pays, ville, r\xE9gion ou quartier, partout dans le monde."));
 }
 Object.assign(window, {
   Globe
