@@ -75,9 +75,7 @@ function App() {
     className: "brand__body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "brand__name"
-  }, "Algor ", /*#__PURE__*/React.createElement("span", null, "Access")), /*#__PURE__*/React.createElement("div", {
-    className: "brand__tag"
-  }, "Renseignement g\xE9opolitique"))), /*#__PURE__*/React.createElement("nav", {
+  }, "Algor ", /*#__PURE__*/React.createElement("span", null, "Access")))), /*#__PURE__*/React.createElement("nav", {
     className: "site-nav",
     "aria-label": "Rubriques"
   }, /*#__PURE__*/React.createElement("a", {
