@@ -229,6 +229,7 @@ img, svg { display: block; max-width: 100%; }
   box-shadow: 0 4px 14px rgba(46,24,87,0.28);
   flex-shrink: 0;
 }
+.brand { flex-shrink: 0; }
 .brand__body { display: flex; flex-direction: column; gap: 5px; line-height: 1; }
 .brand__name {
   font-family: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -237,6 +238,7 @@ img, svg { display: block; max-width: 100%; }
   letter-spacing: -0.015em;
   color: #0c0a14;
   line-height: 1;
+  white-space: nowrap;
 }
 .brand__name span { color: inherit; }
 .brand__tag {
@@ -246,6 +248,7 @@ img, svg { display: block; max-width: 100%; }
   letter-spacing: 0.16em;
   text-transform: uppercase;
   line-height: 1;
+  white-space: nowrap;
 }
 .app-header__nav {
   display: flex;
@@ -636,7 +639,7 @@ img, svg { display: block; max-width: 100%; }
 .globe-search {
   position: absolute;
   left: 50%;
-  bottom: 6px;
+  bottom: 0;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
