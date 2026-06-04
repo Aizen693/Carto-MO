@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Démo cartographique · Algor Int</title>
+<meta name="robots" content="noindex" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
+
+<style>
+  :root {
+    --bg:       #F7F5FC;
+    --ink:      #1F1437;
+    --ink-2:    #4A4460;
+    --muted:    #6B6480;
+    --line:     rgba(123,90,189,0.18);
+    --violet:   #6B3FA0;
+    --violet-h: #5A3290;
+    --sans:     'Plus Jakarta Sans', system-ui, sans-serif;
+    --mono:     'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg);
+    font-family: var(--sans);
+    color: var(--ink);
+    overflow: hidden;
+  }
+
+  /* Plein écran : la carte occupe tout le viewport */
+  #stage { position: fixed; inset: 0; }
+  #map   { position: absolute; inset: 0; }
+
+  #map-loader {
+    position: absolute; inset: 0; z-index: 5;
+    display: flex; align-items: center; justify-content: center;
+    background: #fdfcff; color: var(--muted);
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* En-tête flottant discret (haut gauche) */
+  .ov-title {
+    position: absolute; top: 16px; left: 56px; z-index: 4;
+    display: flex; align-items: baseline; gap: 9px;
+    pointer-events: none;
+  }
+  .ov-title__brand {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--violet); font-weight: 500;
+  }
+  .ov-title__zone {
+    font-size: 14px; font-weight: 600; color: var(--ink);
+  }
+
+  /* Bouton plein écran (haut droite) — calque sur la maquette Castel */
+  .ov-btn {
+    position: absolute; top: 14px; right: 14px; z-index: 4;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em;
+    color: var(--ink-2);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 9px 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px -4px rgba(31,18,55,0.10);
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .ov-btn:hover { color: var(--violet); border-color: rgba(107,63,160,0.35); }
+  .ov-btn svg { width: 15px; height: 15px; }
+
+  /* Lien retour discret (bas gauche, au-dessus de l'attribution) */
+  .ov-back {
+    position: absolute; bottom: 14px; left: 14px; z-index: 4;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em;
+    color: var(--muted); text-decoration: none;
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(4px);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 12px;
+    transition: color 0.15s;
+  }
+  .ov-back:hover { color: var(--violet); }
+
+  /* Contrôles Mapbox — fond blanc, coins doux */
+  .mapboxgl-ctrl-group {
+    background: #fff !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px -4px rgba(31,18,55,0.10) !important;
+  }
+  .mapboxgl-ctrl-top-left { top: 56px; left: 14px; }
+  .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right { opacity: 0.5; }
+  .mapboxgl-ctrl-bottom-left:hover, .mapboxgl-ctrl-bottom-right:hover { opacity: 1; }
+
+  @media (max-width: 640px) {
+    .ov-title { left: 14px; top: 56px; }
+    .mapboxgl-ctrl-top-left { top: 96px; }
+  }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <div id="map"></div>
+    <div id="map-loader">Chargement de la carte…</div>
+
+    <div class="ov-title">
+      <span class="ov-title__brand">Algor Int</span>
+      <span class="ov-title__zone" id="zone-label">Démonstration</span>
+    </div>
+
+    <button class="ov-btn" id="btn-fullscreen" type="button" aria-label="Plein écran">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3" />
+      </svg>
+      <span id="btn-fullscreen-label">Plein écran</span>
+    </button>
+
+    <a class="ov-back" href="/">← Retour</a>
+  </div>
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+  <script>
+  (function () {
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+
+    // — paramètres de zone passés par la recherche du globe d'accueil
+    const qs = new URLSearchParams(location.search);
+    const lon   = parseFloat(qs.get('lon'));
+    const lat   = parseFloat(qs.get('lat'));
+    const zoom  = parseFloat(qs.get('z'));
+    const label = qs.get('label');
+
+    const hasZone = Number.isFinite(lon) && Number.isFinite(lat);
+    if (label) document.getElementById('zone-label').textContent = label;
+
+    // Vue d'ouverture : large, le temps que le vol se déclenche
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v11',
+      projection: 'globe',
+      center: hasZone ? [lon, lat] : [17, 3],
+      zoom: hasZone ? 2.2 : 2.6,
+      minZoom: 1.4,
+      maxZoom: 16,
+      attributionControl: false
+    });
+    map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-left');
+    map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
+
+    map.on('style.load', () => {
+      // léger halo atmosphérique, cohérent avec un fond clair
+      map.setFog({
+        color: 'rgb(247,245,252)',
+        'high-color': 'rgb(225,220,240)',
+        'horizon-blend': 0.04,
+        'space-color': 'rgb(247,245,252)',
+        'star-intensity': 0
+      });
+    });
+
+    map.on('load', () => {
+      document.getElementById('map-loader').style.display = 'none';
+      map.resize();
+      // vol cinématique vers la zone recherchée
+      if (hasZone) {
+        map.flyTo({
+          center: [lon, lat],
+          zoom: Number.isFinite(zoom) ? zoom : 4.5,
+          duration: 2600,
+          curve: 1.5,
+          essential: true
+        });
+      }
+      // base propre : aucun point pour l'instant — on ajoute les éléments ensuite.
+    });
+
+    // — plein écran natif sur le stage
+    const stage = document.getElementById('stage');
+    const fsLabel = document.getElementById('btn-fullscreen-label');
+    document.getElementById('btn-fullscreen').addEventListener('click', () => {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (stage.requestFullscreen) stage.requestFullscreen();
+    });
+    document.addEventListener('fullscreenchange', () => {
+      const on = !!document.fullscreenElement;
+      fsLabel.textContent = on ? 'Quitter' : 'Plein écran';
+      setTimeout(() => map.resize(), 120);
+    });
+
+    window.__demoMap = map; // accès console pour itérer
+  })();
+  </script>
+</body>
+</html>

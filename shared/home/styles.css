@@ -591,6 +591,137 @@ img, svg { display: block; max-width: 100%; }
   font-weight: 400;
 }
 
+/* ───────────────────────────────────────────────
+   MODE DÉMO — barre de recherche + cartes HUD
+   ─────────────────────────────────────────────── */
+.globe-search {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(380px, 90%);
+  padding: 7px 8px 7px 14px;
+  background: rgba(26, 21, 53, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--violet-bd);
+  border-radius: var(--r-full);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  z-index: 5;
+}
+.globe-search svg { flex: 0 0 auto; color: var(--violet); opacity: 0.85; }
+.globe-search input {
+  flex: 1; min-width: 0;
+  background: none; border: none; outline: none;
+  color: #F3EFFB;                 /* HUD toujours sombre → texte clair fixe */
+  font-family: var(--sans);
+  font-size: 13px;
+}
+.globe-search input::placeholder { color: #8079A0; }
+.globe-search button {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: #7B4FB0;
+  border: none;
+  padding: 7px 13px;
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.globe-search button:hover { background: #8B5FBF; }
+.globe-search__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 56px;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--warn);
+  background: rgba(26, 21, 53, 0.88);
+  border: 1px solid var(--violet-bd);
+  padding: 5px 11px;
+  border-radius: var(--r-sm);
+  z-index: 5;
+  white-space: nowrap;
+  max-width: 94%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.demo-card {
+  position: absolute;
+  width: 178px;
+  padding: 9px 12px;
+  background: rgba(18, 14, 36, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--violet-bd);
+  border-left: 2px solid var(--violet);
+  border-radius: var(--r-md);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.42);
+  z-index: 4;
+  opacity: 0;
+  animation: demoCardIn 0.5s ease forwards;
+  pointer-events: none;
+}
+.demo-card--right {
+  border-left: 1px solid var(--violet-bd);
+  border-right: 2px solid var(--violet);
+  text-align: right;
+}
+.demo-card__tag {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #C8B0EA;                 /* HUD sombre → violet clair fixe */
+}
+.demo-card__body {
+  margin: 4px 0 0;
+  font-family: var(--sans);
+  font-size: 11px;
+  line-height: 1.42;
+  color: #ECE7F7;                 /* texte clair fixe, lisible sur carte sombre */
+  min-height: 46px;
+}
+.demo-card__caret { color: #C8B0EA; margin-left: 1px; }
+@keyframes demoCardIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.demo-reset {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #CFC8E2;
+  background: rgba(26, 21, 53, 0.8);
+  border: 1px solid rgba(181, 150, 224, 0.28);
+  padding: 6px 11px;
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.demo-reset:hover { color: #fff; border-color: #B596E0; }
+
+/* Sur petits écrans, on masque les cartes HUD (trop à l'étroit) ;
+   la barre de recherche et le zoom restent actifs. */
+@media (max-width: 720px) {
+  .demo-card { display: none; }
+}
+
 /* Old sphere-label fallback styles (kept simple) */
 .sphere-wrap { position: relative; width: 100%; height: 100%; }
 .sphere-canvas { width: 100%; height: 100%; display: block; }

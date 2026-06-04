@@ -6,10 +6,496 @@
 
 const {
   useEffect: useEffectGlobe,
-  useRef: useRefGlobe
+  useRef: useRefGlobe,
+  useState: useStateGlobe
 } = React;
+
+// ═══════════════════════════════════════════════════════
+//  MODE DÉMO — recherche d'une zone → zoom + points fictifs + cartes HUD
+//  100 % fictif, aucune donnée client. Design aligné sur le reste du site.
+// ═══════════════════════════════════════════════════════
+
+// — normalisation (minuscules, sans accents, sans ponctuation)
+function normZone(s) {
+  return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+// — gazetteer FR : nom → centre [lon, lat] + multiplicateur de zoom (s)
+const GAZETTEER = [
+// ── continents / grandes régions (zoom large)
+{
+  k: ['afrique'],
+  lon: 18,
+  lat: 2,
+  s: 1.05,
+  label: 'Afrique'
+}, {
+  k: ['europe'],
+  lon: 12,
+  lat: 50,
+  s: 1.2,
+  label: 'Europe'
+}, {
+  k: ['asie'],
+  lon: 90,
+  lat: 40,
+  s: 0.95,
+  label: 'Asie'
+}, {
+  k: ['amerique du nord', 'amerique nord'],
+  lon: -100,
+  lat: 45,
+  s: 1.0,
+  label: 'Amérique du Nord'
+}, {
+  k: ['amerique latine', 'amerique du sud', 'amerique sud'],
+  lon: -62,
+  lat: -15,
+  s: 1.0,
+  label: 'Amérique latine'
+}, {
+  k: ['amerique centrale'],
+  lon: -86,
+  lat: 14,
+  s: 1.5,
+  label: 'Amérique centrale'
+}, {
+  k: ['moyen orient', 'proche orient'],
+  lon: 44,
+  lat: 30,
+  s: 1.3,
+  label: 'Moyen-Orient'
+}, {
+  k: ['maghreb'],
+  lon: 5,
+  lat: 31,
+  s: 1.4,
+  label: 'Maghreb'
+}, {
+  k: ['sahel'],
+  lon: 2,
+  lat: 16,
+  s: 1.35,
+  label: 'Sahel'
+}, {
+  k: ['corne de l afrique', 'corne afrique'],
+  lon: 45,
+  lat: 8,
+  s: 1.4,
+  label: "Corne de l'Afrique"
+}, {
+  k: ['afrique de l ouest', 'afrique ouest'],
+  lon: -4,
+  lat: 13,
+  s: 1.4,
+  label: "Afrique de l'Ouest"
+}, {
+  k: ['afrique centrale'],
+  lon: 19,
+  lat: 2,
+  s: 1.3,
+  label: 'Afrique centrale'
+}, {
+  k: ['afrique de l est', 'afrique est'],
+  lon: 38,
+  lat: 0,
+  s: 1.3,
+  label: "Afrique de l'Est"
+}, {
+  k: ['afrique australe', 'afrique du sud region'],
+  lon: 26,
+  lat: -26,
+  s: 1.3,
+  label: 'Afrique australe'
+}, {
+  k: ['grands lacs'],
+  lon: 29,
+  lat: -2,
+  s: 1.55,
+  label: 'Grands Lacs'
+}, {
+  k: ['balkans'],
+  lon: 20,
+  lat: 43,
+  s: 1.6,
+  label: 'Balkans'
+}, {
+  k: ['caucase'],
+  lon: 45,
+  lat: 42,
+  s: 1.7,
+  label: 'Caucase'
+}, {
+  k: ['asie centrale'],
+  lon: 65,
+  lat: 42,
+  s: 1.3,
+  label: 'Asie centrale'
+}, {
+  k: ['asie du sud', 'asie sud'],
+  lon: 78,
+  lat: 22,
+  s: 1.25,
+  label: 'Asie du Sud'
+}, {
+  k: ['asie du sud est', 'asie sud est'],
+  lon: 105,
+  lat: 10,
+  s: 1.2,
+  label: 'Asie du Sud-Est'
+}, {
+  k: ['peninsule arabique', 'golfe persique', 'golfe', 'arabie'],
+  lon: 48,
+  lat: 24,
+  s: 1.4,
+  label: 'Péninsule arabique'
+},
+// ── pays
+{
+  k: ['mali'],
+  lon: -3,
+  lat: 17,
+  s: 1.6,
+  label: 'Mali'
+}, {
+  k: ['niger'],
+  lon: 9,
+  lat: 17,
+  s: 1.6,
+  label: 'Niger'
+}, {
+  k: ['burkina faso', 'burkina'],
+  lon: -1.5,
+  lat: 12,
+  s: 1.7,
+  label: 'Burkina Faso'
+}, {
+  k: ['tchad'],
+  lon: 19,
+  lat: 15,
+  s: 1.5,
+  label: 'Tchad'
+}, {
+  k: ['mauritanie'],
+  lon: -10,
+  lat: 20,
+  s: 1.5,
+  label: 'Mauritanie'
+}, {
+  k: ['nigeria', 'nigéria'],
+  lon: 8,
+  lat: 9,
+  s: 1.6,
+  label: 'Nigeria'
+}, {
+  k: ['soudan'],
+  lon: 30,
+  lat: 15,
+  s: 1.4,
+  label: 'Soudan'
+}, {
+  k: ['soudan du sud'],
+  lon: 31,
+  lat: 7,
+  s: 1.6,
+  label: 'Soudan du Sud'
+}, {
+  k: ['somalie'],
+  lon: 46,
+  lat: 5,
+  s: 1.5,
+  label: 'Somalie'
+}, {
+  k: ['ethiopie', 'éthiopie'],
+  lon: 39,
+  lat: 8,
+  s: 1.5,
+  label: 'Éthiopie'
+}, {
+  k: ['kenya'],
+  lon: 38,
+  lat: 1,
+  s: 1.6,
+  label: 'Kenya'
+}, {
+  k: ['rdc', 'congo', 'republique democratique du congo', 'republique democratique'],
+  lon: 23,
+  lat: -2,
+  s: 1.25,
+  label: 'RDC'
+}, {
+  k: ['rwanda'],
+  lon: 30,
+  lat: -2,
+  s: 1.95,
+  label: 'Rwanda'
+}, {
+  k: ['centrafrique', 'republique centrafricaine'],
+  lon: 21,
+  lat: 7,
+  s: 1.6,
+  label: 'Centrafrique'
+}, {
+  k: ['cameroun'],
+  lon: 12,
+  lat: 6,
+  s: 1.6,
+  label: 'Cameroun'
+}, {
+  k: ['libye'],
+  lon: 17,
+  lat: 27,
+  s: 1.4,
+  label: 'Libye'
+}, {
+  k: ['algerie', 'algérie'],
+  lon: 3,
+  lat: 28,
+  s: 1.2,
+  label: 'Algérie'
+}, {
+  k: ['tunisie'],
+  lon: 9,
+  lat: 34,
+  s: 1.7,
+  label: 'Tunisie'
+}, {
+  k: ['maroc'],
+  lon: -6,
+  lat: 32,
+  s: 1.5,
+  label: 'Maroc'
+}, {
+  k: ['egypte', 'égypte'],
+  lon: 30,
+  lat: 27,
+  s: 1.4,
+  label: 'Égypte'
+}, {
+  k: ['syrie'],
+  lon: 38,
+  lat: 35,
+  s: 1.6,
+  label: 'Syrie'
+}, {
+  k: ['liban'],
+  lon: 35.8,
+  lat: 33.9,
+  s: 1.95,
+  label: 'Liban'
+}, {
+  k: ['irak', 'iraq'],
+  lon: 44,
+  lat: 33,
+  s: 1.5,
+  label: 'Irak'
+}, {
+  k: ['iran'],
+  lon: 54,
+  lat: 32,
+  s: 1.2,
+  label: 'Iran'
+}, {
+  k: ['yemen', 'yémen'],
+  lon: 47,
+  lat: 15,
+  s: 1.5,
+  label: 'Yémen'
+}, {
+  k: ['arabie saoudite'],
+  lon: 45,
+  lat: 24,
+  s: 1.2,
+  label: 'Arabie saoudite'
+}, {
+  k: ['israel', 'israël'],
+  lon: 35,
+  lat: 31,
+  s: 1.9,
+  label: 'Israël'
+}, {
+  k: ['palestine', 'gaza', 'cisjordanie'],
+  lon: 34.5,
+  lat: 31.5,
+  s: 2.0,
+  label: 'Palestine'
+}, {
+  k: ['jordanie'],
+  lon: 36,
+  lat: 31,
+  s: 1.7,
+  label: 'Jordanie'
+}, {
+  k: ['turquie'],
+  lon: 35,
+  lat: 39,
+  s: 1.3,
+  label: 'Turquie'
+}, {
+  k: ['afghanistan'],
+  lon: 66,
+  lat: 34,
+  s: 1.4,
+  label: 'Afghanistan'
+}, {
+  k: ['pakistan'],
+  lon: 70,
+  lat: 30,
+  s: 1.3,
+  label: 'Pakistan'
+}, {
+  k: ['inde'],
+  lon: 79,
+  lat: 22,
+  s: 1.0,
+  label: 'Inde'
+}, {
+  k: ['ukraine'],
+  lon: 32,
+  lat: 49,
+  s: 1.3,
+  label: 'Ukraine'
+}, {
+  k: ['russie'],
+  lon: 90,
+  lat: 60,
+  s: 0.85,
+  label: 'Russie'
+}, {
+  k: ['venezuela'],
+  lon: -66,
+  lat: 7,
+  s: 1.5,
+  label: 'Venezuela'
+}, {
+  k: ['colombie'],
+  lon: -74,
+  lat: 4,
+  s: 1.5,
+  label: 'Colombie'
+}, {
+  k: ['mexique'],
+  lon: -102,
+  lat: 23,
+  s: 1.2,
+  label: 'Mexique'
+}, {
+  k: ['haiti', 'haïti'],
+  lon: -72,
+  lat: 19,
+  s: 1.95,
+  label: 'Haïti'
+}, {
+  k: ['bresil', 'brésil'],
+  lon: -52,
+  lat: -10,
+  s: 0.95,
+  label: 'Brésil'
+}, {
+  k: ['madagascar'],
+  lon: 47,
+  lat: -19,
+  s: 1.4,
+  label: 'Madagascar'
+}, {
+  k: ['mozambique'],
+  lon: 36,
+  lat: -18,
+  s: 1.4,
+  label: 'Mozambique'
+},
+// ── villes
+{
+  k: ['bamako'],
+  lon: -8,
+  lat: 12.6,
+  s: 2.0,
+  label: 'Bamako'
+}, {
+  k: ['beyrouth'],
+  lon: 35.5,
+  lat: 33.9,
+  s: 2.1,
+  label: 'Beyrouth'
+}, {
+  k: ['bagdad'],
+  lon: 44.4,
+  lat: 33.3,
+  s: 2.0,
+  label: 'Bagdad'
+}, {
+  k: ['damas'],
+  lon: 36.3,
+  lat: 33.5,
+  s: 2.0,
+  label: 'Damas'
+}, {
+  k: ['kinshasa'],
+  lon: 15.3,
+  lat: -4.3,
+  s: 2.0,
+  label: 'Kinshasa'
+}, {
+  k: ['goma'],
+  lon: 29.2,
+  lat: -1.7,
+  s: 2.1,
+  label: 'Goma'
+}, {
+  k: ['tripoli'],
+  lon: 13.2,
+  lat: 32.9,
+  s: 2.0,
+  label: 'Tripoli'
+}, {
+  k: ['sanaa', 'sana a'],
+  lon: 44.2,
+  lat: 15.4,
+  s: 2.0,
+  label: 'Sanaa'
+}];
+function resolveZone(raw) {
+  const q = normZone(raw);
+  if (!q) return null;
+  let best = null,
+    bestLen = 0;
+  for (const e of GAZETTEER) {
+    for (const key of e.k) {
+      if (q === key) return e;
+      if ((q.includes(key) || key.includes(q)) && key.length > bestLen) {
+        best = e;
+        bestLen = key.length;
+      }
+    }
+  }
+  return best;
+}
+
+// — convertit l'échelle orthographique du gazetteer en niveau de zoom Mapbox
+function zoneZoom(z) {
+  return Math.round((2.2 + z.s * 1.9) * 10) / 10; // continent ~4.1, pays ~5, ville ~6.2
+}
 function Globe() {
   const canvasRef = useRefGlobe(null);
+  const [query, setQuery] = useStateGlobe('');
+  const [notFound, setNotFound] = useStateGlobe(false);
+  const onSubmit = e => {
+    if (e) e.preventDefault();
+    const z = resolveZone(query);
+    if (!z) {
+      setNotFound(true);
+      return;
+    }
+    setNotFound(false);
+    // La recherche ouvre la carte de démonstration (map blanche) sur la zone.
+    const params = new URLSearchParams({
+      lon: String(z.lon),
+      lat: String(z.lat),
+      z: String(zoneZoom(z)),
+      label: z.label
+    });
+    window.location.href = '/demo/?' + params.toString();
+  };
   useEffectGlobe(() => {
     const canvas = canvasRef.current;
     if (!canvas || !window.d3 || !window.topojson) return;
@@ -488,7 +974,41 @@ function Globe() {
     className: "globe-canvas",
     role: "img",
     "aria-label": "Globe interactif \u2014 six theatres OSINT"
-  }));
+  }), /*#__PURE__*/React.createElement("form", {
+    className: "globe-search",
+    onSubmit: onSubmit
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.2",
+    strokeLinecap: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "11",
+    cy: "11",
+    r: "7"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "21",
+    y1: "21",
+    x2: "16.65",
+    y2: "16.65"
+  })), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: query,
+    "aria-label": "Rechercher une zone",
+    placeholder: "Rechercher une zone \u2014 Sahel, Liban, Am\xE9rique latine\u2026",
+    onChange: e => {
+      setQuery(e.target.value);
+      setNotFound(false);
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    type: "submit"
+  }, "D\xE9mo")), notFound && /*#__PURE__*/React.createElement("div", {
+    className: "globe-search__hint"
+  }, "Zone non reconnue. Essayez : Sahel \xB7 Liban \xB7 RDC \xB7 Am\xE9rique latine \xB7 Y\xE9men"));
 }
 Object.assign(window, {
   Globe
