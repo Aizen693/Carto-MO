@@ -622,34 +622,38 @@
         layout: { 'line-cap': 'round' },
         paint: { 'line-color': '#8c8c8c', 'line-width': 1.2, 'line-opacity': 0.55, 'line-dasharray': [2.5, 2] } });
 
-      // ── POINTS — tailles authentiques engine.js + anneau sur les plus intenses ──
-      map.addLayer({ id: 'demo-ring', type: 'circle', source: 'demo-points',
-        filter: ['>=', ['get', '_casualties'], 120],
-        paint: { 'circle-radius': 13, 'circle-color': 'transparent',
-          'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 1.4, 'circle-stroke-opacity': 0.55 } });
+      // ── POINTS — aura douce (relief sur blanc) + ping radar + dot net + cœur brillant ──
+      // 1) aura colorée large et floue : donne du volume au point
       map.addLayer({ id: 'demo-glow', type: 'circle', source: 'demo-points', paint: {
-        'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 5, 7, 9, 12, 14],
-        'circle-color': ['get', '_color'], 'circle-opacity': 0.14, 'circle-blur': 0.8 } });
-      map.addLayer({ id: 'demo-pulse', type: 'circle', source: 'demo-points', paint: {
-        'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 7, 7, 12, 12, 18],
-        'circle-color': ['get', '_color'], 'circle-opacity': 0,
-        'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 1, 'circle-stroke-opacity': 0.22 } });
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 8, 7, 14, 12, 22],
+        'circle-color': ['get', '_color'], 'circle-opacity': 0.20, 'circle-blur': 1 } });
+      // 2) ping radar (anneau qui s'étend et s'efface) sur les points les plus intenses
+      map.addLayer({ id: 'demo-ping', type: 'circle', source: 'demo-points',
+        filter: ['>=', ['get', '_casualties'], 170],
+        paint: { 'circle-radius': 5, 'circle-color': 'transparent',
+          'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 1.8, 'circle-stroke-opacity': 0.5 } });
+      // 3) dot net, contour blanc franc
       map.addLayer({ id: 'demo-dots', type: 'circle', source: 'demo-points', paint: {
         'circle-radius': ['interpolate', ['linear'], ['zoom'],
-          3,  ['interpolate', ['linear'], ['get', '_casualties'], 0, 3.5, 10, 4, 100, 4.5, 500, 5, 1000, 5.5, 10000, 6.5],
-          7,  ['interpolate', ['linear'], ['get', '_casualties'], 0, 5, 10, 5.5, 100, 6.5, 500, 7.5, 1000, 8.5, 10000, 10],
-          12, ['interpolate', ['linear'], ['get', '_casualties'], 0, 7, 10, 8, 100, 9.5, 500, 11, 1000, 13, 10000, 16]],
+          3,  ['interpolate', ['linear'], ['get', '_casualties'], 0, 3.8, 10, 4.4, 100, 5, 500, 5.6, 1000, 6.2, 10000, 7.2],
+          7,  ['interpolate', ['linear'], ['get', '_casualties'], 0, 5.4, 10, 6, 100, 7, 500, 8, 1000, 9, 10000, 11],
+          12, ['interpolate', ['linear'], ['get', '_casualties'], 0, 7.5, 10, 8.5, 100, 10, 500, 11.5, 1000, 13.5, 10000, 17]],
         'circle-color': ['get', '_color'], 'circle-stroke-color': '#ffffff',
-        'circle-stroke-width': 1.5, 'circle-opacity': 0.96 } });
+        'circle-stroke-width': 1.8, 'circle-opacity': 0.97 } });
+      // 4) cœur brillant (petit point clair décentré) : effet « perle » premium
+      map.addLayer({ id: 'demo-core', type: 'circle', source: 'demo-points', paint: {
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 1, 7, 1.6, 12, 2.4],
+        'circle-color': '#ffffff', 'circle-opacity': 0.55,
+        'circle-translate': [-1, -1] } });
 
-      // pulsation de l'anneau
-      let op = 0.1, dir = 1;
-      (function pulse() {
-        if (!map.getLayer('demo-pulse')) return;
-        op += 0.015 * dir; if (op > 0.6) dir = -1; if (op < 0.05) dir = 1;
-        map.setPaintProperty('demo-pulse', 'circle-stroke-opacity', op);
-        requestAnimationFrame(pulse);
-      })();
+      // ping radar : l'anneau s'étend et s'efface en boucle
+      (function ping(ts) {
+        if (!map.getLayer('demo-ping')) return;
+        const k = ((ts || 0) % 2400) / 2400;        // 0 → 1
+        map.setPaintProperty('demo-ping', 'circle-radius', 5 + k * 19);
+        map.setPaintProperty('demo-ping', 'circle-stroke-opacity', 0.55 * (1 - k));
+        requestAnimationFrame(ping);
+      })(0);
 
 
       // curseur + popup fictif au clic
