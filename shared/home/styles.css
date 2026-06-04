@@ -229,20 +229,21 @@ img, svg { display: block; max-width: 100%; }
   box-shadow: 0 4px 14px rgba(46,24,87,0.28);
   flex-shrink: 0;
 }
-.brand__body { display: flex; flex-direction: column; gap: 4px; line-height: 1; }
+.brand__body { display: flex; flex-direction: column; gap: 5px; line-height: 1; }
 .brand__name {
   font-family: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
-  letter-spacing: 0.005em;
+  letter-spacing: -0.015em;
   color: var(--ink);
   line-height: 1;
 }
+.brand__name span { color: var(--violet); }
 .brand__tag {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 10px;
   color: var(--muted);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   line-height: 1;
 }

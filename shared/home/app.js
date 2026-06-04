@@ -75,7 +75,7 @@ function App() {
     className: "brand__body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "brand__name"
-  }, "Algor Acc\xE8s"), /*#__PURE__*/React.createElement("div", {
+  }, "Algor ", /*#__PURE__*/React.createElement("span", null, "Acc\xE8s")), /*#__PURE__*/React.createElement("div", {
     className: "brand__tag"
   }, "Renseignement g\xE9opolitique"))), /*#__PURE__*/React.createElement("nav", {
     className: "site-nav",
