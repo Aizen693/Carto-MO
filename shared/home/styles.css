@@ -233,12 +233,12 @@ img, svg { display: block; max-width: 100%; }
 .brand__name {
   font-family: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.015em;
-  color: var(--ink);
+  color: #0c0a14;
   line-height: 1;
 }
-.brand__name span { color: var(--violet); }
+.brand__name span { color: inherit; }
 .brand__tag {
   font-family: var(--mono);
   font-size: 10px;
@@ -636,13 +636,13 @@ img, svg { display: block; max-width: 100%; }
 .globe-search {
   position: absolute;
   left: 50%;
-  bottom: 12px;
+  bottom: 6px;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 8px;
   width: min(380px, 90%);
-  padding: 7px 8px 7px 14px;
+  padding: 6px 6px 6px 18px;
   background: rgba(26, 21, 53, 0.78);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -659,6 +659,7 @@ img, svg { display: block; max-width: 100%; }
   color: #F3EFFB;                 /* HUD toujours sombre → texte clair fixe */
   font-family: var(--sans);
   font-size: 13px;
+  line-height: 1;
 }
 .globe-search input::placeholder { color: #8079A0; }
 /* Faux placeholder superposé : permet un dégradé animé (impossible sur un vrai placeholder) */
@@ -666,7 +667,7 @@ img, svg { display: block; max-width: 100%; }
   position: absolute; inset: 0;
   display: flex; align-items: center;
   pointer-events: none;
-  font-family: var(--sans); font-size: 13px; color: #8079A0;
+  font-family: var(--sans); font-size: 13px; line-height: 1; color: #8079A0;
   white-space: nowrap; overflow: hidden;
 }
 .globe-search__ph-zone {
@@ -682,8 +683,8 @@ img, svg { display: block; max-width: 100%; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   color: #fff;
   background: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #2E84D4 100%);
   background-size: 160% auto;

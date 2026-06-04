@@ -62,7 +62,7 @@ function App() {
           <div className="brand" onClick={() => setView('home')}>
             <div className="brand__mark" />
             <div className="brand__body">
-              <div className="brand__name">Algor <span>Accès</span></div>
+              <div className="brand__name">Algor <span>Access</span></div>
               <div className="brand__tag">Renseignement géopolitique</div>
             </div>
           </div>
