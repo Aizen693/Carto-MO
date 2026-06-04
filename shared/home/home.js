@@ -285,6 +285,7 @@ const HOME_GET = [{
   d: "Chaque théâtre sur une carte interactive : la situation se lit dans son ensemble, là où il faudrait autrement compiler des dizaines d'articles.",
   img: "/shared/home/assets/get-carte.jpg?v=20260604q",
   vid: "/shared/home/assets/get-carte.mp4?v=20260604q",
+  auto: true,
   alt: "Cartes de situation Algor Int : Sahel, Moyen-Orient et Madagascar — incidents et flux géolocalisés"
 }, {
   tag: "Le brief",
@@ -302,6 +303,22 @@ const HOME_GET = [{
   alt: "Plateforme Afrique Maritime : navires AIS et zones de risque en mer"
 }];
 function GetSection() {
+  // Les vidéos en lecture auto (data-auto) jouent quand elles entrent dans la vue
+  // et se mettent en pause quand on sort — la compilation est visible sans survol.
+  useEffect(() => {
+    const vids = document.querySelectorAll('video[data-auto="1"]');
+    if (!vids.length || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        const v = e.target;
+        if (e.isIntersecting) v.play().catch(() => {});else v.pause();
+      });
+    }, {
+      threshold: 0.25
+    });
+    vids.forEach(v => io.observe(v));
+    return () => io.disconnect();
+  }, []);
   return /*#__PURE__*/React.createElement("section", {
     className: "home-sec home-sec--alt",
     id: "offre"
@@ -318,10 +335,12 @@ function GetSection() {
     className: "get-card get-card--solo",
     key: i,
     onMouseEnter: e => {
+      if (g.auto) return;
       const v = e.currentTarget.querySelector('video');
       if (v) v.play().catch(() => {});
     },
     onMouseLeave: e => {
+      if (g.auto) return;
       const v = e.currentTarget.querySelector('video');
       if (v) {
         v.pause();
@@ -335,18 +354,24 @@ function GetSection() {
     muted: true,
     loop: true,
     playsInline: true,
-    preload: "none",
+    preload: g.auto ? 'auto' : 'none',
+    autoPlay: g.auto || undefined,
+    "data-auto": g.auto ? '1' : undefined,
     "aria-label": g.alt,
     tabIndex: 0,
-    onFocus: e => e.currentTarget.play().catch(() => {}),
+    onFocus: e => {
+      if (!g.auto) e.currentTarget.play().catch(() => {});
+    },
     onBlur: e => {
-      e.currentTarget.pause();
-      e.currentTarget.currentTime = 0;
+      if (!g.auto) {
+        e.currentTarget.pause();
+        e.currentTarget.currentTime = 0;
+      }
     }
   }, /*#__PURE__*/React.createElement("source", {
     src: g.vid,
     type: "video/mp4"
-  })), /*#__PURE__*/React.createElement("span", {
+  })), !g.auto && /*#__PURE__*/React.createElement("span", {
     className: "get-card__playhint",
     "aria-hidden": "true"
   }, /*#__PURE__*/React.createElement("svg", {
