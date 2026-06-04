@@ -311,7 +311,10 @@ function GetSection() {
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
         const v = e.target;
-        if (e.isIntersecting) v.play().catch(() => {});else v.pause();
+        if (e.isIntersecting) {
+          v.playbackRate = 2.2;
+          v.play().catch(() => {});
+        } else v.pause();
       });
     }, {
       threshold: 0.25
