@@ -231,9 +231,10 @@ img, svg { display: block; max-width: 100%; }
 }
 .brand__body { display: flex; flex-direction: column; gap: 4px; line-height: 1; }
 .brand__name {
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-family: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.005em;
   color: var(--ink);
   line-height: 1;
 }
