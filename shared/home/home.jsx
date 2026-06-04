@@ -37,7 +37,7 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
               <span className="btn-neon btn-neon--bottom" aria-hidden="true" />
             </a>
             <a className="btn--ghost-link" href="/offres/">
-              Voir les formules
+              Voir les offres
               <ArrowDiag />
             </a>
           </div>

@@ -47,7 +47,7 @@ function HomeView({
   })), /*#__PURE__*/React.createElement("a", {
     className: "btn--ghost-link",
     href: "/offres/"
-  }, "Voir les formules", /*#__PURE__*/React.createElement(ArrowDiag, null))), /*#__PURE__*/React.createElement("div", {
+  }, "Voir les offres", /*#__PURE__*/React.createElement(ArrowDiag, null))), /*#__PURE__*/React.createElement("div", {
     className: "hero__demo"
   }, /*#__PURE__*/React.createElement("svg", {
     width: "16",

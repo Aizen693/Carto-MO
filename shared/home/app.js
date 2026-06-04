@@ -98,10 +98,7 @@ function App() {
     className: 'site-login' + (authLoggedIn ? ' is-logged' : ''),
     href: "#",
     "data-algor-login": true
-  }, authLoggedIn ? 'Connecté' : 'Connexion'), /*#__PURE__*/React.createElement("a", {
-    className: "site-cta",
-    href: "/offres/"
-  }, "Voir les offres")), /*#__PURE__*/React.createElement("button", {
+  }, authLoggedIn ? 'Connecté' : 'Connexion')), /*#__PURE__*/React.createElement("button", {
     className: "site-burger",
     "aria-label": "Menu",
     "aria-expanded": menuOpen,
