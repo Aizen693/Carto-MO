@@ -590,7 +590,7 @@ function Globe() {
           <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
         <input type="text" value={query} aria-label="Rechercher une zone"
-               placeholder="Rechercher une zone — Sahel, Liban, Amérique latine…"
+               placeholder="Tapez un pays, une région ou une ville…"
                onChange={(e) => { setQuery(e.target.value); setNotFound(false); }} />
         <button type="submit">Démo</button>
       </form>

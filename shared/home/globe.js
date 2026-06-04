@@ -993,7 +993,7 @@ function Globe() {
     type: "text",
     value: query,
     "aria-label": "Rechercher une zone",
-    placeholder: "Rechercher une zone \u2014 Sahel, Liban, Am\xE9rique latine\u2026",
+    placeholder: "Tapez un pays, une r\xE9gion ou une ville\u2026",
     onChange: e => {
       setQuery(e.target.value);
       setNotFound(false);
