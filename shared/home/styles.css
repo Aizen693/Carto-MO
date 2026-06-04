@@ -594,6 +594,26 @@ img, svg { display: block; max-width: 100%; }
 /* ───────────────────────────────────────────────
    MODE DÉMO — barre de recherche + cartes HUD
    ─────────────────────────────────────────────── */
+/* Accroche démo dans le hero (colonne gauche) — pointe vers la barre du globe */
+.hero__demo {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 22px;
+  max-width: 430px;
+  padding: 11px 14px;
+  background: var(--violet-bg);
+  border: 1px solid var(--violet-bd);
+  border-left: 3px solid var(--violet);
+  border-radius: 10px;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+.hero__demo svg { flex: 0 0 auto; color: var(--violet); margin-top: 1px; }
+.hero__demo strong { color: var(--violet); font-weight: 600; }
+
 .globe-search {
   position: absolute;
   left: 50%;

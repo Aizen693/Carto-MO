@@ -47,7 +47,27 @@ function HomeView({
   })), /*#__PURE__*/React.createElement("a", {
     className: "btn--ghost-link",
     href: "/offres/"
-  }, "Voir les formules", /*#__PURE__*/React.createElement(ArrowDiag, null))), /*#__PURE__*/React.createElement("nav", {
+  }, "Voir les formules", /*#__PURE__*/React.createElement(ArrowDiag, null))), /*#__PURE__*/React.createElement("div", {
+    className: "hero__demo"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "16",
+    height: "16",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.2",
+    strokeLinecap: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "11",
+    cy: "11",
+    r: "7"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "21",
+    y1: "21",
+    x2: "16.65",
+    y2: "16.65"
+  })), /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : tapez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, en bas du globe.")), /*#__PURE__*/React.createElement("nav", {
     className: "hero__foot-nav"
   }, /*#__PURE__*/React.createElement("a", {
     href: "/sahel/"

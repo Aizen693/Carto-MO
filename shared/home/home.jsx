@@ -42,6 +42,14 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
             </a>
           </div>
 
+          <div className="hero__demo">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <span>Essayez la démo : tapez <strong>n'importe quelle ville, région ou pays du monde</strong> dans la barre de recherche, en bas du globe.</span>
+          </div>
+
           <nav className="hero__foot-nav">
             <a href="/sahel/">Sahel</a>
             <a href="/moyen-orient/">Moyen-Orient</a>
