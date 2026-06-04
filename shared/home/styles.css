@@ -613,6 +613,22 @@ img, svg { display: block; max-width: 100%; }
 }
 .hero__demo svg { flex: 0 0 auto; color: var(--violet); margin-top: 1px; }
 .hero__demo strong { color: var(--violet); font-weight: 600; }
+.hero__demo-zone {
+  display: inline-block;
+  font-weight: 700;
+  background: linear-gradient(120deg, #6B3FA0 0%, #5650C6 35%, #2E84D4 60%, #5650C6 85%, #6B3FA0 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: demoZoneFlow 3.5s linear infinite, demoZoneIn 0.45s ease both;
+}
+@keyframes demoZoneFlow { to { background-position: 220% center; } }
+@keyframes demoZoneIn {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: none; }
+}
 
 .globe-search {
   position: absolute;

@@ -14,7 +14,15 @@ const ZONE_LABELS = {
   'asie-sud': 'Asie du Sud',
 };
 
+// Zones des 4 coins du globe — défilent en dégradé dans l'accroche démo
+const DEMO_ZONES = ['Tokyo', 'Bogotá', 'Kinshasa', 'Ukraine', 'Alaska', 'Beyrouth', 'Mexico', 'Sahel', 'Cachemire', 'Somalie', 'Caracas', 'Mali'];
+
 function HomeView({ onEnter, onConsole, clock, videoStyle }) {
+  const [demoZone, setDemoZone] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setDemoZone(i => (i + 1) % DEMO_ZONES.length), 2400);
+    return () => clearInterval(id);
+  }, []);
   return (
     <>
     <main className="view-enter view-enter-active">
@@ -47,7 +55,7 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
                  strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
               <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
-            <span>Essayez la démo : tapez <strong>n'importe quelle ville, région ou pays du monde</strong> dans la barre de recherche, en bas du globe.</span>
+            <span>Essayez la démo sur <span className="hero__demo-zone" key={demoZone}>{DEMO_ZONES[demoZone]}</span> — ou n'importe quelle ville, région ou pays du monde, dans la barre en bas du globe.</span>
           </div>
 
           <nav className="hero__foot-nav">

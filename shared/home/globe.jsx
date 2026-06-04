@@ -112,20 +112,10 @@ function zoneZoom(z) {
   return Math.round((2.2 + z.s * 1.9) * 10) / 10;   // continent ~4.1, pays ~5, ville ~6.2
 }
 
-// — exemples des 4 coins du globe : montre au client que ça marche PARTOUT
-const SEARCH_EXAMPLES = ['Tokyo', 'Bogotá', 'Kinshasa', 'Ukraine', 'Alaska', 'Beyrouth', 'Mexico', 'Sahel', 'Cachemire', 'Somalie', 'Caracas', 'Mali'];
-
 function Globe() {
   const canvasRef = useRefGlobe(null);
   const [query, setQuery] = useStateGlobe('');
   const [notFound, setNotFound] = useStateGlobe(false);
-  const [phEx, setPhEx] = useStateGlobe(0);
-
-  // placeholder qui défile sur des zones du monde entier
-  useEffectGlobe(() => {
-    const id = setInterval(() => setPhEx(i => (i + 1) % SEARCH_EXAMPLES.length), 2200);
-    return () => clearInterval(id);
-  }, []);
 
   const onSubmit = (e) => {
     if (e) e.preventDefault();
@@ -600,7 +590,7 @@ function Globe() {
           <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
         <input type="text" value={query} aria-label="Rechercher une zone"
-               placeholder={'Tapez une zone — ex. ' + SEARCH_EXAMPLES[phEx]}
+               placeholder="Tapez un pays, une région ou une ville…"
                onChange={(e) => { setQuery(e.target.value); setNotFound(false); }} />
         <button type="submit">Démo</button>
       </form>

@@ -17,12 +17,20 @@ const ZONE_LABELS = {
   'afrique': 'Afrique Maritime',
   'asie-sud': 'Asie du Sud'
 };
+
+// Zones des 4 coins du globe — défilent en dégradé dans l'accroche démo
+const DEMO_ZONES = ['Tokyo', 'Bogotá', 'Kinshasa', 'Ukraine', 'Alaska', 'Beyrouth', 'Mexico', 'Sahel', 'Cachemire', 'Somalie', 'Caracas', 'Mali'];
 function HomeView({
   onEnter,
   onConsole,
   clock,
   videoStyle
 }) {
+  const [demoZone, setDemoZone] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setDemoZone(i => (i + 1) % DEMO_ZONES.length), 2400);
+    return () => clearInterval(id);
+  }, []);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("main", {
     className: "view-enter view-enter-active"
   }, /*#__PURE__*/React.createElement("section", {
@@ -67,7 +75,10 @@ function HomeView({
     y1: "21",
     x2: "16.65",
     y2: "16.65"
-  })), /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : tapez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, en bas du globe.")), /*#__PURE__*/React.createElement("nav", {
+  })), /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo sur ", /*#__PURE__*/React.createElement("span", {
+    className: "hero__demo-zone",
+    key: demoZone
+  }, DEMO_ZONES[demoZone]), " \u2014 ou n'importe quelle ville, r\xE9gion ou pays du monde, dans la barre en bas du globe.")), /*#__PURE__*/React.createElement("nav", {
     className: "hero__foot-nav"
   }, /*#__PURE__*/React.createElement("a", {
     href: "/sahel/"
