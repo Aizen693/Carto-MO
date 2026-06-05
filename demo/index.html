@@ -432,19 +432,22 @@
 
   function pad2(n){ return (n<10?'0':'')+n; }
 
+  // Étendue de génération (demi-largeur en degrés), commune au générateur ET à la détection terre/mer
+  function spanFor(zone){
+    var spanX, spanY;
+    if (zone.bbox){ spanX = (zone.bbox[2]-zone.bbox[0])*0.42; spanY = (zone.bbox[3]-zone.bbox[1])*0.42; }
+    else { var vp = 360/Math.pow(2, zone.zoom||6); spanX = vp*0.28; spanY = vp*0.18; }
+    spanX = Math.min(Math.max(spanX, 0.04), 9);
+    spanY = Math.min(Math.max(spanY, 0.03), 6);
+    return [spanX, spanY];
+  }
+
   function makeGenerator(zone, prof, onLand){
     onLand = onLand || function(){ return true; };
     var rnd = rngMake(seedFrom(norm(zone.label||rawQ||'algor')));
     var cx = zone.center[0], cy = zone.center[1];
-    // Écartement des points = taille réelle de la zone.
-    //  - bbox dispo (pays/région/grande ville) → on suit le bbox
-    //  - sinon (ville/point) → on déduit du zoom (cluster serré SUR la ville)
-    var spanX, spanY;
-    if (zone.bbox){ spanX = (zone.bbox[2]-zone.bbox[0])*0.42; spanY = (zone.bbox[3]-zone.bbox[1])*0.42; }
-    else { var vp = 360/Math.pow(2, zone.zoom||6); spanX = vp*0.28; spanY = vp*0.18; }
-    // garde-fous : assez large pour un cluster lisible, jamais démesuré
-    spanX = Math.min(Math.max(spanX, 0.04), 9);
-    spanY = Math.min(Math.max(spanY, 0.03), 6);
+    // Écartement des points = taille réelle de la zone (cluster serré pour une ville, large pour un pays)
+    var sp = spanFor(zone), spanX = sp[0], spanY = sp[1];
 
     // hubs (foyers) — clusters concentrés sur la zone, placés SUR la terre
     var nHubs = 6 + (rnd()*3|0), hubs = [];
@@ -791,9 +794,14 @@
       cb(onLand, cleanup);
     }
     try {
+      // zoom calculé pour que le canvas (900px) couvre TOUTE la zone de génération
+      // (sinon les points hors-canvas seraient comptés « terre » par défaut → bug points en mer)
+      var sp = spanFor(zone);
+      var half = Math.max(sp[0], sp[1]) * 1.5;            // marge autour de l'étendue
+      var zoomCover = Math.log(316.4 / half) / Math.LN2;  // 632.8°/2^z = largeur visible sur 900px
+      var tmpZoom = Math.max(3.5, Math.min(zone.zoom || 6, zoomCover));
       tmp = new mapboxgl.Map({ container:div, style:'mapbox://styles/mapbox/light-v11',
-        center:zone.center, zoom:(zone.zoom||6), interactive:false, attributionControl:false, preserveDrawingBuffer:false });
-      if (zone.bbox) { try { tmp.fitBounds(zone.bbox, { padding:20, duration:0 }); } catch(e){} }
+        center:zone.center, zoom:tmpZoom, interactive:false, attributionControl:false, preserveDrawingBuffer:false });
       tmp.on('idle', finish);
     } catch(e){ finish(); return; }
     setTimeout(finish, 5000); // garde-fou si 'idle' tarde
