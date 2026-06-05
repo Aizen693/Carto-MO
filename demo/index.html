@@ -371,6 +371,40 @@
     return PROFILES.DEFAULT;
   }
 
+  // ── Profil PRÉCIS par IA (edge function) : acteurs + vocabulaire des calques propres au pays ──
+  var FN_BASE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1';
+  function fallbackProfile(z){ var pf = profileFor(z); return { actors:pf.actors, events:pf.events, theme:pf.theme, vocab:null, ai:false }; }
+  function normalizeAI(j, z){
+    var actors = (j.actors||[]).map(function(a){ return { name:a.name, color:a.color || '#6c757d' }; });
+    return {
+      actors: actors,
+      events: (j.events && j.events.length) ? j.events : profileFor(z).events,
+      theme: null,
+      vocab: { flux:j.flux||[], sites:j.sites||[], pop:j.population||[], infra:j.infrastructure||[] },
+      ai: true
+    };
+  }
+  function resolveProfile(z){
+    var key = 'demoai2:' + norm(z.label || rawQ || '');
+    try { var c = localStorage.getItem(key); if (c){ var pc = JSON.parse(c); if (pc && pc.actors && pc.actors.length >= 3) return Promise.resolve(pc); } } catch(e){}
+    var ctrl, to;
+    try { ctrl = new AbortController(); to = setTimeout(function(){ try{ ctrl.abort(); }catch(e){} }, 13000); } catch(e){}
+    return fetch(FN_BASE + '/demo-actors', {
+      method:'POST', headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({ label:z.label, region:z.region, countryCode:z.countryCode }),
+      signal: ctrl ? ctrl.signal : undefined
+    }).then(function(r){ if(to) clearTimeout(to); return r.ok ? r.json() : null; })
+      .then(function(j){
+        if (j && Array.isArray(j.actors) && j.actors.length >= 3){
+          var prof = normalizeAI(j, z);
+          try { localStorage.setItem(key, JSON.stringify(prof)); } catch(e){}
+          return prof;
+        }
+        return fallbackProfile(z);
+      })
+      .catch(function(){ if(to) clearTimeout(to); return fallbackProfile(z); });
+  }
+
   // ─────────────────────────── géocodage ───────────────────────────
   function geocode(q){
     var a = ALIASES[norm(q)];
@@ -431,7 +465,11 @@
     var csz = Math.min(spanX, spanY) * 0.10;
 
     var actors = prof.actors, events = prof.events;
-    var vocab = VOCAB[prof.theme] || VOCAB.generic;
+    // vocabulaire des calques : IA (précis par pays) en priorité, sinon thème, sinon générique
+    var base = VOCAB[prof.theme] || VOCAB.generic;
+    var pv = prof.vocab || {};
+    var ok = function(a){ return a && a.length ? a : null; };
+    var vocab = { flux: ok(pv.flux)||base.flux, sites: ok(pv.sites)||base.sites, pop: ok(pv.pop)||base.pop, infra: ok(pv.infra)||base.infra };
     var pick = function(arr){ return arr[(rnd()*arr.length)|0]; };
     function pickActor(){ var n=actors.length, total=n*(n+1)/2, r=rnd()*total; for(var i=0;i<n;i++){ if((r-=(n-i))<=0) return actors[i]; } return actors[0]; }
     function color(name){ for (var i=0;i<actors.length;i++) if(actors[i].name===name) return actors[i].color; return '#888'; }
@@ -680,72 +718,78 @@
     p.then(function(zone){
       if (!zone){ showFallback(rawQ); return; }
 
-      var prof = profileFor(zone);
-
       // titre
       document.getElementById('zone-title').textContent = zone.label;
       document.title = 'Démo ' + zone.label + ' · Algor Int';
 
-      // ACTOR maps pour le moteur (légende cohérente avec les points)
-      var ACTOR_COLORS = {}; var names = [];
-      prof.actors.forEach(function(a){ ACTOR_COLORS[a.name]=a.color; names.push(a.name); });
+      // Profil PRÉCIS par IA (acteurs + calques propres au pays), lancé EN PARALLÈLE
+      // de la détection terre/mer pour ne pas additionner les temps d'attente.
+      var aiP = resolveProfile(zone);
 
-      window.ZONE_CONFIG = {
-        ZONE_ID:'demo',
-        OTAN_DATA:{},
-        ACTOR_GROUPS:{ 'Acteurs sur la zone': names },
-        ACTOR_COLORS:ACTOR_COLORS,
-        normalizeName:function(raw){ if(!raw) return null; var n=String(raw).trim(); return n||null; },
-        PERIODS:PERIODS_DEF.map(function(x){ return { label:x.label, file:x.file }; }),
-        STYLES:{ standard:'mapbox://styles/mapbox/standard', satellite:'mapbox://styles/mapbox/satellite-streets-v12', dark:'mapbox://styles/mapbox/dark-v11' },
-        MAP_CENTER:zone.center,
-        MAP_ZOOM:zone.zoom||6,
-        MAP_BEARING:0,
-        MAP_ZONES:null,
-        SEARCH_BBOX:[-180,-60,180,75],
-        BADGE_ALL_TEXT:'Toutes · Jan–Mars 2026',
-        TUTORIAL_KEY:'algor-demo-tutorial',
-        CALQUES_ONLY:false,
-        DISABLE_LAYERS_AND_POINTS:false
-      };
-      // pas de tuto démo
-      try { localStorage.setItem('algor-demo-tutorial','1'); } catch(e){}
+      buildOnLandThen(zone, function(onLand, cleanup){
+        aiP.then(function(prof){
+          try {
+            // ACTOR maps pour le moteur (légende cohérente avec les points)
+            var ACTOR_COLORS = {}; var names = [];
+            prof.actors.forEach(function(a){ ACTOR_COLORS[a.name]=a.color; names.push(a.name); });
 
-      // slider labels
-      document.getElementById('yr-start').textContent = 'Jan';
-      document.getElementById('yr-end').textContent = 'Mars';
+            window.ZONE_CONFIG = {
+              ZONE_ID:'demo',
+              OTAN_DATA:{},
+              ACTOR_GROUPS:{ 'Acteurs sur la zone': names },
+              ACTOR_COLORS:ACTOR_COLORS,
+              normalizeName:function(raw){ if(!raw) return null; var n=String(raw).trim(); return n||null; },
+              PERIODS:PERIODS_DEF.map(function(x){ return { label:x.label, file:x.file }; }),
+              STYLES:{ standard:'mapbox://styles/mapbox/standard', satellite:'mapbox://styles/mapbox/satellite-streets-v12', dark:'mapbox://styles/mapbox/dark-v11' },
+              MAP_CENTER:zone.center,
+              MAP_ZOOM:zone.zoom||6,
+              MAP_BEARING:0,
+              MAP_ZONES:null,
+              SEARCH_BBOX:[-180,-60,180,75],
+              BADGE_ALL_TEXT:'Toutes · Jan–Mars 2026',
+              TUTORIAL_KEY:'algor-demo-tutorial',
+              CALQUES_ONLY:false,
+              DISABLE_LAYERS_AND_POINTS:false
+            };
+            try { localStorage.setItem('algor-demo-tutorial','1'); } catch(e){}
+            document.getElementById('yr-start').textContent = 'Jan';
+            document.getElementById('yr-end').textContent = 'Mars';
 
-      // 1) on génère les données SUR LA TERRE (carte temporaire light-v11, eau interrogeable)
-      // 2) puis on charge le moteur premium : il précharge des données déjà nettoyées
-      buildOnLandThen(zone, function(onLand){
-        DEMO_DATA = makeGenerator(zone, prof, onLand).data;
+            // génère les données SUR LA TERRE avec le profil (IA ou repli)
+            DEMO_DATA = makeGenerator(zone, prof, onLand).data;
+          } finally { cleanup(); }
 
-        var s = document.createElement('script');
-        s.src = '../shared/engine.js?v=20260519a';
-        s.onload = function(){
-          initCalques();
-          var map = window.algorMap;
-          var reveal = function(){
-            var boot=document.getElementById('demo-boot'); if(boot) boot.style.display='none';
-            map.resize();
-            // affiche tout d'emblée (comme une vraie lecture d'ensemble)
-            try { if (typeof window.toggleAll === 'function') window.toggleAll(); } catch(e){}
-            setTimeout(startNarration, 700);
+          // charge le moteur premium : il précharge des données déjà nettoyées
+          var s = document.createElement('script');
+          s.src = '../shared/engine.js?v=20260519a';
+          s.onload = function(){
+            initCalques();
+            var map = window.algorMap;
+            var reveal = function(){
+              var boot=document.getElementById('demo-boot'); if(boot) boot.style.display='none';
+              map.resize();
+              // affiche tout d'emblée (comme une vraie lecture d'ensemble)
+              try { if (typeof window.toggleAll === 'function') window.toggleAll(); } catch(e){}
+              setTimeout(startNarration, 700);
+            };
+            if (map.loaded()) setTimeout(reveal, 400); else map.on('load', function(){ setTimeout(reveal, 300); });
           };
-          if (map.loaded()) setTimeout(reveal, 400); else map.on('load', function(){ setTimeout(reveal, 300); });
-        };
-        s.onerror = function(){ showFallback(rawQ); };
-        document.body.appendChild(s);
+          s.onerror = function(){ showFallback(rawQ); };
+          document.body.appendChild(s);
+        });
       });
     });
   }
 
-  // Carte temporaire (light-v11, cachée) → fonction onLand fiable, puis nettoyage.
+  // Carte temporaire (light-v11, cachée) → fonction onLand fiable.
+  // cb reçoit (onLand, cleanup) ; l'appelant appelle cleanup() une fois la génération terminée
+  // (la carte temporaire doit rester vivante pendant que onLand est utilisé).
   function buildOnLandThen(zone, cb){
     var div = document.createElement('div');
     div.style.cssText = 'position:absolute;left:-9999px;top:0;width:900px;height:650px;';
     document.body.appendChild(div);
     var tmp, done=false;
+    function cleanup(){ try { tmp && tmp.remove(); } catch(e){} try { div.remove(); } catch(e){} }
     function finish(){
       if (done) return; done=true;
       var onLand;
@@ -760,7 +804,7 @@
           } catch(e){ return true; }
         };
       } catch(e){ onLand = function(){ return true; }; }
-      try { cb(onLand); } finally { try { tmp && tmp.remove(); } catch(e){} try { div.remove(); } catch(e){} }
+      cb(onLand, cleanup);
     }
     try {
       tmp = new mapboxgl.Map({ container:div, style:'mapbox://styles/mapbox/light-v11',
