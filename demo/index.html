@@ -346,7 +346,7 @@
       var ctx = f.properties.context || {};
       var cc = (ctx.country && ctx.country.country_code) ? ctx.country.country_code.toUpperCase() : null;
       var type = f.properties.feature_type;
-      var zoomByType = { country:5.0, region:5.6, district:6.6, place:8.5, locality:10, address:12 };
+      var zoomByType = { country:5.0, region:5.6, district:7, place:9.2, locality:10.8, address:12.5 };
       return { center:f.geometry.coordinates, bbox:f.properties.bbox||null, label:f.properties.name,
         countryCode:cc, region:(ctx.region&&ctx.region.name)||f.properties.name, zoom:zoomByType[type]||6, type:type };
     }).catch(function(){ return null; });
@@ -369,8 +369,15 @@
   function makeGenerator(zone, prof){
     var rnd = rngMake(seedFrom(norm(zone.label||rawQ||'algor')));
     var cx = zone.center[0], cy = zone.center[1];
-    var spanX = 5, spanY = 3.4;
-    if (zone.bbox){ spanX = Math.max(1.4, (zone.bbox[2]-zone.bbox[0])*0.46); spanY = Math.max(1.0, (zone.bbox[3]-zone.bbox[1])*0.46); }
+    // Écartement des points = taille réelle de la zone.
+    //  - bbox dispo (pays/région/grande ville) → on suit le bbox
+    //  - sinon (ville/point) → on déduit du zoom (cluster serré SUR la ville)
+    var spanX, spanY;
+    if (zone.bbox){ spanX = (zone.bbox[2]-zone.bbox[0])*0.42; spanY = (zone.bbox[3]-zone.bbox[1])*0.42; }
+    else { var vp = 360/Math.pow(2, zone.zoom||6); spanX = vp*0.28; spanY = vp*0.18; }
+    // garde-fous : assez large pour un cluster lisible, jamais démesuré
+    spanX = Math.min(Math.max(spanX, 0.04), 9);
+    spanY = Math.min(Math.max(spanY, 0.03), 6);
 
     // hubs (foyers) — clusters concentrés sur la zone
     var nHubs = 6 + (rnd()*3|0), hubs = [];
