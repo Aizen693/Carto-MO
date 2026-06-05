@@ -287,7 +287,7 @@
       'afrique de l ouest': { center: [-4, 13], zoom: 4.4, type: 'region', label: "Afrique de l'Ouest", pk: 'ML' },
       'grands lacs': { center: [29, -2], zoom: 5.4, type: 'region', label: 'Grands Lacs', pk: 'CD' }
     };
-    const MAXZOOM = { country: 4.6, region: 5.4, district: 6.6, postcode: 8, place: 9.2, locality: 10.5, neighborhood: 11.5, street: 13, address: 13.5, poi: 13.5 };
+    const MAXZOOM = { country: 5.2, region: 5.6, district: 6.6, postcode: 8, place: 9.2, locality: 10.5, neighborhood: 11.5, street: 13, address: 13.5, poi: 13.5 };
     const SMALL = ['place', 'locality', 'neighborhood', 'street', 'address', 'poi', 'postcode'];
 
     async function geocode(q) {
@@ -306,7 +306,7 @@
     function frameZone(z) {
       const mz = MAXZOOM[z.type] || 8;
       if (z.bbox && !SMALL.includes(z.type))
-        map.fitBounds(z.bbox, { padding: 90, maxZoom: mz, duration: 2800, curve: 1.5, essential: true });
+        map.fitBounds(z.bbox, { padding: 60, maxZoom: mz, duration: 2800, curve: 1.5, essential: true });
       else
         map.flyTo({ center: z.center, zoom: z.zoom || mz, duration: 2800, curve: 1.5, essential: true });
     }
@@ -322,6 +322,9 @@
     }
 
     let seed = 1234567;
+    // Emprise réelle de la zone [w,s,e,n] : les points sont semés dessus, pas sur tout le viewport.
+    // Évite que (ex.) l'Ukraine éparpille ses points sur toute l'Europe quand la vue reste large.
+    let ZONE_BOUNDS = null;
 
     map.on('load', async () => {
       map.resize();
@@ -334,6 +337,10 @@
       document.getElementById('zone-label').textContent = z.label;
       document.title = 'Démo ' + z.label + ' · Algor Int';
       seed = seedFrom(norm(z.label || rawQ || 'algor'));
+
+      // Cadre les points sur l'emprise réelle de la zone (bbox géocodé), pas sur le viewport.
+      // Pour les régions/alias sans bbox → null → repli sur le viewport (déjà bien cadré par flyTo).
+      ZONE_BOUNDS = (z.bbox && !SMALL.includes(z.type)) ? z.bbox : null;
 
       // Profil cohérent : table instantanée si dispo, sinon IA en parallèle (repli générique)
       const curated = profileFor(z);
@@ -562,7 +569,13 @@
     // Scène : foyers denses dans la vue, sur la terre, acteurs cohérents avec la zone
     function generateScene() {
       const rnd = rngMake(seed);
-      const b = map.getBounds(), w = b.getWest(), s = b.getSouth(), e = b.getEast(), n = b.getNorth();
+      let w, s, e, n;
+      if (ZONE_BOUNDS) {
+        // emprise réelle de la zone → points concentrés sur la zone concernée
+        w = ZONE_BOUNDS[0]; s = ZONE_BOUNDS[1]; e = ZONE_BOUNDS[2]; n = ZONE_BOUNDS[3];
+      } else {
+        const b = map.getBounds(); w = b.getWest(); s = b.getSouth(); e = b.getEast(); n = b.getNorth();
+      }
       const spanX = e - w, spanY = n - s, pad = 0.14;
       const feats = [], foyers = [];
       const nF = 7 + ((rnd() * 3) | 0); // 7-9 foyers répartis sur toute la bande
