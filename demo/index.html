@@ -183,11 +183,7 @@
         <div class="sb-toggle" id="sb-toggle-infrastructures" onclick="toggleLayer('infrastructures')"></div>
       </div>
       <div class="sb-layer-row">
-        <span>6. Renseignement HUMINT</span>
-        <div class="sb-toggle" id="sb-toggle-humint" onclick="toggleLayer('humint')"></div>
-      </div>
-      <div class="sb-layer-row">
-        <span>7. Flux &amp; trafics</span>
+        <span>6. Flux &amp; trafics</span>
         <div class="sb-toggle" id="sb-toggle-flux" onclick="toggleLayer('flux')"></div>
       </div>
 
@@ -521,12 +517,6 @@
         feats.push(feat({type:'LineString',coordinates:[a,[ (a[0]+b[0])/2+(rnd()-0.5)*csz, (a[1]+b[1])/2+(rnd()-0.5)*csz ],b]},{ name:'Axe '+(j+1), type:ty, _color:'#8d6e63', description:ty+' (tracé fictif).' })); }
       return FC(feats);
     }
-    // ── calque : HUMINT ──
-    function humint(){
-      var feats=[], n=10+(rnd()*8|0);
-      for (var i=0;i<n;i++){ var a=pickActor(); feats.push(feat(pt(land(pickHub(),csz*1.3)),{ name:a.name, _color:a.color, description:'Renseignement humain (fictif) — source non nominative.' })); }
-      return FC(feats);
-    }
     // ── calque : flux & trafics (types selon le secteur, couleur par type) ──
     function fluxColor(t){ var i=vocab.flux.indexOf(t); return FLUX_PALETTE[(i<0?0:i)%FLUX_PALETTE.length]; }
     function flux(){
@@ -559,7 +549,6 @@
     data['population.geojson'] = population();
     data['mines.geojson'] = mines();
     data['infrastructures.geojson'] = infrastructures();
-    data['humint.geojson'] = humint();
     data['flux.geojson'] = flux();
     data['ethnies.geojson'] = ethnies();
 
@@ -583,7 +572,7 @@
   };
 
   // ─────────────── calque factory (2D, couleurs par _color) ───────────────
-  var calqueColors = { ethnies:'#e07c5a', forces:'#e63946', population:'#ab47bc', mines:'#d4a017', infrastructures:'#66bb6a', humint:'#c49a3c', flux:'#ff9800' };
+  var calqueColors = { ethnies:'#e07c5a', forces:'#e63946', population:'#ab47bc', mines:'#d4a017', infrastructures:'#66bb6a', flux:'#ff9800' };
   function makeCalquePopup(props, calqueId){
     var color = props._color || calqueColors[calqueId] || '#888';
     var name = props.name || 'Point';
@@ -626,7 +615,7 @@
     }
 
     window.toggleLayer = function(id){ if(registry[id]) registry[id].toggle(); };
-    window.toggleAllLayers = function(on){ ['ethnies','forces','population','mines','infrastructures','humint','flux'].forEach(function(id){
+    window.toggleAllLayers = function(on){ ['ethnies','forces','population','mines','infrastructures','flux'].forEach(function(id){
       var el=document.getElementById('sb-toggle-'+id); if(!el) return; var isOn=el.classList.contains('on');
       if (on && !isOn) window.toggleLayer(id); else if (!on && isOn) window.toggleLayer(id); }); };
 
@@ -659,11 +648,6 @@
       { id:'infra-ring', type:'circle', paint:{ 'circle-radius':z(4,7,10), 'circle-color':'transparent', 'circle-stroke-width':0.8, 'circle-stroke-color':C, 'circle-stroke-opacity':0.35 } },
       { id:'infra-dots', type:'circle', paint:{ 'circle-radius':z(2,3.5,5), 'circle-color':C, 'circle-stroke-width':0.6, 'circle-stroke-color':'#0d1117' } }
     ]});
-    createLayerToggle({ id:'humint', file:'humint.geojson', clickLayers:['humint-dots'], layers:[
-      { id:'humint-glow', type:'circle', paint:{ 'circle-radius':z(6,11,16), 'circle-color':C, 'circle-opacity':0.06, 'circle-blur':1.2 } },
-      { id:'humint-ring', type:'circle', paint:{ 'circle-radius':z(3,5,8), 'circle-color':'transparent', 'circle-stroke-color':C, 'circle-stroke-width':0.7, 'circle-stroke-opacity':0.5 } },
-      { id:'humint-dots', type:'circle', paint:{ 'circle-radius':z(1.8,3,4.5), 'circle-color':C, 'circle-stroke-color':'#0d1117', 'circle-stroke-width':0.5 } }
-    ]});
     createLayerToggle({ id:'flux', file:'flux.geojson', clickLayers:['flux-main-lines','flux-sec-lines'], layers:[
       { id:'flux-main-glow', type:'line', filter:['==',['get','rank'],'main'], paint:{ 'line-color':C, 'line-width':z(10,18,28), 'line-opacity':0.08, 'line-blur':5 }, layout:{ 'line-cap':'round','line-join':'round' } },
       { id:'flux-main-lines', type:'line', filter:['==',['get','rank'],'main'], paint:{ 'line-color':C, 'line-width':z(2,3,4.5), 'line-opacity':0.85 }, layout:{ 'line-cap':'round','line-join':'round' } },
@@ -682,7 +666,7 @@
   // ─────────── cartouche de présentation (explications qui se tapent) ───────────
   var NSTEPS = [
     { step:'01 · Chronologie', title:'Parcourir le temps', body:"La barre en bas fait défiler les périodes. Cliquez une période, glissez le curseur, ou lancez « Play » pour animer janvier → mars.", hint:false },
-    { step:'02 · Calques', title:'Activer des calques', body:"Ouvrez le menu, en haut à gauche : forces en présence, flux & trafics, zones d'influence, renseignement HUMINT, ressources…", hint:true },
+    { step:'02 · Calques', title:'Activer des calques', body:"Ouvrez le menu, en haut à gauche : forces en présence, flux & trafics, zones d'influence, ressources & sites…", hint:true },
     { step:'03 · Outils', title:'Aller plus loin', body:"Heatmap, comparaison de deux périodes, export PNG, rapports — puis débloquez une vraie zone, suivie en continu.", hint:false }
   ];
   var narI = 0, narTimers = [];
