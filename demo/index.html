@@ -46,6 +46,43 @@
   #demo-boot .fb p { font-size:13px; color:#9aa3b2; margin:0 0 16px; }
   #demo-boot .fb .chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
   #demo-boot .fb a { color:#c49a3c; text-decoration:none; border:1px solid rgba(196,154,60,0.3); border-radius:999px; padding:7px 13px; font-size:11px; }
+
+  /* ── Cartouche de présentation (couleurs d'origine, violet) ── */
+  .narration {
+    position: absolute; left: 14px; top: 60px; z-index: 7;
+    width: 308px; max-width: calc(100% - 28px);
+    background: #fff; border: 1px solid rgba(123,90,189,0.18); border-left: 3px solid #6B3FA0;
+    border-radius: 12px; padding: 14px 16px;
+    box-shadow: 0 8px 26px -8px rgba(46,24,87,0.20);
+    opacity: 0; transform: translateY(-8px);
+    transition: opacity .4s ease, transform .4s ease;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  .narration.show { opacity: 1; transform: none; }
+  .narration__step { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #6B3FA0; }
+  .narration__title { margin: 4px 0 5px; font-size: 15px; font-weight: 700; color: #1F1437; }
+  .narration__body { margin: 0; font-size: 12.5px; line-height: 1.5; color: #4A4460; min-height: 56px; }
+  .narration__caret { color: #6B3FA0; }
+  .narration__nav { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .narration__dots { display: flex; gap: 5px; flex: 1; }
+  .narration__dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(107,63,160,0.22); cursor: pointer; transition: background .2s, width .2s; }
+  .narration__dot.on { background: #6B3FA0; width: 16px; border-radius: 3px; }
+  .narration__btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.05em; color: #6B3FA0; background: none; border: 1px solid rgba(107,63,160,0.3); border-radius: 999px; padding: 5px 11px; cursor: pointer; transition: background .15s; }
+  .narration__btn:hover { background: rgba(107,63,160,0.07); }
+  .narration__close { position: absolute; top: 9px; right: 10px; border: none; background: none; color: #9089AA; font-size: 16px; line-height: 1; cursor: pointer; padding: 0; }
+  .narration__cta {
+    display: block; margin: 11px 0 2px; text-align: center; text-decoration: none;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 12.5px; font-weight: 600; color: #fff;
+    background: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #2E84D4 100%);
+    background-size: 160% auto; background-position: 0% center;
+    border-radius: 9px; padding: 10px 12px;
+    box-shadow: 0 6px 18px -6px rgba(86,80,198,0.55);
+    transition: background-position .35s ease, transform .15s, box-shadow .15s;
+  }
+  .narration__cta:hover { background-position: 100% center; transform: translateY(-1px); box-shadow: 0 8px 22px -6px rgba(46,132,212,0.55); }
+  @keyframes nar-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(107,63,160,0); } 50% { box-shadow: 0 0 0 4px rgba(107,63,160,0.30); } }
+  #btn-sidebar.nar-hint { animation: nar-pulse 1.1s ease-in-out 3; border-radius: 6px; }
+  @media (max-width: 640px) { .narration { top: auto; bottom: 78px; width: calc(100% - 28px); } }
 </style>
 </head>
 <body>
@@ -202,6 +239,18 @@
       <span class="yr" id="yr-end">Mars</span>
     </div>
     <button id="btn-all" onclick="toggleAll()">TOUT</button>
+  </div>
+</div>
+
+<div class="narration" id="narration">
+  <button class="narration__close" id="nar-close" type="button" aria-label="Fermer">×</button>
+  <span class="narration__step" id="nar-step">01 · Chronologie</span>
+  <h3 class="narration__title" id="nar-title"></h3>
+  <p class="narration__body" id="nar-body"></p>
+  <a class="narration__cta" id="nar-cta" href="../offres/">Débloquer une zone en premium →</a>
+  <div class="narration__nav">
+    <div class="narration__dots" id="nar-dots"></div>
+    <button class="narration__btn" id="nar-replay" type="button">Rejouer</button>
   </div>
 </div>
 
@@ -542,6 +591,29 @@
     }
   }
 
+  // ─────────── cartouche de présentation (explications qui se tapent) ───────────
+  var NSTEPS = [
+    { step:'01 · Chronologie', title:'Parcourir le temps', body:"La barre en bas fait défiler les périodes. Cliquez une période, glissez le curseur, ou lancez « Play » pour animer janvier → mars.", hint:false },
+    { step:'02 · Calques', title:'Activer des calques', body:"Ouvrez le menu, en haut à gauche : forces en présence, flux & trafics, zones d'influence, renseignement HUMINT, ressources…", hint:true },
+    { step:'03 · Outils', title:'Aller plus loin', body:"Heatmap, comparaison de deux périodes, export PNG, rapports — puis débloquez une vraie zone, suivie en continu.", hint:false }
+  ];
+  var narI = 0, narTimers = [];
+  function clearNar(){ narTimers.forEach(clearTimeout); narTimers = []; }
+  function buildDots(){ var c=document.getElementById('nar-dots'); if(!c) return; c.innerHTML=''; NSTEPS.forEach(function(_,i){ var d=document.createElement('span'); d.className='narration__dot'; d.addEventListener('click',function(){ playNarration(i); }); c.appendChild(d); }); }
+  function updateDots(){ var c=document.getElementById('nar-dots'); if(!c) return; [].forEach.call(c.children,function(d,i){ d.classList.toggle('on', i===narI); }); }
+  function typeBody(text){ var el=document.getElementById('nar-body'); if(!el) return; var i=0; (function tick(){ el.innerHTML=text.slice(0,i)+'<span class="narration__caret">▍</span>'; if(i++<text.length) narTimers.push(setTimeout(tick,19)); else el.textContent=text; })(); }
+  function setHint(on){ var b=document.getElementById('btn-sidebar'); if(b) b.classList.toggle('nar-hint', !!on); }
+  function playNarration(idx){ clearNar(); narI=idx; var s=NSTEPS[idx];
+    var st=document.getElementById('nar-step'), ti=document.getElementById('nar-title');
+    if(st) st.textContent=s.step; if(ti) ti.textContent=s.title; typeBody(s.body); updateDots(); setHint(s.hint);
+    var dur = s.body.length*19 + 3000 + s.body.length*33;
+    narTimers.push(setTimeout(function(){ if(narI<NSTEPS.length-1) playNarration(narI+1); }, dur));
+  }
+  function startNarration(){ var box=document.getElementById('narration'); if(!box) return; box.classList.add('show'); buildDots(); playNarration(0);
+    var rp=document.getElementById('nar-replay'); if(rp) rp.onclick=function(){ playNarration(0); };
+    var cl=document.getElementById('nar-close'); if(cl) cl.onclick=function(){ clearNar(); setHint(false); box.classList.remove('show'); };
+  }
+
   // ─────────────────────────── boot ───────────────────────────
   function showFallback(q){
     var boot = document.getElementById('demo-boot');
@@ -606,6 +678,7 @@
           map.resize();
           // affiche tout d'emblée (comme une vraie lecture d'ensemble)
           try { if (typeof window.toggleAll === 'function') window.toggleAll(); } catch(e){}
+          setTimeout(startNarration, 700);
         };
         if (map.loaded()) setTimeout(reveal, 400); else map.on('load', function(){ setTimeout(reveal, 300); });
       };
