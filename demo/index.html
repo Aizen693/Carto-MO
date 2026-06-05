@@ -366,7 +366,8 @@
 
   function pad2(n){ return (n<10?'0':'')+n; }
 
-  function makeGenerator(zone, prof){
+  function makeGenerator(zone, prof, onLand){
+    onLand = onLand || function(){ return true; };
     var rnd = rngMake(seedFrom(norm(zone.label||rawQ||'algor')));
     var cx = zone.center[0], cy = zone.center[1];
     // Écartement des points = taille réelle de la zone.
@@ -379,11 +380,18 @@
     spanX = Math.min(Math.max(spanX, 0.04), 9);
     spanY = Math.min(Math.max(spanY, 0.03), 6);
 
-    // hubs (foyers) — clusters concentrés sur la zone
+    // hubs (foyers) — clusters concentrés sur la zone, placés SUR la terre
     var nHubs = 6 + (rnd()*3|0), hubs = [];
-    for (var i=0;i<nHubs;i++) hubs.push([ cx + (rnd()*2-1)*spanX*0.62, cy + (rnd()*2-1)*spanY*0.62 ]);
+    if (onLand([cx,cy])) hubs.push([cx,cy]); // le centre d'abord s'il est sur terre
+    while (hubs.length < nHubs){
+      var h=null;
+      for (var t=0;t<24;t++){ var cand=[ cx + (rnd()*2-1)*spanX*0.62, cy + (rnd()*2-1)*spanY*0.62 ]; if (onLand(cand)){ h=cand; break; } }
+      hubs.push(h || [cx,cy]);
+    }
     function pickHub(){ return hubs[(rnd()*hubs.length)|0]; }
     function near(h, s){ return [ h[0] + (rnd()+rnd()+rnd()-1.5)*s, h[1] + (rnd()+rnd()+rnd()-1.5)*s ]; }
+    // point proche d'un hub, garanti sur la terre (sinon repli sur le hub)
+    function land(h, s){ for (var t=0;t<16;t++){ var c=near(h,s); if (onLand(c)) return c; } return h; }
     var csz = Math.min(spanX, spanY) * 0.10;
 
     var actors = prof.actors, events = prof.events;
@@ -404,7 +412,7 @@
         var dateStr = pad2(day)+'/'+pad2(per.m+1)+'/2026';
         var vict = Math.floor(Math.pow(rnd(),2)*60);
         var desc = 'Date: '+dateStr+'\nPays: '+(zone.label||'')+'\nÉvénement: '+ev+'\nDétail: '+ev+(vict>0?(' — '+vict+' victimes'):' — bilan non précisé')+' (donnée fictive).';
-        feats.push(feat(pt(near(pickHub(), csz)), { name:act.name, description:desc }));
+        feats.push(feat(pt(land(pickHub(), csz)), { name:act.name, description:desc }));
       }
       return FC(feats);
     }
@@ -412,21 +420,21 @@
     // ── calque : forces en présence ──
     function forces(){
       var feats=[], n=10+(rnd()*6|0);
-      for (var i=0;i<n;i++){ var a=pickActor(); feats.push(feat(pt(near(pickHub(),csz*1.1)),{ name:a.name, force:a.name, _color:a.color, description:'Acteur : '+a.name+'\n(positionnement fictif).' })); }
+      for (var i=0;i<n;i++){ var a=pickActor(); feats.push(feat(pt(land(pickHub(),csz*1.1)),{ name:a.name, force:a.name, _color:a.color, description:'Acteur : '+a.name+'\n(positionnement fictif).' })); }
       return FC(feats);
     }
     // ── calque : population & mobilités ──
     function population(){
       var feats=[], names=['Camp de déplacés','Zone de retour','Hub humanitaire','Quartier sous tension','Site de regroupement'];
       var n=7+(rnd()*5|0);
-      for (var i=0;i<n;i++){ var v=5000+(rnd()*rnd()*400000|0); feats.push(feat(pt(near(pickHub(),csz*1.4)),{ name:names[(rnd()*names.length)|0], personnes:v, _color:'#e040fb', description:'Population estimée : '+v.toLocaleString('fr-FR')+'\n(donnée fictive).' })); }
+      for (var i=0;i<n;i++){ var v=5000+(rnd()*rnd()*400000|0); feats.push(feat(pt(land(pickHub(),csz*1.4)),{ name:names[(rnd()*names.length)|0], personnes:v, _color:'#e040fb', description:'Population estimée : '+v.toLocaleString('fr-FR')+'\n(donnée fictive).' })); }
       return FC(feats);
     }
     // ── calque : ressources & sites ──
     function mines(){
       var feats=[], names=['Site minier artisanal','Concession aurifère','Carrière','Gisement contesté','Point de négoce'];
       var n=6+(rnd()*4|0);
-      for (var i=0;i<n;i++){ feats.push(feat(pt(near(pickHub(),csz*1.6)),{ name:names[(rnd()*names.length)|0], _color:'#d4a017', description:'Site stratégique (donnée fictive).' })); }
+      for (var i=0;i<n;i++){ feats.push(feat(pt(land(pickHub(),csz*1.6)),{ name:names[(rnd()*names.length)|0], _color:'#d4a017', description:'Site stratégique (donnée fictive).' })); }
       return FC(feats);
     }
     // ── calque : infrastructures & axes ──
@@ -434,7 +442,7 @@
       var feats=[], types=['Route a risque','Route coupee','Voie ferree','Axe logistique'];
       // points
       var pnames=['Aéroport','Poste-frontière','Dépôt carburant','Pont stratégique','Garnison'];
-      for (var i=0;i<6+(rnd()*4|0);i++){ feats.push(feat(pt(near(pickHub(),csz*1.5)),{ name:pnames[(rnd()*pnames.length)|0], type:'Infrastructure', _color:'#8d6e63', description:'Infrastructure (donnée fictive).' })); }
+      for (var i=0;i<6+(rnd()*4|0);i++){ feats.push(feat(pt(land(pickHub(),csz*1.5)),{ name:pnames[(rnd()*pnames.length)|0], type:'Infrastructure', _color:'#8d6e63', description:'Infrastructure (donnée fictive).' })); }
       // lignes entre hubs
       for (var j=0;j<Math.min(5,hubs.length-1);j++){ var a=hubs[j], b=hubs[(j+1)%hubs.length], ty=types[(rnd()*types.length)|0];
         feats.push(feat({type:'LineString',coordinates:[a,[ (a[0]+b[0])/2+(rnd()-0.5)*csz, (a[1]+b[1])/2+(rnd()-0.5)*csz ],b]},{ name:'Axe '+(j+1), type:ty, _color:'#8d6e63', description:'Axe '+ty+' (fictif).' })); }
@@ -443,7 +451,7 @@
     // ── calque : HUMINT ──
     function humint(){
       var feats=[], n=10+(rnd()*8|0);
-      for (var i=0;i<n;i++){ var a=pickActor(); feats.push(feat(pt(near(pickHub(),csz*1.3)),{ name:a.name, _color:a.color, description:'Renseignement humain (fictif) — source non nominative.' })); }
+      for (var i=0;i<n;i++){ var a=pickActor(); feats.push(feat(pt(land(pickHub(),csz*1.3)),{ name:a.name, _color:a.color, description:'Renseignement humain (fictif) — source non nominative.' })); }
       return FC(feats);
     }
     // ── calque : flux & trafics ──
@@ -638,8 +646,6 @@
       if (!zone){ showFallback(rawQ); return; }
 
       var prof = profileFor(zone);
-      var gen = makeGenerator(zone, prof);
-      DEMO_DATA = gen.data;
 
       // titre
       document.getElementById('zone-title').textContent = zone.label;
@@ -647,7 +653,7 @@
 
       // ACTOR maps pour le moteur (légende cohérente avec les points)
       var ACTOR_COLORS = {}; var names = [];
-      gen.actors.forEach(function(a){ ACTOR_COLORS[a.name]=a.color; names.push(a.name); });
+      prof.actors.forEach(function(a){ ACTOR_COLORS[a.name]=a.color; names.push(a.name); });
 
       window.ZONE_CONFIG = {
         ZONE_ID:'demo',
@@ -674,24 +680,60 @@
       document.getElementById('yr-start').textContent = 'Jan';
       document.getElementById('yr-end').textContent = 'Mars';
 
-      // injecte le moteur premium
-      var s = document.createElement('script');
-      s.src = '../shared/engine.js?v=20260519a';
-      s.onload = function(){
-        initCalques();
-        var map = window.algorMap;
-        var reveal = function(){
-          var boot=document.getElementById('demo-boot'); if(boot) boot.style.display='none';
-          map.resize();
-          // affiche tout d'emblée (comme une vraie lecture d'ensemble)
-          try { if (typeof window.toggleAll === 'function') window.toggleAll(); } catch(e){}
-          setTimeout(startNarration, 700);
+      // 1) on génère les données SUR LA TERRE (carte temporaire light-v11, eau interrogeable)
+      // 2) puis on charge le moteur premium : il précharge des données déjà nettoyées
+      buildOnLandThen(zone, function(onLand){
+        DEMO_DATA = makeGenerator(zone, prof, onLand).data;
+
+        var s = document.createElement('script');
+        s.src = '../shared/engine.js?v=20260519a';
+        s.onload = function(){
+          initCalques();
+          var map = window.algorMap;
+          var reveal = function(){
+            var boot=document.getElementById('demo-boot'); if(boot) boot.style.display='none';
+            map.resize();
+            // affiche tout d'emblée (comme une vraie lecture d'ensemble)
+            try { if (typeof window.toggleAll === 'function') window.toggleAll(); } catch(e){}
+            setTimeout(startNarration, 700);
+          };
+          if (map.loaded()) setTimeout(reveal, 400); else map.on('load', function(){ setTimeout(reveal, 300); });
         };
-        if (map.loaded()) setTimeout(reveal, 400); else map.on('load', function(){ setTimeout(reveal, 300); });
-      };
-      s.onerror = function(){ showFallback(rawQ); };
-      document.body.appendChild(s);
+        s.onerror = function(){ showFallback(rawQ); };
+        document.body.appendChild(s);
+      });
     });
+  }
+
+  // Carte temporaire (light-v11, cachée) → fonction onLand fiable, puis nettoyage.
+  function buildOnLandThen(zone, cb){
+    var div = document.createElement('div');
+    div.style.cssText = 'position:absolute;left:-9999px;top:0;width:900px;height:650px;';
+    document.body.appendChild(div);
+    var tmp, done=false;
+    function finish(){
+      if (done) return; done=true;
+      var onLand;
+      try {
+        onLand = function(coord){
+          try {
+            var pp = tmp.project(coord);
+            var w = tmp.getCanvas().width, h = tmp.getCanvas().height;
+            if (pp.x < 0 || pp.y < 0 || pp.x > w || pp.y > h) return true; // hors écran → indécidable, on garde
+            var feats = tmp.queryRenderedFeatures([pp.x, pp.y]);
+            return !feats.some(function(f){ return f.sourceLayer === 'water' || (f.layer && /water/i.test(f.layer.id)); });
+          } catch(e){ return true; }
+        };
+      } catch(e){ onLand = function(){ return true; }; }
+      try { cb(onLand); } finally { try { tmp && tmp.remove(); } catch(e){} try { div.remove(); } catch(e){} }
+    }
+    try {
+      tmp = new mapboxgl.Map({ container:div, style:'mapbox://styles/mapbox/light-v11',
+        center:zone.center, zoom:(zone.zoom||6), interactive:false, attributionControl:false, preserveDrawingBuffer:false });
+      if (zone.bbox) { try { tmp.fitBounds(zone.bbox, { padding:20, duration:0 }); } catch(e){} }
+      tmp.on('idle', finish);
+    } catch(e){ finish(); return; }
+    setTimeout(finish, 5000); // garde-fou si 'idle' tarde
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
