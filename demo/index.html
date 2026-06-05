@@ -282,7 +282,7 @@
 
   // ───────────────────── profils d'acteurs par zone ─────────────────────
   var A = function(name,color){ return {name:name,color:color}; };
-  var P = function(actors,events){ return {actors:actors,events:events}; };
+  var P = function(actors,events){ return {actors:actors,events:events,theme:'generic'}; };
   var SAHEL = P([A("Groupes d'autodéfense (VDP)",'#c9a227'),A('JNIM','#e63946'),A('Milices locales','#d4a017'),A('FAMa / forces nationales','#2e7d32'),A('État islamique au Sahel','#9d0208'),A('Africa Corps (Wagner)','#6c757d')],['Attaque jihadiste','Engin explosif (IED)','Embuscade','Enlèvement','Raid sur village','Mouvement de troupes']);
   var NARCO_CO = P([A('Clan del Golfo','#e63946'),A('Dissidences FARC','#f48c06'),A('ELN','#c1121f'),A('Forces armées','#2e7d32'),A('Police nationale','#1d7ed8')],['Saisie de cocaïne','Affrontement narco','Extorsion','Assassinat ciblé','Laboratoire démantelé','Embuscade']);
   var NARCO_MX = P([A('Cartel de Sinaloa','#e63946'),A('CJNG','#f48c06'),A('Cartel du Golfe','#c1121f'),A('Garde nationale','#2e7d32'),A('Forces fédérales','#1d7ed8')],['Saisie de drogue','Affrontement entre cartels','Disparition','Exécution','Checkpoint','Embuscade']);
@@ -309,6 +309,42 @@
   var BRAZIL = P([A('Comando Vermelho','#e63946'),A('PCC','#9d0208'),A('Milices','#8e24aa'),A('Police militaire','#1d7ed8'),A('Forces armées','#2e7d32')],['Affrontement','Saisie de drogue','Exécution','Opération de police','Trafic','Fusillade']);
   var CAUCASE = P([A('Forces azerbaïdjanaises','#1d7ed8'),A('Forces arméniennes','#e63946'),A('Séparatistes','#8e24aa'),A('Casques bleus','#6c757d')],['Échange de tirs','Frappe','Affrontement','Violation de cessez-le-feu','Mouvement','Embuscade']);
   var GENERIC = P([A('Groupe armé non étatique','#e63946'),A('Insurrection locale','#f48c06'),A('Forces gouvernementales','#2e7d32'),A('Force internationale','#1d7ed8'),A('Milice / faction','#8e24aa'),A('Acteur paramilitaire','#6c757d')],['Affrontement armé','Attaque ciblée','Mouvement de troupes','Tension communautaire','Engin explosif','Prise de localité']);
+
+  // Thème de conflit par profil → vocabulaire des calques adapté au secteur
+  SAHEL.theme='jihad'; SOMALIE.theme='jihad'; NIGERIA.theme='jihad'; MOZA.theme='jihad'; AFGHA.theme='jihad'; PAKI.theme='jihad'; IRAK.theme='jihad'; LIBYE.theme='jihad';
+  UKRAINE.theme='war'; SYRIE.theme='war'; ISR.theme='war'; LIBAN.theme='war'; YEMEN.theme='war'; CAUCASE.theme='war'; SOUDAN.theme='war'; ETHIO.theme='war';
+  NARCO_CO.theme='narco'; NARCO_MX.theme='narco'; BRAZIL.theme='narco';
+  HAITI.theme='gang';
+  RDC_EST.theme='insurgency'; MYANMAR.theme='insurgency'; INDIA.theme='insurgency'; IRAN.theme='insurgency'; TURKEY.theme='insurgency';
+
+  // Vocabulaire des calques par thème (libellés crédibles selon le type de conflit)
+  var VOCAB = {
+    war: { flux:['Couloir logistique','Ligne de ravitaillement',"Axe d'évacuation",'Voie de repli'],
+           sites:['Centrale électrique','Nœud ferroviaire','Dépôt de munitions','Base aérienne','Pont stratégique'],
+           infra:['Route stratégique','Voie ferrée','Pont détruit','Aérodrome','Poste de commandement'],
+           pop:['Civils déplacés','Zone évacuée','Abri / refuge','Couloir humanitaire'] },
+    jihad: { flux:["Contrebande d'armes",'Route de ravitaillement','Trafic transfrontalier','Migration'],
+             sites:['Site aurifère','Marché de bétail',"Point d'eau stratégique","Cache d'armes",'Comptoir'],
+             infra:['Piste','Poste-frontière','Axe coupé','Pont','Garnison'],
+             pop:['Camp de déplacés','Village abandonné','Zone de retour','Site humanitaire'] },
+    narco: { flux:['Narcotrafic',"Trafic d'armes",'Route de la cocaïne','Blanchiment'],
+             sites:['Laboratoire clandestin','Piste clandestine','Plantation','Point de transbordement'],
+             infra:['Route de contrebande','Port',"Piste d'atterrissage",'Pont','Check-point'],
+             pop:['Quartier sous emprise','Zone de déplacement','Communauté menacée'] },
+    gang: { flux:["Trafic d'armes",'Extorsion','Contrebande',"Route d'enlèvement"],
+            sites:['Base de gang','Marché noir','Péage illégal','Entrepôt'],
+            infra:['Axe bloqué','Barrage routier','Port','Pont'],
+            pop:['Quartier sous contrôle','Déplacés urbains','Zone assiégée'] },
+    insurgency: { flux:['Trafic minier','Contrebande','Route de ravitaillement',"Trafic d'armes"],
+                  sites:['Mine de coltan','Site minier','Carrière','Comptoir minier'],
+                  infra:['Piste','Axe coupé','Pont','Poste-frontière'],
+                  pop:['Camp de déplacés','Village déplacé','Zone de retour'] },
+    generic: { flux:["Trafic d'armes",'Contrebande','Route logistique','Migration'],
+               sites:['Site stratégique','Ressource contestée','Dépôt','Comptoir'],
+               infra:['Axe routier','Poste-frontière','Pont','Aérodrome'],
+               pop:['Camp de déplacés','Zone de tension','Site de regroupement'] }
+  };
+  var FLUX_PALETTE = ['#c62828','#bf360c','#f9a825','#8e24aa','#1565c0','#00897b'];
 
   var PROFILES = {
     ML:SAHEL,BF:SAHEL,NE:SAHEL,TD:SAHEL,MR:SAHEL,BJ:SAHEL,TG:SAHEL,CI:SAHEL,GH:SAHEL,SN:SAHEL,
@@ -395,6 +431,8 @@
     var csz = Math.min(spanX, spanY) * 0.10;
 
     var actors = prof.actors, events = prof.events;
+    var vocab = VOCAB[prof.theme] || VOCAB.generic;
+    var pick = function(arr){ return arr[(rnd()*arr.length)|0]; };
     function pickActor(){ var n=actors.length, total=n*(n+1)/2, r=rnd()*total; for(var i=0;i<n;i++){ if((r-=(n-i))<=0) return actors[i]; } return actors[0]; }
     function color(name){ for (var i=0;i<actors.length;i++) if(actors[i].name===name) return actors[i].color; return '#888'; }
 
@@ -423,29 +461,26 @@
       for (var i=0;i<n;i++){ var a=pickActor(); feats.push(feat(pt(land(pickHub(),csz*1.1)),{ name:a.name, force:a.name, _color:a.color, description:'Acteur : '+a.name+'\n(positionnement fictif).' })); }
       return FC(feats);
     }
-    // ── calque : population & mobilités ──
+    // ── calque : population & mobilités (libellés selon le secteur) ──
     function population(){
-      var feats=[], names=['Camp de déplacés','Zone de retour','Hub humanitaire','Quartier sous tension','Site de regroupement'];
-      var n=7+(rnd()*5|0);
-      for (var i=0;i<n;i++){ var v=5000+(rnd()*rnd()*400000|0); feats.push(feat(pt(land(pickHub(),csz*1.4)),{ name:names[(rnd()*names.length)|0], personnes:v, _color:'#e040fb', description:'Population estimée : '+v.toLocaleString('fr-FR')+'\n(donnée fictive).' })); }
+      var feats=[], n=7+(rnd()*5|0);
+      for (var i=0;i<n;i++){ var v=5000+(rnd()*rnd()*400000|0); feats.push(feat(pt(land(pickHub(),csz*1.4)),{ name:pick(vocab.pop), personnes:v, _color:'#e040fb', description:'Population estimée : '+v.toLocaleString('fr-FR')+'\n(donnée fictive).' })); }
       return FC(feats);
     }
-    // ── calque : ressources & sites ──
+    // ── calque : ressources & sites (libellés selon le secteur) ──
     function mines(){
-      var feats=[], names=['Site minier artisanal','Concession aurifère','Carrière','Gisement contesté','Point de négoce'];
-      var n=6+(rnd()*4|0);
-      for (var i=0;i<n;i++){ feats.push(feat(pt(land(pickHub(),csz*1.6)),{ name:names[(rnd()*names.length)|0], _color:'#d4a017', description:'Site stratégique (donnée fictive).' })); }
+      var feats=[], n=6+(rnd()*4|0);
+      for (var i=0;i<n;i++){ var nm=pick(vocab.sites); feats.push(feat(pt(land(pickHub(),csz*1.6)),{ name:nm, _color:'#d4a017', description:nm+' (donnée fictive).' })); }
       return FC(feats);
     }
-    // ── calque : infrastructures & axes ──
+    // ── calque : infrastructures & axes (libellés selon le secteur) ──
     function infrastructures(){
-      var feats=[], types=['Route a risque','Route coupee','Voie ferree','Axe logistique'];
+      var feats=[];
       // points
-      var pnames=['Aéroport','Poste-frontière','Dépôt carburant','Pont stratégique','Garnison'];
-      for (var i=0;i<6+(rnd()*4|0);i++){ feats.push(feat(pt(land(pickHub(),csz*1.5)),{ name:pnames[(rnd()*pnames.length)|0], type:'Infrastructure', _color:'#8d6e63', description:'Infrastructure (donnée fictive).' })); }
+      for (var i=0;i<6+(rnd()*4|0);i++){ var nm=pick(vocab.infra); feats.push(feat(pt(land(pickHub(),csz*1.5)),{ name:nm, type:nm, _color:'#8d6e63', description:nm+' (donnée fictive).' })); }
       // lignes entre hubs
-      for (var j=0;j<Math.min(5,hubs.length-1);j++){ var a=hubs[j], b=hubs[(j+1)%hubs.length], ty=types[(rnd()*types.length)|0];
-        feats.push(feat({type:'LineString',coordinates:[a,[ (a[0]+b[0])/2+(rnd()-0.5)*csz, (a[1]+b[1])/2+(rnd()-0.5)*csz ],b]},{ name:'Axe '+(j+1), type:ty, _color:'#8d6e63', description:'Axe '+ty+' (fictif).' })); }
+      for (var j=0;j<Math.min(5,hubs.length-1);j++){ var a=hubs[j], b=hubs[(j+1)%hubs.length], ty=pick(vocab.infra);
+        feats.push(feat({type:'LineString',coordinates:[a,[ (a[0]+b[0])/2+(rnd()-0.5)*csz, (a[1]+b[1])/2+(rnd()-0.5)*csz ],b]},{ name:'Axe '+(j+1), type:ty, _color:'#8d6e63', description:ty+' (tracé fictif).' })); }
       return FC(feats);
     }
     // ── calque : HUMINT ──
@@ -454,25 +489,25 @@
       for (var i=0;i<n;i++){ var a=pickActor(); feats.push(feat(pt(land(pickHub(),csz*1.3)),{ name:a.name, _color:a.color, description:'Renseignement humain (fictif) — source non nominative.' })); }
       return FC(feats);
     }
-    // ── calque : flux & trafics ──
+    // ── calque : flux & trafics (types selon le secteur, couleur par type) ──
+    function fluxColor(t){ var i=vocab.flux.indexOf(t); return FLUX_PALETTE[(i<0?0:i)%FLUX_PALETTE.length]; }
     function flux(){
-      var feats=[], types=['Narcotrafic',"Trafic d'armes",'Migration','Contrebande or','Contrebande'];
-      var n=Math.min(6, hubs.length-1);
-      for (var i=0;i<n;i++){ var a=hubs[i], b=hubs[(i+2)%hubs.length], ty=types[(rnd()*types.length)|0];
+      var feats=[], n=Math.min(6, hubs.length-1);
+      for (var i=0;i<n;i++){ var a=hubs[i], b=hubs[(i+2)%hubs.length], ty=pick(vocab.flux);
         var mid=[ (a[0]+b[0])/2 - (b[1]-a[1])*0.12, (a[1]+b[1])/2 + (b[0]-a[0])*0.12 ];
         feats.push(feat({type:'LineString',coordinates:[a,mid,b]},{ name:ty, type:ty, rank:(i<3?'main':'secondary'), _color:fluxColor(ty), description:'Flux '+ty+' (tracé fictif).' })); }
       return FC(feats);
     }
-    function fluxColor(t){ return ({'Narcotrafic':'#c62828',"Trafic d'armes":'#bf360c','Migration':'#8d6e63','Contrebande or':'#f9a825','Contrebande':'#8e24aa'})[t]||'#e65100'; }
-    // ── calque : zones d'influence (polygones) ──
+    // ── calque : zones d'influence (polygones nommés d'après les acteurs) ──
     function ethnies(){
-      var feats=[], palette=['#e07c5a','#8d6e63','#d4a017','#66bb6a','#78909c','#ce93d8','#4db6ac','#ba68c8'];
-      var nm=['Zone d\'influence A','Zone d\'influence B','Zone d\'influence C','Zone contestée D','Bastion E'];
-      var k=Math.min(5,hubs.length);
-      for (var i=0;i<k;i++){ var c=hubs[i], r=csz*(2.4+rnd()*1.8), ring=[];
+      var feats=[];
+      var k=Math.min(actors.length, Math.min(5, hubs.length));
+      for (var i=0;i<k;i++){ var a=actors[i];
+        var label = (i % 4 === 3) ? 'Zone disputée' : ((i % 2 === 0) ? 'Contrôle ' + a.name : 'Bastion ' + a.name);
+        var c=hubs[i], r=csz*(2.4+rnd()*1.8), ring=[];
         for (var t=0;t<=14;t++){ var ang=t/14*2*Math.PI, rad=r*(0.7+rnd()*0.5); ring.push([ c[0]+rad*Math.cos(ang)/Math.cos(c[1]*Math.PI/180), c[1]+rad*Math.sin(ang) ]); }
         ring.push(ring[0]);
-        feats.push(feat({type:'Polygon',coordinates:[ring]},{ name:nm[i%nm.length], _color:palette[i%palette.length], description:'Aire d\'influence (fictive).' })); }
+        feats.push(feat({type:'Polygon',coordinates:[ring]},{ name:label, _color:a.color, description:"Aire d'influence — "+a.name+" (fictive)." })); }
       return FC(feats);
     }
 
