@@ -764,7 +764,7 @@
       let i = 0;
       (function tick() {
         el.innerHTML = text.slice(0, i) + '<span class="narration__caret">▍</span>';
-        if (i++ < text.length) narTimers.push(setTimeout(tick, 16));
+        if (i++ < text.length) narTimers.push(setTimeout(tick, 26));
         else el.textContent = text;
       })();
     }
@@ -776,7 +776,8 @@
       document.getElementById('nar-title').textContent = s.title;
       typeBody(s.body);
       updateDots();
-      const dur = 2600 + s.body.length * 16;
+      // temps de frappe (26 ms/car) + vraie pause de lecture proportionnelle au texte
+      const dur = s.body.length * 26 + 4000 + s.body.length * 50;
       narTimers.push(setTimeout(() => { if (narI < STEPS.length - 1) playNarration(narI + 1); }, dur));
     }
 
