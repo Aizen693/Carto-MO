@@ -57,6 +57,9 @@
   @media(min-width:560px){ .grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))} }
   .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;position:relative}
   .card .thumb{width:100%;aspect-ratio:16/9;background:#000;display:block;border:none}
+  .card .thumb.ytthumb{position:relative;background-size:cover;background-position:center;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .ytthumb .playbtn{width:54px;height:54px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;transition:.15s;padding-left:3px}
+  .ytthumb:active .playbtn, .ytthumb:hover .playbtn{background:var(--accent);transform:scale(1.08)}
   .card .body{padding:12px 14px;flex:1;display:flex;flex-direction:column;gap:6px}
   .card .title{font-weight:600;font-size:15px;word-break:break-word}
   .card .meta{font-size:12px;color:var(--muted);word-break:break-all}
@@ -288,14 +291,15 @@ function renderVideos(){
     const id=ytId(v.url); const card=document.createElement('div'); card.className='card';
     card.innerHTML=`
       <button class="del">×</button>
-      ${ id ? `<iframe class="thumb" loading="lazy" src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>`
+      ${ id ? `<div class="thumb ytthumb" style="background-image:url('https://img.youtube.com/vi/${id}/hqdefault.jpg')"><span class="playbtn">▶</span></div>`
             : `<div class="thumb" style="display:flex;align-items:center;justify-content:center;color:#888;font-size:13px">Lien non YouTube</div>` }
       <div class="body">
         ${ v.note ? `<div class="title">${escapeHtml(v.note)}</div>` : '' }
-        <a class="open" href="${escapeAttr(v.url)}" target="_blank">Ouvrir ↗</a>
+        <a class="open" href="${escapeAttr(v.url)}" target="_blank">Ouvrir sur YouTube ↗</a>
         ${ v.by ? `<div class="by">ajouté par ${escapeHtml(v.by)}</div>` : '' }
       </div>`;
     card.querySelector('.del').onclick=()=>{ db.videos=db.videos.filter(x=>x.id!==v.id); save(['videos']); renderVideos(); };
+    if(id){ const th=card.querySelector('.ytthumb'); th.onclick=()=>{ th.outerHTML=`<iframe class="thumb" src="https://www.youtube.com/embed/${id}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`; }; }
     grid.appendChild(card);
   });
 }
