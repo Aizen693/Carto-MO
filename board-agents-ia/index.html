@@ -129,7 +129,7 @@
       <button class="btn ghost" id="clearMap">🗑 Vider</button>
     </div>
     <div id="mapWrap"><svg id="mapSvg"></svg></div>
-    <div class="hint">Glisse les bulles au doigt · double-tap pour éditer le texte</div>
+    <div class="hint">Tape sur une bulle pour écrire · glisse-la pour la déplacer</div>
   </section>
 
   <section class="view" id="videos">
@@ -378,8 +378,8 @@ function makeNode(n){
   });
   el.addEventListener('pointerup',()=>{
     if(!drag) return; drag=false; el.classList.remove('dragging');
-    if(moved){ save(['nodes']); }
-    else { const now=Date.now(); if(now-lastTap<320) startEdit(); lastTap=now; }
+    if(moved){ save(['nodes']); }   // déplacée → on enregistre
+    else { startEdit(); }            // simple appui → on écrit
   });
   return el;
 }
