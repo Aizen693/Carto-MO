@@ -79,6 +79,8 @@
   .node.dragging{z-index:10;filter:brightness(1.12)}
   .node.selected{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(34,211,238,.35)}
   .node .ntext{outline:none;word-break:break-word}
+  .node .ntext:empty{min-height:2px}
+  .node img.nimg{display:block;max-width:140px;max-height:100px;width:auto;height:auto;object-fit:contain;border-radius:8px;margin:0 auto 6px;background:#fff;pointer-events:none}
   .node .ndel{position:absolute;top:-11px;right:-11px;background:var(--danger);color:#fff;border:none;width:26px;height:26px;border-radius:50%;font-size:15px;cursor:pointer;line-height:1}
 
   nav{position:fixed;bottom:0;left:0;right:0;z-index:60;display:flex;background:rgba(20,23,32,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:var(--safe-b)}
@@ -125,8 +127,10 @@
   <section class="view" id="map">
     <div class="map-toolbar">
       <button class="btn" id="addNode">+ Bulle</button>
+      <button class="btn ghost" id="addLogo">🖼 + Logo</button>
       <button class="btn ghost" id="linkMode">🔗 Relier</button>
       <button class="btn ghost" id="clearMap">🗑 Vider</button>
+      <input type="file" id="logoInput" accept="image/*" hidden>
     </div>
     <div id="mapWrap"><svg id="mapSvg"></svg></div>
     <div class="hint">Tape sur une bulle pour écrire · glisse-la pour la déplacer</div>
@@ -348,7 +352,7 @@ function renderNodes(){ wrap.querySelectorAll('.node').forEach(n=>n.remove()); d
 function makeNode(n){
   const el=document.createElement('div'); el.className='node';
   el.style.left=n.x+'px'; el.style.top=n.y+'px'; el.dataset.id=n.id;
-  el.innerHTML=`<button class="ndel">×</button><div class="ntext">${escapeHtml(n.text)}</div>`;
+  el.innerHTML=`<button class="ndel">×</button>${ n.img?`<img class="nimg" src="${escapeAttr(n.img)}" alt="">`:'' }<div class="ntext">${escapeHtml(n.text)}</div>`;
   const txt=el.querySelector('.ntext');
   el.querySelector('.ndel').onclick=(e)=>{ e.stopPropagation(); db.nodes=db.nodes.filter(x=>x.id!==n.id); db.links=db.links.filter(l=>l.a!==n.id&&l.b!==n.id); save(['nodes','links']); renderNodes(); };
   let lastTap=0;
@@ -400,6 +404,45 @@ document.getElementById('addNode').onclick=()=>{
   const w=wrap.clientWidth, h=wrap.clientHeight;
   db.nodes.push({ id:uid(), x:30+Math.random()*(w*0.4), y:30+Math.random()*(h*0.4), text:'Nouvelle idée' });
   save(['nodes']); renderNodes();
+};
+
+/* --- Logos perso dans la mind map --- */
+function fileToPngBlob(file, max){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>{
+      const scale=Math.min(1, max/Math.max(img.width,img.height));
+      const w=Math.max(1,Math.round(img.width*scale)), h=Math.max(1,Math.round(img.height*scale));
+      const c=document.createElement('canvas'); c.width=w; c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      c.toBlob(b=> b?resolve(b):reject(new Error('canvas')), 'image/png');
+    };
+    img.onerror=()=>reject(new Error('image illisible'));
+    img.src=URL.createObjectURL(file);
+  });
+}
+async function uploadLogo(file){
+  const blob=await fileToPngBlob(file, 256);
+  if(sb){
+    const path='logos/'+getRoom()+'/'+uid()+'.png';
+    const { error }=await sb.storage.from('site').upload(path, blob, { contentType:'image/png', upsert:true });
+    if(!error){ return sb.storage.from('site').getPublicUrl(path).data.publicUrl; }
+  }
+  // hors ligne : image embarquée localement (ne se synchronise pas)
+  return await new Promise(r=>{ const fr=new FileReader(); fr.onload=()=>r(fr.result); fr.readAsDataURL(blob); });
+}
+const logoInput=document.getElementById('logoInput');
+document.getElementById('addLogo').onclick=()=>logoInput.click();
+logoInput.onchange=async(e)=>{
+  const file=e.target.files[0]; if(!file) return;
+  toast('Ajout du logo…');
+  try{
+    const url=await uploadLogo(file);
+    const w=wrap.clientWidth, h=wrap.clientHeight;
+    db.nodes.push({ id:uid(), x:30+Math.random()*(w*0.4), y:30+Math.random()*(h*0.4), text:'', img:url });
+    save(['nodes']); renderNodes(); toast('Logo ajouté');
+  }catch(err){ toast('Échec du logo'); alert('Impossible d\'ajouter ce logo : '+(err.message||err)); }
+  logoInput.value='';
 };
 document.getElementById('linkMode').onclick=()=>{ linking=!linking; linkFrom=null; document.querySelectorAll('.node').forEach(x=>x.classList.remove('selected')); toast(linking?'Tape sur 2 bulles à relier':'Mode lien annulé'); };
 document.getElementById('clearMap').onclick=()=>{ if(confirm('Effacer toute la mind map ?')){ db.nodes=[]; db.links=[]; save(['nodes','links']); renderNodes(); } };
