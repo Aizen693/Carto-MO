@@ -8,17 +8,11 @@
  *   <script type="module" src="../shared/firebase-loader.js"></script>
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
-
-// Meme config que admin/supabase-config.js
-const SUPABASE_URL  = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
-const SUPABASE_KEY  = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
-
-let supabase;
-try {
-  supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-} catch (e) {
-  console.warn('Supabase loader: init skipped', e.message);
+// V4 : on réutilise le client AUTHENTIFIÉ de site-auth (window.algorAuth.supabase)
+// au lieu d'un client anonyme dédié, pour que la lecture des points respecte la
+// RLS premium (et un seul GoTrueClient au lieu de deux).
+function getSupabase() {
+  return (window.algorAuth && window.algorAuth.supabase) || null;
 }
 
 // Cache local (30s TTL — les modifications admin apparaissent rapidement)
@@ -26,6 +20,9 @@ const cache = {};
 const CACHE_TTL = 30 * 1000;
 
 async function loadFirestorePoints(zone) {
+  // Attend l'accès premium (zones gated) avant de lire les points (RLS premium).
+  if (window.algorReady) { try { await window.algorReady; } catch (_) {} }
+  const supabase = getSupabase();
   if (!supabase) return { type: 'FeatureCollection', features: [] };
 
   const cached = cache[zone];
