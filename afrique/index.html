@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Algor Int — Afrique Maritime</title>
-<script type="module" src="../shared/site-auth.js?v=20260608a"></script>
+<script type="module" src="../shared/site-auth.js?v=20260608b"></script>
+<script>/* V1 : promesse d'acces premium, posee AVANT le corps (script classique) pour
+   que les chargements de donnees n'accedent pas a window.algorAuth au parse — il
+   est defini par le module differe site-auth.js. Resolue par algorAuthReady. */
+window.algorReady = new Promise(function (res) {
+  window.addEventListener('algorAuthReady', function () { res(); }, { once: true });
+});</script>
 <script type="module" src="../shared/brief-ia.js?v=20260518i"></script>
 <link rel="icon" type="image/jpeg" href="../favicon.jpg">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
@@ -574,7 +580,8 @@ function initLayersCatalog() {
   Object.values(ALL_CHILDREN).forEach(c => {
     layerState[c.id] = { data: null, visible: false, cfg: c };
     if (c.kind === 'ais') return;  // pas de fichier — flux WebSocket
-    window.algorAuth.loadZoneFile('afrique/' + c.file)
+    window.algorReady
+      .then(function () { return window.algorAuth.loadZoneFile('afrique/' + c.file); })
       .then(data => {
         layerState[c.id].data = data;
         if (c.defaultOn) toggleLayer(c.id);
@@ -1140,7 +1147,9 @@ if (_aisRestored > 0) console.log('[ais] buffer restaure depuis derniere session
    n'ait eu le temps d'accumuler ses donnees. La WS prend ensuite le relais pour la fraicheur. */
 function aisLoadStaticSnapshot() {
   if (DISABLE_LAYERS_AND_POINTS) return;
-  window.algorAuth.loadZoneFile('afrique/ais-snapshot.json').catch(() => null)
+  window.algorReady
+    .then(function () { return window.algorAuth.loadZoneFile('afrique/ais-snapshot.json'); })
+    .catch(() => null)
     .then(data => {
       if (!data || !Array.isArray(data.ships)) return;
       // Marque les positions du snapshot avec un timestamp ancien mais < AIS_STALE_MS

@@ -84,18 +84,23 @@ window.addEventListener('algorAuthReady', () => _resolvePremiumReady());
 window.algorAuth.loadZoneRaw = async function (path) {
   await window.algorAuth.ready;
   const clean = String(path).replace(/^\.?\//, '').split('?')[0];
-  const { data, error } = await supabase.storage.from('zones').download(clean);
-  if (error || !data) {
-    // Filet de sécurité pendant la migration : retombe sur le fichier statique
-    // tant que l'objet n'est pas encore dans le Storage. À RETIRER une fois tous
-    // les fichiers uploadés ET les statiques supprimés du dépôt — c'est cette
-    // suppression qui ferme réellement l'exposition publique (V1).
-    console.warn('[algorAuth] Storage miss', clean, (error && error.message) || '');
-    const res = await fetch('./' + clean.split('/').pop() + '?v=' + Date.now());
-    if (!res.ok) throw new Error('Zone file unavailable: ' + clean);
-    return res.text();
+  // Plusieurs tentatives : au tout premier appel le token de session peut ne pas
+  // encore être attaché au client, et le réseau peut hoqueter. On réessaie avant
+  // de conclure à un échec.
+  for (let i = 0; i < 3; i++) {
+    try {
+      const { data, error } = await supabase.storage.from('zones').download(clean);
+      if (data && !error) return data.text();
+    } catch (_) { /* réseau : on réessaie */ }
+    await new Promise(function (r) { setTimeout(r, 300 * (i + 1)); });
   }
-  return data.text();
+  // Filet de sécurité transitoire : retombe sur le fichier statique tant que la
+  // phase 2 (suppression des statiques) n'est pas faite. Le warning permet de
+  // détecter en prod si le Storage échoue réellement.
+  console.warn('[algorAuth] Storage miss -> fallback statique', clean);
+  const res = await fetch('./' + clean.split('/').pop() + '?v=' + Date.now());
+  if (!res.ok) throw new Error('Zone file unavailable: ' + clean);
+  return res.text();
 };
 
 // Variante JSON (geojson / .json) : renvoie l'objet parsé.
