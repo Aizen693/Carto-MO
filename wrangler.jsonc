@@ -1,0 +1,10 @@
+{
+  // Déploiement Cloudflare (Workers static assets) du site Algor Access.
+  // Sert le répertoire racine en statique + applique le fichier _headers
+  // (en-têtes de sécurité : CSP, HSTS, X-Frame-Options, nosniff, etc.).
+  "name": "carto-mo",
+  "compatibility_date": "2026-06-08",
+  "assets": {
+    "directory": "."
+  }
+}
