@@ -69,6 +69,40 @@ window.algorAuth = {
   },
 };
 
+// Promesse résolue une fois l'accès premium confirmé (voir l'événement
+// « algorAuthReady » émis par gateSite() / proceedAfterAuth()). Les zones
+// attendent ceci avant de télécharger leurs données depuis le Storage privé.
+let _resolvePremiumReady;
+window.algorAuth.ready = new Promise((resolve) => { _resolvePremiumReady = resolve; });
+window.addEventListener('algorAuthReady', () => _resolvePremiumReady());
+
+// Charge le contenu BRUT (texte) d'un fichier de zone depuis le bucket privé
+// Supabase « zones ». `path` = chemin type 'sahel/humint.geojson' ou
+// 'moyen-orient/2005-2006.kml'. Bloque jusqu'à confirmation de l'accès premium
+// → la RLS Storage refuse tout téléchargement sans session premium (plan
+// premium ou rôle staff). Sert de base au chargement geojson ET kml.
+window.algorAuth.loadZoneRaw = async function (path) {
+  await window.algorAuth.ready;
+  const clean = String(path).replace(/^\.?\//, '').split('?')[0];
+  const { data, error } = await supabase.storage.from('zones').download(clean);
+  if (error || !data) {
+    // Filet de sécurité pendant la migration : retombe sur le fichier statique
+    // tant que l'objet n'est pas encore dans le Storage. À RETIRER une fois tous
+    // les fichiers uploadés ET les statiques supprimés du dépôt — c'est cette
+    // suppression qui ferme réellement l'exposition publique (V1).
+    console.warn('[algorAuth] Storage miss', clean, (error && error.message) || '');
+    const res = await fetch('./' + clean.split('/').pop() + '?v=' + Date.now());
+    if (!res.ok) throw new Error('Zone file unavailable: ' + clean);
+    return res.text();
+  }
+  return data.text();
+};
+
+// Variante JSON (geojson / .json) : renvoie l'objet parsé.
+window.algorAuth.loadZoneFile = async function (path) {
+  return JSON.parse(await window.algorAuth.loadZoneRaw(path));
+};
+
 const ICON_MAIL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`;
 const ICON_LOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
 const ICON_EYE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>`;
@@ -657,6 +691,12 @@ const GATED_PREFIXES = ['/sahel/', '/moyen-orient/', '/rdc/', '/afrique/', '/mad
 const IS_GATED_PAGE = GATED_PREFIXES.some((p) => location.pathname.startsWith(p))
                    || /-v2\.html$/.test(location.pathname);
 
+// Marque la page comme « zone privée » : les modules partagés (engine.js,
+// calque-timeline.js) routent alors leurs chargements de données vers le
+// Storage privé (premium) au lieu des fichiers statiques publics. La démo
+// publique n'importe pas site-auth → ce flag reste absent → fetch statique.
+window.ZONE_PRIVATE = IS_GATED_PAGE;
+
 let overlayEl = null;
 
 function injectStyles() {
@@ -707,6 +747,8 @@ async function proceedAfterAuth(userId) {
   const profile = await fetchProfile(userId);
   if (hasZoneAccess(profile)) {
     removeOverlay();
+    // Débloque le chargement des données de zone (Storage privé).
+    window.dispatchEvent(new CustomEvent('algorAuthReady'));
   } else {
     switchView('upgrade');
   }

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Algor Int — Attaques Moyen-Orient 2005–2026</title>
-<script type="module" src="../shared/site-auth.js?v=20260529b"></script>
+<script type="module" src="../shared/site-auth.js?v=20260608a"></script>
 <link rel="icon" type="image/jpeg" href="../favicon.jpg">
 <meta property="og:title" content="Algor Int — Carte Moyen-Orient">
 <meta property="og:description" content="Cartographie interactive des attaques chiites/sunnites au Moyen-Orient. 173 evenements, 22 acteurs, 10 periodes. Cotation OTAN.">
@@ -216,13 +216,17 @@ const ZONE_CONFIG = {
   DISABLE_LAYERS_AND_POINTS: false
 };
 
-/* Chargement asynchrone OTAN + MAP_ZONES */
-fetch("./otan-data.json").then(r => r.json()).then(d => { ZONE_CONFIG.OTAN_DATA = d; Object.assign(OTAN_DATA, d); }).catch(() => console.warn("OTAN data not loaded"));
-fetch("./map-zones.json").then(r => r.json()).then(d => { ZONE_CONFIG.MAP_ZONES = d; }).catch(() => console.warn("MAP_ZONES data not loaded"));
+/* Chargement asynchrone OTAN + MAP_ZONES — depuis le Storage privé (premium).
+   Différé à l'événement algorAuthReady : ce script classique s'exécute avant le
+   module site-auth.js, donc window.algorAuth n'existe pas encore au parse. */
+window.addEventListener('algorAuthReady', function () {
+  window.algorAuth.loadZoneFile("moyen-orient/otan-data.json").then(d => { ZONE_CONFIG.OTAN_DATA = d; Object.assign(OTAN_DATA, d); }).catch(() => console.warn("OTAN data not loaded"));
+  window.algorAuth.loadZoneFile("moyen-orient/map-zones.json").then(d => { ZONE_CONFIG.MAP_ZONES = d; }).catch(() => console.warn("MAP_ZONES data not loaded"));
+});
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
 <script type="module" src="../shared/brief-ia.js?v=20260518i"></script>
-<script src="../shared/engine.js?v=20260519a"></script>
+<script src="../shared/engine.js?v=20260608a"></script>
 
 <!-- MO-SPECIFIC: Daesh territory zones + auto-toggle -->
 <script>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Algor Int — Grands Lacs</title>
-<script type="module" src="../shared/site-auth.js?v=20260529b"></script>
+<script type="module" src="../shared/site-auth.js?v=20260608a"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
@@ -217,7 +217,7 @@ const ZONE_CONFIG = {
 </script>
 <script type="module" src="../shared/firebase-loader.js"></script>
 <script type="module" src="../shared/brief-ia.js?v=20260518i"></script>
-<script src="../shared/engine.js?v=20260519a"></script>
+<script src="../shared/engine.js?v=20260608a"></script>
 
 <!-- CALQUE : Renseignement HUMINT (points colores par auteur, popup riche) -->
 <script>
@@ -236,8 +236,7 @@ const ZONE_CONFIG = {
   function addHumint() {
     if (humintAdded) return;
     if (window.ZONE_CONFIG && window.ZONE_CONFIG.DISABLE_LAYERS_AND_POINTS) return;
-    fetch('./humint.geojson?v=' + Date.now())
-      .then(function(r) { return r.json(); })
+    window.algorAuth.loadZoneFile('rdc/humint.geojson')
       .then(function(data) {
         if (!data || !data.features) return;
         if (window.algorMap.getSource('humint-src')) return;
@@ -300,7 +299,7 @@ const ZONE_CONFIG = {
 </script>
 
 <!-- SLIDER DATES (CALQUES_ONLY) -->
-<script src="../shared/calque-timeline.js?v=20260519a"></script>
+<script src="../shared/calque-timeline.js?v=20260608a"></script>
 <script>
 AlgorCalqueTimeline.init({
   sources: [

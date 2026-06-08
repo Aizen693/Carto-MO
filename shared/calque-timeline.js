@@ -142,8 +142,12 @@
     function fetchSource(s) {
       var fileList = s.files || (s.file ? [s.file] : []);
       return Promise.all(fileList.map(function(f) {
-        return fetch('./' + f + '?v=' + Date.now())
-          .then(function(r) { return r.json(); })
+        // Zone privée (théâtre premium) → Storage privé via algorAuth ; sinon
+        // (démo publique) → fetch statique d'origine.
+        var slug = location.pathname.split('/').filter(Boolean)[0] || '';
+        return ((window.ZONE_PRIVATE && window.algorAuth && window.algorAuth.loadZoneFile)
+            ? window.algorAuth.loadZoneFile(slug + '/' + f)
+            : fetch('./' + f + '?v=' + Date.now()).then(function(r) { return r.json(); }))
           .catch(function() { return null; });
       })).then(function(parts) {
         var merged = { type: 'FeatureCollection', features: [] };

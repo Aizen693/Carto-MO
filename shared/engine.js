@@ -380,20 +380,38 @@ function applyFilter() {
 }
 
 // ── CHARGEMENT KML ───────────────────────────────────────────────────
+// ── Chargement des données : zone privée → Storage premium, sinon statique ──
+// Sur une page de théâtre (window.ZONE_PRIVATE posé par site-auth.js), on passe
+// par le bucket privé Supabase via algorAuth ; sur la démo publique (flag absent),
+// on garde le fetch statique d'origine. `loadZoneRaw` attend l'accès premium.
+function __zoneSlug() { return location.pathname.split('/').filter(Boolean)[0] || ''; }
+function __loadZoneGeoRaw(file, cacheBust) {
+  if (window.ZONE_PRIVATE && window.algorAuth && window.algorAuth.loadZoneRaw) {
+    return window.algorAuth.loadZoneRaw(__zoneSlug() + '/' + file);
+  }
+  return fetch('./' + file + (cacheBust || ('?v=' + Date.now())))
+    .then(function (r) { if (!r.ok) throw new Error('404'); return r.text(); });
+}
+function __loadZoneGeoJson(file) {
+  if (window.ZONE_PRIVATE && window.algorAuth && window.algorAuth.loadZoneFile) {
+    return window.algorAuth.loadZoneFile(__zoneSlug() + '/' + file);
+  }
+  return fetch('./' + file + '?v=' + Date.now()).then(function (r) { return r.json(); });
+}
+
 async function loadKML(index) {
   if (loadedData[index]) return loadedData[index];
   try {
     let geo, descMap = {};
-    const res = await fetch('./' + PERIODS[index].file + '?v=20260422b');
-    if (!res.ok) throw new Error('404');
+    const raw = await __loadZoneGeoRaw(PERIODS[index].file, '?v=20260422b');
     if (PERIODS[index].file.endsWith('.geojson')) {
-      geo = await res.json();
+      geo = JSON.parse(raw);
       geo.features.forEach((f, i) => {
         const d = f.properties.description || '';
         descMap[i] = d.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').trim() || null;
       });
     } else {
-      const text = await res.text();
+      const text = raw;
       const dom = new DOMParser().parseFromString(text, 'text/xml');
       dom.querySelectorAll('Placemark').forEach((pm, i) => {
         const de = pm.querySelector('description');
@@ -812,8 +830,8 @@ function toggleHeatmap() {
     _heatmapCalqueLoaded = true;
     // Charge heatmap-data.geojson (120 points ACLED reels) + evenements.geojson
     Promise.all([
-      fetch('./heatmap-data.geojson?v=' + Date.now()).then(function(r) { return r.json(); }).catch(function() { return null; }),
-      fetch('./evenements.geojson?v=' + Date.now()).then(function(r) { return r.json(); }).catch(function() { return null; })
+      __loadZoneGeoJson('heatmap-data.geojson').catch(function() { return null; }),
+      __loadZoneGeoJson('evenements.geojson').catch(function() { return null; })
     ]).then(function(results) {
       var pts = [];
       results.forEach(function(d) { if (d && d.features) d.features.forEach(function(f) { if (f.geometry && f.geometry.type === 'Point') pts.push(f); }); });
