@@ -74,11 +74,19 @@ function parseDesc(raw) {
 }
 
 function linkifyText(text) {
-  return text.replace(/(https?:\/\/[^\s<>"']+)/g, function(url) {
+  // Securite : on echappe le texte hors-URL ET la valeur des liens (href/display)
+  // tout en preservant les URL completes (params &) dans le href.
+  var re = /(https?:\/\/[^\s<>"']+)/g, out = '', last = 0, m;
+  while ((m = re.exec(String(text ?? ''))) !== null) {
+    out += esc(text.slice(last, m.index));
+    var url = m[0];
     var display = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
     if (display.length > 40) display = display.substring(0, 37) + '...';
-    return '<a href="' + url + '" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-family:\'JetBrains Mono\',monospace;font-size:9px;border-bottom:1px solid rgba(196,154,60,0.3);">' + display + '</a>';
-  });
+    out += '<a href="' + esc(url) + '" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-family:\'JetBrains Mono\',monospace;font-size:9px;border-bottom:1px solid rgba(196,154,60,0.3);">' + esc(display) + '</a>';
+    last = m.index + url.length;
+  }
+  out += esc(text.slice(last));
+  return out;
 }
 
 function makePopupHTML(p) {
@@ -87,9 +95,9 @@ function makePopupHTML(p) {
   const otan = desc && desc.event ? getOtanData(p._period, p.name, desc.event) : null;
   let body = '';
   if (desc) {
-    if (desc.date)   body += `<div class="popup-row"><span class="popup-key">Date</span><span class="popup-val bold">${desc.date}</span></div>`;
-    if (desc.pays)   body += `<div class="popup-row"><span class="popup-key">Pays</span><span class="popup-val">${desc.pays}</span></div>`;
-    if (desc.event)  body += `<div class="popup-row"><span class="popup-key">Événement</span><span class="popup-val bold">${desc.event}</span></div>`;
+    if (desc.date)   body += `<div class="popup-row"><span class="popup-key">Date</span><span class="popup-val bold">${esc(desc.date)}</span></div>`;
+    if (desc.pays)   body += `<div class="popup-row"><span class="popup-key">Pays</span><span class="popup-val">${esc(desc.pays)}</span></div>`;
+    if (desc.event)  body += `<div class="popup-row"><span class="popup-key">Événement</span><span class="popup-val bold">${esc(desc.event)}</span></div>`;
     if (desc.detail) body += `<div class="popup-row"><span class="popup-key">Détail</span><span class="popup-val">${linkifyText(desc.detail)}</span></div>`;
     if (desc.raw)    body += `<div class="popup-row"><span class="popup-val" style="white-space:pre-line;color:#ffffff">${linkifyText(desc.raw)}</span></div>`;
   }
@@ -106,7 +114,7 @@ function makePopupHTML(p) {
     ? window.buildBriefIAButton(p.name || 'Point', { ...desc, pays: desc?.pays || '', ville: p.ville || '', period: p._period || '', event: desc?.event || '' }, 'evenements')
     : '';
   const bodyContent = body + otanBlock + briefBtn;
-  return `<div class="popup-header"><div class="popup-dot-bar" style="background:${color}"></div><div class="popup-actor">${p.name || 'Point'}</div><div class="popup-period-badge">${p._period || ''}</div></div>${bodyContent ? `<div class="popup-body">${bodyContent}</div>` : ''}`;
+  return `<div class="popup-header"><div class="popup-dot-bar" style="background:${esc(color)}"></div><div class="popup-actor">${esc(p.name || 'Point')}</div><div class="popup-period-badge">${esc(p._period || '')}</div></div>${bodyContent ? `<div class="popup-body">${bodyContent}</div>` : ''}`;
 }
 
 // ── CONFIGURATION ────────────────────────────────────────────────────
