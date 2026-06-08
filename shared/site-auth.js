@@ -84,23 +84,22 @@ window.addEventListener('algorAuthReady', () => _resolvePremiumReady());
 window.algorAuth.loadZoneRaw = async function (path) {
   await window.algorAuth.ready;
   const clean = String(path).replace(/^\.?\//, '').split('?')[0];
-  // Plusieurs tentatives : au tout premier appel le token de session peut ne pas
-  // encore être attaché au client, et le réseau peut hoqueter. On réessaie avant
-  // de conclure à un échec.
-  for (let i = 0; i < 3; i++) {
+  // Rafale au démarrage : plusieurs calques se chargent en parallèle dès que
+  // l'accès est confirmé, mais le token de session peut ne pas être encore
+  // attaché au client storage (plusieurs GoTrueClient en concurrence). On force
+  // getSession() avant chaque tentative pour garantir le token, et on réessaie.
+  let lastErr = '';
+  for (let i = 0; i < 5; i++) {
     try {
+      await supabase.auth.getSession();
       const { data, error } = await supabase.storage.from('zones').download(clean);
       if (data && !error) return data.text();
-    } catch (_) { /* réseau : on réessaie */ }
-    await new Promise(function (r) { setTimeout(r, 300 * (i + 1)); });
+      lastErr = (error && error.message) || 'inconnue';
+    } catch (e) { lastErr = String(e); }
+    await new Promise(function (r) { setTimeout(r, 400 * (i + 1)); });
   }
-  // Filet de sécurité transitoire : retombe sur le fichier statique tant que la
-  // phase 2 (suppression des statiques) n'est pas faite. Le warning permet de
-  // détecter en prod si le Storage échoue réellement.
-  console.warn('[algorAuth] Storage miss -> fallback statique', clean);
-  const res = await fetch('./' + clean.split('/').pop() + '?v=' + Date.now());
-  if (!res.ok) throw new Error('Zone file unavailable: ' + clean);
-  return res.text();
+  console.warn('[algorAuth] Storage échec définitif', clean, lastErr);
+  throw new Error('Zone indisponible: ' + clean);
 };
 
 // Variante JSON (geojson / .json) : renvoie l'objet parsé.

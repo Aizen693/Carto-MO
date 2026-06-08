@@ -142,11 +142,13 @@
     function fetchSource(s) {
       var fileList = s.files || (s.file ? [s.file] : []);
       return Promise.all(fileList.map(function(f) {
-        // Zone privée (théâtre premium) → Storage privé via algorAuth ; sinon
-        // (démo publique) → fetch statique d'origine.
+        // Zone privée (théâtre premium) → Storage privé via algorAuth (on attend
+        // algorReady, posé tôt, plutôt que ZONE_PRIVATE posé par le module
+        // différé) ; démo publique (pas d'algorReady) → fetch statique.
+        // Tester UNIQUEMENT algorReady (algorAuth pas encore défini au parse).
         var slug = location.pathname.split('/').filter(Boolean)[0] || '';
-        return ((window.ZONE_PRIVATE && window.algorAuth && window.algorAuth.loadZoneFile)
-            ? window.algorAuth.loadZoneFile(slug + '/' + f)
+        return (window.algorReady
+            ? window.algorReady.then(function () { return window.algorAuth.loadZoneFile(slug + '/' + f); })
             : fetch('./' + f + '?v=' + Date.now()).then(function(r) { return r.json(); }))
           .catch(function() { return null; });
       })).then(function(parts) {

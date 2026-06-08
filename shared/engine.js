@@ -385,16 +385,23 @@ function applyFilter() {
 // par le bucket privé Supabase via algorAuth ; sur la démo publique (flag absent),
 // on garde le fetch statique d'origine. `loadZoneRaw` attend l'accès premium.
 function __zoneSlug() { return location.pathname.split('/').filter(Boolean)[0] || ''; }
+// On teste window.algorReady (posé TÔT par un script classique inline dans les
+// zones premium) plutôt que window.ZONE_PRIVATE (posé par le module différé,
+// donc indisponible au parse). La démo publique n'a pas algorReady → statique.
+// On teste UNIQUEMENT window.algorReady : au parse, algorReady existe (posé tôt)
+// mais window.algorAuth pas encore (module différé). Le .then diffère l'accès à
+// algorAuth après résolution (donc après init de site-auth). La démo publique
+// n'a pas algorReady → branche statique.
 function __loadZoneGeoRaw(file, cacheBust) {
-  if (window.ZONE_PRIVATE && window.algorAuth && window.algorAuth.loadZoneRaw) {
-    return window.algorAuth.loadZoneRaw(__zoneSlug() + '/' + file);
+  if (window.algorReady) {
+    return window.algorReady.then(function () { return window.algorAuth.loadZoneRaw(__zoneSlug() + '/' + file); });
   }
   return fetch('./' + file + (cacheBust || ('?v=' + Date.now())))
     .then(function (r) { if (!r.ok) throw new Error('404'); return r.text(); });
 }
 function __loadZoneGeoJson(file) {
-  if (window.ZONE_PRIVATE && window.algorAuth && window.algorAuth.loadZoneFile) {
-    return window.algorAuth.loadZoneFile(__zoneSlug() + '/' + file);
+  if (window.algorReady) {
+    return window.algorReady.then(function () { return window.algorAuth.loadZoneFile(__zoneSlug() + '/' + file); });
   }
   return fetch('./' + file + '?v=' + Date.now()).then(function (r) { return r.json(); });
 }
