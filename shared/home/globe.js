@@ -625,8 +625,61 @@ function Globe() {
       // flux terrestres — orange clair (glow holo)
       fluxSea: '39,174,192' // flux maritimes — cyan (glow holo)
     };
+
+    // — Intensité du rendu 3D (éclairage sphérique). Deux presets comparables :
+    //   défaut = 'subtil' ; ajouter ?globe=marque dans l'URL pour le rendu marqué.
+    const GLOBE_3D_MODE =
+      (new URLSearchParams(window.location.search).get('globe') === 'marque')
+        ? 'marque'
+        : (window.GLOBE_3D_MODE || 'subtil');
+    const I3D = GLOBE_3D_MODE === 'marque'
+      ? { highlight: 0.28, limb: 0.55, atmo: 0.55, spec: 0.42 }
+      : { highlight: 0.16, limb: 0.30, atmo: 0.30, spec: 0.24 };
+
+    // Halo atmosphérique autour du globe (dessiné HORS du clip circulaire).
+    function drawAtmosphere() {
+      const Rpx = proj.scale(), cx = W / 2, cy = H / 2;
+      const g = ctx.createRadialGradient(cx, cy, Rpx * 0.93, cx, cy, Rpx * 1.16);
+      g.addColorStop(0, 'rgba(120,180,230,0)');
+      g.addColorStop(0.55, `rgba(120,180,230,${(I3D.atmo * 0.9).toFixed(3)})`);
+      g.addColorStop(1, 'rgba(120,180,230,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(cx, cy, Rpx * 1.16, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Éclairage sphérique : reflet haut-gauche + assombrissement du limbe + spéculaire.
+    function drawLighting() {
+      const Rpx = proj.scale(), cx = W / 2, cy = H / 2;
+      // 1) lumière diffuse (haut-gauche) → donne le galbe
+      const hx = cx - Rpx * 0.32, hy = cy - Rpx * 0.38;
+      const hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, Rpx * 1.25);
+      hg.addColorStop(0, `rgba(255,255,255,${I3D.highlight.toFixed(3)})`);
+      hg.addColorStop(0.5, `rgba(255,255,255,${(I3D.highlight * 0.25).toFixed(3)})`);
+      hg.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = hg;
+      ctx.beginPath(); ctx.arc(cx, cy, Rpx, 0, Math.PI * 2); ctx.fill();
+      // 2) ombre au bord (limb darkening) → renforce la rondeur
+      const lg = ctx.createRadialGradient(cx, cy, Rpx * 0.66, cx, cy, Rpx);
+      lg.addColorStop(0, 'rgba(12,22,32,0)');
+      lg.addColorStop(1, `rgba(12,22,32,${I3D.limb.toFixed(3)})`);
+      ctx.fillStyle = lg;
+      ctx.beginPath(); ctx.arc(cx, cy, Rpx, 0, Math.PI * 2); ctx.fill();
+      // 3) reflet spéculaire serré
+      const sx = cx - Rpx * 0.34, sy = cy - Rpx * 0.42;
+      const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, Rpx * 0.42);
+      sg.addColorStop(0, `rgba(255,255,255,${I3D.spec.toFixed(3)})`);
+      sg.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = sg;
+      ctx.beginPath(); ctx.arc(sx, sy, Rpx * 0.42, 0, Math.PI * 2); ctx.fill();
+    }
+
     function draw(t) {
       ctx.clearRect(0, 0, W, H);
+
+      // halo atmospherique (hors clip — il deborde du globe)
+      drawAtmosphere();
 
       // Clip circulaire — le globe reste TOUJOURS rond, meme zoome (jamais un carre).
       ctx.save();
@@ -666,6 +719,9 @@ function Globe() {
       ctx.strokeStyle = C.rim;
       ctx.lineWidth = 0.75;
       ctx.stroke();
+
+      // eclairage spherique 3D (par-dessus la carte, sous les flux pour qu'ils restent vifs)
+      drawLighting();
 
       // arc traces (back drop, very fine)
       arcs.forEach(arc => {
