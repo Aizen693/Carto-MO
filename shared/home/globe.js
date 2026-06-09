@@ -535,10 +535,16 @@ function Globe() {
     // — load world topology asynchronously; sphere/graticule render immediately
     let land = null,
       borders = null;
-    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(r => r.json()).then(topo => {
+    function applyTopo(topo) {
       land = topojson.feature(topo, topo.objects.countries);
       borders = topojson.mesh(topo, topo.objects.countries, (a, b) => a !== b);
-    }).catch(() => {/* sphere-only fallback is acceptable */});
+    }
+    // Geometrie 50m = cotes & frontieres bien plus detaillees ; repli 110m si echec.
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json')
+      .then(r => r.json()).then(applyTopo)
+      .catch(() => fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+        .then(r => r.json()).then(applyTopo)
+        .catch(() => {/* sphere-only fallback is acceptable */}));
     const graticule = d3.geoGraticule10();
     const sphere = {
       type: 'Sphere'
@@ -700,12 +706,34 @@ function Globe() {
       ctx.lineWidth = 0.55;
       ctx.stroke();
 
-      // land — fill + borders
+      // land — fill + relief + borders
       if (land) {
+        // 1) fond sable de base
         ctx.beginPath();
         path(land);
         ctx.fillStyle = C.land;
         ctx.fill();
+
+        // 2) relief : ombrage directionnel clippe sur les terres (lumiere haut-gauche)
+        ctx.save();
+        ctx.beginPath();
+        path(land);
+        ctx.clip();
+        const Rpx = proj.scale(), cxr = W / 2, cyr = H / 2;
+        const rl = GLOBE_3D_MODE === 'marque' ? 0.34 : 0.22;
+        const rg = ctx.createRadialGradient(
+          cxr - Rpx * 0.34, cyr - Rpx * 0.40, Rpx * 0.05,
+          cxr, cyr, Rpx * 1.25);
+        rg.addColorStop(0, `rgba(255,248,228,${rl.toFixed(3)})`); // versants eclaires
+        rg.addColorStop(0.5, 'rgba(255,248,228,0)');
+        rg.addColorStop(1, `rgba(86,66,38,${rl.toFixed(3)})`);    // ombre des reliefs
+        ctx.fillStyle = rg;
+        ctx.beginPath();
+        ctx.arc(cxr, cyr, Rpx, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // 3) cotes & frontieres (geometrie 50m = tres detaillee)
         ctx.beginPath();
         path(borders);
         ctx.strokeStyle = C.border;
