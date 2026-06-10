@@ -893,81 +893,8 @@
         </p>
       </div>
 
-      <div class="deb-dossier" id="deb-dossier">
-        <div class="deb-top">
-          <div class="deb-top__name" id="deb-top-name">—</div>
-          <div class="deb-top__meta" id="deb-top-meta">—</div>
-        </div>
-
-        <div class="deb-body">
-          <aside class="deb-side" aria-label="Panneau dossier">
-            <div class="deb-sec deb-camp">
-              <h3>Campagne</h3>
-              <div class="deb-camp__name" id="ds-nm">—</div>
-              <div class="deb-camp__meta" id="ds-mt">—</div>
-              <div class="deb-camp__resume" id="ds-rs">—</div>
-            </div>
-
-            <div class="deb-sec">
-              <h3>Narratifs <span class="ct" id="ds-ct-narr">00</span></h3>
-              <div id="ds-narr-wrap"></div>
-            </div>
-
-            <div class="deb-sec">
-              <h3>Réseaux identifiés <span class="ct" id="ds-ct-net">00</span></h3>
-              <div id="ds-net-wrap"></div>
-            </div>
-
-            <div class="deb-sec">
-              <h3>Statistiques</h3>
-              <div id="ds-stats"></div>
-            </div>
-
-            <div class="deb-sec">
-              <h3>Méthodologie</h3>
-              <div class="deb-meth" id="ds-meth">—</div>
-            </div>
-          </aside>
-
-          <div class="deb-main">
-            <div id="map"></div>
-            <div id="map-loader">Chargement de la cartographie…</div>
-            <button class="deb-fs-btn" id="deb-fs" type="button" aria-label="Plein écran" title="Plein écran (Échap pour quitter)">
-              <svg class="deb-fs-icon-expand" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2H2v4M14 6V2h-4M10 14h4v-4M2 10v4h4"/></svg>
-              <svg class="deb-fs-icon-shrink" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 6h4V2M10 2v4h4M14 10h-4v4M6 14v-4H2"/></svg>
-              <span class="deb-fs-lbl">Plein écran</span>
-            </button>
-            <div id="legend">
-              <div class="lg-head">Légende</div>
-              <div class="lg-row"><span class="sw" style="background:#6B3FA0;box-shadow:0 0 0 4px rgba(107,63,160,0.15)"></span>Patient zéro</div>
-              <div class="lg-row"><span class="sw" style="background:#8B5FBF"></span>Relais primaire</div>
-              <div class="lg-row"><span class="sw" style="background:#2E84D4"></span>Amplificateur</div>
-              <div class="lg-row"><span class="sw" style="background:#C94A4A"></span>Site copie</div>
-              <div class="lg-row" style="margin-top:6px"><span class="arc"></span>Chaîne de diffusion</div>
-            </div>
-            <div id="tooltip"></div>
-          </div>
-        </div>
-
-        <div id="timeline">
-          <div id="timeline-head">
-            <div class="tl-controls">
-              <button class="tl-btn tl-btn--play" id="tl-play" type="button" aria-label="Lancer la lecture">
-                <svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M3 1.5v9l8-4.5z"/></svg>
-              </button>
-              <button class="tl-btn" id="tl-reset" type="button" aria-label="Recommencer">
-                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6a4 4 0 1 0 1.2-2.85"/><path d="M2 1.5v2.5h2.5"/></svg>
-              </button>
-              <button class="tl-speed" id="tl-speed" type="button" aria-label="Vitesse de lecture" title="Cliquer pour changer">1×</button>
-            </div>
-            <span class="lbl" id="tl-range">Timeline</span>
-            <span class="val" id="tl-date">—</span>
-          </div>
-          <div id="timeline-track">
-            <div id="timeline-handle" style="left: 100%;"></div>
-          </div>
-          <div id="timeline-axis"></div>
-        </div>
+      <div class="deb-embed-wrap" style="position:relative;width:100%;height:1040px;border:1px solid var(--line,rgba(0,0,0,0.08));border-radius:14px;overflow:hidden;background:#fff">
+        <iframe src="carte-demo.html?embed=1" title="Cartographie de la propagation — démonstration interactive" loading="lazy" style="width:100%;height:100%;border:0;display:block"></iframe>
       </div>
     </div>
   </section>
@@ -1148,6 +1075,10 @@ const state = {
 let map;
 
 async function init() {
+  // La carte démo est désormais intégrée en iframe (carte-demo.html). Sans conteneur
+  // #map sur cette page, l'ancien moteur ne s'initialise pas (le formulaire et le reste
+  // de la page continuent de fonctionner normalement).
+  if (!document.getElementById('map')) return;
   // Vitrine publique : seul le cas demo (Societe Lumiere) est servi ici.
   // Les dossiers clients (Castel, etc.) ne sont JAMAIS accessibles depuis cette page,
   // meme via ?case=… — ils vivent derriere le verrou staff (cf. carte-afrique.html).

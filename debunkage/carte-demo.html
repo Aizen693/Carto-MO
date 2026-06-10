@@ -1013,6 +1013,18 @@
 </style>
 </head>
 <body style="background-color:#FFFFFF">
+<style>
+  /* Mode embed (?embed=1) : intégré en iframe dans /debunkage/ → on ne garde que la carte. */
+  body.embed .site-header, body.embed .page-hero, body.embed #methode,
+  body.embed #synthese-pays, body.embed #acteurs-victimes, body.embed .site-footer { display: none !important; }
+  body.embed { background: #fff !important; }
+  body.embed main { padding: 0 !important; }
+  body.embed #dossier { padding: 0 !important; margin: 0 !important; }
+  body.embed #dossier .home-sec__wrap { padding: 0 !important; max-width: none !important; }
+  body.embed #dossier .home-sec__head { display: none !important; }
+  body.embed .deb-dossier { border: 0 !important; box-shadow: none !important; margin: 0 !important; }
+</style>
+<script>if (new URLSearchParams(location.search).get('embed') === '1') document.body.classList.add('embed');</script>
 
 <!-- ─────────────────────────────────────── Header -->
 <header class="site-header">
