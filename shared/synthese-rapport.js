@@ -51,6 +51,7 @@ const STYLES = `
 .algor-synthese-dot:nth-child(3) { animation-delay: 0.4s; }
 @keyframes algSynPulse { 0%, 80%, 100% { opacity: 0.2; } 40% { opacity: 1; } }
 .algor-synthese-error { color: #ff7676; font: 400 11px/1.5 'JetBrains Mono', monospace; padding: 10px 12px; border: 1px solid rgba(255,118,118,0.25); background: rgba(255,118,118,0.05); margin-top: 8px; }
+.algor-synthese-disclaimer { font: 400 9px/1.6 'JetBrains Mono', monospace; letter-spacing: 0.06em; color: #777; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); }
 @media print {
   .algor-synthese { background: #fff; border-color: #b8860b; border-top-color: #b8860b; }
   .algor-synthese-label { color: #b8860b; }
@@ -58,6 +59,7 @@ const STYLES = `
   .algor-synthese-text strong { color: #b8860b; }
   .algor-synthese-actions { display: none; }
   .algor-synthese-meta { color: #777; }
+  .algor-synthese-disclaimer { color: #777; border-top-color: #ddd; }
 }
 `;
 
@@ -94,7 +96,7 @@ function applyInline(text) {
 function renderPlaceholder(textEl) {
   textEl.classList.add('placeholder');
   textEl.contentEditable = 'false';
-  textEl.innerHTML = "Aucune synthese generee. Clique \"Generer\" — l'IA produira un paragraphe decisionnel base sur les donnees recentes (web + sources tier-1).";
+  textEl.innerHTML = "Aucune synthèse générée. Clique « Générer » : l'intelligence artificielle produira un paragraphe décisionnel basé sur les données récentes (web + sources tier-1).";
 }
 
 function renderText(textEl, text) {
@@ -107,9 +109,9 @@ function renderMeta(metaEl, data) {
   if (!data) { metaEl.textContent = ''; return; }
   const d = new Date(data.generatedAt);
   const dateStr = d.toLocaleString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-  const parts = [`Genere ${dateStr}`];
+  const parts = [`Généré par IA le ${dateStr}`];
   if (data.model) parts.push(data.model + ' + recherche web');
-  if (data.edited) parts.push('Edite manuellement');
+  if (data.edited) parts.push('Relu et édité manuellement');
   metaEl.textContent = parts.join(' · ');
 }
 
@@ -118,7 +120,7 @@ async function generateSynthese({ zoneId, zoneLabel, reportTitle }) {
   if (!supabase) throw new Error('Auth indisponible');
   const { data: sess } = await supabase.auth.getSession();
   const token = sess?.session?.access_token;
-  if (!token) throw new Error('Session expiree — recharge la page');
+  if (!token) throw new Error('Session expirée, recharge la page');
 
   const res = await fetch(`${SUPABASE_URL}/functions/v1/brief-securite`, {
     method: 'POST',
@@ -154,6 +156,7 @@ function mount(opts) {
       </div>
       <div class="algor-synthese-text" data-role="text"></div>
       <div class="algor-synthese-meta" data-role="meta"></div>
+      <div class="algor-synthese-disclaimer">Synthèse générée par intelligence artificielle (Google Gemini, recherche web associée), soumise à relecture humaine avant publication. Elle peut contenir des erreurs.</div>
       <div class="algor-synthese-error" data-role="error" style="display:none"></div>
     </section>
   `;
@@ -181,7 +184,7 @@ function mount(opts) {
   }
 
   function showError(msg, hint) {
-    errEl.textContent = msg + (hint ? ' — ' + hint : '');
+    errEl.textContent = msg + (hint ? ' : ' + hint : '');
     errEl.style.display = '';
     setTimeout(() => { errEl.style.display = 'none'; }, 8000);
   }

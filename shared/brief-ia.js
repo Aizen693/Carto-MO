@@ -54,6 +54,7 @@ const STYLES = `
 .bia-source-domain { display: block; color: #888; font-size: 9px; letter-spacing: 0.06em; margin-top: 4px; }
 #brief-ia-error { color: #ff5252; font: 400 12px/1.6 'JetBrains Mono', monospace; background: rgba(255,82,82,0.06); border: 1px solid rgba(255,82,82,0.25); padding: 12px 14px; }
 #brief-ia-error-hint { color: #888; font-size: 10px; margin-top: 8px; }
+#brief-ia-disclaimer { margin-top: 20px; padding: 10px 12px; border: 1px solid rgba(196,154,60,0.20); background: rgba(196,154,60,0.04); color: #9a9a9a; font: 400 10px/1.6 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
 `;
 
 let overlayEl = null;
@@ -129,8 +130,8 @@ function buildExportHtml(data) {
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<title>Brief securite — ${titleEsc}</title>
-<meta name="generator" content="Algor Int — Brief IA Securite">
+<title>Brief securite · ${titleEsc}</title>
+<meta name="generator" content="Algor Int · Brief IA Securite">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: #111214; color: #e8e8e8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
@@ -141,6 +142,7 @@ function buildExportHtml(data) {
   .hdr-confid { color: #ff5252; }
   .hdr-title { margin: 14px 0 6px; font: 700 22px/1.2 'JetBrains Mono', monospace; color: #ffffff; }
   .hdr-meta { font: 400 11px/1.5 'JetBrains Mono', monospace; color: #888; letter-spacing: 0.04em; }
+  .hdr-ai { margin-top: 10px; padding: 8px 10px; border: 1px solid rgba(196,154,60,0.20); background: rgba(196,154,60,0.04); font: 400 10px/1.6 'JetBrains Mono', monospace; color: #9a9a9a; letter-spacing: 0.04em; }
   h2 { font: 600 10px/1 'JetBrains Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #c49a3c; margin: 30px 0 12px; padding-bottom: 7px; border-bottom: 1px solid rgba(196,154,60,0.25); }
   p { margin: 0 0 14px; }
   strong, b { color: #c49a3c; font-weight: 700; }
@@ -169,11 +171,12 @@ function buildExportHtml(data) {
 <body>
   <header class="hdr">
     <div class="hdr-row1">
-      <span class="hdr-brand">Algor Int — Note d'analyse</span>
+      <span class="hdr-brand">Algor Int · Note d'analyse</span>
       <span class="hdr-confid">Confidentiel entreprise</span>
     </div>
     <h1 class="hdr-title">${titleEsc}</h1>
     <div class="hdr-meta">Genere le ${esc(dateStr)}${modelEsc ? ` · ${modelEsc} + recherche web` : ''}</div>
+    <div class="hdr-ai">Document généré par intelligence artificielle (Google Gemini, recherche web associée), soumis à vérification humaine. Il peut contenir des erreurs : contrôler les sources avant toute exploitation.</div>
   </header>
   <main>
     ${briefHtml}
@@ -181,7 +184,7 @@ function buildExportHtml(data) {
   </main>
   <footer class="ftr">
     <span>Algor Int · Intelligence economique et securitaire</span>
-    <span>Note generee par IA — verifier les sources avant exploitation</span>
+    <span>Note générée par IA (Google Gemini), vérifier les sources avant exploitation</span>
   </footer>
 </body>
 </html>`;
@@ -279,7 +282,8 @@ function renderBrief(data) {
          ${data.sources.map(s => `<a class="bia-source" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}<span class="bia-source-domain">${esc(domainOf(s.url))}</span></a>`).join('')}
        </div>`
     : '';
-  return `<div id="brief-ia-content">${briefHtml}</div>${sourcesHtml}`;
+  const disclaimer = `<div id="brief-ia-disclaimer">Contenu généré par intelligence artificielle (Google Gemini, recherche web associée). Il peut contenir des erreurs : vérifier les sources avant toute exploitation.</div>`;
+  return `<div id="brief-ia-content">${briefHtml}</div>${sourcesHtml}${disclaimer}`;
 }
 
 function decodePayload(arg) {
