@@ -1,0 +1,2016 @@
+{
+  "campagne": {
+    "id": "demo-lumiere-2026",
+    "nom": "Campagne anti-Société Lumière",
+    "client": "Société Lumière (fictif — cas démo anonymisé)",
+    "illustratif": false,
+    "secteur": "Cosmétique / Grande consommation",
+    "date_debut": "2026-02-14",
+    "date_fin": "2026-04-10",
+    "publications_total": 54,
+    "comptes_total": 54,
+    "pays_implique": [
+      "FR",
+      "RO",
+      "RU",
+      "DE",
+      "RS",
+      "HU"
+    ],
+    "resume": "Vague de désinformation coordonnée alléguant la nocivité des produits de Société Lumière. Dans chaque pays touché, la campagne se déroule en quatre phases — amorçage, montée, bascule, pic — reconstruites par recoupement de timestamps et de similarité textuelle. Données fictives, à titre d'illustration.",
+    "narratifs": [
+      "Allégations sanitaires fabriquées sur les produits (ingrédient toxique inventé)",
+      "Mise en cause personnelle d'un dirigeant via faux documents",
+      "Lien fabriqué avec une commande publique européenne controversée"
+    ],
+    "methodologie": "Reconstruction de la chaîne par recoupement timestamp + similarité textuelle + traceback des reprises. Géolocalisation par signaux ouverts. Inspiration : Viginum, DFRLab, EU DisinfoLab.",
+    "niveau_confiance_attribution": "Élevé (clusters relais), Faible (origine exacte)."
+  },
+  "publications": [
+    {
+      "id": "fr_1_1",
+      "compte": "@relais_fr_1",
+      "compte_display": "Relais Paris",
+      "plateforme": "forum",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-14T06:00:00Z",
+      "lang": "fr",
+      "pays": "FR",
+      "ville": "Paris",
+      "lat": 48.9855,
+      "lon": 1.8275,
+      "cc": "fr",
+      "audience_estimee": 2000,
+      "content_excerpt": "Amorçage — France (Paris). Premier relais local de l'allégation sanitaire sur les produits."
+    },
+    {
+      "id": "fr_2_1",
+      "compte": "@relais_fr_2",
+      "compte_display": "Relais Lyon",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "fr_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T06:00:00Z",
+      "lang": "fr",
+      "pays": "FR",
+      "ville": "Lyon",
+      "lat": 45.5575,
+      "lon": 4.5355,
+      "cc": "fr",
+      "audience_estimee": 4000,
+      "content_excerpt": "Montée — France (Lyon). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "fr_2_2",
+      "compte": "@relais_fr_3",
+      "compte_display": "Relais Marseille",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "fr_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T06:10:00Z",
+      "lang": "fr",
+      "pays": "FR",
+      "ville": "Marseille",
+      "lat": 43.5128,
+      "lon": 5.5644,
+      "cc": "fr",
+      "audience_estimee": 6000,
+      "content_excerpt": "Montée — France (Marseille). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "fr_3_1",
+      "compte": "@relais_fr_4",
+      "compte_display": "Relais Toulouse",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "fr_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T06:00:00Z",
+      "lang": "fr",
+      "pays": "FR",
+      "ville": "Toulouse",
+      "lat": 43.953,
+      "lon": 0.9856,
+      "cc": "fr",
+      "audience_estimee": 6000,
+      "content_excerpt": "Bascule — France (Toulouse). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "fr_3_2",
+      "compte": "@relais_fr_5",
+      "compte_display": "Relais Paris",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "fr_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T06:10:00Z",
+      "lang": "fr",
+      "pays": "FR",
+      "ville": "Paris",
+      "lat": 48.7897,
+      "lon": 1.8328,
+      "cc": "fr",
+      "audience_estimee": 8000,
+      "content_excerpt": "Bascule — France (Paris). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "fr_3_3",
+      "compte": "@relais_fr_6",
+      "compte_display": "Relais Lyon",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "fr_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T06:20:00Z",
+      "lang": "fr",
+      "pays": "FR",
+      "ville": "Lyon",
+      "lat": 45.5068,
+      "lon": 4.8459,
+      "cc": "fr",
+      "audience_estimee": 10000,
+      "content_excerpt": "Bascule — France (Lyon). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "fr_4_1",
+      "compte": "@relais_fr_7",
+      "compte_display": "Relais Marseille",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "fr_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T06:00:00Z",
+      "lang": "fr",
+      "pays": "FR",
+      "ville": "Marseille",
+      "lat": 42.8739,
+      "lon": 5.0387,
+      "cc": "fr",
+      "audience_estimee": 8000,
+      "content_excerpt": "Pic — France (Marseille). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "fr_4_2",
+      "compte": "@relais_fr_8",
+      "compte_display": "Relais Toulouse",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "fr_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T06:10:00Z",
+      "lang": "fr",
+      "pays": "FR",
+      "ville": "Toulouse",
+      "lat": 43.7349,
+      "lon": 1.4894,
+      "cc": "fr",
+      "audience_estimee": 10000,
+      "content_excerpt": "Pic — France (Toulouse). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "fr_4_3",
+      "compte": "@relais_fr_9",
+      "compte_display": "Relais Paris",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "fr_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T06:20:00Z",
+      "lang": "fr",
+      "pays": "FR",
+      "ville": "Paris",
+      "lat": 48.6084,
+      "lon": 2.4482,
+      "cc": "fr",
+      "audience_estimee": 12000,
+      "content_excerpt": "Pic — France (Paris). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "ro_1_1",
+      "compte": "@relais_ro_1",
+      "compte_display": "Relais Bucarest",
+      "plateforme": "forum",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-14T07:00:00Z",
+      "lang": "fr",
+      "pays": "RO",
+      "ville": "Bucarest",
+      "lat": 44.7085,
+      "lon": 25.5571,
+      "cc": "ro",
+      "audience_estimee": 2000,
+      "content_excerpt": "Amorçage — Roumanie (Bucarest). Premier relais local de l'allégation sanitaire sur les produits."
+    },
+    {
+      "id": "ro_2_1",
+      "compte": "@relais_ro_2",
+      "compte_display": "Relais Cluj-Napoca",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "ro_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T07:00:00Z",
+      "lang": "fr",
+      "pays": "RO",
+      "ville": "Cluj-Napoca",
+      "lat": 47.0452,
+      "lon": 23.808,
+      "cc": "ro",
+      "audience_estimee": 4000,
+      "content_excerpt": "Montée — Roumanie (Cluj-Napoca). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "ro_2_2",
+      "compte": "@relais_ro_3",
+      "compte_display": "Relais Timisoara",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "ro_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T07:10:00Z",
+      "lang": "fr",
+      "pays": "RO",
+      "ville": "Timisoara",
+      "lat": 45.6062,
+      "lon": 20.851,
+      "cc": "ro",
+      "audience_estimee": 6000,
+      "content_excerpt": "Montée — Roumanie (Timisoara). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "ro_3_1",
+      "compte": "@relais_ro_4",
+      "compte_display": "Relais Iasi",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ro_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T07:00:00Z",
+      "lang": "fr",
+      "pays": "RO",
+      "ville": "Iasi",
+      "lat": 47.5715,
+      "lon": 27.4103,
+      "cc": "ro",
+      "audience_estimee": 6000,
+      "content_excerpt": "Bascule — Roumanie (Iasi). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "ro_3_2",
+      "compte": "@relais_ro_5",
+      "compte_display": "Relais Bucarest",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ro_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T07:10:00Z",
+      "lang": "fr",
+      "pays": "RO",
+      "ville": "Bucarest",
+      "lat": 44.0635,
+      "lon": 25.6564,
+      "cc": "ro",
+      "audience_estimee": 8000,
+      "content_excerpt": "Bascule — Roumanie (Bucarest). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "ro_3_3",
+      "compte": "@relais_ro_6",
+      "compte_display": "Relais Cluj-Napoca",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ro_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T07:20:00Z",
+      "lang": "fr",
+      "pays": "RO",
+      "ville": "Cluj-Napoca",
+      "lat": 47.0827,
+      "lon": 23.7041,
+      "cc": "ro",
+      "audience_estimee": 10000,
+      "content_excerpt": "Bascule — Roumanie (Cluj-Napoca). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "ro_4_1",
+      "compte": "@relais_ro_7",
+      "compte_display": "Relais Timisoara",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ro_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T07:00:00Z",
+      "lang": "fr",
+      "pays": "RO",
+      "ville": "Timisoara",
+      "lat": 46.0264,
+      "lon": 21.4827,
+      "cc": "ro",
+      "audience_estimee": 8000,
+      "content_excerpt": "Pic — Roumanie (Timisoara). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "ro_4_2",
+      "compte": "@relais_ro_8",
+      "compte_display": "Relais Iasi",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ro_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T07:10:00Z",
+      "lang": "fr",
+      "pays": "RO",
+      "ville": "Iasi",
+      "lat": 47.1926,
+      "lon": 28.1104,
+      "cc": "ro",
+      "audience_estimee": 10000,
+      "content_excerpt": "Pic — Roumanie (Iasi). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "ro_4_3",
+      "compte": "@relais_ro_9",
+      "compte_display": "Relais Bucarest",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ro_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T07:20:00Z",
+      "lang": "fr",
+      "pays": "RO",
+      "ville": "Bucarest",
+      "lat": 44.3207,
+      "lon": 26.1572,
+      "cc": "ro",
+      "audience_estimee": 12000,
+      "content_excerpt": "Pic — Roumanie (Bucarest). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "ru_1_1",
+      "compte": "@relais_ru_1",
+      "compte_display": "Relais Saint-Petersbourg",
+      "plateforme": "forum",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-14T08:00:00Z",
+      "lang": "fr",
+      "pays": "RU",
+      "ville": "Saint-Petersbourg",
+      "lat": 60.2265,
+      "lon": 30.4704,
+      "cc": "ru",
+      "audience_estimee": 2000,
+      "content_excerpt": "Amorçage — Russie (Saint-Petersbourg). Premier relais local de l'allégation sanitaire sur les produits."
+    },
+    {
+      "id": "ru_2_1",
+      "compte": "@relais_ru_2",
+      "compte_display": "Relais Moscou",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "ru_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T08:00:00Z",
+      "lang": "fr",
+      "pays": "RU",
+      "ville": "Moscou",
+      "lat": 56.0755,
+      "lon": 37.7051,
+      "cc": "ru",
+      "audience_estimee": 4000,
+      "content_excerpt": "Montée — Russie (Moscou). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "ru_2_2",
+      "compte": "@relais_ru_3",
+      "compte_display": "Relais Voronej",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "ru_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T08:10:00Z",
+      "lang": "fr",
+      "pays": "RU",
+      "ville": "Voronej",
+      "lat": 51.8541,
+      "lon": 38.6804,
+      "cc": "ru",
+      "audience_estimee": 6000,
+      "content_excerpt": "Montée — Russie (Voronej). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "ru_3_1",
+      "compte": "@relais_ru_4",
+      "compte_display": "Relais Kazan",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ru_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T08:00:00Z",
+      "lang": "fr",
+      "pays": "RU",
+      "ville": "Kazan",
+      "lat": 55.5551,
+      "lon": 48.8683,
+      "cc": "ru",
+      "audience_estimee": 6000,
+      "content_excerpt": "Bascule — Russie (Kazan). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "ru_3_2",
+      "compte": "@relais_ru_5",
+      "compte_display": "Relais Saint-Petersbourg",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ru_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T08:10:00Z",
+      "lang": "fr",
+      "pays": "RU",
+      "ville": "Saint-Petersbourg",
+      "lat": 59.5518,
+      "lon": 30.0461,
+      "cc": "ru",
+      "audience_estimee": 8000,
+      "content_excerpt": "Bascule — Russie (Saint-Petersbourg). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "ru_3_3",
+      "compte": "@relais_ru_6",
+      "compte_display": "Relais Moscou",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ru_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T08:20:00Z",
+      "lang": "fr",
+      "pays": "RU",
+      "ville": "Moscou",
+      "lat": 55.3909,
+      "lon": 37.3758,
+      "cc": "ru",
+      "audience_estimee": 10000,
+      "content_excerpt": "Bascule — Russie (Moscou). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "ru_4_1",
+      "compte": "@relais_ru_7",
+      "compte_display": "Relais Voronej",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ru_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T08:00:00Z",
+      "lang": "fr",
+      "pays": "RU",
+      "ville": "Voronej",
+      "lat": 51.7921,
+      "lon": 39.0313,
+      "cc": "ru",
+      "audience_estimee": 8000,
+      "content_excerpt": "Pic — Russie (Voronej). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "ru_4_2",
+      "compte": "@relais_ru_8",
+      "compte_display": "Relais Kazan",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ru_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T08:10:00Z",
+      "lang": "fr",
+      "pays": "RU",
+      "ville": "Kazan",
+      "lat": 55.6832,
+      "lon": 48.7805,
+      "cc": "ru",
+      "audience_estimee": 10000,
+      "content_excerpt": "Pic — Russie (Kazan). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "ru_4_3",
+      "compte": "@relais_ru_9",
+      "compte_display": "Relais Saint-Petersbourg",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "ru_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T08:20:00Z",
+      "lang": "fr",
+      "pays": "RU",
+      "ville": "Saint-Petersbourg",
+      "lat": 59.7203,
+      "lon": 30.8203,
+      "cc": "ru",
+      "audience_estimee": 12000,
+      "content_excerpt": "Pic — Russie (Saint-Petersbourg). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "de_1_1",
+      "compte": "@relais_de_1",
+      "compte_display": "Relais Berlin",
+      "plateforme": "forum",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-14T09:00:00Z",
+      "lang": "fr",
+      "pays": "DE",
+      "ville": "Berlin",
+      "lat": 52.6532,
+      "lon": 13.52,
+      "cc": "de",
+      "audience_estimee": 2000,
+      "content_excerpt": "Amorçage — Allemagne (Berlin). Premier relais local de l'allégation sanitaire sur les produits."
+    },
+    {
+      "id": "de_2_1",
+      "compte": "@relais_de_2",
+      "compte_display": "Relais Munich",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "de_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T09:00:00Z",
+      "lang": "fr",
+      "pays": "DE",
+      "ville": "Munich",
+      "lat": 47.844,
+      "lon": 11.832,
+      "cc": "de",
+      "audience_estimee": 4000,
+      "content_excerpt": "Montée — Allemagne (Munich). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "de_2_2",
+      "compte": "@relais_de_3",
+      "compte_display": "Relais Hambourg",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "de_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T09:10:00Z",
+      "lang": "fr",
+      "pays": "DE",
+      "ville": "Hambourg",
+      "lat": 53.2471,
+      "lon": 9.8574,
+      "cc": "de",
+      "audience_estimee": 6000,
+      "content_excerpt": "Montée — Allemagne (Hambourg). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "de_3_1",
+      "compte": "@relais_de_4",
+      "compte_display": "Relais Cologne",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "de_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T09:00:00Z",
+      "lang": "fr",
+      "pays": "DE",
+      "ville": "Cologne",
+      "lat": 51.3806,
+      "lon": 7.114,
+      "cc": "de",
+      "audience_estimee": 6000,
+      "content_excerpt": "Bascule — Allemagne (Cologne). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "de_3_2",
+      "compte": "@relais_de_5",
+      "compte_display": "Relais Berlin",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "de_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T09:10:00Z",
+      "lang": "fr",
+      "pays": "DE",
+      "ville": "Berlin",
+      "lat": 52.5713,
+      "lon": 13.6031,
+      "cc": "de",
+      "audience_estimee": 8000,
+      "content_excerpt": "Bascule — Allemagne (Berlin). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "de_3_3",
+      "compte": "@relais_de_6",
+      "compte_display": "Relais Munich",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "de_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T09:20:00Z",
+      "lang": "fr",
+      "pays": "DE",
+      "ville": "Munich",
+      "lat": 48.4486,
+      "lon": 11.8836,
+      "cc": "de",
+      "audience_estimee": 10000,
+      "content_excerpt": "Bascule — Allemagne (Munich). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "de_4_1",
+      "compte": "@relais_de_7",
+      "compte_display": "Relais Hambourg",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "de_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T09:00:00Z",
+      "lang": "fr",
+      "pays": "DE",
+      "ville": "Hambourg",
+      "lat": 53.3061,
+      "lon": 9.4753,
+      "cc": "de",
+      "audience_estimee": 8000,
+      "content_excerpt": "Pic — Allemagne (Hambourg). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "de_4_2",
+      "compte": "@relais_de_8",
+      "compte_display": "Relais Cologne",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "de_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T09:10:00Z",
+      "lang": "fr",
+      "pays": "DE",
+      "ville": "Cologne",
+      "lat": 50.7739,
+      "lon": 6.7045,
+      "cc": "de",
+      "audience_estimee": 10000,
+      "content_excerpt": "Pic — Allemagne (Cologne). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "de_4_3",
+      "compte": "@relais_de_9",
+      "compte_display": "Relais Berlin",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "de_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T09:20:00Z",
+      "lang": "fr",
+      "pays": "DE",
+      "ville": "Berlin",
+      "lat": 52.2599,
+      "lon": 13.8872,
+      "cc": "de",
+      "audience_estimee": 12000,
+      "content_excerpt": "Pic — Allemagne (Berlin). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "rs_1_1",
+      "compte": "@relais_rs_1",
+      "compte_display": "Relais Belgrade",
+      "plateforme": "forum",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-14T10:00:00Z",
+      "lang": "fr",
+      "pays": "RS",
+      "ville": "Belgrade",
+      "lat": 45.1287,
+      "lon": 20.2461,
+      "cc": "rs",
+      "audience_estimee": 2000,
+      "content_excerpt": "Amorçage — Serbie (Belgrade). Premier relais local de l'allégation sanitaire sur les produits."
+    },
+    {
+      "id": "rs_2_1",
+      "compte": "@relais_rs_2",
+      "compte_display": "Relais Novi Sad",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "rs_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T10:00:00Z",
+      "lang": "fr",
+      "pays": "RS",
+      "ville": "Novi Sad",
+      "lat": 45.3899,
+      "lon": 19.7152,
+      "cc": "rs",
+      "audience_estimee": 4000,
+      "content_excerpt": "Montée — Serbie (Novi Sad). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "rs_2_2",
+      "compte": "@relais_rs_3",
+      "compte_display": "Relais Nis",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "rs_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T10:10:00Z",
+      "lang": "fr",
+      "pays": "RS",
+      "ville": "Nis",
+      "lat": 43.6931,
+      "lon": 21.8547,
+      "cc": "rs",
+      "audience_estimee": 6000,
+      "content_excerpt": "Montée — Serbie (Nis). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "rs_3_1",
+      "compte": "@relais_rs_4",
+      "compte_display": "Relais Kragujevac",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "rs_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T10:00:00Z",
+      "lang": "fr",
+      "pays": "RS",
+      "ville": "Kragujevac",
+      "lat": 43.7984,
+      "lon": 20.6313,
+      "cc": "rs",
+      "audience_estimee": 6000,
+      "content_excerpt": "Bascule — Serbie (Kragujevac). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "rs_3_2",
+      "compte": "@relais_rs_5",
+      "compte_display": "Relais Belgrade",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "rs_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T10:10:00Z",
+      "lang": "fr",
+      "pays": "RS",
+      "ville": "Belgrade",
+      "lat": 44.8452,
+      "lon": 20.189,
+      "cc": "rs",
+      "audience_estimee": 8000,
+      "content_excerpt": "Bascule — Serbie (Belgrade). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "rs_3_3",
+      "compte": "@relais_rs_6",
+      "compte_display": "Relais Novi Sad",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "rs_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T10:20:00Z",
+      "lang": "fr",
+      "pays": "RS",
+      "ville": "Novi Sad",
+      "lat": 45.3261,
+      "lon": 20.2676,
+      "cc": "rs",
+      "audience_estimee": 10000,
+      "content_excerpt": "Bascule — Serbie (Novi Sad). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "rs_4_1",
+      "compte": "@relais_rs_7",
+      "compte_display": "Relais Nis",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "rs_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T10:00:00Z",
+      "lang": "fr",
+      "pays": "RS",
+      "ville": "Nis",
+      "lat": 43.2295,
+      "lon": 21.5913,
+      "cc": "rs",
+      "audience_estimee": 8000,
+      "content_excerpt": "Pic — Serbie (Nis). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "rs_4_2",
+      "compte": "@relais_rs_8",
+      "compte_display": "Relais Kragujevac",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "rs_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T10:10:00Z",
+      "lang": "fr",
+      "pays": "RS",
+      "ville": "Kragujevac",
+      "lat": 44.4578,
+      "lon": 20.9205,
+      "cc": "rs",
+      "audience_estimee": 10000,
+      "content_excerpt": "Pic — Serbie (Kragujevac). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "rs_4_3",
+      "compte": "@relais_rs_9",
+      "compte_display": "Relais Belgrade",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "rs_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T10:20:00Z",
+      "lang": "fr",
+      "pays": "RS",
+      "ville": "Belgrade",
+      "lat": 44.4218,
+      "lon": 19.9518,
+      "cc": "rs",
+      "audience_estimee": 12000,
+      "content_excerpt": "Pic — Serbie (Belgrade). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "hu_1_1",
+      "compte": "@relais_hu_1",
+      "compte_display": "Relais Budapest",
+      "plateforme": "forum",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-14T11:00:00Z",
+      "lang": "fr",
+      "pays": "HU",
+      "ville": "Budapest",
+      "lat": 47.1487,
+      "lon": 19.1802,
+      "cc": "hu",
+      "audience_estimee": 2000,
+      "content_excerpt": "Amorçage — Hongrie (Budapest). Premier relais local de l'allégation sanitaire sur les produits."
+    },
+    {
+      "id": "hu_2_1",
+      "compte": "@relais_hu_2",
+      "compte_display": "Relais Debrecen",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "hu_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T11:00:00Z",
+      "lang": "fr",
+      "pays": "HU",
+      "ville": "Debrecen",
+      "lat": 47.7929,
+      "lon": 21.5444,
+      "cc": "hu",
+      "audience_estimee": 4000,
+      "content_excerpt": "Montée — Hongrie (Debrecen). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "hu_2_2",
+      "compte": "@relais_hu_3",
+      "compte_display": "Relais Szeged",
+      "plateforme": "telegram",
+      "type": "incident",
+      "parent_id": "hu_1_1",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-18T11:10:00Z",
+      "lang": "fr",
+      "pays": "HU",
+      "ville": "Szeged",
+      "lat": 45.8572,
+      "lon": 20.0198,
+      "cc": "hu",
+      "audience_estimee": 6000,
+      "content_excerpt": "Montée — Hongrie (Szeged). Reprise et traduction du contenu, montée en audience."
+    },
+    {
+      "id": "hu_3_1",
+      "compte": "@relais_hu_4",
+      "compte_display": "Relais Miskolc",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "hu_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T11:00:00Z",
+      "lang": "fr",
+      "pays": "HU",
+      "ville": "Miskolc",
+      "lat": 48.5465,
+      "lon": 20.812,
+      "cc": "hu",
+      "audience_estimee": 6000,
+      "content_excerpt": "Bascule — Hongrie (Miskolc). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "hu_3_2",
+      "compte": "@relais_hu_5",
+      "compte_display": "Relais Budapest",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "hu_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T11:10:00Z",
+      "lang": "fr",
+      "pays": "HU",
+      "ville": "Budapest",
+      "lat": 47.924,
+      "lon": 19.4369,
+      "cc": "hu",
+      "audience_estimee": 8000,
+      "content_excerpt": "Bascule — Hongrie (Budapest). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "hu_3_3",
+      "compte": "@relais_hu_6",
+      "compte_display": "Relais Debrecen",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "hu_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-02-27T11:20:00Z",
+      "lang": "fr",
+      "pays": "HU",
+      "ville": "Debrecen",
+      "lat": 47.0903,
+      "lon": 21.8728,
+      "cc": "hu",
+      "audience_estimee": 10000,
+      "content_excerpt": "Bascule — Hongrie (Debrecen). Activation d'un second narratif (mise en cause du dirigeant / fausse commande publique)."
+    },
+    {
+      "id": "hu_4_1",
+      "compte": "@relais_hu_7",
+      "compte_display": "Relais Szeged",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "hu_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T11:00:00Z",
+      "lang": "fr",
+      "pays": "HU",
+      "ville": "Szeged",
+      "lat": 46.4135,
+      "lon": 20.1907,
+      "cc": "hu",
+      "audience_estimee": 8000,
+      "content_excerpt": "Pic — Hongrie (Szeged). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "hu_4_2",
+      "compte": "@relais_hu_8",
+      "compte_display": "Relais Miskolc",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "hu_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T11:10:00Z",
+      "lang": "fr",
+      "pays": "HU",
+      "ville": "Miskolc",
+      "lat": 47.8901,
+      "lon": 20.9351,
+      "cc": "hu",
+      "audience_estimee": 10000,
+      "content_excerpt": "Pic — Hongrie (Miskolc). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    },
+    {
+      "id": "hu_4_3",
+      "compte": "@relais_hu_9",
+      "compte_display": "Relais Budapest",
+      "plateforme": "x",
+      "type": "incident",
+      "parent_id": "hu_1_1",
+      "niveau_preuve": "Probable",
+      "date": "2026-03-20T11:20:00Z",
+      "lang": "fr",
+      "pays": "HU",
+      "ville": "Budapest",
+      "lat": 47.1504,
+      "lon": 18.9682,
+      "cc": "hu",
+      "audience_estimee": 12000,
+      "content_excerpt": "Pic — Hongrie (Budapest). Pic d'amplification, reprise par des comptes à forte audience, puis extinction."
+    }
+  ],
+  "patient_zero": "ru_1_1",
+  "reseaux": [
+    {
+      "id": "cluster-fr",
+      "nom": "Cluster France",
+      "comptes": [
+        "@relais_fr_1",
+        "@relais_fr_2",
+        "@relais_fr_3",
+        "@relais_fr_4",
+        "@relais_fr_5",
+        "@relais_fr_6",
+        "@relais_fr_7",
+        "@relais_fr_8",
+        "@relais_fr_9"
+      ],
+      "publications": [
+        "fr_1_1",
+        "fr_2_1",
+        "fr_2_2",
+        "fr_3_1",
+        "fr_3_2",
+        "fr_3_3",
+        "fr_4_1",
+        "fr_4_2",
+        "fr_4_3"
+      ],
+      "pays_estime": "France",
+      "niveau_confiance": "Confirmé",
+      "couleur": "#8B5FBF",
+      "notes": "Chaîne locale France : propagation en 4 phases (①→④)."
+    },
+    {
+      "id": "cluster-ro",
+      "nom": "Cluster Roumanie",
+      "comptes": [
+        "@relais_ro_1",
+        "@relais_ro_2",
+        "@relais_ro_3",
+        "@relais_ro_4",
+        "@relais_ro_5",
+        "@relais_ro_6",
+        "@relais_ro_7",
+        "@relais_ro_8",
+        "@relais_ro_9"
+      ],
+      "publications": [
+        "ro_1_1",
+        "ro_2_1",
+        "ro_2_2",
+        "ro_3_1",
+        "ro_3_2",
+        "ro_3_3",
+        "ro_4_1",
+        "ro_4_2",
+        "ro_4_3"
+      ],
+      "pays_estime": "Roumanie",
+      "niveau_confiance": "Confirmé",
+      "couleur": "#8B5FBF",
+      "notes": "Chaîne locale Roumanie : propagation en 4 phases (①→④)."
+    },
+    {
+      "id": "cluster-ru",
+      "nom": "Cluster Russie",
+      "comptes": [
+        "@relais_ru_1",
+        "@relais_ru_2",
+        "@relais_ru_3",
+        "@relais_ru_4",
+        "@relais_ru_5",
+        "@relais_ru_6",
+        "@relais_ru_7",
+        "@relais_ru_8",
+        "@relais_ru_9"
+      ],
+      "publications": [
+        "ru_1_1",
+        "ru_2_1",
+        "ru_2_2",
+        "ru_3_1",
+        "ru_3_2",
+        "ru_3_3",
+        "ru_4_1",
+        "ru_4_2",
+        "ru_4_3"
+      ],
+      "pays_estime": "Russie",
+      "niveau_confiance": "Modéré",
+      "couleur": "#8B5FBF",
+      "notes": "Chaîne locale Russie : propagation en 4 phases (①→④)."
+    },
+    {
+      "id": "cluster-de",
+      "nom": "Cluster Allemagne",
+      "comptes": [
+        "@relais_de_1",
+        "@relais_de_2",
+        "@relais_de_3",
+        "@relais_de_4",
+        "@relais_de_5",
+        "@relais_de_6",
+        "@relais_de_7",
+        "@relais_de_8",
+        "@relais_de_9"
+      ],
+      "publications": [
+        "de_1_1",
+        "de_2_1",
+        "de_2_2",
+        "de_3_1",
+        "de_3_2",
+        "de_3_3",
+        "de_4_1",
+        "de_4_2",
+        "de_4_3"
+      ],
+      "pays_estime": "Allemagne",
+      "niveau_confiance": "Modéré",
+      "couleur": "#8B5FBF",
+      "notes": "Chaîne locale Allemagne : propagation en 4 phases (①→④)."
+    },
+    {
+      "id": "cluster-rs",
+      "nom": "Cluster Serbie",
+      "comptes": [
+        "@relais_rs_1",
+        "@relais_rs_2",
+        "@relais_rs_3",
+        "@relais_rs_4",
+        "@relais_rs_5",
+        "@relais_rs_6",
+        "@relais_rs_7",
+        "@relais_rs_8",
+        "@relais_rs_9"
+      ],
+      "publications": [
+        "rs_1_1",
+        "rs_2_1",
+        "rs_2_2",
+        "rs_3_1",
+        "rs_3_2",
+        "rs_3_3",
+        "rs_4_1",
+        "rs_4_2",
+        "rs_4_3"
+      ],
+      "pays_estime": "Serbie",
+      "niveau_confiance": "Modéré",
+      "couleur": "#8B5FBF",
+      "notes": "Chaîne locale Serbie : propagation en 4 phases (①→④)."
+    },
+    {
+      "id": "cluster-hu",
+      "nom": "Cluster Hongrie",
+      "comptes": [
+        "@relais_hu_1",
+        "@relais_hu_2",
+        "@relais_hu_3",
+        "@relais_hu_4",
+        "@relais_hu_5",
+        "@relais_hu_6",
+        "@relais_hu_7",
+        "@relais_hu_8",
+        "@relais_hu_9"
+      ],
+      "publications": [
+        "hu_1_1",
+        "hu_2_1",
+        "hu_2_2",
+        "hu_3_1",
+        "hu_3_2",
+        "hu_3_3",
+        "hu_4_1",
+        "hu_4_2",
+        "hu_4_3"
+      ],
+      "pays_estime": "Hongrie",
+      "niveau_confiance": "Faible",
+      "couleur": "#8B5FBF",
+      "notes": "Chaîne locale Hongrie : propagation en 4 phases (①→④)."
+    }
+  ],
+  "relations": [
+    {
+      "from": "fr_1_1",
+      "to": "fr_1_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "1"
+    },
+    {
+      "from": "fr_1_1",
+      "to": "fr_2_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "fr_1_1",
+      "to": "fr_2_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "fr_1_1",
+      "to": "fr_3_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "fr_1_1",
+      "to": "fr_3_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "fr_1_1",
+      "to": "fr_3_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "fr_1_1",
+      "to": "fr_4_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "fr_1_1",
+      "to": "fr_4_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "fr_1_1",
+      "to": "fr_4_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "ro_1_1",
+      "to": "ro_1_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "1"
+    },
+    {
+      "from": "ro_1_1",
+      "to": "ro_2_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "ro_1_1",
+      "to": "ro_2_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "ro_1_1",
+      "to": "ro_3_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "ro_1_1",
+      "to": "ro_3_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "ro_1_1",
+      "to": "ro_3_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "ro_1_1",
+      "to": "ro_4_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "ro_1_1",
+      "to": "ro_4_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "ro_1_1",
+      "to": "ro_4_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "ru_1_1",
+      "to": "ru_1_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "1"
+    },
+    {
+      "from": "ru_1_1",
+      "to": "ru_2_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "ru_1_1",
+      "to": "ru_2_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "ru_1_1",
+      "to": "ru_3_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "ru_1_1",
+      "to": "ru_3_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "ru_1_1",
+      "to": "ru_3_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "ru_1_1",
+      "to": "ru_4_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "ru_1_1",
+      "to": "ru_4_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "ru_1_1",
+      "to": "ru_4_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "de_1_1",
+      "to": "de_1_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "1"
+    },
+    {
+      "from": "de_1_1",
+      "to": "de_2_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "de_1_1",
+      "to": "de_2_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "de_1_1",
+      "to": "de_3_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "de_1_1",
+      "to": "de_3_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "de_1_1",
+      "to": "de_3_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "de_1_1",
+      "to": "de_4_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "de_1_1",
+      "to": "de_4_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "de_1_1",
+      "to": "de_4_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "rs_1_1",
+      "to": "rs_1_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "1"
+    },
+    {
+      "from": "rs_1_1",
+      "to": "rs_2_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "rs_1_1",
+      "to": "rs_2_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "rs_1_1",
+      "to": "rs_3_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "rs_1_1",
+      "to": "rs_3_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "rs_1_1",
+      "to": "rs_3_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "rs_1_1",
+      "to": "rs_4_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "rs_1_1",
+      "to": "rs_4_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "rs_1_1",
+      "to": "rs_4_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "hu_1_1",
+      "to": "hu_1_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "1"
+    },
+    {
+      "from": "hu_1_1",
+      "to": "hu_2_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "hu_1_1",
+      "to": "hu_2_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "2"
+    },
+    {
+      "from": "hu_1_1",
+      "to": "hu_3_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "hu_1_1",
+      "to": "hu_3_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "hu_1_1",
+      "to": "hu_3_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "3"
+    },
+    {
+      "from": "hu_1_1",
+      "to": "hu_4_1",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "hu_1_1",
+      "to": "hu_4_2",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    },
+    {
+      "from": "hu_1_1",
+      "to": "hu_4_3",
+      "type": "cible",
+      "label": "reprise",
+      "phase": "4"
+    }
+  ],
+  "phases": [
+    {
+      "n": "1",
+      "nom": "① Amorçage · 14 fév.",
+      "couleur": "#6B3FA0",
+      "desc": "Premier relais local de l'allégation : le message s'installe dans le pays.",
+      "marqueur": "Apparition locale"
+    },
+    {
+      "n": "2",
+      "nom": "② Montée · 15-20 fév.",
+      "couleur": "#2F9E8F",
+      "desc": "Reprise et traduction, montée en audience.",
+      "marqueur": "Montée en audience"
+    },
+    {
+      "n": "3",
+      "nom": "③ Bascule · 21 fév-8 mars",
+      "couleur": "#E0652C",
+      "desc": "Activation des narratifs secondaires (dirigeant, commande publique).",
+      "marqueur": "Diversification"
+    },
+    {
+      "n": "4",
+      "nom": "④ Pic · 15 mars-10 avr.",
+      "couleur": "#C8392B",
+      "desc": "Pic d'amplification puis extinction.",
+      "marqueur": "Pic puis fin"
+    }
+  ],
+  "legende": [
+    {
+      "type": "incident",
+      "label": "Publication / incident",
+      "couleur": "#C94A4A"
+    },
+    {
+      "type": "acteur",
+      "label": "Acteur / source hostile",
+      "couleur": "#8E2A2A"
+    }
+  ],
+  "legende_arc": "Chaîne de diffusion : chaque flèche relie un message à celui qu'il reprend (couleur = phase).",
+  "legende_relations": [
+    {
+      "label": "Reprise / chaîne de diffusion",
+      "couleur": "#8B5FBF"
+    }
+  ],
+  "hero_cells": [
+    {
+      "num": "54",
+      "lbl": "Publications tracées"
+    },
+    {
+      "num": "6",
+      "lbl": "Pays impliqués"
+    },
+    {
+      "num": "4",
+      "lbl": "Phases par pays"
+    }
+  ],
+  "stats": [
+    {
+      "lbl": "Publications",
+      "val": "54"
+    },
+    {
+      "lbl": "Pays",
+      "val": "6"
+    },
+    {
+      "lbl": "Phases",
+      "val": "4"
+    },
+    {
+      "lbl": "Narratifs",
+      "val": "3"
+    }
+  ],
+  "acteurs": [
+    {
+      "display": "Compte source (forum russophone)",
+      "orientation": "hostile",
+      "role": "Émission du message initial",
+      "preuve": "Confirmé"
+    },
+    {
+      "display": "Clusters relais (RO/RS/HU)",
+      "orientation": "hostile",
+      "role": "Relais coordonnés par pays",
+      "preuve": "Confirmé"
+    },
+    {
+      "display": "Faux médias copie",
+      "orientation": "hostile",
+      "role": "Articles fabriqués, template commun",
+      "preuve": "Confirmé"
+    },
+    {
+      "display": "Amplificateurs francophones",
+      "orientation": "indéterminé",
+      "role": "Reprise et amplification",
+      "preuve": "Hypothèse non prouvée"
+    }
+  ],
+  "victimes": [
+    {
+      "type": "marque",
+      "nom": "Société Lumière",
+      "subtitle": "Cible principale",
+      "icon": "building",
+      "narratifs": "Allégations sanitaires fabriquées",
+      "impact": "Atteinte réputationnelle directe"
+    },
+    {
+      "type": "dirigeant",
+      "nom": "Direction du groupe",
+      "subtitle": "Mise en cause personnelle",
+      "icon": "user",
+      "narratifs": "Faux documents attribués au dirigeant",
+      "impact": "Décrédibilisation"
+    },
+    {
+      "type": "employes",
+      "nom": "Salariés & marques",
+      "subtitle": "Dommage collatéral",
+      "icon": "users",
+      "narratifs": "Climat de défiance",
+      "impact": "Inquiétude interne"
+    },
+    {
+      "type": "partenaires",
+      "nom": "Distributeurs",
+      "subtitle": "Effet d'entraînement",
+      "icon": "link",
+      "narratifs": "Doute chez les revendeurs",
+      "impact": "Questions en rayon"
+    },
+    {
+      "type": "indirect",
+      "nom": "Secteur cosmétique",
+      "subtitle": "Atteinte indirecte",
+      "icon": "eye",
+      "narratifs": "Défiance généralisée",
+      "impact": "Climat sectoriel dégradé"
+    }
+  ],
+  "pays": [
+    {
+      "id": "fr",
+      "name": "France",
+      "flag": "🇫🇷",
+      "region": "Europe de l'Ouest",
+      "iso": "FR",
+      "subsidiary": "",
+      "actors": [],
+      "disinfo": 5,
+      "sentiment": 4,
+      "lever": true,
+      "platforms": [],
+      "langs": [],
+      "operations": "Marché clé et siège de Société Lumière. Cœur de l'amplification francophone.",
+      "narratives": [
+        "Allégations sanitaires",
+        "Mise en cause du dirigeant",
+        "Commande publique"
+      ],
+      "incidents": [
+        {
+          "date": "2026-02-14",
+          "txt": "Amorçage — Paris"
+        },
+        {
+          "date": "2026-02-18",
+          "txt": "Montée — Lyon"
+        },
+        {
+          "date": "2026-02-27",
+          "txt": "Bascule — Marseille"
+        },
+        {
+          "date": "2026-03-20",
+          "txt": "Pic — Toulouse"
+        }
+      ],
+      "context": "Marché clé et siège de Société Lumière. Cœur de l'amplification francophone.",
+      "sources": [],
+      "lon": 2.4,
+      "lat": 46.6,
+      "cible_harm": 5,
+      "cible_status": "cible_principale",
+      "cible_status_label": "Cible principale",
+      "proof": "Confirmé",
+      "atteinte_type": "directe"
+    },
+    {
+      "id": "ro",
+      "name": "Roumanie",
+      "flag": "🇷🇴",
+      "region": "Europe de l'Est",
+      "iso": "RO",
+      "subsidiary": "",
+      "actors": [],
+      "disinfo": 4,
+      "sentiment": 3,
+      "lever": true,
+      "platforms": [],
+      "langs": [],
+      "operations": "Cluster de Bucarest : canaux Telegram coordonnés, premiers relais.",
+      "narratives": [
+        "Allégations sanitaires",
+        "Mise en cause du dirigeant",
+        "Commande publique"
+      ],
+      "incidents": [
+        {
+          "date": "2026-02-14",
+          "txt": "Amorçage — Bucarest"
+        },
+        {
+          "date": "2026-02-18",
+          "txt": "Montée — Cluj-Napoca"
+        },
+        {
+          "date": "2026-02-27",
+          "txt": "Bascule — Timisoara"
+        },
+        {
+          "date": "2026-03-20",
+          "txt": "Pic — Iasi"
+        }
+      ],
+      "context": "Cluster de Bucarest : canaux Telegram coordonnés, premiers relais.",
+      "sources": [],
+      "lon": 24.9,
+      "lat": 45.9,
+      "cible_harm": 4,
+      "cible_status": "foyer_relais",
+      "cible_status_label": "Foyer relais principal",
+      "proof": "Confirmé",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "ru",
+      "name": "Russie",
+      "flag": "🇷🇺",
+      "region": "Europe de l'Est",
+      "iso": "RU",
+      "subsidiary": "",
+      "actors": [],
+      "disinfo": 4,
+      "sentiment": 3,
+      "lever": true,
+      "platforms": [],
+      "langs": [],
+      "operations": "Forum russophone à l'origine du message initial ; hébergement des faux sites.",
+      "narratives": [
+        "Allégations sanitaires",
+        "Mise en cause du dirigeant",
+        "Commande publique"
+      ],
+      "incidents": [
+        {
+          "date": "2026-02-14",
+          "txt": "Amorçage — Saint-Petersbourg"
+        },
+        {
+          "date": "2026-02-18",
+          "txt": "Montée — Moscou"
+        },
+        {
+          "date": "2026-02-27",
+          "txt": "Bascule — Voronej"
+        },
+        {
+          "date": "2026-03-20",
+          "txt": "Pic — Kazan"
+        }
+      ],
+      "context": "Forum russophone à l'origine du message initial ; hébergement des faux sites.",
+      "sources": [],
+      "lon": 36.0,
+      "lat": 59.0,
+      "cible_harm": 4,
+      "cible_status": "origine",
+      "cible_status_label": "Origine présumée",
+      "proof": "Modéré",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "de",
+      "name": "Allemagne",
+      "flag": "🇩🇪",
+      "region": "Europe de l'Ouest",
+      "iso": "DE",
+      "subsidiary": "",
+      "actors": [],
+      "disinfo": 3,
+      "sentiment": 2,
+      "lever": false,
+      "platforms": [],
+      "langs": [],
+      "operations": "Adaptation du narratif en allemand, pont vers l'espace francophone.",
+      "narratives": [
+        "Allégations sanitaires",
+        "Mise en cause du dirigeant",
+        "Commande publique"
+      ],
+      "incidents": [
+        {
+          "date": "2026-02-14",
+          "txt": "Amorçage — Berlin"
+        },
+        {
+          "date": "2026-02-18",
+          "txt": "Montée — Munich"
+        },
+        {
+          "date": "2026-02-27",
+          "txt": "Bascule — Hambourg"
+        },
+        {
+          "date": "2026-03-20",
+          "txt": "Pic — Cologne"
+        }
+      ],
+      "context": "Adaptation du narratif en allemand, pont vers l'espace francophone.",
+      "sources": [],
+      "lon": 10.4,
+      "lat": 51.2,
+      "cible_harm": 3,
+      "cible_status": "amplification",
+      "cible_status_label": "Amplification",
+      "proof": "Modéré",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "rs",
+      "name": "Serbie",
+      "flag": "🇷🇸",
+      "region": "Europe du Sud-Est",
+      "iso": "RS",
+      "subsidiary": "",
+      "actors": [],
+      "disinfo": 3,
+      "sentiment": 2,
+      "lever": false,
+      "platforms": [],
+      "langs": [],
+      "operations": "Cluster de Belgrade, activé notamment pour le narratif « commande publique ».",
+      "narratives": [
+        "Allégations sanitaires",
+        "Mise en cause du dirigeant",
+        "Commande publique"
+      ],
+      "incidents": [
+        {
+          "date": "2026-02-14",
+          "txt": "Amorçage — Belgrade"
+        },
+        {
+          "date": "2026-02-18",
+          "txt": "Montée — Novi Sad"
+        },
+        {
+          "date": "2026-02-27",
+          "txt": "Bascule — Nis"
+        },
+        {
+          "date": "2026-03-20",
+          "txt": "Pic — Kragujevac"
+        }
+      ],
+      "context": "Cluster de Belgrade, activé notamment pour le narratif « commande publique ».",
+      "sources": [],
+      "lon": 21.0,
+      "lat": 44.0,
+      "cible_harm": 3,
+      "cible_status": "foyer_relais",
+      "cible_status_label": "Relais secondaire",
+      "proof": "Modéré",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "hu",
+      "name": "Hongrie",
+      "flag": "🇭🇺",
+      "region": "Europe centrale",
+      "iso": "HU",
+      "subsidiary": "",
+      "actors": [],
+      "disinfo": 2,
+      "sentiment": 1,
+      "lever": false,
+      "platforms": [],
+      "langs": [],
+      "operations": "Cluster de Budapest : pont linguistique vers l'allemand.",
+      "narratives": [
+        "Allégations sanitaires",
+        "Mise en cause du dirigeant",
+        "Commande publique"
+      ],
+      "incidents": [
+        {
+          "date": "2026-02-14",
+          "txt": "Amorçage — Budapest"
+        },
+        {
+          "date": "2026-02-18",
+          "txt": "Montée — Debrecen"
+        },
+        {
+          "date": "2026-02-27",
+          "txt": "Bascule — Szeged"
+        },
+        {
+          "date": "2026-03-20",
+          "txt": "Pic — Miskolc"
+        }
+      ],
+      "context": "Cluster de Budapest : pont linguistique vers l'allemand.",
+      "sources": [],
+      "lon": 19.5,
+      "lat": 47.2,
+      "cible_harm": 2,
+      "cible_status": "pont",
+      "cible_status_label": "Pont linguistique",
+      "proof": "Faible",
+      "atteinte_type": "indirecte"
+    }
+  ],
+  "vulnerabilites": [
+    {
+      "code": "V1",
+      "label": "Forte exposition de la marque en ligne",
+      "statut": "Confirmé"
+    },
+    {
+      "code": "V2",
+      "label": "Réponse tardive aux premières allégations",
+      "statut": "Probable / structurel"
+    },
+    {
+      "code": "V3",
+      "label": "Faux sites copie difficiles à distinguer",
+      "statut": "Confirmé"
+    }
+  ]
+}
