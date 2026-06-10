@@ -403,71 +403,56 @@
     color: #8A8499; letter-spacing: 0.04em;
   }
 
-  /* Hero stats card */
-  .deb-hero__aside {
-    background: #fff;
-    border: 1px solid var(--border, rgba(0,0,0,0.08));
-    border-radius: 14px;
+  /* Hero — visualisation loupe + flux animes (remplace l'ancienne carte stats) */
+  .deb-viz {
+    position: relative;
+    aspect-ratio: 72 / 56;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 12px 36px -16px rgba(31,18,55,0.14);
+    background: radial-gradient(130% 120% at 78% 46%, #f4eefc 0%, #ece4f8 52%, #e4daf3 100%);
+    border: 1px solid rgba(107,63,160,0.14);
+    box-shadow: 0 24px 60px -26px rgba(31,18,55,0.28), inset 0 1px 0 rgba(255,255,255,0.55);
   }
-  .deb-hero__head {
-    display: flex; align-items: baseline; justify-content: space-between;
-    padding: 18px 22px 16px;
-    border-bottom: 1px solid var(--border, rgba(0,0,0,0.06));
-    background: var(--violet-bg, rgba(107,63,160,0.04));
+  .deb-viz__svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  .deb-viz .dv-base { stroke: rgba(139,95,191,0.11); stroke-width: 1; fill: none; }
+
+  .deb-viz .flow {
+    stroke: url(#dv-flow);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    fill: none;
+    opacity: 0.72;
   }
-  .deb-hero__head .lbl {
-    font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 600;
-    color: var(--violet-d, #6B3FA0); letter-spacing: 0.14em;
-    text-transform: uppercase;
+
+  .deb-viz .dv-node > circle:first-child { fill: #ffffff; stroke-opacity: 0.20; }
+  .deb-viz .dv-node { animation: dvNode 5s ease-in-out infinite; }
+  .deb-viz .dv-node:nth-child(2n) { animation-delay: -1.6s; }
+  .deb-viz .dv-node:nth-child(3n) { animation-delay: -2.9s; }
+  .deb-viz .dv-node:nth-child(4n) { animation-delay: -0.8s; }
+  @keyframes dvNode { 0%,100% { opacity: 1; } 50% { opacity: .74; } }
+
+  .deb-viz .dv-ring {
+    fill: none; stroke: #8B5FBF; stroke-width: 1.3;
+    transform-box: view-box; transform-origin: 548px 272px;
+    animation: dvRing 4.2s ease-out infinite;
   }
-  .deb-hero__head .meta {
-    font-family: 'JetBrains Mono'; font-size: 11px;
-    color: #6B6480; letter-spacing: 0.02em;
+  @keyframes dvRing {
+    0%   { transform: scale(0.42); opacity: 0; }
+    18%  { opacity: 0.42; }
+    100% { transform: scale(2.3); opacity: 0; }
   }
-  .deb-hero__title {
-    padding: 22px 22px 4px;
-    font-family: 'Plus Jakarta Sans'; font-weight: 600;
-    font-size: 22px; line-height: 1.18;
-    letter-spacing: -0.018em; color: #1F1437;
+
+  .deb-viz .dv-bloom { transform-box: view-box; transform-origin: 548px 272px; animation: dvPulse 5.2s ease-in-out infinite; }
+  @keyframes dvPulse { 0%,100% { opacity: .8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+
+  .deb-viz .dv-core { transform-box: view-box; transform-origin: 548px 272px; animation: dvCore 3.4s ease-in-out infinite; }
+  @keyframes dvCore { 0%,100% { opacity: .88; } 50% { opacity: 1; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .deb-viz .dv-ring, .deb-viz .dv-bloom, .deb-viz .dv-core, .deb-viz .dv-node { animation: none; }
+    .deb-viz .dv-ring { opacity: .18; }
   }
-  .deb-hero__region {
-    padding: 0 22px 18px;
-    font-family: 'JetBrains Mono'; font-size: 11px;
-    color: #6B6480; letter-spacing: 0.02em;
-  }
-  .deb-hero__region .sep { color: #C8C2D8; padding: 0 6px; }
-  .deb-hero__grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr;
-    border-top: 1px solid var(--border, rgba(0,0,0,0.06));
-  }
-  .deb-hero__cell {
-    padding: 18px 22px 16px;
-    border-right: 1px solid var(--border, rgba(0,0,0,0.06));
-  }
-  .deb-hero__cell:last-child { border-right: none; }
-  .deb-hero__cell .num {
-    font-family: 'Plus Jakarta Sans'; font-weight: 700;
-    font-size: 24px; color: #1F1437;
-    letter-spacing: -0.018em; line-height: 1;
-  }
-  .deb-hero__cell .lbl {
-    font-family: 'JetBrains Mono'; font-size: 10.5px;
-    color: #6B6480; letter-spacing: 0.04em; margin-top: 8px;
-  }
-  .deb-hero__foot {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 22px;
-    border-top: 1px solid var(--border, rgba(0,0,0,0.06));
-    font-family: 'JetBrains Mono'; font-size: 11px;
-    color: #6B6480; letter-spacing: 0.02em;
-  }
-  .deb-hero__foot a {
-    color: var(--violet-d, #6B3FA0); text-decoration: none;
-    font-weight: 600; transition: opacity .15s ease;
-  }
-  .deb-hero__foot a:hover { opacity: 0.78; }
 
   /* Methode steps */
   .deb-steps {
@@ -750,22 +735,120 @@
         </ul>
       </div>
 
-      <aside class="deb-hero__aside" aria-label="Cas démo">
-        <div class="deb-hero__head">
-          <span class="lbl">Cas démo · anonymisé</span>
-          <span class="meta" id="hs-meta">—</span>
-        </div>
-        <div class="deb-hero__title" id="hs-title">—</div>
-        <div class="deb-hero__region" id="hs-region">—</div>
-        <div class="deb-hero__grid">
-          <div class="deb-hero__cell"><div class="num" id="hs-pub">—</div><div class="lbl">Publications</div></div>
-          <div class="deb-hero__cell"><div class="num" id="hs-acc">—</div><div class="lbl">Comptes</div></div>
-          <div class="deb-hero__cell"><div class="num" id="hs-aud">—</div><div class="lbl">Audience cumulée</div></div>
-        </div>
-        <div class="deb-hero__foot">
-          <span id="hs-period">—</span>
-          <a href="#dossier">Ouvrir le dossier →</a>
-        </div>
+      <aside class="deb-viz" role="img" aria-label="Visualisation : remontée des flux de désinformation jusqu'à leur source">
+        <svg class="deb-viz__svg" viewBox="0 0 720 560" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <!-- p1..p8 : partent chacun d'une icone-source ; p9..p11 : flux secondaires sans icone -->
+            <path id="dv-p1"  d="M108,150 C 250,120 380,200 548,272"/>
+            <path id="dv-p2"  d="M170,96  C 320,90  430,170 548,272"/>
+            <path id="dv-p3"  d="M96,316  C 240,330 380,300 548,272"/>
+            <path id="dv-p4"  d="M286,212 C 360,210 450,238 548,272"/>
+            <path id="dv-p5"  d="M120,236 C 270,250 390,258 548,272"/>
+            <path id="dv-p6"  d="M236,430 C 340,400 450,330 548,272"/>
+            <path id="dv-p7"  d="M172,476 C 300,440 420,350 548,272"/>
+            <path id="dv-p8"  d="M360,378 C 420,360 480,320 548,272"/>
+            <path id="dv-p9"  d="M60,400  C 230,420 380,350 548,272"/>
+            <path id="dv-p10" d="M300,118 C 380,150 450,205 548,272"/>
+            <path id="dv-p11" d="M44,196  C 200,190 340,215 548,272"/>
+
+            <linearGradient id="dv-flow" gradientUnits="userSpaceOnUse" x1="40" y1="272" x2="548" y2="272">
+              <stop offset="0"    stop-color="#B596E0" stop-opacity="0.10"/>
+              <stop offset="0.55" stop-color="#8B5FBF" stop-opacity="0.55"/>
+              <stop offset="1"    stop-color="#6B3FA0" stop-opacity="1"/>
+            </linearGradient>
+            <radialGradient id="dv-glow" gradientUnits="userSpaceOnUse" cx="548" cy="272" r="94">
+              <stop offset="0"    stop-color="#FFFFFF" stop-opacity="0.92"/>
+              <stop offset="0.22" stop-color="#E0D0F6" stop-opacity="0.66"/>
+              <stop offset="0.6"  stop-color="#A079D2" stop-opacity="0.22"/>
+              <stop offset="1"    stop-color="#A079D2" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="dv-core" gradientUnits="userSpaceOnUse" cx="548" cy="272" r="24">
+              <stop offset="0"    stop-color="#FFFFFF"/>
+              <stop offset="0.6"  stop-color="#CDB4ED"/>
+              <stop offset="1"    stop-color="#8B5FBF" stop-opacity="0"/>
+            </radialGradient>
+            <pattern id="dv-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="0.8" fill="#6B3FA0" opacity="0.32"/>
+            </pattern>
+            <radialGradient id="dv-dotfade" gradientUnits="userSpaceOnUse" cx="548" cy="272" r="300">
+              <stop offset="0" stop-color="#fff" stop-opacity="0.38"/>
+              <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+            </radialGradient>
+            <mask id="dv-dotmask"><rect x="330" y="20" width="390" height="520" fill="url(#dv-dotfade)"/></mask>
+            <filter id="dv-soft" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="1.1"/></filter>
+            <filter id="dv-shadow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#2E1857" flood-opacity="0.28"/></filter>
+            <filter id="dv-nodeshadow" x="-70%" y="-70%" width="240%" height="240%"><feDropShadow dx="0" dy="2" stdDeviation="2.4" flood-color="#3F2470" flood-opacity="0.16"/></filter>
+            <linearGradient id="dv-rim" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0"   stop-color="#A87FD6"/>
+              <stop offset="0.5" stop-color="#6B3FA0"/>
+              <stop offset="1"   stop-color="#3F2470"/>
+            </linearGradient>
+            <radialGradient id="dv-glass" gradientUnits="userSpaceOnUse" cx="516" cy="240" r="150">
+              <stop offset="0"    stop-color="#FFFFFF" stop-opacity="0.30"/>
+              <stop offset="0.45" stop-color="#C9B4EA" stop-opacity="0.06"/>
+              <stop offset="1"    stop-color="#8B5FBF" stop-opacity="0.02"/>
+            </radialGradient>
+            <linearGradient id="dv-comet" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#8B5FBF" stop-opacity="0"/>
+              <stop offset="1" stop-color="#7A4BB0" stop-opacity="0.85"/>
+            </linearGradient>
+          </defs>
+
+          <rect x="330" y="20" width="390" height="520" fill="url(#dv-dots)" mask="url(#dv-dotmask)"/>
+
+          <g>
+            <use href="#dv-p1" class="dv-base"/><use href="#dv-p2" class="dv-base"/><use href="#dv-p3" class="dv-base"/>
+            <use href="#dv-p4" class="dv-base"/><use href="#dv-p5" class="dv-base"/><use href="#dv-p6" class="dv-base"/>
+            <use href="#dv-p7" class="dv-base"/><use href="#dv-p8" class="dv-base"/><use href="#dv-p9" class="dv-base"/>
+            <use href="#dv-p10" class="dv-base"/><use href="#dv-p11" class="dv-base"/>
+          </g>
+
+          <g class="dv-nodes" filter="url(#dv-nodeshadow)">
+            <g class="dv-node" transform="translate(108,150)"><circle r="13" fill="#faf7ff" stroke="#6B3FA0" stroke-opacity="0.32" stroke-width="1.2"/><circle cx="0" cy="-3" r="3.1" fill="#6B3FA0"/><path d="M-5.2 6 a5.2 5.2 0 0 1 10.4 0" fill="#6B3FA0"/></g>
+            <g class="dv-node" transform="translate(170,96)"><circle r="13" fill="#faf7ff" stroke="#6B3FA0" stroke-opacity="0.32" stroke-width="1.2"/><rect x="-6" y="-5" width="12" height="10" rx="1.6" fill="none" stroke="#6B3FA0" stroke-width="1.3"/><circle cx="-2.4" cy="-1.6" r="1.4" fill="#6B3FA0"/><path d="M-6 4 L-1.5 -0.5 L1.5 2 L3.5 0 L6 2.5" fill="none" stroke="#6B3FA0" stroke-width="1.3" stroke-linejoin="round"/></g>
+            <g class="dv-node" transform="translate(96,316)"><circle r="13" fill="#faf7ff" stroke="#6B3FA0" stroke-opacity="0.32" stroke-width="1.2"/><path d="M-3.4 -5 L5 0 L-3.4 5 Z" fill="#6B3FA0"/></g>
+            <g class="dv-node" transform="translate(286,212)"><circle r="13" fill="#faf7ff" stroke="#6B3FA0" stroke-opacity="0.32" stroke-width="1.2"/><path d="M0 -6.2 L6.4 5.4 L-6.4 5.4 Z" fill="none" stroke="#6B3FA0" stroke-width="1.3" stroke-linejoin="round"/><line x1="0" y1="-1.4" x2="0" y2="2.2" stroke="#6B3FA0" stroke-width="1.3" stroke-linecap="round"/><circle cx="0" cy="4" r="0.95" fill="#6B3FA0"/></g>
+            <g class="dv-node" transform="translate(120,236)"><circle r="13" fill="#faf7ff" stroke="#6B3FA0" stroke-opacity="0.32" stroke-width="1.2"/><circle r="6.2" fill="none" stroke="#6B3FA0" stroke-width="1.3"/><circle r="2.3" fill="#6B3FA0"/><line x1="-9.6" y1="0" x2="-6.4" y2="0" stroke="#6B3FA0" stroke-width="1.3" stroke-linecap="round"/><line x1="9.6" y1="0" x2="6.4" y2="0" stroke="#6B3FA0" stroke-width="1.3" stroke-linecap="round"/><line x1="0" y1="-9.6" x2="0" y2="-6.4" stroke="#6B3FA0" stroke-width="1.3" stroke-linecap="round"/><line x1="0" y1="9.6" x2="0" y2="6.4" stroke="#6B3FA0" stroke-width="1.3" stroke-linecap="round"/></g>
+            <g class="dv-node" transform="translate(236,430)"><circle r="13" fill="#faf7ff" stroke="#6B3FA0" stroke-opacity="0.32" stroke-width="1.2"/><path d="M-4 -4 L4 4 M4 -4 L-4 4" stroke="#6B3FA0" stroke-width="1.5" stroke-linecap="round"/></g>
+            <g class="dv-node" transform="translate(172,476)"><circle r="13" fill="#faf7ff" stroke="#6B3FA0" stroke-opacity="0.32" stroke-width="1.2"/><circle cx="0" cy="-3" r="3.1" fill="#6B3FA0"/><path d="M-5.2 6 a5.2 5.2 0 0 1 10.4 0" fill="#6B3FA0"/></g>
+            <g class="dv-node" transform="translate(360,378)"><circle r="13" fill="#faf7ff" stroke="#6B3FA0" stroke-opacity="0.32" stroke-width="1.2"/><path d="M-4 -6 L4 -6 L4 6 L0 2.4 L-4 6 Z" fill="#6B3FA0"/></g>
+          </g>
+
+          <g class="deb-viz__flows">
+            <use href="#dv-p1" class="flow"/><use href="#dv-p2" class="flow"/><use href="#dv-p3" class="flow"/>
+            <use href="#dv-p4" class="flow"/><use href="#dv-p5" class="flow"/><use href="#dv-p6" class="flow"/>
+            <use href="#dv-p7" class="flow"/><use href="#dv-p8" class="flow"/><use href="#dv-p9" class="flow"/>
+            <use href="#dv-p10" class="flow"/><use href="#dv-p11" class="flow"/>
+          </g>
+
+          <g class="dv-comets" filter="url(#dv-soft)">
+            <g><ellipse cx="-9" cy="0" rx="9" ry="2" fill="url(#dv-comet)"/><circle r="2.3" fill="#7A4BB0"/><animateMotion dur="4.6s" begin="0s"    repeatCount="indefinite" rotate="auto"><mpath xlink:href="#dv-p1"/></animateMotion></g>
+            <g><ellipse cx="-9" cy="0" rx="9" ry="2" fill="url(#dv-comet)"/><circle r="2.3" fill="#7A4BB0"/><animateMotion dur="5.4s" begin="-1.6s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#dv-p3"/></animateMotion></g>
+            <g><ellipse cx="-9" cy="0" rx="9" ry="2" fill="url(#dv-comet)"/><circle r="2.3" fill="#7A4BB0"/><animateMotion dur="4.2s" begin="-0.8s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#dv-p4"/></animateMotion></g>
+            <g><ellipse cx="-9" cy="0" rx="9" ry="2" fill="url(#dv-comet)"/><circle r="2.3" fill="#7A4BB0"/><animateMotion dur="5.0s" begin="-2.3s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#dv-p6"/></animateMotion></g>
+            <g><ellipse cx="-9" cy="0" rx="9" ry="2" fill="url(#dv-comet)"/><circle r="2.3" fill="#7A4BB0"/><animateMotion dur="4.8s" begin="-1.1s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#dv-p8"/></animateMotion></g>
+            <g><ellipse cx="-9" cy="0" rx="9" ry="2" fill="url(#dv-comet)"/><circle r="2.3" fill="#7A4BB0"/><animateMotion dur="5.6s" begin="-3.0s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#dv-p10"/></animateMotion></g>
+            <g><ellipse cx="-9" cy="0" rx="9" ry="2" fill="url(#dv-comet)"/><circle r="2.3" fill="#7A4BB0"/><animateMotion dur="4.4s" begin="-0.5s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#dv-p2"/></animateMotion></g>
+          </g>
+
+          <circle class="dv-bloom" cx="548" cy="272" r="94" fill="url(#dv-glow)"/>
+          <g>
+            <circle class="dv-ring" cx="548" cy="272" r="30"/>
+            <circle class="dv-ring" cx="548" cy="272" r="30" style="animation-delay:-1.4s"/>
+            <circle class="dv-ring" cx="548" cy="272" r="30" style="animation-delay:-2.8s"/>
+          </g>
+          <circle class="dv-core" cx="548" cy="272" r="22" fill="url(#dv-core)"/>
+          <circle cx="548" cy="272" r="4.5" fill="#fff"/>
+
+          <g class="dv-lens" filter="url(#dv-shadow)">
+            <circle cx="548" cy="272" r="84" fill="url(#dv-glass)"/>
+            <line x1="609" y1="333" x2="678" y2="402" stroke="#3F2470" stroke-width="13" stroke-linecap="round"/>
+            <line x1="609" y1="333" x2="678" y2="402" stroke="url(#dv-rim)" stroke-width="7.5" stroke-linecap="round"/>
+            <circle cx="548" cy="272" r="86" fill="none" stroke="url(#dv-rim)" stroke-width="6.5"/>
+            <circle cx="548" cy="272" r="82.5" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.35"/>
+            <path d="M475,226 A86 86 0 0 1 526,189" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity="0.55"/>
+          </g>
+        </svg>
       </aside>
     </div>
   </section>
@@ -1020,7 +1103,7 @@
   <div class="site-footer__bottom">
     <div class="site-footer__bottom-inner">
       <span>© 2026 Algor Int · Débunkage</span>
-      <span>Diffusion restreinte · usage professionnel</span>
+      <span>Diffusion restreinte · usage professionnel · <a href="/mentions-legales/">Mentions légales</a> · <a href="/confidentialite/">Confidentialité</a></span>
     </div>
   </div>
 </footer>
@@ -1094,15 +1177,7 @@ function showIllustratifBanner(){
 
 function renderHeroStats(){
   const d = state.data;
-  document.getElementById('hs-title').textContent = d.campagne.nom;
-  document.getElementById('hs-region').innerHTML =
-    d.campagne.pays_implique.map(p => escapeHtml(p)).join('<span class="sep">·</span>');
-  document.getElementById('hs-pub').textContent = d.campagne.publications_total;
-  document.getElementById('hs-acc').textContent = d.campagne.comptes_total;
-  const totalAud = d.publications.reduce((s, p) => s + (p.audience_estimee || 0), 0);
-  document.getElementById('hs-aud').textContent = (totalAud / 1000).toFixed(0) + 'k';
-  document.getElementById('hs-period').textContent = fmtPeriod(d.campagne.date_debut, d.campagne.date_fin);
-  document.getElementById('hs-meta').textContent = d.reseaux.length + ' clusters';
+  // Carte hero "Cas demo" remplacee par la visualisation animee .deb-viz (plus de hs-*).
   document.getElementById('deb-top-name').textContent = d.campagne.nom;
   document.getElementById('deb-top-meta').innerHTML =
     `${escapeHtml(d.campagne.secteur)} · <strong>${escapeHtml(fmtPeriod(d.campagne.date_debut, d.campagne.date_fin))}</strong>`;
