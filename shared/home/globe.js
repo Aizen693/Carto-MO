@@ -504,7 +504,7 @@ function Globe() {
     const ctx = canvas.getContext('2d');
 
     // — projection
-    const proj = d3.geoOrthographic().clipAngle(90).rotate([-25, -10, 0]).translate([280, 280]).scale(260);
+    const proj = d3.geoOrthographic().clipAngle(90).rotate([-25, -10, 0]).translate([280, 280]).scale(260).precision(0.4);
     const path = d3.geoPath(proj, ctx);
 
     // — sizing with DPR
@@ -533,12 +533,33 @@ function Globe() {
     window.addEventListener('resize', resize);
 
     // — load world topology asynchronously; sphere/graticule render immediately
+    //   110m (leger) peint en premier, puis upgrade silencieux vers 50m :
+    //   cotes plus fines et petites iles, surtout visibles au zoom hover.
+    //   Si la machine rame en 50m, retour automatique et definitif au 110m.
     let land = null,
       borders = null;
-    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(r => r.json()).then(topo => {
+    let topoLo = null,
+      hiActive = false,
+      hiLocked = false;
+    function applyTopo(topo) {
       land = topojson.feature(topo, topo.objects.countries);
       borders = topojson.mesh(topo, topo.objects.countries, (a, b) => a !== b);
+    }
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(r => r.json()).then(topo => {
+      topoLo = topo;
+      if (!hiActive) applyTopo(topo);
     }).catch(() => {/* sphere-only fallback is acceptable */});
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json').then(r => r.json()).then(topo => {
+      if (hiLocked) return;
+      hiActive = true;
+      applyTopo(topo);
+    }).catch(() => {/* on reste en 110m */});
+    // — lacs et plans d'eau (Natural Earth 50m, heberge en local) :
+    //   remplis dans la teinte exacte de la mer, contour tres discret.
+    let lakes = null;
+    fetch('./shared/home/lakes-50m.json?v=20260610a').then(r => r.json()).then(g => {
+      lakes = g;
+    }).catch(() => {/* sans lacs, rendu identique a avant */});
     const graticule = d3.geoGraticule10();
     const sphere = {
       type: 'Sphere'
@@ -625,6 +646,27 @@ function Globe() {
       // flux terrestres — orange clair (glow holo)
       fluxSea: '39,174,192' // flux maritimes — cyan (glow holo)
     };
+
+    // — sprites de glow pre-rendus : avant, chaque particule recreait son
+    //   createRadialGradient a chaque frame (~80 gradients/frame). Un sprite
+    //   redessine via drawImage est identique a l'oeil et bien plus rapide.
+    function glowSprite(rgb, stops) {
+      const S = 64,
+        c = document.createElement('canvas');
+      c.width = S;
+      c.height = S;
+      const g = c.getContext('2d');
+      const grad = g.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+      stops.forEach(([o, a]) => grad.addColorStop(o, `rgba(${rgb},${a})`));
+      g.fillStyle = grad;
+      g.fillRect(0, 0, S, S);
+      return c;
+    }
+    const SPRITES = {
+      land: glowSprite(C.fluxLand, [[0, 0.55], [0.4, 0.24], [1, 0]]),
+      sea: glowSprite(C.fluxSea, [[0, 0.55], [0.4, 0.24], [1, 0]]),
+      anchor: glowSprite(C.fluxLand, [[0, 1], [0.45, 0.333], [1, 0]])
+    };
     function draw(t) {
       ctx.clearRect(0, 0, W, H);
 
@@ -658,6 +700,20 @@ function Globe() {
         ctx.strokeStyle = C.border;
         ctx.lineWidth = 0.45;
         ctx.stroke();
+      }
+
+      // lacs et plans d'eau — meme teinte que la mer, par-dessus les
+      //   frontieres pour que celles-ci ne traversent pas les lacs.
+      if (lakes) {
+        ctx.beginPath();
+        path(lakes);
+        ctx.fillStyle = C.ocean;
+        ctx.fill();
+        ctx.globalAlpha = 0.6;
+        ctx.strokeStyle = C.border;
+        ctx.lineWidth = 0.3;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
       }
 
       // sphere rim
@@ -719,16 +775,11 @@ function Globe() {
             const baseR = (isSea ? 1.0 : 1.6) * (i === 0 ? 1 : 1 - i * 0.18);
             const isHead = i === 0;
 
-            // 1) glow — bloom radial degrade
+            // 1) glow — bloom radial degrade (sprite pre-rendu)
             const glowR = baseR * (isHead ? isSea ? 7.5 : 8.5 : 4.5);
-            const g = ctx.createRadialGradient(xy[0], xy[1], 0, xy[0], xy[1], glowR);
-            g.addColorStop(0, `rgba(${palette},${(baseOp * 0.55).toFixed(3)})`);
-            g.addColorStop(0.4, `rgba(${palette},${(baseOp * 0.24).toFixed(3)})`);
-            g.addColorStop(1, `rgba(${palette},0)`);
-            ctx.fillStyle = g;
-            ctx.beginPath();
-            ctx.arc(xy[0], xy[1], glowR, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.globalAlpha = baseOp;
+            ctx.drawImage(isSea ? SPRITES.sea : SPRITES.land, xy[0] - glowR, xy[1] - glowR, glowR * 2, glowR * 2);
+            ctx.globalAlpha = 1;
 
             // 2) anneaux holographiques HUD (tete) — fines circonferences concentriques
             if (isHead) {
@@ -768,16 +819,11 @@ function Globe() {
         const pulse = (Math.sin(t / 1100 + i * 1.7) + 1) / 2;
         const k = hovered ? 1.5 : 1;
 
-        // glow bloom orange — meme teinte que les flux terrestres
+        // glow bloom orange — meme teinte que les flux terrestres (sprite)
         const glowR = (10 + pulse * 4) * k;
-        const g = ctx.createRadialGradient(xy[0], xy[1], 0, xy[0], xy[1], glowR);
-        g.addColorStop(0, `rgba(${C.fluxLand},${(0.42 + pulse * 0.16).toFixed(3)})`);
-        g.addColorStop(0.45, `rgba(${C.fluxLand},${(0.14 + pulse * 0.06).toFixed(3)})`);
-        g.addColorStop(1, `rgba(${C.fluxLand},0)`);
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(xy[0], xy[1], glowR, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.globalAlpha = 0.42 + pulse * 0.16;
+        ctx.drawImage(SPRITES.anchor, xy[0] - glowR, xy[1] - glowR, glowR * 2, glowR * 2);
+        ctx.globalAlpha = 1;
 
         // halo orange serre
         ctx.beginPath();
@@ -839,8 +885,22 @@ function Globe() {
       draw(now);
     }
     let rafId = 0;
+    // — garde-fou perf : si le rendu 50m depasse durablement le budget frame,
+    //   retour definitif au 110m (meme rendu qu'avant l'upgrade).
+    let drawEma = 0,
+      slowRun = 0;
     function frame(now) {
+      const t0 = performance.now();
       step(now);
+      drawEma = drawEma * 0.9 + (performance.now() - t0) * 0.1;
+      if (hiActive && !hiLocked) {
+        slowRun = drawEma > 13 ? slowRun + 1 : 0;
+        if (slowRun > 120 && topoLo) {
+          hiLocked = true;
+          hiActive = false;
+          applyTopo(topoLo);
+        }
+      }
       rafId = requestAnimationFrame(frame);
     }
 
