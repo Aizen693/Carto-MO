@@ -115,10 +115,10 @@ function SiteFooter() {
         </nav>
       </div>
       <div className="site-footer__bar">
-        <span>© 2026 Algor Int — Tous droits réservés</span>
+        <span>© 2026 Algor Int · Tous droits réservés</span>
         <span className="site-footer__legal">
-          <a href="/contact/">Mentions légales</a>
-          <a href="/contact/">Confidentialité</a>
+          <a href="/mentions-legales/">Mentions légales</a>
+          <a href="/confidentialite/">Confidentialité</a>
           <a href="/contact/">Contact</a>
         </span>
       </div>

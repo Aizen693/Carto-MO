@@ -112,12 +112,12 @@ function SiteFooter() {
     key: href
   }, label)))))), /*#__PURE__*/React.createElement("div", {
     className: "site-footer__bar"
-  }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 Algor Int \u2014 Tous droits r\xE9serv\xE9s"), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 Algor Int \xB7 Tous droits r\xE9serv\xE9s"), /*#__PURE__*/React.createElement("span", {
     className: "site-footer__legal"
   }, /*#__PURE__*/React.createElement("a", {
-    href: "/contact/"
+    href: "/mentions-legales/"
   }, "Mentions l\xE9gales"), /*#__PURE__*/React.createElement("a", {
-    href: "/contact/"
+    href: "/confidentialite/"
   }, "Confidentialit\xE9"), /*#__PURE__*/React.createElement("a", {
     href: "/contact/"
   }, "Contact"))));
