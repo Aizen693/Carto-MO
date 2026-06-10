@@ -7,7 +7,7 @@
 
 <link rel="icon" type="image/jpeg" href="../favicon.jpg" />
 
-<meta name="description" content="Algor Access — Débunkage. Remontée à la source des campagnes de désinformation, géolocalisation des relais, identification des acteurs. Cas démo navigable d'une campagne anonymisée." />
+<meta name="description" content="Algor Access · Débunkage. Remontée à la source des campagnes de désinformation, géolocalisation des relais, identification des acteurs. Cas démo navigable d'une campagne anonymisée." />
 <meta property="og:title" content="Débunkage : cartographie de la désinformation · Algor Access" />
 <meta property="og:description" content="Remonter à la source des campagnes hostiles. Cartographier les réseaux de relais. Exposer les acteurs. Cas démo navigable." />
 <meta property="og:type" content="website" />
@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet" href="../shared/home/styles.css?v=20260527a" />
+<link rel="stylesheet" href="../shared/home/styles.css?v=20260610a" />
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
 
 <style>
@@ -737,7 +737,7 @@
         <span class="page-hero__eyebrow">Débunkage · Algora Access</span>
         <h1 class="page-hero__title">Remonter à <em>la source</em> des campagnes hostiles</h1>
         <p class="page-hero__lede">
-          Quand une marque, une institution ou un dirigeant est ciblé par une désinformation coordonnée, nous retraçons la chaîne jusqu'au patient zéro et cartographions le réseau d'amplification — pour comprendre, démentir, et — si nécessaire — agir.
+          Quand une marque, une institution ou un dirigeant est ciblé par une désinformation coordonnée, nous retraçons la chaîne jusqu'au patient zéro et cartographions le réseau d'amplification, pour comprendre, démentir et, si nécessaire, agir.
         </p>
         <div class="page-hero__cta">
           <button class="btn btn--primary btn--lg" onclick="openSubmitModal()">Soumettre une campagne</button>
@@ -777,7 +777,7 @@
         <span class="eyebrow">Méthode</span>
         <h2 class="home-sec__title">Trois temps · <em>Veille, Genèse, Débunkage</em></h2>
         <p class="home-sec__intro">
-          Brique facturable indépendamment, cumulables selon vos besoins — diagnostic ponctuel, veille récurrente, ou intervention de crise.
+          Brique facturable indépendamment, cumulables selon vos besoins : diagnostic ponctuel, veille récurrente ou intervention de crise.
         </p>
       </div>
       <div class="deb-steps">
@@ -789,12 +789,12 @@
         <article class="deb-step">
           <div class="deb-step__num">02</div>
           <h3 class="deb-step__h">Remonter</h3>
-          <p class="deb-step__p">Cœur différenciant. Reconstruction de la chaîne de diffusion par recoupement timestamp et similarité textuelle. Identification du contenu source — le patient zéro — et géolocalisation du point de départ.</p>
+          <p class="deb-step__p">Cœur différenciant. Reconstruction de la chaîne de diffusion par recoupement timestamp et similarité textuelle. Identification du contenu source, le patient zéro, et géolocalisation du point de départ.</p>
         </article>
         <article class="deb-step">
           <div class="deb-step__num">03</div>
           <h3 class="deb-step__h">Exposer</h3>
-          <p class="deb-step__p">Volet offensif. Analyse des acteurs, mise en lumière des comptes et entités d'amplification. Vous disposez d'éléments factuels pour réagir, démentir et — si nécessaire — agir en justice.</p>
+          <p class="deb-step__p">Volet offensif. Analyse des acteurs, mise en lumière des comptes et entités d'amplification. Vous disposez d'éléments factuels pour réagir, démentir et, si nécessaire, agir en justice.</p>
         </article>
       </div>
     </div>
@@ -925,7 +925,7 @@
   <section class="cta-band">
     <div class="cta-band__wrap">
       <h2 class="cta-band__title">Votre organisation est ciblée ?</h2>
-      <p class="cta-band__text">Nous instruisons votre dossier sous 24h ouvrées — diagnostic, veille récurrente, ou intervention de crise.</p>
+      <p class="cta-band__text">Nous instruisons votre dossier sous 24h ouvrées : diagnostic, veille récurrente ou intervention de crise.</p>
       <div class="cta-band__row">
         <button class="btn btn--lg btn--on-violet" onclick="openSubmitModal()">Soumettre une campagne</button>
         <a class="btn btn--lg btn--ghost-violet" href="/contact/">Nous contacter</a>
@@ -1087,7 +1087,7 @@ function showIllustratifBanner(){
   if (document.getElementById('illustratif-banner')) return;
   const b = document.createElement('div');
   b.id = 'illustratif-banner';
-  b.textContent = "SCÉNARIO ILLUSTRATIF — données d'exemple, non vérifiées. À remplacer par les données réelles de veille. Page privée, non indexée.";
+  b.textContent = "SCÉNARIO ILLUSTRATIF : données d'exemple, non vérifiées. À remplacer par les données réelles de veille. Page privée, non indexée.";
   b.style.cssText = "position:sticky;top:0;z-index:9999;background:#8E2A2A;color:#fff;font:600 12px/1.4 'Plus Jakarta Sans',-apple-system,sans-serif;letter-spacing:.02em;padding:9px 16px;text-align:center;";
   document.body.prepend(b);
 }
@@ -1752,7 +1752,7 @@ window.submitLead = submitLead;
 init().catch(err => {
   console.error('[debunkage] init failed', err);
   const ml = document.getElementById('map-loader');
-  if (ml) ml.textContent = 'Erreur de chargement — recharger la page';
+  if (ml) ml.textContent = 'Erreur de chargement, recharger la page';
 });
 
 }); // end _whenMapboxReady
