@@ -535,16 +535,10 @@ function Globe() {
     // — load world topology asynchronously; sphere/graticule render immediately
     let land = null,
       borders = null;
-    function applyTopo(topo) {
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(r => r.json()).then(topo => {
       land = topojson.feature(topo, topo.objects.countries);
       borders = topojson.mesh(topo, topo.objects.countries, (a, b) => a !== b);
-    }
-    // Geometrie 50m = cotes & frontieres bien plus detaillees ; repli 110m si echec.
-    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json')
-      .then(r => r.json()).then(applyTopo)
-      .catch(() => fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
-        .then(r => r.json()).then(applyTopo)
-        .catch(() => {/* sphere-only fallback is acceptable */}));
+    }).catch(() => {/* sphere-only fallback is acceptable */});
     const graticule = d3.geoGraticule10();
     const sphere = {
       type: 'Sphere'
@@ -631,61 +625,8 @@ function Globe() {
       // flux terrestres — orange clair (glow holo)
       fluxSea: '39,174,192' // flux maritimes — cyan (glow holo)
     };
-
-    // — Intensité du rendu 3D (éclairage sphérique). Deux presets comparables :
-    //   défaut = 'subtil' ; ajouter ?globe=marque dans l'URL pour le rendu marqué.
-    const GLOBE_3D_MODE =
-      (new URLSearchParams(window.location.search).get('globe') === 'marque')
-        ? 'marque'
-        : (window.GLOBE_3D_MODE || 'subtil');
-    const I3D = GLOBE_3D_MODE === 'marque'
-      ? { highlight: 0.28, limb: 0.55, atmo: 0.55, spec: 0.42 }
-      : { highlight: 0.16, limb: 0.30, atmo: 0.30, spec: 0.24 };
-
-    // Halo atmosphérique autour du globe (dessiné HORS du clip circulaire).
-    function drawAtmosphere() {
-      const Rpx = proj.scale(), cx = W / 2, cy = H / 2;
-      const g = ctx.createRadialGradient(cx, cy, Rpx * 0.93, cx, cy, Rpx * 1.16);
-      g.addColorStop(0, 'rgba(120,180,230,0)');
-      g.addColorStop(0.55, `rgba(120,180,230,${(I3D.atmo * 0.9).toFixed(3)})`);
-      g.addColorStop(1, 'rgba(120,180,230,0)');
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(cx, cy, Rpx * 1.16, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Éclairage sphérique : reflet haut-gauche + assombrissement du limbe + spéculaire.
-    function drawLighting() {
-      const Rpx = proj.scale(), cx = W / 2, cy = H / 2;
-      // 1) lumière diffuse (haut-gauche) → donne le galbe
-      const hx = cx - Rpx * 0.32, hy = cy - Rpx * 0.38;
-      const hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, Rpx * 1.25);
-      hg.addColorStop(0, `rgba(255,255,255,${I3D.highlight.toFixed(3)})`);
-      hg.addColorStop(0.5, `rgba(255,255,255,${(I3D.highlight * 0.25).toFixed(3)})`);
-      hg.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = hg;
-      ctx.beginPath(); ctx.arc(cx, cy, Rpx, 0, Math.PI * 2); ctx.fill();
-      // 2) ombre au bord (limb darkening) → renforce la rondeur
-      const lg = ctx.createRadialGradient(cx, cy, Rpx * 0.66, cx, cy, Rpx);
-      lg.addColorStop(0, 'rgba(12,22,32,0)');
-      lg.addColorStop(1, `rgba(12,22,32,${I3D.limb.toFixed(3)})`);
-      ctx.fillStyle = lg;
-      ctx.beginPath(); ctx.arc(cx, cy, Rpx, 0, Math.PI * 2); ctx.fill();
-      // 3) reflet spéculaire serré
-      const sx = cx - Rpx * 0.34, sy = cy - Rpx * 0.42;
-      const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, Rpx * 0.42);
-      sg.addColorStop(0, `rgba(255,255,255,${I3D.spec.toFixed(3)})`);
-      sg.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = sg;
-      ctx.beginPath(); ctx.arc(sx, sy, Rpx * 0.42, 0, Math.PI * 2); ctx.fill();
-    }
-
     function draw(t) {
       ctx.clearRect(0, 0, W, H);
-
-      // halo atmospherique (hors clip — il deborde du globe)
-      drawAtmosphere();
 
       // Clip circulaire — le globe reste TOUJOURS rond, meme zoome (jamais un carre).
       ctx.save();
@@ -706,34 +647,12 @@ function Globe() {
       ctx.lineWidth = 0.55;
       ctx.stroke();
 
-      // land — fill + relief + borders
+      // land — fill + borders
       if (land) {
-        // 1) fond sable de base
         ctx.beginPath();
         path(land);
         ctx.fillStyle = C.land;
         ctx.fill();
-
-        // 2) relief : ombrage directionnel clippe sur les terres (lumiere haut-gauche)
-        ctx.save();
-        ctx.beginPath();
-        path(land);
-        ctx.clip();
-        const Rpx = proj.scale(), cxr = W / 2, cyr = H / 2;
-        const rl = GLOBE_3D_MODE === 'marque' ? 0.34 : 0.22;
-        const rg = ctx.createRadialGradient(
-          cxr - Rpx * 0.34, cyr - Rpx * 0.40, Rpx * 0.05,
-          cxr, cyr, Rpx * 1.25);
-        rg.addColorStop(0, `rgba(255,248,228,${rl.toFixed(3)})`); // versants eclaires
-        rg.addColorStop(0.5, 'rgba(255,248,228,0)');
-        rg.addColorStop(1, `rgba(86,66,38,${rl.toFixed(3)})`);    // ombre des reliefs
-        ctx.fillStyle = rg;
-        ctx.beginPath();
-        ctx.arc(cxr, cyr, Rpx, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-
-        // 3) cotes & frontieres (geometrie 50m = tres detaillee)
         ctx.beginPath();
         path(borders);
         ctx.strokeStyle = C.border;
@@ -747,9 +666,6 @@ function Globe() {
       ctx.strokeStyle = C.rim;
       ctx.lineWidth = 0.75;
       ctx.stroke();
-
-      // eclairage spherique 3D (par-dessus la carte, sous les flux pour qu'ils restent vifs)
-      drawLighting();
 
       // arc traces (back drop, very fine)
       arcs.forEach(arc => {
