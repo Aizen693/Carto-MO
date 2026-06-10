@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Illustration abstraite : réseau de sources collectées, croisées et cotées sur fond cartographique">
+  <!-- Illustration generee pour Algor Access — reseau de sources abstrait.
+       Aucune geographie reelle. Palette DA : violets B596E0/8B5FBF/6B3FA0,
+       bleu 5BB0F2, or c49a3c. Animations coupees si prefers-reduced-motion. -->
+  <defs>
+    <radialGradient id="bg" cx="32%" cy="38%" r="85%">
+      <stop offset="0%" stop-color="#1D1442"/>
+      <stop offset="55%" stop-color="#130D2C"/>
+      <stop offset="100%" stop-color="#0B0718"/>
+    </radialGradient>
+    <radialGradient id="vignette" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="78%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.42"/>
+    </radialGradient>
+    <linearGradient id="lien" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8B5FBF"/>
+      <stop offset="100%" stop-color="#5BB0F2"/>
+    </linearGradient>
+    <radialGradient id="haloViolet" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#B596E0" stop-opacity="0.50"/>
+      <stop offset="45%" stop-color="#B596E0" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#B596E0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haloBleu" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5BB0F2" stop-opacity="0.50"/>
+      <stop offset="45%" stop-color="#5BB0F2" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#5BB0F2" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="1.1"/>
+    </filter>
+    <style>
+      @media (prefers-reduced-motion: no-preference) {
+        .flow { animation: flow 9s linear infinite; }
+        @keyframes flow { to { stroke-dashoffset: -72; } }
+        .pulse  { animation: pulse 4.2s ease-in-out infinite; }
+        .pulse2 { animation: pulse 4.2s ease-in-out 2.1s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 0.18; } 50% { opacity: 0.65; } }
+        .scintille { animation: sc 5.6s ease-in-out infinite; }
+        @keyframes sc { 0%,100% { opacity: 0.55; } 50% { opacity: 1; } }
+      }
+    </style>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bg)"/>
+
+  <!-- graticule -->
+  <g stroke="#FFFFFF" stroke-width="1" opacity="0.04">
+    <path d="M100 0V600M200 0V600M300 0V600M400 0V600M500 0V600M600 0V600M700 0V600"/>
+    <path d="M0 100H800M0 200H800M0 300H800M0 400H800M0 500H800"/>
+  </g>
+  <g stroke="#B596E0" stroke-width="1" opacity="0.09">
+    <path d="M400 0V600"/><path d="M0 300H800"/>
+  </g>
+
+  <!-- territoire invente : littoral + masse douce -->
+  <path d="M-20 472 C 80 448 138 470 224 416 C 318 357 296 284 376 242 C 458 198 524 234 606 192 C 676 156 706 108 820 88 L 820 -20 L -20 -20 Z"
+        fill="#B596E0" opacity="0.05"/>
+  <path d="M-20 472 C 80 448 138 470 224 416 C 318 357 296 284 376 242 C 458 198 524 234 606 192 C 676 156 706 108 820 88"
+        fill="none" stroke="#B596E0" stroke-width="1.3" opacity="0.28" filter="url(#soft)"/>
+  <path d="M-20 472 C 80 448 138 470 224 416 C 318 357 296 284 376 242 C 458 198 524 234 606 192 C 676 156 706 108 820 88"
+        fill="none" stroke="#CDB6EE" stroke-width="0.6" opacity="0.35"/>
+
+  <!-- courbes de niveau organiques, massif ouest -->
+  <g fill="none" stroke="#8B5FBF">
+    <path d="M132 270 C 122 212 178 168 244 176 C 312 184 352 232 338 286 C 324 338 252 360 196 340 C 152 324 140 306 132 270 Z" opacity="0.16" stroke-width="1.1"/>
+    <path d="M160 268 C 154 224 196 192 248 198 C 302 205 332 242 320 282 C 308 320 254 336 212 320 C 178 308 166 296 160 268 Z" opacity="0.13" stroke-width="1"/>
+    <path d="M190 264 C 187 234 214 214 250 219 C 287 224 308 250 299 277 C 290 303 254 313 226 302 C 203 293 193 284 190 264 Z" opacity="0.10" stroke-width="1"/>
+  </g>
+  <!-- massif sud-est -->
+  <g fill="none" stroke="#8B5FBF">
+    <path d="M438 392 C 446 330 520 296 596 314 C 670 332 706 388 686 440 C 666 490 580 506 514 482 C 462 462 432 438 438 392 Z" opacity="0.15" stroke-width="1.1"/>
+    <path d="M470 392 C 477 346 532 322 590 336 C 645 350 672 392 657 430 C 642 466 578 478 528 460 C 489 445 466 426 470 392 Z" opacity="0.12" stroke-width="1"/>
+    <path d="M502 390 C 507 360 543 344 581 354 C 617 363 635 390 625 415 C 614 439 572 447 540 435 C 515 425 499 412 502 390 Z" opacity="0.09" stroke-width="1"/>
+  </g>
+
+  <!-- liens de collecte -->
+  <g fill="none" stroke="url(#lien)" stroke-width="1" opacity="0.40">
+    <path d="M212 262 Q 152 192 92 122"/>
+    <path d="M212 262 Q 182 222 162 182"/>
+    <path d="M212 262 Q 257 177 302 92"/>
+    <path d="M212 262 Q 147 282 82 302"/>
+    <path d="M212 262 Q 182 342 152 422"/>
+    <path d="M212 262 Q 237 322 262 382"/>
+    <path d="M518 332 Q 475 257 432 182"/>
+    <path d="M518 332 Q 445 317 372 302"/>
+    <path d="M518 332 Q 442 422 362 510"/>
+    <path d="M518 332 Q 540 407 562 480"/>
+    <path d="M518 332 Q 610 377 702 422"/>
+    <path d="M642 168 Q 662 130 682 92"/>
+    <path d="M642 168 Q 562 120 482 72"/>
+    <path d="M642 168 Q 692 215 742 262"/>
+  </g>
+
+  <!-- croisement entre hubs : flux animes -->
+  <g fill="none" stroke="#5BB0F2" stroke-width="1.2" stroke-linecap="round">
+    <path class="flow" d="M212 262 Q 366 272 518 332" stroke-dasharray="3 9" opacity="0.65"/>
+    <path class="flow" d="M518 332 Q 580 252 642 168" stroke-dasharray="3 9" opacity="0.55"/>
+    <path class="flow" d="M642 168 Q 424 196 212 262" stroke-dasharray="3 9" opacity="0.45"/>
+  </g>
+
+  <!-- sources satellites -->
+  <g fill="#C8B0EA">
+    <circle cx="92" cy="122" r="2.8" class="scintille"/>
+    <circle cx="162" cy="182" r="2.2"/>
+    <circle cx="302" cy="92" r="2.8"/>
+    <circle cx="82" cy="302" r="2.2" class="scintille"/>
+    <circle cx="152" cy="422" r="2.8"/>
+    <circle cx="262" cy="382" r="2.2"/>
+    <circle cx="432" cy="182" r="2.8" class="scintille"/>
+    <circle cx="372" cy="302" r="2.2"/>
+    <circle cx="362" cy="510" r="2.8"/>
+    <circle cx="562" cy="480" r="2.2" class="scintille"/>
+    <circle cx="702" cy="422" r="2.8"/>
+    <circle cx="682" cy="92" r="2.2"/>
+    <circle cx="482" cy="72" r="2.8" class="scintille"/>
+    <circle cx="742" cy="262" r="2.2"/>
+  </g>
+
+  <!-- hub A — collecte (violet) -->
+  <circle cx="212" cy="262" r="46" fill="url(#haloViolet)"/>
+  <circle cx="212" cy="262" r="4.8" fill="#E9DFF8"/>
+  <circle cx="212" cy="262" r="5.6" fill="none" stroke="#B596E0" stroke-width="1.4" opacity="0.9"/>
+  <circle cx="212" cy="262" r="12" fill="none" stroke="#B596E0" stroke-width="1" class="pulse"/>
+  <circle cx="212" cy="262" r="20" fill="none" stroke="#B596E0" stroke-width="0.7" class="pulse2"/>
+
+  <!-- hub B — croisement (bleu, croisee de visee) -->
+  <circle cx="518" cy="332" r="46" fill="url(#haloBleu)"/>
+  <circle cx="518" cy="332" r="4.4" fill="#E4F2FE"/>
+  <circle cx="518" cy="332" r="5.2" fill="none" stroke="#5BB0F2" stroke-width="1.4" opacity="0.9"/>
+  <circle cx="518" cy="332" r="13" fill="none" stroke="#5BB0F2" stroke-width="1" class="pulse2"/>
+  <path d="M518 313v-9M518 351v9M499 332h-9M537 332h9" stroke="#5BB0F2" stroke-width="1.1" opacity="0.75"/>
+
+  <!-- hub C — cotation (violet + diamant or) -->
+  <circle cx="642" cy="168" r="38" fill="url(#haloViolet)"/>
+  <circle cx="642" cy="168" r="4" fill="#E9DFF8"/>
+  <circle cx="642" cy="168" r="10" fill="none" stroke="#B596E0" stroke-width="0.9" class="pulse"/>
+  <rect x="-4.4" y="-4.4" width="8.8" height="8.8" transform="translate(660 148) rotate(45)" fill="#c49a3c" opacity="0.95"/>
+  <rect x="-2.4" y="-2.4" width="4.8" height="4.8" transform="translate(302 92) rotate(45)" fill="#c49a3c" opacity="0.6"/>
+
+  <!-- etiquettes mono -->
+  <g font-family="ui-monospace, Menlo, monospace" font-size="11" letter-spacing="1.5">
+    <text x="234" y="244" fill="#A99FC6">S-07 · COLLECTE</text>
+    <text x="540" y="316" fill="#8FB8DC">S-12 · CROISEMENT</text>
+    <text x="546" y="142" fill="#CDB6EE">S-23 · COTATION</text>
+    <text x="688" y="142" fill="#c49a3c">B2</text>
+  </g>
+
+  <!-- echelle fictive + cadre HUD -->
+  <g stroke="#9089AA" stroke-width="1" opacity="0.55">
+    <path d="M48 552h96M48 547v10M96 549v6M144 547v10"/>
+  </g>
+  <text x="48" y="538" font-family="ui-monospace, Menlo, monospace" font-size="9" letter-spacing="1.2" fill="#9089AA" opacity="0.8">ECHELLE INDICATIVE</text>
+  <g stroke="#B596E0" stroke-width="1.2" opacity="0.5" fill="none">
+    <path d="M24 44V24H44"/><path d="M756 24H776V44"/>
+    <path d="M776 556V576H756"/><path d="M44 576H24V556"/>
+  </g>
+
+  <rect width="800" height="600" fill="url(#vignette)"/>
+</svg>

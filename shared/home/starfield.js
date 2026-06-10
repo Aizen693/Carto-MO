@@ -14,6 +14,8 @@ function Starfield() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    // Respect de prefers-reduced-motion : une seule frame statique, pas de boucle.
+    const REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
     let W = 0,
       H = 0;
@@ -87,6 +89,7 @@ function Starfield() {
         ctx.fillRect(-d.r, -d.r, d.r * 2, d.r * 2);
         ctx.restore();
       }
+      if (REDUCED) return;
       t += 16.67;
       rafRef.current = requestAnimationFrame(draw);
     }

@@ -140,6 +140,10 @@ function Globe() {
     if (!canvas || !window.d3 || !window.topojson) return;
     const ctx = canvas.getContext('2d');
 
+    // Respect de prefers-reduced-motion : pas de rotation auto, flux figes.
+    // Le zoom au survol (initie par l'utilisateur) reste actif.
+    const REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
     // — projection
     const proj = d3.geoOrthographic()
       .clipAngle(90)
@@ -537,13 +541,13 @@ function Globe() {
         const cs = proj.scale();
         proj.scale(cs + (targetScale - cs) * ease);
       } else {
-        proj.rotate([ r[0] + (dt / period) * 360, r[1] + (0 - r[1]) * 0.04, 0 ]);
+        proj.rotate([ r[0] + (REDUCED ? 0 : (dt / period) * 360), r[1] + (0 - r[1]) * 0.04, 0 ]);
         const cs = proj.scale();
         if (Math.abs(cs - baseScale) > 0.4) {
           proj.scale(cs + (baseScale - cs) * 0.06);
         }
       }
-      draw(now);
+      draw(REDUCED ? 0 : now);
     }
     let rafId = 0;
     // — garde-fou perf : si le rendu 50m depasse durablement le budget frame,
@@ -616,10 +620,10 @@ function Globe() {
     canvas.addEventListener('click', onClick);
 
     // First paint synchronously
-    draw(performance.now());
+    draw(REDUCED ? 0 : performance.now());
     let topoPoll = 0;
     (function pollTopo() {
-      if (land) { draw(performance.now()); return; }
+      if (land) { draw(REDUCED ? 0 : performance.now()); return; }
       topoPoll = setTimeout(pollTopo, 120);
     })();
 

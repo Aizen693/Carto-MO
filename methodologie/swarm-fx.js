@@ -10,6 +10,8 @@
   }
 
   function init() {
+    // Respect de prefers-reduced-motion : pas de particules animees.
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var canvas = document.querySelector('.swarm-fx');
     if (!canvas) return;
     var ctx = canvas.getContext('2d');

@@ -339,6 +339,15 @@ function GetSection() {
         v.pause();
         v.currentTime = 0;
       }
+    },
+    onClick: e => {
+      if (g.auto) return;
+      const v = e.currentTarget.querySelector('video');
+      if (!v) return;
+      if (v.paused) v.play().catch(() => {});else {
+        v.pause();
+        v.currentTime = 0;
+      }
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "get-card__media"
@@ -374,7 +383,7 @@ function GetSection() {
     fill: "currentColor"
   }, /*#__PURE__*/React.createElement("path", {
     d: "M5 3.5v11l10-5.5z"
-  })), "Survoler pour voir")), /*#__PURE__*/React.createElement("div", {
+  })), "Voir l'aper\xE7u")), /*#__PURE__*/React.createElement("div", {
     className: "get-card__body"
   }, /*#__PURE__*/React.createElement("span", {
     className: "get-card__tag"

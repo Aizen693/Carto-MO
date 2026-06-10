@@ -266,7 +266,8 @@ function GetSection() {
           {HOME_GET.map((g, i) => (
             <article className="get-card get-card--solo" key={i}
               onMouseEnter={(e) => { if (g.auto) return; const v = e.currentTarget.querySelector('video'); if (v) v.play().catch(() => {}); }}
-              onMouseLeave={(e) => { if (g.auto) return; const v = e.currentTarget.querySelector('video'); if (v) { v.pause(); v.currentTime = 0; } }}>
+              onMouseLeave={(e) => { if (g.auto) return; const v = e.currentTarget.querySelector('video'); if (v) { v.pause(); v.currentTime = 0; } }}
+              onClick={(e) => { if (g.auto) return; const v = e.currentTarget.querySelector('video'); if (!v) return; if (v.paused) v.play().catch(() => {}); else { v.pause(); v.currentTime = 0; } }}>
               <div className="get-card__media">
                 <video poster={g.img} muted loop playsInline
                        preload={g.auto ? 'auto' : 'none'} autoPlay={g.auto || undefined}
@@ -279,7 +280,7 @@ function GetSection() {
                 {!g.auto && (
                   <span className="get-card__playhint" aria-hidden="true">
                     <svg width="13" height="13" viewBox="0 0 18 18" fill="currentColor"><path d="M5 3.5v11l10-5.5z" /></svg>
-                    Survoler pour voir
+                    Voir l'aperçu
                   </span>
                 )}
               </div>

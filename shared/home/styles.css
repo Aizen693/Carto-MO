@@ -26,7 +26,7 @@
   --violet-d:  #6B3FA0;          /* profond — couleur signature logo */
   --violet-bg: rgba(181,150,224,0.08); /* wash */
   --violet-bd: rgba(181,150,224,0.22); /* bordure accent */
-  --violet-grad: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #2E84D4 100%); /* degrade violet -> bleu */
+  --violet-grad: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #1E6FBE 100%); /* degrade violet -> bleu (bleu fonce : contraste AA sous texte blanc) */
 
   /* ─── Or — accent secondaire, heritage Algor Int ─── */
   --gold:    #c49a3c;
@@ -461,6 +461,12 @@ img, svg { display: block; max-width: 100%; }
   border: 1px solid var(--line-2);
 }
 .btn--ghost:hover { background: var(--surface); border-color: var(--ink-2); }
+/* Violet plein — action forte secondaire, sans concurrencer le gradient primaire */
+.btn--solid {
+  background: #6B3FA0;
+  color: #fff;
+}
+.btn--solid:hover { filter: brightness(1.1); transform: translateY(-1px); }
 .btn--lg { padding: 16px 28px; font-size: 16px; border-radius: var(--r-md); }
 
 /* Bouton neon — liseres lumineux qui s'allument au survol */
@@ -626,7 +632,7 @@ img, svg { display: block; max-width: 100%; }
 .hero__demo-zone {
   display: inline-block;
   font-weight: 700;
-  background: linear-gradient(120deg, #6B3FA0 0%, #5650C6 35%, #2E84D4 60%, #5650C6 85%, #6B3FA0 100%);
+  background: linear-gradient(120deg, #6B3FA0 0%, #5650C6 35%, #1E6FBE 60%, #5650C6 85%, #6B3FA0 100%);
   background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -693,7 +699,7 @@ img, svg { display: block; max-width: 100%; }
   width: 36px;
   height: 36px;
   color: #fff;
-  background: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #2E84D4 100%);
+  background: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #1E6FBE 100%);
   background-size: 160% auto;
   background-position: 0% center;
   border: none;
@@ -2364,7 +2370,7 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   border-top: 1px solid var(--line);
   max-width: 360px;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.06em;
   color: var(--ink-2);
 }
@@ -2521,6 +2527,7 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 .trust-band__value {
   font-family: var(--sans);
   font-size: 28px;
+  font-variant-numeric: tabular-nums;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -3538,4 +3545,13 @@ button:focus-visible,
 [tabindex]:focus-visible {
   outline: 2px solid var(--violet);
   outline-offset: 3px;
+}
+
+/* ─── Réduction des animations demandée par l'OS ─── */
+@media (prefers-reduced-motion: reduce) {
+  .hero__demo-zone,
+  .globe-search__ph-zone,
+  .media-frame--swarm .swarm-img {
+    animation: none;
+  }
 }

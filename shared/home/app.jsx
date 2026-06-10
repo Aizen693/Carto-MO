@@ -81,6 +81,7 @@ function App() {
                href="#" data-algor-login>
               {authLoggedIn ? 'Connecté' : 'Connexion'}
             </a>
+            <a className="site-cta" href="/offres/">Voir les offres</a>
           </div>
           <button className="site-burger" aria-label="Menu" aria-expanded={menuOpen}
                   onClick={() => setMenuOpen((o) => !o)}>
