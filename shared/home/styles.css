@@ -3502,6 +3502,16 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   transition: color 0.15s var(--ease);
 }
 .site-footer__link:hover { color: var(--violet); }
+/* Survol/clic des liens du footer accueil : degrade AlgorInt (override du blanc herite du footer sombre) */
+.site-footer__cols .site-footer__link:hover,
+.site-footer__cols .site-footer__link:focus,
+.site-footer__cols .site-footer__link:active {
+  background-image: var(--violet-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
 .site-footer__bar {
   max-width: 1180px; margin: 0 auto;
   padding: 22px 40px; border-top: 1px solid var(--line);
