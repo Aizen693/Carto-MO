@@ -3491,11 +3491,11 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 }
 .site-footer__brand .brand__name {
   font-size: 16px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink);
-  display: inline-flex; align-items: center; gap: 11px;
+  display: inline-flex; align-items: center; gap: 14px;
 }
 /* Logo AlgorInt dans le pied de page accueil (coherent avec le footer des rubriques) */
 .site-footer__brand .brand__name::before {
-  content: ''; width: 30px; height: 30px; border-radius: 7px;
+  content: ''; width: 48px; height: 48px; border-radius: 11px;
   background: url('../../favicon.jpg') center / cover; flex-shrink: 0;
 }
 .site-footer__tag {
