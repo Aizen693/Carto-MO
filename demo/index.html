@@ -689,6 +689,55 @@
     var cl=document.getElementById('nar-close'); if(cl) cl.onclick=function(){ clearNar(); setHint(false); box.classList.remove('show'); };
   }
 
+  // ─────── couverture premium : code pays -> theatre des 6 cartes ───────
+  // Afrique Maritime exclue volontairement (routes/detroits, pas de pays terrestre fiable).
+  var PREMIUM_ZONES = {
+    // Moyen-Orient
+    IQ:{name:'Moyen-Orient', url:'/moyen-orient/'}, SY:{name:'Moyen-Orient', url:'/moyen-orient/'},
+    LB:{name:'Moyen-Orient', url:'/moyen-orient/'}, YE:{name:'Moyen-Orient', url:'/moyen-orient/'},
+    // Sahel
+    ML:{name:'Sahel', url:'/sahel/'}, BF:{name:'Sahel', url:'/sahel/'}, NE:{name:'Sahel', url:'/sahel/'},
+    TD:{name:'Sahel', url:'/sahel/'}, MR:{name:'Sahel', url:'/sahel/'},
+    // RDC, Grands Lacs
+    CD:{name:'RDC, Grands Lacs', url:'/rdc/'}, RW:{name:'RDC, Grands Lacs', url:'/rdc/'},
+    BI:{name:'RDC, Grands Lacs', url:'/rdc/'}, UG:{name:'RDC, Grands Lacs', url:'/rdc/'},
+    // Madagascar
+    MG:{name:'Madagascar', url:'/madagascar/'},
+    // Asie du Sud
+    IN:{name:'Asie du Sud', url:'/asie-sud/'}, PK:{name:'Asie du Sud', url:'/asie-sud/'},
+    AF:{name:'Asie du Sud', url:'/asie-sud/'}
+  };
+  // Recherche directe d'un nom de theatre (alias) -> meme cible.
+  var PREMIUM_BY_LABEL = {
+    'sahel':{name:'Sahel', url:'/sahel/'}, 'moyen-orient':{name:'Moyen-Orient', url:'/moyen-orient/'},
+    'moyen orient':{name:'Moyen-Orient', url:'/moyen-orient/'}, 'rdc':{name:'RDC, Grands Lacs', url:'/rdc/'},
+    'grands lacs':{name:'RDC, Grands Lacs', url:'/rdc/'}, 'madagascar':{name:'Madagascar', url:'/madagascar/'},
+    'asie du sud':{name:'Asie du Sud', url:'/asie-sud/'}
+  };
+  function premiumFor(zone){
+    if (!zone) return null;
+    var cc = (zone.countryCode || zone.pk || '').toUpperCase();
+    if (cc && PREMIUM_ZONES[cc]) return PREMIUM_ZONES[cc];
+    var lbl = norm(zone.label || '');
+    if (PREMIUM_BY_LABEL[lbl]) return PREMIUM_BY_LABEL[lbl];
+    return null;
+  }
+  function updateNarrationCTA(zone){
+    var cta = document.getElementById('nar-cta');
+    if (!cta) return;
+    var name = (zone && zone.label) ? zone.label : (rawQ || 'cette zone');
+    var prem = premiumFor(zone);
+    if (prem){
+      cta.textContent = 'Débloquer ' + name + ' dans la carte ' + prem.name + ' →';
+      cta.href = '../offres/';
+      cta.title = 'Débloquer ' + name + ' dans le théâtre premium ' + prem.name;
+    } else {
+      cta.textContent = 'Demander un devis pour ' + name + ' →';
+      cta.href = '../contact/';
+      cta.title = 'Demander un devis pour une carte sur ' + name;
+    }
+  }
+
   // ─────────────────────────── boot ───────────────────────────
   function showFallback(q){
     var boot = document.getElementById('demo-boot');
@@ -708,6 +757,7 @@
       // titre
       document.getElementById('zone-title').textContent = zone.label;
       document.title = 'Démo ' + zone.label + ' · Algor Int';
+      updateNarrationCTA(zone);
 
       // Profil PRÉCIS par IA (acteurs + calques propres au pays), lancé EN PARALLÈLE
       // de la détection terre/mer pour ne pas additionner les temps d'attente.
