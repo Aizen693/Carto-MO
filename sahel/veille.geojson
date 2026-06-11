@@ -32,6 +32,22 @@
         "description": "Date: 10/06/2026\nPays: Mali - Tombouctou\nEvenement: Neutralisation d'un pick-up camouflé\nDetail: Les Forces Armées Maliennes (FAMa) en coopération avec l'Africa Corps ont neutralisé un pick-up camouflé à Tombouctou dans le cadre de la lutte contre le terrorisme.",
         "sources": "Bamada.net|https://bamada.net/lutte-contre-le-terrorisme-les-fama-neutralisent-un-pick-up-camoufle-a-tombouctou"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.370856,
+          44.677003
+        ]
+      },
+      "properties": {
+        "name": "CIVIL",
+        "type": "Humanitaire",
+        "description": "Date: 11/06/2026\nPays: Mali - Multiples régions\nEvenement: Conséquences humanitaires de la crise armée\nDetail: Les populations civiles du Mali font face aux conséquences directes de la violence armée avec des déplacements de population, des blessés et des villages isolés. L'humanitaire devient un rempart contre les effets de la crise.",
+        "sources": "Bamada.net|https://bamada.net/mali-quand-lhumanitaire-devient-un-rempart-contre-les-consequences-de-la-crise"
+      }
     }
   ]
 }
