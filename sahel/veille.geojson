@@ -216,6 +216,27 @@
         "image": "",
         "sources": "Instagram/Alerte Google|https://www.instagram.com/p/DZc7zyMDVA0/"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.041239,
+          16.278813
+        ]
+      },
+      "properties": {
+        "name": "FAMa",
+        "type": "Geopolitique",
+        "Acteur": "FAMa",
+        "Date": "2026-06-11",
+        "Pays + Lieu": "Mali - Gao",
+        "Type d'évènement": "Passation de commandement PCIAT-Est Opération Dougoukoloko",
+        "bilan": "Le Général de brigade Mamadou Massaoulé SAMAKÉ a cédé le commandement du PCIAT-Est au Colonel-major Karim TRAORÉ lors d'une cérémonie au camp 1 Firhoun Ag Alincar à Gao.",
+        "image": "http://bamada.net/wp-content/uploads/2026/06/Dougoukoloko-karim-traire-succede-masaoule.jpg",
+        "sources": "Bamada.net|https://bamada.net/pciat-est-de-loperation-dougoukoloko-le-colonel-major-karim-traore-prend-le-temoin-du-general-de-brigade-mamadou-massaoule-samake"
+      }
     }
   ]
 }
