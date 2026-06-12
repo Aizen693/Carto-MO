@@ -258,6 +258,27 @@
         "image": "",
         "sources": "Instagram - Alerte Google|https://www.instagram.com/reel/DZcWLmzDT21/"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.40754,
+          18.440836
+        ]
+      },
+      "properties": {
+        "name": "JNIM, FLA",
+        "type": "Geopolitique",
+        "Acteur": "JNIM, FLA",
+        "Date": "2026-04-30",
+        "Pays + Lieu": "Mali - Kidal",
+        "Type d'évènement": "Prise de contrôle de Kidal par le JNIM et le FLA",
+        "bilan": "Kidal est aux mains des rebelles du FLA et de leurs alliés djihadistes du JNIM depuis fin avril 2026. Cette capture représente un changement majeur dans le contrôle territorial au nord du Mali.",
+        "image": "",
+        "sources": "Instagram - Alerte Google|https://www.instagram.com/p/DZdDKZHCD54/"
+      }
     }
   ]
 }
