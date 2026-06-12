@@ -1081,7 +1081,7 @@ AlgorCalqueTimeline.init({
     var name = p.name || 'Point';
     var html = '<div class="popup-header"><div class="popup-dot-bar" style="background:#ff5252"></div><div class="popup-actor">' + esc(name) + '</div></div>';
     var body = '';
-    var skip = { name:1, type:1, sources:1, 'Coordonnée':1 };
+    var skip = { name:1, type:1, sources:1, 'Coordonnée':1, image:1 };
     Object.keys(p).forEach(function(k){
       if (skip[k]) return; var v = (p[k]==null?'':String(p[k])).trim(); if (!v) return;
       body += '<div class="popup-row"><span class="popup-key">' + esc(k) + '</span><span class="popup-val">' + esc(v) + '</span></div>';
