@@ -72,6 +72,26 @@
         "bilan": "Les jihadistes du JNIM et les indépendantistes du FLA (Front de Libération de l'Azawad) ont pris le contrôle de Kidal depuis fin avril 2026.",
         "sources": "Instagram|https://www.instagram.com/p/DZdDKZHCD54/"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.725887,
+          47.818044
+        ]
+      },
+      "properties": {
+        "name": "JNIM",
+        "type": "UNE valeur EXACTE parmi: Attaque, Embuscades, Incursion, Siege, Incident frontalier, Crise diplomatique, Economique, Geopolitique (choisis la plus proche)",
+        "Acteur": "JNIM",
+        "Date": "Mai/Juin 2026",
+        "Pays + Lieu": "Mali - Nationale",
+        "Type d'évènement": "Blocus économique du JNIM",
+        "bilan": "Le JNIM maintient un blocus qui crée une crise humanitaire et économique majeure au Mali, bloquant le commerce et les chaînes logistiques vers les côtes.",
+        "sources": "Instagram|https://www.instagram.com/p/DZc8mQejMsv/"
+      }
     }
   ]
 }
