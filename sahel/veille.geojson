@@ -112,6 +112,26 @@
         "bilan": "Les FAMa et l'Africa Corps ont effectué une opération conjointe dans la région de Sirauma contre les groupes djihadistes.",
         "sources": "Instagram|https://www.instagram.com/p/DZc7zyMDVA0/"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.041239,
+          16.278813
+        ]
+      },
+      "properties": {
+        "name": "FAMa",
+        "type": "UNE valeur EXACTE parmi: Attaque, Embuscades, Incursion, Siege, Incident frontalier, Crise diplomatique, Economique, Geopolitique (choisis la plus proche)",
+        "Acteur": "FAMa",
+        "Date": "2026-06-11",
+        "Pays + Lieu": "Mali - Gao",
+        "Type d'évènement": "Passation de commandement PCIAT-Est Opération Dougoukoloko",
+        "bilan": "Cérémonie de passation de commandement du Poste de Commandement Interarmées du Théâtre-Est de l'opération Dougoukoloko entre le Général Mamadou Massaoulé SAMAKÉ et le Colonel-major Karim TRAORÉ à Gao.",
+        "sources": "Bamada.net|https://bamada.net/pciat-est-de-loperation-dougoukoloko-le-colonel-major-karim-traoe-prend-le-temoin-du-general-de-brigade-mamadou-massaoule-samake"
+      }
     }
   ]
 }
