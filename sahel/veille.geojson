@@ -52,6 +52,26 @@
         "bilan": "Le JNIM a mené des attaques le 25 avril dernier contre Bamako. Ces attaques ont visé des installations gouvernementales et civiles.",
         "sources": "Instagram|https://www.instagram.com/reel/DZcWLmzDT21/"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.40754,
+          18.440836
+        ]
+      },
+      "properties": {
+        "name": "JNIM et FLA",
+        "type": "UNE valeur EXACTE parmi: Attaque, Embuscades, Incursion, Siege, Incident frontalier, Crise diplomatique, Economique, Geopolitique (choisis la plus proche)",
+        "Acteur": "JNIM et FLA",
+        "Date": "Avril/Mai 2026",
+        "Pays + Lieu": "Mali - Kidal",
+        "Type d'évènement": "Prise de Kidal par le JNIM et FLA",
+        "bilan": "Les jihadistes du JNIM et les indépendantistes du FLA (Front de Libération de l'Azawad) ont pris le contrôle de Kidal depuis fin avril 2026.",
+        "sources": "Instagram|https://www.instagram.com/p/DZdDKZHCD54/"
+      }
     }
   ]
 }
