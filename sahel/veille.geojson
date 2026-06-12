@@ -92,6 +92,26 @@
         "bilan": "Le JNIM maintient un blocus qui crée une crise humanitaire et économique majeure au Mali, bloquant le commerce et les chaînes logistiques vers les côtes.",
         "sources": "Instagram|https://www.instagram.com/p/DZc8mQejMsv/"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.747371,
+          14.278152
+        ]
+      },
+      "properties": {
+        "name": "FAMa et Africa Corps",
+        "type": "UNE valeur EXACTE parmi: Attaque, Embuscades, Incursion, Siege, Incident frontalier, Crise diplomatique, Economique, Geopolitique (choisis la plus proche)",
+        "Acteur": "FAMa et Africa Corps",
+        "Date": "Juin 2026",
+        "Pays + Lieu": "Mali - Sirauma",
+        "Type d'évènement": "Opération FAMa et Africa Corps",
+        "bilan": "Les FAMa et l'Africa Corps ont effectué une opération conjointe dans la région de Sirauma contre les groupes djihadistes.",
+        "sources": "Instagram|https://www.instagram.com/p/DZc7zyMDVA0/"
+      }
     }
   ]
 }
