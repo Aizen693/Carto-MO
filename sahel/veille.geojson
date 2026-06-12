@@ -321,6 +321,27 @@
         "image": "",
         "sources": "Instagram - Alerte Google|https://www.instagram.com/p/DZc8R2HiP9s/"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.041239,
+          16.278813
+        ]
+      },
+      "properties": {
+        "name": "FAMA",
+        "type": "Geopolitique",
+        "Acteur": "FAMA",
+        "Date": "2026-06-11",
+        "Pays + Lieu": "Mali - Gao",
+        "Type d'évènement": "Passation de commandement du PCIAT-Est",
+        "bilan": "Cérémonie de passation de commandement du Poste de Commandement Interarmées du Théâtre-Est (PCIAT-Est) entre le Général Mamadou Massaoulé Samaké et le Colonel-major Karim Traoré le 11 juin à Gao.",
+        "image": "http://bamada.net/wp-content/uploads/2026/06/Dougoukoloko-karim-traire-succede-masaoule.jpg",
+        "sources": "Bamada.net|https://bamada.net/pciat-est-de-loperation-dougoukoloko-le-colonel-major-karim-traore-prend-le-temoin-du-general-de-brigade-mamadou-massaoule-samake"
+      }
     }
   ]
 }
