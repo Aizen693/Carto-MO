@@ -237,6 +237,27 @@
         "image": "http://bamada.net/wp-content/uploads/2026/06/Dougoukoloko-karim-traire-succede-masaoule.jpg",
         "sources": "Bamada.net|https://bamada.net/pciat-est-de-loperation-dougoukoloko-le-colonel-major-karim-traore-prend-le-temoin-du-general-de-brigade-mamadou-massaoule-samake"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.000337,
+          12.649319
+        ]
+      },
+      "properties": {
+        "name": "JNIM",
+        "type": "Menaces",
+        "Acteur": "JNIM",
+        "Date": "2026-04-25",
+        "Pays + Lieu": "Mali - Bamako",
+        "Type d'évènement": "Attaques du JNIM contre Bamako",
+        "bilan": "Le JNIM a mené des attaques le 25 avril dernier. Le chef de la junte, Assimi Goïta, a été visé lors de ces opérations menées par les jihadistes du JNIM.",
+        "image": "",
+        "sources": "Instagram - Alerte Google|https://www.instagram.com/reel/DZcWLmzDT21/"
+      }
     }
   ]
 }
