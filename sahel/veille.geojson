@@ -1,1 +1,26 @@
-{"type":"FeatureCollection","features":[]}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.041239,
+          16.278813
+        ]
+      },
+      "properties": {
+        "name": "FAMa",
+        "type": "Geopolitique",
+        "Acteur": "FAMa",
+        "Date": "2026-06-11",
+        "Pays + Lieu": "Mali - Gao",
+        "Type d'évènement": "Passation de commandement PCIAT-Est",
+        "bilan": "Le Colonel-major Karim TRAORÉ a pris le commandement du Poste de Commandement Interarmées du Théâtre-Est de l'opération Dougoukoloko, succédant au Général de brigade Mamadou Massaoulé SAMAKÉ. La cérémonie s'est tenue sur la place d'armes du camp 1 Firhoun Ag Alincar à Gao.",
+        "image": "http://bamada.net/wp-content/uploads/2026/06/Dougoukoloko-karim-traire-succede-masaoule.jpg",
+        "sources": "Bamada.net|https://bamada.net/pciat-est-de-loperation-dougoukoloko-le-colonel-major-karim-traore-prend-le-temoin-du-general-de-brigade-mamadou-massaoule-samake"
+      }
+    }
+  ]
+}
