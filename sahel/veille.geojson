@@ -279,6 +279,27 @@
         "image": "",
         "sources": "Instagram - Alerte Google|https://www.instagram.com/p/DZdDKZHCD54/"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.699433,
+          13.286515
+        ]
+      },
+      "properties": {
+        "name": "JNIM",
+        "type": "Humanitaire",
+        "Acteur": "JNIM",
+        "Date": "2026-06-11",
+        "Pays + Lieu": "Mali - Mali (national)",
+        "Type d'évènement": "Blocus du JNIM causant une crise humanitaire et économique",
+        "bilan": "Le JNIM maintient un blocus qui génère une crise humanitaire et économique en gestation. Cette action bloque les échanges régionaux et brise la chaîne logistique du Mali aux côtes.",
+        "image": "",
+        "sources": "Instagram - Alerte Google|https://www.instagram.com/p/DZc8mQejMsv/"
+      }
     }
   ]
 }
