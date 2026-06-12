@@ -195,6 +195,27 @@
         "image": "",
         "sources": "Instagram/Alerte Google|https://www.instagram.com/p/DZc8mQejMsv/"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.747371,
+          14.278152
+        ]
+      },
+      "properties": {
+        "name": "FAMa, Africa Corps",
+        "type": "Combat",
+        "Acteur": "FAMa, Africa Corps",
+        "Date": "2026",
+        "Pays + Lieu": "Mali - Sirauma",
+        "Type d'évènement": "Opération conjointe FAMa-Africa Corps",
+        "bilan": "Les FAMa et l'Africa Corps ont effectué une nouvelle opération dans la région de Sirauma contre les groupes djihadistes.",
+        "image": "",
+        "sources": "Instagram/Alerte Google|https://www.instagram.com/p/DZc7zyMDVA0/"
+      }
     }
   ]
 }
