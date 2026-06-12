@@ -132,6 +132,27 @@
         "bilan": "Cérémonie de passation de commandement du Poste de Commandement Interarmées du Théâtre-Est de l'opération Dougoukoloko entre le Général Mamadou Massaoulé SAMAKÉ et le Colonel-major Karim TRAORÉ à Gao.",
         "sources": "Bamada.net|https://bamada.net/pciat-est-de-loperation-dougoukoloko-le-colonel-major-karim-traoe-prend-le-temoin-du-general-de-brigade-mamadou-massaoule-samake"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.000337,
+          12.649319
+        ]
+      },
+      "properties": {
+        "name": "JNIM",
+        "type": "Menaces",
+        "Acteur": "JNIM",
+        "Date": "2026-04-25",
+        "Pays + Lieu": "Mali - Bamako",
+        "Type d'évènement": "Attaques du JNIM contre Bamako",
+        "bilan": "Le JNIM a mené des attaques le 25 avril dernier contre Bamako, ciblant notamment les autorités de transition. Assimi Goïta était visé lors de ces opérations jihadistes.",
+        "image": "",
+        "sources": "Instagram/Alerte Google|https://www.instagram.com/reel/DZcWLmzDT21/"
+      }
     }
   ]
 }
