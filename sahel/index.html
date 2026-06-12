@@ -1106,8 +1106,10 @@ AlgorCalqueTimeline.init({
       m.addLayer({ id:'veille-ring', type:'circle', source:'veille-src', layout:{visibility:'none'}, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],4,4,8,7,12,10], 'circle-color':'transparent', 'circle-stroke-width':0.8, 'circle-stroke-color':colorExpr, 'circle-stroke-opacity':0.35 } });
       m.addLayer({ id:'veille-dots', type:'circle', source:'veille-src', layout:{visibility:'none'}, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],4,2.5,8,4,12,6], 'circle-color':colorExpr, 'circle-stroke-width':0.6, 'circle-stroke-color':'#0d1117' } });
       m.on('click','veille-dots',function(e){ new mapboxgl.Popup({ closeButton:true, maxWidth:'340px', className:'algor-popup' }).setLngLat(e.lngLat).setHTML(popupHTML(e.features[0].properties)).addTo(m); });
-      m.on('mouseenter','veille-dots',function(){ m.getCanvas().style.cursor='pointer'; });
-      m.on('mouseleave','veille-dots',function(){ m.getCanvas().style.cursor=''; });
+      var veilleHover = new mapboxgl.Popup({ closeButton:false, closeOnClick:false, maxWidth:'220px', className:'algor-popup veille-hover', offset:14 });
+      m.on('mouseenter','veille-dots',function(e){ m.getCanvas().style.cursor='pointer'; var im=e.features[0].properties.image; if(im){ veilleHover.setLngLat(e.lngLat).setHTML('<img src="'+im+'" referrerpolicy="no-referrer" onerror="this.parentNode.parentNode.style.display=\'none\'" style="display:block;width:200px;height:auto;border-radius:4px;">').addTo(m); } });
+      m.on('mousemove','veille-dots',function(e){ if(veilleHover.isOpen()) veilleHover.setLngLat(e.lngLat); });
+      m.on('mouseleave','veille-dots',function(){ m.getCanvas().style.cursor=''; veilleHover.remove(); });
     }).catch(function(e){ console.warn('[veille] load error', e); });
   }
   window.toggleVeille = function(){
