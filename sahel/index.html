@@ -1075,6 +1075,7 @@ AlgorCalqueTimeline.init({
 <script>
 (function(){
   var VEILLE_URL = 'https://raw.githubusercontent.com/Aizen693/Carto-MO/veille-data/sahel/veille.geojson';
+  (function(){ var s=document.createElement('style'); s.textContent='.mapboxgl-popup.veille-hover .mapboxgl-popup-content{padding:0;background:transparent;box-shadow:none;border-radius:0;}.mapboxgl-popup.veille-hover .mapboxgl-popup-tip{display:none;}'; document.head.appendChild(s); })();
   var colorExpr = ['match', ['get','type'], 'Attaque','#ff1744', 'Embuscades','#ff1744', 'Incursion','#ff1744', 'Siege','#d50000', 'Incident frontalier','#ff6d00', 'Crise diplomatique','#ff6d00', 'Economique','#ffd740', 'Geopolitique','#ab47bc', '#ff5252'];
   function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function popupHTML(p){
@@ -1107,7 +1108,7 @@ AlgorCalqueTimeline.init({
       m.addLayer({ id:'veille-dots', type:'circle', source:'veille-src', layout:{visibility:'none'}, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],4,2.5,8,4,12,6], 'circle-color':colorExpr, 'circle-stroke-width':0.6, 'circle-stroke-color':'#0d1117' } });
       m.on('click','veille-dots',function(e){ new mapboxgl.Popup({ closeButton:true, maxWidth:'340px', className:'algor-popup' }).setLngLat(e.lngLat).setHTML(popupHTML(e.features[0].properties)).addTo(m); });
       var veilleHover = new mapboxgl.Popup({ closeButton:false, closeOnClick:false, maxWidth:'220px', className:'algor-popup veille-hover', offset:14 });
-      m.on('mouseenter','veille-dots',function(e){ m.getCanvas().style.cursor='pointer'; var p=e.features[0].properties; var titre=((p.name?p.name+' · ':'')+(p["Type d'évènement"]||p.bilan||'')).trim()||(p.name||'Point'); var im=p.image; var html='<div style="width:220px">'+'<div style="font-size:12px;font-weight:500;color:#fff;padding:7px 9px 6px;line-height:1.35;">'+esc(titre)+'</div>'+(im?'<img src="'+esc(im)+'" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'" style="display:block;width:220px;height:138px;object-fit:cover;">':'')+'</div>'; veilleHover.setLngLat(e.lngLat).setHTML(html).addTo(m); });
+      m.on('mouseenter','veille-dots',function(e){ m.getCanvas().style.cursor='pointer'; var p=e.features[0].properties; var titre=((p.name?p.name+' · ':'')+(p["Type d'évènement"]||p.bilan||'')).trim()||(p.name||'Point'); var im=p.image; var html='<div style="width:230px;background:#0d1117;border:1px solid rgba(255,255,255,0.14);border-radius:6px;overflow:hidden;">'+'<div style="font-size:12px;font-weight:600;color:#fff;padding:8px 10px 7px;line-height:1.3;">'+esc(titre)+'</div>'+(im?'<img src="'+esc(im)+'" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'" style="display:block;width:230px;height:135px;object-fit:cover;">':'')+'</div>'; veilleHover.setLngLat(e.lngLat).setHTML(html).addTo(m); });
       m.on('mousemove','veille-dots',function(e){ if(veilleHover.isOpen()) veilleHover.setLngLat(e.lngLat); });
       m.on('mouseleave','veille-dots',function(){ m.getCanvas().style.cursor=''; veilleHover.remove(); });
     }).catch(function(e){ console.warn('[veille] load error', e); });
