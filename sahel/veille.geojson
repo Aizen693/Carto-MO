@@ -42,6 +42,27 @@
         "image": "https://www.aljazeera.com/wp-content/uploads/2026/06/AP25179547255393-1781337796.jpg?resize=1920%2C1440",
         "sources": "Al Jazeera English|https://www.aljazeera.com/news/2026/6/13/doctors-without-borders-investigation-finds-exploitation-by-staff-in-chad?traffic_source=rss"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.000337,
+          12.649319
+        ]
+      },
+      "properties": {
+        "name": "CIVIL INT",
+        "type": "Geopolitique",
+        "Acteur": "CIVIL INT",
+        "Date": "2026-06-13",
+        "Pays + Lieu": "Mali - Bamako",
+        "Type d'évènement": "Nomination d'Oumar Diarra au ministère de la Défense",
+        "bilan": "Le Brief de Jeune Afrique évoque la nomination d'Oumar Diarra au sein du ministère malien de la Défense, dans un contexte de rivalités pour la succession de Paul Biya au Cameroun et d'incertitudes au Sahara occidental.",
+        "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2026/05/21/jad20260521-match-franck-chantal-biya.jpg",
+        "sources": "JeuneAfrique.comGabon - JeuneAfrique.com|https://www.jeuneafrique.com/1803505/societe/la-guerre-des-biya-le-sahara-occidental-a-lheure-des-incertitudes-lespoir-fragile-duvira-les-5-infos-quil-ne-fallait-pas-manquer/"
+      }
     }
   ]
 }
