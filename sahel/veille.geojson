@@ -105,6 +105,27 @@
         "image": "https://www.maliweb.net/uploads/images/202606/image_870x580_6a2c437e27749.jpg",
         "sources": "L&apos;actualité au Mali en direct et en continu - Derniers messages|https://www.maliweb.net/international/niger-mariama-djibrine-alias-mayra-provisoirement-dechue-de-sa-nationalite-par-decret-presidentiel-3117516.html"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.013778,
+          16.787409
+        ]
+      },
+      "properties": {
+        "name": "CIVIL INT",
+        "type": "Geopolitique",
+        "Acteur": "CIVIL INT",
+        "Date": "2026-06-13",
+        "Pays + Lieu": "Mali - Tombouctou",
+        "Type d'évènement": "CPI ordonne réparations pour crimes d'Al Hassan",
+        "bilan": "La Chambre de première instance de la CPI estime à 65 202 victimes admissibles à réparations pour les crimes d'Al Hassan à Tombouctou, avec un montant d'environ 4,755 milliards FCFA. Les réparations sont principalement collectives.",
+        "image": "https://www.maliweb.net/uploads/images/202606/image_870x580_6a2c4485b18fa.jpg",
+        "sources": "L&apos;actualité au Mali en direct et en continu - Derniers messages|https://www.maliweb.net/societe/justice/mali-cpi-47-mrds-fcfa-en-reparations-des-crimes-dal-hassan-3117517.html"
+      }
     }
   ]
 }
