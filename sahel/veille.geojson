@@ -63,6 +63,27 @@
         "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2026/05/21/jad20260521-match-franck-chantal-biya.jpg",
         "sources": "JeuneAfrique.comGabon - JeuneAfrique.com|https://www.jeuneafrique.com/1803505/societe/la-guerre-des-biya-le-sahara-occidental-a-lheure-des-incertitudes-lespoir-fragile-duvira-les-5-infos-quil-ne-fallait-pas-manquer/"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.40754,
+          18.440836
+        ]
+      },
+      "properties": {
+        "name": "FAMa",
+        "type": "Attaque",
+        "Acteur": "FAMa",
+        "Date": "2023",
+        "Pays + Lieu": "Mali - Kidal",
+        "Type d'évènement": "Combats lors de la reconquête de Kidal",
+        "bilan": "Lors de la reconquête de Kidal en 2023, alors que le lieutenant-colonel Tanass Ag Ahmed était préfet, plusieurs de ses proches ont été signalés dans les combats contre les FAMa à Bourem, Anefif, Kidal et lors de l'attaque du camp militaire de Ber.",
+        "image": "http://bamada.net/wp-content/uploads/2025/01/soutien-armee-malienne-fama-soldat-militaire-logo.jpg",
+        "sources": "Bamada.net|https://bamada.net/lieutenant-colonel-tanass-ag-ahmed-sur-les-traces-dun-deserteur"
+      }
     }
   ]
 }
