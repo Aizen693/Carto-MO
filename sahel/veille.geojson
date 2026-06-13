@@ -21,6 +21,27 @@
         "image": "http://bamada.net/wp-content/uploads/2026/06/Dougoukoloko-karim-traire-succede-masaoule.jpg",
         "sources": "Bamada.net|https://bamada.net/pciat-est-de-loperation-dougoukoloko-le-colonel-major-karim-traore-prend-le-temoin-du-general-de-brigade-mamadou-massaoule-samake"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.835296,
+          9.831104
+        ]
+      },
+      "properties": {
+        "name": "CIVIL INT",
+        "type": "Incident",
+        "Acteur": "CIVIL INT",
+        "Date": "2026-06-13",
+        "Pays + Lieu": "Tchad - Tchad",
+        "Type d'évènement": "Enquête MSF révèle exploitation du personnel",
+        "bilan": "Médecins Sans Frontières a révélé une enquête interne faisant état d'exploitation de personnel au Tchad. L'organisation emploie des milliers de travailleurs locaux et étrangers dans plusieurs pays pour répondre aux crises.",
+        "image": "https://www.aljazeera.com/wp-content/uploads/2026/06/AP25179547255393-1781337796.jpg?resize=1920%2C1440",
+        "sources": "Al Jazeera English|https://www.aljazeera.com/news/2026/6/13/doctors-without-borders-investigation-finds-exploitation-by-staff-in-chad?traffic_source=rss"
+      }
     }
   ]
 }
