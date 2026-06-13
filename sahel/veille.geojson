@@ -84,6 +84,27 @@
         "image": "http://bamada.net/wp-content/uploads/2025/01/soutien-armee-malienne-fama-soldat-militaire-logo.jpg",
         "sources": "Bamada.net|https://bamada.net/lieutenant-colonel-tanass-ag-ahmed-sur-les-traces-dun-deserteur"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.547575,
+          9.618709
+        ]
+      },
+      "properties": {
+        "name": "CIVIL INT",
+        "type": "Geopolitique",
+        "Acteur": "CIVIL INT",
+        "Date": "2026-06-11",
+        "Pays + Lieu": "Niger - Niger",
+        "Type d'évènement": "Déchéance de nationalité de Mariama Djibrine",
+        "bilan": "Le Président du Niger, Général Abdourahamane Tiani, a signé un décret portant déchéance provisoire de nationalité à l'encontre de Mariama Djibrine, alias Mayra, sur la base de l'ordonnance n°2024-43 du 27 août 2024.",
+        "image": "https://www.maliweb.net/uploads/images/202606/image_870x580_6a2c437e27749.jpg",
+        "sources": "L&apos;actualité au Mali en direct et en continu - Derniers messages|https://www.maliweb.net/international/niger-mariama-djibrine-alias-mayra-provisoirement-dechue-de-sa-nationalite-par-decret-presidentiel-3117516.html"
+      }
     }
   ]
 }
