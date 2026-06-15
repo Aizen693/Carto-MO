@@ -165,9 +165,12 @@ main         { view-transition-name: page-main; }
 
 /* — Fallback (Safari/Firefox sans View Transitions) : fade-in du contenu UNIQUEMENT,
    pas du body entier — le header reste stable visuellement entre les pages. */
+/* Opacite uniquement : un transform sur <main> (meme translateY(0) via fill-mode both)
+   ferait de main le bloc conteneur des descendants position:fixed (modals, overlays)
+   et casserait leur centrage plein ecran. */
 @keyframes mainFadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 main {
   animation: mainFadeIn 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;

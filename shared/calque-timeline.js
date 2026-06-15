@@ -257,9 +257,7 @@
     function updateCounter() {
       var el = document.getElementById('event-counter');
       if (!el) return;
-      var n = countFiltered();
-      el.textContent = n.toLocaleString() + ' événements';
-      el.style.display = 'block';
+      el.style.display = 'none';
     }
 
     // Filtre par acteur (legende) — ANDe avec le filtre de periode sur les couches de points

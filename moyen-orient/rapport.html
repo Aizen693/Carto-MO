@@ -6,27 +6,28 @@
 <title>Algor Int — Rapport analytique MO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script type="module" src="../shared/site-auth.js?v=20260608d"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root {
-  --bg: #111214;
-  --bg1: #161819;
-  --bg2: #1b1d1f;
-  --bg3: #212326;
-  --ln: rgba(255,255,255,0.07);
-  --ln1: rgba(255,255,255,0.12);
-  --tx: #c8cdd6;
-  --tx1: #727a87;
-  --tx2: #3e444e;
-  --txh: #e8ecf2;
-  --ac: #c49a3c;
-  --ach: #e0b452;
-  --acd: rgba(196,154,60,0.09);
-  --acb: rgba(196,154,60,0.20);
-  --bc: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --b: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  /* DA unifiee Algor Int : clair #F4F2F8 / violet #6B3FA0 / Plus Jakarta Sans (aligne tokens.css) */
+  --bg: #F4F2F8;
+  --bg1: #FFFFFF;
+  --bg2: #FFFFFF;
+  --bg3: #F1EDF7;
+  --ln: rgba(24,20,40,0.07);
+  --ln1: rgba(24,20,40,0.12);
+  --tx: #3A3450;
+  --tx1: #6E6982;
+  --tx2: #A19DB0;
+  --txh: #181428;
+  --ac: #6B3FA0;
+  --ach: #5A2F8C;
+  --acd: rgba(107,63,160,0.08);
+  --acb: rgba(107,63,160,0.22);
+  --bc: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --b: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --serif: 'Instrument Serif', Georgia, serif;
   --m: 'JetBrains Mono', 'Courier New', monospace;
 }
@@ -439,8 +440,8 @@ const actorData = {
   'Kataib Sayyid':    { data: [0,0,0,0,1,0,0,0,0,0], color: '#e07a5f' },
 };
 
-const gridColor = 'rgba(255,255,255,0.06)';
-const tickColor = 'rgba(255,255,255,0.4)';
+const gridColor = 'rgba(24,20,40,0.08)';
+const tickColor = 'rgba(58,52,80,0.7)';
 
 // Build legend
 const leg1 = document.getElementById('legend-1');
@@ -500,7 +501,7 @@ new Chart(document.getElementById('chart-donut'), {
   type: 'doughnut',
   data: {
     labels: pieLabels,
-    datasets: [{ data: pieValues, backgroundColor: pieColors, borderColor: '#111214', borderWidth: 2 }],
+    datasets: [{ data: pieValues, backgroundColor: pieColors, borderColor: '#FFFFFF', borderWidth: 2 }],
   },
   options: {
     responsive: true, maintainAspectRatio: false,
