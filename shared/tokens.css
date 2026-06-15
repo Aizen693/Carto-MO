@@ -30,6 +30,7 @@
   --ach:   #5A2F8C;  /* violet hover */
   --acd:   rgba(107,63,160,0.08);  /* violet-soft fill */
   --acb:   rgba(107,63,160,0.22);  /* violet-soft border */
+  --violet-grad: linear-gradient(130deg, #6B3FA0 0%, #5650C6 48%, #1E6FBE 100%); /* degrade violet -> bleu (marque, aligne homepage) */
 
   /* ── Status ──────────────────────────────────────────── */
   --err:   #B83A4A;  /* erreur */
