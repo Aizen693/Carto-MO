@@ -276,12 +276,13 @@ html, body {
 
 /* Outils rows */
 .sb-tool-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 12px; font: 400 9px/1 var(--m); color: var(--tx1);
-  cursor: pointer; user-select: none; transition: color var(--mo-fast);
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 14px; font: 600 13px/1.25 var(--bc); color: var(--txh);
+  cursor: pointer; user-select: none; transition: color var(--mo-fast), background var(--mo-fast);
+  margin: 2px 8px; border-radius: 9px;
 }
-.sb-tool-row:hover { color: var(--ach); }
-.sb-tool-icon { font-size: 11px; width: 16px; text-align: center; }
+.sb-tool-row:hover { color: var(--ach); background: var(--acd); }
+.sb-tool-icon { font-size: 15px; width: 20px; text-align: center; color: var(--ac); }
 
 /* Menu button in header */
 #btn-sidebar {
