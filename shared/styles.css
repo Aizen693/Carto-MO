@@ -177,15 +177,15 @@ html, body {
 /* Legend items inside sidebar */
 .legend-group { padding: 0 12px; }
 .legend-group-title {
-  font: 600 7px/1 var(--bc); letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--tx2); padding: 5px 0 3px;
+  font: 700 9px/1 var(--bc); letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--tx1); padding: 6px 0 4px;
   border-top: 1px solid var(--bg3); margin-top: 2px;
 }
 .legend-group:first-child .legend-group-title { border-top: none; margin-top: 0; }
 .legend-item {
   display: flex; align-items: center; gap: 8px;
-  font: 300 9px/1 var(--b); color: var(--tx1);
-  margin-bottom: 3px; padding: 4px 6px;
+  font: 500 11px/1.2 var(--b); color: var(--tx);
+  margin-bottom: 3px; padding: 5px 6px;
   cursor: pointer; transition: color var(--mo-fast); user-select: none;
 }
 .legend-item:hover { color: var(--txh); }
@@ -200,20 +200,18 @@ html, body {
   gap: 10px; margin: 3px 8px; border-radius: 9px;
   transition: background var(--mo-base), color var(--mo-base);
 }
-/* Calque OFF = texte noir bien visible ; ON = degrade violet->bleu marque */
+/* Calque OFF = texte noir lisible ; ON = texte violet gras + toggle en degrade (pas de rectangle) */
 .sb-layer-row:has(.sb-toggle.on),
 .sb-layer-row.is-on {
-  background: var(--violet-grad);
-  color: #fff;
+  background: transparent;
+  color: var(--ach);
+  font-weight: 700;
 }
-/* Toggle sur ligne active : piste blanche translucide pour contraster sur le degrade */
-.sb-layer-row:has(.sb-toggle.on) .sb-toggle.on,
-.sb-layer-row.is-on .sb-toggle.on { background: rgba(255,255,255,0.38); }
 .sb-toggle {
   position: relative; width: 36px; height: 19px; background: var(--bg4);
   border-radius: 10px; cursor: pointer; transition: background var(--mo-base); flex-shrink: 0;
 }
-.sb-toggle.on { background: var(--ac); }
+.sb-toggle.on { background: var(--violet-grad); }
 .sb-toggle::after {
   content: ''; position: absolute; top: 2px; left: 2px;
   width: 15px; height: 15px; background: #fff; border-radius: 50%;
@@ -228,9 +226,9 @@ html, body {
   margin-left: 6px;
   padding: 1px 5px;
   background: var(--bg3);
-  color: var(--tx2);
-  font: 400 7px/1 var(--m);
-  letter-spacing: 0.08em;
+  color: var(--tx1);
+  font: 600 8px/1 var(--bc);
+  letter-spacing: 0.05em;
   border: 1px solid var(--ln);
 }
 .sb-sub-badge.has-active { color: var(--ac); border-color: var(--acb); }
@@ -244,7 +242,7 @@ html, body {
 .sb-sublayers.open { max-height: 280px; }
 .sb-sublayer-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 12px 8px 22px; font: 400 8px/1 var(--m); color: var(--tx1);
+  padding: 9px 12px 9px 24px; font: 500 11px/1.2 var(--bc); color: var(--tx);
   border-top: 1px solid rgba(255,255,255,0.03);
   gap: 8px;
 }
@@ -259,7 +257,7 @@ html, body {
 }
 .sb-style-btn {
   flex: 1; background: none; border: 1px solid var(--ln); color: var(--tx2);
-  font: 400 7px/1 var(--m); padding: 5px 0; cursor: pointer;
+  font: 600 9px/1 var(--bc); padding: 7px 0; cursor: pointer;
   text-transform: uppercase; letter-spacing: 0.06em; transition: all var(--mo-fast);
 }
 .sb-style-btn:hover { color: var(--tx1); border-color: var(--tx2); }
@@ -268,10 +266,10 @@ html, body {
 /* Label de categorie dans la sidebar (Style carte, Outils, etc.) */
 .sb-cat-label {
   padding: 8px 12px 3px;
-  font: 600 7px/1 var(--bc);
-  letter-spacing: 0.14em;
+  font: 700 9px/1 var(--bc);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--tx2);
+  color: var(--tx1);
   border-top: 1px solid var(--ln);
 }
 .sb-cat-label:first-child { border-top: none; }
