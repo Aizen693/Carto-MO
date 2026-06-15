@@ -16,7 +16,7 @@ window.algorReady = new Promise(function (res) {
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tmcw/togeojson@5/dist/togeojson.umd.js"></script>
-<link rel="stylesheet" href="../shared/styles.css?v=20260615ui2">
+<link rel="stylesheet" href="../shared/styles.css?v=20260615ui3">
 <style>
 .sb-cat-label {
   padding:8px 12px 3px;
@@ -189,12 +189,6 @@ window.algorReady = new Promise(function (res) {
       <div class="sb-tool-row" id="btn-handtrack" onclick="toggleHandTrack();toggleSidebar()"><span class="sb-tool-icon">&#x270B;</span> Hand tracking</div>
       <a class="sb-tool-row" href="./rapport.html" style="text-decoration:none;color:var(--ac)"><span class="sb-tool-icon">&#x25C7;</span> Rapports</a>
     </div>
-
-    <div class="sb-section-header" onclick="toggleSbSection(this)">
-      <span class="sb-section-title">Evenements <span id="sb-chart-count" style="color:var(--ac);margin-left:4px">—</span></span>
-      <span class="sb-section-arrow">&#x25B2;</span>
-    </div>
-    <div class="sb-section-body collapsed" id="sb-chart-body"></div>
   </div>
 </div>
 
