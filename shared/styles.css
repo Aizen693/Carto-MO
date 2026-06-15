@@ -50,10 +50,7 @@ html, body {
   padding: 0 12px; border-right: 1px solid var(--ln);
   gap: 8px; flex-shrink: 0;
 }
-.hdr-cell-label {
-  font: 700 9px/1 var(--bc); color: var(--tx1);
-  letter-spacing: 0.1em; text-transform: uppercase;
-}
+.hdr-cell-label { display: none; }
 #period-badge {
   font: 700 13px/1 var(--bc); letter-spacing: 0.01em;
   background: var(--violet-grad);

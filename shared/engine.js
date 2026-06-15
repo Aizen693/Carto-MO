@@ -368,8 +368,7 @@ function updateBadge() {
   if (!b) return;
   if (!activePeriods.size) b.textContent = 'Aucune période';
   else if (activePeriods.size === PERIODS.length) b.textContent = ZONE_CONFIG.BADGE_ALL_TEXT;
-  else if (activePeriods.size === 1) b.textContent = PERIODS[[...activePeriods][0]].label;
-  else b.textContent = activePeriods.size + ' périodes';
+  else b.textContent = [...activePeriods].sort((x, y) => x - y).map(i => PERIODS[i].label).join('/');
 }
 
 function toggleActorFilter(name) {
