@@ -51,16 +51,17 @@ html, body {
   gap: 8px; flex-shrink: 0;
 }
 .hdr-cell-label {
-  font-family: var(--m); font-size: 7px; color: var(--tx2);
-  letter-spacing: 0.14em; text-transform: uppercase;
+  font: 700 9px/1 var(--bc); color: var(--tx1);
+  letter-spacing: 0.1em; text-transform: uppercase;
 }
 #period-badge {
-  font-family: var(--m); font-size: 9px; font-weight: 400;
-  color: var(--ach); letter-spacing: 0.07em;
+  font: 700 13px/1 var(--bc); letter-spacing: 0.01em;
+  background: var(--violet-grad);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 #event-counter {
-  font-family: var(--m); font-size: 9px; color: var(--tx1);
-  letter-spacing: 0.05em; display: none;
+  font: 600 11px/1 var(--bc); color: var(--txh);
+  letter-spacing: 0.01em; display: none;
 }
 .hdr-spacer { flex: 1; }
 .hdr-controls {
@@ -68,8 +69,8 @@ html, body {
   border-left: 1px solid var(--ln);
 }
 .hbtn {
-  font-family: var(--m); font-size: 8px;
-  color: var(--tx2); background: transparent;
+  font: 700 11px/1 var(--bc);
+  color: var(--txh); background: transparent;
   border: none; border-left: 1px solid var(--ln);
   padding: 0 12px; cursor: pointer;
   transition: color var(--mo-fast), background var(--mo-fast);
