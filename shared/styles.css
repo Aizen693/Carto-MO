@@ -286,13 +286,13 @@ html, body {
 
 /* Menu button in header */
 #btn-sidebar {
-  background: var(--acd); border: none; border-right: 1px solid var(--ln);
-  color: var(--ac); font: 700 12px/1 var(--bc); padding: 0 18px;
+  background: transparent; border: none; border-right: 1px solid var(--ln);
+  color: var(--txh); font: 700 12px/1 var(--bc); padding: 0 18px;
   cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase;
   display: flex; align-items: center; gap: 10px; height: 100%;
   transition: color var(--mo-fast), background var(--mo-fast);
 }
-#btn-sidebar:hover { color: #fff; background: var(--ac); }
+#btn-sidebar:hover { color: #fff; background: var(--violet-grad); }
 #btn-sidebar .hamburger { font-size: 17px; line-height: 1; }
 
 #chart-drawer { display: none !important; }
