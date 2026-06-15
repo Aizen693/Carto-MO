@@ -269,6 +269,8 @@ const ZONE_CONFIG = {
     return MAP[n] !== undefined ? MAP[n] : n;
   },
   PERIODS: [
+    { label: 'Déc 01-15', start: '2025-12-01', end: '2025-12-15' },
+    { label: 'Déc 16-31', start: '2025-12-16', end: '2025-12-31' },
     { label: 'Jan 01-15', file: '2026-jan-01-15.geojson' },
     { label: 'Jan 16-31', file: '2026-jan-16-31.geojson' },
     { label: 'Fev 01-14', file: '2026-fev-01-14.geojson' },
@@ -292,7 +294,7 @@ const ZONE_CONFIG = {
   MAP_BEARING: -8,
   MAP_ZONES: null,
   SEARCH_BBOX: [-20, 2, 25, 30],
-  BADGE_ALL_TEXT: 'Toutes · Jan–Juin 2026',
+  BADGE_ALL_TEXT: 'Toutes · Déc 2025–Juin 2026',
   TUTORIAL_KEY: 'algor-tutorial-sahel-seen',
   // Pas de points isoles par periode — slider/play pilote par les dates des calques
   CALQUES_ONLY: true,
