@@ -288,6 +288,7 @@ html, body {
 #btn-sidebar {
   background: transparent; border: none; border-right: 1px solid var(--ln);
   color: var(--txh); font: 700 12px/1 var(--bc); padding: 0 18px;
+  margin: 0 0 0 -14px; align-self: stretch;
   cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase;
   display: flex; align-items: center; gap: 10px; height: 100%;
   transition: color var(--mo-fast), background var(--mo-fast);
