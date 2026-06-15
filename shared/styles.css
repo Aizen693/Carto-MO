@@ -47,9 +47,11 @@ html, body {
 .hdr-controls:empty { display: none; }
 .hdr-cell {
   display: flex; align-items: center;
-  padding: 0 12px; border-right: 1px solid var(--ln);
+  padding: 0 12px;
   gap: 8px; flex-shrink: 0;
 }
+/* Cellule du compteur vide (event-counter masque) : pas de cellule fantome */
+.hdr-cell:has(> #event-counter) { display: none; }
 .hdr-cell-label { display: none; }
 #period-badge {
   font: 700 13px/1 var(--bc); letter-spacing: 0.01em;
