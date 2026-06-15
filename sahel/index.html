@@ -276,6 +276,11 @@ const ZONE_CONFIG = {
     { label: 'Mars 01-15', file: '2026-mars-01-15.geojson' },
     { label: 'Mars 16-31', file: '2026-mars-16-31.geojson' },
     { label: 'Avril 01-15', file: '2026-avr-01-15.geojson' },
+    { label: 'Avril 16-30', start: '2026-04-16', end: '2026-04-30' },
+    { label: 'Mai 01-15', start: '2026-05-01', end: '2026-05-15' },
+    { label: 'Mai 16-31', start: '2026-05-16', end: '2026-05-31' },
+    { label: 'Juin 01-15', start: '2026-06-01', end: '2026-06-15' },
+    { label: 'Juin 16-30', start: '2026-06-16', end: '2026-06-30' },
   ],
   STYLES: {
     standard:  'mapbox://styles/mapbox/standard',
@@ -287,7 +292,7 @@ const ZONE_CONFIG = {
   MAP_BEARING: -8,
   MAP_ZONES: null,
   SEARCH_BBOX: [-20, 2, 25, 30],
-  BADGE_ALL_TEXT: 'Toutes · Jan–Avril 2026',
+  BADGE_ALL_TEXT: 'Toutes · Jan–Juin 2026',
   TUTORIAL_KEY: 'algor-tutorial-sahel-seen',
   // Pas de points isoles par periode — slider/play pilote par les dates des calques
   CALQUES_ONLY: true,
@@ -297,7 +302,7 @@ const ZONE_CONFIG = {
 </script>
 <script type="module" src="../shared/firebase-loader.js?v=20260608d"></script>
 <script type="module" src="../shared/brief-ia.js?v=20260610a"></script>
-<script src="../shared/engine.js?v=20260608d"></script>
+<script src="../shared/engine.js?v=20260615a"></script>
 <script>
 /* ── FACTORY CALQUES SUPERPOSABLES ── */
 (function() {

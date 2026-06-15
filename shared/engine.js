@@ -416,6 +416,8 @@ function __loadZoneGeoJson(file) {
 
 async function loadKML(index) {
   if (loadedData[index]) return loadedData[index];
+  // Periode sans fichier (plage start/end explicite, calque-only) : rien a charger
+  if (!PERIODS[index] || !PERIODS[index].file) return null;
   try {
     let geo, descMap = {};
     const raw = await __loadZoneGeoRaw(PERIODS[index].file, '?v=20260422b');
