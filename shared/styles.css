@@ -286,14 +286,14 @@ html, body {
 
 /* Menu button in header */
 #btn-sidebar {
-  background: none; border: none; border-right: 1px solid var(--ln);
-  color: var(--tx2); font: 500 8px/1 var(--m); padding: 0 12px;
-  cursor: pointer; letter-spacing: 0.09em; text-transform: uppercase;
-  display: flex; align-items: center; gap: 8px; height: 100%;
+  background: var(--acd); border: none; border-right: 1px solid var(--ln);
+  color: var(--ac); font: 700 12px/1 var(--bc); padding: 0 18px;
+  cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 10px; height: 100%;
   transition: color var(--mo-fast), background var(--mo-fast);
 }
-#btn-sidebar:hover { color: var(--txh); background: var(--bg2); }
-#btn-sidebar .hamburger { font-size: 12px; line-height: 1; }
+#btn-sidebar:hover { color: #fff; background: var(--ac); }
+#btn-sidebar .hamburger { font-size: 17px; line-height: 1; }
 
 #chart-drawer { display: none !important; }
 #chart-tab {
@@ -355,18 +355,20 @@ html, body {
 }
 #period-buttons {
   display: flex; border-bottom: 1px solid var(--ln);
+  overflow-x: auto; scrollbar-width: none;
 }
+#period-buttons::-webkit-scrollbar { height: 0; }
 .period-btn {
-  font-family: var(--m); font-size: 8px; color: var(--tx2);
+  font: 600 12px/1 var(--bc); color: var(--tx1);
   background: transparent; border: none; border-right: 1px solid var(--ln);
-  padding: 7px 0; cursor: pointer; transition: all var(--mo-fast);
-  letter-spacing: 0.04em; flex: 1; text-align: center;
+  padding: 11px 14px; cursor: pointer; transition: all var(--mo-fast);
+  letter-spacing: 0.02em; flex: 1 0 auto; min-width: 80px; text-align: center; white-space: nowrap;
 }
 .period-btn:last-child { border-right: none; }
-.period-btn:hover { color: var(--tx1); background: var(--bg2); }
+.period-btn:hover { color: var(--ach); background: var(--bg2); }
 .period-btn.active {
-  color: var(--ach); background: var(--acd);
-  border-bottom: 1px solid var(--ac); margin-bottom: -1px;
+  color: var(--ac); background: var(--acd); font-weight: 700;
+  border-bottom: 2px solid var(--ac); margin-bottom: -1px;
 }
 #btn-row { display: flex; align-items: center; gap: 0; padding: 5px 12px; }
 #btn-play {
@@ -380,7 +382,7 @@ html, body {
 #btn-play.playing { color: var(--err); border-color: rgba(168,64,64,0.25); }
 
 #slider-wrap { flex: 1; display: flex; align-items: center; gap: 9px; }
-.yr { font: 400 8px/1 var(--m); color: var(--tx2); flex-shrink: 0; }
+.yr { font: 600 11px/1 var(--bc); color: var(--tx1); flex-shrink: 0; }
 #slider-inner { flex: 1; }
 #slider-label { display: none; }
 #timeline-slider {
@@ -393,10 +395,10 @@ html, body {
   cursor: ew-resize; border-radius: 0;
 }
 #btn-all {
-  font-family: var(--m); font-size: 8px; color: var(--tx2);
-  background: transparent; border: 1px solid var(--ln);
-  padding: 3px 9px; cursor: pointer; height: 24px; transition: all var(--mo-fast);
-  letter-spacing: 0.08em; text-transform: uppercase; margin-left: 10px; white-space: nowrap;
+  font: 700 11px/1 var(--bc); color: var(--ac);
+  background: var(--acd); border: 1px solid var(--acb);
+  padding: 0 14px; cursor: pointer; height: 30px; transition: all var(--mo-fast);
+  letter-spacing: 0.06em; text-transform: uppercase; margin-left: 12px; white-space: nowrap;
 }
 #btn-all:hover { color: var(--tx1); border-color: var(--ln1); }
 #btn-all.active { color: var(--ach); background: var(--acd); border-color: var(--acb); }
