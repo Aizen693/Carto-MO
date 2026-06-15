@@ -380,6 +380,8 @@ function toggleActorFilter(name) {
     else { el.classList.add('filtered-out'); el.classList.remove('active-filter'); }
   });
   if (mapReady && activePeriods.size > 0) applyFilter();
+  // Mode CALQUES_ONLY : repercute le filtre acteur sur les couches de calques
+  if (window.applyCalqueActorFilter) window.applyCalqueActorFilter(activeFilter);
 }
 function applyFilter() {
   const ptFilter = activeFilter ? ['all', ['==', ['geometry-type'], 'Point'], ['==', ['get', 'name'], activeFilter]] : ['==', ['geometry-type'], 'Point'];

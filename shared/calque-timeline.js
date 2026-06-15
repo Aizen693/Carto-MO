@@ -262,14 +262,57 @@
       el.style.display = 'block';
     }
 
+    // Filtre par acteur (legende) — ANDe avec le filtre de periode sur les couches de points
+    var activeActor = null;
+    function isPointLayer(id) { return /(-dots|-glow|-ring|-pulse|-label|3d-)/.test(id); }
     function applyFilter(filter) {
       var m = getMap();
       if (!m || !m.getLayer) return;
       allFilterLayers.forEach(function(id) {
-        if (m.getLayer(id)) {
-          try { m.setFilter(id, filter); } catch (e) {}
+        if (!m.getLayer(id)) return;
+        var f = filter;
+        if (activeActor && isPointLayer(id)) {
+          var af = ['==', ['coalesce', ['get', 'name'], ''], activeActor];
+          f = f ? ['all', f, af] : af;
         }
+        try { m.setFilter(id, f); } catch (e) {}
       });
+    }
+
+    function currentRanges() {
+      if (lastShowAll) return null; // null = toutes les dates
+      var ranges = [];
+      var periods = (window.ZONE_CONFIG && window.ZONE_CONFIG.PERIODS) || [];
+      lastActive.forEach(function(i) {
+        var p = periods[i]; if (!p) return;
+        var r = (p.start && p.end) ? { start: p.start, end: p.end } : rangeFromFile(p.file);
+        if (r) ranges.push(r);
+      });
+      return ranges;
+    }
+
+    // Reconstruit la legende depuis les acteurs presents dans les calques ACTIFS
+    // et dans la periode active (mode CALQUES_ONLY ou engine.js ne le fait pas).
+    function buildCalqueLegend() {
+      if (typeof window.updateLegend !== 'function') return;
+      if (!lastShowAll && !lastActive.length) return; // pas de periode -> engine vide la legende
+      var ranges = currentRanges();
+      var getCol = (typeof window.getColor === 'function') ? window.getColor : function () { return '#888'; };
+      var actors = {};
+      sources.forEach(function(s) {
+        if (!s.calqueId || !s._normalized) return;
+        var el = document.getElementById('sb-toggle-' + s.calqueId);
+        if (!el || !el.classList.contains('on')) return;
+        s._normalized.features.forEach(function(f) {
+          var p = (f && f.properties) || {};
+          var name = p.name; if (!name) return;
+          var iso = p._normDate;
+          var ok = (ranges === null) || !iso || dateInRanges(iso, ranges);
+          if (!ok) return;
+          if (!actors[name]) actors[name] = getCol(name);
+        });
+      });
+      window.updateLegend(actors);
     }
 
     Promise.all(sources.map(fetchSource)).then(function(results) {
@@ -278,6 +321,7 @@
       autoEnableCalques();
       applyFilter(lastFilter);
       updateCounter();
+      buildCalqueLegend();
     });
 
     window.onActivePeriodsChange = function(activeIndexes, periods, showAll) {
@@ -290,7 +334,23 @@
       pushSourceData();
       autoEnableCalques();
       updateCounter();
+      buildCalqueLegend();
     };
+
+    // Clic sur un item de legende -> engine.toggleActorFilter appelle ceci
+    window.applyCalqueActorFilter = function(actor) {
+      activeActor = actor || null;
+      applyFilter(lastFilter);
+    };
+    window.refreshCalqueLegend = buildCalqueLegend;
+
+    // Rafraichit la legende quand on (de)active un calque ou Tout activer/enlever
+    document.addEventListener('click', function(e) {
+      if (!e.target || !e.target.closest) return;
+      if (e.target.closest('.sb-toggle') || e.target.closest('.sb-style-btn')) {
+        setTimeout(buildCalqueLegend, 60);
+      }
+    });
 
     var m = getMap();
     if (m && m.on) {
