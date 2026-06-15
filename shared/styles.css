@@ -441,40 +441,52 @@ html, body {
 .mapboxgl-popup { z-index: 9998 !important; filter: none !important; }
 .mapboxgl-popup-tip { display: none !important; }
 .mapboxgl-popup-content {
-  background: rgba(255,255,255,0.99) !important;
+  background: #fff !important;
   border: 1px solid var(--ln1) !important;
-  border-left: 3px solid var(--ac) !important;
-  border-radius: 0 !important;
+  border-radius: 16px !important;
   padding: 0 !important;
   font-family: var(--bc) !important;
-  max-width: 330px !important;
-  overflow: visible !important;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.65) !important;
+  max-width: 340px !important;
+  overflow: hidden !important;
+  box-shadow: 0 14px 44px rgba(24,20,40,0.20) !important;
   position: relative !important;
 }
 .mapboxgl-popup-close-button {
-  color: var(--tx1) !important; font-size: 16px !important;
-  font-weight: 300 !important; line-height: 1 !important;
-  padding: 6px 10px !important; position: absolute !important;
-  top: 0 !important; right: 0 !important; z-index: 99999 !important;
-  background: transparent !important; border: none !important;
+  color: var(--tx1) !important; font-size: 17px !important;
+  font-weight: 400 !important; line-height: 1 !important;
+  width: 24px !important; height: 24px !important;
+  padding: 0 !important; position: absolute !important;
+  top: 9px !important; right: 9px !important; z-index: 99999 !important;
+  background: transparent !important; border: none !important; border-radius: 8px !important;
   cursor: pointer !important; pointer-events: all !important;
-  display: block !important; width: auto !important; height: auto !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  transition: background .12s, color .12s !important;
 }
-.mapboxgl-popup-close-button:hover { color: var(--txh) !important; }
+.mapboxgl-popup-close-button:hover { color: var(--txh) !important; background: var(--bg3) !important; }
 .algor-popup { filter: none !important; }
+
+/* Liens du popup (sources + liens inline) harmonises a la charte */
+.mapboxgl-popup-content a {
+  color: var(--ac) !important;
+  font-family: var(--bc) !important;
+  font-weight: 600 !important;
+  border-color: var(--acb) !important;
+  border-radius: 7px !important;
+}
+.mapboxgl-popup-content a:hover { color: var(--ach) !important; border-color: var(--ac) !important; }
 
 .popup-header {
   display: flex; align-items: stretch;
   border-bottom: 1px solid var(--ln);
-  padding-right: 28px;
+  padding-right: 34px;
+  background: linear-gradient(180deg, rgba(107,63,160,0.06), rgba(107,63,160,0));
 }
-.popup-dot-bar { width: 3px; flex-shrink: 0; }
+.popup-dot-bar { width: 4px; flex-shrink: 0; }
 .popup-dot { display: none; }
 .popup-actor {
-  font: 700 15px/1.25 var(--bc); color: var(--txh);
-  flex: 1; letter-spacing: 0.03em; text-transform: uppercase;
-  padding: 11px 12px 10px;
+  font: 700 15px/1.3 var(--bc); color: var(--txh);
+  flex: 1; letter-spacing: 0.02em; text-transform: uppercase;
+  padding: 13px 14px 12px;
 }
 .popup-period-badge {
   font: 400 8px/1 var(--m); color: var(--ach);
@@ -482,7 +494,7 @@ html, body {
   padding: 0 8px; display: flex; align-items: center;
   letter-spacing: 0.06em; white-space: nowrap; flex-shrink: 0;
 }
-.popup-body { padding: 12px 14px 14px; }
+.popup-body { padding: 14px 16px 16px; }
 .popup-icon { display: none !important; }
 .popup-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 9px; }
 .popup-key {
