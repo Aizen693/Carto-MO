@@ -333,7 +333,7 @@ const ZONE_CONFIG = {
     var order = ['volume', 'evolution_15j', 'objet', 'description', 'detail', 'rank', 'force', 'personnes', 'ville', 'pays'];
     var seen = {};
     function renderRow(k) {
-      if (skip.indexOf(k) !== -1 || seen[k]) return;
+      if (skip.indexOf(k) !== -1 || k.charAt(0) === '_' || seen[k]) return;
       var v = (props[k] || '').toString().trim();
       if (!v) return;
       seen[k] = true;
