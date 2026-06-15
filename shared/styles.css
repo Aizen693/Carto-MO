@@ -58,7 +58,7 @@ html, body {
 }
 #event-counter {
   font: 600 11px/1 var(--bc); color: var(--txh);
-  letter-spacing: 0.01em; display: none;
+  letter-spacing: 0.01em; display: none !important;
 }
 .hdr-spacer { flex: 1; }
 .hdr-controls {
