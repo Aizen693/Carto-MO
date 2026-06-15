@@ -137,8 +137,12 @@ window.algorReady = new Promise(function (res) {
         <span>8. Flux &amp; trafics</span>
         <div class="sb-toggle" id="sb-toggle-flux" onclick="toggleLayer('flux')"></div>
       </div>
+      <div class="sb-layer-row">
+        <span>9. Veille IA</span>
+        <div class="sb-toggle" id="sb-toggle-veille" onclick="toggleVeille()"></div>
+      </div>
       <div class="sb-layer-row sb-layer-parent" onclick="toggleFrontieresSection(event)">
-        <span>9. Frontieres Ouest <span class="sb-sub-badge" id="sb-frontieres-badge">0/5</span></span>
+        <span>10. Frontieres Ouest <span class="sb-sub-badge" id="sb-frontieres-badge">0/5</span></span>
         <div class="sb-toggle" id="sb-toggle-frontieres" onclick="event.stopPropagation();toggleFrontieresMaster()"></div>
       </div>
       <div class="sb-sublayers" id="sb-frontieres-sub">
@@ -1061,6 +1065,59 @@ AlgorCalqueTimeline.init({
       autoEnable: false, layers: ['ethnies-fill', 'ethnies-outline'] }
   ]
 });
+</script>
+
+<!-- CALQUE VEILLE IA (autonome, lit veille-data, style clone events, OFF par defaut) -->
+<script>
+(function(){
+  var VEILLE_URL = 'https://raw.githubusercontent.com/Aizen693/Carto-MO/veille-data/sahel/veille.geojson';
+  (function(){ var s=document.createElement('style'); s.textContent='.mapboxgl-popup.veille-hover .mapboxgl-popup-content{padding:0;background:transparent;box-shadow:none;border-radius:0;}.mapboxgl-popup.veille-hover .mapboxgl-popup-tip{display:none;}'; document.head.appendChild(s); })();
+  var colorExpr = ['match', ['get','type'], 'Attaque','#ff1744', 'Embuscades','#ff1744', 'Incursion','#ff1744', 'Siege','#d50000', 'Incident frontalier','#ff6d00', 'Crise diplomatique','#ff6d00', 'Economique','#ffd740', 'Geopolitique','#ab47bc', '#ff5252'];
+  function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function popupHTML(p){
+    var name = p.name || 'Point';
+    var html = '<div class="popup-header"><div class="popup-dot-bar" style="background:#ff5252"></div><div class="popup-actor">' + esc(name) + '</div></div>';
+    var body = '';
+    var skip = { name:1, type:1, sources:1, 'Coordonnée':1, image:1 };
+    Object.keys(p).forEach(function(k){
+      if (skip[k]) return; var v = (p[k]==null?'':String(p[k])).trim(); if (!v) return;
+      body += '<div class="popup-row"><span class="popup-key">' + esc(k) + '</span><span class="popup-val">' + esc(v) + '</span></div>';
+    });
+    var sv = (p.sources||'').toString().trim();
+    if (sv) {
+      var links = sv.split(/\s+(?=[^\s|]+\|http)/).map(function(s){
+        var parts = s.split('|');
+        if (parts.length===2 && parts[1].indexOf('http')===0) return '<a href="' + esc(parts[1]) + '" target="_blank" rel="noopener" style="color:#c49a3c;text-decoration:none;font-size:10px;font-family:\'JetBrains Mono\',monospace;border:1px solid rgba(196,154,60,0.25);padding:1px 6px;letter-spacing:0.04em;">' + esc(parts[0]) + '</a>';
+        return '<span style="color:#999;font-size:10px;">' + esc(s) + '</span>';
+      }).join(' ');
+      body += '<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="popup-key" style="color:#888;margin-right:2px;">Sources</span>' + links + '</div>';
+    }
+    return html + (body ? '<div class="popup-body">' + body + '</div>' : '');
+  }
+  function addVeille(){
+    var m = window.algorMap; if (!m || m.getSource('veille-src')) return;
+    fetch(VEILLE_URL + '?v=' + Date.now()).then(function(r){ return r.json(); }).then(function(data){
+      if (m.getSource('veille-src')) return;
+      m.addSource('veille-src', { type:'geojson', data:data });
+      m.addLayer({ id:'veille-glow', type:'circle', source:'veille-src', layout:{visibility:'none'}, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],4,8,8,14,12,20], 'circle-color':colorExpr, 'circle-opacity':0.07, 'circle-blur':1.2 } });
+      m.addLayer({ id:'veille-ring', type:'circle', source:'veille-src', layout:{visibility:'none'}, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],4,4,8,7,12,10], 'circle-color':'transparent', 'circle-stroke-width':0.8, 'circle-stroke-color':colorExpr, 'circle-stroke-opacity':0.35 } });
+      m.addLayer({ id:'veille-dots', type:'circle', source:'veille-src', layout:{visibility:'none'}, paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],4,2.5,8,4,12,6], 'circle-color':colorExpr, 'circle-stroke-width':0.6, 'circle-stroke-color':'#0d1117' } });
+      m.on('click','veille-dots',function(e){ new mapboxgl.Popup({ closeButton:true, maxWidth:'340px', className:'algor-popup' }).setLngLat(e.lngLat).setHTML(popupHTML(e.features[0].properties)).addTo(m); });
+      var veilleHover = new mapboxgl.Popup({ closeButton:false, closeOnClick:false, maxWidth:'220px', className:'algor-popup veille-hover', offset:14 });
+      m.on('mouseenter','veille-dots',function(e){ m.getCanvas().style.cursor='pointer'; var p=e.features[0].properties; var titre=((p.name?p.name+' · ':'')+(p["Type d'évènement"]||p.bilan||'')).trim()||(p.name||'Point'); var im=p.image; var html='<div style="width:230px;background:#0d1117;border:1px solid rgba(255,255,255,0.14);border-radius:6px;overflow:hidden;">'+'<div style="font-size:12px;font-weight:600;color:#fff;padding:8px 10px 7px;line-height:1.3;">'+esc(titre)+'</div>'+(im?'<img src="'+esc(im)+'" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'" style="display:block;width:230px;height:135px;object-fit:cover;">':'')+'</div>'; veilleHover.setLngLat(e.lngLat).setHTML(html).addTo(m); });
+      m.on('mousemove','veille-dots',function(e){ if(veilleHover.isOpen()) veilleHover.setLngLat(e.lngLat); });
+      m.on('mouseleave','veille-dots',function(){ m.getCanvas().style.cursor=''; veilleHover.remove(); });
+    }).catch(function(e){ console.warn('[veille] load error', e); });
+  }
+  window.toggleVeille = function(){
+    var m = window.algorMap; if (!m || !m.getLayer('veille-dots')) return;
+    var nv = m.getLayoutProperty('veille-dots','visibility')==='visible' ? 'none' : 'visible';
+    ['veille-glow','veille-ring','veille-dots'].forEach(function(id){ m.setLayoutProperty(id,'visibility',nv); });
+    var t = document.getElementById('sb-toggle-veille'); if (t) t.classList.toggle('on', nv==='visible');
+  };
+  function ready(){ var m = window.algorMap; if (m && m.isStyleLoaded()) addVeille(); else if (m) m.once('idle', addVeille); else setTimeout(ready, 300); }
+  ready();
+})();
 </script>
 
 <!-- TUTORIEL -->
