@@ -308,10 +308,11 @@ window.buildBriefIAButton = function buildBriefIAButton(name, props, calqueId) {
     if (v && v.length < 600) ctx[k] = v;
   }
   const payload = btoa(unescape(encodeURIComponent(JSON.stringify(ctx))));
-  return '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);">'
+  return '<div style="margin-top:14px;">'
     + '<button onclick="window.openBriefIA(\'' + payload + '\')" '
-    + 'style="background:transparent;border:1px solid rgba(196,154,60,0.45);border-top:1px solid #c49a3c;color:#c49a3c;'
-    + 'font:600 9px/1 \'JetBrains Mono\',monospace;letter-spacing:0.14em;text-transform:uppercase;padding:7px 14px;cursor:pointer;width:100%;text-align:left;">'
+    + 'style="background:linear-gradient(130deg,#6B3FA0 0%,#5650C6 48%,#1E6FBE 100%);border:none;color:#fff;'
+    + 'font:700 11px/1 \'Plus Jakarta Sans\',-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;'
+    + 'padding:12px 16px;cursor:pointer;width:100%;text-align:center;border-radius:10px;box-shadow:0 4px 14px rgba(107,63,160,0.28);">'
     + 'Brief IA Securite &nbsp;&rarr;</button></div>';
 };
 
