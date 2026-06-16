@@ -132,6 +132,13 @@ function veilleDateFR(d) {
     return d;
   }
 }
+function srcLogo(url) {
+  try {
+    return 'https://www.google.com/s2/favicons?domain=' + new URL(url).hostname + '&sz=128';
+  } catch (e) {
+    return null;
+  }
+}
 function useVeille() {
   const [items, setItems] = useState(VEILLE_SEED);
   useEffect(() => {
@@ -199,7 +206,15 @@ function VeilleCard({
   }) : null, /*#__PURE__*/React.createElement("span", {
     className: "vcard__grid",
     "aria-hidden": "true"
-  }), /*#__PURE__*/React.createElement("span", {
+  }), srcLogo(it.source_url) ? /*#__PURE__*/React.createElement("img", {
+    className: "vcard__logo",
+    src: srcLogo(it.source_url),
+    alt: it.source,
+    loading: "lazy",
+    onError: e => {
+      e.target.style.display = 'none';
+    }
+  }) : null, /*#__PURE__*/React.createElement("span", {
     className: "vcard__src"
   }, it.source), /*#__PURE__*/React.createElement("span", {
     className: "vcard__sev",
@@ -280,7 +295,14 @@ function VeilleModal({
   }) : null, /*#__PURE__*/React.createElement("span", {
     className: "vcard__grid",
     "aria-hidden": "true"
-  }), /*#__PURE__*/React.createElement("span", {
+  }), srcLogo(it.source_url) ? /*#__PURE__*/React.createElement("img", {
+    className: "vcard__logo",
+    src: srcLogo(it.source_url),
+    alt: it.source,
+    onError: e => {
+      e.target.style.display = 'none';
+    }
+  }) : null, /*#__PURE__*/React.createElement("span", {
     className: "vcard__src"
   }, it.source)), /*#__PURE__*/React.createElement("div", {
     className: "vmodal__body"

@@ -62,6 +62,7 @@ const VEILLE_SEED = [
 
 function veilleZone(k){ return ZONE_LABELS[k] || k; }
 function veilleDateFR(d){ try { return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}); } catch(e){ return d; } }
+function srcLogo(url){ try { return 'https://www.google.com/s2/favicons?domain=' + new URL(url).hostname + '&sz=128'; } catch(e){ return null; } }
 
 function useVeille(){
   const [items,setItems]=useState(VEILLE_SEED);
@@ -90,6 +91,7 @@ function VeilleCard({ it, onOpen }){
       <div className="vcard__media" data-zone={it.theatre}>
         {it.image ? <img className="vcard__img" src={it.image} alt="" loading="lazy" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
         <span className="vcard__grid" aria-hidden="true" />
+        {srcLogo(it.source_url) ? <img className="vcard__logo" src={srcLogo(it.source_url)} alt={it.source} loading="lazy" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
         <span className="vcard__src">{it.source}</span>
         <span className="vcard__sev" style={{ color: sev.c, borderColor: sev.c+'59', background: sev.c+'14' }}>{sev.lbl}</span>
       </div>
@@ -124,6 +126,7 @@ function VeilleModal({ it, sub, onClose }){
         <div className="vmodal__media" data-zone={it.theatre}>
           {it.image ? <img src={it.image} alt="" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
           <span className="vcard__grid" aria-hidden="true" />
+          {srcLogo(it.source_url) ? <img className="vcard__logo" src={srcLogo(it.source_url)} alt={it.source} onError={(e)=>{ e.target.style.display='none'; }} /> : null}
           <span className="vcard__src">{it.source}</span>
         </div>
         <div className="vmodal__body">
