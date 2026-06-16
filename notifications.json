@@ -2,6 +2,54 @@
   "updated": "2026-06-16",
   "items": [
     {
+      "id": "v-2026-06-16-01",
+      "date": "2026-06-16",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/bamako-et-cotonou-affichent-leur-volonte-de-renforcer-leur-cooperation",
+      "image": "http://bamada.net/wp-content/uploads/2026/06/assimi-goita-accueil-president-benin-Romuald-Wadagni-visite-travail-cooperation-billateral.jpg",
+      "titre": "Bénin et Mali renforcent leur coopération sécuritaire et diplomatique",
+      "resume": "Le président béninois a effectué une visite officielle à Bamako le 9 juin pour rencontrer le général Assimi Goïta. Les discussions ont porté sur la sécurité, l'économie et la diplomatie régionale.",
+      "detail": "Cette visite intervient dans un contexte de consolidation des relations entre États membres de l'AES (Alliance des États du Sahel). Le renforcement de la coopération entre Cotonou et Bamako reflète une volonté de coordonner les stratégies face aux défis sécuritaires sahéliens. L'engagement du Bénin aux côtés du Mali et du Burkina Faso se matérialise par des échanges réguliers au plus haut niveau. Un communiqué conjoint a formalisé les orientations de cette coopération renforcée."
+    },
+    {
+      "id": "v-2026-06-16-02",
+      "date": "2026-06-16",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/gao-assistance-sanitaire-aux-deplaces",
+      "image": "http://bamada.net/wp-content/uploads/2026/05/Deplace-faladie.jpg",
+      "titre": "Assistance humanitaire aux personnes déplacées à Gao",
+      "resume": "Des déplacés internes de Gao ont reçu une aide sanitaire le 9 juin incluant consultations médicales, médicaments et équipement médical. L'assistance provient de l'ONG GREFFA avec financement de l'AECID et partenaires.",
+      "detail": "Cette intervention humanitaire cible une population vulnérable affectée par les déplacements forcés dans la région de Gao. Les services fournis comprennent une assistance médicale directe et la distribution de ressources pharmaceutiques. Le financement provient de partenaires internationaux reconnaissant les besoins critiques en santé dans les zones touchées par le conflit. Cette action illustre la persistance des défis humanitaires au Mali malgré les opérations sécuritaires."
+    },
+    {
+      "id": "v-2026-06-16-03",
+      "date": "2026-06-16",
+      "theatre": "moyen-orient",
+      "severite": "critique",
+      "source": "TRT Haber",
+      "source_url": "https://www.trthaber.com/haber/dunya/trump-bugun-irana-cok-sert-bir-sekilde-saldiracagiz-947788.html",
+      "image": "https://trthaberstatic.cdn.wp.trt.com.tr/resimler/2450000/abd-trump-iran-2450891.jpg",
+      "titre": "Trump annonce des frappes imminentes contre l'Iran en représailles",
+      "resume": "Le président Trump a déclaré que les États Unis frapperaient l'Iran suivant la perte d'un hélicoptère américain. Il affirme que des frappes ont déjà eu lieu et d'autres sont planifiées immédiatement.",
+      "detail": "Ces déclarations surviennent dans un contexte d'escalade directe entre les États Unis et l'Iran. Trump justifie les opérations militaires comme réponse à l'incident aérien impliquant un hélicoptère américain. L'annonce publique d'opérations imminentes crée une tension géopolitique majeure en Moyen Orient. Cette rhétorique agressive suggère une volonté d'actions armées rapides sans intermediation diplomatique."
+    },
+    {
+      "id": "v-2026-06-16-04",
+      "date": "2026-06-16",
+      "theatre": "afrique",
+      "severite": "alerte",
+      "source": "The Guardian",
+      "source_url": "https://www.theguardian.com/football/video/2026/jun/10/the-most-inclusive-world-cup-ever-doesnt-look-like-it",
+      "image": "",
+      "titre": "Arbitre somali de classe mondiale exclu de la Coupe du monde",
+      "resume": "Omar Abdulkadir Artan, premier arbitre somalien à accéder à une Coupe du monde, a été refusé d'entrée aux États Unis et n'a pu participer à la compétition. Il a été accueilli comme un héros à son retour en Somalie.",
+      "detail": "Cet incident soulève des questions sur les critères d'admission aux frontières américaines et les implications pour la participation africaine aux événements internationaux. Artan était reconnu comme le meilleur arbitre du continent et sa sélection représentait une avancée majeure pour la représentation somali. Son exclusion contraste avec les promesses d'inclusivité de l'organisation du tournoi. L'incident a généré des critiques internationales sur l'équité des processus de sécurité appliqués aux participants africains."
+    },
+    {
       "id": "v08",
       "date": "2026-06-15",
       "theatre": "sahel",
