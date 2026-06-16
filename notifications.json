@@ -1,37 +1,101 @@
 {
   "updated": "2026-06-16",
   "items": [
-    { "id": "v08", "date": "2026-06-15", "theatre": "sahel", "severite": "alerte", "source": "ACLED", "source_url": "https://acleddata.com", "image": "",
+    {
+      "id": "v08",
+      "date": "2026-06-15",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "ACLED",
+      "source_url": "https://acleddata.com",
+      "image": "",
       "titre": "Le blocus jihadiste autour de Djibo se durcit",
       "resume": "Le JNIM resserre son étau sur Djibo : convois ciblés et axes coupés au nord du Burkina.",
-      "detail": "Sur la semaine écoulée, ACLED recense une hausse nette des embuscades sur les axes Djibo Kongoussi. Le ravitaillement de la ville devient difficile et le risque humanitaire monte d'un cran pour les organisations encore présentes sur zone." },
-    { "id": "v07", "date": "2026-06-14", "theatre": "moyen-orient", "severite": "critique", "source": "ISW", "source_url": "https://understandingwar.org", "image": "",
+      "detail": "Sur la semaine écoulée, ACLED recense une hausse nette des embuscades sur les axes Djibo Kongoussi. Le ravitaillement de la ville devient difficile et le risque humanitaire monte d'un cran pour les organisations encore présentes sur zone."
+    },
+    {
+      "id": "v07",
+      "date": "2026-06-14",
+      "theatre": "moyen-orient",
+      "severite": "critique",
+      "source": "ISW",
+      "source_url": "https://understandingwar.org",
+      "image": "",
       "titre": "Regain de frappes le long du corridor d'Hodeida",
       "resume": "Plusieurs frappes signalées sur les infrastructures portuaires de la mer Rouge.",
-      "detail": "L'Institute for the Study of War documente une série de frappes visant les installations portuaires d'Hodeida. La logistique maritime régionale est directement exposée, avec un report possible du trafic vers des routes alternatives." },
-    { "id": "v06", "date": "2026-06-13", "theatre": "rdc", "severite": "alerte", "source": "Kivu Security Tracker", "source_url": "https://kivusecurity.org", "image": "",
+      "detail": "L'Institute for the Study of War documente une série de frappes visant les installations portuaires d'Hodeida. La logistique maritime régionale est directement exposée, avec un report possible du trafic vers des routes alternatives."
+    },
+    {
+      "id": "v06",
+      "date": "2026-06-13",
+      "theatre": "rdc",
+      "severite": "alerte",
+      "source": "Kivu Security Tracker",
+      "source_url": "https://kivusecurity.org",
+      "image": "",
       "titre": "Progression du M23 confirmée vers Uvira",
       "resume": "Mouvements de colonnes observés au sud du lac Kivu.",
-      "detail": "Le Kivu Security Tracker confirme des mouvements du M23 en direction d'Uvira. Plusieurs localités changent de contrôle. La pression sur les axes commerciaux vers le Burundi s'accentue." },
-    { "id": "v05", "date": "2026-06-12", "theatre": "asie-sud", "severite": "info", "source": "Bellingcat", "source_url": "https://www.bellingcat.com", "image": "",
+      "detail": "Le Kivu Security Tracker confirme des mouvements du M23 en direction d'Uvira. Plusieurs localités changent de contrôle. La pression sur les axes commerciaux vers le Burundi s'accentue."
+    },
+    {
+      "id": "v05",
+      "date": "2026-06-12",
+      "theatre": "asie-sud",
+      "severite": "info",
+      "source": "Bellingcat",
+      "source_url": "https://www.bellingcat.com",
+      "image": "",
       "titre": "Renforts observés le long de la Ligne de contrôle",
       "resume": "L'imagerie satellite montre de nouveaux déploiements au Cachemire.",
-      "detail": "L'analyse d'imagerie ouverte met en évidence de nouveaux cantonnements et un trafic logistique accru le long de la Ligne de contrôle. À surveiller comme signal précoce d'une montée de tension." },
-    { "id": "v04", "date": "2026-06-11", "theatre": "afrique", "severite": "info", "source": "IMB Piracy Reporting Centre", "source_url": "https://www.icc-ccs.org", "image": "",
+      "detail": "L'analyse d'imagerie ouverte met en évidence de nouveaux cantonnements et un trafic logistique accru le long de la Ligne de contrôle. À surveiller comme signal précoce d'une montée de tension."
+    },
+    {
+      "id": "v04",
+      "date": "2026-06-11",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "IMB Piracy Reporting Centre",
+      "source_url": "https://www.icc-ccs.org",
+      "image": "",
       "titre": "Pic d'approches suspectes dans le golfe de Guinée",
       "resume": "Trois tentatives d'abordage rapportées en une semaine au large du Nigeria.",
-      "detail": "Le Bureau maritime international relève trois approches hostiles en une semaine. Le mode opératoire reste l'enlèvement d'équipage. Les armateurs adaptent leurs routes et leurs vitesses de transit." },
-    { "id": "v03", "date": "2026-06-10", "theatre": "madagascar", "severite": "info", "source": "Presse régionale", "source_url": "", "image": "",
+      "detail": "Le Bureau maritime international relève trois approches hostiles en une semaine. Le mode opératoire reste l'enlèvement d'équipage. Les armateurs adaptent leurs routes et leurs vitesses de transit."
+    },
+    {
+      "id": "v03",
+      "date": "2026-06-10",
+      "theatre": "madagascar",
+      "severite": "info",
+      "source": "Presse régionale",
+      "source_url": "",
+      "image": "",
       "titre": "Tensions sociales à Antananarivo",
       "resume": "Manifestations et coupures de courant signalées dans la capitale.",
-      "detail": "Plusieurs rassemblements liés aux coupures d'électricité sont rapportés dans la capitale. La situation reste contenue mais mérite un suivi rapproché pour les implantations locales." },
-    { "id": "v02", "date": "2026-06-09", "theatre": "sahel", "severite": "info", "source": "RFI", "source_url": "https://www.rfi.fr", "image": "",
+      "detail": "Plusieurs rassemblements liés aux coupures d'électricité sont rapportés dans la capitale. La situation reste contenue mais mérite un suivi rapproché pour les implantations locales."
+    },
+    {
+      "id": "v02",
+      "date": "2026-06-09",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "RFI",
+      "source_url": "https://www.rfi.fr",
+      "image": "",
       "titre": "Nouvelle vague de recrutement des VDP au Burkina",
       "resume": "Les autorités annoncent un renfort des supplétifs civils.",
-      "detail": "Une nouvelle campagne de recrutement de Volontaires pour la Défense de la Patrie est annoncée. L'encadrement et l'équipement de ces unités restent un point de vigilance documenté." },
-    { "id": "v01", "date": "2026-06-08", "theatre": "moyen-orient", "severite": "alerte", "source": "MarineTraffic", "source_url": "https://www.marinetraffic.com", "image": "",
+      "detail": "Une nouvelle campagne de recrutement de Volontaires pour la Défense de la Patrie est annoncée. L'encadrement et l'équipement de ces unités restent un point de vigilance documenté."
+    },
+    {
+      "id": "v01",
+      "date": "2026-06-08",
+      "theatre": "moyen-orient",
+      "severite": "alerte",
+      "source": "MarineTraffic",
+      "source_url": "https://www.marinetraffic.com",
+      "image": "",
       "titre": "Concentration navale inhabituelle en mer Rouge",
       "resume": "Une densité anormale de bâtiments militaires est détectée.",
-      "detail": "Le suivi AIS révèle une concentration inhabituelle de bâtiments dans le sud de la mer Rouge. Le signal est cohérent avec une posture de dissuasion autour du détroit de Bab el Mandeb." }
+      "detail": "Le suivi AIS révèle une concentration inhabituelle de bâtiments dans le sud de la mer Rouge. Le signal est cohérent avec une posture de dissuasion autour du détroit de Bab el Mandeb."
+    }
   ]
 }
