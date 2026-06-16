@@ -17,6 +17,425 @@ const ZONE_LABELS = {
   'afrique': 'Afrique Maritime',
   'asie-sud': 'Asie du Sud'
 };
+
+// ════════════════════════════════════════════════════════════════════════
+// VEILLE HEBDOMADAIRE — flux OSINT (cloche + section editoriale)
+// Donnees : notifications.json sur la branche veille-data (alimente par n8n).
+// Teaser public ; analyse complete + archive reservees aux abonnes.
+// ════════════════════════════════════════════════════════════════════════
+const VEILLE_REMOTE = 'https://raw.githubusercontent.com/Aizen693/Carto-MO/veille-data/notifications.json';
+const SEV = {
+  info: {
+    lbl: 'Signal',
+    c: '#6B3FA0'
+  },
+  alerte: {
+    lbl: 'Alerte',
+    c: '#C77A12'
+  },
+  critique: {
+    lbl: 'Critique',
+    c: '#B83A4A'
+  }
+};
+const VEILLE_SEED = [{
+  id: 'v08',
+  date: '2026-06-15',
+  theatre: 'sahel',
+  severite: 'alerte',
+  source: 'ACLED',
+  source_url: 'https://acleddata.com',
+  titre: "Le blocus jihadiste autour de Djibo se durcit",
+  resume: "Le JNIM resserre son étau sur Djibo : convois ciblés et axes coupés au nord du Burkina.",
+  detail: "Sur la semaine écoulée, ACLED recense une hausse nette des embuscades sur les axes Djibo Kongoussi. Le ravitaillement de la ville devient difficile et le risque humanitaire monte d'un cran pour les organisations encore présentes sur zone."
+}, {
+  id: 'v07',
+  date: '2026-06-14',
+  theatre: 'moyen-orient',
+  severite: 'critique',
+  source: 'ISW',
+  source_url: 'https://understandingwar.org',
+  titre: "Regain de frappes le long du corridor d'Hodeida",
+  resume: "Plusieurs frappes signalées sur les infrastructures portuaires de la mer Rouge.",
+  detail: "L'Institute for the Study of War documente une série de frappes visant les installations portuaires d'Hodeida. La logistique maritime régionale est directement exposée, avec un report possible du trafic vers des routes alternatives."
+}, {
+  id: 'v06',
+  date: '2026-06-13',
+  theatre: 'rdc',
+  severite: 'alerte',
+  source: 'Kivu Security Tracker',
+  source_url: 'https://kivusecurity.org',
+  titre: "Progression du M23 confirmée vers Uvira",
+  resume: "Mouvements de colonnes observés au sud du lac Kivu.",
+  detail: "Le Kivu Security Tracker confirme des mouvements du M23 en direction d'Uvira. Plusieurs localités changent de contrôle. La pression sur les axes commerciaux vers le Burundi s'accentue."
+}, {
+  id: 'v05',
+  date: '2026-06-12',
+  theatre: 'asie-sud',
+  severite: 'info',
+  source: 'Bellingcat',
+  source_url: 'https://www.bellingcat.com',
+  titre: "Renforts observés le long de la Ligne de contrôle",
+  resume: "L'imagerie satellite montre de nouveaux déploiements au Cachemire.",
+  detail: "L'analyse d'imagerie ouverte met en évidence de nouveaux cantonnements et un trafic logistique accru le long de la Ligne de contrôle. À surveiller comme signal précoce d'une montée de tension."
+}, {
+  id: 'v04',
+  date: '2026-06-11',
+  theatre: 'afrique',
+  severite: 'info',
+  source: 'IMB Piracy Reporting Centre',
+  source_url: 'https://www.icc-ccs.org',
+  titre: "Pic d'approches suspectes dans le golfe de Guinée",
+  resume: "Trois tentatives d'abordage rapportées en une semaine au large du Nigeria.",
+  detail: "Le Bureau maritime international relève trois approches hostiles en une semaine. Le mode opératoire reste l'enlèvement d'équipage. Les armateurs adaptent leurs routes et leurs vitesses de transit."
+}, {
+  id: 'v03',
+  date: '2026-06-10',
+  theatre: 'madagascar',
+  severite: 'info',
+  source: 'Presse régionale',
+  source_url: '',
+  titre: "Tensions sociales à Antananarivo",
+  resume: "Manifestations et coupures de courant signalées dans la capitale.",
+  detail: "Plusieurs rassemblements liés aux coupures d'électricité sont rapportés dans la capitale. La situation reste contenue mais mérite un suivi rapproché pour les implantations locales."
+}, {
+  id: 'v02',
+  date: '2026-06-09',
+  theatre: 'sahel',
+  severite: 'info',
+  source: 'RFI',
+  source_url: 'https://www.rfi.fr',
+  titre: "Nouvelle vague de recrutement des VDP au Burkina",
+  resume: "Les autorités annoncent un renfort des supplétifs civils.",
+  detail: "Une nouvelle campagne de recrutement de Volontaires pour la Défense de la Patrie est annoncée. L'encadrement et l'équipement de ces unités restent un point de vigilance documenté."
+}, {
+  id: 'v01',
+  date: '2026-06-08',
+  theatre: 'moyen-orient',
+  severite: 'alerte',
+  source: 'MarineTraffic',
+  source_url: 'https://www.marinetraffic.com',
+  titre: "Concentration navale inhabituelle en mer Rouge",
+  resume: "Une densité anormale de bâtiments militaires est détectée.",
+  detail: "Le suivi AIS révèle une concentration inhabituelle de bâtiments dans le sud de la mer Rouge. Le signal est cohérent avec une posture de dissuasion autour du détroit de Bab el Mandeb."
+}];
+function veilleZone(k) {
+  return ZONE_LABELS[k] || k;
+}
+function veilleDateFR(d) {
+  try {
+    return new Date(d).toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'short'
+    });
+  } catch (e) {
+    return d;
+  }
+}
+function useVeille() {
+  const [items, setItems] = useState(VEILLE_SEED);
+  useEffect(() => {
+    let on = true;
+    fetch(VEILLE_REMOTE, {
+      cache: 'no-store'
+    }).then(r => r.ok ? r.json() : Promise.reject()).then(d => {
+      const a = Array.isArray(d) ? d : d.items || [];
+      if (on && a.length) setItems(a.slice().sort((x, y) => String(y.date).localeCompare(String(x.date))));
+    }).catch(() => {});
+    return () => {
+      on = false;
+    };
+  }, []);
+  return items;
+}
+function useSubscriber() {
+  const [sub, setSub] = useState(false);
+  useEffect(() => {
+    let on = true;
+    const check = () => {
+      try {
+        const a = window.algorAuth;
+        if (a && a.supabase && a.supabase.auth && a.supabase.auth.getSession) {
+          a.supabase.auth.getSession().then(({
+            data
+          }) => {
+            if (on) setSub(!!(data && data.session));
+          });
+        }
+      } catch (e) {}
+    };
+    check();
+    window.addEventListener('algorAuthReady', check);
+    return () => {
+      on = false;
+      window.removeEventListener('algorAuthReady', check);
+    };
+  }, []);
+  return sub;
+}
+function VeilleCard({
+  it,
+  onOpen
+}) {
+  const sev = SEV[it.severite] || SEV.info;
+  return /*#__PURE__*/React.createElement("article", {
+    className: "vcard",
+    onClick: onOpen,
+    tabIndex: "0",
+    onKeyDown: e => {
+      if (e.key === 'Enter') onOpen();
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vcard__media",
+    "data-zone": it.theatre
+  }, it.image ? /*#__PURE__*/React.createElement("img", {
+    className: "vcard__img",
+    src: it.image,
+    alt: "",
+    loading: "lazy",
+    onError: e => {
+      e.target.style.display = 'none';
+    }
+  }) : null, /*#__PURE__*/React.createElement("span", {
+    className: "vcard__grid",
+    "aria-hidden": "true"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "vcard__src"
+  }, it.source), /*#__PURE__*/React.createElement("span", {
+    className: "vcard__sev",
+    style: {
+      color: sev.c,
+      borderColor: sev.c + '59',
+      background: sev.c + '14'
+    }
+  }, sev.lbl)), /*#__PURE__*/React.createElement("div", {
+    className: "vcard__body"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vcard__meta"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vcard__zone"
+  }, veilleZone(it.theatre)), /*#__PURE__*/React.createElement("span", {
+    className: "vcard__date"
+  }, veilleDateFR(it.date))), /*#__PURE__*/React.createElement("h3", {
+    className: "vcard__title"
+  }, it.titre), /*#__PURE__*/React.createElement("p", {
+    className: "vcard__resume"
+  }, it.resume), /*#__PURE__*/React.createElement("span", {
+    className: "vcard__more"
+  }, "Lire ", /*#__PURE__*/React.createElement(Arrow, null))));
+}
+function VeilleRow({
+  it,
+  onOpen
+}) {
+  const sev = SEV[it.severite] || SEV.info;
+  return /*#__PURE__*/React.createElement("button", {
+    className: "vrow",
+    onClick: onOpen
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vrow__dot",
+    style: {
+      background: sev.c
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "vrow__body"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vrow__meta"
+  }, veilleZone(it.theatre), " \xB7 ", veilleDateFR(it.date), " \xB7 ", it.source), /*#__PURE__*/React.createElement("span", {
+    className: "vrow__t"
+  }, it.titre)));
+}
+function VeilleModal({
+  it,
+  sub,
+  onClose
+}) {
+  const sev = SEV[it.severite] || SEV.info;
+  useEffect(() => {
+    const h = e => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "vmodal-scrim",
+    onClick: onClose
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vmodal",
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "vmodal__x",
+    onClick: onClose,
+    "aria-label": "Fermer"
+  }, "\u2715"), /*#__PURE__*/React.createElement("div", {
+    className: "vmodal__media",
+    "data-zone": it.theatre
+  }, it.image ? /*#__PURE__*/React.createElement("img", {
+    src: it.image,
+    alt: "",
+    onError: e => {
+      e.target.style.display = 'none';
+    }
+  }) : null, /*#__PURE__*/React.createElement("span", {
+    className: "vcard__grid",
+    "aria-hidden": "true"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "vcard__src"
+  }, it.source)), /*#__PURE__*/React.createElement("div", {
+    className: "vmodal__body"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vcard__meta"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vcard__zone"
+  }, veilleZone(it.theatre)), /*#__PURE__*/React.createElement("span", {
+    className: "vcard__date"
+  }, veilleDateFR(it.date)), /*#__PURE__*/React.createElement("span", {
+    className: "vcard__sev",
+    style: {
+      color: sev.c,
+      borderColor: sev.c + '59',
+      background: sev.c + '14'
+    }
+  }, sev.lbl)), /*#__PURE__*/React.createElement("h3", {
+    className: "vmodal__title"
+  }, it.titre), /*#__PURE__*/React.createElement("p", {
+    className: "vmodal__resume"
+  }, it.resume), sub ? /*#__PURE__*/React.createElement("div", {
+    className: "vmodal__detail"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vmodal__lbl"
+  }, "Analyse"), /*#__PURE__*/React.createElement("p", null, it.detail || it.resume), it.source_url && /*#__PURE__*/React.createElement("a", {
+    className: "vmodal__srclink",
+    href: it.source_url,
+    target: "_blank",
+    rel: "noopener"
+  }, "Source \xB7 ", it.source, " \u2197")) : /*#__PURE__*/React.createElement("div", {
+    className: "vmodal__gate"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "22",
+    height: "22",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "#6B3FA0",
+    strokeWidth: "1.9",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "3",
+    y: "11",
+    width: "18",
+    height: "11",
+    rx: "2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M7 11V7a5 5 0 0 1 10 0v4"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "vmodal__gate-t"
+  }, "Analyse compl\xE8te r\xE9serv\xE9e aux abonn\xE9s"), /*#__PURE__*/React.createElement("div", {
+    className: "vmodal__gate-s"
+  }, "Acc\xE9dez \xE0 l'analyse d\xE9taill\xE9e, aux sources et \xE0 l'archive compl\xE8te de la veille."), /*#__PURE__*/React.createElement("a", {
+    className: "btn btn--primary",
+    href: "/offres/"
+  }, "Voir les offres")))));
+}
+function VeilleSystem() {
+  const items = useVeille();
+  const sub = useSubscriber();
+  const [open, setOpen] = useState(false);
+  const [sel, setSel] = useState(null);
+  const [seen, setSeen] = useState(() => {
+    try {
+      return localStorage.getItem('algor-veille-seen') || '';
+    } catch (e) {
+      return '';
+    }
+  });
+  const latest = items.reduce((m, it) => it.date > m ? it.date : m, '');
+  const unread = items.filter(it => (it.date || '') > seen).length;
+  useEffect(() => {
+    if (open) {
+      try {
+        localStorage.setItem('algor-veille-seen', latest);
+      } catch (e) {}
+      setSeen(latest);
+    }
+  }, [open, latest]);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("section", {
+    className: "home-sec veille-sec",
+    id: "veille"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "home-sec__wrap"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "veille-sec__head"
+  }, /*#__PURE__*/React.createElement(SectionHead, {
+    eyebrow: "Veille \xB7 mise \xE0 jour hebdomadaire",
+    title: "Ce que notre veille a",
+    em: "capt\xE9 cette semaine",
+    intro: "Flux OSINT consolid\xE9 en continu sur nos six th\xE9\xE2tres. S\xE9lection sourc\xE9e et dat\xE9e. L'analyse compl\xE8te et l'archive sont r\xE9serv\xE9es aux abonn\xE9s."
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "veille-live"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "veille-live__dot"
+  }), "Veille active")), /*#__PURE__*/React.createElement("div", {
+    className: "veille-grid"
+  }, items.slice(0, 6).map(it => /*#__PURE__*/React.createElement(VeilleCard, {
+    key: it.id,
+    it: it,
+    onOpen: () => setSel(it)
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "veille-sec__foot"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn--ghost-link",
+    onClick: () => setOpen(true)
+  }, "Tout le fil de veille ", /*#__PURE__*/React.createElement(ArrowDiag, null))))), /*#__PURE__*/React.createElement("button", {
+    className: "veille-bell",
+    "aria-label": "Fil de veille",
+    onClick: () => setOpen(true)
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    width: "21",
+    height: "21",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M13.7 21a2 2 0 0 1-3.4 0"
+  })), unread > 0 && /*#__PURE__*/React.createElement("span", {
+    className: "veille-bell__badge"
+  }, unread)), /*#__PURE__*/React.createElement("div", {
+    className: 'veille-panel-scrim' + (open ? ' is-open' : ''),
+    onClick: () => setOpen(false)
+  }), /*#__PURE__*/React.createElement("aside", {
+    className: 'veille-panel' + (open ? ' is-open' : ''),
+    "aria-hidden": !open
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "veille-panel__head"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "veille-panel__t"
+  }, "Fil de veille"), /*#__PURE__*/React.createElement("div", {
+    className: "veille-panel__s"
+  }, "OSINT \xB7 six th\xE9\xE2tres")), /*#__PURE__*/React.createElement("button", {
+    className: "veille-panel__x",
+    onClick: () => setOpen(false),
+    "aria-label": "Fermer"
+  }, "\u2715")), /*#__PURE__*/React.createElement("div", {
+    className: "veille-panel__list"
+  }, items.map(it => /*#__PURE__*/React.createElement(VeilleRow, {
+    key: it.id,
+    it: it,
+    onOpen: () => setSel(it)
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "veille-panel__foot"
+  }, "Veille aliment\xE9e en continu. Analyse compl\xE8te r\xE9serv\xE9e aux abonn\xE9s.")), sel && /*#__PURE__*/React.createElement(VeilleModal, {
+    it: sel,
+    sub: sub,
+    onClose: () => setSel(null)
+  }));
+}
 function HomeView({
   onEnter,
   onConsole,
@@ -71,7 +490,7 @@ function HomeView({
     className: "hero__demo-warn"
   }, "Donn\xE9es fictives, \xE0 titre d'illustration du rendu de nos cartes.")))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"
-  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(TrustBand, null), /*#__PURE__*/React.createElement(ProductionSection, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
+  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(TrustBand, null), /*#__PURE__*/React.createElement(ProductionSection, null), /*#__PURE__*/React.createElement(VeilleSystem, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
     style: videoStyle
   })), /*#__PURE__*/React.createElement(SiteFooter, null));
 }

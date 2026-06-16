@@ -3579,3 +3579,87 @@ button:focus-visible,
     animation: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   VEILLE HEBDOMADAIRE — flux OSINT (section + cloche + panneau)
+   DA : violet #6B3FA0 / blanc / Plus Jakarta Sans
+   ═══════════════════════════════════════════════════════════════ */
+.veille-sec__head { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+.veille-live { display:inline-flex; align-items:center; gap:8px; font:600 10px/1 'JetBrains Mono',monospace; letter-spacing:.16em; text-transform:uppercase; color:#2E9E6B; white-space:nowrap; padding-bottom:6px; }
+.veille-live__dot { width:8px; height:8px; border-radius:50%; background:#2E9E6B; box-shadow:0 0 0 0 rgba(46,158,107,.5); animation:veille-pulse 2s infinite; }
+@keyframes veille-pulse { 0%{box-shadow:0 0 0 0 rgba(46,158,107,.45);} 70%{box-shadow:0 0 0 7px rgba(46,158,107,0);} 100%{box-shadow:0 0 0 0 rgba(46,158,107,0);} }
+
+.veille-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:30px; }
+@media (max-width:980px){ .veille-grid{ grid-template-columns:repeat(2,1fr);} }
+@media (max-width:640px){ .veille-grid{ grid-template-columns:1fr;} }
+
+.vcard { display:flex; flex-direction:column; background:#fff; border:1px solid rgba(24,20,40,.09); border-radius:16px; overflow:hidden; cursor:pointer; text-align:left; transition:transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s, border-color .22s; outline:none; }
+.vcard:hover, .vcard:focus-visible { transform:translateY(-4px); box-shadow:0 22px 50px rgba(24,20,40,.13); border-color:rgba(107,63,160,.3); }
+.vcard__media { position:relative; aspect-ratio:16/8.4; background:linear-gradient(135deg,#6B3FA0 0%,#5650C6 52%,#1E6FBE 100%); overflow:hidden; }
+.vcard__img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.vcard__grid { position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,.22) 1px, transparent 1.4px); background-size:14px 14px; opacity:.5; mix-blend-mode:overlay; }
+.vcard:hover .vcard__media { transform:none; }
+.vcard__src { position:absolute; left:14px; bottom:11px; right:14px; font:800 19px/1.05 'Plus Jakarta Sans',sans-serif; letter-spacing:-.01em; color:#fff; text-shadow:0 2px 14px rgba(13,8,30,.4); opacity:.96; }
+.vcard__sev { position:absolute; top:11px; left:11px; font:700 8.5px/1 'JetBrains Mono',monospace; letter-spacing:.12em; text-transform:uppercase; padding:5px 9px; border-radius:5px; border:1px solid; backdrop-filter:blur(4px); }
+.vcard__body { padding:16px 17px 18px; display:flex; flex-direction:column; flex:1; }
+.vcard__meta { display:flex; align-items:center; gap:9px; font:600 9.5px/1 'JetBrains Mono',monospace; letter-spacing:.08em; text-transform:uppercase; color:#8A8499; margin-bottom:10px; flex-wrap:wrap; }
+.vcard__zone { color:#6B3FA0; }
+.vcard__date::before { content:'· '; color:#C4BDD6; }
+.vcard__title { font:700 16.5px/1.32 'Plus Jakarta Sans',sans-serif; letter-spacing:-.01em; color:#181428; margin:0 0 9px; }
+.vcard__resume { font:400 13.5px/1.6 'Plus Jakarta Sans',sans-serif; color:#5A5470; margin:0 0 16px; flex:1; }
+.vcard__more { display:inline-flex; align-items:center; gap:6px; font:600 11px/1 'JetBrains Mono',monospace; letter-spacing:.1em; text-transform:uppercase; color:#6B3FA0; }
+.vcard__more svg { width:13px; height:13px; }
+
+.veille-sec__foot { margin-top:26px; display:flex; justify-content:center; }
+
+/* ── Cloche flottante ── */
+.veille-bell { position:fixed; right:26px; bottom:26px; z-index:60; width:54px; height:54px; border-radius:50%; border:none; cursor:pointer;
+  background:linear-gradient(135deg,#6B3FA0,#5650C6); color:#fff; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 12px 34px rgba(107,63,160,.42); transition:transform .18s, box-shadow .18s; }
+.veille-bell:hover { transform:translateY(-3px) scale(1.04); box-shadow:0 18px 44px rgba(107,63,160,.55); }
+.veille-bell__badge { position:absolute; top:-3px; right:-3px; min-width:21px; height:21px; padding:0 5px; border-radius:11px; background:#B83A4A; color:#fff;
+  font:700 11px/21px 'Plus Jakarta Sans',sans-serif; text-align:center; border:2px solid #fff; box-shadow:0 0 0 0 rgba(184,58,74,.5); animation:veille-pulse2 2.4s infinite; }
+@keyframes veille-pulse2 { 0%{box-shadow:0 0 0 0 rgba(184,58,74,.5);} 70%{box-shadow:0 0 0 8px rgba(184,58,74,0);} 100%{box-shadow:0 0 0 0 rgba(184,58,74,0);} }
+@media (max-width:640px){ .veille-bell{ right:16px; bottom:16px; width:50px; height:50px; } }
+
+/* ── Panneau lateral ── */
+.veille-panel-scrim { position:fixed; inset:0; z-index:70; background:rgba(20,14,34,.42); backdrop-filter:blur(2px); opacity:0; pointer-events:none; transition:opacity .35s; }
+.veille-panel-scrim.is-open { opacity:1; pointer-events:auto; }
+.veille-panel { position:fixed; top:0; right:0; bottom:0; z-index:71; width:392px; max-width:92vw; background:#fff; border-left:1px solid rgba(24,20,40,.1);
+  box-shadow:-26px 0 70px rgba(20,14,34,.22); transform:translateX(100%); transition:transform .42s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; }
+.veille-panel.is-open { transform:none; }
+.veille-panel__head { padding:22px 22px 18px; border-bottom:1px solid rgba(24,20,40,.08); display:flex; align-items:flex-start; justify-content:space-between; }
+.veille-panel__t { font:700 17px/1 'Plus Jakarta Sans',sans-serif; color:#181428; }
+.veille-panel__s { font:600 9px/1 'JetBrains Mono',monospace; letter-spacing:.16em; text-transform:uppercase; color:#8A8499; margin-top:7px; }
+.veille-panel__x { width:30px; height:30px; border-radius:8px; border:1px solid rgba(24,20,40,.12); background:none; color:#6E6982; cursor:pointer; font-size:15px; line-height:1; transition:.15s; }
+.veille-panel__x:hover { color:#181428; border-color:#6B3FA0; background:rgba(107,63,160,.07); }
+.veille-panel__list { flex:1; overflow-y:auto; padding:8px 12px; }
+.veille-panel__foot { padding:13px 22px; border-top:1px solid rgba(24,20,40,.08); font:500 10.5px/1.5 'Plus Jakarta Sans',sans-serif; color:#8A8499; }
+.vrow { display:flex; gap:12px; width:100%; text-align:left; background:none; border:none; border-radius:11px; padding:13px 12px; cursor:pointer; transition:background .14s; }
+.vrow:hover { background:#F4F2F8; }
+.vrow__dot { width:9px; height:9px; border-radius:50%; margin-top:5px; flex:none; }
+.vrow__meta { display:block; font:600 9px/1.3 'JetBrains Mono',monospace; letter-spacing:.07em; text-transform:uppercase; color:#8A8499; margin-bottom:5px; }
+.vrow__t { display:block; font:600 13.5px/1.42 'Plus Jakarta Sans',sans-serif; color:#181428; }
+
+/* ── Modale detail ── */
+.vmodal-scrim { position:fixed; inset:0; z-index:80; background:rgba(20,14,34,.5); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; padding:24px; animation:vfade .2s ease; }
+@keyframes vfade { from{opacity:0;} to{opacity:1;} }
+.vmodal { position:relative; width:560px; max-width:100%; max-height:90vh; overflow:hidden; background:#fff; border-radius:20px; box-shadow:0 40px 100px rgba(20,14,34,.4); display:flex; flex-direction:column; animation:vpop .3s cubic-bezier(.22,1,.36,1); }
+@keyframes vpop { from{opacity:0; transform:translateY(14px) scale(.98);} to{opacity:1; transform:none;} }
+.vmodal__x { position:absolute; top:14px; right:14px; z-index:2; width:32px; height:32px; border-radius:9px; border:1px solid rgba(255,255,255,.4); background:rgba(13,8,30,.3); color:#fff; cursor:pointer; font-size:15px; backdrop-filter:blur(6px); transition:.15s; }
+.vmodal__x:hover { background:rgba(13,8,30,.55); }
+.vmodal__media { position:relative; height:168px; background:linear-gradient(135deg,#6B3FA0 0%,#5650C6 52%,#1E6FBE 100%); overflow:hidden; flex:none; }
+.vmodal__media img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.vmodal__media .vcard__src { font-size:24px; }
+.vmodal__body { padding:22px 26px 26px; overflow-y:auto; }
+.vmodal__title { font:700 23px/1.25 'Plus Jakarta Sans',sans-serif; letter-spacing:-.015em; color:#181428; margin:12px 0 12px; }
+.vmodal__resume { font:500 15px/1.6 'Plus Jakarta Sans',sans-serif; color:#3A3450; margin:0 0 18px; }
+.vmodal__detail { border-top:1px solid rgba(24,20,40,.08); padding-top:18px; }
+.vmodal__lbl { font:700 9px/1 'JetBrains Mono',monospace; letter-spacing:.2em; text-transform:uppercase; color:#6B3FA0; margin-bottom:11px; }
+.vmodal__detail p { font:400 14px/1.7 'Plus Jakarta Sans',sans-serif; color:#5A5470; margin:0 0 16px; }
+.vmodal__srclink { display:inline-flex; align-items:center; gap:6px; font:600 10px/1 'JetBrains Mono',monospace; letter-spacing:.05em; color:#6B3FA0; text-decoration:none; border:1px solid rgba(107,63,160,.3); padding:7px 11px; border-radius:7px; transition:.15s; }
+.vmodal__srclink:hover { background:rgba(107,63,160,.08); border-color:#6B3FA0; }
+.vmodal__gate { border-top:1px solid rgba(24,20,40,.08); padding-top:22px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:11px; }
+.vmodal__gate-t { font:700 15px/1.3 'Plus Jakarta Sans',sans-serif; color:#181428; }
+.vmodal__gate-s { font:400 13px/1.6 'Plus Jakarta Sans',sans-serif; color:#6E6982; max-width:340px; }
+.vmodal__gate .btn--primary { margin-top:6px; }
