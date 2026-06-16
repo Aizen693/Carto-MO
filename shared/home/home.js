@@ -139,6 +139,22 @@ function srcLogo(url) {
     return null;
   }
 }
+function reliabilityOf(s) {
+  s = (s || '').toLowerCase();
+  if (/acled|isw|bellingcat|kivu|reuters|afp|crisis|hrw|amnesty|\bonu\b|\bun\b|imb|janes/.test(s)) return 'Élevée';
+  if (/rfi|guardian|\bbbc\b|france 24|le monde|trt|jazeera|figaro|ap\b/.test(s)) return 'Établie';
+  return 'À recouper';
+}
+function VBlock({
+  v
+}) {
+  if (Array.isArray(v) && v.length) return /*#__PURE__*/React.createElement("ul", {
+    className: "vreport__ul"
+  }, v.map((x, i) => /*#__PURE__*/React.createElement("li", {
+    key: i
+  }, x)));
+  return /*#__PURE__*/React.createElement("p", null, Array.isArray(v) ? v.join(' ') : v);
+}
 function useVeille() {
   const [items, setItems] = useState(VEILLE_SEED);
   useEffect(() => {
@@ -324,15 +340,57 @@ function VeilleModal({
   }, it.titre), /*#__PURE__*/React.createElement("p", {
     className: "vmodal__resume"
   }, it.resume), sub ? /*#__PURE__*/React.createElement("div", {
-    className: "vmodal__detail"
+    className: "vreport"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "vmodal__lbl"
-  }, "Analyse"), /*#__PURE__*/React.createElement("p", null, it.detail || it.resume), it.source_url && /*#__PURE__*/React.createElement("a", {
+    className: "vreport__class"
+  }, "Note d'analyse \xB7 Acc\xE8s abonn\xE9"), /*#__PURE__*/React.createElement("div", {
+    className: "vreport__sec"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vreport__lbl"
+  }, "Analyse"), /*#__PURE__*/React.createElement("p", null, it.detail || it.resume)), it.implications && (Array.isArray(it.implications) ? it.implications.length : it.implications) ? /*#__PURE__*/React.createElement("div", {
+    className: "vreport__sec"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vreport__lbl"
+  }, "Implications op\xE9rationnelles"), /*#__PURE__*/React.createElement(VBlock, {
+    v: it.implications
+  })) : null, /*#__PURE__*/React.createElement("div", {
+    className: "vreport__sec vreport__reco"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vreport__lbl"
+  }, "Recommandations \xB7 que faire de cette information"), it.recommandations && (Array.isArray(it.recommandations) ? it.recommandations.length : it.recommandations) ? /*#__PURE__*/React.createElement(VBlock, {
+    v: it.recommandations
+  }) : /*#__PURE__*/React.createElement("p", {
+    className: "vreport__muted"
+  }, "\xC0 partir de ce signal, nos analystes produisent sur demande une note d'impact d\xE9di\xE9e \xE0 votre organisation : exposition, sc\xE9narios probables et mesures \xE0 prendre.")), /*#__PURE__*/React.createElement("div", {
+    className: "vreport__sec"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vreport__lbl"
+  }, "Sources et fiabilit\xE9"), /*#__PURE__*/React.createElement("div", {
+    className: "vreport__srcrow"
+  }, it.source_url ? /*#__PURE__*/React.createElement("a", {
     className: "vmodal__srclink",
     href: it.source_url,
     target: "_blank",
     rel: "noopener"
-  }, "Source \xB7 ", it.source, " \u2197")) : /*#__PURE__*/React.createElement("div", {
+  }, it.source, " \u2197") : /*#__PURE__*/React.createElement("span", {
+    className: "vreport__srcname"
+  }, it.source), /*#__PURE__*/React.createElement("span", {
+    className: "vreport__rel"
+  }, "Fiabilit\xE9 \xB7 ", reliabilityOf(it.source)))), /*#__PURE__*/React.createElement("a", {
+    className: "vreport__cta",
+    href: "/contact/"
+  }, "Demander un brief approfondi sur ce sujet", /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M5 12h14M13 6l6 6-6 6"
+  })))) : /*#__PURE__*/React.createElement("div", {
     className: "vmodal__gate"
   }, /*#__PURE__*/React.createElement("svg", {
     width: "22",
@@ -353,9 +411,11 @@ function VeilleModal({
     d: "M7 11V7a5 5 0 0 1 10 0v4"
   })), /*#__PURE__*/React.createElement("div", {
     className: "vmodal__gate-t"
-  }, "Analyse compl\xE8te r\xE9serv\xE9e aux abonn\xE9s"), /*#__PURE__*/React.createElement("div", {
+  }, "Note d'analyse r\xE9serv\xE9e aux abonn\xE9s"), /*#__PURE__*/React.createElement("div", {
     className: "vmodal__gate-s"
-  }, "Acc\xE9dez \xE0 l'analyse d\xE9taill\xE9e, aux sources et \xE0 l'archive compl\xE8te de la veille."), /*#__PURE__*/React.createElement("a", {
+  }, "Chaque signal est livr\xE9 sous forme de note exploitable. L'abonnement ouvre l'acc\xE8s complet :"), /*#__PURE__*/React.createElement("ul", {
+    className: "vgate__list"
+  }, /*#__PURE__*/React.createElement("li", null, "Analyse d\xE9taill\xE9e et mise en contexte"), /*#__PURE__*/React.createElement("li", null, "Implications op\xE9rationnelles pour votre organisation"), /*#__PURE__*/React.createElement("li", null, "Recommandations actionnables"), /*#__PURE__*/React.createElement("li", null, "Sources v\xE9rifiables et niveau de fiabilit\xE9")), /*#__PURE__*/React.createElement("a", {
     className: "btn btn--primary",
     href: "/offres/"
   }, "Voir les offres")))));

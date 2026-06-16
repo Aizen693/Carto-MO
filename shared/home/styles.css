@@ -3664,6 +3664,28 @@ button:focus-visible,
 .vmodal__gate-s { font:400 13px/1.6 'Plus Jakarta Sans',sans-serif; color:#6E6982; max-width:340px; }
 .vmodal__gate .btn--primary { margin-top:6px; }
 
+/* Note d'analyse abonné (modale veille) */
+.vreport { border-top:1px solid rgba(24,20,40,.08); padding-top:20px; }
+.vreport__class { display:inline-block; font:700 9px/1 'JetBrains Mono',monospace; letter-spacing:.16em; text-transform:uppercase; color:#6B3FA0; background:rgba(107,63,160,.08); border:1px solid rgba(107,63,160,.22); padding:6px 10px; border-radius:6px; margin-bottom:20px; }
+.vreport__sec { margin-bottom:20px; }
+.vreport__lbl { font:700 9px/1 'JetBrains Mono',monospace; letter-spacing:.18em; text-transform:uppercase; color:#6B3FA0; margin-bottom:10px; }
+.vreport__sec p { font:400 14px/1.7 'Plus Jakarta Sans',sans-serif; color:#4A4458; margin:0; }
+.vreport__ul { margin:0; padding:0; list-style:none; }
+.vreport__ul li { position:relative; padding-left:20px; font:400 14px/1.65 'Plus Jakarta Sans',sans-serif; color:#4A4458; margin-bottom:9px; }
+.vreport__ul li:last-child { margin-bottom:0; }
+.vreport__ul li::before { content:''; position:absolute; left:1px; top:8px; width:7px; height:7px; border-radius:2px; background:linear-gradient(135deg,#6B3FA0,#1E6FBE); }
+.vreport__reco { background:linear-gradient(180deg,rgba(107,63,160,.055),rgba(30,111,190,.045)); border:1px solid rgba(107,63,160,.14); border-radius:13px; padding:16px 17px; }
+.vreport__reco .vreport__lbl { color:#5650C6; }
+.vreport__muted { font-style:italic; color:#6E6982 !important; }
+.vreport__srcrow { display:flex; align-items:center; gap:11px; flex-wrap:wrap; }
+.vreport__srcname { font:600 12px/1 'Plus Jakarta Sans',sans-serif; color:#3A3450; }
+.vreport__rel { font:600 9px/1 'JetBrains Mono',monospace; letter-spacing:.07em; text-transform:uppercase; color:#2E9E6B; border:1px solid rgba(46,158,107,.32); background:rgba(46,158,107,.08); padding:6px 9px; border-radius:6px; }
+.vreport__cta { display:flex; align-items:center; justify-content:center; gap:9px; width:100%; margin-top:4px; font:700 11px/1 'JetBrains Mono',monospace; letter-spacing:.1em; text-transform:uppercase; color:#fff; text-decoration:none; background:linear-gradient(120deg,#6B3FA0,#5650C6 55%,#1E6FBE); padding:15px; border-radius:12px; box-shadow:0 10px 26px rgba(107,63,160,.3); transition:.18s; }
+.vreport__cta:hover { box-shadow:0 14px 34px rgba(107,63,160,.45); transform:translateY(-2px); }
+.vgate__list { list-style:none; margin:15px 0 18px; padding:0; text-align:left; display:inline-block; }
+.vgate__list li { position:relative; padding-left:25px; font:500 13px/1.45 'Plus Jakarta Sans',sans-serif; color:#3A3450; margin-bottom:10px; }
+.vgate__list li::before { content:'✓'; position:absolute; left:0; top:0; color:#2E9E6B; font-weight:800; }
+
 /* Logo de la source OSINT sur la carte de veille */
 .vcard__logo { position:absolute; top:11px; right:11px; width:36px; height:36px; border-radius:10px; background:#fff; padding:7px; object-fit:contain; box-shadow:0 5px 16px rgba(13,8,30,.28); }
 .vmodal__media .vcard__logo { top:14px; right:14px; width:42px; height:42px; padding:8px; border-radius:11px; }

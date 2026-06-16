@@ -63,6 +63,14 @@ const VEILLE_SEED = [
 function veilleZone(k){ return ZONE_LABELS[k] || k; }
 function veilleDateFR(d){ try { return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}); } catch(e){ return d; } }
 function srcLogo(url){ try { return 'https://www.google.com/s2/favicons?domain=' + new URL(url).hostname + '&sz=128'; } catch(e){ return null; } }
+function reliabilityOf(s){ s = (s||'').toLowerCase();
+  if (/acled|isw|bellingcat|kivu|reuters|afp|crisis|hrw|amnesty|\bonu\b|\bun\b|imb|janes/.test(s)) return 'Élevée';
+  if (/rfi|guardian|\bbbc\b|france 24|le monde|trt|jazeera|figaro|ap\b/.test(s)) return 'Établie';
+  return 'À recouper'; }
+function VBlock({ v }){
+  if (Array.isArray(v) && v.length) return (<ul className="vreport__ul">{v.map((x,i)=>(<li key={i}>{x}</li>))}</ul>);
+  return <p>{Array.isArray(v) ? v.join(' ') : v}</p>;
+}
 
 function useVeille(){
   const [items,setItems]=useState(VEILLE_SEED);
@@ -138,16 +146,49 @@ function VeilleModal({ it, sub, onClose }){
           <h3 className="vmodal__title">{it.titre}</h3>
           <p className="vmodal__resume">{it.resume}</p>
           {sub ? (
-            <div className="vmodal__detail">
-              <div className="vmodal__lbl">Analyse</div>
-              <p>{it.detail || it.resume}</p>
-              {it.source_url && <a className="vmodal__srclink" href={it.source_url} target="_blank" rel="noopener">Source · {it.source} ↗</a>}
+            <div className="vreport">
+              <div className="vreport__class">Note d'analyse · Accès abonné</div>
+              <div className="vreport__sec">
+                <div className="vreport__lbl">Analyse</div>
+                <p>{it.detail || it.resume}</p>
+              </div>
+              {it.implications && (Array.isArray(it.implications) ? it.implications.length : it.implications) ? (
+                <div className="vreport__sec">
+                  <div className="vreport__lbl">Implications opérationnelles</div>
+                  <VBlock v={it.implications} />
+                </div>
+              ) : null}
+              <div className="vreport__sec vreport__reco">
+                <div className="vreport__lbl">Recommandations · que faire de cette information</div>
+                {it.recommandations && (Array.isArray(it.recommandations) ? it.recommandations.length : it.recommandations)
+                  ? <VBlock v={it.recommandations} />
+                  : <p className="vreport__muted">À partir de ce signal, nos analystes produisent sur demande une note d'impact dédiée à votre organisation : exposition, scénarios probables et mesures à prendre.</p>}
+              </div>
+              <div className="vreport__sec">
+                <div className="vreport__lbl">Sources et fiabilité</div>
+                <div className="vreport__srcrow">
+                  {it.source_url
+                    ? <a className="vmodal__srclink" href={it.source_url} target="_blank" rel="noopener">{it.source} ↗</a>
+                    : <span className="vreport__srcname">{it.source}</span>}
+                  <span className="vreport__rel">Fiabilité · {reliabilityOf(it.source)}</span>
+                </div>
+              </div>
+              <a className="vreport__cta" href="/contact/">
+                Demander un brief approfondi sur ce sujet
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
             </div>
           ) : (
             <div className="vmodal__gate">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6B3FA0" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <div className="vmodal__gate-t">Analyse complète réservée aux abonnés</div>
-              <div className="vmodal__gate-s">Accédez à l'analyse détaillée, aux sources et à l'archive complète de la veille.</div>
+              <div className="vmodal__gate-t">Note d'analyse réservée aux abonnés</div>
+              <div className="vmodal__gate-s">Chaque signal est livré sous forme de note exploitable. L'abonnement ouvre l'accès complet :</div>
+              <ul className="vgate__list">
+                <li>Analyse détaillée et mise en contexte</li>
+                <li>Implications opérationnelles pour votre organisation</li>
+                <li>Recommandations actionnables</li>
+                <li>Sources vérifiables et niveau de fiabilité</li>
+              </ul>
               <a className="btn btn--primary" href="/offres/">Voir les offres</a>
             </div>
           )}
