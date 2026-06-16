@@ -2,8 +2,8 @@
   "updated": "2026-06-16",
   "items": [
     {
-      "id": "v-2026-06-16-01",
-      "date": "2026-06-16",
+      "id": "u-bamada-net-bamako-et-cotonou-affichent-leur-volonte-de-renforcer-leur-",
+      "date": "2026-06-10",
       "theatre": "sahel",
       "severite": "alerte",
       "source": "Bamada.net",
@@ -24,8 +24,8 @@
       ]
     },
     {
-      "id": "v-2026-06-16-02",
-      "date": "2026-06-16",
+      "id": "u-bamada-net-gao-assistance-sanitaire-aux-deplaces",
+      "date": "2026-06-10",
       "theatre": "sahel",
       "severite": "info",
       "source": "Bamada.net",
@@ -46,8 +46,8 @@
       ]
     },
     {
-      "id": "v-2026-06-16-03",
-      "date": "2026-06-16",
+      "id": "u-trthaber-com-haber-dunya-trump-bugun-irana-cok-sert-bir-sekilde-saldir",
+      "date": "2026-06-10",
       "theatre": "moyen-orient",
       "severite": "critique",
       "source": "TRT Haber",
@@ -65,28 +65,6 @@
         "Surveiller les déclarations iraniennes en réponse",
         "Analyser les déploiements militaires US dans la région",
         "Évaluer l'impact sur les chaînes d'approvisionnement énergétiques"
-      ]
-    },
-    {
-      "id": "v-2026-06-16-04",
-      "date": "2026-06-16",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "The Guardian",
-      "source_url": "https://www.theguardian.com/football/video/2026/jun/10/the-most-inclusive-world-cup-ever-doesnt-look-like-it",
-      "image": "",
-      "titre": "Arbitre somalien de classe mondiale exclu de la Coupe du monde 2026",
-      "resume": "Omar Abdulkadir Artan, meilleur arbitre africain, a été refusé d'entrée aux États-Unis pour officier à la Coupe du monde 2026, réduisant à néant sa participation historique potentielle.",
-      "detail": "Artan aurait pu devenir le premier arbitre somalien à officier à une Coupe du monde, marquant une avancée pour la représentation africaine. Son exclusion questionne les politiques d'accès américaines et les protocoles FIFA de sélection. L'incident soulève des enjeux de réputation pour la Somalie et d'équité dans le sport international. Sepp Blatter a critiqué la décision comme insensée et incroyable.",
-      "implications": [
-        "Représentation africaine entravée dans les instances sportives internationales",
-        "Enjeux diplomatiques entre la Somalie et les États-Unis",
-        "Crédibilité de l'inclusivité proclamée de la Coupe du monde 2026"
-      ],
-      "recommandations": [
-        "Monitorer les réactions officielles somaliennes et africaines",
-        "Analyser les implications pour la participation africaine aux compétitions internationales",
-        "Suivre les clarifications de la FIFA et des autorités américaines"
       ]
     }
   ]
