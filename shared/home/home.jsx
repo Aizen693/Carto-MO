@@ -250,7 +250,6 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
       </section>
 
       <TrustBand />
-      <ProductionSection />
       <VeilleSystem />
       <GetSection />
       <DiffSection />
