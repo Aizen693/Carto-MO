@@ -490,7 +490,7 @@ function HomeView({
     className: "hero__demo-warn"
   }, "Donn\xE9es fictives, \xE0 titre d'illustration du rendu de nos cartes.")))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"
-  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(TrustBand, null), /*#__PURE__*/React.createElement(VeilleSystem, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
+  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(VeilleSystem, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
     style: videoStyle
   })), /*#__PURE__*/React.createElement(SiteFooter, null));
 }

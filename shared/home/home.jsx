@@ -249,7 +249,6 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
         </div>
       </section>
 
-      <TrustBand />
       <VeilleSystem />
       <GetSection />
       <DiffSection />
