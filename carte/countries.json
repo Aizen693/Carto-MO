@@ -411,7 +411,7 @@
         9.5
       ],
       "zoom": 6.2,
-      "count": 69,
+      "count": 70,
       "events": [
         "Accident",
         "Arrestation",
@@ -424,6 +424,7 @@
         "Elections",
         "Opération",
         "Présence / Regroupement",
+        "Renforcement",
         "Vol"
       ],
       "actors": [
@@ -431,6 +432,7 @@
         "CIVILS",
         "FDS",
         "FR",
+        "GAT",
         "GENERAL EXT",
         "GSIM",
         "HANI"

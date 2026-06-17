@@ -43,10 +43,13 @@ function normalizePays(raw) {
   s = s.replace(/\s*\(.*?\)\s*/g, '');
   s = s.replace(/\s+/g, ' ').trim();
   if (!s) return null;
+  // Multi-pays ("Frontière Bénin, Nigéria...") → rattaché au 1er pays nommé.
+  if (/[,/]/.test(s) || /fronti/i.test(s)) {
+    s = s.replace(/fronti[èe]re/i, '').split(/[,/]/)[0].replace(/\s*\(.*?\)\s*/g, '').trim();
+    if (!s) return null;
+  }
   const key = s.toLowerCase();
   if (PAYS_TYPOS[key]) return PAYS_TYPOS[key];
-  // Multi-pays ("Frontière Bénin, Nigéria...") → on ignore (trop ambigu).
-  if (/[,/]/.test(s) || /fronti/i.test(s)) return null;
   return s;
 }
 
@@ -104,8 +107,8 @@ function toISO(raw) {
   // Déjà ISO : 2026-01-02
   let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
   if (m) return `${m[1]}-${m[2]}-${m[3]}`;
-  // DD/MM/YYYY
-  m = s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  // DD/MM/YYYY (séparateur tolérant : / ou .)
+  m = s.match(/(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})/);
   if (m) return `${m[3]}-${String(m[2]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;
   return null;
 }

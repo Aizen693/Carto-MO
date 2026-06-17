@@ -142,7 +142,7 @@ function PaysList({ q }) {
   const [list, setList] = useState(null);
   useEffect(() => {
     let on = true;
-    fetch('/carte/countries.json?v=20260617live')
+    fetch('/carte/countries.json?v=20260617audit')
       .then(r => r.json())
       .then(d => { if (on) setList(d.countries || []); })
       .catch(() => { if (on) setList([]); });

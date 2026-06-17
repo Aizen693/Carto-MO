@@ -26,9 +26,13 @@
     if (!raw) return null;
     var s = String(raw).trim().split(/\s*-\s*/)[0].replace(/\s*\(.*?\)\s*/g, '').replace(/\s+/g, ' ').trim();
     if (!s) return null;
+    // Point multi-pays / frontière → rattaché au 1er pays nommé (aucune perte).
+    if (/[,/]/.test(s) || /fronti/i.test(s)) {
+      s = s.replace(/fronti[èe]re/i, '').split(/[,/]/)[0].replace(/\s*\(.*?\)\s*/g, '').trim();
+      if (!s) return null;
+    }
     var key = s.toLowerCase();
     if (PAYS_TYPOS[key]) return PAYS_TYPOS[key];
-    if (/[,/]/.test(s) || /fronti/i.test(s)) return null;
     return s;
   }
   function canonEvent(raw) {
@@ -73,7 +77,7 @@
     if (!raw) return null;
     var s = String(raw).trim(), m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
     if (m) return m[1] + '-' + m[2] + '-' + m[3];
-    m = s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    m = s.match(/(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})/);
     if (m) return m[3] + '-' + String(m[2]).padStart(2, '0') + '-' + String(m[1]).padStart(2, '0');
     return null;
   }
@@ -102,6 +106,7 @@
     sel: { from: null, to: null, event: null, actor: null },
     dataFor: null,
     mapReady: false,
+    tl: { gran: 'jour', buckets: [], idx: 0, playing: false, timer: null },
   };
   var SRC = 'humint-src';
 
@@ -206,8 +211,101 @@
   // Rendu dès que la donnée ET la carte sont prêtes (ordre d'arrivée indifférent).
   function tryRender() {
     if (!state.mapReady || state.dataFor !== state.country) return;
+    buildTimeline();
     applyFacets();
     fitToFiltered();
+  }
+
+  /* ─────────── Curseur temporel (granularité adaptée à la période) ─────────── */
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function isoToDate(iso) { var p = iso.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function dateToIso(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+  function frShort(iso) { var ms = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.']; var p = iso.split('-'); return parseInt(p[2], 10) + ' ' + ms[parseInt(p[1], 10) - 1]; }
+
+  function activeRange() {
+    if (state.sel.from && state.sel.to) return [state.sel.from, state.sel.to];
+    var min = null, max = null;
+    state.all.forEach(function (f) { if (f.iso) { if (!min || f.iso < min) min = f.iso; if (!max || f.iso > max) max = f.iso; } });
+    return (min && max) ? [min, max] : null;
+  }
+
+  function buildBuckets(fromIso, toIso) {
+    var span = Math.round((isoToDate(toIso) - isoToDate(fromIso)) / 86400000) + 1;
+    var buckets = [], gran, d, end = isoToDate(toIso);
+    if (span <= 31) {
+      gran = 'jour';
+      for (d = isoToDate(fromIso); d <= end; d.setDate(d.getDate() + 1)) { var iso = dateToIso(d); buckets.push({ start: iso, end: iso, label: frDate(iso) }); }
+    } else if (span <= 92) {
+      gran = 'semaine';
+      d = isoToDate(fromIso);
+      while (d <= end) { var s = new Date(d); var e = new Date(d); e.setDate(e.getDate() + 6); if (e > end) e = new Date(end); buckets.push({ start: dateToIso(s), end: dateToIso(e), label: frShort(dateToIso(s)) + ' – ' + frShort(dateToIso(e)) }); d.setDate(d.getDate() + 7); }
+    } else {
+      gran = 'mois';
+      var y = +fromIso.slice(0, 4), m = +fromIso.slice(5, 7) - 1;
+      d = new Date(y, m, 1);
+      while (d <= end) {
+        var by = d.getFullYear(), bm = d.getMonth();
+        var bs = dateToIso(new Date(by, bm, 1)), be = dateToIso(new Date(by, bm + 1, 0));
+        if (bs < fromIso) bs = fromIso; if (be > toIso) be = toIso;
+        buckets.push({ start: bs, end: be, label: MOIS_FR[bm] + ' ' + by });
+        d = new Date(by, bm + 1, 1);
+      }
+    }
+    return { gran: gran, buckets: buckets };
+  }
+
+  function buildTimeline() {
+    stopPlay();
+    var r = activeRange();
+    if (!r) { state.tl = { gran: 'jour', buckets: [], idx: 0, playing: false, timer: null }; renderTimeline(); return; }
+    var bb = buildBuckets(r[0], r[1]);
+    state.tl = { gran: bb.gran, buckets: bb.buckets, idx: 0, playing: false, timer: null };
+    renderTimeline();
+  }
+
+  function tlPasses(f) {
+    if (state.tl.idx <= 0) return true;
+    var b = state.tl.buckets[state.tl.idx - 1];
+    if (!b) return true;
+    return f.iso && f.iso >= b.start && f.iso <= b.end;
+  }
+  function tlLabel() {
+    if (state.tl.idx === 0) return 'Toute la période · par ' + state.tl.gran;
+    var b = state.tl.buckets[state.tl.idx - 1];
+    return b ? b.label : '';
+  }
+  function updateTl() {
+    var l = $('tl-label'); if (l) l.textContent = tlLabel();
+    var s = $('tl-slider'); if (s) s.value = state.tl.idx;
+  }
+  function renderTimeline() {
+    var box = $('timeline'); if (!box) return;
+    if (!state.tl.buckets.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
+    box.style.display = 'flex';
+    var n = state.tl.buckets.length;
+    box.innerHTML = '<button id="tl-play" class="tl-btn" title="Lecture">▶</button>' +
+      '<input type="range" id="tl-slider" min="0" max="' + n + '" step="1" value="' + state.tl.idx + '">' +
+      '<span id="tl-label">' + esc(tlLabel()) + '</span>';
+    $('tl-slider').oninput = function () { stopPlay(); state.tl.idx = +this.value; updateTl(); applyFacets(); };
+    $('tl-play').onclick = function () { togglePlay(); };
+  }
+  function togglePlay() { if (state.tl.playing) stopPlay(); else startPlay(); }
+  function startPlay() {
+    if (!state.tl.buckets.length) return;
+    if (state.tl.idx >= state.tl.buckets.length) state.tl.idx = 0;
+    state.tl.playing = true;
+    var btn = $('tl-play'); if (btn) btn.textContent = '❚❚';
+    state.tl.timer = setInterval(function () {
+      state.tl.idx++;
+      if (state.tl.idx > state.tl.buckets.length) { stopPlay(); state.tl.idx = 0; updateTl(); applyFacets(); return; }
+      updateTl(); applyFacets();
+    }, 950);
+  }
+  function stopPlay() {
+    if (!state.tl) return;
+    state.tl.playing = false;
+    if (state.tl.timer) { clearInterval(state.tl.timer); state.tl.timer = null; }
+    var btn = $('tl-play'); if (btn) btn.textContent = '▶';
   }
 
   function normFeature(f) {
@@ -240,7 +338,7 @@
   }
   function applyFacets() {
     if (!map || !map.getSource(SRC)) return;
-    var shown = state.all.filter(passes);
+    var shown = state.all.filter(function (f) { return passes(f) && tlPasses(f); });
     map.getSource(SRC).setData({
       type: 'FeatureCollection',
       features: shown.map(function (f) {
@@ -400,7 +498,7 @@
         b.onclick = function () { if (b.disabled) return; var iso = b.getAttribute('data-iso'); if (!from || (from && to)) { from = iso; to = null; } else if (iso >= from) { to = iso; } else { from = iso; } redraw(); };
       });
       var c = p.querySelector('[data-act=cancel]'); if (c) c.onclick = function () { closePop(); };
-      var ok = p.querySelector('[data-act=ok]'); if (ok) ok.onclick = function () { if (from && to) { state.sel.from = from; state.sel.to = to; closePop(); applyFacets(); renderSummary(); fitToFiltered(); } };
+      var ok = p.querySelector('[data-act=ok]'); if (ok) ok.onclick = function () { if (from && to) { state.sel.from = from; state.sel.to = to; closePop(); buildTimeline(); applyFacets(); renderSummary(); fitToFiltered(); } };
     }
     function redraw() { pop.querySelector('.cal-inner').innerHTML = html(); wire(pop); }
     pop = openPop(anchor, '<div class="cal-inner">' + html() + '</div>', wire);

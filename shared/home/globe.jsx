@@ -276,7 +276,7 @@ function Globe() {
 
   // Manifeste pays (données HUMINT) — alimente toutes les étapes du constructeur.
   useEffectGlobe(() => {
-    fetch('/carte/countries.json?v=20260617live')
+    fetch('/carte/countries.json?v=20260617audit')
       .then(r => r.json())
       .then(d => setManifest(d.countries || []))
       .catch(() => {});

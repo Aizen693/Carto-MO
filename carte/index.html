@@ -145,9 +145,20 @@
   .popup-sources a{color:var(--blue);text-decoration:none;font:600 10px var(--mono);border:1px solid rgba(46,132,212,.3);border-radius:6px;padding:2px 7px}
   .popup-sources span{color:var(--muted);font:500 10px var(--mono)}
 
+  /* ── Curseur temporel ── */
+  #timeline{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:7;display:none;
+    align-items:center;gap:13px;background:#fff;border:1px solid var(--ln);border-radius:14px;
+    box-shadow:var(--shadow);padding:9px 16px;max-width:calc(100% - 130px)}
+  .tl-btn{width:34px;height:34px;flex:none;border:none;cursor:pointer;border-radius:50%;background:var(--grad);
+    color:#fff;font-size:11px;line-height:1;display:inline-flex;align-items:center;justify-content:center}
+  .tl-btn:hover{filter:brightness(1.08)}
+  #tl-slider{width:min(440px,44vw);accent-color:var(--violet);cursor:pointer;height:4px}
+  #tl-label{font:700 12px var(--jakarta);color:var(--ink);min-width:130px;white-space:nowrap}
+
   @media(max-width:680px){
-    #legend{display:none}
     #country-title{font-size:15px}
+    #tl-slider{width:44vw}
+    #tl-label{min-width:0;font-size:11px}
   }
 </style>
 </head>
@@ -169,7 +180,8 @@
 
 <div id="map"></div>
 <div id="loader">Chargement…</div>
+<div id="timeline"></div>
 
-<script src="../shared/humint-engine.js?v=20260617k"></script>
+<script src="../shared/humint-engine.js?v=20260617m"></script>
 </body>
 </html>
