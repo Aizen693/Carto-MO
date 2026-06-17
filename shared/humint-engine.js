@@ -214,6 +214,41 @@
     buildTimeline();
     applyFacets();
     fitToFiltered();
+    renderNew();
+  }
+
+  /* ─────────── Panneau « Nouveau cette semaine » (abonnés) ─────────── */
+  // Basé sur la date d'INGESTION (champ `added` posé par n8n à l'arrivée).
+  function daysSince(iso) {
+    if (!iso) return Infinity;
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    return Math.round((now - isoToDate(iso)) / 86400000);
+  }
+  function renderNew() {
+    var box = $('news'); if (!box) return;
+    var pts = state.all.filter(function (f) { return f.added && daysSince(f.added) >= 0 && daysSince(f.added) <= 7; })
+      .sort(function (a, b) { return (b.added || '').localeCompare(a.added || ''); });
+    var head = '<div class="news-head"><span class="news-dot-live"></span>Nouveau cette semaine' +
+      (pts.length ? '<span class="news-badge">' + pts.length + '</span>' : '') + '</div>';
+    if (!pts.length) { box.innerHTML = head + '<div class="news-empty">Aucune nouvelle donnée cette semaine pour ' + esc(state.country || 'ce pays') + '.</div>'; box.style.display = 'flex'; return; }
+    box.innerHTML = head + '<div class="news-list">' + pts.slice(0, 50).map(function (f, i) {
+      return '<button class="news-row" data-i="' + i + '"><span class="news-dot" style="background:' + actorColor(f.acteur) + '"></span>' +
+        '<span class="news-body"><span class="news-actor">' + esc(f.acteur) + '</span>' +
+        '<span class="news-meta">' + esc(f.type || '') + ' · ' + esc(f.iso || '') + '</span></span></button>';
+    }).join('') + '</div>';
+    box.style.display = 'flex';
+    box.querySelectorAll('.news-row').forEach(function (el) {
+      el.onclick = function () {
+        var f = pts[+el.getAttribute('data-i')];
+        if (f && map) {
+          try { map.flyTo({ center: f.coords, zoom: 9, duration: 700 }); } catch (e) { /* */ }
+          new mapboxgl.Popup({ closeButton: true, maxWidth: '320px', className: 'humint-popup' })
+            .setLngLat(f.coords)
+            .setHTML(makePopup({ acteur: f.acteur, type: f.type, iso: f.iso, description: f.description, sources: f.sources, _color: actorColor(f.acteur) }))
+            .addTo(map);
+        }
+      };
+    });
   }
 
   /* ─────────── Curseur temporel (granularité adaptée à la période) ─────────── */
@@ -322,6 +357,7 @@
       pays: normalizePays(pays), iso: iso, mkey: monthKey(iso),
       type: canonEvent(type), acteur: normalizeActor(acteur) || '—',
       description: p.description || detail || '', sources: p.sources || '', coords: coords,
+      added: p.added ? String(p.added).slice(0, 10) : null,
     };
   }
 
