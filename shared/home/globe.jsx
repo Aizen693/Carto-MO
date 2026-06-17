@@ -252,7 +252,7 @@ function Globe() {
   }, [logged, stage, sel.entry, sel.dateFrom]);
 
   const STAGES = ['pays', 'date', 'event', 'actor'];
-  const PH = { pays: 'Tapez un pays, comme', date: 'Tapez une date, comme', event: 'Tapez une typologie, comme', actor: 'Tapez un acteur, comme' };
+  const PH = { pays: 'Indiquez un pays, comme', date: 'Indiquez une date, comme', event: "Indiquez une typologie d'événement, comme", actor: 'Indiquez un acteur, comme' };
   const STAGE_EX = { pays: PAYS_EXAMPLES, date: ['Janvier 2026', 'Mars 2026'], event: ['Attaque', 'Embuscade', 'IED / Explosif'], actor: ['GSIM', 'EI-S', 'FAMA'] };
   const curStage = STAGES[stage] || 'actor';
   const examples = logged ? (STAGE_EX[curStage] || PAYS_EXAMPLES) : DEMO_EXAMPLES;
@@ -898,7 +898,7 @@ function Globe() {
                    onChange={(e) => { setQuery(e.target.value); setNotFound(false); }} />
             {!query && (
               <span className="globe-search__ph" aria-hidden="true">
-                {(logged ? PH[curStage] : 'Tapez une zone, comme')}&nbsp;<span className="globe-search__ph-zone" key={phEx}>{examples[phEx % examples.length]}</span>
+                {(logged ? PH[curStage] : 'Indiquez une zone, comme')}&nbsp;<span className="globe-search__ph-zone" key={phEx}>{examples[phEx % examples.length]}</span>
               </span>
             )}
           </>)}

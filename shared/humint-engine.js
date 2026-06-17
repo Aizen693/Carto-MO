@@ -273,7 +273,7 @@
       bar.appendChild(facetChip('pays', 'Pays', state.country, true));
       bar.appendChild(facetChip('date', 'Période', (state.sel.from && state.sel.to) ? (frDate(state.sel.from) + ' – ' + frDate(state.sel.to)) : 'Toute période', !!(state.sel.from && state.sel.to)));
       bar.appendChild(facetChip('actor', 'Acteur', state.sel.actor || 'Tous', !!state.sel.actor));
-      bar.appendChild(facetChip('event', 'Typologie', state.sel.event || 'Toutes', !!state.sel.event));
+      bar.appendChild(facetChip('event', "Typologie d'événement", state.sel.event || 'Toutes', !!state.sel.event));
     }
     var title = $('country-title');
     if (title) title.textContent = state.country || 'Choisir un pays';
@@ -327,7 +327,7 @@
   /* ── Éditeurs ── */
   function openEditor(key, anchor) {
     if (key === 'pays') return openList(anchor, 'Pays', null, (state.manifest.countries || []).map(function (c) { return { v: c.name, n: c.count }; }), state.country, false, function (val) { switchCountry(val); });
-    if (key === 'event') return openList(anchor, 'Typologie', 'Toutes les typologies', distinctCount(rowsFor(false), 'type'), state.sel.event, true, function (val) { state.sel.event = val; applyFacets(); renderSummary(); fitToFiltered(); });
+    if (key === 'event') return openList(anchor, "Typologie d'événement", 'Toutes les typologies', distinctCount(rowsFor(false), 'type'), state.sel.event, true, function (val) { state.sel.event = val; applyFacets(); renderSummary(); fitToFiltered(); });
     if (key === 'actor') return openList(anchor, 'Acteur', 'Tous les acteurs', distinctCount(rowsFor(true), 'acteur'), state.sel.actor, true, function (val) { state.sel.actor = val; applyFacets(); renderSummary(); fitToFiltered(); });
     if (key === 'date') return openCalendar(anchor);
   }
@@ -436,7 +436,7 @@
     var color = p._color || '#888';
     var head = '<div class="popup-header"><div class="popup-dot-bar" style="background:' + color + '"></div><div class="popup-actor">' + esc(p.acteur) + '</div></div>';
     var rows = '';
-    if (p.type) rows += '<div class="popup-row"><span class="popup-key">Typologie</span><span class="popup-val">' + esc(p.type) + '</span></div>';
+    if (p.type) rows += '<div class="popup-row"><span class="popup-key">Typologie d\'événement</span><span class="popup-val">' + esc(p.type) + '</span></div>';
     if (p.iso) rows += '<div class="popup-row"><span class="popup-key">Date</span><span class="popup-val">' + esc(p.iso) + '</span></div>';
     if (p.description) rows += '<div class="popup-row popup-desc"><span class="popup-val">' + esc(p.description) + '</span></div>';
     var src = '';

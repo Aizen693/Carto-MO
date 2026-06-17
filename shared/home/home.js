@@ -570,7 +570,7 @@ function HomeView({
     y1: "21",
     x2: "16.65",
     y2: "16.65"
-  })), sub ? /*#__PURE__*/React.createElement("span", null, "Tapez ", /*#__PURE__*/React.createElement("strong", null, "un pays suivi"), " dans la barre sous le globe pour ouvrir sa carte de renseignement HUMINT : \xE9v\xE9nements, acteurs et dates, filtrables.") : /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : tapez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, sous le globe.", /*#__PURE__*/React.createElement("em", {
+  })), sub ? /*#__PURE__*/React.createElement("span", null, "Indiquez ", /*#__PURE__*/React.createElement("strong", null, "un pays suivi"), " dans la barre sous le globe pour ouvrir sa carte de renseignement HUMINT : \xE9v\xE9nements, acteurs et dates, filtrables.") : /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : indiquez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, sous le globe.", /*#__PURE__*/React.createElement("em", {
     className: "hero__demo-warn"
   }, "Donn\xE9es fictives, \xE0 titre d'illustration du rendu de nos cartes.")))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"

@@ -674,10 +674,10 @@ function Globe() {
   }, [logged, stage, sel.entry, sel.dateFrom]);
   const STAGES = ['pays', 'date', 'event', 'actor'];
   const PH = {
-    pays: 'Tapez un pays, comme',
-    date: 'Tapez une date, comme',
-    event: 'Tapez une typologie, comme',
-    actor: 'Tapez un acteur, comme'
+    pays: 'Indiquez un pays, comme',
+    date: 'Indiquez une date, comme',
+    event: "Indiquez une typologie d'événement, comme",
+    actor: 'Indiquez un acteur, comme'
   };
   const STAGE_EX = {
     pays: PAYS_EXAMPLES,
@@ -1454,7 +1454,7 @@ function Globe() {
   }), !query && /*#__PURE__*/React.createElement("span", {
     className: "globe-search__ph",
     "aria-hidden": "true"
-  }, logged ? PH[curStage] : 'Tapez une zone, comme', "\xA0", /*#__PURE__*/React.createElement("span", {
+  }, logged ? PH[curStage] : 'Indiquez une zone, comme', "\xA0", /*#__PURE__*/React.createElement("span", {
     className: "globe-search__ph-zone",
     key: phEx
   }, examples[phEx % examples.length])))), /*#__PURE__*/React.createElement("button", {
