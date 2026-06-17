@@ -1,6 +1,116 @@
 {
-  "updated": "2026-06-16",
+  "updated": "2026-06-17",
   "items": [
+    {
+      "id": "u-jeuneafrique-com-1804663-politique-mauritanie-mali-pourquoi-ghazouani-",
+      "date": "2026-06-17",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "JeuneAfrique.com",
+      "source_url": "https://www.jeuneafrique.com/1804663/politique/mauritanie-mali-pourquoi-ghazouani-tend-la-main-a-goita-apres-des-mois-de-crise/",
+      "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover,gravity=0.1425x0.4875/https://prod.cdn-medias.jeuneafrique.com/medias/2026/06/16/jad20260616-ass-mali-mauritanie-apaisement-assimigoita-hananaouldsidi.jpg",
+      "titre": "Mauritanie Mali détente diplomatique après crise mars 2026",
+      "resume": "Le président mauritanien El Ghazouani dépêche son ministre de la Défense à Bamako le 15 juin pour apaiser les tensions accumulées depuis mars. Cette démarche marque un tournant après une période de crise aiguë entre les deux pays.",
+      "detail": "Les tensions régionales entre Mauritanie et Mali s'étaient fortement accrues en mars 2026, créant une instabilité notable au Sahel. La mission diplomatique du ministre mauritanien de la Défense porteur d'un message direct à Assimi Goïta signale une volonté de désescalade. Cette réconciliation potentielle pourrait réduire les risques de déstabilisation transfrontalière et améliorer la coopération sécuritaire régionale. Les implications pour la stabilité du Sahel sont substantielles given les enjeux géopolitiques et sécuritaires de la zone.",
+      "implications": [
+        "Réduction du risque de confrontation armée transfrontalière Mali Mauritanie",
+        "Amélioration potentielle de la coopération sécuritaire contre les groupes terroristes",
+        "Renforcement de la cohésion régionale du Sahel"
+      ],
+      "recommandations": [
+        "Monitorer les déclarations diplomatiques officielles suite à cette visite",
+        "Évaluer les impacts sur les flux migratoires et commerciaux frontaliers",
+        "Analyser les implications pour les opérations militaires conjointes contre AQIM"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-changements-climatiques-la-bnda-envisage-une-demande-de-f",
+      "date": "2026-06-17",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/changements-climatiques-la-bnda-envisage-une-demande-de-financement-de-pres-de-20-millions-de-dollars-us/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18286.jpg",
+      "titre": "Mali investit 12 milliards FCFA résilience climatique",
+      "resume": "Le Mali mobilise 12 milliards FCFA pour renforcer la résilience face au dérèglement climatique. Cette initiative s'inscrit dans une stratégie d'adaptation aux impacts du changement climatique sur l'agriculture et les ressources hydriques.",
+      "detail": "Le financement climatique malien cible directement la vulnérabilité agricole du Sahel face aux chocs climatiques. Cette allocation budgétaire reflète la reconnaissance des défis chroniques de sécheresse et désertification. Les investissements en résilience climatique pourraient renforcer la stabilité rurale et réduire les migrations forcées liées aux chocs climatiques. Cette dimension de gouvernance climatique est essentielle pour la prévention des crises humanitaires.",
+      "implications": [
+        "Renforcement de la résilience agricole et pastorale face aux déficits hydriques",
+        "Réduction des migrations climatiques vers zones urbaines instables",
+        "Amélioration de la sécurité alimentaire rurale"
+      ],
+      "recommandations": [
+        "Vérifier l'allocation effective des fonds et les projets prioritaires bénéficiaires",
+        "Identifier les régions ciblées et les capacités de mise en œuvre locale",
+        "Évaluer les partenariats avec bailleurs de fonds internationaux"
+      ]
+    },
+    {
+      "id": "u-askanews-it-2026-06-17-iran-apres-deux-mois-ripartono-le-esportazioni-",
+      "date": "2026-06-17",
+      "theatre": "moyen-orient",
+      "severite": "alerte",
+      "source": "askanews.it",
+      "source_url": "https://askanews.it/2026/06/17/iran-apres-deux-mois-ripartono-le-esportazioni-petroliere-di-teheran-hanno-varcato-zona-blocco-navale-usa/",
+      "image": "",
+      "titre": "Pétrolières iraniennes contournent blocus naval américain",
+      "resume": "Des pétrolières iraniennes ont traversé la zone de blocus naval américain après deux mois de suspension des exportations. Le mouvement intervient avant la signature d'un accord de détente entre Téhéran et Washington.",
+      "detail": "Le blocage naval américain des exportations pétrolières iraniennes en place depuis deux mois représente une escalade économique majeure. La reprise des passages de pétrolières indique une dynamique de négociation avancée entre les deux puissances. Cette levée partielle du blocus suggère des concessions mutuelles en cours et un pivot diplomatique potentiel. Les implications commerciales et géopolitiques pour le Moyen-Orient sont considérables étant donné la dépendance énergétique mondiale aux exportations iraniennes.",
+      "implications": [
+        "Potentiel accord États-Unis Iran en phase finale de négociation",
+        "Normalisation progressive des flux pétroliers moyen-orientaux",
+        "Stabilisation relative des prix énergétiques mondiaux"
+      ],
+      "recommandations": [
+        "Surveiller les annonces officielles d'accord États-Unis Iran",
+        "Analyser les termes de l'accord sur les sanctions et inspections nucléaires",
+        "Évaluer les impacts sur les alliances régionales et le positionnement saoudien"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-lagriculture-resiliente-au-sahel-saa-mali-explore-de-nouv",
+      "date": "2026-06-17",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/lagriculture-resiliente-au-sahel-saa-mali-explore-de-nouvelles-voies/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18284.jpg",
+      "titre": "Forum agriculture résiliente Sahel Bamako juin 2026",
+      "resume": "Le Forum annuel de l'ONG Sasakawa Afrique sur l'agriculture résiliente réunit experts et acteurs du développement agricole à Bamako en juin 2026. Cette initiative explore des solutions innovantes pour l'agriculture sahélienne face aux défis climatiques.",
+      "detail": "La convergence d'experts agricoles à Bamako dénote une mobilisation régionale autour de l'innovation agricole. Sasakawa Afrique est reconnue pour son expertise en systèmes agricoles durables adaptés aux contextes arides. Les solutions explorées concernent probablement l'amélioration variétale, la gestion de l'eau et les techniques de culture conservation. Cette plateforme de partage de bonnes pratiques peut faciliter l'adoption de méthodes éprouvées par d'autres pays sahéliens.",
+      "implications": [
+        "Amélioration des rendements agricoles à travers diffusion innovations",
+        "Renforcement de la sécurité alimentaire par techniques durables",
+        "Capacitation des acteurs locaux en agriculture résiliente"
+      ],
+      "recommandations": [
+        "Identifier les innovations présentées applicable au contexte Mali",
+        "Évaluer les possibilités de financement de projets pilotes",
+        "Vérifier les engagements de suivi post-forum pour mise en œuvre"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-appel-a-une-souverainete-mediatique-en-afrique-pour-2026",
+      "date": "2026-06-17",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/appel-a-une-souverainete-mediatique-en-afrique-pour-2026/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18291.jpg",
+      "titre": "Appel souveraineté médiatique Afrique 2026",
+      "resume": "Un rassemblement appelle à la souveraineté médiatique africaine et à une narration authentique des enjeux continentaux en 2026. L'initiative critique la dépendance des médias africains aux narrations externes.",
+      "detail": "L'appel à la souveraineté médiatique reflète une prise de conscience africaine sur le contrôle narratif des informations. Cette initiative cible la nécessité pour les médias africains de développer des capacités de production et distribution autonomes. L'enjeu est crucial car les narrations médiatiques influencent les perceptions sur la sécurité, la stabilité politique et les investissements. Un renforcement de la souveraineté médiatique africaine pourrait contrer la désinformation et améliorer la représentation authentique des réalités continentales.",
+      "implications": [
+        "Réduction de la dépendance aux agences de presse occidentales",
+        "Amélioration du contrôle narratif sur les enjeux de sécurité régionaux",
+        "Renforcement des capacités médiatiques africaines"
+      ],
+      "recommandations": [
+        "Analyser les acteurs médiatiques africains impliqués dans le mouvement",
+        "Identifier les initiatives concrètes de financement médiatique régional",
+        "Évaluer les risques de polarisation narrative intra-africaine"
+      ]
+    },
     {
       "id": "u-bamada-net-bamako-et-cotonou-affichent-leur-volonte-de-renforcer-leur-",
       "date": "2026-06-10",
