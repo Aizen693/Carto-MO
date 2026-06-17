@@ -112,27 +112,257 @@ function zoneZoom(z) {
   return Math.round((2.2 + z.s * 1.9) * 10) / 10;   // continent ~4.1, pays ~5, ville ~6.2
 }
 
-// — zones des 4 coins du globe : défilent en dégradé dans la barre (faux placeholder)
-const SEARCH_EXAMPLES = ['Tokyo', 'Bogotá', 'Kinshasa', 'Ukraine', 'Alaska', 'Beyrouth', 'Mexico', 'Sahel', 'Cachemire', 'Somalie', 'Caracas', 'Mali'];
+// Exemples défilants dans la barre. Visiteur → démo mondiale ; abonné → pays suivis.
+const DEMO_EXAMPLES = ['Tokyo', 'Bogotá', 'Kinshasa', 'Ukraine', 'Alaska', 'Beyrouth', 'Mexico', 'Sahel', 'Cachemire', 'Somalie', 'Caracas', 'Mali'];
+const PAYS_EXAMPLES = ['Mali', 'Niger', 'Burkina Faso', 'Nigeria', 'RDC', 'Bénin', 'Togo'];
+
+// Valeurs verrouillées dans la barre : exactement le style du mot qui défile
+// (texte dégradé violet animé), épuré, inline. Clic discret pour corriger.
+const GS_BUILDER_CSS = `
+.globe-search--builder{ width:min(640px,94%); flex-wrap:wrap; gap:7px; }
+.gsb-val{ flex:0 0 auto; border:none; padding:0; cursor:pointer; white-space:nowrap;
+  font-family:'Plus Jakarta Sans',system-ui,sans-serif; font-weight:700; font-size:13px; line-height:1;
+  background:linear-gradient(120deg,#C8B0EA 0%,#9C9BF0 38%,#5BB0F2 62%,#9C9BF0 86%,#C8B0EA 100%); background-size:220% auto;
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;
+  animation:demoZoneFlow 3.5s linear infinite; }
+.gsb-sep{ flex:0 0 auto; font:700 12px/1 'Plus Jakarta Sans',system-ui,sans-serif; opacity:.65;
+  background:linear-gradient(120deg,#C8B0EA,#5BB0F2); -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent; color:transparent; }
+.gsb-dateprompt{ flex:1; cursor:pointer; color:#C8B0EA; font:600 13px 'Plus Jakarta Sans',system-ui,sans-serif; }
+.cal-pop{ position:absolute; bottom:calc(100% + 12px); left:50%; transform:translateX(-50%); z-index:40;
+  width:300px; max-width:92vw; background:#fff; border:1px solid rgba(123,90,189,0.18); border-radius:18px;
+  box-shadow:0 22px 60px -18px rgba(46,24,87,.5); padding:14px; cursor:default; }
+.cal-pop .cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.cal-pop .cal-title{ font:700 15px 'Plus Jakarta Sans',system-ui,sans-serif; color:#1F1437; }
+.cal-pop .cal-nav{ width:32px; height:32px; min-width:0; display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid rgba(123,90,189,0.22); background:#fff; background-image:none; border-radius:9px; cursor:pointer; color:#6B3FA0; font-size:17px; line-height:1; padding:0; box-shadow:none; transform:none; }
+.cal-pop .cal-nav:hover:not(:disabled){ background:rgba(107,63,160,.07); transform:none; box-shadow:none; }
+.cal-pop .cal-nav:disabled{ opacity:.3; cursor:default; }
+.cal-pop .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.cal-pop .cal-dow{ margin-bottom:6px; }
+.cal-pop .cal-dow__c{ text-align:center; font:700 9px/1.6 'JetBrains Mono',monospace; color:#9089AA; }
+.cal-pop .cal-day{ width:100%; height:auto; aspect-ratio:1; min-width:0; display:flex; align-items:center; justify-content:center;
+  border:none; background:#fff; background-image:none; color:#1F1437; border-radius:10px; cursor:pointer;
+  font:600 13px 'Plus Jakarta Sans',system-ui,sans-serif; padding:0; box-shadow:none; transform:none; }
+.cal-pop .cal-day:hover:not(:disabled):not(.is-sel){ background:rgba(107,63,160,.10); transform:none; box-shadow:none; }
+.cal-pop .cal-day.is-off{ color:#cbc6d8; background:#fff; cursor:default; }
+.cal-pop .cal-day--blank{ background:none; }
+.cal-pop .cal-day.is-range{ background:rgba(107,63,160,.13); border-radius:0; }
+.cal-pop .cal-day.is-sel{ background:linear-gradient(130deg,#6B3FA0,#2E84D4); background-image:linear-gradient(130deg,#6B3FA0,#2E84D4); color:#fff; }
+.cal-pop .cal-foot{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px; padding-top:12px; border-top:1px solid rgba(123,90,189,0.12); }
+.cal-pop .cal-range{ font:600 11.5px 'Plus Jakarta Sans',system-ui,sans-serif; color:#4A4460; }
+.cal-pop .cal-actions{ display:flex; gap:8px; }
+.cal-pop .cal-btn{ width:auto; height:auto; min-width:0; border:none; cursor:pointer; border-radius:10px;
+  font:700 10px 'JetBrains Mono',monospace; letter-spacing:.06em; text-transform:uppercase; padding:9px 14px; box-shadow:none; transform:none; }
+.cal-pop .cal-btn--ghost{ background:#fff; background-image:none; border:1px solid rgba(123,90,189,0.22); color:#6B3FA0; }
+.cal-pop .cal-btn--go{ background:linear-gradient(130deg,#6B3FA0,#2E84D4); background-image:linear-gradient(130deg,#6B3FA0,#2E84D4); color:#fff; }
+.cal-pop .cal-btn--go:disabled{ opacity:.4; cursor:default; }
+`;
+
+// Popup calendrier (style Airbnb, DA violet/blanc) : sélection d'un intervalle
+// de deux dates, borné aux mois où la donnée existe pour le pays.
+function DateRangePopup({ entry, onApply, onClose }) {
+  const MOIS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+  const MS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+  const JOURS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+  const pad = (n) => (n < 10 ? '0' : '') + n;
+  const lastDay = (y, m) => new Date(y, m, 0).getDate();
+  const keys = ((entry && entry.months) || []).map(m => m.key).sort();
+  const minKey = keys[0] || '2026-01';
+  const maxKey = keys[keys.length - 1] || minKey;
+  const minDate = minKey + '-01';
+  const [maxY, maxM] = maxKey.split('-').map(Number);
+  const maxDate = maxKey + '-' + pad(lastDay(maxY, maxM));
+
+  const [view, setView] = React.useState(minKey);
+  const [range, setRange] = React.useState({ from: null, to: null });
+  const from = range.from, to = range.to;
+
+  const [vy, vm] = view.split('-').map(Number);
+  const lead = (new Date(vy, vm - 1, 1).getDay() + 6) % 7;
+  const dim = lastDay(vy, vm);
+  const cells = [];
+  for (let i = 0; i < lead; i++) cells.push(null);
+  for (let d = 1; d <= dim; d++) cells.push(vy + '-' + pad(vm) + '-' + pad(d));
+
+  const shift = (delta) => {
+    let y = vy, m = vm + delta;
+    if (m < 1) { m = 12; y--; } else if (m > 12) { m = 1; y++; }
+    const nk = y + '-' + pad(m);
+    if (nk >= minKey && nk <= maxKey) setView(nk);
+  };
+  const off = (iso) => !iso || iso < minDate || iso > maxDate;
+  const clickDay = (iso) => {
+    if (off(iso)) return;
+    setRange(r => {
+      if (!r.from || (r.from && r.to)) return { from: iso, to: null };
+      if (iso >= r.from) return { from: r.from, to: iso };
+      return { from: iso, to: null };
+    });
+  };
+  const inRange = (iso) => from && to && iso > from && iso < to;
+  const fmt = (iso) => { const p = iso.split('-'); return parseInt(p[2], 10) + ' ' + MS[parseInt(p[1], 10) - 1]; };
+  const fmtFull = (iso) => fmt(iso) + ' ' + iso.split('-')[0];
+  const label = from && to ? (fmt(from) + ' – ' + fmtFull(to)) : (from ? (fmt(from) + ' – …') : 'Sélectionnez deux dates');
+
+  return (
+    <div className="cal-pop" onMouseDown={(e) => e.stopPropagation()}>
+      <div className="cal-head">
+        <button type="button" className="cal-nav" onClick={() => shift(-1)} disabled={view <= minKey} aria-label="Mois précédent">‹</button>
+        <span className="cal-title">{MOIS[vm - 1]} {vy}</span>
+        <button type="button" className="cal-nav" onClick={() => shift(1)} disabled={view >= maxKey} aria-label="Mois suivant">›</button>
+      </div>
+      <div className="cal-grid cal-dow">{JOURS.map((j, i) => <span key={i} className="cal-dow__c">{j}</span>)}</div>
+      <div className="cal-grid">
+        {cells.map((iso, i) => iso ? (
+          <button type="button" key={i} disabled={off(iso)}
+            className={'cal-day' + (off(iso) ? ' is-off' : '') + (iso === from || iso === to ? ' is-sel' : '') + (inRange(iso) ? ' is-range' : '')}
+            onClick={() => clickDay(iso)}>{parseInt(iso.split('-')[2], 10)}</button>
+        ) : <span key={i} className="cal-day cal-day--blank" />)}
+      </div>
+      <div className="cal-foot">
+        <span className="cal-range">{label}</span>
+        <div className="cal-actions">
+          <button type="button" className="cal-btn cal-btn--ghost" onClick={onClose}>Annuler</button>
+          <button type="button" className="cal-btn cal-btn--go" disabled={!(from && to)}
+            onClick={() => onApply({ from, to, label: fmt(from) + ' – ' + fmtFull(to) })}>Valider</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Globe() {
   const canvasRef = useRefGlobe(null);
   const [query, setQuery] = useStateGlobe('');
   const [notFound, setNotFound] = useStateGlobe(false);
   const [phEx, setPhEx] = useStateGlobe(0);
+  const [manifest, setManifest] = useStateGlobe([]);
+  const [logged, setLogged] = useStateGlobe(false);
+  // Constructeur séquentiel (abonné) : pays → date → typologie → acteur,
+  // tout dans cette barre. À la fin, ouvre /carte/ déjà filtrée.
+  const [stage, setStage] = useStateGlobe(0);
+  const [sel, setSel] = useStateGlobe({ entry: null, dateFrom: null, dateTo: null, dateLabel: null, event: null, actor: null });
+  const [showCal, setShowCal] = useStateGlobe(false);
+
+  // À l'étape date : ouvre le calendrier (sauf si une période est déjà posée).
+  useEffectGlobe(() => {
+    if (logged && stage === 1 && sel.entry && !sel.dateFrom) setShowCal(true);
+    else if (stage !== 1) setShowCal(false);
+  }, [logged, stage, sel.entry, sel.dateFrom]);
+
+  const STAGES = ['pays', 'date', 'event', 'actor'];
+  const PH = { pays: 'Tapez un pays, comme', date: 'Tapez une date, comme', event: 'Tapez une typologie, comme', actor: 'Tapez un acteur, comme' };
+  const STAGE_EX = { pays: PAYS_EXAMPLES, date: ['Janvier 2026', 'Mars 2026'], event: ['Attaque', 'Embuscade', 'IED / Explosif'], actor: ['GSIM', 'EI-S', 'FAMA'] };
+  const curStage = STAGES[stage] || 'actor';
+  const examples = logged ? (STAGE_EX[curStage] || PAYS_EXAMPLES) : DEMO_EXAMPLES;
 
   useEffectGlobe(() => {
-    const id = setInterval(() => setPhEx(i => (i + 1) % SEARCH_EXAMPLES.length), 2400);
+    const id = setInterval(() => setPhEx(i => (i + 1) % examples.length), 2400);
     return () => clearInterval(id);
+  }, [logged, curStage]);
+
+  // État de connexion (exposé par site-auth.js → window.algorAuthState).
+  // `?apercu=1` force la vue abonné (outil pays) pour tester sans session,
+  // ex. dans le preview intégré de Claude qui n'a pas de login.
+  useEffectGlobe(() => {
+    const preview = /[?&]apercu=1/.test(location.search);
+    const sync = () => setLogged(preview || !!(window.algorAuthState && window.algorAuthState.loggedIn));
+    sync();
+    window.addEventListener('algorAuthReady', sync);
+    window.addEventListener('algorAuthStateChanged', sync);
+    return () => { window.removeEventListener('algorAuthReady', sync); window.removeEventListener('algorAuthStateChanged', sync); };
   }, []);
 
+  // Manifeste pays (données HUMINT) — alimente toutes les étapes du constructeur.
+  useEffectGlobe(() => {
+    fetch('/carte/countries.json?v=20260617live')
+      .then(r => r.json())
+      .then(d => setManifest(d.countries || []))
+      .catch(() => {});
+  }, []);
+
+  function stageOptions(st) {
+    const e = sel.entry;
+    if (st === 'pays') return manifest.map(c => ({ value: c.name, label: c.name, meta: c.count + ' rens.' }));
+    if (!e) return [];
+    if (st === 'date')  return [{ value: '__all', label: 'Toutes les dates' }].concat((e.months || []).map(m => ({ value: m.key, label: m.label })));
+    if (st === 'event') return [{ value: '__all', label: 'Toutes les typologies' }].concat((e.events || []).map(v => ({ value: v, label: v })));
+    if (st === 'actor') return [{ value: '__all', label: 'Tous les acteurs' }].concat((e.actors || []).map(v => ({ value: v, label: v })));
+    return [];
+  }
+  // Correspondance tolérante (accents/casse, partielle) — pas de menu, juste la saisie.
+  function norm(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function matchOption(q) {
+    const real = stageOptions(curStage).filter(o => o.value !== '__all');
+    const nq = norm(q.trim());
+    if (!nq) return curStage === 'pays' ? null : { value: '__all' };
+    return real.find(o => norm(o.label) === nq) || real.find(o => norm(o.label).indexOf(nq) !== -1) || null;
+  }
+
+  function goToMap(s) {
+    s = s || sel;
+    if (!s.entry) return;
+    const p = new URLSearchParams();
+    p.set('pays', s.entry.name);
+    if (s.dateFrom && s.dateTo) { p.set('from', s.dateFrom); p.set('to', s.dateTo); }
+    if (s.event) p.set('event', s.event);
+    if (s.actor) p.set('actor', s.actor);
+    window.location.href = '/carte/?' + p.toString();
+  }
+
+  // Validation du calendrier (intervalle de deux dates) → passe à la typologie.
+  function applyDate(r) {
+    setSel(s => ({ ...s, dateFrom: r.from, dateTo: r.to, dateLabel: r.label }));
+    setShowCal(false);
+    setStage(2);
+  }
+
+  function pick(opt) {
+    if (!opt) return;
+    setQuery(''); setNotFound(false);
+    if (curStage === 'pays') {
+      const e = manifest.find(c => c.name === opt.value) || null;
+      setSel({ entry: e, dateFrom: null, dateTo: null, dateLabel: null, event: null, actor: null });
+      setStage(1);
+    } else if (curStage === 'event') {
+      setSel(s => ({ ...s, event: opt.value === '__all' ? null : opt.value }));
+      setStage(3);
+    } else if (curStage === 'actor') {
+      goToMap({ ...sel, actor: opt.value === '__all' ? null : opt.value });
+    }
+  }
+
+  function removeChip(fromStage) {
+    setQuery(''); setNotFound(false);
+    if (fromStage === 0) { setSel({ entry: null, dateFrom: null, dateTo: null, dateLabel: null, event: null, actor: null }); setStage(0); return; }
+    setSel(s => {
+      const n = { ...s };
+      if (fromStage <= 1) { n.dateFrom = null; n.dateTo = null; n.dateLabel = null; }
+      if (fromStage <= 2) n.event = null;
+      n.actor = null;
+      return n;
+    });
+    setStage(fromStage);
+  }
+
+  // Tout se passe dans la barre : Entrée valide la saisie (ou « Tous » si vide),
+  // ça se bloque en jeton à gauche et passe à l'étape suivante. Rien en dehors.
   const onSubmit = (e) => {
     if (e) e.preventDefault();
-    const q = query.trim();
-    if (!q) { setNotFound(true); return; }
+    if (!logged) {
+      const q = query.trim();
+      if (!q) { setNotFound(true); return; }
+      setNotFound(false);
+      window.location.href = '/demo/?q=' + encodeURIComponent(q);
+      return;
+    }
+    // L'étape date passe par le calendrier, pas la saisie.
+    if (curStage === 'date') { setShowCal(true); return; }
+    const m = matchOption(query);
+    if (!m) { setNotFound(true); return; }
     setNotFound(false);
-    // La recherche ouvre la démo : géocodage mondial côté /demo/.
-    window.location.href = '/demo/?q=' + encodeURIComponent(q);
+    pick(m);
   };
 
   useEffectGlobe(() => {
@@ -644,29 +874,50 @@ function Globe() {
 
   return (
     <div className="globe-wrap">
+      <style dangerouslySetInnerHTML={{ __html: GS_BUILDER_CSS }} />
       <canvas ref={canvasRef} className="globe-canvas"
               role="img" aria-label="Globe interactif — six theatres OSINT" />
 
-      <form className="globe-search" onSubmit={onSubmit}>
+      <form className={'globe-search' + (logged ? ' globe-search--builder' : '')} onSubmit={onSubmit} autoComplete="off">
+        {logged && stage > 0 && sel.entry && (
+          <span className="gsb-val" onClick={() => removeChip(0)} title="Modifier" role="button">{sel.entry.name}</span>
+        )}
+        {logged && stage > 1 && (<>
+          <span className="gsb-sep" aria-hidden="true">·</span>
+          <span className="gsb-val" onClick={() => removeChip(1)} title="Modifier" role="button">{sel.dateLabel || 'Toute période'}</span>
+        </>)}
+        {logged && stage > 2 && (<>
+          <span className="gsb-sep" aria-hidden="true">·</span>
+          <span className="gsb-val" onClick={() => removeChip(2)} title="Modifier" role="button">{sel.event || 'Toutes les typologies'}</span>
+        </>)}
         <span className="globe-search__field">
-          <input type="text" value={query} aria-label="Rechercher une zone" placeholder=""
-                 onChange={(e) => { setQuery(e.target.value); setNotFound(false); }} />
-          {!query && (
-            <span className="globe-search__ph" aria-hidden="true">
-              Tapez une zone, comme&nbsp;<span className="globe-search__ph-zone" key={phEx}>{SEARCH_EXAMPLES[phEx]}</span>
-            </span>
-          )}
+          {logged && curStage === 'date' ? (
+            <span className="gsb-dateprompt" onClick={() => setShowCal(true)} role="button">Choisir une période…</span>
+          ) : (<>
+            <input type="text" value={query} aria-label="Rechercher" placeholder=""
+                   onChange={(e) => { setQuery(e.target.value); setNotFound(false); }} />
+            {!query && (
+              <span className="globe-search__ph" aria-hidden="true">
+                {(logged ? PH[curStage] : 'Tapez une zone, comme')}&nbsp;<span className="globe-search__ph-zone" key={phEx}>{examples[phEx % examples.length]}</span>
+              </span>
+            )}
+          </>)}
         </span>
-        <button type="submit" aria-label="Lancer la démo">
+        <button type="submit" aria-label={logged ? 'Valider' : 'Lancer la démo'}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
             <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </button>
+        {logged && curStage === 'date' && showCal && sel.entry && (
+          <DateRangePopup entry={sel.entry} onApply={applyDate} onClose={() => setShowCal(false)} />
+        )}
       </form>
       {notFound && (
         <div className="globe-search__hint">
-          Saisissez une ville, une région ou un pays, partout dans le monde.
+          {logged
+            ? 'Choisissez un pays suivi, puis affinez par date, typologie et acteur.'
+            : 'Saisissez une ville, une région ou un pays, partout dans le monde.'}
         </div>
       )}
     </div>

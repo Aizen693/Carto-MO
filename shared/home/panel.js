@@ -75,9 +75,9 @@ function SidePanel({
 // ─── Root frame factory ───────────────────────────────────
 function rootFor(action) {
   if (action === 'region') return {
-    kind: 'zones',
-    title: 'Régions',
-    subtitle: 'Choisissez un théâtre pour accéder à sa cartographie, ses rapports et ses indicateurs.'
+    kind: 'pays',
+    title: 'Pays',
+    subtitle: 'Sélectionnez un pays suivi pour ouvrir sa carte de renseignement HUMINT.'
   };
   if (action === 'rapport') return {
     kind: 'zones-r',
@@ -95,9 +95,9 @@ function rootFor(action) {
     subtitle: 'Lectures transversales : un sujet, plusieurs zones. Ports, Mines, JNIM, etc.'
   };
   if (action === 'cartographie') return {
-    kind: 'zones',
+    kind: 'pays',
     title: 'Cartographie',
-    subtitle: 'Accès direct aux cartes interactives : sélectionnez un théâtre pour l\'ouvrir.'
+    subtitle: 'Choisissez un pays pour ouvrir sa carte de renseignement HUMINT.'
   };
   return null;
 }
@@ -137,6 +137,10 @@ function PanelHeader({
 // ─── Frame renderers ──────────────────────────────────────
 function renderFrame(frame, query, push) {
   switch (frame.kind) {
+    case 'pays':
+      return /*#__PURE__*/React.createElement(PaysList, {
+        q: query
+      });
     case 'zones':
       return /*#__PURE__*/React.createElement(ZonesList, {
         q: query,
@@ -205,6 +209,53 @@ function renderFrame(frame, query, push) {
 }
 
 // ─── Lists ────────────────────────────────────────────────
+// Liste des pays suivis (données HUMINT) → ouvre /carte/?pays=X.
+// Remplace l'ancienne liste de théâtres pour l'accès cartographique.
+function PaysList({
+  q
+}) {
+  const [list, setList] = useState(null);
+  useEffect(() => {
+    let on = true;
+    fetch('/carte/countries.json?v=20260617live').then(r => r.json()).then(d => {
+      if (on) setList(d.countries || []);
+    }).catch(() => {
+      if (on) setList([]);
+    });
+    return () => {
+      on = false;
+    };
+  }, []);
+  if (list === null) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "panel-list"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "panel-list__group-label"
+    }, "Chargement\u2026"));
+  }
+  const filtered = list.filter(c => match(q, c.name));
+  return /*#__PURE__*/React.createElement("div", {
+    className: "panel-list"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "panel-list__group-label"
+  }, "Pays suivis \xB7 ", filtered.length), filtered.map(c => /*#__PURE__*/React.createElement("a", {
+    key: c.name,
+    className: "panel-row",
+    href: '/carte/?pays=' + encodeURIComponent(c.name)
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "panel-row__flag"
+  }, c.name.slice(0, 2).toUpperCase()), /*#__PURE__*/React.createElement("span", {
+    className: "panel-row__body"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "panel-row__title"
+  }, c.name), /*#__PURE__*/React.createElement("span", {
+    className: "panel-row__meta"
+  }, c.count, " renseignements HUMINT")), /*#__PURE__*/React.createElement("span", {
+    className: "panel-row__badge ok"
+  }, (c.events || []).length, " \xE9vts"), /*#__PURE__*/React.createElement(ChevRight, null))), !filtered.length && /*#__PURE__*/React.createElement(Empty, {
+    q: q
+  }));
+}
 function ZonesList({
   q,
   mode,

@@ -691,7 +691,7 @@ const VIEWS = {
 // Pages gatées (overlay bloquant au chargement). Sur les autres pages
 // (homepage publique, rubriques marketing), site-auth.js expose seulement
 // algorAuth.openLogin() pour le bouton « Connexion ».
-const GATED_PREFIXES = ['/sahel/', '/moyen-orient/', '/rdc/', '/afrique/', '/madagascar/', '/asie-sud/', '/archive/'];
+const GATED_PREFIXES = ['/carte/', '/sahel/', '/moyen-orient/', '/rdc/', '/afrique/', '/madagascar/', '/asie-sud/', '/archive/'];
 const IS_GATED_PAGE = GATED_PREFIXES.some((p) => location.pathname.startsWith(p))
                    || /-v2\.html$/.test(location.pathname);
 

@@ -37,8 +37,8 @@ function PlatformView({
   }, /*#__PURE__*/React.createElement(ActionCard, {
     num: "01",
     name: "Region",
-    desc: "Choisir un th\xE9\xE2tre op\xE9rationnel : Sahel, Moyen-Orient, RDC, Madagascar, Afrique, Asie du Sud.",
-    count: `${ZONES.length} zones`,
+    desc: "Choisir un pays suivi pour ouvrir sa carte de renseignement HUMINT.",
+    count: "7 pays",
     icon: /*#__PURE__*/React.createElement(RegionIcon, null),
     onClick: () => openAction('region')
   }), /*#__PURE__*/React.createElement(ActionCard, {
@@ -65,8 +65,8 @@ function PlatformView({
   }), /*#__PURE__*/React.createElement(ActionCard, {
     num: "05",
     name: "Cartographie",
-    desc: "Acc\xE8s direct aux cartes interactives : six th\xE9\xE2tres, calques et timeline.",
-    count: `${ZONES.length} cartes`,
+    desc: "Acc\xE8s direct aux cartes HUMINT par pays : \xE9v\xE9nements, acteurs et dates filtrables.",
+    count: "7 pays",
     icon: /*#__PURE__*/React.createElement(CartoIconLg, null),
     onClick: () => openAction('cartographie')
   })), /*#__PURE__*/React.createElement("div", {
@@ -109,27 +109,24 @@ function PlatformView({
 }
 
 // Cascade au survol : carte d'action -> sous-éléments -> actions.
+// Pays suivis (données HUMINT) — pivot vers une navigation par pays.
+const PAYS_HUMINT = ['Mali', 'Niger', 'Burkina Faso', 'Nigeria', 'RDC', 'Bénin', 'Togo'];
+function paysCascade() {
+  return PAYS_HUMINT.map(p => ({
+    label: p,
+    meta: 'HUMINT',
+    actions: [{
+      label: 'Ouvrir la carte du pays',
+      meta: 'Événements · Acteurs · Dates',
+      href: '/carte/?pays=' + encodeURIComponent(p)
+    }]
+  }));
+}
 function cascadeFor(name) {
   const zoneName = id => (ZONES.find(z => z.id === id) || {}).name || id;
   const zoneHref = id => (ZONES.find(z => z.id === id) || {}).href || '#';
   if (name === 'Region') {
-    return ZONES.map(z => ({
-      label: z.name,
-      meta: z.code,
-      actions: [{
-        label: 'Carte interactive',
-        meta: z.countries,
-        href: z.href
-      }, {
-        label: 'Rapports analytiques',
-        meta: `${(REPORTS[z.id] || []).length} document(s)`,
-        href: ((REPORTS[z.id] || []).find(r => r.href) || {}).href || z.href
-      }, {
-        label: 'Visualisations',
-        meta: `${(GRAPHS[z.id] || []).length} graph(s)`,
-        href: z.href
-      }]
-    }));
+    return paysCascade();
   }
   if (name === 'Rapport') {
     return Object.keys(REPORTS).map(zid => ({
@@ -172,15 +169,7 @@ function cascadeFor(name) {
     });
   }
   if (name === 'Cartographie') {
-    return ZONES.map(z => ({
-      label: z.name,
-      meta: z.code,
-      actions: [{
-        label: 'Ouvrir la carte interactive',
-        meta: z.countries,
-        href: z.href
-      }]
-    }));
+    return paysCascade();
   }
   return [];
 }

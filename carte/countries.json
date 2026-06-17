@@ -1,0 +1,570 @@
+{
+  "generated": "humint-live-2026-06-17",
+  "countries": [
+    {
+      "name": "Nigeria",
+      "zone": "sahel",
+      "file": "/sahel/humint.geojson",
+      "center": [
+        8.1,
+        9.6
+      ],
+      "zoom": 5.4,
+      "count": 540,
+      "events": [
+        "Affrontements",
+        "Alerte",
+        "Arrestation",
+        "Assassinat",
+        "Attaque",
+        "Combat",
+        "Destruction",
+        "Discours Déclaration",
+        "Divers",
+        "Embuscade",
+        "Enlèvement",
+        "Frappe aérienne / Drône",
+        "IED / Explosif",
+        "Libération",
+        "Manifestations Emeutes",
+        "Menaces",
+        "Opération",
+        "Position",
+        "Présence / Regroupement",
+        "Réfugiés",
+        "Renforcement",
+        "Revendication",
+        "Trafic armes drogues",
+        "Violence",
+        "Vol Braquage"
+      ],
+      "actors": [
+        "Boko Haram",
+        "BOKO HARAM",
+        "CIVILS",
+        "Ei",
+        "EI",
+        "EI-S",
+        "FDS",
+        "Forces armées Nigérianes",
+        "FR",
+        "GAE",
+        "GANE",
+        "GAT",
+        "GAT EI",
+        "GAT, BOKO HARAM",
+        "GENERAL EXT",
+        "GENERAL INT",
+        "GSIM",
+        "HANI",
+        "ISWAP",
+        "NAF",
+        "OPHK (opération Hadin Kai)",
+        "USA"
+      ],
+      "months": [
+        {
+          "key": "2025-12",
+          "label": "Décembre 2025"
+        },
+        {
+          "key": "2026-01",
+          "label": "Janvier 2026"
+        },
+        {
+          "key": "2026-02",
+          "label": "Février 2026"
+        },
+        {
+          "key": "2026-03",
+          "label": "Mars 2026"
+        },
+        {
+          "key": "2026-04",
+          "label": "Avril 2026"
+        },
+        {
+          "key": "2026-05",
+          "label": "Mai 2026"
+        }
+      ]
+    },
+    {
+      "name": "Burkina Faso",
+      "zone": "sahel",
+      "file": "/sahel/humint.geojson",
+      "center": [
+        -1.6,
+        12.3
+      ],
+      "zoom": 5.8,
+      "count": 539,
+      "events": [
+        "Affrontement",
+        "Affrontements",
+        "Alerte",
+        "Alertes",
+        "Arrestation",
+        "Assassinat",
+        "Attaque",
+        "Combat",
+        "Cotisations",
+        "Déplacement",
+        "Déplacements",
+        "Destruction",
+        "Discours Déclaration",
+        "Disparition",
+        "Divers",
+        "EID",
+        "Embuscade",
+        "Enlèvement",
+        "Exfiltration",
+        "Frappe aérienne / Drône",
+        "IED / Explosif",
+        "IEF",
+        "Incursion",
+        "Manifestations Emeutes",
+        "Menaces",
+        "Mouvement",
+        "Mouvements",
+        "Offensive",
+        "Offensives",
+        "Opération",
+        "Pénétrations",
+        "Prélèvement",
+        "Présence / Regroupement",
+        "Rassemblement",
+        "Reconnaissance",
+        "Rencontre",
+        "Renforcement",
+        "Réunion",
+        "Vol"
+      ],
+      "actors": [
+        "Civil",
+        "CIVIL",
+        "CIVIL INT",
+        "CIVIL-GENERAL INT",
+        "CIVILS",
+        "EI",
+        "EI-S",
+        "EIGS",
+        "FAN",
+        "FDS",
+        "FDS-VDP",
+        "FDS/VDP",
+        "GAT",
+        "GENERAL EXT",
+        "GENERAL INT",
+        "GSIM",
+        "GSIM et CIVILS",
+        "HANI",
+        "USA"
+      ],
+      "months": [
+        {
+          "key": "2025-12",
+          "label": "Décembre 2025"
+        },
+        {
+          "key": "2026-01",
+          "label": "Janvier 2026"
+        },
+        {
+          "key": "2026-02",
+          "label": "Février 2026"
+        },
+        {
+          "key": "2026-03",
+          "label": "Mars 2026"
+        },
+        {
+          "key": "2026-04",
+          "label": "Avril 2026"
+        },
+        {
+          "key": "2026-05",
+          "label": "Mai 2026"
+        },
+        {
+          "key": "2026-06",
+          "label": "Juin 2026"
+        }
+      ]
+    },
+    {
+      "name": "Mali",
+      "zone": "sahel",
+      "file": "/sahel/humint.geojson",
+      "center": [
+        -3.5,
+        17.6
+      ],
+      "zoom": 5.2,
+      "count": 364,
+      "events": [
+        "Affrontement",
+        "Affrontements",
+        "Alerte",
+        "Arrestation",
+        "Assassinat",
+        "Attaque",
+        "Combat",
+        "Contrôle",
+        "Convoi",
+        "Crash aéronef",
+        "Départ",
+        "Déplacement",
+        "Désertion",
+        "Destruction",
+        "Discours",
+        "Discours Déclaration",
+        "Divers",
+        "Embuscade",
+        "Enlèvement",
+        "Evacuation",
+        "Exécution",
+        "Frappe aérienne / Drône",
+        "IED / Explosif",
+        "Libération",
+        "Libérations",
+        "Manifestation",
+        "Menaces",
+        "Mouvements",
+        "Négociations",
+        "Opération",
+        "Politique",
+        "Position",
+        "Présence / Regroupement",
+        "Prise de position",
+        "Rencontre",
+        "Renforcement",
+        "Repli",
+        "Sabotage",
+        "Situation",
+        "Violence",
+        "Vol",
+        "Vol Braquage"
+      ],
+      "actors": [
+        "A/C",
+        "AK",
+        "CIVILS",
+        "EI",
+        "EI-S",
+        "EI-Sahel",
+        "EIGS",
+        "FAMA",
+        "FAMA/AC",
+        "FAMA/AK",
+        "FDS",
+        "FLA",
+        "FLA/GSIM",
+        "FMA/AC",
+        "GANE",
+        "GAT",
+        "GAT EI",
+        "GAT GSIM",
+        "GENERAL EXT",
+        "GENERAL INT",
+        "GSIM",
+        "GSIM/FLA",
+        "HANI",
+        "JNIM",
+        "ONG",
+        "SMP",
+        "USA"
+      ],
+      "months": [
+        {
+          "key": "2025-12",
+          "label": "Décembre 2025"
+        },
+        {
+          "key": "2026-01",
+          "label": "Janvier 2026"
+        },
+        {
+          "key": "2026-02",
+          "label": "Février 2026"
+        },
+        {
+          "key": "2026-03",
+          "label": "Mars 2026"
+        },
+        {
+          "key": "2026-04",
+          "label": "Avril 2026"
+        },
+        {
+          "key": "2026-05",
+          "label": "Mai 2026"
+        }
+      ]
+    },
+    {
+      "name": "Niger",
+      "zone": "sahel",
+      "file": "/sahel/humint.geojson",
+      "center": [
+        8.1,
+        17.6
+      ],
+      "zoom": 5,
+      "count": 260,
+      "events": [
+        "Accrochage",
+        "Affrontements",
+        "Alerte",
+        "Alerte sécurité",
+        "Arrestation",
+        "Assassinat",
+        "Attaque",
+        "Braquage",
+        "Combat",
+        "Déplacement",
+        "Destruction",
+        "Discours Déclaration",
+        "Divers",
+        "Embuscade",
+        "Enlèvement",
+        "Frappe aérienne / Drône",
+        "IED / Explosif",
+        "Incursion",
+        "Interception",
+        "Libération",
+        "Menaces",
+        "Mouvement",
+        "Mouvements",
+        "Pillage",
+        "Pilonnage",
+        "Présence / Regroupement",
+        "Reddition",
+        "Renforcement",
+        "Tir",
+        "Vol",
+        "Vols"
+      ],
+      "actors": [
+        "Bandits",
+        "Boko Haram",
+        "BOKO HARAM",
+        "Civil",
+        "Civil INT",
+        "CIVILS",
+        "EI",
+        "EI-S",
+        "EI-Sahel",
+        "EI-SAHEL",
+        "EIFS",
+        "EIGS",
+        "FAN",
+        "FDS",
+        "GANE",
+        "GAT",
+        "GAT EI",
+        "GENERAL EXT",
+        "GENERAL INT",
+        "Groupe armé",
+        "GSIM",
+        "HANI",
+        "ISWAP",
+        "JAS",
+        "Lakurawa (EIGS)",
+        "Lukawara",
+        "Milices",
+        "USA"
+      ],
+      "months": [
+        {
+          "key": "2025-12",
+          "label": "Décembre 2025"
+        },
+        {
+          "key": "2026-01",
+          "label": "Janvier 2026"
+        },
+        {
+          "key": "2026-02",
+          "label": "Février 2026"
+        },
+        {
+          "key": "2026-03",
+          "label": "Mars 2026"
+        },
+        {
+          "key": "2026-04",
+          "label": "Avril 2026"
+        },
+        {
+          "key": "2026-05",
+          "label": "Mai 2026"
+        }
+      ]
+    },
+    {
+      "name": "Bénin",
+      "zone": "sahel",
+      "file": "/sahel/humint.geojson",
+      "center": [
+        2.3,
+        9.5
+      ],
+      "zoom": 6.2,
+      "count": 69,
+      "events": [
+        "Accident",
+        "Arrestation",
+        "Assassinat",
+        "Attaque",
+        "Déplacement",
+        "Destruction",
+        "Discours Déclaration",
+        "Divers",
+        "Elections",
+        "Opération",
+        "Présence / Regroupement",
+        "Vol"
+      ],
+      "actors": [
+        "CIVIL INT",
+        "CIVILS",
+        "FDS",
+        "FR",
+        "GENERAL EXT",
+        "GSIM",
+        "HANI"
+      ],
+      "months": [
+        {
+          "key": "2026-01",
+          "label": "Janvier 2026"
+        },
+        {
+          "key": "2026-02",
+          "label": "Février 2026"
+        },
+        {
+          "key": "2026-03",
+          "label": "Mars 2026"
+        },
+        {
+          "key": "2026-04",
+          "label": "Avril 2026"
+        },
+        {
+          "key": "2026-05",
+          "label": "Mai 2026"
+        }
+      ]
+    },
+    {
+      "name": "RDC",
+      "zone": "rdc",
+      "file": "/rdc/humint.geojson",
+      "center": [
+        27.5,
+        -2.5
+      ],
+      "zoom": 6.3,
+      "count": 62,
+      "events": [
+        "Assassinat",
+        "Attaque",
+        "Combat",
+        "Discours Déclaration",
+        "Divers",
+        "Embuscade",
+        "Enlèvement",
+        "Frappe aérienne / Drône",
+        "Menaces",
+        "Position",
+        "Présence / Regroupement",
+        "Réfugiés",
+        "Renforcement",
+        "Violence",
+        "Vol Braquage"
+      ],
+      "actors": [
+        "CIVILS",
+        "FDS",
+        "GAE",
+        "GANE",
+        "GAT",
+        "GAT EI ISCAP",
+        "GAT et ISCAP",
+        "GAT ET ISCAP",
+        "GENERAL INT",
+        "HANI",
+        "UN"
+      ],
+      "months": [
+        {
+          "key": "2025-12",
+          "label": "Décembre 2025"
+        },
+        {
+          "key": "2026-01",
+          "label": "Janvier 2026"
+        },
+        {
+          "key": "2026-02",
+          "label": "Février 2026"
+        },
+        {
+          "key": "2026-03",
+          "label": "Mars 2026"
+        },
+        {
+          "key": "2026-04",
+          "label": "Avril 2026"
+        }
+      ]
+    },
+    {
+      "name": "Togo",
+      "zone": "sahel",
+      "file": "/sahel/humint.geojson",
+      "center": [
+        1,
+        8.6
+      ],
+      "zoom": 6.4,
+      "count": 10,
+      "events": [
+        "Déplacement",
+        "Divers",
+        "Opération",
+        "Présence / Regroupement"
+      ],
+      "actors": [
+        "CIVILS",
+        "FDS",
+        "GENERL EXT",
+        "GSIM"
+      ],
+      "months": [
+        {
+          "key": "2025-12",
+          "label": "Décembre 2025"
+        },
+        {
+          "key": "2026-01",
+          "label": "Janvier 2026"
+        },
+        {
+          "key": "2026-03",
+          "label": "Mars 2026"
+        },
+        {
+          "key": "2026-04",
+          "label": "Avril 2026"
+        },
+        {
+          "key": "2026-05",
+          "label": "Mai 2026"
+        }
+      ]
+    }
+  ]
+}

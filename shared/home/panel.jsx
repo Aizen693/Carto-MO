@@ -76,11 +76,11 @@ function SidePanel({ open, action, onClose }) {
 
 // ─── Root frame factory ───────────────────────────────────
 function rootFor(action) {
-  if (action === 'region')  return { kind: 'zones',   title: 'Régions',  subtitle: 'Choisissez un théâtre pour accéder à sa cartographie, ses rapports et ses indicateurs.' };
+  if (action === 'region')  return { kind: 'pays',    title: 'Pays',     subtitle: 'Sélectionnez un pays suivi pour ouvrir sa carte de renseignement HUMINT.' };
   if (action === 'rapport') return { kind: 'zones-r', title: 'Rapports', subtitle: 'Classement par zone, puis par rapport. Notes hebdomadaires, synthèses et études.' };
   if (action === 'graph')   return { kind: 'zones-g', title: 'Graphs',   subtitle: 'Visualisations et indicateurs : flux, densités, réseaux, séries temporelles.' };
   if (action === 'theme')   return { kind: 'themes',  title: 'Thèmes',   subtitle: 'Lectures transversales : un sujet, plusieurs zones. Ports, Mines, JNIM, etc.' };
-  if (action === 'cartographie') return { kind: 'zones', title: 'Cartographie', subtitle: 'Accès direct aux cartes interactives : sélectionnez un théâtre pour l\'ouvrir.' };
+  if (action === 'cartographie') return { kind: 'pays', title: 'Cartographie', subtitle: 'Choisissez un pays pour ouvrir sa carte de renseignement HUMINT.' };
   return null;
 }
 
@@ -120,6 +120,7 @@ function PanelHeader({ stack, onCrumbClick, onClose }) {
 // ─── Frame renderers ──────────────────────────────────────
 function renderFrame(frame, query, push) {
   switch (frame.kind) {
+    case 'pays':    return <PaysList    q={query} />;
     case 'zones':   return <ZonesList   q={query} onPick={(z) => { if (z.href) window.location.href = z.href; else push({ kind: 'detail-zone',  title: z.name, subtitle: z.countries, payload: z }); }} />;
     case 'zones-r': return <ZonesList   q={query} mode="reports" onPick={(z) => push({ kind: 'reports-of-zone', title: `Rapports · ${z.name}`, subtitle: z.countries, payload: z })} />;
     case 'zones-g': return <ZonesList   q={query} mode="graphs"  onPick={(z) => push({ kind: 'graphs-of-zone',  title: `Graphs · ${z.name}`,  subtitle: z.countries, payload: z })} />;
@@ -135,6 +136,41 @@ function renderFrame(frame, query, push) {
 }
 
 // ─── Lists ────────────────────────────────────────────────
+// Liste des pays suivis (données HUMINT) → ouvre /carte/?pays=X.
+// Remplace l'ancienne liste de théâtres pour l'accès cartographique.
+function PaysList({ q }) {
+  const [list, setList] = useState(null);
+  useEffect(() => {
+    let on = true;
+    fetch('/carte/countries.json?v=20260617live')
+      .then(r => r.json())
+      .then(d => { if (on) setList(d.countries || []); })
+      .catch(() => { if (on) setList([]); });
+    return () => { on = false; };
+  }, []);
+  if (list === null) {
+    return <div className="panel-list"><div className="panel-list__group-label">Chargement…</div></div>;
+  }
+  const filtered = list.filter(c => match(q, c.name));
+  return (
+    <div className="panel-list">
+      <div className="panel-list__group-label">Pays suivis · {filtered.length}</div>
+      {filtered.map(c => (
+        <a key={c.name} className="panel-row" href={'/carte/?pays=' + encodeURIComponent(c.name)}>
+          <span className="panel-row__flag">{c.name.slice(0, 2).toUpperCase()}</span>
+          <span className="panel-row__body">
+            <span className="panel-row__title">{c.name}</span>
+            <span className="panel-row__meta">{c.count} renseignements HUMINT</span>
+          </span>
+          <span className="panel-row__badge ok">{(c.events || []).length} évts</span>
+          <ChevRight />
+        </a>
+      ))}
+      {!filtered.length && <Empty q={q} />}
+    </div>
+  );
+}
+
 function ZonesList({ q, mode, onPick }) {
   const filtered = ZONES.filter(z => match(q, z.name, z.countries));
   return (

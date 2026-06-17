@@ -524,6 +524,8 @@ function HomeView({
   clock,
   videoStyle
 }) {
+  // Abonné connecté OU aperçu forcé (?apercu=1) → vue outil (pas la démo).
+  const sub = useSubscriber() || /[?&]apercu=1/.test(window.location.search);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("main", {
     className: "view-enter view-enter-active"
   }, /*#__PURE__*/React.createElement("section", {
@@ -568,7 +570,7 @@ function HomeView({
     y1: "21",
     x2: "16.65",
     y2: "16.65"
-  })), /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : tapez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, en bas du globe.", /*#__PURE__*/React.createElement("em", {
+  })), sub ? /*#__PURE__*/React.createElement("span", null, "Tapez ", /*#__PURE__*/React.createElement("strong", null, "un pays suivi"), " dans la barre sous le globe pour ouvrir sa carte de renseignement HUMINT : \xE9v\xE9nements, acteurs et dates, filtrables.") : /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : tapez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, sous le globe.", /*#__PURE__*/React.createElement("em", {
     className: "hero__demo-warn"
   }, "Donn\xE9es fictives, \xE0 titre d'illustration du rendu de nos cartes.")))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"
