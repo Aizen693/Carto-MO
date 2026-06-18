@@ -271,6 +271,23 @@
   .ana-ia-src a{font:600 9px var(--jakarta);color:var(--blue);text-decoration:none;
     border:1px solid rgba(46,132,212,.3);border-radius:6px;padding:2px 7px;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .ana-ia-foot{margin-top:9px;font:600 8.5px/1.3 var(--jakarta);letter-spacing:.04em;color:var(--muted)}
+  /* drill-down : liste auditable des événements d'une région */
+  .ana-drill-head{display:flex;align-items:center;gap:9px;padding:4px 0 11px;border-bottom:1px solid var(--ln-soft);margin-bottom:9px}
+  .ana-back{flex:none;border:1px solid var(--ln);background:#fff;color:var(--violet);cursor:pointer;
+    font:700 9px/1 var(--jakarta);letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-radius:9px}
+  .ana-back:hover{background:rgba(107,63,160,.07)}
+  .ana-drill-t{flex:1;font:800 12.5px/1.2 var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ana-drill-n{flex:none;background:var(--grad);color:#fff;border-radius:999px;padding:3px 9px;font:800 10px var(--jakarta)}
+  .ana-ev-list{display:flex;flex-direction:column;gap:3px}
+  .ana-ev{position:relative;display:flex;align-items:center;gap:10px;width:100%;border:1px solid transparent;background:#fff;
+    cursor:pointer;text-align:left;padding:9px 10px 9px 13px;border-radius:11px;transition:border-color .14s,box-shadow .14s,transform .14s}
+  .ana-ev:hover{border-color:var(--ln);box-shadow:0 8px 20px -12px rgba(46,24,87,.34);transform:translateX(2px)}
+  .ana-ev-dot{position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--c)}
+  .ana-ev-main{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+  .ana-ev-top{display:flex;align-items:baseline;gap:8px;justify-content:space-between}
+  .ana-ev-type{font:700 12.5px/1.15 var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ana-ev-date{flex:none;font:600 9px/1 var(--jakarta);color:var(--muted);white-space:nowrap}
+  .ana-ev-sub{font:600 10px/1.2 var(--jakarta);color:var(--c);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   @media(max-width:680px){
     #country-title{font-size:15px}
@@ -295,6 +312,6 @@
 <div id="news"></div>
 <div id="analysis"></div>
 
-<script src="../shared/humint-engine.js?v=20260619a"></script>
+<script src="../shared/humint-engine.js?v=20260619b"></script>
 </body>
 </html>

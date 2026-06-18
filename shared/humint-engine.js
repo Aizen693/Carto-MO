@@ -424,32 +424,91 @@
     if (sig === state._anaSig && box.style.display !== 'none') return;
     state._anaSig = sig;
     if (state.anaOpen === undefined) state.anaOpen = true;
-    var stats = {
+    state.anaDrill = null; // nouvelles données → on revient à la vue graphiques
+    state._anaStats = {
       total: feats.length,
       regions: ready ? statsTally(feats, '_region') : [],
       types: statsTally(feats, 'type'), acteurs: statsTally(feats, 'acteur'),
     };
-    var head = '<div class="ana-head"><span class="ana-badge">' + stats.total + '</span>' +
+    var head = '<div class="ana-head"><span class="ana-badge">' + state._anaStats.total + '</span>' +
       '<span class="ana-title">Analyse · ' + esc(state.country) + '</span><span class="ana-caret">▾</span></div>';
-    var geo = ready
-      ? anaSection('Régions touchées', stats.regions, stats.total, function () { return 'linear-gradient(90deg,#6B3FA0,#5650C6)'; }, 'régions', true)
-      : '<div class="ana-sec"><div class="ana-sec-h"><span class="ana-sec-t">Régions touchées</span></div>' +
-        '<div class="ana-bars"><div class="ana-empty">Calcul des régions…</div></div></div>';
-    var sections = geo +
-      anaSection("Typologie d'événement", stats.types, stats.total, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }, "typologies") +
-      anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); }, 'acteurs');
-    var ia = '<div class="ana-ia"><button class="ana-ia-btn" type="button">✶ Générer la synthèse IA</button>' +
-      '<div class="ana-ia-out"></div></div>';
-    box.innerHTML = head + '<div class="ana-body">' + sections + ia + '</div>';
+    box.innerHTML = head + '<div class="ana-body"></div>';
     box.style.display = 'flex';
     box.classList.toggle('ana-open', !!state.anaOpen);
     var h = box.querySelector('.ana-head');
     if (h) h.onclick = function () { state.anaOpen = !state.anaOpen; box.classList.toggle('ana-open', state.anaOpen); };
-    var btn = box.querySelector('.ana-ia-btn'), out = box.querySelector('.ana-ia-out');
-    if (btn) btn.onclick = function () { runAnalysisIA(btn, out, stats); };
-    box.querySelectorAll('.ana-row-clic').forEach(function (el) {
-      el.onclick = function () { flyToRegion(el.getAttribute('data-v')); };
+    paintAnaBody();
+  }
+
+  function anaChartsHTML(stats, ready) {
+    var geo = ready
+      ? anaSection('Régions touchées', stats.regions, stats.total, function () { return 'linear-gradient(90deg,#6B3FA0,#5650C6)'; }, 'régions', true)
+      : '<div class="ana-sec"><div class="ana-sec-h"><span class="ana-sec-t">Régions touchées</span></div>' +
+        '<div class="ana-bars"><div class="ana-empty">Calcul des régions…</div></div></div>';
+    return geo +
+      anaSection("Typologie d'événement", stats.types, stats.total, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }, "typologies") +
+      anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); }, 'acteurs') +
+      '<div class="ana-ia"><button class="ana-ia-btn" type="button">✶ Générer la synthèse IA</button><div class="ana-ia-out"></div></div>';
+  }
+
+  // Liste auditable des événements d'une région (clic sur une ligne « région »).
+  function regionDrillFeats(name) {
+    return (state._anaFeats || []).filter(function (f) { return (f._region || 'Hors région') === name; })
+      .sort(function (a, b) { return (b.iso || '').localeCompare(a.iso || ''); });
+  }
+  function anaDrillHTML(name) {
+    var fs = regionDrillFeats(name);
+    var rows = fs.map(function (f, i) {
+      return '<button class="ana-ev" data-i="' + i + '" style="--c:' + actorColor(f.acteur) + '">' +
+        '<span class="ana-ev-dot"></span>' +
+        '<span class="ana-ev-main"><span class="ana-ev-top">' +
+        '<span class="ana-ev-type">' + esc(f.type || '—') + '</span>' +
+        '<span class="ana-ev-date">' + esc(f.iso ? frDate(f.iso) : '—') + '</span></span>' +
+        '<span class="ana-ev-sub">' + esc(f.acteur || '—') + (f.ville ? ' · ' + esc(f.ville) : '') + '</span>' +
+        '</span></button>';
+    }).join('') || '<div class="ana-empty">Aucun événement</div>';
+    return '<div class="ana-drill-head"><button class="ana-back" type="button">← Régions</button>' +
+      '<span class="ana-drill-t" title="' + esc(name) + '">' + esc(name) + '</span>' +
+      '<span class="ana-drill-n">' + fs.length + '</span></div>' +
+      '<div class="ana-ev-list">' + rows + '</div>';
+  }
+  function paintAnaBody() {
+    var box = $('analysis'); if (!box) return;
+    var body = box.querySelector('.ana-body'); if (!body) return;
+    if (state.anaDrill) {
+      body.innerHTML = anaDrillHTML(state.anaDrill);
+      var back = body.querySelector('.ana-back');
+      if (back) back.onclick = function () {
+        state.anaDrill = null;
+        try { if (map && map.getSource('region-hl')) map.getSource('region-hl').setData({ type: 'FeatureCollection', features: [] }); } catch (e) { /* */ }
+        paintAnaBody();
+      };
+      var fs = regionDrillFeats(state.anaDrill);
+      body.querySelectorAll('.ana-ev').forEach(function (el) {
+        el.onclick = function () {
+          var f = fs[+el.getAttribute('data-i')];
+          if (f && map && f.coords) {
+            try { map.flyTo({ center: f.coords, zoom: 9, duration: 700 }); } catch (e) { /* */ }
+            new mapboxgl.Popup({ closeButton: true, maxWidth: '320px', className: 'humint-popup' })
+              .setLngLat(f.coords)
+              .setHTML(makePopup({ acteur: f.acteur, type: f.type, iso: f.iso, description: f.description, sources: f.sources, _color: actorColor(f.acteur) }))
+              .addTo(map);
+          }
+        };
+      });
+      return;
+    }
+    body.innerHTML = anaChartsHTML(state._anaStats, state.regionsReady);
+    var btn = body.querySelector('.ana-ia-btn'), out = body.querySelector('.ana-ia-out');
+    if (btn) btn.onclick = function () { runAnalysisIA(btn, out, state._anaStats); };
+    body.querySelectorAll('.ana-row-clic').forEach(function (el) {
+      el.onclick = function () { openRegionDrill(el.getAttribute('data-v')); };
     });
+  }
+  function openRegionDrill(name) {
+    state.anaDrill = name;
+    flyToRegion(name);
+    paintAnaBody();
   }
 
   // Clic sur une région → la carte cadre dessus, on surligne son contour et on
