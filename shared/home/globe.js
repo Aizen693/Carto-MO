@@ -661,6 +661,9 @@ function Globe() {
   const [phEx, setPhEx] = useStateGlobe(0);
   const [manifest, setManifest] = useStateGlobe([]);
   const [logged, setLogged] = useStateGlobe(false);
+  // `resolved` = l'état de connexion est connu. Tant qu'il ne l'est pas, on garde
+  // la barre invisible (sinon flash de la version démo avant la version connectée).
+  const [resolved, setResolved] = useStateGlobe(false);
   // Constructeur séquentiel (abonné) : pays → date → typologie → acteur,
   // tout dans cette barre. À la fin, ouvre /carte/ déjà filtrée.
   const [stage, setStage] = useStateGlobe(0);
@@ -703,13 +706,19 @@ function Globe() {
   // ex. dans le preview intégré de Claude qui n'a pas de login.
   useEffectGlobe(() => {
     const preview = /[?&]apercu=1/.test(location.search);
-    const sync = () => setLogged(preview || !!(window.algorAuthState && window.algorAuthState.loggedIn));
+    const sync = () => {
+      setLogged(preview || !!(window.algorAuthState && window.algorAuthState.loggedIn));
+      if (preview || window.algorAuthState) setResolved(true);
+    };
     sync();
     window.addEventListener('algorAuthReady', sync);
     window.addEventListener('algorAuthStateChanged', sync);
+    // Filet de sécurité : si l'auth ne signale jamais, on affiche quand même la barre.
+    const t = setTimeout(() => setResolved(true), 1500);
     return () => {
       window.removeEventListener('algorAuthReady', sync);
       window.removeEventListener('algorAuthStateChanged', sync);
+      clearTimeout(t);
     };
   }, []);
 
@@ -1420,7 +1429,12 @@ function Globe() {
   }), /*#__PURE__*/React.createElement("form", {
     className: 'globe-search' + (logged ? ' globe-search--builder' : ''),
     onSubmit: onSubmit,
-    autoComplete: "off"
+    autoComplete: "off",
+    style: {
+      opacity: resolved ? 1 : 0,
+      pointerEvents: resolved ? 'auto' : 'none',
+      transition: 'opacity .18s ease'
+    }
   }, logged && stage > 0 && sel.entry && /*#__PURE__*/React.createElement("span", {
     className: "gsb-val",
     onClick: () => removeChip(0),
