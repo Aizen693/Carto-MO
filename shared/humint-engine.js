@@ -341,17 +341,20 @@
   }
   function anaSig() { return [state.country, state.sel.from, state.sel.to, state.sel.event, state.sel.actor].join('|'); }
 
-  function anaSection(title, rows, total, colorFn) {
+  function anaSection(title, rows, total, colorFn, moreNoun) {
     var max = rows.length ? rows[0].n : 1;
     var body = rows.slice(0, 8).map(function (r) {
       var w = Math.max(4, Math.round(r.n / max * 100));
       var p = total ? Math.round(r.n / total * 100) : 0;
+      // Compte = pastille à gauche (collée au nom) ; % = colonne de droite.
+      // On évite « 3 · 8% » qui se lirait « 3,8% ».
       return '<div class="ana-row">' +
+        '<span class="ana-row-c" title="' + r.n + ' événement' + (r.n > 1 ? 's' : '') + '">' + r.n + '</span>' +
         '<span class="ana-row-l" title="' + esc(r.k) + '">' + esc(r.k) + '</span>' +
         '<span class="ana-row-track"><span class="ana-row-fill" style="width:' + w + '%;background:' + colorFn(r.k) + '"></span></span>' +
-        '<span class="ana-row-v">' + r.n + ' · ' + p + '%</span></div>';
+        '<span class="ana-row-v">' + p + '%</span></div>';
     }).join('') || '<div class="ana-empty">Aucune donnée</div>';
-    var more = rows.length > 8 ? '<div class="ana-more">+ ' + (rows.length - 8) + ' autres localités</div>' : '';
+    var more = rows.length > 8 ? '<div class="ana-more">+ ' + (rows.length - 8) + ' autres ' + (moreNoun || 'entrées') + '</div>' : '';
     return '<div class="ana-sec"><div class="ana-sec-h"><span class="ana-sec-t">' + esc(title) +
       '</span><span class="ana-sec-n">' + rows.length + '</span></div><div class="ana-bars">' + body + more + '</div></div>';
   }
@@ -370,9 +373,9 @@
     var head = '<div class="ana-head"><span class="ana-badge">' + stats.total + '</span>' +
       '<span class="ana-title">Analyse · ' + esc(state.country) + '</span><span class="ana-caret">▾</span></div>';
     var sections =
-      anaSection('Localités touchées', stats.villes, stats.total, function () { return 'linear-gradient(90deg,#6B3FA0,#5650C6)'; }) +
-      anaSection("Typologie d'événement", stats.types, stats.total, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }) +
-      anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); });
+      anaSection('Localités touchées', stats.villes, stats.total, function () { return 'linear-gradient(90deg,#6B3FA0,#5650C6)'; }, 'localités') +
+      anaSection("Typologie d'événement", stats.types, stats.total, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }, "typologies") +
+      anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); }, 'acteurs');
     var ia = '<div class="ana-ia"><button class="ana-ia-btn" type="button">✶ Générer la synthèse IA</button>' +
       '<div class="ana-ia-out"></div></div>';
     box.innerHTML = head + '<div class="ana-body">' + sections + ia + '</div>';
