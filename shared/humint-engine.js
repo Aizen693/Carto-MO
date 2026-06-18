@@ -241,8 +241,18 @@
     var titre = 'Nouveauté cette semaine' + (state.country ? ' sur ' + art + state.country : '');
     var head = '<div class="news-head">' +
       (pts.length ? '<span class="news-badge">' + pts.length + '</span>' : '') +
-      '<span class="news-title">' + esc(titre) + '</span></div>';
-    if (!pts.length) { box.innerHTML = head + '<div class="news-empty">Aucune nouvelle donnée cette semaine pour ' + esc(state.country || 'ce pays') + '.</div>'; box.style.display = 'flex'; return; }
+      '<span class="news-title">' + esc(titre) + '</span>' +
+      '<span class="news-caret">▾</span></div>';
+    // Bandeau cliquable : déplie / replie la liste (état mémorisé dans state.newsOpen).
+    function wireToggle() {
+      var h = box.querySelector('.news-head');
+      if (h) h.onclick = function () { state.newsOpen = !state.newsOpen; box.classList.toggle('news-open', state.newsOpen); };
+      box.classList.toggle('news-open', !!state.newsOpen);
+    }
+    if (!pts.length) {
+      box.innerHTML = head + '<div class="news-list"><div class="news-empty">Aucune nouvelle donnée cette semaine pour ' + esc(state.country || 'ce pays') + '.</div></div>';
+      box.style.display = 'flex'; wireToggle(); return;
+    }
     box.innerHTML = head + '<div class="news-list">' + pts.slice(0, 60).map(function (f, i) {
       var c = actorColor(f.acteur);
       return '<button class="news-row" data-i="' + i + '" style="--c:' + c + ';--i:' + i + '">' +
@@ -256,6 +266,7 @@
       '</button>';
     }).join('') + '</div>';
     box.style.display = 'flex';
+    wireToggle();
     box.querySelectorAll('.news-row').forEach(function (el) {
       el.onclick = function () {
         var f = pts[+el.getAttribute('data-i')];
