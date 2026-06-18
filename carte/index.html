@@ -146,14 +146,13 @@
   .popup-sources span{color:var(--muted);font:500 10px var(--jakarta)}
 
   /* ── Panneau « Nouveau cette semaine » ── */
-  #news{position:absolute;top:70px;right:16px;z-index:7;display:none;flex-direction:column;width:274px;
-    max-height:calc(100% - 110px);background:#fff;border:1px solid var(--ln);border-radius:16px;
+  #news{position:absolute;top:14px;right:16px;z-index:7;display:none;flex-direction:column;width:274px;
+    max-height:calc(100% - 54px);background:#fff;border:1px solid var(--ln);border-radius:16px;
     box-shadow:0 16px 44px -14px rgba(46,24,87,.3);overflow:hidden}
   .news-head{display:flex;align-items:center;gap:9px;padding:13px 15px;border-bottom:1px solid var(--ln-soft);
     background:linear-gradient(180deg,rgba(107,63,160,.06),rgba(107,63,160,0))}
-  .news-title{font:800 8.5px/1 var(--jakarta);letter-spacing:.15em;text-transform:uppercase;color:var(--violet)}
-  .news-pulse{width:8px;height:8px;border-radius:50%;background:#22c55e;flex:none;animation:newsPulse 2.2s infinite}
-  .news-badge{margin-left:auto;background:var(--grad);color:#fff;border-radius:999px;padding:3px 9px;
+  .news-title{flex:1;font:800 8.5px/1.35 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;color:var(--violet)}
+  .news-badge{flex:none;background:var(--grad);color:#fff;border-radius:999px;padding:3px 9px;
     font:800 10px var(--jakarta);box-shadow:0 5px 13px -3px rgba(86,80,198,.55)}
   .news-list{overflow-y:auto;padding:8px}
   .news-list::-webkit-scrollbar{width:6px}
@@ -212,6 +211,6 @@
 <div id="timeline"></div>
 <div id="news"></div>
 
-<script src="../shared/humint-engine.js?v=20260618b"></script>
+<script src="../shared/humint-engine.js?v=20260618c"></script>
 </body>
 </html>

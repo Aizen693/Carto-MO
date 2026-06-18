@@ -237,8 +237,11 @@
     var box = $('news'); if (!box) return;
     var pts = state.all.filter(function (f) { return f.added && daysSince(f.added) >= 0 && daysSince(f.added) <= 7; })
       .sort(function (a, b) { return (b.added || '').localeCompare(a.added || '') || (b.iso || '').localeCompare(a.iso || ''); });
-    var head = '<div class="news-head"><span class="news-pulse"></span><span class="news-title">Nouveau cette semaine</span>' +
-      (pts.length ? '<span class="news-badge">' + pts.length + '</span>' : '') + '</div>';
+    var art = /^(RDC|RCA)$/i.test(state.country || '') ? 'la ' : 'le ';
+    var titre = 'Nouveauté cette semaine' + (state.country ? ' sur ' + art + state.country : '');
+    var head = '<div class="news-head">' +
+      (pts.length ? '<span class="news-badge">' + pts.length + '</span>' : '') +
+      '<span class="news-title">' + esc(titre) + '</span></div>';
     if (!pts.length) { box.innerHTML = head + '<div class="news-empty">Aucune nouvelle donnée cette semaine pour ' + esc(state.country || 'ce pays') + '.</div>'; box.style.display = 'flex'; return; }
     box.innerHTML = head + '<div class="news-list">' + pts.slice(0, 60).map(function (f, i) {
       var c = actorColor(f.acteur);
