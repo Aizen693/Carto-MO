@@ -103,12 +103,27 @@
     entry: null,
     country: null,
     all: [],
+    allRaw: [],          // toutes les features du fichier chargé (pays + voisins)
+    layers: new Set(),   // pays frontaliers affichés en calque
     sel: { from: null, to: null, event: null, actor: null },
     dataFor: null,
     mapReady: false,
     tl: { gran: 'jour', buckets: [], idx: 0, playing: false, timer: null },
   };
   var SRC = 'humint-src';
+
+  // Pays frontaliers (uniquement ceux pour lesquels on a de la donnée HUMINT).
+  var NEIGHBORS = {
+    'Mali': ['Niger', 'Burkina Faso'],
+    'Niger': ['Mali', 'Burkina Faso', 'Nigeria', 'Bénin'],
+    'Burkina Faso': ['Mali', 'Niger', 'Bénin', 'Togo'],
+    'Nigeria': ['Niger', 'Bénin'],
+    'Bénin': ['Niger', 'Burkina Faso', 'Nigeria', 'Togo'],
+    'Togo': ['Burkina Faso', 'Bénin'],
+    'RDC': [],
+  };
+  // Une feature est affichée si elle appartient au pays courant OU à un calque actif.
+  function inScope(f) { return f.pays === state.country || (state.layers && state.layers.has(f.pays)); }
 
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
@@ -200,7 +215,9 @@
     fetchZone(state.entry.file)
       .then(function (gj) {
         if (state.country !== target) return;
-        state.all = (gj.features || []).map(normFeature).filter(function (f) { return f && f.pays === target && f.coords; });
+        var feats = (gj.features || []).map(normFeature).filter(Boolean);
+        state.allRaw = feats;
+        state.all = feats.filter(function (f) { return f.pays === target; });
         state.dataFor = target;
         showLoader(false);
         tryRender();
@@ -407,7 +424,7 @@
   }
   function applyFacets() {
     if (!map || !map.getSource(SRC)) return;
-    var shown = state.all.filter(function (f) { return passes(f) && tlPasses(f); });
+    var shown = (state.allRaw || []).filter(function (f) { return inScope(f) && passes(f) && tlPasses(f); });
     map.getSource(SRC).setData({
       type: 'FeatureCollection',
       features: shown.map(function (f) {
@@ -463,8 +480,9 @@
     document.removeEventListener('mousedown', outsidePop);
     if (popAnchor && popAnchor.classList) popAnchor.classList.remove('chip-pop-open');
     popAnchor = null;
+    cancelHideNeighbor(); closeNeighborMenu();
   }
-  function outsidePop(e) { var p = $('facet-pop'); if (p && !p.contains(e.target) && !(e.target.closest && e.target.closest('.chip-edit'))) closePop(); }
+  function outsidePop(e) { var p = $('facet-pop'); if (p && !p.contains(e.target) && !(e.target.closest && (e.target.closest('.chip-edit') || e.target.closest('#fp-sub')))) closePop(); }
   function openPop(anchor, html, wire) {
     closePop();
     var p = document.createElement('div');
@@ -500,23 +518,71 @@
 
   /* ── Éditeurs ── */
   function openEditor(key, anchor) {
-    if (key === 'pays') return openList(anchor, 'Pays', null, (state.manifest.countries || []).map(function (c) { return { v: c.name, n: c.count }; }), state.country, false, function (val) { switchCountry(val); });
+    if (key === 'pays') return openList(anchor, 'Pays', null, (state.manifest.countries || []).map(function (c) { return { v: c.name, n: c.count }; }), state.country, false, function (val) { switchCountry(val); }, true);
     if (key === 'event') return openList(anchor, "Typologie d'événement", 'Toutes les typologies', distinctCount(rowsFor(false), 'type'), state.sel.event, true, function (val) { state.sel.event = val; applyFacets(); renderSummary(); fitToFiltered(); });
     if (key === 'actor') return openList(anchor, 'Acteur', 'Tous les acteurs', distinctCount(rowsFor(true), 'acteur'), state.sel.actor, true, function (val) { state.sel.actor = val; applyFacets(); renderSummary(); fitToFiltered(); });
     if (key === 'date') return openCalendar(anchor);
   }
 
-  function openList(anchor, title, allLabel, items, current, isActor, onPick) {
+  function openList(anchor, title, allLabel, items, current, isActor, onPick, withLayers) {
     var rows = '';
     if (allLabel) rows += '<button class="fp-opt' + (!current ? ' on' : '') + '" data-v="__all"><span class="fp-l">' + esc(allLabel) + '</span></button>';
     rows += items.map(function (o) {
       var dot = isActor ? '<span class="fp-dot" style="background:' + actorColor(o.v) + '"></span>' : '';
-      return '<button class="fp-opt' + (o.v === current ? ' on' : '') + '" data-v="' + esc(o.v) + '">' + dot + '<span class="fp-l">' + esc(o.v) + '</span><span class="fp-n">' + o.n + '</span></button>';
+      var caret = (withLayers && (NEIGHBORS[o.v] || []).length) ? '<span class="fp-more">›</span>' : '';
+      return '<button class="fp-opt' + (o.v === current ? ' on' : '') + '" data-v="' + esc(o.v) + '">' + dot + '<span class="fp-l">' + esc(o.v) + '</span><span class="fp-n">' + o.n + '</span>' + caret + '</button>';
     }).join('') || '<div class="fp-empty">Aucune valeur</div>';
     openPop(anchor, '<div class="fp-head">' + esc(title) + '</div><div class="fp-body">' + rows + '</div>', function (p) {
       p.querySelectorAll('.fp-opt').forEach(function (b) {
         b.onclick = function () { var v = b.getAttribute('data-v'); closePop(); onPick(v === '__all' ? null : v); };
+        if (withLayers) {
+          var name = b.getAttribute('data-v');
+          b.addEventListener('mouseenter', function () { cancelHideNeighbor(); openNeighborMenu(b, name); });
+          b.addEventListener('mouseleave', scheduleHideNeighbor);
+        }
       });
+    });
+  }
+
+  /* ── Calques frontaliers : popup latérale au survol d'un pays ── */
+  var neighborHideTimer = null;
+  function cancelHideNeighbor() { if (neighborHideTimer) { clearTimeout(neighborHideTimer); neighborHideTimer = null; } }
+  function scheduleHideNeighbor() { cancelHideNeighbor(); neighborHideTimer = setTimeout(closeNeighborMenu, 240); }
+  function closeNeighborMenu() { var m = $('fp-sub'); if (m) m.remove(); }
+  function openNeighborMenu(rowEl, country) {
+    closeNeighborMenu();
+    var nb = NEIGHBORS[country] || [];
+    if (!nb.length) return;
+    var counts = {}; (state.manifest.countries || []).forEach(function (c) { counts[c.name] = c.count; });
+    var m = document.createElement('div');
+    m.id = 'fp-sub'; m.className = 'fp-sub';
+    m.innerHTML = '<div class="fp-head">Calques frontaliers</div><div class="fp-body">' + nb.map(function (name) {
+      var on = state.layers && state.layers.has(name);
+      return '<div class="fp-sub-row" data-c="' + esc(name) + '">' +
+        '<span class="fp-l">' + esc(name) + '</span><span class="fp-n">' + (counts[name] || 0) + '</span>' +
+        '<button class="lay-toggle' + (on ? ' on' : '') + '" aria-pressed="' + (on ? 'true' : 'false') + '"><span class="lay-knob"></span></button>' +
+        '</div>';
+    }).join('') + '</div>';
+    document.body.appendChild(m);
+    var r = rowEl.getBoundingClientRect();
+    var w = m.offsetWidth;
+    var left = r.right + 6;
+    if (left + w > window.innerWidth - 8) left = r.left - w - 6;
+    m.style.left = Math.max(8, left) + 'px';
+    m.style.top = Math.max(8, Math.min(r.top - 4, window.innerHeight - m.offsetHeight - 8)) + 'px';
+    m.addEventListener('mouseenter', cancelHideNeighbor);
+    m.addEventListener('mouseleave', scheduleHideNeighbor);
+    m.querySelectorAll('.fp-sub-row').forEach(function (rw) {
+      var btn = rw.querySelector('.lay-toggle');
+      btn.onclick = function (e) {
+        e.stopPropagation();
+        var c = rw.getAttribute('data-c');
+        if (!state.layers) state.layers = new Set();
+        if (state.layers.has(c)) state.layers.delete(c); else state.layers.add(c);
+        var on = state.layers.has(c);
+        btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        applyFacets(); fitToFiltered();
+      };
     });
   }
 
@@ -525,7 +591,7 @@
     if (!entry || name === state.country) return;
     state.entry = entry; state.country = name;
     state.sel = { from: null, to: null, event: null, actor: null };
-    state.dataFor = null; state.all = [];
+    state.dataFor = null; state.all = []; state.layers = new Set();
     if (map) { try { map.flyTo({ center: entry.center, zoom: entry.zoom, duration: 600 }); } catch (e) { /* */ } }
     renderSummary();
     startLoad();
@@ -635,7 +701,7 @@
 
   function fitToFiltered() {
     if (!map) return;
-    var shown = state.all.filter(passes);
+    var shown = (state.allRaw || []).filter(function (f) { return inScope(f) && passes(f); });
     var pts = shown.length ? shown : state.all;
     if (!pts.length) return;
     var b = new mapboxgl.LngLatBounds();

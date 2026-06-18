@@ -92,6 +92,18 @@
   .fp-n{font:600 9px var(--jakarta);color:var(--muted)}
   .fp-dot{width:9px;height:9px;border-radius:50%;flex:none}
   .fp-empty{padding:11px;font:500 12px var(--jakarta);color:var(--muted)}
+  /* ── Calques frontaliers (popup latérale) ── */
+  .fp-more{margin-left:4px;color:var(--violet);font:700 15px/1 var(--jakarta)}
+  .fp-sub{position:fixed;z-index:31;min-width:188px;background:#fff;border:1px solid var(--ln);
+    border-radius:13px;box-shadow:0 16px 44px -12px rgba(46,24,87,.4);overflow:hidden}
+  .fp-sub .fp-head{display:flex;align-items:center;gap:6px}
+  .fp-sub-row{display:flex;align-items:center;gap:9px;padding:8px 12px}
+  .fp-sub-row .fp-l{flex:1;font:600 13px var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fp-sub-row .fp-n{font:600 9px var(--jakarta);color:var(--muted)}
+  .lay-toggle{flex:none;width:36px;height:20px;border-radius:999px;border:none;background:#ddd6ea;cursor:pointer;position:relative;padding:0;transition:background .18s}
+  .lay-toggle.on{background:var(--grad)}
+  .lay-knob{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(46,24,87,.3);transition:left .18s}
+  .lay-toggle.on .lay-knob{left:18px}
 
   /* ── Calendrier (intervalle) ── */
   .cal-inner{padding:14px;width:300px;max-width:86vw}
@@ -225,6 +237,6 @@
 <div id="timeline"></div>
 <div id="news"></div>
 
-<script src="../shared/humint-engine.js?v=20260618e"></script>
+<script src="../shared/humint-engine.js?v=20260618f"></script>
 </body>
 </html>
