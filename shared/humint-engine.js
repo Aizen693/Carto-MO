@@ -188,16 +188,12 @@
         map.addLayer({
           id: 'admin-lines', type: 'line', slot: 'middle',
           source: 'admin-bounds', 'source-layer': 'country_boundaries',
-          // Frontières terrestres uniquement (pas de lignes maritimes ni de doublons contestés).
-          filter: ['all',
-            ['==', ['get', 'maritime'], 'false'],
-            ['==', ['get', 'disputed'], 'false'],
-            ['any', ['==', 'all', ['get', 'worldview']], ['in', 'US', ['get', 'worldview']]],
-          ],
+          // Frontières terrestres uniquement (on enleve juste les lignes maritimes).
+          filter: ['==', ['get', 'maritime'], 'false'],
           paint: {
             'line-color': '#000000',
-            'line-width': ['interpolate', ['linear'], ['zoom'], 3, 1.2, 6, 2.6, 9, 3.8, 12, 5],
-            'line-opacity': 0.82,
+            'line-width': ['interpolate', ['linear'], ['zoom'], 2, 2, 4, 3.2, 6, 4.5, 9, 6, 12, 8],
+            'line-opacity': 0.9,
           },
         });
       } catch (e) { /* tileset indispo : on continue sans accent */ }
