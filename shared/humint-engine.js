@@ -42,7 +42,7 @@
     if (/frappe|dr[ôo]ne/.test(low)) return 'Frappe aérienne / Drône';
     if (/assassinat/.test(low)) return 'Assassinat';
     if (/embuscade/.test(low)) return 'Embuscade';
-    if (/enl[èe]vement|kidnapp/.test(low)) return 'Enlèvement';
+    if (/enl[èe]vem|kidnapp|rapt/.test(low)) return 'Enlèvement';
     if (/attaque/.test(low)) return 'Attaque';
     if (/combat/.test(low)) return 'Combat';
     if (/menace/.test(low)) return 'Menaces';
