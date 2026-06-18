@@ -188,10 +188,16 @@
         map.addLayer({
           id: 'admin-lines', type: 'line', slot: 'middle',
           source: 'admin-bounds', 'source-layer': 'country_boundaries',
+          // Frontières terrestres uniquement (pas de lignes maritimes ni de doublons contestés).
+          filter: ['all',
+            ['==', ['get', 'maritime'], 'false'],
+            ['==', ['get', 'disputed'], 'false'],
+            ['any', ['==', 'all', ['get', 'worldview']], ['in', 'US', ['get', 'worldview']]],
+          ],
           paint: {
             'line-color': '#000000',
-            'line-width': ['interpolate', ['linear'], ['zoom'], 3, 0.8, 6, 1.8, 9, 2.8, 12, 3.6],
-            'line-opacity': 0.72,
+            'line-width': ['interpolate', ['linear'], ['zoom'], 3, 0.6, 6, 1.4, 9, 2.2, 12, 2.8],
+            'line-opacity': 0.7,
           },
         });
       } catch (e) { /* tileset indispo : on continue sans accent */ }
