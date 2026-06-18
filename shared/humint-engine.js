@@ -154,7 +154,7 @@
           state.sel = { from: q.get('from') || null, to: q.get('to') || null, event: q.get('event') || null, actor: q.get('actor') || null };
         }
         renderSummary();
-        whenAuthorized(function () { if (state.entry) startLoad(); initMap(); });
+        whenAuthorized(function () { ensureRegions(); if (state.entry) startLoad(); initMap(); });
       })
       .catch(function (er) { showError('Manifeste pays introuvable.'); console.error(er); });
   }
@@ -215,6 +215,10 @@
       map.addLayer({ id: 'humint-glow', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 6, 8, 11, 12, 16], 'circle-color': ['get', '_color'], 'circle-opacity': 0.06, 'circle-blur': 1.2 } });
       map.addLayer({ id: 'humint-ring', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 3, 8, 5, 12, 8], 'circle-color': 'rgba(0,0,0,0)', 'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 0.7, 'circle-stroke-opacity': 0.5 } });
       map.addLayer({ id: 'humint-dots', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 1.8, 8, 3, 12, 4.5], 'circle-color': ['get', '_color'], 'circle-stroke-color': '#0d1117', 'circle-stroke-width': 0.5 } });
+      // Surlignage de région (clic sur une ligne du panneau d'analyse) — sous les points.
+      map.addSource('region-hl', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+      map.addLayer({ id: 'region-hl-fill', type: 'fill', source: 'region-hl', paint: { 'fill-color': '#6B3FA0', 'fill-opacity': 0.07 } }, 'humint-glow');
+      map.addLayer({ id: 'region-hl-line', type: 'line', source: 'region-hl', paint: { 'line-color': '#6B3FA0', 'line-width': 1.8, 'line-opacity': 0.55 } }, 'humint-glow');
       setupPopups();
       state.mapReady = true;
       tryRender();
@@ -332,7 +336,6 @@
   // Tout est calculé sur la VRAIE donnée HUMINT du pays courant (respecte les
   // facettes date/typo/acteur, ignore le curseur temporel). L'IA n'invente rien :
   // on lui passe ces chiffres et elle les interprète (edge function mode=analyse).
-  function analysisFeats() { return (state.all || []).filter(passes); }
   function statsTally(feats, field) {
     var m = {};
     feats.forEach(function (f) { var k = (f[field] == null || f[field] === '') ? 'Non précisé' : f[field]; m[k] = (m[k] || 0) + 1; });
@@ -340,6 +343,48 @@
       .sort(function (a, b) { return b.n - a.n || a.k.localeCompare(b.k); });
   }
   function anaSig() { return [state.country, state.sel.from, state.sel.to, state.sel.event, state.sel.actor].join('|'); }
+
+  /* ── Régions administratives (ADM1) : rattachement par point-dans-polygone ── */
+  // Contours = carte/regions.geojson (108 régions des 7 pays, geoBoundaries simplifié).
+  // On attribue chaque point à sa région réelle → analyse géographique cohérente
+  // (un foyer = une région, pas 60 villages éclatés). Chiffres 100 % vérifiables.
+  function bboxOf(coords) {
+    var b = [Infinity, Infinity, -Infinity, -Infinity];
+    (function walk(c) { if (typeof c[0] === 'number') { if (c[0] < b[0]) b[0] = c[0]; if (c[1] < b[1]) b[1] = c[1]; if (c[0] > b[2]) b[2] = c[0]; if (c[1] > b[3]) b[3] = c[1]; } else c.forEach(walk); })(coords);
+    return b;
+  }
+  function inRing(pt, ring) {
+    var x = pt[0], y = pt[1], inside = false;
+    for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      var xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+      if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) inside = !inside;
+    }
+    return inside;
+  }
+  function inPoly(pt, poly) { if (!inRing(pt, poly[0])) return false; for (var k = 1; k < poly.length; k++) if (inRing(pt, poly[k])) return false; return true; }
+  function inGeom(pt, g) { return g.type === 'Polygon' ? inPoly(pt, g.coordinates) : g.coordinates.some(function (p) { return inPoly(pt, p); }); }
+  function regionOf(pt, pays) {
+    if (!state.regions || !pt) return null;
+    for (var i = 0; i < state.regions.length; i++) {
+      var rg = state.regions[i];
+      if (pays && rg.pays !== pays) continue;
+      var b = rg.bb; if (pt[0] < b[0] || pt[0] > b[2] || pt[1] < b[1] || pt[1] > b[3]) continue;
+      if (inGeom(pt, rg.geom)) return rg.name;
+    }
+    return null;
+  }
+  function ensureRegions() {
+    if (state.regionsReady || state._regionsP) return state._regionsP;
+    state._regionsP = fetch('/carte/regions.geojson?v=20260618').then(function (r) { return r.json(); }).then(function (gj) {
+      state.regions = (gj.features || []).map(function (f) {
+        return { name: f.properties.name, pays: f.properties.pays, geom: f.geometry, bb: bboxOf(f.geometry.coordinates) };
+      });
+      state.regionsReady = true;
+      state._anaSig = null;
+      renderAnalysis(state._lastShown || []); // recalcule dès que les contours sont là
+    }).catch(function (e) { console.warn('[regions] indisponibles', e && e.message); });
+    return state._regionsP;
+  }
 
   function anaSection(title, rows, total, colorFn, moreNoun, clickable) {
     var max = rows.length ? rows[0].n : 1;
@@ -363,21 +408,34 @@
       '</span><span class="ana-sec-n">' + rows.length + '</span></div><div class="ana-bars">' + body + more + '</div></div>';
   }
 
-  function renderAnalysis() {
+  function renderAnalysis(shown) {
     var box = $('analysis'); if (!box) return;
     if (!state.country || !(state.all && state.all.length)) { box.style.display = 'none'; state._anaSig = null; return; }
-    var feats = analysisFeats();
-    var sig = anaSig() + '#' + feats.length;
-    // Curseur temporel : l'analyse ne dépend pas du bucket courant → on ne reconstruit
-    // pas à chaque tick (sinon la synthèse IA générée serait effacée pendant le play).
+    state._lastShown = shown || [];
+    // Jeu EXACT affiché sur la carte, restreint au pays courant → compteur du
+    // panneau == points visibles (le décalage venait du fait que l'analyse
+    // ignorait le curseur temporel / les calques).
+    var feats = (shown || []).filter(function (f) { return f.pays === state.country; });
+    state._anaFeats = feats;
+    var ready = state.regionsReady;
+    if (!ready) ensureRegions();
+    if (ready) feats.forEach(function (f) { if (f._region === undefined) f._region = regionOf(f.coords, f.pays) || 'Hors région'; });
+    var sig = anaSig() + '#' + feats.length + '#' + state.tl.idx + '#' + (ready ? 'r' : '-');
     if (sig === state._anaSig && box.style.display !== 'none') return;
     state._anaSig = sig;
     if (state.anaOpen === undefined) state.anaOpen = true;
-    var stats = { total: feats.length, villes: statsTally(feats, 'ville'), types: statsTally(feats, 'type'), acteurs: statsTally(feats, 'acteur') };
+    var stats = {
+      total: feats.length,
+      regions: ready ? statsTally(feats, '_region') : [],
+      types: statsTally(feats, 'type'), acteurs: statsTally(feats, 'acteur'),
+    };
     var head = '<div class="ana-head"><span class="ana-badge">' + stats.total + '</span>' +
       '<span class="ana-title">Analyse · ' + esc(state.country) + '</span><span class="ana-caret">▾</span></div>';
-    var sections =
-      anaSection('Localités touchées', stats.villes, stats.total, function () { return 'linear-gradient(90deg,#6B3FA0,#5650C6)'; }, 'localités', true) +
+    var geo = ready
+      ? anaSection('Régions touchées', stats.regions, stats.total, function () { return 'linear-gradient(90deg,#6B3FA0,#5650C6)'; }, 'régions', true)
+      : '<div class="ana-sec"><div class="ana-sec-h"><span class="ana-sec-t">Régions touchées</span></div>' +
+        '<div class="ana-bars"><div class="ana-empty">Calcul des régions…</div></div></div>';
+    var sections = geo +
       anaSection("Typologie d'événement", stats.types, stats.total, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }, "typologies") +
       anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); }, 'acteurs');
     var ia = '<div class="ana-ia"><button class="ana-ia-btn" type="button">✶ Générer la synthèse IA</button>' +
@@ -390,25 +448,32 @@
     var btn = box.querySelector('.ana-ia-btn'), out = box.querySelector('.ana-ia-out');
     if (btn) btn.onclick = function () { runAnalysisIA(btn, out, stats); };
     box.querySelectorAll('.ana-row-clic').forEach(function (el) {
-      el.onclick = function () { flyToVille(el.getAttribute('data-v')); };
+      el.onclick = function () { flyToRegion(el.getAttribute('data-v')); };
     });
   }
 
-  // Clic sur une localité → la carte cadre sur la ville/village (tous ses points).
-  function flyToVille(ville) {
-    if (!map || !ville) return;
-    var fs = analysisFeats().filter(function (f) {
-      var k = (f.ville == null || f.ville === '') ? 'Non précisé' : f.ville;
-      return k === ville && f.coords;
-    });
+  // Clic sur une région → la carte cadre dessus, on surligne son contour et on
+  // voit tous ses points (le compte du panneau devient vérifiable à l'œil).
+  function flyToRegion(name) {
+    if (!map || !name) return;
+    var rg = null;
+    for (var i = 0; i < (state.regions || []).length; i++) {
+      if (state.regions[i].pays === state.country && state.regions[i].name === name) { rg = state.regions[i]; break; }
+    }
+    if (rg) {
+      try { if (map.getSource('region-hl')) map.getSource('region-hl').setData({ type: 'Feature', geometry: rg.geom, properties: {} }); } catch (e) { /* */ }
+      var b = rg.bb;
+      try { map.fitBounds([[b[0], b[1]], [b[2], b[3]]], { padding: { top: 80, bottom: 80, left: 360, right: 80 }, duration: 800 }); } catch (e) { /* */ }
+      return;
+    }
+    // « Hors région » : on cadre simplement sur ces points.
+    var fs = (state._anaFeats || []).filter(function (f) { return (f._region || 'Hors région') === name && f.coords; });
     if (!fs.length) return;
-    if (fs.length === 1) { try { map.flyTo({ center: fs[0].coords, zoom: 10, duration: 800 }); } catch (e) { /* */ } return; }
     try {
-      var b = new mapboxgl.LngLatBounds();
-      fs.forEach(function (f) { b.extend(f.coords); });
-      // Padding gauche large : laisse de la place au panneau d'analyse (≈330px).
-      map.fitBounds(b, { padding: { top: 90, bottom: 90, left: 360, right: 80 }, maxZoom: 11, duration: 800 });
-    } catch (e) { map.flyTo({ center: fs[0].coords, zoom: 9, duration: 800 }); }
+      var bb = new mapboxgl.LngLatBounds();
+      fs.forEach(function (f) { bb.extend(f.coords); });
+      map.fitBounds(bb, { padding: { top: 80, bottom: 80, left: 360, right: 80 }, maxZoom: 9, duration: 800 });
+    } catch (e) { map.flyTo({ center: fs[0].coords, zoom: 7, duration: 800 }); }
   }
 
   function buildStatsText(s) {
@@ -418,7 +483,7 @@
         return '- ' + r.k + ' : ' + r.n + ' (' + Math.round(r.n / t * 100) + '%)';
       }).join('\n');
     }
-    return block('Localites (repartition geographique)', s.villes) + '\n\n' +
+    return block('Regions administratives (repartition geographique)', s.regions) + '\n\n' +
       block('Typologies d evenement', s.types) + '\n\n' +
       block('Acteurs', s.acteurs);
   }
@@ -593,9 +658,12 @@
     return true;
   }
   function applyFacets() {
-    renderAnalysis();
-    if (!map || !map.getSource(SRC)) return;
+    // Jeu de points RÉELLEMENT affiché sur la carte (mêmes filtres : pays/calques,
+    // facettes, ET curseur temporel). L'analyse est calculée sur CE jeu → les
+    // chiffres du panneau == les points visibles, vérifiable à l'œil.
     var shown = (state.allRaw || []).filter(function (f) { return inScope(f) && passes(f) && tlPasses(f); });
+    renderAnalysis(shown);
+    if (!map || !map.getSource(SRC)) return;
     map.getSource(SRC).setData({
       type: 'FeatureCollection',
       features: shown.map(function (f) {
@@ -762,8 +830,11 @@
     if (!entry || name === state.country) return;
     state.entry = entry; state.country = name;
     state.sel = { from: null, to: null, event: null, actor: null };
-    state.dataFor = null; state.all = []; state.layers = new Set();
-    if (map) { try { map.flyTo({ center: entry.center, zoom: entry.zoom, duration: 600 }); } catch (e) { /* */ } }
+    state.dataFor = null; state.all = []; state.layers = new Set(); state._anaSig = null;
+    if (map) {
+      try { if (map.getSource('region-hl')) map.getSource('region-hl').setData({ type: 'FeatureCollection', features: [] }); } catch (e) { /* */ }
+      try { map.flyTo({ center: entry.center, zoom: entry.zoom, duration: 600 }); } catch (e) { /* */ }
+    }
     renderSummary();
     startLoad();
   }
