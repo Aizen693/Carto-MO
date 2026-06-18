@@ -537,10 +537,16 @@ function DateRangePopup({
   const lastDay = (y, m) => new Date(y, m, 0).getDate();
   const keys = (entry && entry.months || []).map(m => m.key).sort();
   const minKey = keys[0] || '2026-01';
-  const maxKey = keys[keys.length - 1] || minKey;
+  let maxKey = keys[keys.length - 1] || minKey;
+  // Le calendrier va toujours au moins jusqu'au mois courant (calcule a l'execution :
+  // s'etend tout seul chaque debut de mois, meme sans donnee encore arrivee).
+  const _now = new Date();
+  const nowKey = _now.getFullYear() + '-' + pad(_now.getMonth() + 1);
+  if (nowKey > maxKey) maxKey = nowKey;
   const minDate = minKey + '-01';
   const [maxY, maxM] = maxKey.split('-').map(Number);
-  const maxDate = maxKey + '-' + pad(lastDay(maxY, maxM));
+  // Dans le mois courant, on ne selectionne pas au-dela d'aujourd'hui.
+  const maxDate = maxKey === nowKey ? nowKey + '-' + pad(_now.getDate()) : maxKey + '-' + pad(lastDay(maxY, maxM));
   const [view, setView] = React.useState(minKey);
   const [range, setRange] = React.useState({
     from: null,

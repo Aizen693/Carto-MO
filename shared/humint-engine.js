@@ -524,8 +524,16 @@
     var keys = Object.keys(mset).sort();
     if (!keys.length) keys = (entry.months || []).map(function (m) { return m.key; }).sort();
     var minKey = keys[0] || '2026-01', maxKey = keys[keys.length - 1] || minKey;
+    // Le calendrier va toujours au moins jusqu'au mois courant (calculé à l'exécution :
+    // s'étend tout seul chaque début de mois, même sans donnée encore arrivée).
+    var now = new Date();
+    var nowKey = now.getFullYear() + '-' + pad(now.getMonth() + 1);
+    if (nowKey > maxKey) maxKey = nowKey;
     var mk = maxKey.split('-').map(Number);
-    var minDate = minKey + '-01', maxDate = maxKey + '-' + pad(lastDay(mk[0], mk[1]));
+    var todayIso = nowKey + '-' + pad(now.getDate());
+    var minDate = minKey + '-01';
+    // Dans le mois courant, on ne sélectionne pas au-delà d'aujourd'hui.
+    var maxDate = (maxKey === nowKey) ? todayIso : maxKey + '-' + pad(lastDay(mk[0], mk[1]));
     var view = state.sel.from ? state.sel.from.slice(0, 7) : minKey;
     var from = state.sel.from, to = state.sel.to;
 
