@@ -181,17 +181,19 @@
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
     whenStyleLoaded(function () {
       map.resize();
-      // Frontières en noir : on recolore celles du fond + un calque country-boundaries.
-      try { map.setConfigProperty('basemap', 'colorAdminBoundaries', '#000000'); } catch (e) { /* config indispo */ }
+      // Frontières en noir : on MASQUE complètement la native (sinon double trait
+      // décalé) et on garde UNIQUEMENT notre calque country-boundaries noir.
+      try { map.setConfigProperty('basemap', 'colorAdminBoundaries', 'rgba(0,0,0,0)'); } catch (e) { /* config indispo */ }
       try {
         map.addSource('admin-bounds', { type: 'vector', url: 'mapbox://mapbox.country-boundaries-v1' });
         map.addLayer({
           id: 'admin-lines', type: 'line', slot: 'middle',
           source: 'admin-bounds', 'source-layer': 'country_boundaries',
+          filter: ['==', ['get', 'maritime'], 'false'],
           paint: {
             'line-color': '#000000',
             'line-width': ['interpolate', ['linear'], ['zoom'], 3, 0.8, 6, 1.8, 9, 2.8, 12, 3.6],
-            'line-opacity': 0.72,
+            'line-opacity': 0.82,
           },
         });
       } catch (e) { /* tileset indispo */ }
