@@ -181,8 +181,9 @@
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
     whenStyleLoaded(function () {
       map.resize();
-      // Frontières natives recolorées en noir (repli si le trait épais ci-dessous ne charge pas).
-      try { map.setConfigProperty('basemap', 'colorAdminBoundaries', '#000000'); } catch (e) { /* config indispo */ }
+      // On MASQUE la frontière native fine (sinon double trait décalé au dézoom) :
+      // seul le trait épais ci-dessous (mapbox-streets-v8 admin) doit s'afficher.
+      try { map.setConfigProperty('basemap', 'colorAdminBoundaries', 'rgba(0,0,0,0)'); } catch (e) { /* config indispo */ }
       // Frontières pays ÉPAISSES et PRÉCISES : tracées depuis la source Mapbox Streets
       // elle-même (couche `admin`, niveau 0) → MÊME géométrie que le fond, alignement
       // parfait (zéro frontière fausse). Niveau 0 = pays uniquement, hors maritime.
