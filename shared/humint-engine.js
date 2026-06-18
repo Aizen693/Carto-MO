@@ -181,9 +181,21 @@
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
     whenStyleLoaded(function () {
       map.resize();
-      // Frontières : on utilise UNIQUEMENT celles du fond Mapbox, recolorées en noir
-      // (pas de calque ajouté — sinon le trait se dédouble et se décale).
-      try { map.setConfigProperty('basemap', 'colorAdminBoundaries', '#000000'); } catch (e) { /* config indispo */ }
+      // Frontières : on masque la fine native (non épaississable) et on trace les
+      // nôtres en noir depuis un geojson aligné (lignes Natural Earth 50m, sans côtes).
+      try { map.setConfigProperty('basemap', 'colorAdminBoundaries', 'hsla(0,0%,0%,0)'); } catch (e) { /* config indispo */ }
+      try {
+        map.addSource('borders-geo', { type: 'geojson', data: 'africa-bounds.geojson' });
+        map.addLayer({
+          id: 'borders-thick', type: 'line', slot: 'middle', source: 'borders-geo',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: {
+            'line-color': '#000000',
+            'line-width': ['interpolate', ['linear'], ['zoom'], 2, 1.1, 6, 1.9, 9, 2.7, 12, 3.4],
+            'line-opacity': 0.85,
+          },
+        });
+      } catch (e) { /* on continue sans accent */ }
       map.addSource(SRC, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'humint-glow', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 6, 8, 11, 12, 16], 'circle-color': ['get', '_color'], 'circle-opacity': 0.06, 'circle-blur': 1.2 } });
       map.addLayer({ id: 'humint-ring', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 3, 8, 5, 12, 8], 'circle-color': 'rgba(0,0,0,0)', 'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 0.7, 'circle-stroke-opacity': 0.5 } });
