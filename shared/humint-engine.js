@@ -181,9 +181,25 @@
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
     whenStyleLoaded(function () {
       map.resize();
-      // Frontières : ON N'AJOUTE AUCUN calque. On garde uniquement les frontières
-      // natives du fond Mapbox, recolorées en noir (au lieu du rouge par défaut).
+      // Frontières natives recolorées en noir (repli si le trait épais ci-dessous ne charge pas).
       try { map.setConfigProperty('basemap', 'colorAdminBoundaries', '#000000'); } catch (e) { /* config indispo */ }
+      // Frontières pays ÉPAISSES et PRÉCISES : tracées depuis la source Mapbox Streets
+      // elle-même (couche `admin`, niveau 0) → MÊME géométrie que le fond, alignement
+      // parfait (zéro frontière fausse). Niveau 0 = pays uniquement, hors maritime.
+      try {
+        if (!map.getSource('mb-admin')) map.addSource('mb-admin', { type: 'vector', url: 'mapbox://mapbox.mapbox-streets-v8' });
+        if (!map.getLayer('admin0-thick')) map.addLayer({
+          id: 'admin0-thick', type: 'line', slot: 'middle',
+          source: 'mb-admin', 'source-layer': 'admin',
+          filter: ['all', ['==', ['get', 'admin_level'], 0], ['==', ['get', 'maritime'], 'false']],
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: {
+            'line-color': '#000000',
+            'line-width': ['interpolate', ['linear'], ['zoom'], 3, 1.2, 6, 2.2, 9, 3.2, 12, 4.2],
+            'line-opacity': 0.92,
+          },
+        });
+      } catch (e) { /* tileset indispo : la frontière native fine reste en place */ }
       map.addSource(SRC, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'humint-glow', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 6, 8, 11, 12, 16], 'circle-color': ['get', '_color'], 'circle-opacity': 0.06, 'circle-blur': 1.2 } });
       map.addLayer({ id: 'humint-ring', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 3, 8, 5, 12, 8], 'circle-color': 'rgba(0,0,0,0)', 'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 0.7, 'circle-stroke-opacity': 0.5 } });
