@@ -375,7 +375,7 @@
   }
   function ensureRegions() {
     if (state.regionsReady || state._regionsP) return state._regionsP;
-    state._regionsP = fetch('/carte/regions.geojson?v=20260618').then(function (r) { return r.json(); }).then(function (gj) {
+    state._regionsP = fetch('/carte/regions.geojson?v=20260619c').then(function (r) { return r.json(); }).then(function (gj) {
       state.regions = (gj.features || []).map(function (f) {
         return { name: f.properties.name, pays: f.properties.pays, geom: f.geometry, bb: bboxOf(f.geometry.coordinates) };
       });

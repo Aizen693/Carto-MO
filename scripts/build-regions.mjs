@@ -14,6 +14,28 @@ const COUNTRIES = [
   ['NGA', 'Nigeria'], ['BEN', 'Bénin'], ['TGO', 'Togo'], ['COD', 'RDC'],
 ];
 
+// Corrections d'accent / orthographe sur les noms de régions (gbHumanitarian
+// est déjà propre, restent quelques sans-accent).
+const NAME_FIX = {
+  'Tillaberi': 'Tillabéri', 'Menaka': 'Ménaka', 'Oueme': 'Ouémé',
+  'Segou': 'Ségou', 'Koulikouro': 'Koulikoro',
+};
+
+// On préfère la version HUMANITAIRE (OCHA, noms propres + bons découpages),
+// repli sur gbOpen si absente.
+async function fetchADM1(iso3) {
+  for (const rel of ['gbHumanitarian', 'gbOpen']) {
+    try {
+      const api = await fetch(`https://www.geoboundaries.org/api/current/${rel}/${iso3}/ADM1/`).then((r) => r.json());
+      const url = api.simplifiedGeometryGeoJSON || api.gjDownloadURL;
+      if (!url) continue;
+      const gj = await fetch(url).then((r) => r.json());
+      if (gj && gj.features && gj.features.length) { console.log(`  ${iso3} ← ${rel}`); return gj; }
+    } catch (e) { /* tente la source suivante */ }
+  }
+  throw new Error('Pas d\'ADM1 pour ' + iso3);
+}
+
 // Pour un test point-dans-région, une précision ~100 m suffit largement.
 // On arrondit à 3 décimales PUIS on simplifie chaque anneau (Douglas-Peucker)
 // pour alléger fortement le fichier (un contour de région n'a pas besoin de
@@ -57,21 +79,21 @@ function simplifyGeom(type, coords) {
 const out = { type: 'FeatureCollection', features: [] };
 
 for (const [iso3, pays] of COUNTRIES) {
-  const api = await fetch(`https://www.geoboundaries.org/api/current/gbOpen/${iso3}/ADM1/`).then((r) => r.json());
-  const url = api.simplifiedGeometryGeoJSON || api.gjDownloadURL;
-  const gj = await fetch(url).then((r) => r.json());
-  let n = 0;
+  const gj = await fetchADM1(iso3);
+  const names = [];
   for (const f of gj.features || []) {
     const p = f.properties || {};
-    const name = p.shapeName || p.shapeName_en || p.name || 'Région';
+    let name = (p.shapeName || p.shapeName_en || p.name || '').trim();
+    if (!name) continue; // on ignore les entrées sans nom (glitch source)
+    name = NAME_FIX[name] || name;
+    names.push(name);
     out.features.push({
       type: 'Feature',
       properties: { name, pays, iso3 },
       geometry: { type: f.geometry.type, coordinates: simplifyGeom(f.geometry.type, f.geometry.coordinates) },
     });
-    n++;
   }
-  console.log(`${pays} (${iso3}) : ${n} régions`);
+  console.log(`${pays} (${iso3}) : ${names.length} régions → ${names.sort().join(', ')}`);
 }
 
 writeFileSync(new URL('../carte/regions.geojson', import.meta.url), JSON.stringify(out));
