@@ -341,18 +341,22 @@
   }
   function anaSig() { return [state.country, state.sel.from, state.sel.to, state.sel.event, state.sel.actor].join('|'); }
 
-  function anaSection(title, rows, total, colorFn, moreNoun) {
+  function anaSection(title, rows, total, colorFn, moreNoun, clickable) {
     var max = rows.length ? rows[0].n : 1;
     var body = rows.slice(0, 8).map(function (r) {
       var w = Math.max(4, Math.round(r.n / max * 100));
       var p = total ? Math.round(r.n / total * 100) : 0;
+      // Localités cliquables → la carte vole sur la ville/village (data-v = clé).
+      var clic = (clickable && r.k !== 'Non précisé') ? ' ana-row-clic' : '';
+      var dv = clic ? ' data-v="' + esc(r.k) + '"' : '';
       // Compte = pastille à gauche (collée au nom) ; % = colonne de droite.
       // On évite « 3 · 8% » qui se lirait « 3,8% ».
-      return '<div class="ana-row">' +
+      return '<div class="ana-row' + clic + '"' + dv + (clic ? ' title="Voir ' + esc(r.k) + ' sur la carte"' : '') + '>' +
         '<span class="ana-row-c" title="' + r.n + ' événement' + (r.n > 1 ? 's' : '') + '">' + r.n + '</span>' +
-        '<span class="ana-row-l" title="' + esc(r.k) + '">' + esc(r.k) + '</span>' +
+        '<span class="ana-row-l">' + esc(r.k) + '</span>' +
         '<span class="ana-row-track"><span class="ana-row-fill" style="width:' + w + '%;background:' + colorFn(r.k) + '"></span></span>' +
-        '<span class="ana-row-v">' + p + '%</span></div>';
+        '<span class="ana-row-v">' + p + '%</span>' +
+        (clic ? '<span class="ana-row-go">→</span>' : '') + '</div>';
     }).join('') || '<div class="ana-empty">Aucune donnée</div>';
     var more = rows.length > 8 ? '<div class="ana-more">+ ' + (rows.length - 8) + ' autres ' + (moreNoun || 'entrées') + '</div>' : '';
     return '<div class="ana-sec"><div class="ana-sec-h"><span class="ana-sec-t">' + esc(title) +
@@ -373,7 +377,7 @@
     var head = '<div class="ana-head"><span class="ana-badge">' + stats.total + '</span>' +
       '<span class="ana-title">Analyse · ' + esc(state.country) + '</span><span class="ana-caret">▾</span></div>';
     var sections =
-      anaSection('Localités touchées', stats.villes, stats.total, function () { return 'linear-gradient(90deg,#6B3FA0,#5650C6)'; }, 'localités') +
+      anaSection('Localités touchées', stats.villes, stats.total, function () { return 'linear-gradient(90deg,#6B3FA0,#5650C6)'; }, 'localités', true) +
       anaSection("Typologie d'événement", stats.types, stats.total, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }, "typologies") +
       anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); }, 'acteurs');
     var ia = '<div class="ana-ia"><button class="ana-ia-btn" type="button">✶ Générer la synthèse IA</button>' +
@@ -385,6 +389,26 @@
     if (h) h.onclick = function () { state.anaOpen = !state.anaOpen; box.classList.toggle('ana-open', state.anaOpen); };
     var btn = box.querySelector('.ana-ia-btn'), out = box.querySelector('.ana-ia-out');
     if (btn) btn.onclick = function () { runAnalysisIA(btn, out, stats); };
+    box.querySelectorAll('.ana-row-clic').forEach(function (el) {
+      el.onclick = function () { flyToVille(el.getAttribute('data-v')); };
+    });
+  }
+
+  // Clic sur une localité → la carte cadre sur la ville/village (tous ses points).
+  function flyToVille(ville) {
+    if (!map || !ville) return;
+    var fs = analysisFeats().filter(function (f) {
+      var k = (f.ville == null || f.ville === '') ? 'Non précisé' : f.ville;
+      return k === ville && f.coords;
+    });
+    if (!fs.length) return;
+    if (fs.length === 1) { try { map.flyTo({ center: fs[0].coords, zoom: 10, duration: 800 }); } catch (e) { /* */ } return; }
+    try {
+      var b = new mapboxgl.LngLatBounds();
+      fs.forEach(function (f) { b.extend(f.coords); });
+      // Padding gauche large : laisse de la place au panneau d'analyse (≈330px).
+      map.fitBounds(b, { padding: { top: 90, bottom: 90, left: 360, right: 80 }, maxZoom: 11, duration: 800 });
+    } catch (e) { map.flyTo({ center: fs[0].coords, zoom: 9, duration: 800 }); }
   }
 
   function buildStatsText(s) {

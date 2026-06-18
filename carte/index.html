@@ -239,7 +239,11 @@
   .ana-sec-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
   .ana-sec-t{font:800 8.5px/1 var(--jakarta);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
   .ana-sec-n{font:700 9px var(--jakarta);color:var(--muted)}
-  .ana-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .ana-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;padding:3px 5px;margin-left:-5px;margin-right:-5px;border-radius:8px}
+  .ana-row-clic{cursor:pointer;transition:background .12s}
+  .ana-row-clic:hover{background:rgba(107,63,160,.08)}
+  .ana-row-go{flex:none;font:800 13px/1 var(--jakarta);color:var(--violet);opacity:0;transform:translateX(-3px);transition:opacity .14s,transform .14s}
+  .ana-row-clic:hover .ana-row-go{opacity:1;transform:translateX(0)}
   .ana-row-c{flex:none;min-width:22px;text-align:center;font:800 9.5px/1 var(--jakarta);color:var(--violet);
     background:rgba(107,63,160,.11);border-radius:6px;padding:3px 5px}
   .ana-row-l{flex:0 0 74px;font:600 11px/1.2 var(--jakarta);color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -291,6 +295,6 @@
 <div id="news"></div>
 <div id="analysis"></div>
 
-<script src="../shared/humint-engine.js?v=20260618y"></script>
+<script src="../shared/humint-engine.js?v=20260618z"></script>
 </body>
 </html>
