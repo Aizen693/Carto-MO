@@ -196,8 +196,8 @@
           ],
           paint: {
             'line-color': '#000000',
-            'line-width': ['interpolate', ['linear'], ['zoom'], 3, 0.6, 6, 1.4, 9, 2.2, 12, 2.8],
-            'line-opacity': 0.7,
+            'line-width': ['interpolate', ['linear'], ['zoom'], 3, 1.2, 6, 2.6, 9, 3.8, 12, 5],
+            'line-opacity': 0.82,
           },
         });
       } catch (e) { /* tileset indispo : on continue sans accent */ }
