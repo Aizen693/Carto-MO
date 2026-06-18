@@ -146,20 +146,40 @@
   .popup-sources span{color:var(--muted);font:500 10px var(--mono)}
 
   /* ── Panneau « Nouveau cette semaine » ── */
-  #news{position:absolute;top:70px;right:16px;z-index:7;display:none;flex-direction:column;width:250px;
-    max-height:calc(100% - 110px);background:#fff;border:1px solid var(--ln);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
-  .news-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--ln-soft);
-    font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
-  .news-dot-live{width:7px;height:7px;border-radius:50%;background:#22a06b;box-shadow:0 0 0 3px rgba(34,160,107,.18);flex:none}
-  .news-badge{margin-left:auto;background:var(--grad);color:#fff;border-radius:999px;padding:2px 8px;font:700 10px var(--mono)}
-  .news-list{overflow-y:auto;padding:6px}
-  .news-row{display:flex;align-items:center;gap:9px;width:100%;border:none;background:none;cursor:pointer;text-align:left;padding:8px 9px;border-radius:9px}
-  .news-row:hover{background:rgba(107,63,160,.07)}
-  .news-dot{width:9px;height:9px;border-radius:50%;flex:none}
-  .news-body{display:flex;flex-direction:column;gap:2px;min-width:0}
-  .news-actor{font:700 12px var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .news-meta{font:600 9px var(--mono);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .news-empty{padding:13px 14px;font:500 12px/1.5 var(--jakarta);color:var(--muted)}
+  #news{position:absolute;top:70px;right:16px;z-index:7;display:none;flex-direction:column;width:274px;
+    max-height:calc(100% - 110px);background:#fff;border:1px solid var(--ln);border-radius:16px;
+    box-shadow:0 16px 44px -14px rgba(46,24,87,.3);overflow:hidden}
+  .news-head{display:flex;align-items:center;gap:9px;padding:13px 15px;border-bottom:1px solid var(--ln-soft);
+    background:linear-gradient(180deg,rgba(107,63,160,.06),rgba(107,63,160,0))}
+  .news-title{font:800 8.5px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--violet)}
+  .news-pulse{width:8px;height:8px;border-radius:50%;background:#22c55e;flex:none;animation:newsPulse 2.2s infinite}
+  .news-badge{margin-left:auto;background:var(--grad);color:#fff;border-radius:999px;padding:3px 9px;
+    font:800 10px var(--mono);box-shadow:0 5px 13px -3px rgba(86,80,198,.55)}
+  .news-list{overflow-y:auto;padding:8px}
+  .news-list::-webkit-scrollbar{width:6px}
+  .news-list::-webkit-scrollbar-thumb{background:var(--ln);border-radius:6px}
+  .news-row{position:relative;display:flex;align-items:center;gap:10px;width:100%;
+    border:1px solid transparent;background:#fff;cursor:pointer;text-align:left;
+    padding:10px 11px 10px 14px;border-radius:12px;margin-bottom:3px;
+    transition:transform .16s,box-shadow .16s,border-color .16s;
+    animation:newsIn .42s both;animation-delay:calc(var(--i,0) * 26ms)}
+  .news-row:hover{border-color:var(--ln);box-shadow:0 9px 22px -11px rgba(46,24,87,.32);transform:translateX(2px)}
+  .news-accent{position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;
+    background:var(--c);box-shadow:0 0 9px -1px var(--c)}
+  .news-main{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+  .news-top{display:flex;align-items:baseline;gap:8px;justify-content:space-between}
+  .news-type{font:700 13.5px/1.15 var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .news-when{font:600 9px/1 var(--mono);color:var(--muted);white-space:nowrap;flex:none;letter-spacing:.03em}
+  .news-actor{align-self:flex-start;max-width:100%;font:700 9px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;
+    color:var(--c);background:color-mix(in srgb,var(--c) 11%,#fff);
+    border:1px solid color-mix(in srgb,var(--c) 24%,#fff);
+    padding:3px 7px;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .news-go{flex:none;font:700 15px/1 var(--jakarta);color:var(--c);opacity:0;transform:translateX(-4px);
+    transition:opacity .16s,transform .16s}
+  .news-row:hover .news-go{opacity:1;transform:translateX(0)}
+  .news-empty{padding:14px 15px;font:500 12px/1.5 var(--jakarta);color:var(--muted)}
+  @keyframes newsIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes newsPulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
 
   /* ── Curseur temporel ── */
   #timeline{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:7;display:none;
@@ -199,6 +219,6 @@
 <div id="timeline"></div>
 <div id="news"></div>
 
-<script src="../shared/humint-engine.js?v=20260617n"></script>
+<script src="../shared/humint-engine.js?v=20260618a"></script>
 </body>
 </html>

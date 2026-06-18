@@ -183,7 +183,7 @@
     if (window.algorAuth && window.algorAuth.loadZoneFile && window.ZONE_PRIVATE) {
       var live = Promise.race([
         window.algorAuth.loadZoneFile(path),
-        new Promise(function (_, rej) { setTimeout(function () { rej(new Error('timeout bucket')); }, 9000); }),
+        new Promise(function (_, rej) { setTimeout(function () { rej(new Error('timeout bucket')); }, 20000); }),
       ]);
       return live.catch(function (e) {
         console.warn('[humint] bucket indisponible, repli statique', e && e.message);
@@ -224,17 +224,33 @@
     var now = new Date(); now.setHours(0, 0, 0, 0);
     return Math.round((now - isoToDate(iso)) / 86400000);
   }
+  function relTime(iso) {
+    var d = daysSince(iso);
+    if (!isFinite(d)) return '';
+    if (d <= 0) return "aujourd'hui";
+    if (d === 1) return 'hier';
+    if (d < 7) return 'il y a ' + d + ' j';
+    var w = Math.round(d / 7);
+    return 'il y a ' + w + ' sem';
+  }
   function renderNew() {
     var box = $('news'); if (!box) return;
     var pts = state.all.filter(function (f) { return f.added && daysSince(f.added) >= 0 && daysSince(f.added) <= 7; })
-      .sort(function (a, b) { return (b.added || '').localeCompare(a.added || ''); });
-    var head = '<div class="news-head"><span class="news-dot-live"></span>Nouveau cette semaine' +
+      .sort(function (a, b) { return (b.added || '').localeCompare(a.added || '') || (b.iso || '').localeCompare(a.iso || ''); });
+    var head = '<div class="news-head"><span class="news-pulse"></span><span class="news-title">Nouveau cette semaine</span>' +
       (pts.length ? '<span class="news-badge">' + pts.length + '</span>' : '') + '</div>';
     if (!pts.length) { box.innerHTML = head + '<div class="news-empty">Aucune nouvelle donnée cette semaine pour ' + esc(state.country || 'ce pays') + '.</div>'; box.style.display = 'flex'; return; }
-    box.innerHTML = head + '<div class="news-list">' + pts.slice(0, 50).map(function (f, i) {
-      return '<button class="news-row" data-i="' + i + '"><span class="news-dot" style="background:' + actorColor(f.acteur) + '"></span>' +
-        '<span class="news-body"><span class="news-actor">' + esc(f.acteur) + '</span>' +
-        '<span class="news-meta">' + esc(f.type || '') + ' · ' + esc(f.iso || '') + '</span></span></button>';
+    box.innerHTML = head + '<div class="news-list">' + pts.slice(0, 60).map(function (f, i) {
+      var c = actorColor(f.acteur);
+      return '<button class="news-row" data-i="' + i + '" style="--c:' + c + ';--i:' + i + '">' +
+        '<span class="news-accent"></span>' +
+        '<span class="news-main">' +
+          '<span class="news-top"><span class="news-type">' + esc(f.type || 'Renseignement') + '</span>' +
+          '<span class="news-when">' + esc(relTime(f.iso)) + '</span></span>' +
+          '<span class="news-actor">' + esc(f.acteur) + '</span>' +
+        '</span>' +
+        '<span class="news-go">→</span>' +
+      '</button>';
     }).join('') + '</div>';
     box.style.display = 'flex';
     box.querySelectorAll('.news-row').forEach(function (el) {
@@ -346,7 +362,10 @@
   function normFeature(f) {
     var p = (f && f.properties) || {};
     var coords = (f.geometry && f.geometry.coordinates) || null;
-    if (!coords) return null;
+    // Coordonnées valides obligatoires : 2 nombres finis, lon ∈ [-180,180], lat ∈ [-90,90].
+    // Un point pourri (coquille source → lat>90, NaN…) est ignoré au lieu de casser le rendu.
+    if (!coords || !isFinite(coords[0]) || !isFinite(coords[1]) ||
+        coords[0] < -180 || coords[0] > 180 || coords[1] < -90 || coords[1] > 90) return null;
     var pays = p.pays, date = p.date, type = p.type, acteur = p.name, detail = '';
     if (!pays || !date || !type) {
       var parsed = parseDesc(p.description);
