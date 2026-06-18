@@ -28,7 +28,7 @@ const decode = s => s
   .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n));
 
 const RE_PAYS  = /^\s*#\s*\d+\s*[–\-—]\s*(.+?)\s*$/;
-const RE_COORD = /(-?\d{1,3}[.,]\d+)\s*[;,]\s*(-?\d{1,3}[.,]\d+)/;
+const RE_COORD = /(-?\d{1,3}[.,]\d+)(?:\s*[;,]\s*|\s+)(-?\d{1,3}[.,]\d+)/;
 const RE_DATE  = /(\d{1,2})[/.\-](\d{1,2})[/.\-](\d{2,4})/;
 
 function paraText(p) {
@@ -79,46 +79,52 @@ let pays = null;
 
 const blockRe = /<w:tbl[\s>][\s\S]*?<\/w:tbl>|<w:p[\s>][\s\S]*?<\/w:p>/g;
 let bm;
+let last = []; // features de la derniere ligne de donnees (pour rattacher la description)
 while ((bm = blockRe.exec(xml))) {
   const block = bm[0];
 
-  // Titre de section pays "#N - PAYS" : cherche dans le texte brut du bloc
-  // (paragraphe, mini-tableau a une cellule, ou zone de texte)
+  // Titre de section pays "#N - PAYS" : petit tableau/paragraphe titre -> on saute ses lignes.
   const rawText = decode(block.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
   const mp = rawText.match(/#\s*\d+\s*[–\-—]\s*([^\d#]+)/);
-  if (mp) pays = titleCasePays(mp[1].trim());
+  if (mp) { pays = titleCasePays(mp[1].trim()); last = []; continue; }
 
-  // Tableau de donnees uniquement
   if (!block.startsWith('<w:tbl')) continue;
   const rows = block.match(/<w:tr[\s>][\s\S]*?<\/w:tr>/g) || [];
-  let ri = 0;
+  // Le tableau de donnees alterne : ligne a 4 cellules (donnee) puis ligne a 1 cellule (description).
   for (const row of rows) {
     const cells = row.match(/<w:tc[\s>][\s\S]*?<\/w:tc>/g) || [];
-    if (cells.length < 4) { ri++; continue; }
-    const dateRaw = cellLines(cells[0]).join(' ');
-    if (ri === 0 && !RE_DATE.test(dateRaw)) { ri++; continue; } // en-tete
-    ri++;
-    const villes = cellLines(cells[1]);
-    const coordLines = cellLines(cells[2]);
-    const acteurRaw = cellLines(cells[3]).join(' ');
-    const iso = toISO(dateRaw);
-    const [name, etype] = splitActor(acteurRaw);
-    const coords = coordLines.map(parseCoord).filter(Boolean);
-    if (!coords.length) {
-      if (dateRaw || acteurRaw) warnings.push(`${pays}: ligne sans coords (date=${dateRaw}, acteur=${acteurRaw})`);
-      continue;
-    }
-    if (!iso) warnings.push(`${pays}: date illisible "${dateRaw}"`);
-    coords.forEach((coord, i) => {
-      const ville = villes[i] || villes[villes.length - 1] || '';
-      const paysVille = ville ? `${pays} - ${ville}` : (pays || '');
-      features.push({
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: coord },
-        properties: { name, type: etype, date: iso, pays: paysVille, description: '', sources: 'HUMINT', added: today },
+
+    if (cells.length >= 4) {
+      const dateRaw = cellLines(cells[0]).join(' ');
+      const villes = cellLines(cells[1]);
+      const coordLines = cellLines(cells[2]);
+      const acteurRaw = cellLines(cells[3]).join(' ');
+      const iso = toISO(dateRaw);
+      const [name, etype] = splitActor(acteurRaw);
+      const coords = coordLines.map(parseCoord).filter(Boolean);
+      last = [];
+      if (!coords.length) {
+        if (dateRaw || acteurRaw) warnings.push(`${pays}: ligne sans coords (date=${dateRaw}, acteur=${acteurRaw})`);
+        continue;
+      }
+      if (!iso) warnings.push(`${pays}: date illisible "${dateRaw}"`);
+      coords.forEach((coord, i) => {
+        const ville = villes[i] || villes[villes.length - 1] || '';
+        const paysVille = ville ? `${pays} - ${ville}` : (pays || '');
+        const feat = {
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: coord },
+          properties: { name, type: etype, date: iso, pays: paysVille, description: '', sources: 'HUMINT', added: today },
+        };
+        features.push(feat);
+        last.push(feat);
+        report[pays] = (report[pays] || 0) + 1;
       });
-      report[pays] = (report[pays] || 0) + 1;
-    });
+    } else if (cells.length === 1) {
+      // Ligne de description : rattachee a tous les points de la ligne data precedente.
+      const desc = cellLines(cells[0]).join(' ').trim();
+      if (desc && last.length) last.forEach((f) => { f.properties.description = desc; });
+    }
   }
 }
 

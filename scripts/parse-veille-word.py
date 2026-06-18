@@ -39,8 +39,8 @@ except ImportError:
 
 # Titre de section pays : "#1 – BURKINA FASO", "#2 - MALI", etc.
 RE_PAYS = re.compile(r'^\s*#\s*\d+\s*[–\-—]\s*(.+?)\s*$')
-# Un couple de coordonnees : "13.281611 ; -0.652850" (virgule ou point decimal accepte)
-RE_COORD = re.compile(r'(-?\d{1,3}[.,]\d+)\s*[;,]\s*(-?\d{1,3}[.,]\d+)')
+# Un couple de coordonnees : "13.281611 ; -0.652850" OU "12.060840 -0.359208" (separateur ; , ou espace)
+RE_COORD = re.compile(r'(-?\d{1,3}[.,]\d+)(?:\s*[;,]\s*|\s+)(-?\d{1,3}[.,]\d+)')
 # Date jj/mm/aa ou jj/mm/aaaa (separateurs / . -)
 RE_DATE = re.compile(r'(\d{1,2})[/.\-](\d{1,2})[/.\-](\d{2,4})')
 
@@ -125,55 +125,68 @@ def parse_doc(path):
     warnings = []
     today = datetime.date.today().isoformat()
 
+    last = []  # features de la derniere ligne de donnees (pour rattacher la description)
+    pays_re = re.compile(r'#\s*\d+\s*[–\-—]\s*([^\d#]+)')
+
     for block in iter_blocks(doc):
         if isinstance(block, Paragraph):
-            m = RE_PAYS.match(block.text)
+            m = pays_re.search(block.text)
             if m:
-                pays = title_case_pays(m.group(1))
+                pays = title_case_pays(m.group(1).strip())
+                last = []
             continue
 
-        # Tableau
-        for ri, row in enumerate(block.rows):
+        # Tableau-titre "#N - PAYS" (1 ligne) -> definit le pays, pas de donnees.
+        full = ' '.join(c.text for r in block.rows for c in r.cells)
+        mp = pays_re.search(full)
+        if mp and len(block.rows) <= 1:
+            pays = title_case_pays(mp.group(1).strip())
+            last = []
+            continue
+
+        # Tableau de donnees : alterne ligne data (date en col 0) et ligne description (cellule fusionnee).
+        for row in block.rows:
             cells = row.cells
-            if len(cells) < 4:
-                continue
-            date_raw = cells[0].text.strip()
-            # ignore une eventuelle ligne d'en-tete
-            if ri == 0 and not RE_DATE.search(date_raw):
+            c0 = cells[0].text.strip()
+            c1 = cells[1].text.strip() if len(cells) > 1 else ''
+            is_data = len(cells) >= 4 and bool(RE_DATE.search(c0)) and c0 != c1
+
+            if not is_data:
+                # Ligne description (cellule fusionnee) -> rattachee a la ligne data precedente.
+                desc = c0
+                if desc and last:
+                    for f in last:
+                        f["properties"]["description"] = desc
                 continue
 
             villes = cell_lines(cells[1])
             coord_lines = cell_lines(cells[2])
             acteur_raw = ' '.join(cell_lines(cells[3]))
-
-            iso = to_iso(date_raw)
+            iso = to_iso(c0)
             name, etype = split_actor(acteur_raw)
-            coords = [parse_coord(c) for c in coord_lines]
-            coords = [c for c in coords if c]
+            coords = [c for c in (parse_coord(x) for x in coord_lines) if c]
+            last = []
 
             if not coords:
-                if date_raw or acteur_raw:
-                    warnings.append(f"{pays}: ligne sans coordonnees lisibles (date={date_raw!r}, acteur={acteur_raw!r})")
+                if c0 or acteur_raw:
+                    warnings.append(f"{pays}: ligne sans coordonnees lisibles (date={c0!r}, acteur={acteur_raw!r})")
                 continue
             if not iso:
-                warnings.append(f"{pays}: date illisible {date_raw!r}")
+                warnings.append(f"{pays}: date illisible {c0!r}")
 
             for i, coord in enumerate(coords):
                 ville = villes[i] if i < len(villes) else (villes[-1] if villes else '')
                 pays_ville = f"{pays} - {ville}" if ville else (pays or '')
-                features.append({
+                feat = {
                     "type": "Feature",
                     "geometry": {"type": "Point", "coordinates": coord},
                     "properties": {
-                        "name": name,
-                        "type": etype,
-                        "date": iso,
-                        "pays": pays_ville,
-                        "description": "",
-                        "sources": "HUMINT",
-                        "added": today,
+                        "name": name, "type": etype, "date": iso, "pays": pays_ville,
+                        "description": "", "sources": "HUMINT", "added": today,
                     },
-                })
+                }
+                features.append(feat)
+                last.append(feat)
                 report[pays] = report.get(pays, 0) + 1
 
     return features, report, warnings
