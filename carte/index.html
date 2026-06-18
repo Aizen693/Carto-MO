@@ -75,7 +75,8 @@
   /* ── Jetons éditables sur la carte (clic → sélecteur) ── */
   .chip-edit{appearance:none;-webkit-appearance:none;cursor:pointer;text-align:left;transition:border-color .12s}
   .chip-edit:hover{border-color:var(--violet)}
-  .chip-caret{font-size:13px;color:var(--muted);margin-left:1px}
+  .chip-caret{font-size:13px;color:var(--muted);margin-left:1px;transition:transform .18s}
+  .chip-pop-open .chip-caret{transform:rotate(180deg)}
   .chip-pays .chip-caret{color:rgba(255,255,255,.85)}
   .chip-on{border-left-color:var(--blue)}
 
@@ -224,6 +225,6 @@
 <div id="timeline"></div>
 <div id="news"></div>
 
-<script src="../shared/humint-engine.js?v=20260618d"></script>
+<script src="../shared/humint-engine.js?v=20260618e"></script>
 </body>
 </html>

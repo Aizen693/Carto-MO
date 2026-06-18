@@ -452,12 +452,18 @@
     el.type = 'button';
     el.className = 'chip chip-edit' + (key === 'pays' ? ' chip-pays' : '') + (active ? ' chip-on' : '');
     el.innerHTML = '<span class="chip-key">' + esc(label) + '</span><span class="chip-val">' + esc(value) + '</span><span class="chip-caret">▾</span>';
-    el.onclick = function (e) { e.stopPropagation(); openEditor(key, el); };
+    el.onclick = function (e) { e.stopPropagation(); if (popAnchor === el) { closePop(); return; } openEditor(key, el); };
     return el;
   }
 
   /* ── Popover générique ── */
-  function closePop() { var p = $('facet-pop'); if (p) p.remove(); document.removeEventListener('mousedown', outsidePop); }
+  var popAnchor = null;
+  function closePop() {
+    var p = $('facet-pop'); if (p) p.remove();
+    document.removeEventListener('mousedown', outsidePop);
+    if (popAnchor && popAnchor.classList) popAnchor.classList.remove('chip-pop-open');
+    popAnchor = null;
+  }
   function outsidePop(e) { var p = $('facet-pop'); if (p && !p.contains(e.target) && !(e.target.closest && e.target.closest('.chip-edit'))) closePop(); }
   function openPop(anchor, html, wire) {
     closePop();
@@ -465,6 +471,7 @@
     p.id = 'facet-pop'; p.className = 'facet-pop';
     p.innerHTML = html;
     document.body.appendChild(p);
+    popAnchor = anchor; if (anchor && anchor.classList) anchor.classList.add('chip-pop-open');
     var r = anchor.getBoundingClientRect();
     p.style.left = Math.max(8, Math.min(r.left, window.innerWidth - p.offsetWidth - 8)) + 'px';
     p.style.top = (r.bottom + 8) + 'px';
