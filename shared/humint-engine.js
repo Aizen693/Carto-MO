@@ -171,82 +171,23 @@
     }, 100);
   }
 
-  /* ─────────── Style premium du fond (light-v11 restylé) ─────────── */
-  // Restyle les couches NATIVES de Mapbox (pas de calque ajouté) : relief subtil,
-  // palette eau/terres épurée, frontières pays noires épaisses + liseré blanc.
-  function polishBasemap() {
-    function setP(id, prop, val) { if (map.getLayer(id)) { try { map.setPaintProperty(id, prop, val); } catch (e) { /* */ } } }
-    function setL(id, prop, val) { if (map.getLayer(id)) { try { map.setLayoutProperty(id, prop, val); } catch (e) { /* */ } } }
-    function hide(id) { setL(id, 'visibility', 'none'); }
-    function firstSymbolId() {
-      var ls = (map.getStyle() && map.getStyle().layers) || [];
-      for (var i = 0; i < ls.length; i++) if (ls[i].type === 'symbol') return ls[i].id;
-      return undefined;
-    }
-
-    // (1) Relief : DEM + hillshade 2D subtil, sous les labels et sous les points.
-    try {
-      if (!map.getSource('dem')) map.addSource('dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
-      if (!map.getLayer('hillshade')) map.addLayer({
-        id: 'hillshade', type: 'hillshade', source: 'dem',
-        paint: {
-          'hillshade-exaggeration': ['interpolate', ['linear'], ['zoom'], 4, 0.22, 7, 0.32, 9, 0.42],
-          'hillshade-shadow-color': '#9fa6ad', 'hillshade-highlight-color': '#ffffff',
-          'hillshade-accent-color': '#c8ccd1', 'hillshade-illumination-direction': 335,
-          'hillshade-illumination-anchor': 'viewport',
-        },
-      }, firstSymbolId());
-    } catch (e) { /* DEM indispo → carte reste belle à plat */ }
-
-    // (2) On garde les couleurs NATIVES de streets-v12 (eau bleue, terres, routes,
-    //     végétation) — c'est le "look Mapbox" demandé. Pas d'override de palette.
-
-    // (3) Frontières NATIVES restylées : pays noir épais + casing blanc (séparation nette).
-    setP('admin-0-boundary-bg', 'line-color', '#ffffff');
-    setP('admin-0-boundary-bg', 'line-opacity', 0.6);
-    setP('admin-0-boundary-bg', 'line-blur', 0.3);
-    setP('admin-0-boundary-bg', 'line-width', ['interpolate', ['linear'], ['zoom'], 4, 4.5, 6, 6.5, 9, 9]);
-    setP('admin-0-boundary', 'line-color', '#1a1a1a');
-    setP('admin-0-boundary', 'line-opacity', 1);
-    setP('admin-0-boundary', 'line-width', ['interpolate', ['linear'], ['zoom'], 4, 1.6, 6, 2.4, 9, 3.4]);
-    setL('admin-0-boundary', 'line-cap', 'round');
-    setL('admin-0-boundary', 'line-join', 'round');
-    setP('admin-0-boundary-disputed', 'line-color', '#1a1a1a');
-    setP('admin-0-boundary-disputed', 'line-opacity', 0.85);
-    setP('admin-0-boundary-disputed', 'line-dasharray', [2.5, 1.8]);
-    setP('admin-0-boundary-disputed', 'line-width', ['interpolate', ['linear'], ['zoom'], 4, 1.2, 6, 1.8, 9, 2.6]);
-    setP('admin-1-boundary', 'line-color', '#9a9aa2');
-    setP('admin-1-boundary', 'line-opacity', 0.5);
-    setP('admin-1-boundary', 'line-dasharray', [3, 1.5]);
-    setP('admin-1-boundary', 'line-width', ['interpolate', ['linear'], ['zoom'], 4, 0.4, 9, 1.0]);
-
-    // (4) Labels & routes : on garde tout en NATIF (look Mapbox complet, routes visibles).
-    //     Juste le nom de pays un peu renforcé pour la lisibilité.
-    setP('country-label', 'text-halo-width', 1.4);
-  }
-
   function initMap() {
     var c = state.entry ? state.entry.center : [2, 14];
     var z = state.entry ? state.entry.zoom : 3.4;
     map = new mapboxgl.Map({
-      container: 'map', style: 'mapbox://styles/mapbox/streets-v12',
+      container: 'map', style: 'mapbox://styles/mapbox/standard',
       center: c, zoom: z, projection: 'mercator', attributionControl: false, language: 'fr',
     });
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
     whenStyleLoaded(function () {
       map.resize();
-      polishBasemap();
-      // Repli relief : si le DEM est indisponible (403/timeout), on retire le hillshade
-      // proprement — la carte reste belle à plat.
-      map.on('error', function (e) {
-        if (e && e.sourceId === 'dem') {
-          try { if (map.getLayer('hillshade')) map.removeLayer('hillshade'); if (map.getSource('dem')) map.removeSource('dem'); } catch (er) { /* */ }
-        }
-      });
+      // Frontières : ON N'AJOUTE AUCUN calque. On garde uniquement les frontières
+      // natives du fond Mapbox, recolorées en noir (au lieu du rouge par défaut).
+      try { map.setConfigProperty('basemap', 'colorAdminBoundaries', '#000000'); } catch (e) { /* config indispo */ }
       map.addSource(SRC, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'humint-glow', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 6, 8, 11, 12, 16], 'circle-color': ['get', '_color'], 'circle-opacity': 0.06, 'circle-blur': 1.2 } });
       map.addLayer({ id: 'humint-ring', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 3, 8, 5, 12, 8], 'circle-color': 'rgba(0,0,0,0)', 'circle-stroke-color': ['get', '_color'], 'circle-stroke-width': 0.7, 'circle-stroke-opacity': 0.5 } });
-      map.addLayer({ id: 'humint-dots', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 1.8, 8, 3, 12, 4.5], 'circle-color': ['get', '_color'], 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1 } });
+      map.addLayer({ id: 'humint-dots', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 1.8, 8, 3, 12, 4.5], 'circle-color': ['get', '_color'], 'circle-stroke-color': '#0d1117', 'circle-stroke-width': 0.5 } });
       setupPopups();
       state.mapReady = true;
       tryRender();
