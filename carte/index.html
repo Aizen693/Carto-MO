@@ -38,7 +38,7 @@
   #counter{font:600 10px/1 var(--jakarta);letter-spacing:.08em;color:var(--violet);text-transform:uppercase;pointer-events:none}
 
   /* ── Barre constructeur (jetons + saisie) ── */
-  #chipbar{position:absolute;top:70px;left:16px;z-index:7;display:flex;gap:9px;flex-wrap:wrap;align-items:center;max-width:calc(100% - 32px)}
+  #chipbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;flex:1;min-width:0;pointer-events:auto}
   .chip{display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--ln);
     border-left:3px solid var(--violet);padding:8px 12px;border-radius:11px;box-shadow:var(--shadow);font-family:var(--jakarta)}
   .chip-key{font:700 7px/1 var(--jakarta);letter-spacing:.16em;text-transform:uppercase;color:var(--violet)}
@@ -203,13 +203,8 @@
   <a class="brand" href="../index.html" title="Retour à l'accueil">
     <img src="../sahel/algor_int_logo.jpg" alt="Algor Int" onerror="this.style.display='none'">
   </a>
-  <div>
-    <h1 id="country-title">Choisir un pays</h1>
-  </div>
-  <div class="spacer"></div>
+  <div id="chipbar"></div>
 </div>
-
-<div id="chipbar"></div>
 
 <div id="map"></div>
 <div id="loader">Chargement…</div>
