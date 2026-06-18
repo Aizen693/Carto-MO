@@ -16,6 +16,7 @@
   'use strict';
 
   mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+  var SUPABASE_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
 
   /* ─────────── Normalisation (miroir du build) ─────────── */
   var PAYS_TYPOS = {
@@ -34,6 +35,15 @@
     var key = s.toLowerCase();
     if (PAYS_TYPOS[key]) return PAYS_TYPOS[key];
     return s;
+  }
+  // Localité : la partie après « Pays - » (ex. « Nigeria - Maiduguri » → « Maiduguri »).
+  // Sert aux graphiques d'analyse (répartition géographique). Null si non précisée.
+  function villeOf(raw) {
+    if (!raw) return null;
+    var parts = String(raw).split(/\s*-\s*/);
+    if (parts.length < 2) return null;
+    var v = parts.slice(1).join(' - ').replace(/\s*\(.*?\)\s*/g, '').replace(/\s+/g, ' ').trim();
+    return v || null;
   }
   function canonEvent(raw) {
     if (!raw) return null;
@@ -318,6 +328,117 @@
     });
   }
 
+  /* ─────────── Panneau d'analyse (graphiques data + synthèse IA) ─────────── */
+  // Tout est calculé sur la VRAIE donnée HUMINT du pays courant (respecte les
+  // facettes date/typo/acteur, ignore le curseur temporel). L'IA n'invente rien :
+  // on lui passe ces chiffres et elle les interprète (edge function mode=analyse).
+  function analysisFeats() { return (state.all || []).filter(passes); }
+  function statsTally(feats, field) {
+    var m = {};
+    feats.forEach(function (f) { var k = (f[field] == null || f[field] === '') ? 'Non précisé' : f[field]; m[k] = (m[k] || 0) + 1; });
+    return Object.keys(m).map(function (k) { return { k: k, n: m[k] }; })
+      .sort(function (a, b) { return b.n - a.n || a.k.localeCompare(b.k); });
+  }
+  function anaSig() { return [state.country, state.sel.from, state.sel.to, state.sel.event, state.sel.actor].join('|'); }
+
+  function anaSection(title, rows, total, colorFn) {
+    var max = rows.length ? rows[0].n : 1;
+    var body = rows.slice(0, 8).map(function (r) {
+      var w = Math.max(4, Math.round(r.n / max * 100));
+      var p = total ? Math.round(r.n / total * 100) : 0;
+      return '<div class="ana-row">' +
+        '<span class="ana-row-l" title="' + esc(r.k) + '">' + esc(r.k) + '</span>' +
+        '<span class="ana-row-track"><span class="ana-row-fill" style="width:' + w + '%;background:' + colorFn(r.k) + '"></span></span>' +
+        '<span class="ana-row-v">' + r.n + ' · ' + p + '%</span></div>';
+    }).join('') || '<div class="ana-empty">Aucune donnée</div>';
+    var more = rows.length > 8 ? '<div class="ana-more">+ ' + (rows.length - 8) + ' autres localités</div>' : '';
+    return '<div class="ana-sec"><div class="ana-sec-h"><span class="ana-sec-t">' + esc(title) +
+      '</span><span class="ana-sec-n">' + rows.length + '</span></div><div class="ana-bars">' + body + more + '</div></div>';
+  }
+
+  function renderAnalysis() {
+    var box = $('analysis'); if (!box) return;
+    if (!state.country || !(state.all && state.all.length)) { box.style.display = 'none'; state._anaSig = null; return; }
+    var feats = analysisFeats();
+    var sig = anaSig() + '#' + feats.length;
+    // Curseur temporel : l'analyse ne dépend pas du bucket courant → on ne reconstruit
+    // pas à chaque tick (sinon la synthèse IA générée serait effacée pendant le play).
+    if (sig === state._anaSig && box.style.display !== 'none') return;
+    state._anaSig = sig;
+    if (state.anaOpen === undefined) state.anaOpen = true;
+    var stats = { total: feats.length, villes: statsTally(feats, 'ville'), types: statsTally(feats, 'type'), acteurs: statsTally(feats, 'acteur') };
+    var head = '<div class="ana-head"><span class="ana-badge">' + stats.total + '</span>' +
+      '<span class="ana-title">Analyse · ' + esc(state.country) + '</span><span class="ana-caret">▾</span></div>';
+    var sections =
+      anaSection('Localités touchées', stats.villes, stats.total, function () { return 'linear-gradient(90deg,#6B3FA0,#5650C6)'; }) +
+      anaSection("Typologie d'événement", stats.types, stats.total, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }) +
+      anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); });
+    var ia = '<div class="ana-ia"><button class="ana-ia-btn" type="button">✶ Générer la synthèse IA</button>' +
+      '<div class="ana-ia-out"></div></div>';
+    box.innerHTML = head + '<div class="ana-body">' + sections + ia + '</div>';
+    box.style.display = 'flex';
+    box.classList.toggle('ana-open', !!state.anaOpen);
+    var h = box.querySelector('.ana-head');
+    if (h) h.onclick = function () { state.anaOpen = !state.anaOpen; box.classList.toggle('ana-open', state.anaOpen); };
+    var btn = box.querySelector('.ana-ia-btn'), out = box.querySelector('.ana-ia-out');
+    if (btn) btn.onclick = function () { runAnalysisIA(btn, out, stats); };
+  }
+
+  function buildStatsText(s) {
+    function block(title, rows) {
+      var t = rows.reduce(function (a, r) { return a + r.n; }, 0) || 1;
+      return title + ' :\n' + rows.slice(0, 12).map(function (r) {
+        return '- ' + r.k + ' : ' + r.n + ' (' + Math.round(r.n / t * 100) + '%)';
+      }).join('\n');
+    }
+    return block('Localites (repartition geographique)', s.villes) + '\n\n' +
+      block('Typologies d evenement', s.types) + '\n\n' +
+      block('Acteurs', s.acteurs);
+  }
+  function mdMini(md) {
+    var safe = esc(md).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    return safe.split(/\n{2,}/).map(function (blk) {
+      blk = blk.trim(); if (!blk) return '';
+      var h = blk.match(/^#{1,6}\s+([\s\S]+)$/);
+      if (h) return '<h4>' + h[1].replace(/\n/g, ' ').trim() + '</h4>';
+      return '<p>' + blk.replace(/\n/g, ' ') + '</p>';
+    }).join('');
+  }
+  function runAnalysisIA(btn, out, stats) {
+    if (state._anaBusy) return;
+    state._anaBusy = true;
+    btn.disabled = true; btn.textContent = 'Analyse en cours…';
+    out.innerHTML = '<div class="ana-ia-load">Gemini analyse ' + esc(state.country) + ' sur nos ' + stats.total + ' événements…</div>';
+    var done = function (html, label) {
+      state._anaBusy = false; btn.disabled = false; btn.textContent = label || '↻ Regénérer la synthèse';
+      out.innerHTML = html;
+    };
+    var sa = window.algorAuth && window.algorAuth.supabase;
+    if (!sa) { done('<div class="ana-ia-err">Session indisponible. Recharge la page.</div>', '✶ Générer la synthèse IA'); return; }
+    sa.auth.getSession().then(function (res) {
+      var token = res && res.data && res.data.session && res.data.session.access_token;
+      if (!token) { done('<div class="ana-ia-err">Session expirée. Recharge la page.</div>', '✶ Générer la synthèse IA'); return; }
+      var periode = (state.sel.from && state.sel.to) ? (frDate(state.sel.from) + ' – ' + frDate(state.sel.to)) : 'toutes dates';
+      return fetch(SUPABASE_URL + '/functions/v1/brief-securite', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: state.country, pays: state.country, mode: 'analyse',
+          context: { stats: buildStatsText(stats), total: String(stats.total), periode: periode },
+        }),
+      }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (o) {
+          if (!o.ok) { done('<div class="ana-ia-err">' + esc(o.j.error || 'Erreur IA') + (o.j.hint ? '<br><span>' + esc(o.j.hint) + '</span>' : '') + '</div>'); return; }
+          var src = (o.j.sources || []).slice(0, 6).map(function (s) {
+            return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title || 'source') + '</a>';
+          }).join('');
+          done('<div class="ana-ia-txt">' + mdMini(o.j.brief || '') + '</div>' +
+            (src ? '<div class="ana-ia-src">' + src + '</div>' : '') +
+            '<div class="ana-ia-foot">Généré par ' + esc(o.j.model || 'Gemini') + ' · interprétation de nos ' + stats.total + ' événements</div>');
+        });
+    }).catch(function (e) { done('<div class="ana-ia-err">Échec réseau. ' + esc(String((e && e.message) || e)) + '</div>'); });
+  }
+
   /* ─────────── Curseur temporel (granularité adaptée à la période) ─────────── */
   function pad2(n) { return (n < 10 ? '0' : '') + n; }
   function isoToDate(iso) { var p = iso.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
@@ -426,7 +547,7 @@
     }
     var iso = toISO(date);
     return {
-      pays: normalizePays(pays), iso: iso, mkey: monthKey(iso),
+      pays: normalizePays(pays), ville: villeOf(pays), iso: iso, mkey: monthKey(iso),
       type: canonEvent(type), acteur: normalizeActor(acteur) || '—',
       description: p.description || detail || '', sources: p.sources || '', coords: coords,
       added: p.added ? String(p.added).slice(0, 10) : null,
@@ -445,6 +566,7 @@
     return true;
   }
   function applyFacets() {
+    renderAnalysis();
     if (!map || !map.getSource(SRC)) return;
     var shown = (state.allRaw || []).filter(function (f) { return inScope(f) && passes(f) && tlPasses(f); });
     map.getSource(SRC).setData({

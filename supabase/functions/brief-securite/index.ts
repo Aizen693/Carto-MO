@@ -20,6 +20,7 @@ const ALLOWED_ORIGINS = [
   'https://algoracces.fr',
   'https://www.algoracces.fr',
   'http://localhost:8765',
+  'http://localhost:8768',
 ];
 
 function corsHeaders(origin: string | null): HeadersInit {
@@ -60,6 +61,45 @@ UTILISE la recherche web Google : 3-5 recherches ciblees minimum pour les faits 
 Sortie : juste le paragraphe, rien d'autre.`;
 }
 
+// Analyse statistique : on injecte les chiffres REELS de notre base HUMINT
+// (repartition par localite / typologie / acteur) et on demande a Gemini d'en
+// tirer une lecture analytique. Aucune donnee chiffree ne doit etre inventee :
+// l'IA interprete, elle ne fabrique pas.
+function buildAnalysePrompt(input: {
+  name: string;
+  context?: Record<string, string>;
+}): string {
+  const ctx = input.context || {};
+  const stats = ctx.stats || '';
+  const total = ctx.total || '?';
+  const periode = ctx.periode ? ` (periode : ${ctx.periode})` : '';
+  return `Tu es analyste senior pour Algor Int — cabinet francais d'intelligence economique et securitaire.
+
+PAYS ANALYSE : **${input.name}**${periode}
+
+Voici les STATISTIQUES REELLES issues de notre base HUMINT proprietaire (${total} evenements). Elles font foi. Base ton analyse EXCLUSIVEMENT sur ces chiffres : ne fabrique AUCUN nombre, AUCUN pourcentage et AUCUNE localite qui ne figure pas ci-dessous.
+
+${stats}
+
+Produis une lecture analytique courte et dense, en 3 sections markdown EXACTEMENT :
+
+## Repartition geographique
+2 a 3 phrases : ou se concentrent les evenements, quelles localites montrent une expansion ou un poids dominant. Cite des localites et leurs parts (%) telles que fournies.
+
+## Typologie dominante
+2 a 3 phrases : quels types d'evenements dominent, ce que ce mode operatoire revele.
+
+## Acteurs
+2 a 3 phrases : acteurs principaux et leur poids relatif.
+
+REGLES STRICTES :
+- Francais sobre, registre analyste senior, aucun emoji, aucune puce dans les paragraphes
+- Cite UNIQUEMENT des chiffres presents dans les stats fournies
+- Aucune speculation, aucune projection sur l'avenir
+- Tu peux contextualiser tres brievement (1 incise) avec la recherche web mais sans introduire de donnee chiffree externe
+- Sortie : juste les 3 sections, rien avant ni apres.`;
+}
+
 function buildPrompt(input: {
   name: string;
   ville?: string;
@@ -68,6 +108,7 @@ function buildPrompt(input: {
   mode?: string;
 }): string {
   if (input.mode === 'synthese') return buildSynthesePrompt(input);
+  if (input.mode === 'analyse') return buildAnalysePrompt(input);
   const ctx = input.context || {};
   // Champs utiles a injecter dans le prompt (on filtre les bruits)
   const skipKeys = new Set(['name', 'Name', 'nom', 'Nom', '_calque']);
