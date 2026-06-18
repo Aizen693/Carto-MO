@@ -369,12 +369,14 @@
     if (state.tl.idx <= 0) return true;
     var b = state.tl.buckets[state.tl.idx - 1];
     if (!b) return true;
-    return f.iso && f.iso >= b.start && f.iso <= b.end;
+    // Cumul : on montre tout ce qui s'est passé jusqu'à la fin du bucket courant
+    // (les points s'accumulent au fil du play, ils ne disparaissent pas d'une période à l'autre)
+    return f.iso && f.iso <= b.end;
   }
   function tlLabel() {
     if (state.tl.idx === 0) return 'Toute la période · par ' + state.tl.gran;
     var b = state.tl.buckets[state.tl.idx - 1];
-    return b ? b.label : '';
+    return b ? 'Jusqu\'à ' + b.label : '';
   }
   function updateTl() {
     var l = $('tl-label'); if (l) l.textContent = tlLabel();
