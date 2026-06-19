@@ -157,13 +157,17 @@
   function coordsFor(it, fbIdx){
     var lat = parseFloat(it.lat != null ? it.lat : it.latitude);
     var lon = parseFloat(it.lon != null ? it.lon : (it.lng != null ? it.lng : it.longitude));
-    if (isFinite(lat) && isFinite(lon)) return { c: [lon, lat], precise: true };
-    var base = countryCenter(it.lieu);
+    var precise = isFinite(lat) && isFinite(lon);
+    var base = precise ? [lon, lat] : countryCenter(it.lieu);
     if (!base) return null;
-    var key = base[0] + ',' + base[1];
+    // Anti-superposition : les signaux au même point sont écartés en spirale,
+    // pour rester tous visibles et cliquables. Écart serré si point précis.
+    var key = base[0].toFixed(2) + ',' + base[1].toFixed(2);
     var n = (fbIdx[key] = (fbIdx[key] || 0), fbIdx[key]++);
-    var a = n * 2.399963, r = 0.28 + n * 0.16;
-    return { c: [base[0] + Math.cos(a) * r, base[1] + Math.sin(a) * r], precise: false };
+    if (!n) return { c: [base[0], base[1]], precise: precise };
+    var r0 = precise ? 0.07 : 0.28, step = precise ? 0.05 : 0.16;
+    var a = n * 2.399963, r = r0 + n * step;
+    return { c: [base[0] + Math.cos(a) * r, base[1] + Math.sin(a) * r], precise: precise };
   }
 
   function noteHTML(it){
