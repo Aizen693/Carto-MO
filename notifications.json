@@ -1,6 +1,116 @@
 {
-  "updated": "2026-06-18",
+  "updated": "2026-06-19",
   "items": [
+    {
+      "id": "u-bamada-net-offensive-des-fama-a-diema-plus-de-30-terroristes-mis-hors-",
+      "date": "2026-06-19",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/offensive-des-fama-a-diema-plus-de-30-terroristes-mis-hors-detat-de-nuire",
+      "image": "http://bamada.net/wp-content/uploads/2026/01/general-assimi-goita-fete-armee-depot-gerbe-genie-militaire-hommage-soldat-tombe-fronts-avion-fama.jpg",
+      "titre": "Offensive FAMa à Diéma: 30+ terroristes neutralisés",
+      "resume": "Les Forces Armées Maliennes ont mené une reconnaissance offensive dans le secteur de Diéma le 17 juin 2026, débusquant un groupe armé terroriste et neutralisant plus de 30 éléments.",
+      "detail": "L'opération intervient dans un contexte de maintien de la sécurité dans le secteur de Diéma, région stratégique du Mali. Cette action témoigne de la capacité opérationnelle des FAMa à déployer des opérations ciblées contre les groupes armés. Les chiffres fournis par l'État-Major suggèrent une efficacité tactique significative. La pression sur les groupes terroristes dans cette zone demeure une priorité sécuritaire majeure.",
+      "implications": [
+        "Renforcement temporaire du contrôle territorial des FAMa dans le secteur",
+        "Possible relocalisation des groupes armés vers des zones adjacentes",
+        "Risque de représailles contre les civils dans les zones de repli"
+      ],
+      "recommandations": [
+        "Suivre la consolidation du contrôle territorial post-opération",
+        "Monitorer les flux de déplacés civils dans les régions limitrophes",
+        "Évaluer la capacité de reconstitution des groupes armés neutralisés"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-croissance-en-afrique-la-bad-anticipe-un-ralentissement-a",
+      "date": "2026-06-19",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/croissance-en-afrique-la-bad-anticipe-un-ralentissement-a-4-2-dici-2026/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18536.jpg",
+      "titre": "Croissance africaine: ralentissement à 4,2% prévu d'ici 2026",
+      "resume": "La Banque Africaine de Développement anticipe un ralentissement de la croissance économique africaine à 4,2% d'ici 2026, reflétant les défis macroéconomiques persistants du continent.",
+      "detail": "Les projections de la BAD indiquent une trajectoire de croissance ralentie par rapport aux années précédentes. Ce ralentissement reflète les pressions inflationnistes, les défis de financement et les facteurs externes affectant la région. Cette prévision revêt une importance particulière pour les États sahéliens dépendants de l'aide au développement et du financement extérieur. Les implications pour la stabilité socioéconomique et les capacités budgétaires nationales sont substantielles.",
+      "implications": [
+        "Compression des budgets gouvernementaux et baisse des dépenses publiques",
+        "Réduction de l'espace fiscal pour les investissements en sécurité",
+        "Augmentation potentielle des tensions sociales liées au chômage"
+      ],
+      "recommandations": [
+        "Analyser les impacts budgétaires sectoriels dans les pays clients",
+        "Anticiper les crises de liquidités au sein des États sahéliens",
+        "Évaluer les risques de déstabilisation liés aux compressions budgétaires"
+      ]
+    },
+    {
+      "id": "u-bamada-net-oeuvres-sociales-541eme-forage-offert-par-le-president-de-l",
+      "date": "2026-06-19",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/oeuvres-sociales-541eme-forage-offert-par-le-president-de-la-transition",
+      "image": "http://bamada.net/wp-content/uploads/2026/05/aguibou-dembele-oeuvres-sociales-inauguration-forage-1008-logement.jpg",
+      "titre": "Mali: 541e forage inauguré dans la capitale",
+      "resume": "Le Président de la Transition a inauguré le 541e forage à Bamako, dans les communes VI, marquant la poursuite d'une initiative majeure d'accès à l'eau potable au Mali.",
+      "detail": "Cette initiative d'infrastructure hydraulique s'inscrit dans une stratégie plus large d'accès aux services essentiels en zone urbaine et périurbaine. Le cumul de 541 forages représente un investissement considérable en capital infrastructure. Cette action peut contribuer à améliorer l'acceptabilité politique de la junte militaire auprès des populations urbaines. L'initiative reflète une priorisation des services de base comme vecteur de légitimité gouvernementale.",
+      "implications": [
+        "Renforcement de la base de soutien urbain du Président Goïta",
+        "Amélioration de l'accès à l'eau réduisant les tensions communautaires",
+        "Signal de continuité de la transition et de gouvernance fonctionnelle"
+      ],
+      "recommandations": [
+        "Suivre l'impact de ces infrastructures sur la satisfaction publique",
+        "Monitorer l'utilisation stratégique de ces projets dans la narrative politique",
+        "Évaluer la durabilité maintenance des installations hydrauliques"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-stabilite-economique-au-mali-lutte-contre-les-flux-illici",
+      "date": "2026-06-19",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/stabilite-economique-au-mali-lutte-contre-les-flux-illicites-et-soutien-au-secteur-prive/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/stabilite-economique-au-mali-lutte-contre-les-flux-illicites-et-soutien-au-secteur-prive.jpeg",
+      "titre": "Mali: priorités économiques sur flux illicites et secteur privé",
+      "resume": "Le ministre des Finances du Mali a exposé les enjeux économiques prioritaires, incluant la lutte contre les flux financiers illicites et le soutien au secteur privé formel.",
+      "detail": "La lutte contre les flux illicites demeure une préoccupation majeure pour la stabilité macroéconomique malienne, directement liée aux financements du terrorisme et à l'économie parallèle. Le soutien déclaré au secteur privé formel indique une tentative de formalisation économique et de renforcement de la base fiscale. Ces priorités reflètent une compréhension des défis structurels du financement gouvernemental. La déclaration politique suggère une orientation vers une gouvernance économique plus transparente.",
+      "implications": [
+        "Renforcement potentiel de la traçabilité des flux financiers",
+        "Amélioration du recouvrement fiscal pouvant affecter les circuits parallèles",
+        "Impact sur les secteurs informels alimentant l'économie d'ombre"
+      ],
+      "recommandations": [
+        "Monitorer l'efficacité opérationnelle des contrôles de flux illicites",
+        "Identifier les secteurs affectés par les politiques de formalisation",
+        "Évaluer les résistances institutionnelles à la transparence financière"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-et-si-lafrique-netait-pas-surendettee-la-verite-financier",
+      "date": "2026-06-19",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/et-si-lafrique-netait-pas-surendettee-la-verite-financiere-qui-bouscule-leconomie-mondiale/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/image-8.jpg",
+      "titre": "Débat: l'Afrique n'est pas surendettée mais mal stratégiquement financée",
+      "resume": "Une analyse remet en question le consensus sur le surendettement africain, arguant que le continent souffre d'un manque de stratégie financière plutôt que d'un excès de dettes absolus.",
+      "detail": "Cette position contredit le narratif dominant sur la crise de la dette africaine et soulève des questions sur la structure des appels de fonds internationaux. La proposition implique une réorientation des débats de politique économique africaine vers les efficacités d'allocation. Cette perspective pourrait influencer les négociations avec les créanciers internationaux et les institutions multilatérales. Elle remet en cause implicitement les impositions de conditionnalités économiques traditionnelles.",
+      "implications": [
+        "Repositionnement de la narrative africaine sur la souveraineté financière",
+        "Potentiel renforcement du pouvoir de négociation des États africains",
+        "Remise en question des conditions imposées par les institutions internationales"
+      ],
+      "recommandations": [
+        "Analyser les données de capacité de remboursement réelle des États",
+        "Monitorer les évolutions du positionnement africain face aux créanciers",
+        "Évaluer les impacts sur les politiques d'aide conditionnelle régionales"
+      ]
+    },
     {
       "id": "u-maliactu-net-bamako-au-cur-de-la-bataille-numerique-enjeux-et-perspect",
       "date": "2026-06-18",
