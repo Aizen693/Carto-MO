@@ -172,26 +172,36 @@ function useVeille() {
   return items;
 }
 function useSubscriber() {
-  const [sub, setSub] = useState(false);
+  // Connecte = acces complet aux notes d'analyse. La detection s'aligne sur
+  // site-auth.js : etat initial (window.algorAuthState) + evenement de session
+  // (« algorAuthStateChanged », emis sur toutes les pages, accueil compris) +
+  // filet via le client Supabase. L'ancienne version n'ecoutait que
+  // « algorAuthReady » (jamais emis sur l'accueil public) → cadenas a tort.
+  const [sub, setSub] = useState(() => !!(window.algorAuthState && window.algorAuthState.loggedIn));
   useEffect(() => {
     let on = true;
-    const check = () => {
+    const apply = v => {
+      if (on) setSub(!!v);
+    };
+    if (window.algorAuthState) apply(window.algorAuthState.loggedIn);
+    const onState = e => apply(e && e.detail && e.detail.loggedIn);
+    window.addEventListener('algorAuthStateChanged', onState);
+    const probe = () => {
       try {
         const a = window.algorAuth;
-        if (a && a.supabase && a.supabase.auth && a.supabase.auth.getSession) {
+        if (a && a.supabase && a.supabase.auth) {
           a.supabase.auth.getSession().then(({
             data
-          }) => {
-            if (on) setSub(!!(data && data.session));
-          });
+          }) => apply(!!(data && data.session))).catch(() => {});
         }
       } catch (e) {}
     };
-    check();
-    window.addEventListener('algorAuthReady', check);
+    probe();
+    window.addEventListener('algorAuthReady', probe);
     return () => {
       on = false;
-      window.removeEventListener('algorAuthReady', check);
+      window.removeEventListener('algorAuthStateChanged', onState);
+      window.removeEventListener('algorAuthReady', probe);
     };
   }, []);
   return sub;
