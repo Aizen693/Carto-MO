@@ -22,23 +22,65 @@ function App() {
     !!(window.algorAuthState && window.algorAuthState.loggedIn)
   );
 
-  // Co-branding : un abonné peut remplacer le logo Algor Access par celui de son
-  // entreprise. Stocké en local (par navigateur).
+  // Co-branding : le logo est rattaché au COMPTE (profiles.logo) pour suivre le
+  // client partout, sur tout appareil. localStorage = cache d'affichage instantané.
   const [clientLogo, setClientLogo] = useState(() => {
     try { return localStorage.getItem('algor-client-logo') || ''; } catch (e) { return ''; }
   });
   const logoInputRef = useRef(null);
+  function sbClient() { return (window.algorAuth && window.algorAuth.supabase) || null; }
+  async function sbUserId() {
+    const c = sbClient(); if (!c) return null;
+    try { const r = await c.auth.getSession(); return r.data && r.data.session && r.data.session.user ? r.data.session.user.id : null; } catch (e) { return null; }
+  }
+  function applyLogoLocal(url) {
+    setClientLogo(url || '');
+    try { if (url) localStorage.setItem('algor-client-logo', url); else localStorage.removeItem('algor-client-logo'); } catch (e) {}
+  }
+  async function saveLogo(url) {
+    applyLogoLocal(url);
+    const c = sbClient(); const uid = await sbUserId();
+    if (c && uid) { try { await c.from('profiles').update({ logo: url || null }).eq('id', uid); } catch (e) {} }
+  }
+  // Source de vérité = le compte : on charge profiles.logo dès qu'une session existe.
+  useEffect(function () {
+    let on = true;
+    async function load() {
+      const c = sbClient(); if (!c) return;
+      const uid = await sbUserId(); if (!uid || !on) return;
+      try { const r = await c.from('profiles').select('logo').eq('id', uid).single(); if (on && r.data) applyLogoLocal(r.data.logo || ''); } catch (e) {}
+    }
+    load();
+    window.addEventListener('algorAuthReady', load);
+    window.addEventListener('algorAuthStateChanged', load);
+    return function () { on = false; window.removeEventListener('algorAuthReady', load); window.removeEventListener('algorAuthStateChanged', load); };
+  }, []);
+  function downscaleLogo(dataUrl, isSvg, cb) {
+    if (isSvg) { cb(dataUrl); return; } // SVG : on garde le vectoriel tel quel
+    const img = new Image();
+    img.onload = function () {
+      const maxH = 320, scale = Math.min(1, maxH / (img.height || maxH));
+      const w = Math.max(1, Math.round(img.width * scale)), h = Math.max(1, Math.round(img.height * scale));
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      cv.getContext('2d').drawImage(img, 0, 0, w, h);
+      let out; try { out = cv.toDataURL('image/png'); } catch (e) { out = dataUrl; }
+      if (out.length > 220000) { try { const j = cv.toDataURL('image/jpeg', 0.85); if (j.length < out.length) out = j; } catch (e) {} }
+      cb(out);
+    };
+    img.onerror = function () { cb(dataUrl); };
+    img.src = dataUrl;
+  }
   function onLogoPick(e) {
     const f = e.target.files && e.target.files[0];
     e.target.value = '';
     if (!f) return;
     if (!/^image\//.test(f.type)) { alert('Choisissez un fichier image (PNG, JPG, SVG…).'); return; }
-    if (f.size > 1.5 * 1024 * 1024) { alert('Logo trop lourd : 1,5 Mo maximum.'); return; }
+    if (f.size > 4 * 1024 * 1024) { alert('Image trop lourde : 4 Mo maximum.'); return; }
     const r = new FileReader();
-    r.onload = function () { try { localStorage.setItem('algor-client-logo', r.result); } catch (e) {} setClientLogo(r.result); };
+    r.onload = function () { downscaleLogo(r.result, f.type === 'image/svg+xml', function (small) { saveLogo(small); }); };
     r.readAsDataURL(f);
   }
-  function resetLogo() { try { localStorage.removeItem('algor-client-logo'); } catch (e) {} setClientLogo(''); }
+  function resetLogo() { saveLogo(''); }
 
   // Reflète l'état de session sur le bouton « Connexion » (texte « Connecté »
   // si une session est active). site-auth.js dispatch l'événement.
