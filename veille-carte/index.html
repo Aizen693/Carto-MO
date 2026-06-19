@@ -116,11 +116,29 @@
     'moyen-orient': 'Moyen-Orient', 'sahel': 'Sahel', 'rdc': 'RDC',
     'madagascar': 'Madagascar', 'afrique': 'Afrique Maritime', 'asie-sud': 'Asie du Sud'
   };
-  // Centres de repli par théâtre (lon, lat) quand l'item n'a pas de coordonnées.
-  var ZONE_CENTER = {
-    'moyen-orient': [44, 30], 'sahel': [2, 16], 'rdc': [27, -2],
-    'madagascar': [47, -19], 'afrique': [5, 3], 'asie-sud': [78, 24]
+  // Centres par pays (lon, lat) : repli quand l'item n'a pas encore de coordonnées
+  // précises mais qu'on connaît son pays via `lieu`. Un signal malien retombe
+  // au centre du Mali, pas au milieu du théâtre (qui mélange plusieurs pays).
+  var COUNTRY = {
+    'mali':[-3.5,17.5],'niger':[9,17.5],'burkina faso':[-1.7,12.3],'burkina':[-1.7,12.3],'nigeria':[8.5,9.5],
+    'tchad':[18.7,15],'mauritanie':[-10.5,20.5],'senegal':[-14.5,14.5],'benin':[2.3,9.6],'togo':[0.9,8.6],
+    'cote d ivoire':[-5.5,7.6],'guinee':[-11,10.5],'ghana':[-1.2,7.9],
+    'rdc':[23.6,-2.9],'republique democratique du congo':[23.6,-2.9],'congo':[15.8,-0.7],
+    'soudan':[30,15.5],'soudan du sud':[31,7],'somalie':[46,5.5],'ethiopie':[39.5,9],'kenya':[37.9,0.2],
+    'iran':[53.7,32.4],'irak':[43.7,33],'iraq':[43.7,33],'syrie':[38,35],'yemen':[47.6,15.5],'liban':[35.9,33.9],
+    'israel':[34.9,31.4],'palestine':[35.2,31.9],'jordanie':[36.5,31.3],'arabie saoudite':[45,24],'turquie':[35,39],'egypte':[30,27],
+    'madagascar':[46.7,-19],'mozambique':[35.5,-18],
+    'inde':[79,22],'pakistan':[69,30],'afghanistan':[66,33],'bangladesh':[90,24]
   };
+  function norm(s){ return String(s == null ? '' : s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z ]/g,' ').replace(/\s+/g,' ').trim(); }
+  function countryCenter(lieu){
+    if (!lieu) return null;
+    var parts = String(lieu).split(',');
+    var tries = [norm(parts[parts.length - 1])];
+    if (parts.length > 1) tries.push(norm(lieu));
+    for (var i = 0; i < tries.length; i++){ if (COUNTRY[tries[i]]) return COUNTRY[tries[i]]; }
+    return null;
+  }
 
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function (c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
   function zoneLabel(k){ return ZONE_LABELS[k] || k || ''; }
@@ -132,14 +150,19 @@
   function asList(v){ return Array.isArray(v) ? v.filter(Boolean) : (v ? [v] : []); }
   function block(v){ var a = asList(v); if (!a.length) return ''; return '<ul>' + a.map(function (x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'; }
 
-  // Coordonnées : précises (item.lat/lon, fournies par n8n) sinon centre de zone
-  // + petit décalage déterministe (spirale) pour éviter la superposition.
-  function coordsFor(it, idxInZone){
-    var lat = parseFloat(it.lat != null ? it.lat : (it.latitude));
+  // Coordonnées : précises (item.lat/lon de n8n) ; sinon repli au centre du PAYS
+  // (lu dans `lieu`) + petit décalage en spirale anti-superposition. Si on ne
+  // connaît ni coords ni pays, on retourne null → le signal n'est PAS placé
+  // (mieux vaut l'omettre que le mettre au mauvais endroit).
+  function coordsFor(it, fbIdx){
+    var lat = parseFloat(it.lat != null ? it.lat : it.latitude);
     var lon = parseFloat(it.lon != null ? it.lon : (it.lng != null ? it.lng : it.longitude));
     if (isFinite(lat) && isFinite(lon)) return { c: [lon, lat], precise: true };
-    var base = ZONE_CENTER[it.theatre] || [10, 8];
-    var a = idxInZone * 2.399963, r = 0.55 + idxInZone * 0.28;
+    var base = countryCenter(it.lieu);
+    if (!base) return null;
+    var key = base[0] + ',' + base[1];
+    var n = (fbIdx[key] = (fbIdx[key] || 0), fbIdx[key]++);
+    var a = n * 2.399963, r = 0.28 + n * 0.16;
     return { c: [base[0] + Math.cos(a) * r, base[1] + Math.sin(a) * r], precise: false };
   }
 
@@ -191,10 +214,11 @@
   function plot(items){
     var loading = document.getElementById('loading'); if (loading) loading.remove();
     if (!items.length) { document.getElementById('vk-sub').textContent = 'Aucun signal pour le moment.'; return; }
-    var zoneIdx = {}, bounds = new mapboxgl.LngLatBounds(), nPrecise = 0, byId = {};
+    var fbIdx = {}, bounds = new mapboxgl.LngLatBounds(), nPrecise = 0, nPlaced = 0, byId = {};
     items.forEach(function (it){
-      zoneIdx[it.theatre] = (zoneIdx[it.theatre] || 0);
-      var pos = coordsFor(it, zoneIdx[it.theatre]++);
+      var pos = coordsFor(it, fbIdx);
+      if (!pos) return; // ni coords ni pays connu → on ne place pas (évite les points au mauvais endroit)
+      nPlaced++;
       if (it.id) byId[it.id] = { pos: pos, it: it };
       if (pos.precise) nPrecise++;
       var sev = SEV[it.severite] || SEV.info;
@@ -209,13 +233,15 @@
       new mapboxgl.Marker({ element: el }).setLngLat(pos.c).addTo(map);
       bounds.extend(pos.c);
     });
-    try { map.fitBounds(bounds, { padding: 90, maxZoom: 5.5, duration: 0 }); } catch (e) {}
+    if (nPlaced) { try { map.fitBounds(bounds, { padding: 90, maxZoom: 5.5, duration: 0 }); } catch (e) {} }
     // Centrage sur un signal precis (?focus=id), ex. depuis « Voir sur la carte » d'une note.
     var focus = new URLSearchParams(location.search).get('focus');
     if (focus && byId[focus]) { var f = byId[focus]; openNote(f.it); map.flyTo({ center: f.pos.c, zoom: 5.5, duration: 900 }); }
     var sub = document.getElementById('vk-sub');
-    sub.textContent = items.length + (items.length > 1 ? ' signaux · ' : ' signal · ')
-      + (nPrecise === items.length ? 'géolocalisés' : nPrecise + ' géolocalisés, ' + (items.length - nPrecise) + ' par zone');
+    if (!nPlaced) { sub.textContent = 'En attente de signaux géolocalisés…'; return; }
+    var approx = nPlaced - nPrecise;
+    sub.textContent = nPlaced + (nPlaced > 1 ? ' signaux localisés' : ' signal localisé')
+      + (approx ? ' · ' + nPrecise + ' précis, ' + approx + ' au pays' : '');
   }
 
   function load(){
