@@ -509,9 +509,9 @@ const GS_BUILDER_CSS = `
   border:none; background:#fff; background-image:none; color:#1F1437; border-radius:10px; cursor:pointer;
   font:600 13px 'Plus Jakarta Sans',system-ui,sans-serif; padding:0; box-shadow:none; transform:none; }
 .cal-pop .cal-day:hover:not(:disabled):not(.is-sel){ background:rgba(107,63,160,.10); transform:none; box-shadow:none; }
-.cal-pop .cal-day.is-off{ color:#cbc6d8; background:#fff; cursor:default; }
+.cal-pop .cal-day.is-off{ color:#9089AA; background:#fff; cursor:default; opacity:.55; text-decoration:line-through; }
 .cal-pop .cal-day--blank{ background:none; }
-.cal-pop .cal-day.is-range{ background:rgba(107,63,160,.13); border-radius:0; }
+.cal-pop .cal-day.is-range{ background:rgba(107,63,160,.13); border-radius:0; box-shadow:0 0 0 2px rgba(107,63,160,.13); }
 .cal-pop .cal-day.is-sel{ background:linear-gradient(130deg,#6B3FA0,#2E84D4); background-image:linear-gradient(130deg,#6B3FA0,#2E84D4); color:#fff; }
 .cal-pop .cal-foot{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px; padding-top:12px; border-top:1px solid rgba(123,90,189,0.12); }
 .cal-pop .cal-range{ font:600 11.5px 'Plus Jakarta Sans',system-ui,sans-serif; color:#4A4460; }
