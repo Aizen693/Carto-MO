@@ -186,6 +186,10 @@ function VeilleModal({ it, sub, onClose }){
                 Demander un brief approfondi sur ce sujet
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </a>
+              <a className="vreport__map" href={'/veille-carte/?focus=' + encodeURIComponent(it.id)}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 20l-6 2V6l6-2 6 2 6-2v16l-6 2-6-2z"/><path d="M9 4v16M15 6v16"/></svg>
+                Voir ce signal sur la carte de veille
+              </a>
             </div>
           ) : (
             <div className="vmodal__gate">

@@ -188,10 +188,11 @@
   function plot(items){
     var loading = document.getElementById('loading'); if (loading) loading.remove();
     if (!items.length) { document.getElementById('vk-sub').textContent = 'Aucun signal pour le moment.'; return; }
-    var zoneIdx = {}, bounds = new mapboxgl.LngLatBounds(), nPrecise = 0;
+    var zoneIdx = {}, bounds = new mapboxgl.LngLatBounds(), nPrecise = 0, byId = {};
     items.forEach(function (it){
       zoneIdx[it.theatre] = (zoneIdx[it.theatre] || 0);
       var pos = coordsFor(it, zoneIdx[it.theatre]++);
+      if (it.id) byId[it.id] = { pos: pos, it: it };
       if (pos.precise) nPrecise++;
       var sev = SEV[it.severite] || SEV.info;
       var el = document.createElement('div');
@@ -203,6 +204,9 @@
       bounds.extend(pos.c);
     });
     try { map.fitBounds(bounds, { padding: 90, maxZoom: 5.5, duration: 0 }); } catch (e) {}
+    // Centrage sur un signal precis (?focus=id), ex. depuis « Voir sur la carte » d'une note.
+    var focus = new URLSearchParams(location.search).get('focus');
+    if (focus && byId[focus]) { var f = byId[focus]; openNote(f.it); map.flyTo({ center: f.pos.c, zoom: 5.5, duration: 900 }); }
     var sub = document.getElementById('vk-sub');
     sub.textContent = items.length + (items.length > 1 ? ' signaux · ' : ' signal · ')
       + (nPrecise === items.length ? 'géolocalisés' : nPrecise + ' géolocalisés, ' + (items.length - nPrecise) + ' par zone');

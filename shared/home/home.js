@@ -400,7 +400,23 @@ function VeilleModal({
     strokeLinejoin: "round"
   }, /*#__PURE__*/React.createElement("path", {
     d: "M5 12h14M13 6l6 6-6 6"
-  })))) : /*#__PURE__*/React.createElement("div", {
+  }))), /*#__PURE__*/React.createElement("a", {
+    className: "vreport__map",
+    href: '/veille-carte/?focus=' + encodeURIComponent(it.id)
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "15",
+    height: "15",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M9 20l-6 2V6l6-2 6 2 6-2v16l-6 2-6-2z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M9 4v16M15 6v16"
+  })), "Voir ce signal sur la carte de veille")) : /*#__PURE__*/React.createElement("div", {
     className: "vmodal__gate"
   }, /*#__PURE__*/React.createElement("svg", {
     width: "22",

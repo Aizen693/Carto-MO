@@ -3682,6 +3682,9 @@ button:focus-visible,
 .vreport__rel { font:600 9px/1 'JetBrains Mono',monospace; letter-spacing:.07em; text-transform:uppercase; color:#2E9E6B; border:1px solid rgba(46,158,107,.32); background:rgba(46,158,107,.08); padding:6px 9px; border-radius:6px; }
 .vreport__cta { display:flex; align-items:center; justify-content:center; gap:9px; width:100%; margin-top:4px; font:700 11px/1 'JetBrains Mono',monospace; letter-spacing:.1em; text-transform:uppercase; color:#fff; text-decoration:none; background:linear-gradient(120deg,#6B3FA0,#5650C6 55%,#1E6FBE); padding:15px; border-radius:12px; box-shadow:0 10px 26px rgba(107,63,160,.3); transition:.18s; }
 .vreport__cta:hover { box-shadow:0 14px 34px rgba(107,63,160,.45); transform:translateY(-2px); }
+.vreport__map { display:flex; align-items:center; justify-content:center; gap:9px; width:100%; margin-top:9px; font:700 11px/1 'JetBrains Mono',monospace; letter-spacing:.08em; text-transform:uppercase; color:#6B3FA0; text-decoration:none; background:#fff; border:1px solid rgba(123,90,189,0.28); padding:14px; border-radius:12px; transition:.18s; }
+.vreport__map:hover { background:rgba(107,63,160,.06); border-color:rgba(123,90,189,0.5); }
+.vreport__map svg { color:#6B3FA0; }
 .vgate__list { list-style:none; margin:15px 0 18px; padding:0; text-align:left; display:inline-block; }
 .vgate__list li { position:relative; padding-left:25px; font:500 13px/1.45 'Plus Jakarta Sans',sans-serif; color:#3A3450; margin-bottom:10px; }
 .vgate__list li::before { content:'✓'; position:absolute; left:0; top:0; color:#2E9E6B; font-weight:800; }
