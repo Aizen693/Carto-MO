@@ -47,6 +47,10 @@
     box-shadow:0 2px 8px rgba(31,20,55,.35);transition:transform .12s ease}
   .vk-pin:hover .vk-pin__dot{transform:scale(1.25)}
   .vk-pin__dot.is-critique{width:22px;height:22px;animation:vkpulse 1.8s ease-out infinite}
+  /* Point sélectionné : halo blanc + anneau violet, agrandi, bien visible. */
+  .vk-pin__dot.is-selected,
+  .vk-pin:hover .vk-pin__dot.is-selected{transform:scale(1.5);animation:none;
+    box-shadow:0 0 0 3px #fff,0 0 0 6px #6B3FA0,0 6px 18px rgba(46,24,87,.55)}
   @keyframes vkpulse{0%{box-shadow:0 2px 8px rgba(31,20,55,.35),0 0 0 0 rgba(184,58,74,.5)}70%{box-shadow:0 2px 8px rgba(31,20,55,.35),0 0 0 12px rgba(184,58,74,0)}100%{box-shadow:0 2px 8px rgba(31,20,55,.35),0 0 0 0 rgba(184,58,74,0)}}
 
   /* Panneau note (droite) */
@@ -199,6 +203,14 @@
   }
 
   var noteEl = document.getElementById('note');
+  // Marqueur actuellement sélectionné : mis en avant pour qu'on voie quel point
+  // correspond à la note ouverte.
+  var selectedDot = null;
+  function selectDot(dot){
+    if (selectedDot) { selectedDot.classList.remove('is-selected'); if (selectedDot.parentElement) selectedDot.parentElement.style.zIndex = ''; }
+    selectedDot = dot || null;
+    if (selectedDot) { selectedDot.classList.add('is-selected'); if (selectedDot.parentElement) selectedDot.parentElement.style.zIndex = '10'; }
+  }
   function openNote(it){
     noteEl.innerHTML = noteHTML(it);
     noteEl.classList.add('is-open');
@@ -206,7 +218,7 @@
     var x = document.getElementById('note-x');
     if (x) x.onclick = closeNote;
   }
-  function closeNote(){ noteEl.classList.remove('is-open'); noteEl.setAttribute('aria-hidden', 'true'); }
+  function closeNote(){ noteEl.classList.remove('is-open'); noteEl.setAttribute('aria-hidden', 'true'); selectDot(null); }
   document.addEventListener('keydown', function (e){ if (e.key === 'Escape') closeNote(); });
 
   var map = new mapboxgl.Map({
@@ -223,7 +235,6 @@
       var pos = coordsFor(it, fbIdx);
       if (!pos) return; // ni coords ni pays connu → on ne place pas (évite les points au mauvais endroit)
       nPlaced++;
-      if (it.id) byId[it.id] = { pos: pos, it: it };
       if (pos.precise) nPrecise++;
       var sev = SEV[it.severite] || SEV.info;
       var el = document.createElement('div');
@@ -233,14 +244,15 @@
       dot.style.background = sev.c;
       el.appendChild(dot);
       el.title = it.titre || '';
-      el.addEventListener('click', function (e){ e.stopPropagation(); openNote(it); map.flyTo({ center: pos.c, zoom: Math.max(map.getZoom(), 4.5), duration: 700 }); });
+      if (it.id) byId[it.id] = { pos: pos, it: it, dot: dot };
+      el.addEventListener('click', function (e){ e.stopPropagation(); selectDot(dot); openNote(it); map.flyTo({ center: pos.c, zoom: Math.max(map.getZoom(), 4.5), duration: 700 }); });
       new mapboxgl.Marker({ element: el }).setLngLat(pos.c).addTo(map);
       bounds.extend(pos.c);
     });
     if (nPlaced) { try { map.fitBounds(bounds, { padding: 90, maxZoom: 5.5, duration: 0 }); } catch (e) {} }
     // Centrage sur un signal precis (?focus=id), ex. depuis « Voir sur la carte » d'une note.
     var focus = new URLSearchParams(location.search).get('focus');
-    if (focus && byId[focus]) { var f = byId[focus]; openNote(f.it); map.flyTo({ center: f.pos.c, zoom: 5.5, duration: 900 }); }
+    if (focus && byId[focus]) { var f = byId[focus]; selectDot(f.dot); openNote(f.it); map.flyTo({ center: f.pos.c, zoom: 5.5, duration: 900 }); }
     var sub = document.getElementById('vk-sub');
     if (!nPlaced) { sub.textContent = 'En attente de signaux géolocalisés…'; return; }
     var approx = nPlaced - nPrecise;
