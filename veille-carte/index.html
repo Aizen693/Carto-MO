@@ -34,10 +34,10 @@
   .vk-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;padding-top:11px;border-top:1px solid var(--ln-soft)}
   .vk-leg{display:inline-flex;align-items:center;gap:6px;font:600 11px var(--jakarta);color:var(--tx)}
   .vk-leg i{width:10px;height:10px;border-radius:50%;display:inline-block}
-  .vk-back{position:fixed;top:18px;right:18px;z-index:5;background:#fff;border:1px solid var(--ln);
-    border-radius:11px;padding:9px 14px;font:700 11px var(--jakarta);color:var(--violet);text-decoration:none;
-    box-shadow:0 10px 30px -14px rgba(46,24,87,.4)}
-  .vk-back:hover{background:rgba(107,63,160,.06)}
+  .vk-back{position:fixed;top:18px;right:18px;z-index:5;background:var(--grad);border:none;
+    border-radius:11px;padding:10px 15px;font:700 11px var(--jakarta);color:#fff;text-decoration:none;
+    box-shadow:0 10px 30px -14px rgba(46,24,87,.5);transition:filter .15s ease,box-shadow .15s ease}
+  .vk-back:hover{filter:brightness(1.07);box-shadow:0 14px 34px -14px rgba(46,24,87,.6)}
 
   /* Marqueurs */
   /* Mapbox positionne .vk-pin via transform: ne jamais y mettre de transition
