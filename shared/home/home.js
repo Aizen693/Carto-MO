@@ -469,7 +469,7 @@ function VeilleSystem() {
   }, /*#__PURE__*/React.createElement("button", {
     className: "btn--ghost-link",
     onClick: () => setOpen(true)
-  }, "Tout le fil de veille ", /*#__PURE__*/React.createElement(ArrowDiag, null))))), /*#__PURE__*/React.createElement("button", {
+  }, "Tout le fil de veille ", /*#__PURE__*/React.createElement(ArrowDiag, null))))), ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     className: "veille-bell",
     "aria-label": "Fil de veille",
     onClick: () => setOpen(true)
@@ -516,7 +516,7 @@ function VeilleSystem() {
     it: sel,
     sub: sub,
     onClose: () => setSel(null)
-  }));
+  })), document.body));
 }
 function HomeView({
   onEnter,
