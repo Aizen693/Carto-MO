@@ -510,7 +510,6 @@ const GS_BUILDER_CSS = `
   font:600 13px 'Plus Jakarta Sans',system-ui,sans-serif; padding:0; box-shadow:none; transform:none; }
 .cal-pop .cal-day:hover:not(:disabled):not(.is-sel){ background:rgba(107,63,160,.10); transform:none; box-shadow:none; }
 .cal-pop .cal-day.is-off{ color:#9089AA; background:#fff; cursor:default; opacity:.55; text-decoration:line-through; }
-.cal-pop .cal-day.is-out{ color:#c9c4d6; cursor:default; }
 .cal-pop .cal-day--blank{ background:none; }
 .cal-pop .cal-day.is-range{ background:rgba(107,63,160,.13); border-radius:0; box-shadow:0 0 0 2px rgba(107,63,160,.13); }
 .cal-pop .cal-day.is-sel{ background:linear-gradient(130deg,#6B3FA0,#2E84D4); background-image:linear-gradient(130deg,#6B3FA0,#2E84D4); color:#fff; }
@@ -646,8 +645,8 @@ function DateRangePopup({
   }, cells.map((c, i) => /*#__PURE__*/React.createElement("button", {
     type: "button",
     key: i,
-    disabled: c.out || off(c.iso),
-    className: 'cal-day' + (c.out ? ' is-out' : '') + (off(c.iso) ? ' is-off' : '') + (c.iso === from || c.iso === to ? ' is-sel' : '') + (inRange(c.iso) ? ' is-range' : ''),
+    disabled: off(c.iso),
+    className: 'cal-day' + (off(c.iso) ? ' is-off' : '') + (c.iso === from || c.iso === to ? ' is-sel' : '') + (inRange(c.iso) ? ' is-range' : ''),
     onClick: () => clickDay(c.iso)
   }, parseInt(c.iso.split('-')[2], 10)))), /*#__PURE__*/React.createElement("div", {
     className: "cal-foot"
