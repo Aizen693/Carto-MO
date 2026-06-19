@@ -232,10 +232,11 @@ function App() {
     type: "button",
     className: "logo-import",
     onClick: () => logoInputRef.current && logoInputRef.current.click(),
-    title: "Remplacer le logo Algor Access par celui de votre entreprise"
+    "aria-label": "T\xE9l\xE9charger le logo de votre entreprise",
+    "data-tip": "T\xE9l\xE9charger le logo de votre entreprise"
   }, /*#__PURE__*/React.createElement("svg", {
-    width: "15",
-    height: "15",
+    width: "17",
+    height: "17",
     viewBox: "0 0 24 24",
     fill: "none",
     stroke: "currentColor",
@@ -249,9 +250,7 @@ function App() {
     d: "M17 8l-5-5-5 5"
   }), /*#__PURE__*/React.createElement("path", {
     d: "M12 3v12"
-  })), /*#__PURE__*/React.createElement("span", {
-    className: "lbl"
-  }, "Importer le logo de votre entreprise")), clientLogo && /*#__PURE__*/React.createElement("button", {
+  }))), clientLogo && /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "logo-reset",
     onClick: resetLogo,

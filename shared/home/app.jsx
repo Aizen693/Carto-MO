@@ -145,9 +145,8 @@ function App() {
               <span className="logo-tool">
                 <input ref={logoInputRef} type="file" accept="image/*" onChange={onLogoPick} hidden />
                 <button type="button" className="logo-import" onClick={() => logoInputRef.current && logoInputRef.current.click()}
-                        title="Remplacer le logo Algor Access par celui de votre entreprise">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="M17 8l-5-5-5 5" /><path d="M12 3v12" /></svg>
-                  <span className="lbl">Importer le logo de votre entreprise</span>
+                        aria-label="Télécharger le logo de votre entreprise" data-tip="Télécharger le logo de votre entreprise">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="M17 8l-5-5-5 5" /><path d="M12 3v12" /></svg>
                 </button>
                 {clientLogo && (
                   <button type="button" className="logo-reset" onClick={resetLogo} title="Rétablir le logo Algor Access">Rétablir</button>

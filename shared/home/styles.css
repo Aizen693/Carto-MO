@@ -212,10 +212,10 @@ img, svg { display: block; max-width: 100%; }
 .app-header__inner {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 22px 48px;
+  padding: 22px 40px;
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 22px;
 }
 .brand {
   display: flex;
@@ -262,19 +262,23 @@ img, svg { display: block; max-width: 100%; }
 }
 /* Co-branding : logo client + bouton d'import (abonné connecté) */
 .brand__logo { height: 48px; width: auto; max-width: 200px; object-fit: contain; border-radius: 8px; display: block; flex-shrink: 0; }
-.logo-tool { display: inline-flex; align-items: center; gap: 8px; }
-.logo-import { display: inline-flex; align-items: center; gap: 7px; font: 700 11.5px var(--sans); color: var(--violet); background: #fff; border: 1px solid rgba(123,90,189,.3); border-radius: 10px; padding: 8px 12px; cursor: pointer; white-space: nowrap; transition: background .15s, border-color .15s; }
+.logo-tool { display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+.logo-import { position: relative; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; color: var(--violet); background: #fff; border: 1px solid rgba(123,90,189,.3); border-radius: 10px; padding: 0; cursor: pointer; transition: background .15s, border-color .15s; }
 .logo-import:hover { background: rgba(107,63,160,.06); border-color: var(--violet); }
-.logo-import svg { width: 15px; height: 15px; flex: 0 0 15px; }
+.logo-import svg { width: 17px; height: 17px; display: block; }
+/* Bulle au survol (pas d'espace pris dans le header) */
+.logo-import::after { content: attr(data-tip); position: absolute; top: calc(100% + 9px); right: 0; background: var(--ink); color: #fff; font: 600 11px var(--sans); white-space: nowrap; padding: 7px 10px; border-radius: 8px; box-shadow: 0 8px 22px -8px rgba(46,24,87,.55); opacity: 0; transform: translateY(-4px); pointer-events: none; transition: opacity .15s ease, transform .15s ease; z-index: 60; }
+.logo-import::before { content: ""; position: absolute; top: calc(100% + 3px); right: 12px; border: 5px solid transparent; border-bottom-color: var(--ink); opacity: 0; transition: opacity .15s ease; z-index: 60; }
+.logo-import:hover::after, .logo-import:focus-visible::after { opacity: 1; transform: none; }
+.logo-import:hover::before, .logo-import:focus-visible::before { opacity: 1; }
 .logo-reset { font: 600 11px var(--sans); color: var(--muted); background: none; border: none; cursor: pointer; text-decoration: underline; }
 .logo-reset:hover { color: var(--violet); }
-@media (max-width: 1100px) { .logo-import .lbl { display: none; } .logo-import { padding: 8px; } }
 
 .app-header__right {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
 }
 /* Nav recentré : espaces égaux entre logo et connexion */
 .app-header__inner .site-nav { margin-left: auto; margin-right: auto; }
@@ -2882,7 +2886,7 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   font-size: 15px; font-weight: 700;
   letter-spacing: 0.14em; color: var(--ink);
 }
-.site-nav { display: flex; align-items: center; gap: 26px; }
+.site-nav { display: flex; align-items: center; gap: 20px; }
 .site-nav a {
   font-size: 14.5px; font-weight: 500;
   color: var(--muted);
