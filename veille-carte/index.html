@@ -40,10 +40,13 @@
   .vk-back:hover{background:rgba(107,63,160,.06)}
 
   /* Marqueurs */
-  .vk-pin{width:18px;height:18px;border-radius:50%;border:2.5px solid #fff;cursor:pointer;
+  /* Mapbox positionne .vk-pin via transform: ne jamais y mettre de transition
+     (sinon les pastilles « glissent » au zoom). L'effet visuel va sur la pastille interne. */
+  .vk-pin{cursor:pointer;line-height:0}
+  .vk-pin__dot{width:18px;height:18px;border-radius:50%;border:2.5px solid #fff;
     box-shadow:0 2px 8px rgba(31,20,55,.35);transition:transform .12s ease}
-  .vk-pin:hover{transform:scale(1.25)}
-  .vk-pin.is-critique{width:22px;height:22px;animation:vkpulse 1.8s ease-out infinite}
+  .vk-pin:hover .vk-pin__dot{transform:scale(1.25)}
+  .vk-pin__dot.is-critique{width:22px;height:22px;animation:vkpulse 1.8s ease-out infinite}
   @keyframes vkpulse{0%{box-shadow:0 2px 8px rgba(31,20,55,.35),0 0 0 0 rgba(184,58,74,.5)}70%{box-shadow:0 2px 8px rgba(31,20,55,.35),0 0 0 12px rgba(184,58,74,0)}100%{box-shadow:0 2px 8px rgba(31,20,55,.35),0 0 0 0 rgba(184,58,74,0)}}
 
   /* Panneau note (droite) */
@@ -196,8 +199,11 @@
       if (pos.precise) nPrecise++;
       var sev = SEV[it.severite] || SEV.info;
       var el = document.createElement('div');
-      el.className = 'vk-pin' + (it.severite === 'critique' ? ' is-critique' : '');
-      el.style.background = sev.c;
+      el.className = 'vk-pin';
+      var dot = document.createElement('div');
+      dot.className = 'vk-pin__dot' + (it.severite === 'critique' ? ' is-critique' : '');
+      dot.style.background = sev.c;
+      el.appendChild(dot);
       el.title = it.titre || '';
       el.addEventListener('click', function (e){ e.stopPropagation(); openNote(it); map.flyTo({ center: pos.c, zoom: Math.max(map.getZoom(), 4.5), duration: 700 }); });
       new mapboxgl.Marker({ element: el }).setLngLat(pos.c).addTo(map);
@@ -220,7 +226,11 @@
         plot(a); })
       .catch(function (){ var l = document.getElementById('loading'); if (l) l.textContent = 'Flux de veille indisponible.'; });
   }
-  if (map.loaded()) load(); else map.on('load', load);
+  var _started = false;
+  function start(){ if (_started) return; _started = true; load(); }
+  map.on('load', start);
+  map.on('idle', start);
+  setTimeout(start, 3000); // filet : afficher les signaux meme si l'evenement load tarde
 })();
 </script>
 </body>
