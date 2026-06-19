@@ -260,6 +260,16 @@ img, svg { display: block; max-width: 100%; }
   gap: 4px;
   margin-left: 28px;
 }
+/* Co-branding : logo client + bouton d'import (abonné connecté) */
+.brand__logo { height: 48px; width: auto; max-width: 200px; object-fit: contain; border-radius: 8px; display: block; flex-shrink: 0; }
+.logo-tool { display: inline-flex; align-items: center; gap: 8px; }
+.logo-import { display: inline-flex; align-items: center; gap: 7px; font: 700 11.5px var(--sans); color: var(--violet); background: #fff; border: 1px solid rgba(123,90,189,.3); border-radius: 10px; padding: 8px 12px; cursor: pointer; white-space: nowrap; transition: background .15s, border-color .15s; }
+.logo-import:hover { background: rgba(107,63,160,.06); border-color: var(--violet); }
+.logo-import svg { width: 15px; height: 15px; flex: 0 0 15px; }
+.logo-reset { font: 600 11px var(--sans); color: var(--muted); background: none; border: none; cursor: pointer; text-decoration: underline; }
+.logo-reset:hover { color: var(--violet); }
+@media (max-width: 1100px) { .logo-import .lbl { display: none; } .logo-import { padding: 8px; } }
+
 .app-header__right {
   margin-left: auto;
   display: flex;

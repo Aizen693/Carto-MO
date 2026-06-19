@@ -1,6 +1,6 @@
 /* global React, ReactDOM, HomeView, ConsoleView, ArchivesView, VeilleView, PlatformView, Starfield */
 
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
 function PopCheck() {
   return (
@@ -21,6 +21,24 @@ function App() {
   const [authLoggedIn, setAuthLoggedIn] = useState(
     !!(window.algorAuthState && window.algorAuthState.loggedIn)
   );
+
+  // Co-branding : un abonné peut remplacer le logo Algor Access par celui de son
+  // entreprise. Stocké en local (par navigateur).
+  const [clientLogo, setClientLogo] = useState(() => {
+    try { return localStorage.getItem('algor-client-logo') || ''; } catch (e) { return ''; }
+  });
+  const logoInputRef = useRef(null);
+  function onLogoPick(e) {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    if (!/^image\//.test(f.type)) { alert('Choisissez un fichier image (PNG, JPG, SVG…).'); return; }
+    if (f.size > 1.5 * 1024 * 1024) { alert('Logo trop lourd : 1,5 Mo maximum.'); return; }
+    const r = new FileReader();
+    r.onload = function () { try { localStorage.setItem('algor-client-logo', r.result); } catch (e) {} setClientLogo(r.result); };
+    r.readAsDataURL(f);
+  }
+  function resetLogo() { try { localStorage.removeItem('algor-client-logo'); } catch (e) {} setClientLogo(''); }
 
   // Reflète l'état de session sur le bouton « Connexion » (texte « Connecté »
   // si une session est active). site-auth.js dispatch l'événement.
@@ -60,10 +78,14 @@ function App() {
       <header className={'app-header' + (menuOpen ? ' is-open' : '')}>
         <div className="app-header__inner">
           <div className="brand" onClick={() => setView('home')}>
-            <div className="brand__mark" />
-            <div className="brand__body">
-              <div className="brand__name">Algor <span>Access</span></div>
-            </div>
+            {clientLogo
+              ? <img className="brand__logo" src={clientLogo} alt="Logo entreprise" />
+              : <div className="brand__mark" />}
+            {!clientLogo && (
+              <div className="brand__body">
+                <div className="brand__name">Algor <span>Access</span></div>
+              </div>
+            )}
           </div>
 
           <nav className="site-nav" aria-label="Rubriques">
@@ -77,6 +99,19 @@ function App() {
           </nav>
 
           <div className="app-header__right">
+            {authLoggedIn && (
+              <span className="logo-tool">
+                <input ref={logoInputRef} type="file" accept="image/*" onChange={onLogoPick} hidden />
+                <button type="button" className="logo-import" onClick={() => logoInputRef.current && logoInputRef.current.click()}
+                        title="Remplacer le logo Algor Access par celui de votre entreprise">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="M17 8l-5-5-5 5" /><path d="M12 3v12" /></svg>
+                  <span className="lbl">Importer le logo de votre entreprise</span>
+                </button>
+                {clientLogo && (
+                  <button type="button" className="logo-reset" onClick={resetLogo} title="Rétablir le logo Algor Access">Rétablir</button>
+                )}
+              </span>
+            )}
             <a className={'site-login' + (authLoggedIn ? ' is-logged' : '')}
                href="#" data-algor-login>
               {authLoggedIn ? 'Connecté' : 'Connexion'}

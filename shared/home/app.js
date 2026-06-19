@@ -3,7 +3,8 @@
 
 const {
   useState,
-  useEffect
+  useEffect,
+  useRef
 } = React;
 function PopCheck() {
   return /*#__PURE__*/React.createElement("svg", {
@@ -25,6 +26,44 @@ function App() {
   const [clock, setClock] = useState('--:--');
   const [menuOpen, setMenuOpen] = useState(false);
   const [authLoggedIn, setAuthLoggedIn] = useState(!!(window.algorAuthState && window.algorAuthState.loggedIn));
+
+  // Co-branding : un abonné peut remplacer le logo Algor Access par celui de son
+  // entreprise. Stocké en local (par navigateur).
+  const [clientLogo, setClientLogo] = useState(() => {
+    try {
+      return localStorage.getItem('algor-client-logo') || '';
+    } catch (e) {
+      return '';
+    }
+  });
+  const logoInputRef = useRef(null);
+  function onLogoPick(e) {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    if (!/^image\//.test(f.type)) {
+      alert('Choisissez un fichier image (PNG, JPG, SVG…).');
+      return;
+    }
+    if (f.size > 1.5 * 1024 * 1024) {
+      alert('Logo trop lourd : 1,5 Mo maximum.');
+      return;
+    }
+    const r = new FileReader();
+    r.onload = function () {
+      try {
+        localStorage.setItem('algor-client-logo', r.result);
+      } catch (e) {}
+      setClientLogo(r.result);
+    };
+    r.readAsDataURL(f);
+  }
+  function resetLogo() {
+    try {
+      localStorage.removeItem('algor-client-logo');
+    } catch (e) {}
+    setClientLogo('');
+  }
 
   // Reflète l'état de session sur le bouton « Connexion » (texte « Connecté »
   // si une session est active). site-auth.js dispatch l'événement.
@@ -69,9 +108,13 @@ function App() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "brand",
     onClick: () => setView('home')
-  }, /*#__PURE__*/React.createElement("div", {
+  }, clientLogo ? /*#__PURE__*/React.createElement("img", {
+    className: "brand__logo",
+    src: clientLogo,
+    alt: "Logo entreprise"
+  }) : /*#__PURE__*/React.createElement("div", {
     className: "brand__mark"
-  }), /*#__PURE__*/React.createElement("div", {
+  }), !clientLogo && /*#__PURE__*/React.createElement("div", {
     className: "brand__body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "brand__name"
@@ -94,7 +137,43 @@ function App() {
     href: "/contact/"
   }, "Contact")), /*#__PURE__*/React.createElement("div", {
     className: "app-header__right"
-  }, /*#__PURE__*/React.createElement("a", {
+  }, authLoggedIn && /*#__PURE__*/React.createElement("span", {
+    className: "logo-tool"
+  }, /*#__PURE__*/React.createElement("input", {
+    ref: logoInputRef,
+    type: "file",
+    accept: "image/*",
+    onChange: onLogoPick,
+    hidden: true
+  }), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "logo-import",
+    onClick: () => logoInputRef.current && logoInputRef.current.click(),
+    title: "Remplacer le logo Algor Access par celui de votre entreprise"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "15",
+    height: "15",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M17 8l-5-5-5 5"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M12 3v12"
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, "Importer le logo de votre entreprise")), clientLogo && /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "logo-reset",
+    onClick: resetLogo,
+    title: "R\xE9tablir le logo Algor Access"
+  }, "R\xE9tablir")), /*#__PURE__*/React.createElement("a", {
     className: 'site-login' + (authLoggedIn ? ' is-logged' : ''),
     href: "#",
     "data-algor-login": true
