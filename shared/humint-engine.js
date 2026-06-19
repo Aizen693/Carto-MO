@@ -928,12 +928,18 @@
     function html() {
       var vy = +view.split('-')[0], vm = +view.split('-')[1];
       var lead = (new Date(vy, vm - 1, 1).getDay() + 6) % 7, dim = lastDay(vy, vm), cells = '';
-      for (var i = 0; i < lead; i++) cells += '<span class="cd cd-blank"></span>';
-      for (var d = 1; d <= dim; d++) {
-        var iso = vy + '-' + pad(vm) + '-' + pad(d), off = iso < minDate || iso > maxDate;
+      // Une case = un jour cliquable. Les jours des mois voisins comblent les
+      // debuts/fins de semaine (grille toujours pleine, plus de cases vides).
+      function cell(iso, d) {
+        var off = iso < minDate || iso > maxDate;
         var sel = iso === from || iso === to, rng = from && to && iso > from && iso < to;
-        cells += '<button class="cd' + (off ? ' cd-off' : '') + (sel ? ' cd-sel' : '') + (rng ? ' cd-rng' : '') + '" data-iso="' + iso + '"' + (off ? ' disabled' : '') + '>' + d + '</button>';
+        return '<button class="cd' + (off ? ' cd-off' : '') + (sel ? ' cd-sel' : '') + (rng ? ' cd-rng' : '') + '" data-iso="' + iso + '"' + (off ? ' disabled' : '') + '>' + d + '</button>';
       }
+      var pm = vm === 1 ? 12 : vm - 1, py = vm === 1 ? vy - 1 : vy, pdim = lastDay(py, pm);
+      for (var i = lead; i > 0; i--) { var pdd = pdim - i + 1; cells += cell(py + '-' + pad(pm) + '-' + pad(pdd), pdd); }
+      for (var d = 1; d <= dim; d++) cells += cell(vy + '-' + pad(vm) + '-' + pad(d), d);
+      var nm = vm === 12 ? 1 : vm + 1, ny = vm === 12 ? vy + 1 : vy, nd = 1, tot = lead + dim;
+      while (tot % 7 !== 0) { cells += cell(ny + '-' + pad(nm) + '-' + pad(nd), nd); nd++; tot++; }
       var lab = (from && to) ? (frDate(from) + ' – ' + frDate(to)) : (from ? (frDate(from) + ' – …') : 'Sélectionnez deux dates');
       return '<div class="cal-head"><button class="cal-nav" data-nav="-1"' + (view <= minKey ? ' disabled' : '') + '>‹</button><span class="cal-title">' + MOIS[vm - 1] + ' ' + vy + '</span><button class="cal-nav" data-nav="1"' + (view >= maxKey ? ' disabled' : '') + '>›</button></div>'
         + '<div class="cal-grid cal-dow">' + JOURS.map(function (j) { return '<span class="cdow">' + j + '</span>'; }).join('') + '</div>'
