@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte de veille — Algor Access</title>
+<!-- Gate premium : overlay bloquant tant que session + plan premium absents. -->
+<script>window.addEventListener('algorAuthReady', function () { window.__algorAuthGranted = true; });</script>
+<script type="module" src="../shared/site-auth.js?v=20260619a"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
+<style>
+  :root{
+    --violet:#6B3FA0; --violet-mid:#5650C6; --blue:#2E84D4;
+    --grad:linear-gradient(95deg,#6B3FA0,#5650C6 55%,#2E84D4);
+    --ink:#1F1437; --tx:#4A4460; --muted:#9089AA;
+    --panel:#fff; --ln:rgba(123,90,189,0.18); --ln-soft:rgba(123,90,189,0.10);
+    --jakarta:'Plus Jakarta Sans',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:var(--jakarta);color:var(--ink);background:#eef0f5}
+  #map{position:absolute;inset:0}
+
+  /* Bandeau titre + légende (haut gauche) */
+  .vk-head{position:fixed;top:18px;left:18px;z-index:5;background:#fff;border:1px solid var(--ln);
+    border-radius:16px;box-shadow:0 18px 50px -20px rgba(46,24,87,.45);padding:14px 16px;max-width:300px}
+  .vk-eyebrow{font:700 9px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--violet);display:flex;align-items:center;gap:7px}
+  .vk-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:#34b27b;box-shadow:0 0 0 4px rgba(52,178,123,.18)}
+  .vk-title{font:800 18px/1.2 var(--jakarta);margin:8px 0 2px}
+  .vk-sub{font:500 12px/1.4 var(--tx)}
+  .vk-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;padding-top:11px;border-top:1px solid var(--ln-soft)}
+  .vk-leg{display:inline-flex;align-items:center;gap:6px;font:600 11px var(--jakarta);color:var(--tx)}
+  .vk-leg i{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .vk-back{position:fixed;top:18px;right:18px;z-index:5;background:#fff;border:1px solid var(--ln);
+    border-radius:11px;padding:9px 14px;font:700 11px var(--jakarta);color:var(--violet);text-decoration:none;
+    box-shadow:0 10px 30px -14px rgba(46,24,87,.4)}
+  .vk-back:hover{background:rgba(107,63,160,.06)}
+
+  /* Marqueurs */
+  .vk-pin{width:18px;height:18px;border-radius:50%;border:2.5px solid #fff;cursor:pointer;
+    box-shadow:0 2px 8px rgba(31,20,55,.35);transition:transform .12s ease}
+  .vk-pin:hover{transform:scale(1.25)}
+  .vk-pin.is-critique{width:22px;height:22px;animation:vkpulse 1.8s ease-out infinite}
+  @keyframes vkpulse{0%{box-shadow:0 2px 8px rgba(31,20,55,.35),0 0 0 0 rgba(184,58,74,.5)}70%{box-shadow:0 2px 8px rgba(31,20,55,.35),0 0 0 12px rgba(184,58,74,0)}100%{box-shadow:0 2px 8px rgba(31,20,55,.35),0 0 0 0 rgba(184,58,74,0)}}
+
+  /* Panneau note (droite) */
+  .vk-note{position:fixed;top:0;right:0;height:100%;width:430px;max-width:92vw;z-index:6;background:#fff;
+    border-left:1px solid var(--ln);box-shadow:-24px 0 60px -28px rgba(46,24,87,.5);
+    transform:translateX(102%);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto}
+  .vk-note.is-open{transform:none}
+  .vk-note__media{position:relative;height:188px;background:#1b1430 var(--grad);overflow:hidden}
+  .vk-note__media img{width:100%;height:100%;object-fit:cover;opacity:.92}
+  .vk-note__sev{position:absolute;top:14px;left:14px;font:700 9px/1 var(--mono);letter-spacing:.12em;
+    text-transform:uppercase;padding:6px 9px;border-radius:7px;border:1px solid;backdrop-filter:blur(4px)}
+  .vk-note__src{position:absolute;left:16px;bottom:13px;color:#fff;font:800 17px var(--jakarta);text-shadow:0 2px 12px rgba(0,0,0,.5)}
+  .vk-note__x{position:absolute;top:12px;right:12px;width:34px;height:34px;border:none;border-radius:9px;cursor:pointer;
+    background:rgba(255,255,255,.92);color:var(--ink);font-size:16px;display:flex;align-items:center;justify-content:center}
+  .vk-note__body{padding:20px 22px 30px}
+  .vk-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+  .vk-meta .z{color:var(--violet)}
+  .vk-note__t{font:800 21px/1.25 var(--jakarta);margin:10px 0 8px}
+  .vk-note__resume{font:500 14px/1.55 var(--tx);margin:0 0 4px}
+  .vk-class{margin:20px 0 14px;font:700 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--violet);
+    background:rgba(107,63,160,.08);border:1px solid var(--ln);border-radius:8px;padding:9px 11px;display:inline-block}
+  .vk-sec{margin:16px 0}
+  .vk-sec__lbl{font:700 11px var(--jakarta);letter-spacing:.02em;color:var(--ink);margin-bottom:6px}
+  .vk-sec p{font:500 13.5px/1.55 var(--tx);margin:0}
+  .vk-sec ul{margin:0;padding-left:18px}
+  .vk-sec li{font:500 13.5px/1.5 var(--tx);margin-bottom:5px}
+  .vk-reco{background:rgba(46,132,212,.05);border:1px solid rgba(46,132,212,.16);border-radius:12px;padding:13px 15px}
+  .vk-srcrow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between}
+  .vk-srclink{font:700 13px var(--jakarta);color:var(--blue);text-decoration:none}
+  .vk-rel{font:600 11px var(--mono);color:var(--muted)}
+  .vk-cta{margin-top:18px;display:flex;align-items:center;gap:8px;justify-content:center;background:var(--grad);
+    color:#fff;text-decoration:none;border-radius:11px;padding:13px;font:700 13px var(--jakarta)}
+  .vk-loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:4;
+    font:600 13px var(--jakarta);color:var(--muted);pointer-events:none}
+  @media (max-width:640px){ .vk-head{max-width:none;left:12px;right:12px;top:12px} .vk-back{top:12px} }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="vk-loading" id="loading">Chargement des signaux…</div>
+
+<div class="vk-head">
+  <div class="vk-eyebrow"><span class="dot"></span>Veille active</div>
+  <div class="vk-title">Carte de veille</div>
+  <div class="vk-sub" id="vk-sub">Signaux OSINT géolocalisés · mise à jour quotidienne</div>
+  <div class="vk-legend">
+    <span class="vk-leg"><i style="background:#6B3FA0"></i>Signal</span>
+    <span class="vk-leg"><i style="background:#C77A12"></i>Alerte</span>
+    <span class="vk-leg"><i style="background:#B83A4A"></i>Critique</span>
+  </div>
+</div>
+<a class="vk-back" href="/#console">← Console</a>
+
+<aside class="vk-note" id="note" aria-hidden="true"></aside>
+
+<script>
+(function () {
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+
+  var REMOTE = 'https://raw.githubusercontent.com/Aizen693/Carto-MO/veille-data/notifications.json';
+  var SEV = {
+    info:     { lbl: 'Signal',   c: '#6B3FA0' },
+    alerte:   { lbl: 'Alerte',   c: '#C77A12' },
+    critique: { lbl: 'Critique', c: '#B83A4A' }
+  };
+  var ZONE_LABELS = {
+    'moyen-orient': 'Moyen-Orient', 'sahel': 'Sahel', 'rdc': 'RDC',
+    'madagascar': 'Madagascar', 'afrique': 'Afrique Maritime', 'asie-sud': 'Asie du Sud'
+  };
+  // Centres de repli par théâtre (lon, lat) quand l'item n'a pas de coordonnées.
+  var ZONE_CENTER = {
+    'moyen-orient': [44, 30], 'sahel': [2, 16], 'rdc': [27, -2],
+    'madagascar': [47, -19], 'afrique': [5, 3], 'asie-sud': [78, 24]
+  };
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function (c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
+  function zoneLabel(k){ return ZONE_LABELS[k] || k || ''; }
+  function dateFR(d){ try { return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }); } catch (e) { return d; } }
+  function reliabilityOf(s){ s = (s || '').toLowerCase();
+    if (/acled|isw|bellingcat|kivu|reuters|afp|crisis|hrw|amnesty|\bonu\b|\bun\b|imb|janes/.test(s)) return 'Élevée';
+    if (/rfi|guardian|\bbbc\b|france 24|le monde|trt|jazeera|figaro|ap\b/.test(s)) return 'Établie';
+    return 'À recouper'; }
+  function asList(v){ return Array.isArray(v) ? v.filter(Boolean) : (v ? [v] : []); }
+  function block(v){ var a = asList(v); if (!a.length) return ''; return '<ul>' + a.map(function (x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'; }
+
+  // Coordonnées : précises (item.lat/lon, fournies par n8n) sinon centre de zone
+  // + petit décalage déterministe (spirale) pour éviter la superposition.
+  function coordsFor(it, idxInZone){
+    var lat = parseFloat(it.lat != null ? it.lat : (it.latitude));
+    var lon = parseFloat(it.lon != null ? it.lon : (it.lng != null ? it.lng : it.longitude));
+    if (isFinite(lat) && isFinite(lon)) return { c: [lon, lat], precise: true };
+    var base = ZONE_CENTER[it.theatre] || [10, 8];
+    var a = idxInZone * 2.399963, r = 0.55 + idxInZone * 0.28;
+    return { c: [base[0] + Math.cos(a) * r, base[1] + Math.sin(a) * r], precise: false };
+  }
+
+  function noteHTML(it){
+    var sev = SEV[it.severite] || SEV.info;
+    var img = it.image ? '<img src="' + esc(it.image) + '" alt="" onerror="this.style.display=\'none\'">' : '';
+    var impl = block(it.implications);
+    var reco = block(it.recommandations);
+    return ''
+      + '<div class="vk-note__media">' + img
+      +   '<span class="vk-note__sev" style="color:' + sev.c + ';border-color:' + sev.c + '59;background:' + sev.c + '22">' + sev.lbl + '</span>'
+      +   '<span class="vk-note__src">' + esc(it.source || '') + '</span>'
+      +   '<button class="vk-note__x" id="note-x" aria-label="Fermer">✕</button>'
+      + '</div>'
+      + '<div class="vk-note__body">'
+      +   '<div class="vk-meta"><span class="z">' + esc(zoneLabel(it.theatre)) + '</span><span>·</span><span>' + esc(dateFR(it.date)) + '</span></div>'
+      +   '<h2 class="vk-note__t">' + esc(it.titre || '') + '</h2>'
+      +   '<p class="vk-note__resume">' + esc(it.resume || '') + '</p>'
+      +   '<div class="vk-class">Note d\'analyse · Accès abonné</div>'
+      +   (it.detail || it.resume ? '<div class="vk-sec"><div class="vk-sec__lbl">Analyse</div><p>' + esc(it.detail || it.resume) + '</p></div>' : '')
+      +   (impl ? '<div class="vk-sec"><div class="vk-sec__lbl">Implications opérationnelles</div>' + impl + '</div>' : '')
+      +   '<div class="vk-sec vk-reco"><div class="vk-sec__lbl">Recommandations · que faire de cette information</div>'
+      +     (reco || '<p>À partir de ce signal, nos analystes produisent sur demande une note d\'impact dédiée à votre organisation : exposition, scénarios probables et mesures à prendre.</p>') + '</div>'
+      +   '<div class="vk-sec"><div class="vk-sec__lbl">Sources et fiabilité</div><div class="vk-srcrow">'
+      +     (it.source_url ? '<a class="vk-srclink" href="' + esc(it.source_url) + '" target="_blank" rel="noopener">' + esc(it.source) + ' ↗</a>' : '<span>' + esc(it.source || '') + '</span>')
+      +     '<span class="vk-rel">Fiabilité · ' + reliabilityOf(it.source) + '</span>'
+      +   '</div></div>'
+      +   '<a class="vk-cta" href="/contact/">Demander un brief approfondi sur ce sujet →</a>'
+      + '</div>';
+  }
+
+  var noteEl = document.getElementById('note');
+  function openNote(it){
+    noteEl.innerHTML = noteHTML(it);
+    noteEl.classList.add('is-open');
+    noteEl.setAttribute('aria-hidden', 'false');
+    var x = document.getElementById('note-x');
+    if (x) x.onclick = closeNote;
+  }
+  function closeNote(){ noteEl.classList.remove('is-open'); noteEl.setAttribute('aria-hidden', 'true'); }
+  document.addEventListener('keydown', function (e){ if (e.key === 'Escape') closeNote(); });
+
+  var map = new mapboxgl.Map({
+    container: 'map', style: 'mapbox://styles/mapbox/light-v11',
+    center: [22, 12], zoom: 2.1, projection: 'mercator', attributionControl: false, language: 'fr'
+  });
+  map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
+
+  function plot(items){
+    var loading = document.getElementById('loading'); if (loading) loading.remove();
+    if (!items.length) { document.getElementById('vk-sub').textContent = 'Aucun signal pour le moment.'; return; }
+    var zoneIdx = {}, bounds = new mapboxgl.LngLatBounds(), nPrecise = 0;
+    items.forEach(function (it){
+      zoneIdx[it.theatre] = (zoneIdx[it.theatre] || 0);
+      var pos = coordsFor(it, zoneIdx[it.theatre]++);
+      if (pos.precise) nPrecise++;
+      var sev = SEV[it.severite] || SEV.info;
+      var el = document.createElement('div');
+      el.className = 'vk-pin' + (it.severite === 'critique' ? ' is-critique' : '');
+      el.style.background = sev.c;
+      el.title = it.titre || '';
+      el.addEventListener('click', function (e){ e.stopPropagation(); openNote(it); map.flyTo({ center: pos.c, zoom: Math.max(map.getZoom(), 4.5), duration: 700 }); });
+      new mapboxgl.Marker({ element: el }).setLngLat(pos.c).addTo(map);
+      bounds.extend(pos.c);
+    });
+    try { map.fitBounds(bounds, { padding: 90, maxZoom: 5.5, duration: 0 }); } catch (e) {}
+    var sub = document.getElementById('vk-sub');
+    sub.textContent = items.length + (items.length > 1 ? ' signaux · ' : ' signal · ')
+      + (nPrecise === items.length ? 'géolocalisés' : nPrecise + ' géolocalisés, ' + (items.length - nPrecise) + ' par zone');
+  }
+
+  function load(){
+    fetch(REMOTE, { cache: 'no-store' })
+      .then(function (r){ return r.ok ? r.json() : Promise.reject(); })
+      .then(function (d){ var a = Array.isArray(d) ? d : (d.items || []);
+        a.sort(function (x, y){ return String(y.date).localeCompare(String(x.date)); });
+        plot(a); })
+      .catch(function (){ var l = document.getElementById('loading'); if (l) l.textContent = 'Flux de veille indisponible.'; });
+  }
+  if (map.loaded()) load(); else map.on('load', load);
+})();
+</script>
+</body>
+</html>
