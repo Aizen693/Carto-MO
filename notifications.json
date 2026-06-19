@@ -357,20 +357,25 @@
       "id": "u-bamada-net-bamako-et-cotonou-affichent-leur-volonte-de-renforcer-leur-",
       "date": "2026-06-10",
       "theatre": "sahel",
-      "severite": "alerte",
+      "severite": "info",
       "source": "Bamada.net",
       "source_url": "https://bamada.net/bamako-et-cotonou-affichent-leur-volonte-de-renforcer-leur-cooperation",
       "image": "http://bamada.net/wp-content/uploads/2026/06/assimi-goita-accueil-president-benin-Romuald-Wadagni-visite-travail-cooperation-billateral.jpg",
-      "titre": "Bénin renforce coopération sécuritaire et diplomatique avec Mali",
-      "resume": "Le président béninois Romuald Wadagni a effectué une visite officielle à Bamako le 9 juin pour rencontrer le général Assimi Goïta. Les échanges ont porté sur la sécurité, l'économie et la diplomatie régionale.",
-      "detail": "Cette visite intervient dans un contexte de consolidation des alliances sahéliennes autour de l'AES. Le renforcement de la coopération Mali-Bénin signale une expansion des liens sécuritaires au-delà du noyau dur de l'AES initial. Les discussions sécuritaires suggèrent une coordination accrue face aux menaces terroristes transfrontalières. Ce rapprochement peut indiquer des préoccupations communes concernant la stabilité régionale et les opérations militaires conjointes.",
+      "titre": "Bénin et Mali renforcent leur coopération sécuritaire et diplomatique",
+      "resume": "Le président béninois Romuald Wadagni a effectué une visite de travail à Bamako le 9 juin 2026, rencontrant le général Assimi Goïta. Les échanges ont porté sur la sécurité, l'économie et la diplomatie dans le contexte sahélien.",
+      "detail": "Cette visite bilatérale s'inscrit dans le cadre des relations interrégionales du Sahel face aux défis sécuritaires communs. Le Bénin et le Mali, tous deux confrontés à des menaces terroristes, cherchent à harmoniser leurs approches. Un communiqué conjoint a été publié, témoignant de l'engagement partagé. Cette coopération pourrait renforcer les capacités de coordination régionale face aux groupes armés non étatiques.",
+      "lieu": "Bamako, Mali",
+      "lat": 12.649319,
+      "lon": -8.000337,
       "implications": [
-        "Expansion géographique de l'influence de l'AES vers l'Afrique de l'Ouest côtière",
-        "Renforcement potentiel des capacités sécuritaires par partage d'intelligence et coordination militaire"
+        "Renforcement des mécanismes de coordination sécuritaire entre pays du Sahel",
+        "Possible harmonisation des stratégies anti-terroristes régionales",
+        "Consolidation de l'influence diplomatique malienne dans la sous-région"
       ],
       "recommandations": [
-        "Surveiller les accords bilatéraux formels publiés dans les jours suivants",
-        "Monitorer les mouvements de troupes béninoises vers la frontière malienne"
+        "Suivre les accords spécifiques issus de cette rencontre dans les rapports futurs",
+        "Monitorer les implications pour les dynamiques régionales incluant l'AES",
+        "Analyser les impacts sur les flux migratoires et commerciaux Bénin-Mali"
       ]
     },
     {
@@ -382,15 +387,20 @@
       "source_url": "https://bamada.net/gao-assistance-sanitaire-aux-deplaces",
       "image": "http://bamada.net/wp-content/uploads/2026/05/Deplace-faladie.jpg",
       "titre": "Assistance humanitaire aux déplacés internes à Gao",
-      "resume": "Des personnes déplacées internes à Gao ont reçu le 9 juin une assistance sanitaire d'ONG incluant médicaments, consultations médicales gratuites et équipement médical mobile.",
-      "detail": "L'assistance est financée par l'AECID, Alianza et ActionAid, indiquant une présence humanitaire coordonnée malgré l'insécurité régionale. La concentration sur Gao souligne l'ampleur du déplacement interne dans cette région stratégique. Le maintien de services sanitaires aux déplacés reflète une stabilisation relative permettant l'accès humanitaire. Cette activité confirme la persistance d'une population vulnérable significative malgré les opérations de sécurité.",
+      "resume": "Des personnes déplacées internes à Gao ont reçu le 9 juin une assistance sanitaire comprenant une moto-tricycle médicalisée, des médicaments et des consultations gratuites, financée par l'AECID.",
+      "detail": "L'ONG GREFFA, en partenariat avec l'AECID, Alianza et ActionAid, a déployé une assistance directe aux populations déplacées du Mali. Cette intervention reflète l'ampleur persistante des déplacements forcés dans la région de Gao. L'apport de ressources médicales mobiles indique une adaptation aux contraintes géographiques et sécuritaires. Ces actions palliatives ne résolvant pas les causes profondes du déplacement, elles demeurent essentielles pour la survie des populations.",
+      "lieu": "Gao, Mali",
+      "lat": 16.2788129,
+      "lon": -0.0412392,
       "implications": [
-        "Reconnaissance implicite d'une population déplacée importante et persistante à Gao",
-        "Indication d'un accès humanitaire possible malgré l'insécurité"
+        "Persistance d'une population importante en situation de déplacement à Gao",
+        "Dépendance prolongée de l'aide humanitaire internationale",
+        "Besoin continu d'accès sécurisé pour les interventions humanitaires"
       ],
       "recommandations": [
-        "Estimer le volume de déplacés basé sur la capacité des distributions",
-        "Suivre la continuité de l'accès humanitaire comme indicateur de stabilité locale"
+        "Documenter les chiffres exacts de déplacés internes pour l'analyse de tendances",
+        "Évaluer la viabilité à long terme de ces interventions ponctuelles",
+        "Examiner les conditions sous-jacentes provoquant les déplacements persistants"
       ]
     },
     {
@@ -401,16 +411,21 @@
       "source": "TRT Haber",
       "source_url": "https://www.trthaber.com/haber/dunya/trump-bugun-irana-cok-sert-bir-sekilde-saldiracagiz-947788.html",
       "image": "https://trthaberstatic.cdn.wp.trt.com.tr/resimler/2450000/abd-trump-iran-2450891.jpg",
-      "titre": "Trump annonce nouvelle offensive majeure contre l'Iran",
-      "resume": "Le président américain Donald Trump a déclaré que les États-Unis lanceraient une offensive de grande envergure contre l'Iran suite à la destruction d'un hélicoptère américain.",
-      "detail": "Trump a explicitement affirmé l'intention d'une frappe majeure, justifiant l'action comme réponse proportionnée. Cette déclaration suite à une perte de plateforme aérienne américaine indique une escalade imminente. La rhétorique employée suggère une action militaire coordonnée et planifiée plutôt qu'une réaction impulsive. Le contexte de destruction d'hélicoptère pointe vers des opérations militaires actives dans la région.",
+      "titre": "Trump annonce des frappes imminentes contre l'Iran suite à destruction d'hélicoptère US",
+      "resume": "Le président américain Donald Trump a déclaré que les États-Unis mèneraient des attaques massives contre l'Iran après la destruction d'un hélicoptère américain. Trump affirme que des frappes ont déjà eu lieu et d'autres suivront.",
+      "detail": "Trump a explicitement menacé une escalade militaire directe contre l'Iran, invoquant le droit de représailles suite à la perte d'un aéronef américain. Cette déclaration intervient dans un contexte d'escalade régionale accrue. Les menaces répétées et publiques suggèrent une intention d'action imminente plutôt que des postures diplomatiques. Cette trajectoire comporte des risques significatifs d'embrasement régional.",
+      "lieu": "États-Unis",
+      "lat": 39.7837304,
+      "lon": -100.445882,
       "implications": [
-        "Risque élevé d'escalade militaire directe États-Unis-Iran à court terme",
-        "Impact potentiel sur la stabilité régionale et les routes commerciales du Golfe"
+        "Risque d'escalade militaire directe États-Unis-Iran",
+        "Possibilité d'impacts régionaux majeurs affectant la stabilité moyen-orientale",
+        "Implications potentielles pour les approvisionnements énergétiques mondiaux"
       ],
       "recommandations": [
-        "Activer le protocole de suivi des opérations militaires aériennes dans le Golfe",
-        "Surveiller les déclarations d'Iran et des acteurs régionaux en réaction"
+        "Monitorer les communications officielles Iran et US pour signaux de de-escalade",
+        "Analyser les capacités de réponse iraniennes et les seuils potentiels de conflit",
+        "Évaluer les impacts probables sur les alliés régionaux et les opérations internationales"
       ]
     }
   ]
