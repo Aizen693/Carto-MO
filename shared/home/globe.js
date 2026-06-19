@@ -510,6 +510,7 @@ const GS_BUILDER_CSS = `
   font:600 13px 'Plus Jakarta Sans',system-ui,sans-serif; padding:0; box-shadow:none; transform:none; }
 .cal-pop .cal-day:hover:not(:disabled):not(.is-sel){ background:rgba(107,63,160,.10); transform:none; box-shadow:none; }
 .cal-pop .cal-day.is-off{ color:#9089AA; background:#fff; cursor:default; opacity:.55; text-decoration:line-through; }
+.cal-pop .cal-day.is-out{ color:#c9c4d6; cursor:default; }
 .cal-pop .cal-day--blank{ background:none; }
 .cal-pop .cal-day.is-range{ background:rgba(107,63,160,.13); border-radius:0; box-shadow:0 0 0 2px rgba(107,63,160,.13); }
 .cal-pop .cal-day.is-sel{ background:linear-gradient(130deg,#6B3FA0,#2E84D4); background-image:linear-gradient(130deg,#6B3FA0,#2E84D4); color:#fff; }
@@ -558,8 +559,26 @@ function DateRangePopup({
   const lead = (new Date(vy, vm - 1, 1).getDay() + 6) % 7;
   const dim = lastDay(vy, vm);
   const cells = [];
-  for (let i = 0; i < lead; i++) cells.push(null);
-  for (let d = 1; d <= dim; d++) cells.push(vy + '-' + pad(vm) + '-' + pad(d));
+  // Jours du mois precedent pour combler le debut de semaine (plus de cases vides).
+  const pm = vm === 1 ? 12 : vm - 1,
+    py = vm === 1 ? vy - 1 : vy,
+    pdim = lastDay(py, pm);
+  for (let i = lead; i > 0; i--) cells.push({
+    iso: py + '-' + pad(pm) + '-' + pad(pdim - i + 1),
+    out: true
+  });
+  for (let d = 1; d <= dim; d++) cells.push({
+    iso: vy + '-' + pad(vm) + '-' + pad(d),
+    out: false
+  });
+  // Jours du mois suivant pour completer la derniere semaine.
+  const nm = vm === 12 ? 1 : vm + 1,
+    ny = vm === 12 ? vy + 1 : vy;
+  let nd = 1;
+  while (cells.length % 7 !== 0) cells.push({
+    iso: ny + '-' + pad(nm) + '-' + pad(nd++),
+    out: true
+  });
   const shift = delta => {
     let y = vy,
       m = vm + delta;
@@ -624,16 +643,13 @@ function DateRangePopup({
     className: "cal-dow__c"
   }, j))), /*#__PURE__*/React.createElement("div", {
     className: "cal-grid"
-  }, cells.map((iso, i) => iso ? /*#__PURE__*/React.createElement("button", {
+  }, cells.map((c, i) => /*#__PURE__*/React.createElement("button", {
     type: "button",
     key: i,
-    disabled: off(iso),
-    className: 'cal-day' + (off(iso) ? ' is-off' : '') + (iso === from || iso === to ? ' is-sel' : '') + (inRange(iso) ? ' is-range' : ''),
-    onClick: () => clickDay(iso)
-  }, parseInt(iso.split('-')[2], 10)) : /*#__PURE__*/React.createElement("span", {
-    key: i,
-    className: "cal-day cal-day--blank"
-  }))), /*#__PURE__*/React.createElement("div", {
+    disabled: c.out || off(c.iso),
+    className: 'cal-day' + (c.out ? ' is-out' : '') + (off(c.iso) ? ' is-off' : '') + (c.iso === from || c.iso === to ? ' is-sel' : '') + (inRange(c.iso) ? ' is-range' : ''),
+    onClick: () => clickDay(c.iso)
+  }, parseInt(c.iso.split('-')[2], 10)))), /*#__PURE__*/React.createElement("div", {
     className: "cal-foot"
   }, /*#__PURE__*/React.createElement("span", {
     className: "cal-range"
