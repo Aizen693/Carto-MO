@@ -1,6 +1,156 @@
 {
-  "updated": "2026-06-19",
+  "updated": "2026-06-20",
   "items": [
+    {
+      "id": "u-maliactu-net-ebola-rdc-menace-sahel-mali",
+      "date": "2026-06-20",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/ebola-rdc-menace-sahel-mali/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18879.jpg",
+      "titre": "Épidémie Ebola en RDC : 896 cas confirmés, risque régional",
+      "resume": "L'épidémie d'Ebola en RDC s'aggrave avec 896 cas confirmés. L'OMS alerte sur les risques de propagation régionale au Sahel pendant que le Mali et l'AES renforcent les mesures de surveillance.",
+      "detail": "La RDC fait face à une épidémie d'Ebola en phase critique avec près de 900 cas confirmés. L'OMS évalue le risque de propagation transfrontalière comme élevé, particulièrement vers les pays sahéliens adjacents. Le Mali et l'alliance AES ont activé des protocoles de contrôle aux frontières et de traçage des contacts. Cette menace sanitaire intervient dans un contexte régional déjà fragilisé par l'insécurité et les défaillances des systèmes de santé.",
+      "lieu": "République Démocratique du Congo",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Renforcement des contrôles sanitaires aux frontières Mali RDC Congo Brazzaville",
+        "Mobilisation des ressources médicales limitées de l'AES pour contenir une épidémie",
+        "Risque de panique et mouvements de population vers les zones non affectées"
+      ],
+      "recommandations": [
+        "Établir un corridor humanitaire coordonné avec l'OMS pour l'acheminement de vaccins et équipements",
+        "Mettre en place un système d'alerte précoce partagé entre pays sahéliens",
+        "Préparer des unités de quarantaine mobiles aux points de passage frontaliers critiques"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-monnaie-unique-aes-mali-burkina-niger",
+      "date": "2026-06-20",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/monnaie-unique-aes-mali-burkina-niger/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18899.jpg",
+      "titre": "Monnaie unique AES : lancement prévu 2026, sortie du franc CFA",
+      "resume": "Mali, Burkina Faso et Niger projettent de créer une monnaie unique pour 2026, marquant une rupture économique majeure avec le franc CFA français.",
+      "detail": "L'Alliance des États du Sahel prépare le lancement d'une monnaie commune en 2026, projet stratégique visant à redessiner l'architecture économique régionale et réduire la dépendance vis à vis de la France. Cette initiative comporte des risques de volatilité monétaire mais reflète une volonté d'autonomie macroéconomique. Le projet nécessite la convergence de politiques budgétaires et l'établissement d'institutions monétaires communes. Les impacts sur le commerce régional et l'inflation seront déterminants pour la stabilité économique du Sahel.",
+      "lieu": "Mali, Burkina Faso, Niger",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Réduction de l'influence française sur les politiques économiques sahéliennes",
+        "Risques d'instabilité monétaire et d'inflation durant la période de transition",
+        "Renforcement de l'intégration économique AES et de l'autonomie stratégique"
+      ],
+      "recommandations": [
+        "Suivre les évolutions des réserves de change des trois pays et leur politique budgétaire",
+        "Analyser les impacts probables sur les flux commerciaux régionaux et les partenaires commerciaux",
+        "Anticiper les mesures de réaction potentielles des partenaires occidentaux"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-tensions-frontiere-cote-ivoire-burkina-faso",
+      "date": "2026-06-20",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/tensions-frontiere-cote-ivoire-burkina-faso/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18888.jpg",
+      "titre": "Tensions à la frontière Côte d'Ivoire-Burkina Faso : risque d'instabilité",
+      "resume": "La frontière entre la Côte d'Ivoire et le Burkina Faso connaît des tensions inédites menaçant la stabilité régionale ouest africaine.",
+      "detail": "Les tensions à cette frontière critique reflètent l'intersection de plusieurs enjeux : la présence de groupes armés non étatiques dans le Sahel, les différends sur les ressources frontalières et les dynamiques migratoires. La Côte d'Ivoire, relativement stable, confrontée à l'instabilité croissante du Burkina voisin, craint la contagion sécuritaire. Les incidents frontaliers pourraient déclencher un conflit inter états ou accélérer la déstabilisation de la Côte d'Ivoire. Cette tension affecte le commerce régional et les populations civiles frontalières.",
+      "lieu": "Côte d'Ivoire, Burkina Faso",
+      "lat": 5.3239157,
+      "lon": -4.0236245,
+      "implications": [
+        "Risque de conflit armé direct entre États ouest africains",
+        "Perturbation des corridors commerciaux critiques pour la sous région",
+        "Flux migratoires accélérés vers la Côte d'Ivoire et la Guinée"
+      ],
+      "recommandations": [
+        "Renforcer la médiation diplomatique via la CEDEAO et l'Union Africaine",
+        "Établir une zone tampon démilitarisée avec observation neutre",
+        "Faciliter les mécanismes d'alerte précoce sur incidents frontaliers"
+      ]
+    },
+    {
+      "id": "u-aljazeera-com-news-2026-6-20-israel-fetes-somalilands-leader-as-it-see",
+      "date": "2026-06-20",
+      "theatre": "moyen-orient",
+      "severite": "alerte",
+      "source": "Al Jazeera English",
+      "source_url": "https://www.aljazeera.com/news/2026/6/20/israel-fetes-somalilands-leader-as-it-seeks-to-expand-red-Sea-influence?traffic_source=rss",
+      "image": "",
+      "titre": "Israël renforce son influence en Mer Rouge via Somaliland",
+      "resume": "Six mois après la reconnaissance du Somaliland par Israël, les deux acteurs passent de la symbolique à la coopération stratégique dans la Mer Rouge.",
+      "detail": "Israël développe un partenariat stratégique avec Somaliland pour consolider son contrôle des routes maritimes critiques de la Mer Rouge. Cette approche s'inscrit dans une stratégie plus large d'encerclement et contournement face aux acteurs régionaux hostiles. Somaliland, en quête de reconnaissance internationale, trouve dans cette alliance une validation géopolitique et des avantages économiques. Le partenariat couvre probablement l'infrastructure portuaire, les capacités navales et le renseignement.",
+      "lieu": "Somaliland",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Renforcement du contrôle israélien des détroits clés du commerce mondial",
+        "Consolidation de la fragmentation de la Somalie et du positionnement de Somaliland",
+        "Augmentation des tensions avec l'Égypte et les acteurs hostiles à Israël"
+      ],
+      "recommandations": [
+        "Surveiller le développement des installations portuaires israéliennes à Somaliland",
+        "Analyser les impacts sur la liberté de navigation et les corridors commerciaux",
+        "Évaluer les réactions potentielles des pays arabes et de la Turquie"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-reouverture-frontiere-niger-benin-sahel-6",
+      "date": "2026-06-20",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/reouverture-frontiere-niger-benin-sahel-6/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18876.jpg",
+      "titre": "Réouverture frontière Niger-Bénin : relance économique sahélienne",
+      "resume": "La réouverture de la frontière Niger-Bénin marque un tournant pour le commerce et la connectivité économique du Sahel.",
+      "detail": "Cette réouverture est un signal majeur d'amélioration des relations dans la région et de volonté de relancer les échanges commerciaux vitaux. Elle reflète les efforts de l'AES pour renforcer l'intégration économique face aux défis sécuritaires. Le corridor commercial revitalisé bénéficiera aux économies nigérienne et béninoise, réduira les coûts de transport régionaux et stimulera les flux de biens essentiels. Ce succès diplomatique peut servir de modèle pour résoudre d'autres tensions frontalières.",
+      "lieu": "Niger, Bénin",
+      "lat": 11.7957038,
+      "lon": 3.5186962,
+      "implications": [
+        "Augmentation des flux commerciaux régionaux et réduction des contournements coûteux",
+        "Renforcement de la cohésion régionale et de la coordination AES",
+        "Accélération des échanges de biens alimentaires et énergétiques critiques"
+      ],
+      "recommandations": [
+        "Documenter les mécanismes de coopération ayant permis la réouverture pour les appliquer ailleurs",
+        "Surveiller les volumes commerciaux et les impacts économiques mesurables",
+        "Évaluer les opportunités de médiation similaire pour d'autres frontières fermées"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-mali-sanctions-diaspora-avoir-geles",
+      "date": "2026-06-20",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/mali-sanctions-diaspora-avoir-geles/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18893.jpg",
+      "titre": "Mali : gels d'avoirs contre 12 exilés, tensions diaspora",
+      "resume": "Le Mali sanctionne 12 ressortissants en exil en gelant leurs avoirs, créant des tensions au sein de la diaspora malienne.",
+      "detail": "Cette mesure reflète une volonté des autorités maliennes de contrôler les acteurs d'opposition en diaspora et potentiellement d'accéder à des ressources financières. Les gels d'avoirs peuvent concerner des critiques politiques, des militants des droits de l'homme ou des personnalités liées à l'ancien régime. Cette action inquiète la diaspora mondiale et pourrait affecter les transferts de fonds vers les familles restées au Mali. Elle illustre le durcissement du contrôle politique dans le contexte de la gouvernance militaire en transition.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Réduction des envois de fonds de la diaspora vers les ménages maliens",
+        "Escalade potentielle des mobilisations de la diaspora contre Bamako",
+        "Renforcement du contrôle des capitaux et de la surveillance des opposants"
+      ],
+      "recommandations": [
+        "Suivre les impacts économiques sur les transferts de fonds et le secteur financier",
+        "Monitorer les réactions de la diaspora et les campagnes internationales de soutien",
+        "Analyser les personnes ciblées pour comprendre les priorités politiques de Bamako"
+      ]
+    },
     {
       "id": "u-bamada-net-offensive-des-fama-a-diema-plus-de-30-terroristes-mis-hors-",
       "date": "2026-06-19",
@@ -222,8 +372,8 @@
         "Anticiper les besoins de soutien défensif additionnels pour l'Ukraine au secteur nord",
         "Préparer les scénarios d'engagement de puissances régionales si la Biélorussie bascule militairement"
       ],
-      "lat": 50.4501,
-      "lon": 30.5234,
+      "lat": null,
+      "lon": null,
       "lieu": "Kyiv, Ukraine"
     },
     {
