@@ -281,7 +281,7 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
           </h1>
 
           <p className="hero__lede">
-            Théâtres géopolitiques suivis en continu pour les directions sûreté, cabinets d'analyse et rédactions spécialisées. Imagerie satellite, ACLED, GDELT, presse régionale, OSINT social : chaque événement sourcé, daté et auditable.
+            Théâtres géopolitiques suivis en continu pour les directions sûreté, cabinets d'analyse et rédactions spécialisées. Solution souveraine française, vos données hébergées en Europe : chaque événement sourcé, daté et auditable.
           </p>
 
           <div className="hero__cta-row">
