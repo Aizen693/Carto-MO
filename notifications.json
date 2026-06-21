@@ -1,6 +1,131 @@
 {
-  "updated": "2026-06-20",
+  "updated": "2026-06-21",
   "items": [
+    {
+      "id": "u-maliactu-net-aes-mali-burkina-niger-diplomatie-onu",
+      "date": "2026-06-21",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-mali-burkina-niger-diplomatie-onu/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19290.jpg",
+      "titre": "AES consolide alliance diplomatique face à l'ONU 2026",
+      "resume": "Le Mali, Burkina Faso et Niger renforcent leur coordination diplomatique avant l'assemblée générale de l'ONU 2026. Cette alliance défie l'ordre géopolitique occidental et consolide leur position face aux pressions internationales.",
+      "detail": "L'Alliance des États du Sahel (AES) intensifie sa stratégie diplomatique commune pour contester l'isolement imposé par les puissances occidentales et les sanctions de la CEDEAO. Cette coordination tripartite vise à diversifier les partenariats internationaux et à affirmer la souveraineté des trois États face aux défis sécuritaires régionaux. Les ministres des Affaires étrangères multiplient les initiatives pour présenter une position unie aux instances internationales. Cette consolidation reflète une volonté de briser l'encerclement diplomatique et d'établir des contre-équilibres géopolitiques durables.",
+      "lieu": "Mali, Burkina Faso, Niger",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Isolement diplomatique occidental aggravé par une alliance unie au Sahel",
+        "Réalignement géopolitique majeur avec partenaires non-occidentaux (Russie, Chine)",
+        "Fragilisation de l'architecture de sécurité régionale CEDEAO-OTAN"
+      ],
+      "recommandations": [
+        "Monitorer les accords bilatéraux AES avec puissances alternatives",
+        "Cartographier les nouvelles alliances militaires et économiques de l'AES",
+        "Analyser l'impact sur les flux migratoires et les équilibres régionaux"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-rapatriement-maliens-cote-divoire-tensions",
+      "date": "2026-06-21",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/rapatriement-maliens-cote-divoire-tensions/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19246.jpg",
+      "titre": "415 Maliens rapatriés de Côte d'Ivoire après démolitions",
+      "resume": "Un drame humanitaire se dessine avec le rapatriement de 415 Maliens de Port-Bouët après des démolitions massives. Cet incident révèle des tensions régionales croissantes et des failles dans la protection consulaire.",
+      "detail": "Les démolitions à Port-Bouët en Côte d'Ivoire ont entraîné le rapatriement forcé de 415 ressortissants maliens, mettant en lumière les défaillances de la protection consulaire malienne. Cet événement traduit des tensions sous-jacentes entre le Mali et la Côte d'Ivoire malgré les initiatives de paix transfrontalière. Les rapatriements massifs de migrants maliens soulignent l'instabilité économique et les risques d'escalade des tensions communautaires. La crise consulaire s'aggrave avec les expulsions parallèles depuis l'Europe, créant une pression démographique et sécuritaire accrue au Mali.",
+      "lieu": "Côte d'Ivoire, Mali",
+      "lat": 12.6267755,
+      "lon": -8.0349475,
+      "implications": [
+        "Dégradation des relations Mali-Côte d'Ivoire malgré dialogues pacifiques",
+        "Retour de populations vulnérables surchargeant les zones frontalières",
+        "Risque d'instrumentalisation politique des rapatriés dans le contexte électoral sahélien"
+      ],
+      "recommandations": [
+        "Renforcer le suivi des tensions communautaires aux frontières Mali-CI",
+        "Analyser l'impact des rapatriements massifs sur la stabilité régionale",
+        "Documenter les violations des droits des migrants maliens expulsés"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-senegal-alerte-meteo-orages-violents",
+      "date": "2026-06-21",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/senegal-alerte-meteo-orages-violents/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19248.jpg",
+      "titre": "Sénégal : alerte météo majeure, 8 régions menacées par orages violents",
+      "resume": "Le Sénégal fait face à une alerte météorologique imminente avec orages et pluies intenses attendus dans 8 régions. Risques majeurs pour les populations et les infrastructures sécuritaires régionales.",
+      "detail": "Une dépression météorologique majeure se dessine au Sénégal avec des orages violents et des pluies torrentielles prévus dans 8 régions identifiées. Cette alerte intervient dans un contexte de fragilité institutionnelle suite aux réformes constitutionnelles du régime Pastef. Les inondations et perturbations pourraient désorganiser les opérations de sécurité et aggraver les vulnérabilités humanitaires existantes. Dans un Sahel déjà sous stress climatique et sécuritaire, ces phénomènes extrêmes risquent de créer des mouvements de population supplémentaires et de perturber l'économie agricole.",
+      "lieu": "Sénégal",
+      "lat": 14.4750607,
+      "lon": -14.4529612,
+      "implications": [
+        "Perturbation des opérations de sécurité durant une période de transition politique",
+        "Aggravation des déplacements internes et des crises humanitaires",
+        "Impact sur les corridors logistiques régionaux et l'approvisionnement alimentaire"
+      ],
+      "recommandations": [
+        "Préparer cartographie des zones à risque humanitaire accru post-orages",
+        "Monitorer les mouvements de populations induites par la catastrophe climatique",
+        "Analyser l'impact sur les forces de sécurité et la stabilité régionale"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-transition-energetique-afrique-4500-milliards",
+      "date": "2026-06-21",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/transition-energetique-afrique-4500-milliards/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19240.jpg",
+      "titre": "Transition énergétique Afrique de l'Ouest : 4500 milliards euros en jeu",
+      "resume": "Un rapport estime que la transition vers les énergies renouvelables pourrait générer 4500 milliards d'euros de gains économiques pour l'Afrique de l'Ouest. Enjeu stratégique majeur pour la souveraineté régionale.",
+      "detail": "Les énergies renouvelables représentent un potentiel économique colossal pour l'Afrique de l'Ouest, transformant les équilibres géopolitiques énergétiques. Ce rapport soulève la bataille de la souveraineté énergétique entre les puissances occidentales, la Chine et la Russie. L'AES, particulièrement le Mali et le Niger riches en ressources minérales essentielles aux énergies renouvelables, devient stratégiquement crucial. Le contrôle de cette transition énergétique déterminera les alignements géopolitiques régionaux pour la décennie.",
+      "lieu": "Afrique de l'Ouest, Mali, Niger",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Compétition accrue Occident-Chine-Russie pour le contrôle des ressources énergétiques régionales",
+        "Potentiel de diversification économique réduisant la dépendance aux matières premières classiques",
+        "Enjeu de souveraineté technologique et financière pour les États sahéliens"
+      ],
+      "recommandations": [
+        "Cartographier les investissements chinois et russes en énergies renouvelables au Sahel",
+        "Analyser les partenariats énergétiques émergents de l'AES",
+        "Suivre les négociations sur l'extraction des minéraux critiques (lithium, cobalt, nickel)"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-reforme-constitutionnelle-senegal-sahel",
+      "date": "2026-06-21",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/reforme-constitutionnelle-senegal-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19247.jpg",
+      "titre": "Sénégal : réforme constitutionnelle Pastef impact régional",
+      "resume": "Le Sénégal engage une réforme constitutionnelle majeure sous la direction de Pastef. Ce changement pourrait modifier les équilibres politiques régionaux du Sahel et affecter les alliances sous-régionales.",
+      "detail": "La réforme constitutionnelle du régime Pastef au Sénégal intervient dans un contexte de recomposition géopolitique sahélienne accentuée par l'AES. Cette réforme interne sénégalaise pourrait renforcer ou affaiblir les alliances régionales existantes selon son orientation. La stabilité institutionnelle sénégalaise reste cruciale pour l'équilibre régional face à l'alliance AES. Le processus de réforme révèle des tensions entre les visions intégrationnistes ouest-africaines et les nouvelles orientations géopolitiques.",
+      "lieu": "Sénégal",
+      "lat": 14.4750607,
+      "lon": -14.4529612,
+      "implications": [
+        "Potential shift géopolitique du Sénégal face à l'AES et la CEDEAO",
+        "Redéfinition de l'architecture de gouvernance interne impactant les politiques régionales",
+        "Risque d'instabilité institutionnelle durant la transition constitutionnelle"
+      ],
+      "recommandations": [
+        "Monitorer les dispositions constitutionnelles affectant la politique régionale sénégalaise",
+        "Analyser la position du Sénégal vis-à-vis de l'AES post-réforme",
+        "Suivre l'impact sur les relations CEDEAO et les alliances sous-régionales"
+      ]
+    },
     {
       "id": "u-maliactu-net-ebola-rdc-menace-sahel-mali",
       "date": "2026-06-20",
@@ -624,31 +749,6 @@
         "Activer protocoles de suivi des opérations militaires régionales",
         "Monitorer les déclarations officielles iraniennes de riposte",
         "Évaluer les impacts économiques sur les marchés énergétiques"
-      ]
-    },
-    {
-      "id": "u-theguardian-com-football-video-2026-jun-10-the-most-inclusive-world-cu",
-      "date": "2026-06-10",
-      "theatre": "afrique",
-      "severite": "alerte",
-      "source": "The Guardian",
-      "source_url": "https://www.theguardian.com/football/video/2026/jun/10/the-most-inclusive-world-cup-ever-doesnt-look-like-it",
-      "image": "",
-      "titre": "Arbitre somali refusé à la Coupe du Monde",
-      "resume": "Omar Abdulkadir Artan, meilleur arbitre africain, s'est vu refuser l'entrée aux États-Unis pour officier à la Coupe du Monde, malgré une sélection à cet effet par la FIFA.",
-      "detail": "Cet incident révèle des tensions diplomatiques entre les États-Unis et la Somalie, ou des problèmes de contrôle migratoire affectant les personnels officiels. Le refus d'entrée d'un arbitre de premier plan pointe vers des processus de sécurité États-Unis disproportionnés ou des enjeux diplomatiques sousjacents. Cet événement a des implications pour la crédibilité internationale des États-Unis et pour les relations avec la Somalie.",
-      "lieu": "Somalie",
-      "lat": 8.3676771,
-      "lon": 49.083416,
-      "implications": [
-        "Tensions diplomatiques États-Unis Somalie",
-        "Processus de sécurité états-unienne affectant les relations diplomatiques",
-        "Impact réputationnel sur l'image internationale des États-Unis"
-      ],
-      "recommandations": [
-        "Analyser les causes précises du refus d'entrée",
-        "Évaluer les impacts diplomatiques avec la Somalie",
-        "Monitorer les réactions somaliennes officielles"
       ]
     }
   ]
