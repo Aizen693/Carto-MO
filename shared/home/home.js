@@ -562,7 +562,7 @@ function HomeView({
     className: "hero__title"
   }, "Anticiper les risques", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "op\xE9rationnels")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Th\xE9\xE2tres g\xE9opolitiques suivis en continu pour les directions s\xFBret\xE9, cabinets d'analyse et r\xE9dactions sp\xE9cialis\xE9es. Imagerie satellite, ACLED, GDELT, presse r\xE9gionale, OSINT social : chaque \xE9v\xE9nement sourc\xE9, dat\xE9 et auditable."), /*#__PURE__*/React.createElement("div", {
+  }, "Th\xE9\xE2tres g\xE9opolitiques suivis en continu pour les directions s\xFBret\xE9, cabinets d'analyse et r\xE9dactions sp\xE9cialis\xE9es. Solution souveraine française, vos données hébergées en Europe : chaque \xE9v\xE9nement sourc\xE9, dat\xE9 et auditable."), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
   }, /*#__PURE__*/React.createElement("a", {
     className: "btn btn--primary btn--lg btn--neon",
@@ -600,7 +600,7 @@ function HomeView({
     className: "hero__demo-warn"
   }, "Donn\xE9es fictives, \xE0 titre d'illustration du rendu de nos cartes.")))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"
-  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(VeilleSystem, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
+  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(VeilleSystem, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement({
     style: videoStyle
   })), /*#__PURE__*/React.createElement(SiteFooter, null));
 }
@@ -1237,123 +1237,7 @@ function CompareSection() {
     className: "cmp-table__cell cmp-table__cell--pos cmp-table__pos"
   }, pos))))));
 }
-const HOME_VIDEOS = [{
-  cat: 'Veille',
-  title: 'Cartographie OSINT en temps réel',
-  meta: 'Plateforme · 2 min 14',
-  duration: '2:14'
-}, {
-  cat: 'Influence',
-  title: 'Analyse multicouche du théâtre sahélien',
-  meta: 'Étude de cas · 3 min 02',
-  duration: '3:02'
-}, {
-  cat: 'Protection',
-  title: 'Évaluation de menaces sur les infrastructures',
-  meta: 'Mission · 4 min 28',
-  duration: '4:28'
-}, {
-  cat: 'Méthode',
-  title: 'De la donnée brute au rapport décisionnel',
-  meta: 'Coulisses · 2 min 47',
-  duration: '2:47'
-}, {
-  cat: 'Terrain',
-  title: 'Réseaux djihadistes au Sahel : pattern 2026',
-  meta: 'Décryptage · 5 min 12',
-  duration: '5:12'
-}];
-function VideoBand({
-  style = 'strip'
-}) {
-  return /*#__PURE__*/React.createElement("section", {
-    className: `video-band video-band--${style}`
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "video-band__head"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
-    className: "eyebrow"
-  }, "Notre travail en images"), /*#__PURE__*/React.createElement("h2", {
-    className: "video-band__title"
-  }, "Capsules ", /*#__PURE__*/React.createElement("em", null, "vid\xE9os"), " \xB7 activit\xE9s Algor Int")), /*#__PURE__*/React.createElement("p", {
-    className: "video-band__intro"
-  }, "Cinq formats courts pour comprendre nos m\xE9thodes, nos terrains et nos livrables. Glissez horizontalement pour parcourir.")), /*#__PURE__*/React.createElement("div", {
-    className: "video-band__strip"
-  }, HOME_VIDEOS.map((v, i) => /*#__PURE__*/React.createElement(VideoCard, _extends({
-    key: i
-  }, v, {
-    index: i,
-    variant: style
-  })))));
-}
-function VideoCard({
-  cat,
-  title,
-  meta,
-  duration,
-  index
-}) {
-  return /*#__PURE__*/React.createElement("article", {
-    className: "video-card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "video-card__thumb"
-  }, /*#__PURE__*/React.createElement(ThumbMosaic, {
-    seed: index
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "video-card__play"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "play-circle"
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "18",
-    height: "18",
-    viewBox: "0 0 18 18",
-    fill: "currentColor"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M5 3.5v11l10-5.5z"
-  })))), /*#__PURE__*/React.createElement("span", {
-    className: "video-card__duration"
-  }, duration)), /*#__PURE__*/React.createElement("div", {
-    className: "video-card__body"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "video-card__cat"
-  }, cat), /*#__PURE__*/React.createElement("h3", {
-    className: "video-card__title"
-  }, title), /*#__PURE__*/React.createElement("p", {
-    className: "video-card__meta"
-  }, meta)));
-}
-function ThumbMosaic({
-  seed = 0
-}) {
-  const cells = [];
-  const cols = 14,
-    rows = 10;
-  const rng = mulberry(seed * 1337 + 7);
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const o = 0.05 + rng() * 0.22;
-      const size = 5.5 + rng() * 4.5;
-      cells.push({
-        x: (c + 0.5) * (100 / cols),
-        y: (r + 0.5) * (100 / rows),
-        o,
-        size
-      });
-    }
-  }
-  return /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 100 70",
-    preserveAspectRatio: "xMidYMid slice"
-  }, cells.map((c, i) => /*#__PURE__*/React.createElement("rect", {
-    key: i,
-    x: c.x - c.size / 2,
-    y: c.y - c.size / 2,
-    width: c.size,
-    height: c.size,
-    transform: `rotate(45 ${c.x} ${c.y})`,
-    fill: "#fff",
-    opacity: c.o
-  })));
-}
+
 function mulberry(a) {
   return function () {
     a |= 0;
@@ -1820,7 +1704,6 @@ function DashCloseIcon({
 }
 Object.assign(window, {
   HomeView,
-  VideoBand,
   ConsoleView,
   ArchivesView,
   VeilleView,
