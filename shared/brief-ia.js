@@ -2,7 +2,7 @@
  * brief-ia.js — Modal "Brief IA Securite" sur les points cartographiques
  *
  * Expose window.openBriefIA(name, pays?, ville?) appelable depuis les popups.
- * Appelle l'edge function Supabase `brief-securite` qui interroge Gemini 2.0 Flash
+ * Appelle l'edge function Supabase `brief-securite-mistral` qui interroge Mistral Large
  * avec recherche Google et renvoie un brief securite + sources.
  */
 
@@ -176,7 +176,7 @@ function buildExportHtml(data) {
     </div>
     <h1 class="hdr-title">${titleEsc}</h1>
     <div class="hdr-meta">Genere le ${esc(dateStr)}${modelEsc ? ` · ${modelEsc} + recherche web` : ''}</div>
-    <div class="hdr-ai">Document généré par intelligence artificielle (Google Gemini, recherche web associée), soumis à vérification humaine. Il peut contenir des erreurs : contrôler les sources avant toute exploitation.</div>
+    <div class="hdr-ai">Document généré par intelligence artificielle (Mistral, recherche web associée), soumis à vérification humaine. Il peut contenir des erreurs : contrôler les sources avant toute exploitation.</div>
   </header>
   <main>
     ${briefHtml}
@@ -184,7 +184,7 @@ function buildExportHtml(data) {
   </main>
   <footer class="ftr">
     <span>Algor Int · Intelligence economique et securitaire</span>
-    <span>Note générée par IA (Google Gemini), vérifier les sources avant exploitation</span>
+    <span>Note générée par IA (Mistral), vérifier les sources avant exploitation</span>
   </footer>
 </body>
 </html>`;
@@ -282,7 +282,7 @@ function renderBrief(data) {
          ${data.sources.map(s => `<a class="bia-source" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}<span class="bia-source-domain">${esc(domainOf(s.url))}</span></a>`).join('')}
        </div>`
     : '';
-  const disclaimer = `<div id="brief-ia-disclaimer">Contenu généré par intelligence artificielle (Google Gemini, recherche web associée). Il peut contenir des erreurs : vérifier les sources avant toute exploitation.</div>`;
+  const disclaimer = `<div id="brief-ia-disclaimer">Contenu généré par intelligence artificielle (Mistral, recherche web associée). Il peut contenir des erreurs : vérifier les sources avant toute exploitation.</div>`;
   return `<div id="brief-ia-content">${briefHtml}</div>${sourcesHtml}${disclaimer}`;
 }
 
@@ -347,7 +347,7 @@ window.openBriefIA = async function openBriefIA(payloadOrName, _legacyPays, _leg
       return;
     }
 
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/brief-securite`, {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/brief-securite-mistral`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

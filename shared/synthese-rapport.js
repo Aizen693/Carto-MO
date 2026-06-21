@@ -14,7 +14,7 @@
  *
  * Architecture :
  *   - L'utilisateur clique "Generer" -> POST edge function brief-securite (mode=synthese)
- *     -> Gemini 2.5 Flash + web search produit un paragraphe de 4-6 lignes
+ *     -> Mistral Large + web search produit un paragraphe de 4-6 lignes
  *   - Le texte est rendu en contenteditable pour relecture/edition
  *   - Persiste dans localStorage (cle algor-synthese-{zoneId})
  *   - Bouton "Reinitialiser" supprime la version locale
@@ -122,7 +122,7 @@ async function generateSynthese({ zoneId, zoneLabel, reportTitle }) {
   const token = sess?.session?.access_token;
   if (!token) throw new Error('Session expirée, recharge la page');
 
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/brief-securite`, {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/brief-securite-mistral`, {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -156,7 +156,7 @@ function mount(opts) {
       </div>
       <div class="algor-synthese-text" data-role="text"></div>
       <div class="algor-synthese-meta" data-role="meta"></div>
-      <div class="algor-synthese-disclaimer">Synthèse générée par intelligence artificielle (Google Gemini, recherche web associée), soumise à relecture humaine avant publication. Elle peut contenir des erreurs.</div>
+      <div class="algor-synthese-disclaimer">Synthèse générée par intelligence artificielle (Mistral, recherche web associée), soumise à relecture humaine avant publication. Elle peut contenir des erreurs.</div>
       <div class="algor-synthese-error" data-role="error" style="display:none"></div>
     </section>
   `;

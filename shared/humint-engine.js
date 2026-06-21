@@ -559,7 +559,7 @@
     if (state._anaBusy) return;
     state._anaBusy = true;
     btn.disabled = true; btn.textContent = 'Analyse en cours…';
-    out.innerHTML = '<div class="ana-ia-load">Gemini analyse ' + esc(state.country) + ' sur nos ' + stats.total + ' événements…</div>';
+    out.innerHTML = '<div class="ana-ia-load">Mistral analyse ' + esc(state.country) + ' sur nos ' + stats.total + ' événements…</div>';
     var done = function (html, label) {
       state._anaBusy = false; btn.disabled = false; btn.textContent = label || '↻ Regénérer la synthèse';
       out.innerHTML = html;
@@ -570,7 +570,7 @@
       var token = res && res.data && res.data.session && res.data.session.access_token;
       if (!token) { done('<div class="ana-ia-err">Session expirée. Recharge la page.</div>', '✶ Générer la synthèse IA'); return; }
       var periode = (state.sel.from && state.sel.to) ? (frDate(state.sel.from) + ' – ' + frDate(state.sel.to)) : 'toutes dates';
-      return fetch(SUPABASE_URL + '/functions/v1/brief-securite', {
+      return fetch(SUPABASE_URL + '/functions/v1/brief-securite-mistral', {
         method: 'POST',
         headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -585,7 +585,7 @@
           }).join('');
           done('<div class="ana-ia-txt">' + mdMini(o.j.brief || '') + '</div>' +
             (src ? '<div class="ana-ia-src">' + src + '</div>' : '') +
-            '<div class="ana-ia-foot">Généré par ' + esc(o.j.model || 'Gemini') + ' · interprétation de nos ' + stats.total + ' événements</div>');
+            '<div class="ana-ia-foot">Généré par ' + esc(o.j.model || 'Mistral') + ' · interprétation de nos ' + stats.total + ' événements</div>');
         });
     }).catch(function (e) { done('<div class="ana-ia-err">Échec réseau. ' + esc(String((e && e.message) || e)) + '</div>'); });
   }
