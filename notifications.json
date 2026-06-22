@@ -1,6 +1,131 @@
 {
-  "updated": "2026-06-21",
+  "updated": "2026-06-22",
   "items": [
+    {
+      "id": "u-maliactu-net-niger-benin-3-accords-frontiere",
+      "date": "2026-06-22",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/niger-benin-3-accords-frontiere/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19584.jpg",
+      "titre": "Niger-Bénin rouvrent leur frontière sous accords secrets",
+      "resume": "Niger et Bénin finalisent trois accords pour rouvrir leur frontière. Enjeux majeurs pour la sécurité et le commerce régional.",
+      "detail": "Les trois accords portent sur la défense la sécurité et le commerce. Leur signature intervient dans un contexte de tension sécuritaire persistante au Sahel. La réouverture de la frontière pourrait faciliter la circulation des groupes armés non étatiques et des flux illicites. Une coordination renforcée entre les deux pays est nécessaire pour éviter une exploitation hostile des corridors.",
+      "lieu": "Frontière Niger-Bénin",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque accru de trafic d'armes",
+        "Opportunité pour les groupes jihadistes",
+        "Impact potentiel sur les marchés locaux"
+      ],
+      "recommandations": [
+        "Cartographier les zones frontalières critiques",
+        "Renforcer les patrouilles conjointes",
+        "Surveiller les flux commerciaux"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-aes-diplomatie-sahel-defis-internationaux",
+      "date": "2026-06-22",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-diplomatie-sahel-defis-internationaux/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19585.jpg",
+      "titre": "AES harmonise sa diplomatie face aux défis sahéliens",
+      "resume": "Les ministres des Affaires étrangères du Mali, Burkina Faso et Niger unifient leur stratégie diplomatique à Bamako.",
+      "detail": "La réunion à Bamako marque une volonté d'harmonisation des positions face aux pressions internationales. L'AES cherche à consolider son unité face aux défis sécuritaires et économiques. Cependant cette alliance pourrait aussi renforcer des dynamiques de rejet des partenariats traditionnels comme ceux avec la France. La coordination diplomatique pourrait modifier l'équilibre des forces au Sahel.",
+      "lieu": "Bamako, Mali",
+      "lat": 12.6132656,
+      "lon": -7.9847391,
+      "implications": [
+        "Renforcement de l'autonomie politique de l'AES",
+        "Risque de marginalisation des partenaires historiques",
+        "Potentiel conflit diplomatique accru"
+      ],
+      "recommandations": [
+        "Analyser les déclarations officielles de l'AES",
+        "Évaluer les impacts sur les alliances militaires",
+        "Surveiller les réactions des pays voisins"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-accord-frontalier-guinee-cote-ivoire",
+      "date": "2026-06-22",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/accord-frontalier-guinee-cote-ivoire/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19583.jpg",
+      "titre": "Guinée-Côte d'Ivoire stabilisent leur frontière après accord",
+      "resume": "Un accord historique après quatre ans de négociations impacte la stabilité ouest-africaine.",
+      "detail": "L'accord frontalier entre la Guinée et la Côte d'Ivoire pourrait servir de modèle de coopération en Afrique de l'Ouest. Il vise à réduire les tensions liées à la circulation transfrontalière et au commerce informel. La stabilisation de cette frontière pourrait aussi limiter les mouvements de groupes armés. Cependant une mise en œuvre efficace nécessite des ressources et une volonté politique durable.",
+      "lieu": "Frontière Guinée-Côte d'Ivoire",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Réduction des tensions locales",
+        "Amélioration des échanges commerciaux",
+        "Potentiel modèle pour d'autres frontières"
+      ],
+      "recommandations": [
+        "Suivre la mise en œuvre concrète de l'accord",
+        "Évaluer les premiers impacts économiques",
+        "Comparer avec d'autres initiatives frontalières"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-burkina-faso-survie-quotidienne-sahel-crise",
+      "date": "2026-06-22",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/burkina-faso-survie-quotidienne-sahel-crise/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19586.jpg",
+      "titre": "Burkina Faso lutte pour survivre en zone de crise",
+      "resume": "Le Burkina Faso fait face à des défis économiques et sécuritaires majeurs malgré la crise sahélienne.",
+      "detail": "Les préoccupations quotidiennes des Burkinabè sont dominées par l'insécurité persistante et la dégradation des conditions économiques. Les déplacements internes et l'accès aux services de base restent des enjeux critiques. La situation humanitaire s'aggrave avec des besoins croissants en protection et en assistance. La résilience des populations est mise à l'épreuve dans un contexte de restrictions budgétaires.",
+      "lieu": "Burkina Faso",
+      "lat": 12.0753083,
+      "lon": -1.6880314,
+      "implications": [
+        "Augmentation des besoins humanitaires",
+        "Risque de radicalisation accrue",
+        "Pression sur les services publics"
+      ],
+      "recommandations": [
+        "Cartographier les zones de crise humanitaire",
+        "Renforcer les capacités locales de réponse",
+        "Surveiller les indicateurs socio-économiques"
+      ]
+    },
+    {
+      "id": "u-africa24tv-com-nigeria-une-attaque-de-liswap-repoussee-par-les-forces-",
+      "date": "2026-06-22",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "Africa24tv",
+      "source_url": "https://africa24tv.com/nigeria-une-attaque-de-liswap-repoussee-par-les-forces-de-securite-dans-le-nord-est-2/",
+      "image": "",
+      "titre": "ISWAP repoussé par les forces nigérianes dans le nord-est",
+      "resume": "L'ISWAP a lancé une attaque repoussée par les forces de sécurité nigérianes dans la région du Borno.",
+      "detail": "Cette attaque confirme la persistance de la menace jihadiste dans le nord-est du Nigeria malgré les offensives militaires. L'ISWAP continue de cibler les civils et les infrastructures locales. La région reste instable avec des déplacements massifs de populations. La capacité des forces locales à maintenir la sécurité est un enjeu majeur pour la stabilité régionale.",
+      "lieu": "Borno, Nigeria",
+      "lat": 12.1875392,
+      "lon": 13.3080034,
+      "implications": [
+        "Persistance de la menace jihadiste",
+        "Impact humanitaire continu",
+        "Besoin de coordination militaire régionale"
+      ],
+      "recommandations": [
+        "Analyser les dynamiques locales de l'ISWAP",
+        "Évaluer les capacités de réponse nigérianes",
+        "Renforcer les mécanismes de coordination régionale"
+      ]
+    },
     {
       "id": "u-maliactu-net-aes-mali-burkina-niger-diplomatie-onu",
       "date": "2026-06-21",
@@ -625,131 +750,6 @@
       "lat": 32.4279,
       "lon": 53.688,
       "lieu": "Iran"
-    },
-    {
-      "id": "u-maliactu-net-lagriculture-resiliente-au-sahel-saa-mali-explore-de-nouv",
-      "date": "2026-06-17",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/lagriculture-resiliente-au-sahel-saa-mali-explore-de-nouvelles-voies/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18284.jpg",
-      "titre": "Forum agriculture résiliente Sahel Bamako juin 2026",
-      "resume": "Le Forum annuel de l'ONG Sasakawa Afrique sur l'agriculture résiliente réunit experts et acteurs du développement agricole à Bamako en juin 2026. Cette initiative explore des solutions innovantes pour l'agriculture sahélienne face aux défis climatiques.",
-      "detail": "La convergence d'experts agricoles à Bamako dénote une mobilisation régionale autour de l'innovation agricole. Sasakawa Afrique est reconnue pour son expertise en systèmes agricoles durables adaptés aux contextes arides. Les solutions explorées concernent probablement l'amélioration variétale, la gestion de l'eau et les techniques de culture conservation. Cette plateforme de partage de bonnes pratiques peut faciliter l'adoption de méthodes éprouvées par d'autres pays sahéliens.",
-      "implications": [
-        "Amélioration des rendements agricoles à travers diffusion innovations",
-        "Renforcement de la sécurité alimentaire par techniques durables",
-        "Capacitation des acteurs locaux en agriculture résiliente"
-      ],
-      "recommandations": [
-        "Identifier les innovations présentées applicable au contexte Mali",
-        "Évaluer les possibilités de financement de projets pilotes",
-        "Vérifier les engagements de suivi post-forum pour mise en œuvre"
-      ],
-      "lat": 12.6392,
-      "lon": -8.0029,
-      "lieu": "Bamako, Mali"
-    },
-    {
-      "id": "u-maliactu-net-appel-a-une-souverainete-mediatique-en-afrique-pour-2026",
-      "date": "2026-06-17",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/appel-a-une-souverainete-mediatique-en-afrique-pour-2026/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18291.jpg",
-      "titre": "Appel souveraineté médiatique Afrique 2026",
-      "resume": "Un rassemblement appelle à la souveraineté médiatique africaine et à une narration authentique des enjeux continentaux en 2026. L'initiative critique la dépendance des médias africains aux narrations externes.",
-      "detail": "L'appel à la souveraineté médiatique reflète une prise de conscience africaine sur le contrôle narratif des informations. Cette initiative cible la nécessité pour les médias africains de développer des capacités de production et distribution autonomes. L'enjeu est crucial car les narrations médiatiques influencent les perceptions sur la sécurité, la stabilité politique et les investissements. Un renforcement de la souveraineté médiatique africaine pourrait contrer la désinformation et améliorer la représentation authentique des réalités continentales.",
-      "implications": [
-        "Réduction de la dépendance aux agences de presse occidentales",
-        "Amélioration du contrôle narratif sur les enjeux de sécurité régionaux",
-        "Renforcement des capacités médiatiques africaines"
-      ],
-      "recommandations": [
-        "Analyser les acteurs médiatiques africains impliqués dans le mouvement",
-        "Identifier les initiatives concrètes de financement médiatique régional",
-        "Évaluer les risques de polarisation narrative intra-africaine"
-      ],
-      "lat": 12.6392,
-      "lon": -8.0029,
-      "lieu": "Bamako, Mali"
-    },
-    {
-      "id": "u-bamada-net-bamako-et-cotonou-affichent-leur-volonte-de-renforcer-leur-",
-      "date": "2026-06-10",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/bamako-et-cotonou-affichent-leur-volonte-de-renforcer-leur-cooperation",
-      "image": "http://bamada.net/wp-content/uploads/2026/06/assimi-goita-accueil-president-benin-Romuald-Wadagni-visite-travail-cooperation-billateral.jpg",
-      "titre": "Bamako et Cotonou renforcent leur coopération en sécurité et économie",
-      "resume": "Le président béninois Romuald Wadagni a rencontré le général Assimi Goïta à Bamako pour discuter de sécurité, économie et diplomatie.",
-      "detail": "Cette visite de travail confirme l'engagement du Bénin à soutenir la transition malienne malgré les tensions régionales. Les échanges portent sur des projets concrets de coopération sécuritaire et économique. Le Mali cherche à consolider ses alliances au Sahel face aux pressions internationales. Une dynamique diplomatique locale qui pourrait influencer les équilibres géopolitiques.",
-      "lieu": "Bamako, Mali",
-      "lat": 12.649319,
-      "lon": -8.000337,
-      "implications": [
-        "Renforcement potentiel des capacités militaires maliennes",
-        "Coopération économique accrue dans la zone",
-        "Impact sur les relations avec les partenaires internationaux"
-      ],
-      "recommandations": [
-        "Surveiller les annonces concrètes issues de cette coopération",
-        "Évaluer les retombées économiques pour les acteurs locaux",
-        "Analyser les réactions des groupes armés dans la région"
-      ]
-    },
-    {
-      "id": "u-bamada-net-gao-assistance-sanitaire-aux-deplaces",
-      "date": "2026-06-10",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/gao-assistance-sanitaire-aux-deplaces",
-      "image": "http://bamada.net/wp-content/uploads/2026/05/Deplace-faladie.jpg",
-      "titre": "Assistance sanitaire aux déplacés internes à Gao",
-      "resume": "L'ONG GREFFA a fourni une aide médicale aux déplacés internes de Gao via un projet financé par plusieurs partenaires internationaux.",
-      "detail": "L'opération vise à répondre aux besoins urgents des populations déplacées par les conflits dans le nord du Mali. L'aide comprend des consultations médicales gratuites et du matériel médical. Cette initiative montre la persistance des crises humanitaires malgré les efforts de reconstruction. Les déplacés restent vulnérables aux maladies et aux conditions précaires.",
-      "lieu": "Gao, Mali",
-      "lat": 16.2788129,
-      "lon": -0.0412392,
-      "implications": [
-        "Amélioration temporaire de l'accès aux soins pour les déplacés",
-        "Risque de dépendance aux ONG internationales",
-        "Pression persistante sur les ressources locales"
-      ],
-      "recommandations": [
-        "Cartographier les zones les plus touchées par les déplacements",
-        "Coordination renforcée avec les acteurs humanitaires",
-        "Évaluer l'impact à long terme de ces interventions"
-      ]
-    },
-    {
-      "id": "u-trthaber-com-haber-dunya-trump-bugun-irana-cok-sert-bir-sekilde-saldir",
-      "date": "2026-06-10",
-      "theatre": "moyen-orient",
-      "severite": "critique",
-      "source": "TRT Haber",
-      "source_url": "https://www.trthaber.com/haber/dunya/trump-bugun-irana-cok-sert-bir-sekilde-saldiracagiz-947788.html",
-      "image": "https://trthaberstatic.cdn.wp.trt.com.tr/resimler/2450000/abd-trump-iran-2450891.jpg",
-      "titre": "Trump menace d'attaques militaires contre l'Iran",
-      "resume": "Donald Trump annonce des frappes militaires contre l'Iran en représailles à l'abattage d'un hélicoptère américain.",
-      "detail": "Les déclarations de Trump s'inscrivent dans une escalade verbale déjà marquée entre les deux pays. Les cibles potentielles pourraient inclure des sites militaires ou des infrastructures stratégiques. Une escalade militaire directe aurait des conséquences régionales majeures. Les alliés des États-Unis dans la région pourraient être sollicités pour des soutiens logistiques.",
-      "lieu": "Iran",
-      "lat": 32.6475314,
-      "lon": 54.5643516,
-      "implications": [
-        "Risque immédiat de conflit armé ouvert",
-        "Impact sur les prix du pétrole et les marchés financiers",
-        "Mobilisation des réseaux proxy régionaux (Hezbollah, Houthis)"
-      ],
-      "recommandations": [
-        "Préparer des scénarios de crise pour les ressortissants en Iran",
-        "Surveiller les mouvements de troupes et de navires",
-        "Analyser les réactions des pays voisins (Irak, Arabie saoudite)"
-      ]
     }
   ]
 }
