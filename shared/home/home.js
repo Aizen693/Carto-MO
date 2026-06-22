@@ -799,25 +799,27 @@ function MediaFrame({
 const HOME_GET = [{
   tag: "La carte",
   t: "Une carte de situation",
-  d: "Chaque théâtre sur une carte interactive : la situation se lit dans son ensemble, là où il faudrait autrement compiler des dizaines d'articles.",
-  img: "/shared/home/assets/get-carte.jpg?v=20260604q",
-  vid: "/shared/home/assets/get-carte.mp4?v=20260604q",
+  d: "Chaque pays sur une carte interactive : incidents, acteurs et zones se lisent d'un coup d'oeil, là où il faudrait autrement compiler des dizaines d'articles.",
+  img: "/shared/home/assets/get-carte.jpg?v=20260622a",
+  vid: "/shared/home/assets/get-carte.mp4?v=20260622a",
   auto: true,
-  alt: "Cartes de situation Algor Int : Sahel, Moyen-Orient et Madagascar — incidents et flux géolocalisés"
+  alt: "Carte de situation Algor Access : incidents et acteurs géolocalisés, ici le Mali"
 }, {
-  tag: "Le brief",
-  t: "Des briefs prêts à l'emploi",
-  d: "Une synthèse de sécurité sur le secteur de votre choix, structurée pour aller à l'essentiel, claire, datée et sourcée.",
-  img: "/shared/home/assets/get-brief.jpg",
-  vid: "/shared/home/assets/preview-rapport.mp4",
-  alt: "Rapport analytique : répartition des événements par type et par pays"
+  tag: "L'analyse",
+  t: "Une lecture analytique immédiate",
+  d: "Pour chaque pays, la répartition des incidents par région, par type et par acteur, calculée automatiquement à partir des données collectées.",
+  img: "/shared/home/assets/get-analyse.jpg?v=20260622a",
+  vid: "/shared/home/assets/get-analyse.mp4?v=20260622a",
+  auto: true,
+  alt: "Panneau d'analyse : répartition des incidents par région, type et acteur"
 }, {
   tag: "L'accès",
   t: "Un accès continu",
-  d: "Plutôt qu'un rapport figé, un accès à une plateforme mise à jour en continu, consultable au moment où la décision se pose.",
-  img: "/shared/home/assets/get-acces.jpg?v=20260604q",
-  vid: "/shared/home/assets/get-acces.mp4?v=20260604q",
-  alt: "Plateforme Afrique Maritime : navires AIS et zones de risque en mer"
+  d: "Plutôt qu'un rapport figé, une plateforme mise à jour chaque semaine, consultable au moment où la décision se pose.",
+  img: "/shared/home/assets/get-acces.jpg?v=20260622a",
+  vid: "/shared/home/assets/get-acces.mp4?v=20260622a",
+  auto: true,
+  alt: "Plateforme Algor Access : couverture continue, ici la région des Grands Lacs"
 }];
 function GetSection() {
   // Les vidéos en lecture auto (data-auto) jouent quand elles entrent dans la vue
