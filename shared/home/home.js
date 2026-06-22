@@ -1163,10 +1163,18 @@ function DiffSection() {
   }, p.t), /*#__PURE__*/React.createElement("p", {
     className: "pillar__text"
   }, p.d)), /*#__PURE__*/React.createElement("span", {
-    className: "pillar__icon"
-  }, /*#__PURE__*/React.createElement(PillarIcon, {
-    name: p.icon
-  })))))));
+    className: "pillar__icon",
+    style: {
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
+      fontWeight: 700,
+      fontSize: '56px',
+      lineHeight: 1,
+      background: 'linear-gradient(130deg, #6B3FA0, #5650C6, #1E6FBE)',
+      WebkitBackgroundClip: 'text',
+      backgroundClip: 'text',
+      WebkitTextFillColor: 'transparent'
+    }
+  }, String(i + 1).padStart(2, '0')))))));
 }
 
 // ── 3. Pour qui — segments clients.
