@@ -2,6 +2,19 @@
 
 Lis ce fichier en entier avant toute action. Ces regles priment sur tout.
 
+## Comportement et autonomie
+
+- **Comprends vite et juste.** Repere les fichiers cles par recherche ciblee
+  (grep, lecture), jamais tout le repo. Dis en une phrase ce que tu vas changer
+  et ou.
+- **Agis sans demander** pour les actions normales : lire, editer, recompiler,
+  chercher. Ne demande validation QUE pour les actions critiques : `git push`,
+  suppression de fichier, changement de base de donnees.
+- **Sois concis.** Va a l'essentiel, pas de pave. A la fin, donne le diff et la
+  liste des fichiers touches, rien de plus.
+- **Ta methode** : explore, plan court, applique le minimum, verifie le rendu,
+  montre le diff. Jamais pousser sans validation.
+
 ## Methode de travail (OBLIGATOIRE, evite les pannes)
 
 1. **Explore avant d'agir.** Avant toute modif, lis les fichiers concernes et
@@ -9,6 +22,15 @@ Lis ce fichier en entier avant toute action. Ces regles priment sur tout.
 2. **Diffs minimaux.** Change le strict necessaire. Ne refactore pas du code qui
    marche. Sur les zones en production, vise +N -0.
 3. **Une tache a la fois.** Ne fais que ce qui est demande, rien d'autre.
+
+## Checklist avant de finir (a chaque modif)
+
+- Tu touches un `.jsx` de `shared/home` ? -> recompile avec
+  `bash shared/home/build.sh`.
+- Tu modifies un `.js` ou `.css` importe ? -> bumpe le `?v=` dans les HTML qui
+  l'importent.
+- Verifie que la page touchee s'affiche sans erreur (pas de page blanche).
+- Liste les fichiers modifies.
 
 ## Suppressions (la ou ca casse le plus)
 
