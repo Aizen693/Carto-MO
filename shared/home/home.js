@@ -890,7 +890,10 @@ function GetSection() {
     playsInline: true,
     preload: "metadata",
     style: {
-      background: '#F1EDF7'
+      backgroundImage: `url("${g.img}")`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
     },
     "aria-label": g.alt,
     tabIndex: 0,

@@ -530,7 +530,8 @@ function GetSection() {
               onMouseLeave={(e) => { if (g.auto) return; const v = e.currentTarget.querySelector('video'); if (v) { v.pause(); v.currentTime = 0; } }}
               onClick={(e) => { if (g.auto) return; const v = e.currentTarget.querySelector('video'); if (!v) return; if (v.paused) v.play().catch(() => {}); else { v.pause(); v.currentTime = 0; } }}>
               <div className="get-card__media">
-                <video poster={g.img} muted loop playsInline preload="metadata" style={{background:'#F1EDF7'}}
+                <video poster={g.img} muted loop playsInline preload="metadata"
+                       style={{ backgroundImage: `url("${g.img}")`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
                        aria-label={g.alt} tabIndex={0}
                        onFocus={(e) => { e.currentTarget.play().catch(() => {}); }}
                        onBlur={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}>
