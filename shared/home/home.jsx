@@ -477,25 +477,25 @@ const HOME_GET = [
     t: "Une carte de situation",
     d: "Chaque pays sur une carte interactive : incidents, acteurs et zones se lisent d'un coup d'oeil, là où il faudrait autrement compiler des dizaines d'articles.",
     img: "/shared/home/assets/get-carte.jpg?v=20260622c",
-    vid: "/shared/home/assets/get-carte.mp4?v=20260622c",
+    vid: "/shared/home/assets/get-carte.mp4?v=20260622f",
     gif: "/shared/home/assets/get-carte.gif?v=20260622e",
-    auto: true,
+    auto: false,
     alt: "Carte de situation Algor Access : incidents et acteurs géolocalisés, ici le Mali" },
   { tag: "L'analyse",
     t: "Une lecture analytique immédiate",
     d: "Pour chaque pays, la répartition des incidents par région, par type et par acteur, calculée automatiquement à partir des données collectées.",
     img: "/shared/home/assets/get-analyse.jpg?v=20260622c",
-    vid: "/shared/home/assets/get-analyse.mp4?v=20260622c",
+    vid: "/shared/home/assets/get-analyse.mp4?v=20260622f",
     gif: "/shared/home/assets/get-analyse.gif?v=20260622e",
-    auto: true,
+    auto: false,
     alt: "Panneau d'analyse : répartition des incidents par région, type et acteur" },
   { tag: "L'accès",
     t: "Un accès continu",
     d: "Plutôt qu'un rapport figé, une plateforme mise à jour chaque semaine, consultable au moment où la décision se pose.",
     img: "/shared/home/assets/get-acces.jpg?v=20260622c",
-    vid: "/shared/home/assets/get-acces.mp4?v=20260622c",
+    vid: "/shared/home/assets/get-acces.mp4?v=20260622f",
     gif: "/shared/home/assets/get-acces.gif?v=20260622e",
-    auto: true,
+    auto: false,
     alt: "Plateforme Algor Access : couverture continue, ici la région des Grands Lacs" },
 ];
 
@@ -530,8 +530,16 @@ function GetSection() {
               onMouseLeave={(e) => { if (g.auto) return; const v = e.currentTarget.querySelector('video'); if (v) { v.pause(); v.currentTime = 0; } }}
               onClick={(e) => { if (g.auto) return; const v = e.currentTarget.querySelector('video'); if (!v) return; if (v.paused) v.play().catch(() => {}); else { v.pause(); v.currentTime = 0; } }}>
               <div className="get-card__media">
-                <img className="get-card__gif" src={g.gif} alt={g.alt} loading="lazy"
-                     style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <video poster={g.img} muted loop playsInline preload="none"
+                       aria-label={g.alt} tabIndex={0}
+                       onFocus={(e) => { e.currentTarget.play().catch(() => {}); }}
+                       onBlur={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}>
+                  <source src={g.vid} type="video/mp4" />
+                </video>
+                <span className="get-card__playhint" aria-hidden="true">
+                  <svg width="13" height="13" viewBox="0 0 18 18" fill="currentColor"><path d="M5 3.5v11l10-5.5z" /></svg>
+                  Survolez pour l'aperçu
+                </span>
               </div>
               <div className="get-card__body">
                 <span className="get-card__tag">{g.tag}</span>
