@@ -1079,10 +1079,6 @@ const state = {
 let map;
 
 async function init() {
-  // La carte démo est désormais intégrée en iframe (carte-demo.html). Sans conteneur
-  // #map sur cette page, l'ancien moteur ne s'initialise pas (le formulaire et le reste
-  // de la page continuent de fonctionner normalement).
-  if (!document.getElementById('map')) return;
   // Vitrine publique : seul le cas demo (Societe Lumiere) est servi ici.
   // Les dossiers clients (Castel, etc.) ne sont JAMAIS accessibles depuis cette page,
   // meme via ?case=… — ils vivent derriere le verrou staff (cf. carte-afrique.html).
@@ -1093,11 +1089,19 @@ async function init() {
   const res = await fetch('./data/' + file + '?v=' + Date.now());
   state.data = await res.json();
   if (state.data.campagne && state.data.campagne.illustratif) showIllustratifBanner();
+
+  // Acteurs principaux / victimes ciblees : section toujours presente sur la page,
+  // independante de la carte. A rendre meme quand #map est absent.
+  if (document.getElementById('av-acteurs')) renderActeursVictimes();
+
+  // La carte démo est désormais intégrée en iframe (carte-demo.html). Sans conteneur
+  // #map sur cette page, l'ancien moteur (carte, sidebar, timeline, hero stats) ne
+  // s'initialise pas (le reste de la page continue de fonctionner normalement).
+  if (!document.getElementById('map')) return;
   renderHeroStats();
   renderSidebar();
   buildMap();
   renderTimeline();
-  renderActeursVictimes();
 }
 
 function showIllustratifBanner(){
