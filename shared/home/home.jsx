@@ -660,12 +660,11 @@ function DiffSection() {
         <div className="pillar-list">
           {HOME_DIFF.map((p, i) => (
             <article className="pillar" key={i}>
-              <span className="pillar__num">{String(i + 1).padStart(2, '0')}</span>
+              <span className="pillar__icon"><PillarIcon name={p.icon} /></span>
               <div className="pillar__body">
                 <h3 className="pillar__title">{p.t}</h3>
                 <p className="pillar__text">{p.d}</p>
               </div>
-              <span className="pillar__icon" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, fontSize: '56px', lineHeight: 1, background: 'linear-gradient(130deg, #6B3FA0, #5650C6, #1E6FBE)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{String(i + 1).padStart(2, '0')}</span>
             </article>
           ))}
         </div>
