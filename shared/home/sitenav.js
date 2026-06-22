@@ -55,6 +55,10 @@
     var url;
     try { url = new URL(href, location.href); } catch (_) { return null; }
     if (url.origin !== location.origin) return null;
+    // L'accueil (/) est l'app React, sans <main> a swapper : on laisse le navigateur
+    // faire une navigation pleine et fiable. Garantit le retour accueil via le logo
+    // depuis n'importe quelle rubrique (sinon soft-nav async fragile cote Safari).
+    if (url.pathname === '/') return null;
     if (url.pathname === location.pathname && url.search === location.search) return null;
     return url;
   }
