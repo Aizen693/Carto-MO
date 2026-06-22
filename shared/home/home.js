@@ -888,7 +888,10 @@ function GetSection() {
     muted: true,
     loop: true,
     playsInline: true,
-    preload: "none",
+    preload: "metadata",
+    style: {
+      background: '#F1EDF7'
+    },
     "aria-label": g.alt,
     tabIndex: 0,
     onFocus: e => {
