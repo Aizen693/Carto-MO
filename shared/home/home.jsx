@@ -322,8 +322,6 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
       <DiffSection />
       <AudienceSection />
       <CompareSection />
-
-      <VideoBand style={videoStyle} />
     </main>
     <SiteFooter />
     </>

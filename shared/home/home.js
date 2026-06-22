@@ -562,7 +562,7 @@ function HomeView({
     className: "hero__title"
   }, "Anticiper les risques", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "op\xE9rationnels")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Th\xE9\xE2tres g\xE9opolitiques suivis en continu pour les directions s\xFBret\xE9, cabinets d'analyse et r\xE9dactions sp\xE9cialis\xE9es. Solution souveraine française, vos données hébergées en Europe : chaque \xE9v\xE9nement sourc\xE9, dat\xE9 et auditable."), /*#__PURE__*/React.createElement("div", {
+  }, "Th\xE9\xE2tres g\xE9opolitiques suivis en continu pour les directions s\xFBret\xE9, cabinets d'analyse et r\xE9dactions sp\xE9cialis\xE9es. Solution souveraine fran\xE7aise, vos donn\xE9es h\xE9berg\xE9es en Europe : chaque \xE9v\xE9nement sourc\xE9, dat\xE9 et auditable."), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
   }, /*#__PURE__*/React.createElement("a", {
     className: "btn btn--primary btn--lg btn--neon",
@@ -600,9 +600,7 @@ function HomeView({
     className: "hero__demo-warn"
   }, "Donn\xE9es fictives, \xE0 titre d'illustration du rendu de nos cartes.")))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"
-  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(VeilleSystem, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null), /*#__PURE__*/React.createElement(VideoBand, {
-    style: videoStyle
-  })), /*#__PURE__*/React.createElement(SiteFooter, null));
+  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(VeilleSystem, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null)), /*#__PURE__*/React.createElement(SiteFooter, null));
 }
 
 // ─── Pied de page — sobre, dans la DA client (violet/blanc/Jakarta).
