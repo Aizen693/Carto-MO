@@ -170,8 +170,7 @@ function App() {
         <HomeView
           onEnter={() => setView('platform')}
           onConsole={() => setView('console')}
-          clock={clock}
-          videoStyle="strip" />
+          clock={clock} />
       )}
       {view === 'console' && (
         <ConsoleView
