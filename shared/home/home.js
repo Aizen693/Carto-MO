@@ -753,7 +753,7 @@ function SectionHead({
 }) {
   return /*#__PURE__*/React.createElement("div", {
     className: "home-sec__head"
-  }, /*#__PURE__*/React.createElement("span", {
+  }, eyebrow && /*#__PURE__*/React.createElement("span", {
     className: "eyebrow"
   }, eyebrow), /*#__PURE__*/React.createElement("h2", {
     className: "home-sec__title"
@@ -1145,7 +1145,6 @@ function DiffSection() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "home-sec__wrap"
   }, /*#__PURE__*/React.createElement(SectionHead, {
-    eyebrow: "Notre approche",
     title: "Notre approche du",
     em: "renseignement",
     intro: "Trois principes guident la fa\xE7on dont nous traitons et restituons l'information."
@@ -1188,7 +1187,6 @@ function AudienceSection() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "home-sec__wrap"
   }, /*#__PURE__*/React.createElement(SectionHead, {
-    eyebrow: "Pour qui",
     title: "\xC0 qui s'adresse",
     em: "Algor Access",
     intro: "Des profils diff\xE9rents, un m\xEAme besoin : une lecture fiable et dat\xE9e des th\xE9\xE2tres \xE0 risque."

@@ -2197,7 +2197,7 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   gap: 0;
   background: none;
   border: none;
-  border-radius: 0;
+  border-radius: 14px;
   aspect-ratio: 4 / 3;
   overflow: hidden;
 }

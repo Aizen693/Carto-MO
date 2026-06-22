@@ -449,7 +449,7 @@ function ProductionSection() {
 function SectionHead({ eyebrow, title, em, intro }) {
   return (
     <div className="home-sec__head">
-      <span className="eyebrow">{eyebrow}</span>
+      {eyebrow && <span className="eyebrow">{eyebrow}</span>}
       <h2 className="home-sec__title">{title} <em>{em}</em></h2>
       {intro && <p className="home-sec__intro">{intro}</p>}
     </div>
@@ -653,7 +653,6 @@ function DiffSection() {
     <section className="home-sec" id="difference">
       <div className="home-sec__wrap">
         <SectionHead
-          eyebrow="Notre approche"
           title="Notre approche du"
           em="renseignement"
           intro="Trois principes guident la façon dont nous traitons et restituons l'information." />
@@ -690,7 +689,6 @@ function AudienceSection() {
     <section className="home-sec home-sec--alt" id="pour-qui">
       <div className="home-sec__wrap">
         <SectionHead
-          eyebrow="Pour qui"
           title="À qui s'adresse"
           em="Algor Access"
           intro="Des profils différents, un même besoin : une lecture fiable et datée des théâtres à risque." />
