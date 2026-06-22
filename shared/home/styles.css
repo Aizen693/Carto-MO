@@ -2864,7 +2864,7 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   aspect-ratio: 4 / 3;
   padding: 0;
   gap: 0;
-  background: #0B0716;
+  background: var(--violet-grad);
   border: 1px solid var(--violet-bd);
   border-radius: 14px;
   overflow: hidden;
@@ -2875,11 +2875,6 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   height: 100%;
   object-fit: cover;
   display: block;
-  animation:
-    swarmHueShift 18s ease-in-out infinite,
-    swarmBreath   22s ease-in-out infinite;
-  transform-origin: 50% 50%;
-  will-change: filter, transform;
 }
 /* Respiration tres lente : zoom + petit pan, donne l'impression que la photo vit. */
 @keyframes swarmBreath {
@@ -2892,9 +2887,9 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 .media-frame--swarm .swarm-img__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg,
-    rgba(11, 7, 22, 0.18) 0%,
-    rgba(46, 24, 87, 0.12) 100%);
+  background: linear-gradient(160deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0) 42%);
   pointer-events: none;
 }
 .media-frame--swarm .swarm-fx {

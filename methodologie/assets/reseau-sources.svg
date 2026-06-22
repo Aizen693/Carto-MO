@@ -1,161 +1,103 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Illustration abstraite : réseau de sources collectées, croisées et cotées sur fond cartographique">
-  <!-- Illustration generee pour Algor Access — reseau de sources abstrait.
-       Aucune geographie reelle. Palette DA : violets B596E0/8B5FBF/6B3FA0,
-       bleu 5BB0F2, or c49a3c. Animations coupees si prefers-reduced-motion. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Reseau de sources : collecte, croisement et cotation relies par des liens courbes, en blanc sur le degrade Algor Int violet vers bleu">
+  <!-- Illustration Algor Access — reseau de sources abstrait sur degrade maison.
+       Aucune geographie reelle. DA : degrade signature #6B3FA0 -> #5650C6 -> #1E6FBE,
+       reseau en blanc. Animations coupees si prefers-reduced-motion. Zero or, zero sombre. -->
   <defs>
-    <radialGradient id="bg" cx="32%" cy="38%" r="85%">
-      <stop offset="0%" stop-color="#1D1442"/>
-      <stop offset="55%" stop-color="#130D2C"/>
-      <stop offset="100%" stop-color="#0B0718"/>
-    </radialGradient>
-    <radialGradient id="vignette" cx="50%" cy="50%" r="72%">
-      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
-      <stop offset="78%" stop-color="#000000" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.42"/>
-    </radialGradient>
-    <linearGradient id="lien" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#8B5FBF"/>
-      <stop offset="100%" stop-color="#5BB0F2"/>
-    </linearGradient>
-    <radialGradient id="haloViolet" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#B596E0" stop-opacity="0.50"/>
-      <stop offset="45%" stop-color="#B596E0" stop-opacity="0.16"/>
-      <stop offset="100%" stop-color="#B596E0" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="haloBleu" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#5BB0F2" stop-opacity="0.50"/>
-      <stop offset="45%" stop-color="#5BB0F2" stop-opacity="0.16"/>
-      <stop offset="100%" stop-color="#5BB0F2" stop-opacity="0"/>
-    </radialGradient>
-    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="1.1"/>
-    </filter>
     <style>
-      @media (prefers-reduced-motion: no-preference) {
-        .flow { animation: flow 9s linear infinite; }
-        @keyframes flow { to { stroke-dashoffset: -72; } }
-        .pulse  { animation: pulse 4.2s ease-in-out infinite; }
-        .pulse2 { animation: pulse 4.2s ease-in-out 2.1s infinite; }
-        @keyframes pulse { 0%,100% { opacity: 0.18; } 50% { opacity: 0.65; } }
-        .scintille { animation: sc 5.6s ease-in-out infinite; }
-        @keyframes sc { 0%,100% { opacity: 0.55; } 50% { opacity: 1; } }
+      @media (prefers-reduced-motion: no-preference){
+        .flow{stroke-dasharray:3 10;animation:dash 6s linear infinite;}
+        .flow2{stroke-dasharray:3 10;animation:dash 7.5s linear infinite;}
+        .pulse{animation:pulse 5s ease-in-out infinite;}
+        .pulse2{animation:pulse 5s ease-in-out infinite;animation-delay:1.6s;}
+        .pulse3{animation:pulse 5s ease-in-out infinite;animation-delay:3.2s;}
+        .twinkle{animation:tw 6s ease-in-out infinite;}
       }
+      @keyframes dash{to{stroke-dashoffset:-130;}}
+      @keyframes pulse{0%,100%{opacity:.30;transform:scale(.9);}50%{opacity:.70;transform:scale(1.2);}}
+      @keyframes tw{0%,100%{opacity:.45;}50%{opacity:.95;}}
     </style>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="92%">
+      <stop offset="0%" stop-color="#6B3FA0"/>
+      <stop offset="48%" stop-color="#5650C6"/>
+      <stop offset="100%" stop-color="#1E6FBE"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.42"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="core" cx="38%" cy="32%" r="74%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#D8CCF2"/>
+    </radialGradient>
   </defs>
 
-  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect x="0" y="0" width="800" height="600" fill="url(#bg)"/>
 
   <!-- graticule -->
-  <g stroke="#FFFFFF" stroke-width="1" opacity="0.04">
-    <path d="M100 0V600M200 0V600M300 0V600M400 0V600M500 0V600M600 0V600M700 0V600"/>
-    <path d="M0 100H800M0 200H800M0 300H800M0 400H800M0 500H800"/>
-  </g>
-  <g stroke="#B596E0" stroke-width="1" opacity="0.09">
-    <path d="M400 0V600"/><path d="M0 300H800"/>
+  <g stroke="#FFFFFF" stroke-width="1" opacity="0.07">
+    <line x1="0" y1="120" x2="800" y2="120"/><line x1="0" y1="240" x2="800" y2="240"/><line x1="0" y1="360" x2="800" y2="360"/><line x1="0" y1="480" x2="800" y2="480"/>
+    <line x1="160" y1="0" x2="160" y2="600"/><line x1="320" y1="0" x2="320" y2="600"/><line x1="480" y1="0" x2="480" y2="600"/><line x1="640" y1="0" x2="640" y2="600"/>
   </g>
 
-  <!-- territoire invente : littoral + masse douce -->
-  <path d="M-20 472 C 80 448 138 470 224 416 C 318 357 296 284 376 242 C 458 198 524 234 606 192 C 676 156 706 108 820 88 L 820 -20 L -20 -20 Z"
-        fill="#B596E0" opacity="0.05"/>
-  <path d="M-20 472 C 80 448 138 470 224 416 C 318 357 296 284 376 242 C 458 198 524 234 606 192 C 676 156 706 108 820 88"
-        fill="none" stroke="#B596E0" stroke-width="1.3" opacity="0.28" filter="url(#soft)"/>
-  <path d="M-20 472 C 80 448 138 470 224 416 C 318 357 296 284 376 242 C 458 198 524 234 606 192 C 676 156 706 108 820 88"
-        fill="none" stroke="#CDB6EE" stroke-width="0.6" opacity="0.35"/>
-
-  <!-- courbes de niveau organiques, massif ouest -->
-  <g fill="none" stroke="#8B5FBF">
-    <path d="M132 270 C 122 212 178 168 244 176 C 312 184 352 232 338 286 C 324 338 252 360 196 340 C 152 324 140 306 132 270 Z" opacity="0.16" stroke-width="1.1"/>
-    <path d="M160 268 C 154 224 196 192 248 198 C 302 205 332 242 320 282 C 308 320 254 336 212 320 C 178 308 166 296 160 268 Z" opacity="0.13" stroke-width="1"/>
-    <path d="M190 264 C 187 234 214 214 250 219 C 287 224 308 250 299 277 C 290 303 254 313 226 302 C 203 293 193 284 190 264 Z" opacity="0.10" stroke-width="1"/>
+  <!-- territoire invente : littoral + courbes douces, en blanc tres discret -->
+  <g fill="none" stroke="#FFFFFF" stroke-linecap="round">
+    <path d="M70 470 C 150 430, 240 452, 300 408 C 372 356, 408 392, 488 350 C 560 312, 632 336, 730 296" stroke-width="1.4" opacity="0.20"/>
+    <path d="M96 512 C 188 478, 276 496, 344 452 C 418 404, 452 438, 528 398 C 600 360, 668 380, 752 344" stroke-width="1.1" opacity="0.13"/>
+    <path d="M130 168 C 214 150, 286 188, 360 172 C 452 152, 520 196, 612 176 C 668 164, 706 178, 742 168" stroke-width="1.2" opacity="0.16"/>
   </g>
-  <!-- massif sud-est -->
-  <g fill="none" stroke="#8B5FBF">
-    <path d="M438 392 C 446 330 520 296 596 314 C 670 332 706 388 686 440 C 666 490 580 506 514 482 C 462 462 432 438 438 392 Z" opacity="0.15" stroke-width="1.1"/>
-    <path d="M470 392 C 477 346 532 322 590 336 C 645 350 672 392 657 430 C 642 466 578 478 528 460 C 489 445 466 426 470 392 Z" opacity="0.12" stroke-width="1"/>
-    <path d="M502 390 C 507 360 543 344 581 354 C 617 363 635 390 625 415 C 614 439 572 447 540 435 C 515 425 499 412 502 390 Z" opacity="0.09" stroke-width="1"/>
+
+  <!-- anneaux de portee autour des hubs -->
+  <g stroke="#FFFFFF" stroke-width="1" opacity="0.12">
+    <circle cx="212" cy="262" r="74" fill="none"/><circle cx="212" cy="262" r="120" fill="none"/>
+    <circle cx="518" cy="332" r="70" fill="none"/>
+    <circle cx="642" cy="168" r="64" fill="none"/><circle cx="642" cy="168" r="104" fill="none"/>
   </g>
 
   <!-- liens de collecte -->
-  <g fill="none" stroke="url(#lien)" stroke-width="1" opacity="0.40">
-    <path d="M212 262 Q 152 192 92 122"/>
-    <path d="M212 262 Q 182 222 162 182"/>
-    <path d="M212 262 Q 257 177 302 92"/>
-    <path d="M212 262 Q 147 282 82 302"/>
-    <path d="M212 262 Q 182 342 152 422"/>
-    <path d="M212 262 Q 237 322 262 382"/>
-    <path d="M518 332 Q 475 257 432 182"/>
-    <path d="M518 332 Q 445 317 372 302"/>
-    <path d="M518 332 Q 442 422 362 510"/>
-    <path d="M518 332 Q 540 407 562 480"/>
-    <path d="M518 332 Q 610 377 702 422"/>
-    <path d="M642 168 Q 662 130 682 92"/>
-    <path d="M642 168 Q 562 120 482 72"/>
-    <path d="M642 168 Q 692 215 742 262"/>
+  <g stroke="#FFFFFF" fill="none" stroke-linecap="round">
+    <path d="M212 262 C 320 232, 430 268, 518 332" stroke-width="2" opacity="0.55"/>
+    <path d="M518 332 C 600 290, 614 222, 642 168" stroke-width="2" opacity="0.55"/>
+    <path d="M212 262 C 380 160, 520 150, 642 168" stroke-width="1.6" opacity="0.38"/>
+    <path d="M212 262 L 118 168" stroke-width="1.3" opacity="0.45"/><path d="M212 262 L 128 318" stroke-width="1.3" opacity="0.45"/><path d="M212 262 L 174 372" stroke-width="1.3" opacity="0.45"/><path d="M212 262 L 286 350" stroke-width="1.3" opacity="0.45"/><path d="M212 262 L 300 196" stroke-width="1.3" opacity="0.45"/><path d="M212 262 L 232 150" stroke-width="1.3" opacity="0.45"/>
+    <path d="M518 332 L 458 428" stroke-width="1.3" opacity="0.45"/><path d="M518 332 L 560 418" stroke-width="1.3" opacity="0.45"/><path d="M518 332 L 614 392" stroke-width="1.3" opacity="0.45"/><path d="M518 332 L 436 268" stroke-width="1.3" opacity="0.45"/><path d="M518 332 L 600 290" stroke-width="1.3" opacity="0.45"/>
+    <path d="M642 168 L 716 110" stroke-width="1.3" opacity="0.45"/><path d="M642 168 L 730 198" stroke-width="1.3" opacity="0.45"/><path d="M642 168 L 572 102" stroke-width="1.3" opacity="0.45"/>
   </g>
 
-  <!-- croisement entre hubs : flux animes -->
-  <g fill="none" stroke="#5BB0F2" stroke-width="1.2" stroke-linecap="round">
-    <path class="flow" d="M212 262 Q 366 272 518 332" stroke-dasharray="3 9" opacity="0.65"/>
-    <path class="flow" d="M518 332 Q 580 252 642 168" stroke-dasharray="3 9" opacity="0.55"/>
-    <path class="flow" d="M642 168 Q 424 196 212 262" stroke-dasharray="3 9" opacity="0.45"/>
+  <!-- flux animes entre hubs -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" opacity="0.92">
+    <path class="flow" d="M212 262 C 320 232, 430 268, 518 332"/>
+    <path class="flow2" d="M518 332 C 600 290, 614 222, 642 168"/>
   </g>
 
   <!-- sources satellites -->
-  <g fill="#C8B0EA">
-    <circle cx="92" cy="122" r="2.8" class="scintille"/>
-    <circle cx="162" cy="182" r="2.2"/>
-    <circle cx="302" cy="92" r="2.8"/>
-    <circle cx="82" cy="302" r="2.2" class="scintille"/>
-    <circle cx="152" cy="422" r="2.8"/>
-    <circle cx="262" cy="382" r="2.2"/>
-    <circle cx="432" cy="182" r="2.8" class="scintille"/>
-    <circle cx="372" cy="302" r="2.2"/>
-    <circle cx="362" cy="510" r="2.8"/>
-    <circle cx="562" cy="480" r="2.2" class="scintille"/>
-    <circle cx="702" cy="422" r="2.8"/>
-    <circle cx="682" cy="92" r="2.2"/>
-    <circle cx="482" cy="72" r="2.8" class="scintille"/>
-    <circle cx="742" cy="262" r="2.2"/>
+  <g fill="#FFFFFF">
+    <circle class="twinkle" cx="118" cy="168" r="4.5"/><circle class="twinkle" cx="128" cy="318" r="4" style="animation-delay:.8s"/><circle class="twinkle" cx="174" cy="372" r="4" style="animation-delay:1.5s"/><circle class="twinkle" cx="286" cy="350" r="4.5" style="animation-delay:2.2s"/><circle class="twinkle" cx="300" cy="196" r="4" style="animation-delay:.4s"/><circle class="twinkle" cx="232" cy="150" r="4" style="animation-delay:3s"/><circle class="twinkle" cx="458" cy="428" r="4" style="animation-delay:1.1s"/><circle class="twinkle" cx="560" cy="418" r="4.5" style="animation-delay:2.6s"/><circle class="twinkle" cx="614" cy="392" r="4" style="animation-delay:.6s"/><circle class="twinkle" cx="436" cy="268" r="4" style="animation-delay:1.9s"/><circle class="twinkle" cx="716" cy="110" r="4.5" style="animation-delay:3.4s"/><circle class="twinkle" cx="730" cy="198" r="4" style="animation-delay:.9s"/><circle class="twinkle" cx="572" cy="102" r="4" style="animation-delay:2.4s"/><circle class="twinkle" cx="600" cy="290" r="3.5" style="animation-delay:1.3s"/>
+  </g>
+  <g fill="none" stroke="#FFFFFF" stroke-width="1.4" opacity="0.5">
+    <circle cx="118" cy="168" r="8"/><circle cx="286" cy="350" r="8"/><circle cx="300" cy="196" r="8"/><circle cx="560" cy="418" r="8"/><circle cx="716" cy="110" r="8"/><circle cx="572" cy="102" r="8"/>
   </g>
 
-  <!-- hub A — collecte (violet) -->
-  <circle cx="212" cy="262" r="46" fill="url(#haloViolet)"/>
-  <circle cx="212" cy="262" r="4.8" fill="#E9DFF8"/>
-  <circle cx="212" cy="262" r="5.6" fill="none" stroke="#B596E0" stroke-width="1.4" opacity="0.9"/>
-  <circle cx="212" cy="262" r="12" fill="none" stroke="#B596E0" stroke-width="1" class="pulse"/>
-  <circle cx="212" cy="262" r="20" fill="none" stroke="#B596E0" stroke-width="0.7" class="pulse2"/>
-
-  <!-- hub B — croisement (bleu, croisee de visee) -->
-  <circle cx="518" cy="332" r="46" fill="url(#haloBleu)"/>
-  <circle cx="518" cy="332" r="4.4" fill="#E4F2FE"/>
-  <circle cx="518" cy="332" r="5.2" fill="none" stroke="#5BB0F2" stroke-width="1.4" opacity="0.9"/>
-  <circle cx="518" cy="332" r="13" fill="none" stroke="#5BB0F2" stroke-width="1" class="pulse2"/>
-  <path d="M518 313v-9M518 351v9M499 332h-9M537 332h9" stroke="#5BB0F2" stroke-width="1.1" opacity="0.75"/>
-
-  <!-- hub C — cotation (violet + diamant or) -->
-  <circle cx="642" cy="168" r="38" fill="url(#haloViolet)"/>
-  <circle cx="642" cy="168" r="4" fill="#E9DFF8"/>
-  <circle cx="642" cy="168" r="10" fill="none" stroke="#B596E0" stroke-width="0.9" class="pulse"/>
-  <rect x="-4.4" y="-4.4" width="8.8" height="8.8" transform="translate(660 148) rotate(45)" fill="#c49a3c" opacity="0.95"/>
-  <rect x="-2.4" y="-2.4" width="4.8" height="4.8" transform="translate(302 92) rotate(45)" fill="#c49a3c" opacity="0.6"/>
-
-  <!-- etiquettes mono -->
-  <g font-family="ui-monospace, Menlo, monospace" font-size="11" letter-spacing="1.5">
-    <text x="234" y="244" fill="#A99FC6">S-07 · COLLECTE</text>
-    <text x="540" y="316" fill="#8FB8DC">S-12 · CROISEMENT</text>
-    <text x="546" y="142" fill="#CDB6EE">S-23 · COTATION</text>
-    <text x="688" y="142" fill="#c49a3c">B2</text>
+  <!-- halos des hubs -->
+  <g>
+    <circle class="pulse" cx="212" cy="262" r="62" fill="url(#halo)" style="transform-origin:212px 262px"/>
+    <circle class="pulse2" cx="518" cy="332" r="58" fill="url(#halo)" style="transform-origin:518px 332px"/>
+    <circle class="pulse3" cx="642" cy="168" r="56" fill="url(#halo)" style="transform-origin:642px 168px"/>
   </g>
 
-  <!-- echelle fictive + cadre HUD -->
-  <g stroke="#9089AA" stroke-width="1" opacity="0.55">
-    <path d="M48 552h96M48 547v10M96 549v6M144 547v10"/>
-  </g>
-  <text x="48" y="538" font-family="ui-monospace, Menlo, monospace" font-size="9" letter-spacing="1.2" fill="#9089AA" opacity="0.8">ECHELLE INDICATIVE</text>
-  <g stroke="#B596E0" stroke-width="1.2" opacity="0.5" fill="none">
-    <path d="M24 44V24H44"/><path d="M756 24H776V44"/>
-    <path d="M776 556V576H756"/><path d="M44 576H24V556"/>
+  <!-- hubs : noyaux blancs -->
+  <g>
+    <circle cx="212" cy="262" r="22" fill="#FFFFFF" opacity="0.30"/><circle cx="212" cy="262" r="16" fill="url(#core)"/><circle cx="212" cy="262" r="6" fill="#6B3FA0" opacity="0.55"/>
+    <circle cx="518" cy="332" r="20" fill="#FFFFFF" opacity="0.30"/><circle cx="518" cy="332" r="14" fill="url(#core)"/><circle cx="518" cy="332" r="5" fill="#1E6FBE" opacity="0.6"/>
+    <circle cx="642" cy="168" r="22" fill="#FFFFFF" opacity="0.30"/><circle cx="642" cy="168" r="16" fill="url(#core)"/>
+    <g transform="translate(642 168) rotate(45)"><rect x="-6.5" y="-6.5" width="13" height="13" rx="2.5" fill="#FFFFFF"/></g>
+    <g transform="translate(642 168) rotate(45)"><rect x="-3" y="-3" width="6" height="6" rx="1.4" fill="#5650C6" opacity="0.85"/></g>
   </g>
 
-  <rect width="800" height="600" fill="url(#vignette)"/>
+  <!-- etiquettes Plus Jakarta -->
+  <g font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="600" font-size="16" fill="#FFFFFF">
+    <text x="212" y="312" text-anchor="middle">Collecte</text>
+    <text x="518" y="380" text-anchor="middle">Croisement</text>
+    <text x="642" y="216" text-anchor="middle">Cotation</text>
+  </g>
 </svg>
