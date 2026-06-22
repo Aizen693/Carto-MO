@@ -322,6 +322,8 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
       <DiffSection />
       <AudienceSection />
       <CompareSection />
+
+      <VideoBand style={videoStyle} />
     </main>
     <SiteFooter />
     </>
@@ -745,7 +747,85 @@ function CompareSection() {
   );
 }
 
+const HOME_VIDEOS = [
+  { cat: 'Veille',     title: 'Cartographie OSINT en temps réel',                meta: 'Plateforme · 2 min 14',    duration: '2:14' },
+  { cat: 'Influence',  title: 'Analyse multicouche du théâtre sahélien',         meta: 'Étude de cas · 3 min 02',  duration: '3:02' },
+  { cat: 'Protection', title: 'Évaluation de menaces sur les infrastructures',   meta: 'Mission · 4 min 28',       duration: '4:28' },
+  { cat: 'Méthode',    title: 'De la donnée brute au rapport décisionnel',       meta: 'Coulisses · 2 min 47',     duration: '2:47' },
+  { cat: 'Terrain',    title: 'Réseaux djihadistes au Sahel : pattern 2026',     meta: 'Décryptage · 5 min 12',    duration: '5:12' },
+];
 
+function VideoBand({ style = 'strip' }) {
+  return (
+    <section className={`video-band video-band--${style}`}>
+      <div className="video-band__head">
+        <div>
+          <span className="eyebrow">Notre travail en images</span>
+          <h2 className="video-band__title">
+            Capsules <em>vidéos</em> · activités Algor Int
+          </h2>
+        </div>
+        <p className="video-band__intro">
+          Cinq formats courts pour comprendre nos méthodes, nos terrains et nos livrables. Glissez horizontalement pour parcourir.
+        </p>
+      </div>
+
+      <div className="video-band__strip">
+        {HOME_VIDEOS.map((v, i) => (
+          <VideoCard key={i} {...v} index={i} variant={style} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function VideoCard({ cat, title, meta, duration, index }) {
+  return (
+    <article className="video-card">
+      <div className="video-card__thumb">
+        <ThumbMosaic seed={index} />
+        <div className="video-card__play">
+          <div className="play-circle">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+              <path d="M5 3.5v11l10-5.5z" />
+            </svg>
+          </div>
+        </div>
+        <span className="video-card__duration">{duration}</span>
+      </div>
+      <div className="video-card__body">
+        <div className="video-card__cat">{cat}</div>
+        <h3 className="video-card__title">{title}</h3>
+        <p className="video-card__meta">{meta}</p>
+      </div>
+    </article>
+  );
+}
+
+function ThumbMosaic({ seed = 0 }) {
+  const cells = [];
+  const cols = 14, rows = 10;
+  const rng = mulberry(seed * 1337 + 7);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const o = 0.05 + rng() * 0.22;
+      const size = 5.5 + rng() * 4.5;
+      cells.push({ x: (c + 0.5) * (100 / cols), y: (r + 0.5) * (100 / rows), o, size });
+    }
+  }
+  return (
+    <svg viewBox="0 0 100 70" preserveAspectRatio="xMidYMid slice">
+      {cells.map((c, i) => (
+        <rect key={i}
+          x={c.x - c.size / 2}
+          y={c.y - c.size / 2}
+          width={c.size} height={c.size}
+          transform={`rotate(45 ${c.x} ${c.y})`}
+          fill="#fff" opacity={c.o} />
+      ))}
+    </svg>
+  );
+}
 function mulberry(a) {
   return function() {
     a |= 0; a = (a + 0x6D2B79F5) | 0;
@@ -1125,4 +1205,4 @@ function DashCloseIcon({ size = 14 }) {
   </svg>);
 }
 
-Object.assign(window, { HomeView, ConsoleView, ArchivesView, VeilleView, Arrow, ArrowDiag });
+Object.assign(window, { HomeView, VideoBand, ConsoleView, ArchivesView, VeilleView, Arrow, ArrowDiag });
