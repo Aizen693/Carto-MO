@@ -199,6 +199,7 @@ function VeilleModal({ it, sub, onClose }){
                 <li>Implications opérationnelles pour votre organisation</li>
                 <li>Recommandations actionnables</li>
                 <li>Sources vérifiables et niveau de fiabilité</li>
+                <li>Carte de veille interactive regroupant tous les signaux</li>
               </ul>
               <a className="btn btn--primary" href="/offres/">Voir les offres</a>
             </div>

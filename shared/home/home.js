@@ -437,7 +437,7 @@ function VeilleModal({
     className: "vmodal__gate-s"
   }, "Chaque signal est livr\xE9 sous forme de note exploitable. L'abonnement ouvre l'acc\xE8s complet :"), /*#__PURE__*/React.createElement("ul", {
     className: "vgate__list"
-  }, /*#__PURE__*/React.createElement("li", null, "Analyse d\xE9taill\xE9e et mise en contexte"), /*#__PURE__*/React.createElement("li", null, "Implications op\xE9rationnelles pour votre organisation"), /*#__PURE__*/React.createElement("li", null, "Recommandations actionnables"), /*#__PURE__*/React.createElement("li", null, "Sources v\xE9rifiables et niveau de fiabilit\xE9")), /*#__PURE__*/React.createElement("a", {
+  }, /*#__PURE__*/React.createElement("li", null, "Analyse d\xE9taill\xE9e et mise en contexte"), /*#__PURE__*/React.createElement("li", null, "Implications op\xE9rationnelles pour votre organisation"), /*#__PURE__*/React.createElement("li", null, "Recommandations actionnables"), /*#__PURE__*/React.createElement("li", null, "Sources v\xE9rifiables et niveau de fiabilit\xE9"), /*#__PURE__*/React.createElement("li", null, "Carte de veille interactive regroupant tous les signaux")), /*#__PURE__*/React.createElement("a", {
     className: "btn btn--primary",
     href: "/offres/"
   }, "Voir les offres")))));
