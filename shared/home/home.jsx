@@ -109,7 +109,6 @@ function VeilleCard({ it, onOpen }){
         {it.image ? <img className="vcard__img" src={it.image} alt="" loading="lazy" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
         <span className="vcard__grid" aria-hidden="true" />
         {srcLogo(it.source_url) ? <img className="vcard__logo" src={srcLogo(it.source_url)} alt={it.source} loading="lazy" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
-        <span className="vcard__src">{it.source}</span>
         <span className="vcard__sev" style={{ color: sev.c, borderColor: sev.c+'59', background: sev.c+'14' }}>{sev.lbl}</span>
       </div>
       <div className="vcard__body">
@@ -144,7 +143,6 @@ function VeilleModal({ it, sub, onClose }){
           {it.image ? <img src={it.image} alt="" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
           <span className="vcard__grid" aria-hidden="true" />
           {srcLogo(it.source_url) ? <img className="vcard__logo" src={srcLogo(it.source_url)} alt={it.source} onError={(e)=>{ e.target.style.display='none'; }} /> : null}
-          <span className="vcard__src">{it.source}</span>
         </div>
         <div className="vmodal__body">
           <div className="vcard__meta">

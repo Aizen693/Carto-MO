@@ -241,8 +241,6 @@ function VeilleCard({
       e.target.style.display = 'none';
     }
   }) : null, /*#__PURE__*/React.createElement("span", {
-    className: "vcard__src"
-  }, it.source), /*#__PURE__*/React.createElement("span", {
     className: "vcard__sev",
     style: {
       color: sev.c,
@@ -328,9 +326,7 @@ function VeilleModal({
     onError: e => {
       e.target.style.display = 'none';
     }
-  }) : null, /*#__PURE__*/React.createElement("span", {
-    className: "vcard__src"
-  }, it.source)), /*#__PURE__*/React.createElement("div", {
+  }) : null), /*#__PURE__*/React.createElement("div", {
     className: "vmodal__body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "vcard__meta"

@@ -270,8 +270,7 @@ function App() {
   }, /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null), /*#__PURE__*/React.createElement("span", null)))), view === 'home' && /*#__PURE__*/React.createElement(HomeView, {
     onEnter: () => setView('platform'),
     onConsole: () => setView('console'),
-    clock: clock,
-    videoStyle: "strip"
+    clock: clock
   }), view === 'console' && /*#__PURE__*/React.createElement(ConsoleView, {
     onBack: () => setView('home'),
     onArchives: () => setView('archives'),
