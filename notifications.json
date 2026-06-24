@@ -1,6 +1,126 @@
 {
-  "updated": "2026-06-23",
+  "updated": "2026-06-24",
   "items": [
+    {
+      "id": "u-maliactu-net-guinee-interdiction-or-brut-aes",
+      "date": "2026-06-24",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/guinee-interdiction-or-brut-aes/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20083.jpg",
+      "titre": "Guinée interdit l'exportation d'or brut pour renforcer l'AES",
+      "resume": "La Guinée interdit l'exportation d'or brut pour imposer sa transformation locale.",
+      "detail": "Cette mesure vise à réduire la dépendance aux exportations brutes et à valoriser les ressources minières localement. Elle s'inscrit dans la stratégie économique de l'AES pour renforcer la souveraineté régionale. Les acteurs miniers locaux pourraient en tirer profit mais les conditions de mise en œuvre restent à clarifier.",
+      "lieu": "Guinée",
+      "lat": 10.7226226,
+      "lon": -10.7083587,
+      "implications": [
+        "Renforcement économique de l'AES",
+        "Impact sur les flux commerciaux traditionnels",
+        "Opportunités pour les raffineries locales"
+      ],
+      "recommandations": [
+        "Cartographier les acteurs miniers locaux en Guinée",
+        "Analyser les capacités de traitement de l'or en Afrique de l'Ouest"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-echec-unowas-senegal-gendarme-sahel",
+      "date": "2026-06-24",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/echec-unowas-senegal-gendarme-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20081.jpg",
+      "titre": "Sénégal émerge comme acteur sécuritaire régional",
+      "resume": "L'échec de l'UNOWAS propulse le Sénégal comme nouveau gendarme du Sahel.",
+      "detail": "Avec 24,3 millions de Sahéliens en besoin d'aide la région fait face à une crise humanitaire. Le Sénégal développe des capacités militaires et logistiques pour combler le vide laissé par l'UNOWAS. Cette montée en puissance pourrait modifier les équilibres sécuritaires régionaux.",
+      "lieu": "Sénégal",
+      "lat": 14.4750607,
+      "lon": -14.4529612,
+      "implications": [
+        "Changement des alliances militaires",
+        "Risque de tensions avec les groupes armés",
+        "Opportunité pour une stabilisation progressive"
+      ],
+      "recommandations": [
+        "Évaluer les capacités militaires sénégalaises",
+        "Suivre les réactions des groupes armés au Sahel"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-benin-budget-rectificatif-2026-crise-sahel",
+      "date": "2026-06-24",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/benin-budget-rectificatif-2026-crise-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20074.jpg",
+      "titre": "Bénin alloue 4 148 milliards FCFA pour résister à la crise sahélienne",
+      "resume": "Le Bénin adopte un budget rectificatif pour faire face aux défis sécuritaires régionaux.",
+      "detail": "Cette enveloppe budgétaire vise à renforcer les capacités de résilience économique et sécuritaire du Bénin face à la crise sahélienne. Le pays pourrait devenir un hub économique pour les pays voisins en cas d'effondrement sécuritaire. Les fonds seront-ils suffisants et bien alloués.",
+      "lieu": "Bénin",
+      "lat": 9.5293472,
+      "lon": 2.2584408,
+      "implications": [
+        "Renforcement des infrastructures béninoises",
+        "Impact sur les flux économiques régionaux",
+        "Risque de tensions internes si mal répartis"
+      ],
+      "recommandations": [
+        "Analyser l'allocation sectorielle des fonds",
+        "Surveiller les réactions des populations béninoises"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-guinee-raffinerie-alumine-chalco-sahel",
+      "date": "2026-06-24",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/guinee-raffinerie-alumine-chalco-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20082.jpg",
+      "titre": "Guinée lance une raffinerie d'alumine à 1 milliard de dollars",
+      "resume": "La Guinée ouvre une raffinerie d'alumine avec Chalco pour renforcer sa souveraineté.",
+      "detail": "Ce projet de 1 milliard de dollars marque une étape clé dans la transformation locale des ressources minières. Il pourrait servir de modèle pour d'autres pays du Sahel cherchant à réduire leur dépendance aux exportations brutes. Les bénéfices économiques restent à concrétiser.",
+      "lieu": "Guinée",
+      "lat": 10.7226226,
+      "lon": -10.7083587,
+      "implications": [
+        "Réduction de la dépendance aux exportations",
+        "Nouveaux partenariats industriels",
+        "Impact sur les marchés internationaux"
+      ],
+      "recommandations": [
+        "Étudier les retombées économiques locales",
+        "Analyser les partenariats avec la Chine"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-revolution-agricole-mali-sahel",
+      "date": "2026-06-24",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/revolution-agricole-mali-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20065.jpg",
+      "titre": "Mali mise sur une révolution agricole pour contrer la crise sahélienne",
+      "resume": "Le Mali anticipe 11,9 millions de tonnes de céréales grâce à une stratégie agricole renforcée.",
+      "detail": "Cette initiative gouvernementale vise à assurer la sécurité alimentaire malgré les crises sécuritaires récurrentes. Les résultats dépendront de la stabilité des zones rurales et de l'accès aux intrants. Les initiatives locales pourraient jouer un rôle clé dans la résilience.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Amélioration de la sécurité alimentaire",
+        "Réduction de la dépendance aux importations",
+        "Opportunités pour les petits producteurs"
+      ],
+      "recommandations": [
+        "Cartographier les zones agricoles prioritaires",
+        "Évaluer l'accès aux intrants dans les zones instables"
+      ]
+    },
     {
       "id": "u-maliactu-net-guinee-fin-exportation-or-brut",
       "date": "2026-06-23",
@@ -621,131 +741,6 @@
         "Analyser les données de capacité de remboursement réelle des États",
         "Monitorer les évolutions du positionnement africain face aux créanciers",
         "Évaluer les impacts sur les politiques d'aide conditionnelle régionales"
-      ],
-      "lat": 12.6392,
-      "lon": -8.0029,
-      "lieu": "Bamako, Mali"
-    },
-    {
-      "id": "u-maliactu-net-bamako-au-cur-de-la-bataille-numerique-enjeux-et-perspect",
-      "date": "2026-06-18",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/bamako-au-cur-de-la-bataille-numerique-enjeux-et-perspectives/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18413.jpg",
-      "titre": "Bamako au cœur de la bataille numérique stratégique africaine",
-      "resume": "L'Afrique reconnaît l'information comme instrument stratégique essentiel. Bamako devient un centre névralgique de cette compétition numérique régionale.",
-      "detail": "La bataille numérique en Afrique représente un enjeu géopolitique majeur où le contrôle de l'information devient synonyme de pouvoir stratégique. Bamako émerge comme acteur central dans cette dynamique, positionnée entre influences régionales et aspirations souveraines. Cette tendance reflète une prise de conscience accrue des élites maliennes quant aux implications de la domination informationnelle. Les implications pour la stabilité régionale et l'influence extérieure demeurent significatives.",
-      "implications": [
-        "Augmentation des opérations de manipulation informationnelle ciblant le Mali et le Sahel",
-        "Renforcement des contrôles gouvernementaux sur les espaces numériques et médiatiques",
-        "Concurrence accrue entre acteurs régionaux et puissances extérieures pour l'influence informationnelle"
-      ],
-      "recommandations": [
-        "Monitorer les campagnes de désinformation et les opérations de contrôle des médias au Mali",
-        "Analyser les alliances informationnelles émergentes dans la région sahélienne",
-        "Évaluer les capacités de résilience numérique des institutions maliennes"
-      ],
-      "lat": 12.6392,
-      "lon": -8.0029,
-      "lieu": "Bamako, Mali"
-    },
-    {
-      "id": "u-maliactu-net-cloture-du-fopame-a-bamako-une-collaboration-pour-surmont",
-      "date": "2026-06-18",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/cloture-du-fopame-a-bamako-une-collaboration-pour-surmonter-les-defis-des-medias-africains/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18411.jpg",
-      "titre": "Forum panafricain des médias à Bamako juin 2026",
-      "resume": "Bamako a accueilli le FOPAME du 3 juin 2026, rassemblant acteurs des médias africains pour aborder les défis collectifs. Cet événement marque une volonté de coordination régionale sur les enjeux médiatiques.",
-      "detail": "Le Forum Panafricain des Médias en Afrique symbolise une mobilisation collective face aux pressions croissantes sur la liberté de presse et l'indépendance des médias. Bamako, capitale du Mali en transition politique instable, devient plate-forme pour débattre de souveraineté informationnelle et de solidarité journalistique. Cette convergence géographique et thématique suggère une stratégie de consolidation des positions médiatiques face aux influences externes. Les débats soulevés ont des implications directes pour le contrôle narratif dans la région.",
-      "implications": [
-        "Émergence d'une coalition panafricaine prônant une indépendance médiatique accrue",
-        "Potentiel renforcement des critères de censure ou d'autocensure sous couvert de souveraineté",
-        "Alignements nouveaux entre médias africains et réorientations éditoriales"
-      ],
-      "recommandations": [
-        "Identifier les recommandations et chartes émergeant du FOPAME pour anticiper les changements de gouvernance médiatique",
-        "Surveiller les alliances formées entre médias lors du forum et leurs implications pour la couverture régionale",
-        "Analyser les positions du Mali et d'autres acteurs sahéliens sur le contrôle versus liberté de l'information"
-      ],
-      "lat": 12.6392,
-      "lon": -8.0029,
-      "lieu": "Bamako, Mali"
-    },
-    {
-      "id": "u-maliactu-net-appel-aux-journalistes-pour-lexercice-de-la-souverainete",
-      "date": "2026-06-18",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/appel-aux-journalistes-pour-lexercice-de-la-souverainete/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18412.jpg",
-      "titre": "Appel aux journalistes pour l'exercice de la souveraineté africaine",
-      "resume": "Un appel souligne l'importance de l'unité et de la solidarité journalistique pour exercer la souveraineté informationnelle en Afrique. Initiative reflétant les tensions autour du contrôle éditorial régional.",
-      "detail": "Cet appel cristallise une rhétorique émergente qui lie souveraineté nationale et autonomie médiatique, potentiellement utilisée pour justifier des restrictions sur la liberté de presse. La notion de solidarité journalistique africaine peut être instrumentalisée pour aligner les éditoriaux ou réduire la critique gouvernementale sous prétexte d'unité continentale. Le Mali, pays instable avec transitions multiples, se positionne comme catalyseur de ce discours. L'imprécision volontaire de termes comme solidarité permet une application flexible faveur aux pouvoirs établis.",
-      "implications": [
-        "Potentiel d'instrumentalisation de la solidarité panafricaine pour réduire les critiques médiatiques",
-        "Risque d'alignement éditorial forcé sous couvert de souveraineté continentale",
-        "Marginalisation de médias indépendants ne souscrivant pas aux nouvelles normes de solidarité"
-      ],
-      "recommandations": [
-        "Surveiller les prises de position de médias majeurs maliens et sahéliens pour détecter les alignements politiques",
-        "Documenter tout incident de pression sur journalistes invoquant la solidarité ou souveraineté africaine",
-        "Évaluer l'impact sur la diversité des voix journalistiques et l'accès à l'information critique"
-      ],
-      "lat": 12.6392,
-      "lon": -8.0029,
-      "lieu": "Bamako, Mali"
-    },
-    {
-      "id": "u-theguardian-com-world-2026-jun-18-ukraine-bolsters-its-northern-defenc",
-      "date": "2026-06-18",
-      "theatre": "asie-sud",
-      "severite": "critique",
-      "source": "The Guardian",
-      "source_url": "https://www.theguardian.com/world/2026/jun/18/ukraine-bolsters-its-northern-defences-amid-fears-belarus-is-being-dragged-into-war",
-      "image": "",
-      "titre": "Ukraine renforce ses défenses nord face à l'intégration militaire de la Biélorussie",
-      "resume": "L'Ukraine intensifie ses défenses septentrionalesface aux craintes d'une implication biélorusse dans le conflit. Les drones de renseignement russes en provenance de l'espace aérien biélorusse ont augmenté significativement depuis début 2026.",
-      "detail": "L'escalade des violations de l'espace aérien ukrainien via la Biélorussie indique une intégration militaire progressive du régime Loukachenko aux opérations russes. Kyiv perçoit une stratégie de Moscou visant à élargir le théâtre opérationnel nord en exploitant la proximité géographique de Minsk. Les augmentations documentées de survols de drones depuis début 2026 précèdent potentiellement une intensification militaire plus large. Cette dynamique reflète l'échec des efforts de neutralité biélorusses et signale une réorientation stratégique régionale majeure.",
-      "implications": [
-        "Ouverture d'un second front militaire susceptible de surcharger les défenses ukrainiennes",
-        "Intégration accélérée de la Biélorussie dans le bloc militaire russe avec effets régionaux",
-        "Risque d'escalade directe impliquant structures de l'OTAN présentes en Europe de l'Est"
-      ],
-      "recommandations": [
-        "Renforcer le suivi des mouvements militaires biélorusses et des transferts de capacités russes",
-        "Anticiper les besoins de soutien défensif additionnels pour l'Ukraine au secteur nord",
-        "Préparer les scénarios d'engagement de puissances régionales si la Biélorussie bascule militairement"
-      ],
-      "lat": null,
-      "lon": null,
-      "lieu": "Kyiv, Ukraine"
-    },
-    {
-      "id": "u-maliactu-net-la-relance-du-conseil-daffaires-un-nouveau-chapitre-econo",
-      "date": "2026-06-18",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/la-relance-du-conseil-daffaires-un-nouveau-chapitre-economique-strategique-souvre/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18408.jpg",
-      "titre": "Mali relance son Conseil d'Affaires en tant que levier stratégique",
-      "resume": "Le Mali réactive une plateforme bilatérale d'affaires conçue comme levier opérationnel pour transformer la coopération économique. Initiative reflétant les réalignements commerciaux régionaux.",
-      "detail": "La relance du Conseil d'Affaires malien survient dans un contexte de réorientations géopolitiques du Sahel, où le Mali cherche à consolider ses partenariats économiques stratégiques. Cette plateforme bilatérale représente un instrument de soft power et de captation de ressources financières étrangères critiques pour l'économie locale. Le timing coïncide avec l'isolement diplomatique croissant du Mali face aux sanctions de la CEDEAO et aux pressions internationales. Les bénéficiaires potentiels et les pays partenaires prioritaires offriront des indicateurs de nouvelles alignements géostratégiques.",
-      "implications": [
-        "Réalignement des priorités commerciales et des partenaires économiques du Mali",
-        "Renforcement potentiel des liens avec des acteurs non occidentaux offrant financement sans conditions politiques",
-        "Mobilisation de ressources pour stabiliser l'économie malgré l'instabilité politique chronique"
-      ],
-      "recommandations": [
-        "Identifier les nouveaux partenaires bilatéraux ciblés par le Conseil relancé et leurs intérêts régionaux",
-        "Monitorer les flux financiers et investissements entrants suite à la relance du Conseil",
-        "Analyser les conditions attachées à ces partenariats pour détecter les dépendances stratégiques émergentes"
       ],
       "lat": 12.6392,
       "lon": -8.0029,
