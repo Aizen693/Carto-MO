@@ -919,10 +919,10 @@ function ConsoleView({ onBack, onArchives, onVeille }) {
             icon={<><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" /></>}
           />
           <ConsoleTab
-            href="/debunkage/carte-afrique.html"
+            soon
             label="Dossiers"
             popTitle="Dossiers clients"
-            popText="Dossiers d'analyse reserves a l'equipe interne. Acces verrouille (compte editeur ou admin)."
+            popText="Dossiers d'analyse internes. Acces securise en cours de refonte."
             icon={<><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="M9 13a3 3 0 1 1 6 0" /><path d="M12 13v3" /></>}
           />
           <ConsoleTab
