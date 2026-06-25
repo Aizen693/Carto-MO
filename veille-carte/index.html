@@ -145,6 +145,8 @@
   }
 
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function (c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
+  // Securite : n'autorise que les URL http(s) (bloque javascript:, data:, etc. venant du flux distant)
+  function safeHttpUrl(u){ u = String(u == null ? '' : u).trim(); return /^https?:\/\//i.test(u) ? u : ''; }
   function zoneLabel(k){ return ZONE_LABELS[k] || k || ''; }
   function dateFR(d){ try { return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }); } catch (e) { return d; } }
   function reliabilityOf(s){ s = (s || '').toLowerCase();
@@ -195,7 +197,7 @@
       +   '<div class="vk-sec vk-reco"><div class="vk-sec__lbl">Recommandations · que faire de cette information</div>'
       +     (reco || '<p>À partir de ce signal, nos analystes produisent sur demande une note d\'impact dédiée à votre organisation : exposition, scénarios probables et mesures à prendre.</p>') + '</div>'
       +   '<div class="vk-sec"><div class="vk-sec__lbl">Sources et fiabilité</div><div class="vk-srcrow">'
-      +     (it.source_url ? '<a class="vk-srclink" href="' + esc(it.source_url) + '" target="_blank" rel="noopener">' + esc(it.source) + ' ↗</a>' : '<span>' + esc(it.source || '') + '</span>')
+      +     (safeHttpUrl(it.source_url) ? '<a class="vk-srclink" href="' + esc(safeHttpUrl(it.source_url)) + '" target="_blank" rel="noopener">' + esc(it.source) + ' ↗</a>' : '<span>' + esc(it.source || '') + '</span>')
       +     '<span class="vk-rel">Fiabilité · ' + reliabilityOf(it.source) + '</span>'
       +   '</div></div>'
       +   '<a class="vk-cta" href="/contact/">Demander un brief approfondi sur ce sujet →</a>'

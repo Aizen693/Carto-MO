@@ -10,7 +10,8 @@
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 
 const MISTRAL_API_KEY = Deno.env.get('MISTRAL_API_KEY');
-const MISTRAL_MODEL = 'mistral-large-latest';
+// Demo publique fictive : modele economique (limite l'impact d'un abus de quota sur l'endpoint non authentifie)
+const MISTRAL_MODEL = 'mistral-small-latest';
 const MISTRAL_ENDPOINT = 'https://api.mistral.ai/v1/chat/completions';
 
 const ALLOWED_ORIGINS = [
@@ -79,7 +80,7 @@ async function callMistral(prompt: string): Promise<any | null> {
           messages: [{ role: 'user', content: prompt }],
           response_format: { type: 'json_object' },
           temperature: 0.4,
-          max_tokens: 700,
+          max_tokens: 500,
         }),
       });
       if (!res.ok) {

@@ -63,6 +63,8 @@ const VEILLE_SEED = [
 function veilleZone(k){ return ZONE_LABELS[k] || k; }
 function veilleDateFR(d){ try { return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}); } catch(e){ return d; } }
 function srcLogo(url){ try { return 'https://www.google.com/s2/favicons?domain=' + new URL(url).hostname + '&sz=128'; } catch(e){ return null; } }
+// Securite : n'autorise que les URL http(s) dans un href (bloque javascript:/data: venant du flux veille)
+function safeHttpUrl(u){ u = (u == null ? '' : String(u)).trim(); return /^https?:\/\//i.test(u) ? u : null; }
 function reliabilityOf(s){ s = (s||'').toLowerCase();
   if (/acled|isw|bellingcat|kivu|reuters|afp|crisis|hrw|amnesty|\bonu\b|\bun\b|imb|janes/.test(s)) return 'Élevée';
   if (/rfi|guardian|\bbbc\b|france 24|le monde|trt|jazeera|figaro|ap\b/.test(s)) return 'Établie';
@@ -174,8 +176,8 @@ function VeilleModal({ it, sub, onClose }){
               <div className="vreport__sec">
                 <div className="vreport__lbl">Sources et fiabilité</div>
                 <div className="vreport__srcrow">
-                  {it.source_url
-                    ? <a className="vmodal__srclink" href={it.source_url} target="_blank" rel="noopener">{it.source} ↗</a>
+                  {safeHttpUrl(it.source_url)
+                    ? <a className="vmodal__srclink" href={safeHttpUrl(it.source_url)} target="_blank" rel="noopener">{it.source} ↗</a>
                     : <span className="vreport__srcname">{it.source}</span>}
                   <span className="vreport__rel">Fiabilité · {reliabilityOf(it.source)}</span>
                 </div>

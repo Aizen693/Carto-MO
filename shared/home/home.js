@@ -139,6 +139,11 @@ function srcLogo(url) {
     return null;
   }
 }
+// Securite : n'autorise que les URL http(s) dans un href (bloque javascript:/data: venant du flux veille)
+function safeHttpUrl(u) {
+  u = (u == null ? '' : String(u)).trim();
+  return /^https?:\/\//i.test(u) ? u : null;
+}
 function reliabilityOf(s) {
   s = (s || '').toLowerCase();
   if (/acled|isw|bellingcat|kivu|reuters|afp|crisis|hrw|amnesty|\bonu\b|\bun\b|imb|janes/.test(s)) return 'Élevée';
@@ -373,9 +378,9 @@ function VeilleModal({
     className: "vreport__lbl"
   }, "Sources et fiabilit\xE9"), /*#__PURE__*/React.createElement("div", {
     className: "vreport__srcrow"
-  }, it.source_url ? /*#__PURE__*/React.createElement("a", {
+  }, safeHttpUrl(it.source_url) ? /*#__PURE__*/React.createElement("a", {
     className: "vmodal__srclink",
-    href: it.source_url,
+    href: safeHttpUrl(it.source_url),
     target: "_blank",
     rel: "noopener"
   }, it.source, " \u2197") : /*#__PURE__*/React.createElement("span", {

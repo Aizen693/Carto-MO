@@ -243,7 +243,9 @@ function setupInteractions() {
   editorMap.on('click', STATIC_LAYER_DOTS, (e) => {
     if (!e.features.length) return;
     const f = e.features[0].properties;
-    const color = f._color || '#888';
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+    // couleur assainie (jamais d'injection dans l'attribut style)
+    const color = (String(f._color || '#888').replace(/[^#0-9a-zA-Z(),.%\s]/g, '')) || '#888';
     const desc = f._desc && f._desc !== 'null' ? parseStaticDesc(f._desc) : null;
     let body = '';
     if (desc) {
