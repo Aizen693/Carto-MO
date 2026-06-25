@@ -19,7 +19,7 @@ const ZONE_LABELS = {
 // Donnees : notifications.json sur la branche veille-data (alimente par n8n).
 // Teaser public ; analyse complete + archive reservees aux abonnes.
 // ════════════════════════════════════════════════════════════════════════
-const VEILLE_REMOTE = 'https://raw.githubusercontent.com/Aizen693/Carto-MO/veille-data/notifications.json';
+const VEILLE_REMOTE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
 const SEV = {
   info:     { lbl: 'Signal',   c: '#6B3FA0' },
   alerte:   { lbl: 'Alerte',   c: '#C77A12' },

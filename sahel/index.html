@@ -1071,7 +1071,7 @@ AlgorCalqueTimeline.init({
 <!-- CALQUE VEILLE IA (autonome, lit veille-data, style clone events, OFF par defaut) -->
 <script>
 (function(){
-  var VEILLE_URL = 'https://raw.githubusercontent.com/Aizen693/Carto-MO/veille-data/sahel/veille.geojson';
+  var VEILLE_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/sahel/veille.geojson';
   (function(){ var s=document.createElement('style'); s.textContent='.mapboxgl-popup.veille-hover .mapboxgl-popup-content{padding:0;background:transparent;box-shadow:none;border-radius:0;}.mapboxgl-popup.veille-hover .mapboxgl-popup-tip{display:none;}'; document.head.appendChild(s); })();
   var colorExpr = ['match', ['get','type'], 'Attaque','#ff1744', 'Embuscades','#ff1744', 'Incursion','#ff1744', 'Siege','#d50000', 'Incident frontalier','#ff6d00', 'Crise diplomatique','#ff6d00', 'Economique','#ffd740', 'Geopolitique','#ab47bc', '#ff5252'];
   function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
