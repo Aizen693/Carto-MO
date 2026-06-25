@@ -12,7 +12,8 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SNAPSHOT_PATH = resolve(__dirname, '..', 'afrique', 'ais-snapshot.json');
 
-const AIS_KEY = process.env.AISSTREAM_KEY || '74f3a2c9bf38cfa3db1c187fba5bcde6d0dc6e7c';
+const AIS_KEY = process.env.AISSTREAM_KEY;
+if (!AIS_KEY) { console.error('AISSTREAM_KEY manquante : exporte la variable d\'environnement avant de lancer ce script.'); process.exit(1); }
 const DURATION_MIN = Number(process.argv[2]) || 45;
 const MERGE_EXISTING = process.argv.includes('--merge');
 

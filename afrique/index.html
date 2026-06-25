@@ -1019,8 +1019,9 @@ const AIS_TRAIL_MAX = 30;   // nombre max de positions historiques par navire
 const AIS_KEY_STORAGE = 'aisstream_api_key_v1';
 const AIS_BUFFER_STORAGE = 'aisstream_buffer_v1';
 const AIS_WS_URL = 'wss://stream.aisstream.io/v0/stream';
-// Cle API embarquee (compte Algor Int). L'utilisateur peut l'overrider via localStorage.
-const AIS_DEFAULT_KEY = '74f3a2c9bf38cfa3db1c187fba5bcde6d0dc6e7c';
+// Pas de cle embarquee (repo public + securite). L'utilisateur fournit sa propre cle
+// AISStream gratuite via le modal, stockee dans son localStorage.
+const AIS_DEFAULT_KEY = '';
 // BBOX format AISStream: [[[lat_SW, lng_SW], [lat_NE, lng_NE]], ...]
 // 7 zones : 5 zones africaines focalisees + Atlantique mi-ocean (Cape route) + Med Maghreb
 const AIS_BBOX = [
