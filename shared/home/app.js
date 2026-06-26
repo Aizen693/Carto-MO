@@ -1,11 +1,57 @@
 (function () {
-/* global React, ReactDOM, HomeView, ConsoleView, ComptesView, ArchivesView, VeilleView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, PlatformView, Starfield */
 
 const {
   useState,
   useEffect,
   useRef
 } = React;
+
+// Statut « equipe » : true (admin/editor), false (client/anon), null (en cours).
+// Sert a verrouiller la Console interne et ses sous-vues. La vraie protection
+// des donnees reste cote serveur (RLS Supabase) ; ceci cache l'UI aux clients.
+function useStaff() {
+  const [staff, setStaff] = useState(null);
+  useEffect(() => {
+    let on = true,
+      tries = 0;
+    async function check() {
+      const c = window.algorAuth && window.algorAuth.supabase;
+      if (!c) {
+        if (on && tries++ < 20) setTimeout(check, 250);
+        return;
+      }
+      try {
+        const {
+          data: s
+        } = await c.auth.getSession();
+        const uid = s && s.session && s.session.user && s.session.user.id;
+        if (!uid) {
+          if (on) setStaff(false);
+          return;
+        }
+        const r = await c.from('profiles').select('role').eq('id', uid).single();
+        const role = r.data && r.data.role;
+        if (on) setStaff(role === 'admin' || role === 'editor');
+      } catch (e) {
+        if (on) setStaff(false);
+      }
+    }
+    check();
+    const recheck = () => {
+      tries = 0;
+      check();
+    };
+    window.addEventListener('algorAuthStateChanged', recheck);
+    window.addEventListener('algorAuthReady', recheck);
+    return () => {
+      on = false;
+      window.removeEventListener('algorAuthStateChanged', recheck);
+      window.removeEventListener('algorAuthReady', recheck);
+    };
+  }, []);
+  return staff;
+}
 function PopCheck() {
   return /*#__PURE__*/React.createElement("svg", {
     className: "cta-pop__check",
@@ -25,6 +71,7 @@ function App() {
   // d'inscription), #console ouvre la Console. Retour depuis /cloud/, /admin/...
   const [view, setView] = useState(window.location.hash === '#comptes' ? 'comptes' : window.location.hash === '#console' ? 'console' : 'home');
   const [clock, setClock] = useState('--:--');
+  const staff = useStaff();
   const [menuOpen, setMenuOpen] = useState(false);
   const [authLoggedIn, setAuthLoggedIn] = useState(!!(window.algorAuthState && window.algorAuthState.loggedIn));
 
@@ -272,16 +319,19 @@ function App() {
     onEnter: () => setView('platform'),
     onConsole: () => setView('console'),
     clock: clock
-  }), view === 'console' && /*#__PURE__*/React.createElement(ConsoleView, {
+  }), ['console', 'comptes', 'archives', 'veille'].includes(view) && staff !== true && /*#__PURE__*/React.createElement(ConsoleGate, {
+    checking: staff === null,
+    onBack: () => setView('home')
+  }), view === 'console' && staff === true && /*#__PURE__*/React.createElement(ConsoleView, {
     onBack: () => setView('home'),
     onArchives: () => setView('archives'),
     onVeille: () => setView('veille'),
     onComptes: () => setView('comptes')
-  }), view === 'comptes' && /*#__PURE__*/React.createElement(ComptesView, {
+  }), view === 'comptes' && staff === true && /*#__PURE__*/React.createElement(ComptesView, {
     onBack: () => setView('console')
-  }), view === 'archives' && /*#__PURE__*/React.createElement(ArchivesView, {
+  }), view === 'archives' && staff === true && /*#__PURE__*/React.createElement(ArchivesView, {
     onBack: () => setView('console')
-  }), view === 'veille' && /*#__PURE__*/React.createElement(VeilleView, {
+  }), view === 'veille' && staff === true && /*#__PURE__*/React.createElement(VeilleView, {
     onBack: () => setView('console')
   }), view === 'platform' && /*#__PURE__*/React.createElement(PlatformView, {
     onBack: () => setView('home')

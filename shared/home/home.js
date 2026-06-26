@@ -1570,6 +1570,37 @@ function ConsoleView({
   }))));
 }
 
+// Garde d'acces de la Console interne : reservee a l'equipe (role admin/editor).
+// Le verrou UI cache la console aux clients ; la vraie protection des donnees
+// sensibles reste cote serveur (RLS Supabase + staff-gate de /admin/).
+function ConsoleGate({
+  checking,
+  onBack
+}) {
+  return /*#__PURE__*/React.createElement("main", {
+    className: "view-enter view-enter-active"
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "console-page"
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "console-back",
+    href: "#",
+    onClick: e => {
+      e.preventDefault();
+      onBack();
+    }
+  }, "\u2190 Retour \xE0 l'accueil"), /*#__PURE__*/React.createElement("h1", {
+    className: "hero__title"
+  }, "Console ", /*#__PURE__*/React.createElement("em", null, "interne")), checking ? /*#__PURE__*/React.createElement("p", {
+    className: "hero__lede"
+  }, "V\xE9rification de l'acc\xE8s\u2026") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("p", {
+    className: "hero__lede"
+  }, "Cet espace est r\xE9serv\xE9 \xE0 l'\xE9quipe Algor Int. Connecte-toi avec ton compte interne pour y acc\xE9der."), /*#__PURE__*/React.createElement("a", {
+    className: "site-cta",
+    href: "#",
+    "data-algor-login": true
+  }, "Connexion"))));
+}
+
 // Page « Comptes » — validation des inscriptions (admin only). Remplace la
 // gestion des utilisateurs de l'ancienne console /admin/. Lecture/ecriture sur
 // la table `profiles` via le client authentifie (window.algorAuth.supabase) :
@@ -2008,6 +2039,7 @@ Object.assign(window, {
   HomeView,
   VideoBand,
   ConsoleView,
+  ConsoleGate,
   ComptesView,
   ArchivesView,
   VeilleView,

@@ -1,6 +1,38 @@
-/* global React, ReactDOM, HomeView, ConsoleView, ComptesView, ArchivesView, VeilleView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, PlatformView, Starfield */
 
 const { useState, useEffect, useRef } = React;
+
+// Statut « equipe » : true (admin/editor), false (client/anon), null (en cours).
+// Sert a verrouiller la Console interne et ses sous-vues. La vraie protection
+// des donnees reste cote serveur (RLS Supabase) ; ceci cache l'UI aux clients.
+function useStaff() {
+  const [staff, setStaff] = useState(null);
+  useEffect(() => {
+    let on = true, tries = 0;
+    async function check() {
+      const c = window.algorAuth && window.algorAuth.supabase;
+      if (!c) { if (on && tries++ < 20) setTimeout(check, 250); return; }
+      try {
+        const { data: s } = await c.auth.getSession();
+        const uid = s && s.session && s.session.user && s.session.user.id;
+        if (!uid) { if (on) setStaff(false); return; }
+        const r = await c.from('profiles').select('role').eq('id', uid).single();
+        const role = r.data && r.data.role;
+        if (on) setStaff(role === 'admin' || role === 'editor');
+      } catch (e) { if (on) setStaff(false); }
+    }
+    check();
+    const recheck = () => { tries = 0; check(); };
+    window.addEventListener('algorAuthStateChanged', recheck);
+    window.addEventListener('algorAuthReady', recheck);
+    return () => {
+      on = false;
+      window.removeEventListener('algorAuthStateChanged', recheck);
+      window.removeEventListener('algorAuthReady', recheck);
+    };
+  }, []);
+  return staff;
+}
 
 function PopCheck() {
   return (
@@ -20,6 +52,7 @@ function App() {
       : 'home'
   );
   const [clock, setClock] = useState('--:--');
+  const staff = useStaff();
   const [menuOpen, setMenuOpen] = useState(false);
   const [authLoggedIn, setAuthLoggedIn] = useState(
     !!(window.algorAuthState && window.algorAuthState.loggedIn)
@@ -175,16 +208,21 @@ function App() {
           onConsole={() => setView('console')}
           clock={clock} />
       )}
-      {view === 'console' && (
+      {/* Console interne + sous-vues : reservees a l'equipe (admin/editor).
+          Tant que staff !== true, on affiche la garde d'acces a la place. */}
+      {['console', 'comptes', 'archives', 'veille'].includes(view) && staff !== true && (
+        <ConsoleGate checking={staff === null} onBack={() => setView('home')} />
+      )}
+      {view === 'console' && staff === true && (
         <ConsoleView
           onBack={() => setView('home')}
           onArchives={() => setView('archives')}
           onVeille={() => setView('veille')}
           onComptes={() => setView('comptes')} />
       )}
-      {view === 'comptes' && <ComptesView onBack={() => setView('console')} />}
-      {view === 'archives' && <ArchivesView onBack={() => setView('console')} />}
-      {view === 'veille' && <VeilleView onBack={() => setView('console')} />}
+      {view === 'comptes' && staff === true && <ComptesView onBack={() => setView('console')} />}
+      {view === 'archives' && staff === true && <ArchivesView onBack={() => setView('console')} />}
+      {view === 'veille' && staff === true && <VeilleView onBack={() => setView('console')} />}
       {view === 'platform' && <PlatformView onBack={() => setView('home')} />}
     </>
   );

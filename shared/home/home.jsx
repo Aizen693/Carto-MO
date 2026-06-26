@@ -954,6 +954,32 @@ function ConsoleView({ onBack, onArchives, onVeille, onComptes }) {
   );
 }
 
+// Garde d'acces de la Console interne : reservee a l'equipe (role admin/editor).
+// Le verrou UI cache la console aux clients ; la vraie protection des donnees
+// sensibles reste cote serveur (RLS Supabase + staff-gate de /admin/).
+function ConsoleGate({ checking, onBack }) {
+  return (
+    <main className="view-enter view-enter-active">
+      <section className="console-page">
+        <a className="console-back" href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>
+          &larr; Retour à l'accueil
+        </a>
+        <h1 className="hero__title">Console <em>interne</em></h1>
+        {checking ? (
+          <p className="hero__lede">Vérification de l'accès…</p>
+        ) : (
+          <>
+            <p className="hero__lede">
+              Cet espace est réservé à l'équipe Algor Int. Connecte-toi avec ton compte interne pour y accéder.
+            </p>
+            <a className="site-cta" href="#" data-algor-login>Connexion</a>
+          </>
+        )}
+      </section>
+    </main>
+  );
+}
+
 // Page « Comptes » — validation des inscriptions (admin only). Remplace la
 // gestion des utilisateurs de l'ancienne console /admin/. Lecture/ecriture sur
 // la table `profiles` via le client authentifie (window.algorAuth.supabase) :
@@ -1364,4 +1390,4 @@ function DashCloseIcon({ size = 14 }) {
   </svg>);
 }
 
-Object.assign(window, { HomeView, VideoBand, ConsoleView, ComptesView, ArchivesView, VeilleView, Arrow, ArrowDiag });
+Object.assign(window, { HomeView, VideoBand, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, Arrow, ArrowDiag });
