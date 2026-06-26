@@ -1011,7 +1011,10 @@ function ComptesView({ onBack }) {
   const visible = users.filter((u) =>
     !needle || (u.email || '').toLowerCase().includes(needle)
             || (u.display_name || '').toLowerCase().includes(needle));
-  const pending = users.filter((u) => (u.plan || 'free') !== 'premium').length;
+  // « En attente » = compte sans aucun accès. Un editor/admin a déjà accès via
+  // son rôle (cf. site-auth.js), seul un viewer en Gratuit attend une validation.
+  const hasAccess = (u) => u.role === 'admin' || u.role === 'editor' || (u.plan || 'free') === 'premium';
+  const pending = users.filter((u) => !hasAccess(u)).length;
 
   return (
     <main className="view-enter view-enter-active">
@@ -1067,7 +1070,7 @@ function ComptesView({ onBack }) {
                         <tr key={u.id} className="dash-row">
                           <td>
                             {u.email}
-                            {!isPremium && <span className="compte-badge">En attente</span>}
+                            {!hasAccess(u) && <span className="compte-badge">En attente</span>}
                           </td>
                           <td>{date}</td>
                           <td>

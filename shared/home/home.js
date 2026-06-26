@@ -1656,7 +1656,10 @@ function ComptesView({
   }
   const needle = query.toLowerCase().trim();
   const visible = users.filter(u => !needle || (u.email || '').toLowerCase().includes(needle) || (u.display_name || '').toLowerCase().includes(needle));
-  const pending = users.filter(u => (u.plan || 'free') !== 'premium').length;
+  // « En attente » = compte sans aucun accès. Un editor/admin a déjà accès via
+  // son rôle (cf. site-auth.js), seul un viewer en Gratuit attend une validation.
+  const hasAccess = u => u.role === 'admin' || u.role === 'editor' || (u.plan || 'free') === 'premium';
+  const pending = users.filter(u => !hasAccess(u)).length;
   return /*#__PURE__*/React.createElement("main", {
     className: "view-enter view-enter-active"
   }, /*#__PURE__*/React.createElement("section", {
@@ -1708,7 +1711,7 @@ function ComptesView({
     return /*#__PURE__*/React.createElement("tr", {
       key: u.id,
       className: "dash-row"
-    }, /*#__PURE__*/React.createElement("td", null, u.email, !isPremium && /*#__PURE__*/React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("td", null, u.email, !hasAccess(u) && /*#__PURE__*/React.createElement("span", {
       className: "compte-badge"
     }, "En attente")), /*#__PURE__*/React.createElement("td", null, date), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("select", {
       className: 'compte-select ' + (isPremium ? 'is-premium' : 'is-free'),
