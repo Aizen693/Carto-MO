@@ -2,6 +2,131 @@
   "updated": "2026-06-26",
   "items": [
     {
+      "id": "u-maliactu-net-mali-france-expulsion-ambassadeur-rupture-diplomatique",
+      "date": "2026-06-26",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/mali-france-expulsion-ambassadeur-rupture-diplomatique/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20668.jpg",
+      "titre": "Mali-FR rupture diplomatique après expulsion de l'ambassadeur",
+      "resume": "Le Mali expulse l'ambassadeur de France en 72 heures marquant une rupture historique entre les deux pays",
+      "detail": "La décision reflète une détérioration rapide des relations bilatérales déjà fragilisées par des sanctions récentes. Une expulsion en si peu de temps indique une escalade diplomatique majeure avec des conséquences potentielles sur la coopération sécuritaire et économique. Les acteurs locaux pourraient exploiter cette rupture pour renforcer leur positionnement géopolitique au Sahel. Surveillance accrue nécessaire sur les réactions régionales et internationales.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Risque d'isolement diplomatique accru pour le Mali",
+        "Possible durcissement des positions des juntes régionales",
+        "Opportunité pour d'autres acteurs comme la Russie ou la Turquie"
+      ],
+      "recommandations": [
+        "Cartographier les nouveaux acteurs clés au Sahel",
+        "Évaluer l'impact sur les missions de sécurité régionales",
+        "Anticiper les mesures économiques de rétorsion"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-souverainete-numerique-etat-malien-acquiert-56-capital-so",
+      "date": "2026-06-26",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/souverainete-numerique-etat-malien-acquiert-56-capital-sotelma/",
+      "image": "",
+      "titre": "Mali prend le contrôle de Sotelma pour souveraineté numérique",
+      "resume": "L'État malien acquiert 56% du capital de la Sotelma mettant fin à 17 ans de domination marocaine",
+      "detail": "Cette nationalisation marque un tournant dans la stratégie numérique du Mali vis-à-vis des acteurs étrangers. Le contrôle d'un opérateur clé pourrait faciliter la surveillance des communications mais aussi exposer des vulnérabilités cyber. La transition nécessite une période d'adaptation pour maintenir la continuité du service. Les partenaires internationaux pourraient réévaluer leur engagement technologique.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Nouveaux risques de cybersurveillance interne",
+        "Opportunité pour développement d'infrastructures locales",
+        "Potentiel conflit avec anciens partenaires marocains"
+      ],
+      "recommandations": [
+        "Analyser les capacités cyber du nouvel opérateur",
+        "Évaluer les risques de perturbation des services",
+        "Surveiller les mouvements des partenaires technologiques"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-diaspora-malienne-france-5-milliards-sahel",
+      "date": "2026-06-26",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/diaspora-malienne-france-5-milliards-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20670.jpg",
+      "titre": "Diaspora malienne FR injecte 5 milliards EUR au Sahel",
+      "resume": "La diaspora malienne en France transfère 5 milliards d'euros dans le Sahel créant 10 000 emplois",
+      "detail": "Ces flux financiers privés deviennent un acteur économique majeur face à l'affaiblissement des aides publiques traditionnelles. Les montants injectés soutiennent directement des projets locaux mais peuvent aussi créer des dépendances. La stabilité de ces transferts dépend des politiques migratoires européennes. Une opportunité pour des partenariats public-privé innovants.",
+      "lieu": "Sahel",
+      "lat": 14.0279165,
+      "lon": -0.7717776,
+      "implications": [
+        "Nouveau levier économique en dehors des canaux traditionnels",
+        "Risque de blanchiment ou de financement informel",
+        "Opportunité pour projets d'infrastructure ciblés"
+      ],
+      "recommandations": [
+        "Cartographier les flux financiers de la diaspora",
+        "Identifier les projets prioritaires soutenus",
+        "Renforcer les mécanismes de contrôle des transferts"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-sahel-500-millions-agriculture-aes",
+      "date": "2026-06-26",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/sahel-500-millions-agriculture-aes/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20662.jpg",
+      "titre": "500 millions EUR investis dans l'agriculture sahélienne",
+      "resume": "500 millions d'euros sont investis dans l'agriculture sahélienne pour renforcer la souveraineté alimentaire",
+      "detail": "Ce fonds stratégique vise à contrer l'insécurité alimentaire dans une région sous haute pression climatique et sécuritaire. Les projets ciblent la résilience des petits producteurs et l'innovation technologique. Une partie des fonds pourrait être détournée par des groupes armés ou des intermédiaires corrompus. Nécessité de mécanismes de suivi indépendants.",
+      "lieu": "Sahel",
+      "lat": 14.0279165,
+      "lon": -0.7717776,
+      "implications": [
+        "Amélioration potentielle de la sécurité alimentaire",
+        "Risque de corruption ou détournement de fonds",
+        "Impact limité en zones de conflit actif"
+      ],
+      "recommandations": [
+        "Surveiller l'allocation et l'utilisation des fonds",
+        "Évaluer l'impact réel sur les populations locales",
+        "Renforcer les contrôles dans les zones frontalières"
+      ]
+    },
+    {
+      "id": "u-radiookapi-net-2026-06-26-actualite-securite-des-congolais-bloques-la-",
+      "date": "2026-06-26",
+      "theatre": "rdc",
+      "severite": "info",
+      "source": "Radio Okapi",
+      "source_url": "https://www.radiookapi.net/2026/06/26/actualite/securite/des-congolais-bloques-la-frontiere-tanzanienne-de-rusumo-regagnent",
+      "image": "https://photos.radiookapi.net/picture/20240815130938103973_IMG_4113.jpg?imgmax=1200",
+      "titre": "Congolais bloqués à la frontière Tanzanie regagnent Goma",
+      "resume": "Des Congolais bloqués plusieurs jours à la frontière tanzanienne de Rusumo regagnent Goma au Nord-Kivu",
+      "detail": "Ce mouvement de population reflète les tensions persistantes à la frontière entre RDC et Tanzanie. Les retards dans le retour suggèrent des difficultés logistiques ou des obstacles administratifs. La situation pourrait s'aggraver avec l'arrivée de la saison des pluies. Une surveillance accrue nécessaire sur les mouvements transfrontaliers.",
+      "lieu": "Goma, République démocratique du Congo",
+      "lat": -1.6665685,
+      "lon": 29.225652,
+      "implications": [
+        "Tensions persistantes à la frontière RDC-Tanzanie",
+        "Risque d'afflux de réfugiés dans les zones instables",
+        "Impact humanitaire sur les populations locales"
+      ],
+      "recommandations": [
+        "Cartographier les points de passage frontaliers sensibles",
+        "Renforcer la surveillance des mouvements de population",
+        "Anticiper les besoins humanitaires saisonniers"
+      ]
+    },
+    {
       "id": "u-maliactu-net-guinee-interdiction-or-brut-aes",
       "date": "2026-06-24",
       "theatre": "sahel",
@@ -620,131 +745,6 @@
         "Monitorer les réactions de la diaspora et les campagnes internationales de soutien",
         "Analyser les personnes ciblées pour comprendre les priorités politiques de Bamako"
       ]
-    },
-    {
-      "id": "u-bamada-net-offensive-des-fama-a-diema-plus-de-30-terroristes-mis-hors-",
-      "date": "2026-06-19",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/offensive-des-fama-a-diema-plus-de-30-terroristes-mis-hors-detat-de-nuire",
-      "image": "http://bamada.net/wp-content/uploads/2026/01/general-assimi-goita-fete-armee-depot-gerbe-genie-militaire-hommage-soldat-tombe-fronts-avion-fama.jpg",
-      "titre": "Offensive FAMa à Diéma: 30+ terroristes neutralisés",
-      "resume": "Les Forces Armées Maliennes ont mené une reconnaissance offensive dans le secteur de Diéma le 17 juin 2026, débusquant un groupe armé terroriste et neutralisant plus de 30 éléments.",
-      "detail": "L'opération intervient dans un contexte de maintien de la sécurité dans le secteur de Diéma, région stratégique du Mali. Cette action témoigne de la capacité opérationnelle des FAMa à déployer des opérations ciblées contre les groupes armés. Les chiffres fournis par l'État-Major suggèrent une efficacité tactique significative. La pression sur les groupes terroristes dans cette zone demeure une priorité sécuritaire majeure.",
-      "implications": [
-        "Renforcement temporaire du contrôle territorial des FAMa dans le secteur",
-        "Possible relocalisation des groupes armés vers des zones adjacentes",
-        "Risque de représailles contre les civils dans les zones de repli"
-      ],
-      "recommandations": [
-        "Suivre la consolidation du contrôle territorial post-opération",
-        "Monitorer les flux de déplacés civils dans les régions limitrophes",
-        "Évaluer la capacité de reconstitution des groupes armés neutralisés"
-      ],
-      "lat": 14.5408,
-      "lon": -9.1736,
-      "lieu": "Diéma, Mali"
-    },
-    {
-      "id": "u-maliactu-net-croissance-en-afrique-la-bad-anticipe-un-ralentissement-a",
-      "date": "2026-06-19",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/croissance-en-afrique-la-bad-anticipe-un-ralentissement-a-4-2-dici-2026/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18536.jpg",
-      "titre": "Croissance africaine: ralentissement à 4,2% prévu d'ici 2026",
-      "resume": "La Banque Africaine de Développement anticipe un ralentissement de la croissance économique africaine à 4,2% d'ici 2026, reflétant les défis macroéconomiques persistants du continent.",
-      "detail": "Les projections de la BAD indiquent une trajectoire de croissance ralentie par rapport aux années précédentes. Ce ralentissement reflète les pressions inflationnistes, les défis de financement et les facteurs externes affectant la région. Cette prévision revêt une importance particulière pour les États sahéliens dépendants de l'aide au développement et du financement extérieur. Les implications pour la stabilité socioéconomique et les capacités budgétaires nationales sont substantielles.",
-      "implications": [
-        "Compression des budgets gouvernementaux et baisse des dépenses publiques",
-        "Réduction de l'espace fiscal pour les investissements en sécurité",
-        "Augmentation potentielle des tensions sociales liées au chômage"
-      ],
-      "recommandations": [
-        "Analyser les impacts budgétaires sectoriels dans les pays clients",
-        "Anticiper les crises de liquidités au sein des États sahéliens",
-        "Évaluer les risques de déstabilisation liés aux compressions budgétaires"
-      ],
-      "lat": 5.3599,
-      "lon": -4.0083,
-      "lieu": "Abidjan, Côte d'Ivoire"
-    },
-    {
-      "id": "u-bamada-net-oeuvres-sociales-541eme-forage-offert-par-le-president-de-l",
-      "date": "2026-06-19",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/oeuvres-sociales-541eme-forage-offert-par-le-president-de-la-transition",
-      "image": "http://bamada.net/wp-content/uploads/2026/05/aguibou-dembele-oeuvres-sociales-inauguration-forage-1008-logement.jpg",
-      "titre": "Mali: 541e forage inauguré dans la capitale",
-      "resume": "Le Président de la Transition a inauguré le 541e forage à Bamako, dans les communes VI, marquant la poursuite d'une initiative majeure d'accès à l'eau potable au Mali.",
-      "detail": "Cette initiative d'infrastructure hydraulique s'inscrit dans une stratégie plus large d'accès aux services essentiels en zone urbaine et périurbaine. Le cumul de 541 forages représente un investissement considérable en capital infrastructure. Cette action peut contribuer à améliorer l'acceptabilité politique de la junte militaire auprès des populations urbaines. L'initiative reflète une priorisation des services de base comme vecteur de légitimité gouvernementale.",
-      "implications": [
-        "Renforcement de la base de soutien urbain du Président Goïta",
-        "Amélioration de l'accès à l'eau réduisant les tensions communautaires",
-        "Signal de continuité de la transition et de gouvernance fonctionnelle"
-      ],
-      "recommandations": [
-        "Suivre l'impact de ces infrastructures sur la satisfaction publique",
-        "Monitorer l'utilisation stratégique de ces projets dans la narrative politique",
-        "Évaluer la durabilité maintenance des installations hydrauliques"
-      ],
-      "lat": 12.6392,
-      "lon": -8.0029,
-      "lieu": "Bamako, Mali"
-    },
-    {
-      "id": "u-maliactu-net-stabilite-economique-au-mali-lutte-contre-les-flux-illici",
-      "date": "2026-06-19",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/stabilite-economique-au-mali-lutte-contre-les-flux-illicites-et-soutien-au-secteur-prive/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/stabilite-economique-au-mali-lutte-contre-les-flux-illicites-et-soutien-au-secteur-prive.jpeg",
-      "titre": "Mali: priorités économiques sur flux illicites et secteur privé",
-      "resume": "Le ministre des Finances du Mali a exposé les enjeux économiques prioritaires, incluant la lutte contre les flux financiers illicites et le soutien au secteur privé formel.",
-      "detail": "La lutte contre les flux illicites demeure une préoccupation majeure pour la stabilité macroéconomique malienne, directement liée aux financements du terrorisme et à l'économie parallèle. Le soutien déclaré au secteur privé formel indique une tentative de formalisation économique et de renforcement de la base fiscale. Ces priorités reflètent une compréhension des défis structurels du financement gouvernemental. La déclaration politique suggère une orientation vers une gouvernance économique plus transparente.",
-      "implications": [
-        "Renforcement potentiel de la traçabilité des flux financiers",
-        "Amélioration du recouvrement fiscal pouvant affecter les circuits parallèles",
-        "Impact sur les secteurs informels alimentant l'économie d'ombre"
-      ],
-      "recommandations": [
-        "Monitorer l'efficacité opérationnelle des contrôles de flux illicites",
-        "Identifier les secteurs affectés par les politiques de formalisation",
-        "Évaluer les résistances institutionnelles à la transparence financière"
-      ],
-      "lat": 12.6392,
-      "lon": -8.0029,
-      "lieu": "Bamako, Mali"
-    },
-    {
-      "id": "u-maliactu-net-et-si-lafrique-netait-pas-surendettee-la-verite-financier",
-      "date": "2026-06-19",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/et-si-lafrique-netait-pas-surendettee-la-verite-financiere-qui-bouscule-leconomie-mondiale/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/image-8.jpg",
-      "titre": "Débat: l'Afrique n'est pas surendettée mais mal stratégiquement financée",
-      "resume": "Une analyse remet en question le consensus sur le surendettement africain, arguant que le continent souffre d'un manque de stratégie financière plutôt que d'un excès de dettes absolus.",
-      "detail": "Cette position contredit le narratif dominant sur la crise de la dette africaine et soulève des questions sur la structure des appels de fonds internationaux. La proposition implique une réorientation des débats de politique économique africaine vers les efficacités d'allocation. Cette perspective pourrait influencer les négociations avec les créanciers internationaux et les institutions multilatérales. Elle remet en cause implicitement les impositions de conditionnalités économiques traditionnelles.",
-      "implications": [
-        "Repositionnement de la narrative africaine sur la souveraineté financière",
-        "Potentiel renforcement du pouvoir de négociation des États africains",
-        "Remise en question des conditions imposées par les institutions internationales"
-      ],
-      "recommandations": [
-        "Analyser les données de capacité de remboursement réelle des États",
-        "Monitorer les évolutions du positionnement africain face aux créanciers",
-        "Évaluer les impacts sur les politiques d'aide conditionnelle régionales"
-      ],
-      "lat": 12.6392,
-      "lon": -8.0029,
-      "lieu": "Bamako, Mali"
     }
   ]
 }
