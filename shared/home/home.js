@@ -1443,7 +1443,8 @@ function ConsoleTab({
 function ConsoleView({
   onBack,
   onArchives,
-  onVeille
+  onVeille,
+  onComptes
 }) {
   return /*#__PURE__*/React.createElement("main", {
     className: "view-enter view-enter-active"
@@ -1473,6 +1474,22 @@ function ConsoleView({
       cx: "12",
       cy: "10",
       r: "2.6"
+    }))
+  }), /*#__PURE__*/React.createElement(ConsoleTab, {
+    onClick: onComptes,
+    label: "Comptes",
+    popTitle: "Comptes clients",
+    popText: "Validation des inscriptions : passe un compte en Premium pour lui ouvrir l'acc\xE8s aux six th\xE9\xE2tres. R\xE9serv\xE9 aux administrateurs.",
+    icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+      d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+    }), /*#__PURE__*/React.createElement("circle", {
+      cx: "9",
+      cy: "7",
+      r: "4"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M22 21v-2a4 4 0 0 0-3-3.87"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M16 3.13a4 4 0 0 1 0 7.75"
     }))
   }), /*#__PURE__*/React.createElement(ConsoleTab, {
     onClick: onArchives,
@@ -1551,6 +1568,170 @@ function ConsoleView({
       d: "M8.2 7.3l7.6 3.4M8.2 16.7l7.6-3.4"
     }))
   }))));
+}
+
+// Page « Comptes » — validation des inscriptions (admin only). Remplace la
+// gestion des utilisateurs de l'ancienne console /admin/. Lecture/ecriture sur
+// la table `profiles` via le client authentifie (window.algorAuth.supabase) :
+// la RLS + le trigger protect_profile_privileges garantissent que seul un admin
+// peut changer plan/role cote serveur.
+function ComptesView({
+  onBack
+}) {
+  const [state, setState] = useState('loading'); // loading | anon | denied | ready | error
+  const [users, setUsers] = useState([]);
+  const [error, setError] = useState(null);
+  const [busy, setBusy] = useState(null);
+  const [query, setQuery] = useState('');
+  function supa() {
+    return window.algorAuth && window.algorAuth.supabase || null;
+  }
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const c = supa();
+      if (!c) {
+        if (!cancelled) setState('anon');
+        return;
+      }
+      try {
+        const {
+          data: s
+        } = await c.auth.getSession();
+        const uid = s && s.session && s.session.user && s.session.user.id;
+        if (!uid) {
+          if (!cancelled) setState('anon');
+          return;
+        }
+        const me = await c.from('profiles').select('role').eq('id', uid).single();
+        if (me.error || !me.data || me.data.role !== 'admin') {
+          if (!cancelled) setState('denied');
+          return;
+        }
+        const {
+          data,
+          error
+        } = await c.from('profiles').select('id,email,display_name,role,plan,created_at,last_login').order('created_at', {
+          ascending: false
+        });
+        if (error) throw error;
+        if (!cancelled) {
+          setUsers(data || []);
+          setState('ready');
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setError(e && e.message || 'Erreur de chargement');
+          setState('error');
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  async function setField(u, field, value) {
+    const c = supa();
+    if (!c) return;
+    const prev = u[field];
+    if (prev === value) return;
+    setBusy(u.id + field);
+    setUsers(list => list.map(x => x.id === u.id ? {
+      ...x,
+      [field]: value
+    } : x));
+    const {
+      error
+    } = await c.from('profiles').update({
+      [field]: value
+    }).eq('id', u.id);
+    setBusy(null);
+    if (error) {
+      setUsers(list => list.map(x => x.id === u.id ? {
+        ...x,
+        [field]: prev
+      } : x));
+      alert('Échec de la mise à jour : ' + (error.message || 'réessayez'));
+    }
+  }
+  const needle = query.toLowerCase().trim();
+  const visible = users.filter(u => !needle || (u.email || '').toLowerCase().includes(needle) || (u.display_name || '').toLowerCase().includes(needle));
+  const pending = users.filter(u => (u.plan || 'free') !== 'premium').length;
+  return /*#__PURE__*/React.createElement("main", {
+    className: "view-enter view-enter-active"
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "console-page"
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "console-back",
+    href: "#",
+    onClick: e => {
+      e.preventDefault();
+      onBack();
+    }
+  }, "\u2190 Retour \xE0 la console"), /*#__PURE__*/React.createElement("h1", {
+    className: "hero__title"
+  }, "Comptes ", /*#__PURE__*/React.createElement("em", null, "clients")), /*#__PURE__*/React.createElement("p", {
+    className: "hero__lede"
+  }, "Valide les inscriptions : passe un compte en Premium pour lui ouvrir les six th\xE9\xE2tres. Un nouveau compte arrive en Gratuit, verrouill\xE9, jusqu'\xE0 ta validation."), state === 'loading' && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg"
+  }, "Chargement des comptes..."), state === 'anon' && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg"
+  }, "Connecte-toi avec ton compte admin pour g\xE9rer les comptes."), state === 'denied' && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg dash-msg--err"
+  }, "Acc\xE8s r\xE9serv\xE9 aux administrateurs."), state === 'error' && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg dash-msg--err"
+  }, "Erreur : ", error), state === 'ready' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "dash-search"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "search-input"
+  }, /*#__PURE__*/React.createElement(DashSearchIcon, null), /*#__PURE__*/React.createElement("input", {
+    placeholder: "Rechercher un compte par email ou nom...",
+    value: query,
+    onChange: e => setQuery(e.target.value)
+  }), query && /*#__PURE__*/React.createElement("button", {
+    className: "search-input__clear",
+    onClick: () => setQuery(''),
+    "aria-label": "Effacer"
+  }, /*#__PURE__*/React.createElement(DashCloseIcon, {
+    size: 12
+  }))), /*#__PURE__*/React.createElement("span", {
+    className: "dash-search__count"
+  }, users.length, " compte", users.length > 1 ? 's' : '', pending > 0 ? ' · ' + pending + ' en attente' : '')), visible.length === 0 && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg"
+  }, "Aucun compte ne correspond."), visible.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "dash-table-wrap"
+  }, /*#__PURE__*/React.createElement("table", {
+    className: "dash-table comptes-table"
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Email"), /*#__PURE__*/React.createElement("th", null, "Inscrit le"), /*#__PURE__*/React.createElement("th", null, "Plan"), /*#__PURE__*/React.createElement("th", null, "R\xF4le"))), /*#__PURE__*/React.createElement("tbody", null, visible.map(u => {
+    const isPremium = (u.plan || 'free') === 'premium';
+    const date = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : '·';
+    return /*#__PURE__*/React.createElement("tr", {
+      key: u.id,
+      className: "dash-row"
+    }, /*#__PURE__*/React.createElement("td", null, u.email, !isPremium && /*#__PURE__*/React.createElement("span", {
+      className: "compte-badge"
+    }, "En attente")), /*#__PURE__*/React.createElement("td", null, date), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("select", {
+      className: 'compte-select ' + (isPremium ? 'is-premium' : 'is-free'),
+      value: isPremium ? 'premium' : 'free',
+      disabled: busy === u.id + 'plan',
+      onChange: e => setField(u, 'plan', e.target.value)
+    }, /*#__PURE__*/React.createElement("option", {
+      value: "free"
+    }, "Gratuit"), /*#__PURE__*/React.createElement("option", {
+      value: "premium"
+    }, "Premium"))), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("select", {
+      className: "compte-select",
+      value: u.role || 'viewer',
+      disabled: busy === u.id + 'role',
+      onChange: e => setField(u, 'role', e.target.value)
+    }, /*#__PURE__*/React.createElement("option", {
+      value: "viewer"
+    }, "Viewer"), /*#__PURE__*/React.createElement("option", {
+      value: "editor"
+    }, "Editor"), /*#__PURE__*/React.createElement("option", {
+      value: "admin"
+    }, "Admin"))));
+  })))))));
 }
 
 // Page « Veille » — outil de veille OSINT (app Streamlit Algor Int) intégré en cadre.
@@ -1824,6 +2005,7 @@ Object.assign(window, {
   HomeView,
   VideoBand,
   ConsoleView,
+  ComptesView,
   ArchivesView,
   VeilleView,
   Arrow,

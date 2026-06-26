@@ -3545,3 +3545,18 @@ button:focus-visible,
 /* Logo de la source OSINT sur la carte de veille */
 .vcard__logo { position:absolute; top:11px; right:11px; width:36px; height:36px; border-radius:10px; background:#fff; padding:7px; object-fit:contain; box-shadow:0 5px 16px rgba(13,8,30,.28); }
 .vmodal__media .vcard__logo { top:14px; right:14px; width:42px; height:42px; padding:8px; border-radius:11px; }
+
+/* ── Console : Comptes clients (validation des inscriptions) ── */
+.comptes-table td { vertical-align:middle; }
+.comptes-table .compte-select {
+  font:600 12px/1 'Plus Jakarta Sans',sans-serif;
+  padding:6px 10px; border-radius:8px; cursor:pointer;
+  border:1px solid #E2D9F0; background:#fff; color:#2A1B45;
+}
+.comptes-table .compte-select.is-premium { background:#6B3FA0; color:#fff; border-color:#6B3FA0; }
+.comptes-table .compte-select:disabled { opacity:.5; cursor:default; }
+.compte-badge {
+  display:inline-block; margin-left:9px; padding:2px 8px; border-radius:999px;
+  font:800 9px/1.5 'Plus Jakarta Sans',sans-serif; letter-spacing:.05em; text-transform:uppercase;
+  background:#F3ECFF; color:#6B3FA0; vertical-align:middle;
+}

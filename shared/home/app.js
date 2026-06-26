@@ -1,5 +1,5 @@
 (function () {
-/* global React, ReactDOM, HomeView, ConsoleView, ArchivesView, VeilleView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, ComptesView, ArchivesView, VeilleView, PlatformView, Starfield */
 
 const {
   useState,
@@ -21,8 +21,9 @@ function PopCheck() {
   }));
 }
 function App() {
-  // Ancre #console : ouvre directement la Console (retour depuis /cloud/, /admin/...).
-  const [view, setView] = useState(window.location.hash === '#console' ? 'console' : 'home');
+  // Ancres : #comptes ouvre directement la vue Comptes (lien des notifs
+  // d'inscription), #console ouvre la Console. Retour depuis /cloud/, /admin/...
+  const [view, setView] = useState(window.location.hash === '#comptes' ? 'comptes' : window.location.hash === '#console' ? 'console' : 'home');
   const [clock, setClock] = useState('--:--');
   const [menuOpen, setMenuOpen] = useState(false);
   const [authLoggedIn, setAuthLoggedIn] = useState(!!(window.algorAuthState && window.algorAuthState.loggedIn));
@@ -274,7 +275,10 @@ function App() {
   }), view === 'console' && /*#__PURE__*/React.createElement(ConsoleView, {
     onBack: () => setView('home'),
     onArchives: () => setView('archives'),
-    onVeille: () => setView('veille')
+    onVeille: () => setView('veille'),
+    onComptes: () => setView('comptes')
+  }), view === 'comptes' && /*#__PURE__*/React.createElement(ComptesView, {
+    onBack: () => setView('console')
   }), view === 'archives' && /*#__PURE__*/React.createElement(ArchivesView, {
     onBack: () => setView('console')
   }), view === 'veille' && /*#__PURE__*/React.createElement(VeilleView, {

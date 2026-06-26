@@ -1,4 +1,4 @@
-/* global React, ReactDOM, HomeView, ConsoleView, ArchivesView, VeilleView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, ComptesView, ArchivesView, VeilleView, PlatformView, Starfield */
 
 const { useState, useEffect, useRef } = React;
 
@@ -12,9 +12,12 @@ function PopCheck() {
 }
 
 function App() {
-  // Ancre #console : ouvre directement la Console (retour depuis /cloud/, /admin/...).
+  // Ancres : #comptes ouvre directement la vue Comptes (lien des notifs
+  // d'inscription), #console ouvre la Console. Retour depuis /cloud/, /admin/...
   const [view, setView] = useState(
-    window.location.hash === '#console' ? 'console' : 'home'
+    window.location.hash === '#comptes' ? 'comptes'
+      : window.location.hash === '#console' ? 'console'
+      : 'home'
   );
   const [clock, setClock] = useState('--:--');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -176,8 +179,10 @@ function App() {
         <ConsoleView
           onBack={() => setView('home')}
           onArchives={() => setView('archives')}
-          onVeille={() => setView('veille')} />
+          onVeille={() => setView('veille')}
+          onComptes={() => setView('comptes')} />
       )}
+      {view === 'comptes' && <ComptesView onBack={() => setView('console')} />}
       {view === 'archives' && <ArchivesView onBack={() => setView('console')} />}
       {view === 'veille' && <VeilleView onBack={() => setView('console')} />}
       {view === 'platform' && <PlatformView onBack={() => setView('home')} />}
