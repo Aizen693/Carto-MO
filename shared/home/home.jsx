@@ -1,7 +1,7 @@
 /* global React, ReactDOM */
 // Page 1 — Accueil client Algor Access (plateforme OSINT)
 
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
 const SB_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
 const SB_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
@@ -877,7 +877,7 @@ function ConsoleTab({ href, soon, onClick, icon, label, popTitle, popText }) {
   );
 }
 
-function ConsoleView({ onBack, onArchives, onVeille, onComptes }) {
+function ConsoleView({ onBack, onArchives, onVeille, onComptes, onRapports }) {
   return (
     <main className="view-enter view-enter-active">
       <section className="console-page">
@@ -935,10 +935,10 @@ function ConsoleView({ onBack, onArchives, onVeille, onComptes }) {
             icon={<><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="M9 13a3 3 0 1 1 6 0" /><path d="M12 13v3" /></>}
           />
           <ConsoleTab
-            soon
-            label="Rapport"
-            popTitle="Rapport"
-            popText="Generation de rapports d'analyse decisionnels. Bientôt disponible."
+            onClick={onRapports}
+            label="Rapports"
+            popTitle="Rapports"
+            popText="Bulletins de veille securite par théâtre : consultation du rapport complet et export PDF."
             icon={<><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" /><path d="M14 2v5h5" /><path d="M9 13h6M9 17h6" /></>}
           />
           <ConsoleTab
@@ -1378,6 +1378,246 @@ function PointDetail({ point, onClose }) {
   );
 }
 
+// Page « Rapports » — veille securite produite par n8n, stockee dans le bucket
+// prive `zones` (rapports/index.json + un .html autonome par rapport). Lecture
+// via window.algorAuth.loadZoneRaw (gere l'auth premium/staff + la RLS Storage).
+const RAP_ZONE_LABELS = {
+  'moyen-orient': 'Moyen-Orient',
+  'sahel': 'Sahel',
+  'rdc': 'RDC',
+  'madagascar': 'Madagascar',
+  'afrique': 'Afrique Maritime',
+  'asie-sud': 'Asie du Sud',
+};
+
+function rapDateFR(iso) {
+  if (!iso) return '·';
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+// Charge html2pdf.js a la demande (CDN) et le met en cache sur window.
+function loadHtml2Pdf() {
+  if (window.html2pdf) return Promise.resolve(window.html2pdf);
+  if (window.__html2pdfPromise) return window.__html2pdfPromise;
+  window.__html2pdfPromise = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js';
+    s.onload = () => resolve(window.html2pdf);
+    s.onerror = () => reject(new Error('Chargement html2pdf impossible'));
+    document.head.appendChild(s);
+  });
+  return window.__html2pdfPromise;
+}
+
+// Modale A4 affichant le HTML autonome d'un rapport + export PDF cote navigateur.
+function RapportModal({ entry, html, onClose }) {
+  const pageRef = useRef(null);
+  const [pdfBusy, setPdfBusy] = useState(false);
+
+  useEffect(() => {
+    const h = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [onClose]);
+
+  async function downloadPdf() {
+    if (pdfBusy || !pageRef.current) return;
+    setPdfBusy(true);
+    try {
+      const lib = await loadHtml2Pdf();
+      const name = (entry.fichier || 'rapport.html').split('/').pop().replace('.html', '.pdf');
+      await lib().set({
+        margin: 8,
+        filename: name,
+        html2canvas: { scale: 2 },
+        jsPDF: { format: 'a4' },
+      }).from(pageRef.current).save();
+    } catch (e) {
+      alert('Echec de la generation du PDF : ' + ((e && e.message) || 'reessayez'));
+    } finally {
+      setPdfBusy(false);
+    }
+  }
+
+  return ReactDOM.createPortal(
+    <div className="rapport-modal-overlay" onClick={onClose}>
+      <div className="rapport-modal" role="dialog" aria-modal="true"
+           onClick={(e) => e.stopPropagation()}>
+        <div className="rapport-modal__bar">
+          <span className="rapport-modal__title">{entry.titre || 'Rapport'}</span>
+          <div className="rapport-modal__actions">
+            <button className="rapport-btn" onClick={downloadPdf} disabled={pdfBusy}>
+              {pdfBusy ? 'Génération…' : 'Télécharger PDF'}
+            </button>
+            <button className="rapport-btn rapport-btn--ghost" onClick={onClose}>Fermer</button>
+          </div>
+        </div>
+        <div className="rapport-modal__scroll">
+          <div className="rapport-page" ref={pageRef}
+               dangerouslySetInnerHTML={{ __html: html }} />
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+function RapportsView({ onBack }) {
+  const [items, setItems] = useState(null);
+  const [error, setError] = useState(null);
+  const [query, setQuery] = useState('');
+  const [open, setOpen] = useState(null);   // entry en cours d'affichage
+  const [openHtml, setOpenHtml] = useState(null);
+  const [loadingDoc, setLoadingDoc] = useState(false);
+  const [docError, setDocError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        if (!(window.algorAuth && window.algorAuth.loadZoneRaw)) {
+          throw new Error('Service de stockage indisponible');
+        }
+        const raw = await window.algorAuth.loadZoneRaw('rapports/index.json');
+        const data = JSON.parse(raw);
+        if (!cancelled) setItems(Array.isArray(data) ? data : []);
+      } catch (e) {
+        if (!cancelled) setError((e && e.message) || 'Erreur de chargement');
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  async function view(entry) {
+    setOpen(entry);
+    setOpenHtml(null);
+    setDocError(null);
+    setLoadingDoc(true);
+    try {
+      const html = await window.algorAuth.loadZoneRaw(entry.fichier);
+      setOpenHtml(html);
+    } catch (e) {
+      setDocError((e && e.message) || 'Rapport indisponible');
+    } finally {
+      setLoadingDoc(false);
+    }
+  }
+
+  function close() { setOpen(null); setOpenHtml(null); setDocError(null); }
+
+  const needle = query.toLowerCase().trim();
+  const visible = (items || []).filter((r) => {
+    if (!needle) return true;
+    return [r.titre, r.date, RAP_ZONE_LABELS[r.zone] || r.zone]
+      .some((f) => (f || '').toString().toLowerCase().includes(needle));
+  });
+
+  return (
+    <main className="view-enter view-enter-active">
+      <section className="console-page">
+        <a className="console-back" href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>
+          &larr; Retour à la console
+        </a>
+        <h1 className="hero__title">Rapports <em>de veille</em></h1>
+        <p className="hero__lede">
+          Bulletins de veille sécurité par théâtre, corroborés et datés. Consulte le rapport complet et exporte le en PDF.
+        </p>
+
+        {items && items.length > 0 && (
+          <div className="dash-search">
+            <div className="search-input">
+              <DashSearchIcon />
+              <input
+                placeholder="Rechercher un rapport : titre, date, théâtre..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              {query && (
+                <button className="search-input__clear" onClick={() => setQuery('')} aria-label="Effacer">
+                  <DashCloseIcon size={12} />
+                </button>
+              )}
+            </div>
+            <span className="dash-search__count">
+              {visible.length} rapport{visible.length > 1 ? 's' : ''}
+            </span>
+          </div>
+        )}
+
+        {error && <div className="dash-msg dash-msg--err">Erreur : {error}</div>}
+        {!items && !error && <div className="dash-msg">Chargement des rapports...</div>}
+        {items && items.length === 0 && <div className="dash-msg">Aucun rapport disponible.</div>}
+        {items && items.length > 0 && visible.length === 0 && (
+          <div className="dash-msg">Aucun résultat pour « {query} ».</div>
+        )}
+
+        {visible.length > 0 && (
+          <div className="dash-zone">
+            <div className="dash-table-wrap">
+              <table className="dash-table">
+                <thead>
+                  <tr>
+                    <th>Titre</th><th>Théâtre</th><th>Date</th>
+                    <th>HUMINT</th><th>OSINT</th><th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visible.map((r, i) => (
+                    <tr key={(r.fichier || '') + i} className="dash-row">
+                      <td>{r.titre || '·'}</td>
+                      <td>{RAP_ZONE_LABELS[r.zone] || r.zone || '·'}</td>
+                      <td>{rapDateFR(r.date)}</td>
+                      <td><span className="rapport-count rapport-count--humint">{r.nb_humint != null ? r.nb_humint : 0}</span></td>
+                      <td><span className="rapport-count rapport-count--osint">{r.nb_osint != null ? r.nb_osint : 0}</span></td>
+                      <td><button className="rapport-btn rapport-btn--sm" onClick={() => view(r)}>Voir</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {open && loadingDoc && (
+        <div className="rapport-modal-overlay" onClick={close}>
+          <div className="rapport-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="rapport-modal__bar">
+              <span className="rapport-modal__title">{open.titre || 'Rapport'}</span>
+              <div className="rapport-modal__actions">
+                <button className="rapport-btn rapport-btn--ghost" onClick={close}>Fermer</button>
+              </div>
+            </div>
+            <div className="rapport-modal__scroll">
+              <div className="dash-msg">Chargement du rapport...</div>
+            </div>
+          </div>
+        </div>
+      )}
+      {open && !loadingDoc && docError && (
+        <div className="rapport-modal-overlay" onClick={close}>
+          <div className="rapport-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="rapport-modal__bar">
+              <span className="rapport-modal__title">{open.titre || 'Rapport'}</span>
+              <div className="rapport-modal__actions">
+                <button className="rapport-btn rapport-btn--ghost" onClick={close}>Fermer</button>
+              </div>
+            </div>
+            <div className="rapport-modal__scroll">
+              <div className="dash-msg dash-msg--err">Erreur : {docError}</div>
+            </div>
+          </div>
+        </div>
+      )}
+      {open && !loadingDoc && !docError && openHtml != null && (
+        <RapportModal entry={open} html={openHtml} onClose={close} />
+      )}
+    </main>
+  );
+}
+
 function DashSearchIcon() {
   return (<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
     <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
@@ -1390,4 +1630,4 @@ function DashCloseIcon({ size = 14 }) {
   </svg>);
 }
 
-Object.assign(window, { HomeView, VideoBand, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, Arrow, ArrowDiag });
+Object.assign(window, { HomeView, VideoBand, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, RapportsView, Arrow, ArrowDiag });

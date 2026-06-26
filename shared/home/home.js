@@ -5,7 +5,8 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
 
 const {
   useState,
-  useEffect
+  useEffect,
+  useRef
 } = React;
 const SB_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
 const SB_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
@@ -1444,7 +1445,8 @@ function ConsoleView({
   onBack,
   onArchives,
   onVeille,
-  onComptes
+  onComptes,
+  onRapports
 }) {
   return /*#__PURE__*/React.createElement("main", {
     className: "view-enter view-enter-active"
@@ -1536,10 +1538,10 @@ function ConsoleView({
       d: "M12 13v3"
     }))
   }), /*#__PURE__*/React.createElement(ConsoleTab, {
-    soon: true,
-    label: "Rapport",
-    popTitle: "Rapport",
-    popText: "Generation de rapports d'analyse decisionnels. Bient\xF4t disponible.",
+    onClick: onRapports,
+    label: "Rapports",
+    popTitle: "Rapports",
+    popText: "Bulletins de veille securite par th\xE9\xE2tre : consultation du rapport complet et export PDF.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"
     }), /*#__PURE__*/React.createElement("path", {
@@ -2001,6 +2003,262 @@ function PointDetail({
     className: "point-modal__val"
   }, v)))))), document.body);
 }
+
+// Page « Rapports » — veille securite produite par n8n, stockee dans le bucket
+// prive `zones` (rapports/index.json + un .html autonome par rapport). Lecture
+// via window.algorAuth.loadZoneRaw (gere l'auth premium/staff + la RLS Storage).
+const RAP_ZONE_LABELS = {
+  'moyen-orient': 'Moyen-Orient',
+  'sahel': 'Sahel',
+  'rdc': 'RDC',
+  'madagascar': 'Madagascar',
+  'afrique': 'Afrique Maritime',
+  'asie-sud': 'Asie du Sud'
+};
+function rapDateFR(iso) {
+  if (!iso) return '·';
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  });
+}
+
+// Charge html2pdf.js a la demande (CDN) et le met en cache sur window.
+function loadHtml2Pdf() {
+  if (window.html2pdf) return Promise.resolve(window.html2pdf);
+  if (window.__html2pdfPromise) return window.__html2pdfPromise;
+  window.__html2pdfPromise = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js';
+    s.onload = () => resolve(window.html2pdf);
+    s.onerror = () => reject(new Error('Chargement html2pdf impossible'));
+    document.head.appendChild(s);
+  });
+  return window.__html2pdfPromise;
+}
+
+// Modale A4 affichant le HTML autonome d'un rapport + export PDF cote navigateur.
+function RapportModal({
+  entry,
+  html,
+  onClose
+}) {
+  const pageRef = useRef(null);
+  const [pdfBusy, setPdfBusy] = useState(false);
+  useEffect(() => {
+    const h = e => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [onClose]);
+  async function downloadPdf() {
+    if (pdfBusy || !pageRef.current) return;
+    setPdfBusy(true);
+    try {
+      const lib = await loadHtml2Pdf();
+      const name = (entry.fichier || 'rapport.html').split('/').pop().replace('.html', '.pdf');
+      await lib().set({
+        margin: 8,
+        filename: name,
+        html2canvas: {
+          scale: 2
+        },
+        jsPDF: {
+          format: 'a4'
+        }
+      }).from(pageRef.current).save();
+    } catch (e) {
+      alert('Echec de la generation du PDF : ' + (e && e.message || 'reessayez'));
+    } finally {
+      setPdfBusy(false);
+    }
+  }
+  return ReactDOM.createPortal(/*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal-overlay",
+    onClick: onClose
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal",
+    role: "dialog",
+    "aria-modal": "true",
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal__bar"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "rapport-modal__title"
+  }, entry.titre || 'Rapport'), /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal__actions"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "rapport-btn",
+    onClick: downloadPdf,
+    disabled: pdfBusy
+  }, pdfBusy ? 'Génération…' : 'Télécharger PDF'), /*#__PURE__*/React.createElement("button", {
+    className: "rapport-btn rapport-btn--ghost",
+    onClick: onClose
+  }, "Fermer"))), /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal__scroll"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rapport-page",
+    ref: pageRef,
+    dangerouslySetInnerHTML: {
+      __html: html
+    }
+  })))), document.body);
+}
+function RapportsView({
+  onBack
+}) {
+  const [items, setItems] = useState(null);
+  const [error, setError] = useState(null);
+  const [query, setQuery] = useState('');
+  const [open, setOpen] = useState(null); // entry en cours d'affichage
+  const [openHtml, setOpenHtml] = useState(null);
+  const [loadingDoc, setLoadingDoc] = useState(false);
+  const [docError, setDocError] = useState(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        if (!(window.algorAuth && window.algorAuth.loadZoneRaw)) {
+          throw new Error('Service de stockage indisponible');
+        }
+        const raw = await window.algorAuth.loadZoneRaw('rapports/index.json');
+        const data = JSON.parse(raw);
+        if (!cancelled) setItems(Array.isArray(data) ? data : []);
+      } catch (e) {
+        if (!cancelled) setError(e && e.message || 'Erreur de chargement');
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  async function view(entry) {
+    setOpen(entry);
+    setOpenHtml(null);
+    setDocError(null);
+    setLoadingDoc(true);
+    try {
+      const html = await window.algorAuth.loadZoneRaw(entry.fichier);
+      setOpenHtml(html);
+    } catch (e) {
+      setDocError(e && e.message || 'Rapport indisponible');
+    } finally {
+      setLoadingDoc(false);
+    }
+  }
+  function close() {
+    setOpen(null);
+    setOpenHtml(null);
+    setDocError(null);
+  }
+  const needle = query.toLowerCase().trim();
+  const visible = (items || []).filter(r => {
+    if (!needle) return true;
+    return [r.titre, r.date, RAP_ZONE_LABELS[r.zone] || r.zone].some(f => (f || '').toString().toLowerCase().includes(needle));
+  });
+  return /*#__PURE__*/React.createElement("main", {
+    className: "view-enter view-enter-active"
+  }, /*#__PURE__*/React.createElement("section", {
+    className: "console-page"
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "console-back",
+    href: "#",
+    onClick: e => {
+      e.preventDefault();
+      onBack();
+    }
+  }, "\u2190 Retour \xE0 la console"), /*#__PURE__*/React.createElement("h1", {
+    className: "hero__title"
+  }, "Rapports ", /*#__PURE__*/React.createElement("em", null, "de veille")), /*#__PURE__*/React.createElement("p", {
+    className: "hero__lede"
+  }, "Bulletins de veille s\xE9curit\xE9 par th\xE9\xE2tre, corrobor\xE9s et dat\xE9s. Consulte le rapport complet et exporte le en PDF."), items && items.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "dash-search"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "search-input"
+  }, /*#__PURE__*/React.createElement(DashSearchIcon, null), /*#__PURE__*/React.createElement("input", {
+    placeholder: "Rechercher un rapport : titre, date, th\xE9\xE2tre...",
+    value: query,
+    onChange: e => setQuery(e.target.value)
+  }), query && /*#__PURE__*/React.createElement("button", {
+    className: "search-input__clear",
+    onClick: () => setQuery(''),
+    "aria-label": "Effacer"
+  }, /*#__PURE__*/React.createElement(DashCloseIcon, {
+    size: 12
+  }))), /*#__PURE__*/React.createElement("span", {
+    className: "dash-search__count"
+  }, visible.length, " rapport", visible.length > 1 ? 's' : '')), error && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg dash-msg--err"
+  }, "Erreur : ", error), !items && !error && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg"
+  }, "Chargement des rapports..."), items && items.length === 0 && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg"
+  }, "Aucun rapport disponible."), items && items.length > 0 && visible.length === 0 && /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg"
+  }, "Aucun r\xE9sultat pour \xAB ", query, " \xBB."), visible.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "dash-zone"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "dash-table-wrap"
+  }, /*#__PURE__*/React.createElement("table", {
+    className: "dash-table"
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Titre"), /*#__PURE__*/React.createElement("th", null, "Th\xE9\xE2tre"), /*#__PURE__*/React.createElement("th", null, "Date"), /*#__PURE__*/React.createElement("th", null, "HUMINT"), /*#__PURE__*/React.createElement("th", null, "OSINT"), /*#__PURE__*/React.createElement("th", null))), /*#__PURE__*/React.createElement("tbody", null, visible.map((r, i) => /*#__PURE__*/React.createElement("tr", {
+    key: (r.fichier || '') + i,
+    className: "dash-row"
+  }, /*#__PURE__*/React.createElement("td", null, r.titre || '·'), /*#__PURE__*/React.createElement("td", null, RAP_ZONE_LABELS[r.zone] || r.zone || '·'), /*#__PURE__*/React.createElement("td", null, rapDateFR(r.date)), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("span", {
+    className: "rapport-count rapport-count--humint"
+  }, r.nb_humint != null ? r.nb_humint : 0)), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("span", {
+    className: "rapport-count rapport-count--osint"
+  }, r.nb_osint != null ? r.nb_osint : 0)), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("button", {
+    className: "rapport-btn rapport-btn--sm",
+    onClick: () => view(r)
+  }, "Voir"))))))))), open && loadingDoc && /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal-overlay",
+    onClick: close
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal",
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal__bar"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "rapport-modal__title"
+  }, open.titre || 'Rapport'), /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal__actions"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "rapport-btn rapport-btn--ghost",
+    onClick: close
+  }, "Fermer"))), /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal__scroll"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg"
+  }, "Chargement du rapport...")))), open && !loadingDoc && docError && /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal-overlay",
+    onClick: close
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal",
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal__bar"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "rapport-modal__title"
+  }, open.titre || 'Rapport'), /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal__actions"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "rapport-btn rapport-btn--ghost",
+    onClick: close
+  }, "Fermer"))), /*#__PURE__*/React.createElement("div", {
+    className: "rapport-modal__scroll"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "dash-msg dash-msg--err"
+  }, "Erreur : ", docError)))), open && !loadingDoc && !docError && openHtml != null && /*#__PURE__*/React.createElement(RapportModal, {
+    entry: open,
+    html: openHtml,
+    onClose: close
+  }));
+}
 function DashSearchIcon() {
   return /*#__PURE__*/React.createElement("svg", {
     width: "16",
@@ -2043,6 +2301,7 @@ Object.assign(window, {
   ComptesView,
   ArchivesView,
   VeilleView,
+  RapportsView,
   Arrow,
   ArrowDiag
 });

@@ -1,5 +1,5 @@
 (function () {
-/* global React, ReactDOM, HomeView, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, RapportsView, PlatformView, Starfield */
 
 const {
   useState,
@@ -69,7 +69,7 @@ function PopCheck() {
 function App() {
   // Ancres : #comptes ouvre directement la vue Comptes (lien des notifs
   // d'inscription), #console ouvre la Console. Retour depuis /cloud/, /admin/...
-  const [view, setView] = useState(window.location.hash === '#comptes' ? 'comptes' : window.location.hash === '#console' ? 'console' : 'home');
+  const [view, setView] = useState(window.location.hash === '#comptes' ? 'comptes' : window.location.hash === '#rapports' ? 'rapports' : window.location.hash === '#console' ? 'console' : 'home');
   const [clock, setClock] = useState('--:--');
   const staff = useStaff();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -319,19 +319,22 @@ function App() {
     onEnter: () => setView('platform'),
     onConsole: () => setView('console'),
     clock: clock
-  }), ['console', 'comptes', 'archives', 'veille'].includes(view) && staff !== true && /*#__PURE__*/React.createElement(ConsoleGate, {
+  }), ['console', 'comptes', 'archives', 'veille', 'rapports'].includes(view) && staff !== true && /*#__PURE__*/React.createElement(ConsoleGate, {
     checking: staff === null,
     onBack: () => setView('home')
   }), view === 'console' && staff === true && /*#__PURE__*/React.createElement(ConsoleView, {
     onBack: () => setView('home'),
     onArchives: () => setView('archives'),
     onVeille: () => setView('veille'),
-    onComptes: () => setView('comptes')
+    onComptes: () => setView('comptes'),
+    onRapports: () => setView('rapports')
   }), view === 'comptes' && staff === true && /*#__PURE__*/React.createElement(ComptesView, {
     onBack: () => setView('console')
   }), view === 'archives' && staff === true && /*#__PURE__*/React.createElement(ArchivesView, {
     onBack: () => setView('console')
   }), view === 'veille' && staff === true && /*#__PURE__*/React.createElement(VeilleView, {
+    onBack: () => setView('console')
+  }), view === 'rapports' && staff === true && /*#__PURE__*/React.createElement(RapportsView, {
     onBack: () => setView('console')
   }), view === 'platform' && /*#__PURE__*/React.createElement(PlatformView, {
     onBack: () => setView('home')

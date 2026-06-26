@@ -1,4 +1,4 @@
-/* global React, ReactDOM, HomeView, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, RapportsView, PlatformView, Starfield */
 
 const { useState, useEffect, useRef } = React;
 
@@ -48,6 +48,7 @@ function App() {
   // d'inscription), #console ouvre la Console. Retour depuis /cloud/, /admin/...
   const [view, setView] = useState(
     window.location.hash === '#comptes' ? 'comptes'
+      : window.location.hash === '#rapports' ? 'rapports'
       : window.location.hash === '#console' ? 'console'
       : 'home'
   );
@@ -210,7 +211,7 @@ function App() {
       )}
       {/* Console interne + sous-vues : reservees a l'equipe (admin/editor).
           Tant que staff !== true, on affiche la garde d'acces a la place. */}
-      {['console', 'comptes', 'archives', 'veille'].includes(view) && staff !== true && (
+      {['console', 'comptes', 'archives', 'veille', 'rapports'].includes(view) && staff !== true && (
         <ConsoleGate checking={staff === null} onBack={() => setView('home')} />
       )}
       {view === 'console' && staff === true && (
@@ -218,11 +219,13 @@ function App() {
           onBack={() => setView('home')}
           onArchives={() => setView('archives')}
           onVeille={() => setView('veille')}
-          onComptes={() => setView('comptes')} />
+          onComptes={() => setView('comptes')}
+          onRapports={() => setView('rapports')} />
       )}
       {view === 'comptes' && staff === true && <ComptesView onBack={() => setView('console')} />}
       {view === 'archives' && staff === true && <ArchivesView onBack={() => setView('console')} />}
       {view === 'veille' && staff === true && <VeilleView onBack={() => setView('console')} />}
+      {view === 'rapports' && staff === true && <RapportsView onBack={() => setView('console')} />}
       {view === 'platform' && <PlatformView onBack={() => setView('home')} />}
     </>
   );
