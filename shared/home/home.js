@@ -2122,11 +2122,14 @@ function RapportsView({
     let cancelled = false;
     (async () => {
       try {
-        if (!(window.algorAuth && window.algorAuth.loadZoneRaw)) {
-          throw new Error('Service de stockage indisponible');
-        }
-        const raw = await window.algorAuth.loadZoneRaw('rapports/index.json');
-        const data = JSON.parse(raw);
+        const c = window.algorAuth && window.algorAuth.supabase;
+        if (!c) throw new Error('Service de stockage indisponible');
+        await c.auth.getSession();
+        const dl = c.storage.from('zones').download('rapports/index.json');
+        const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('Delai depasse, reessaie')), 12000));
+        const res = await Promise.race([dl, timeout]);
+        if (res.error) throw res.error;
+        const data = JSON.parse(await res.data.text());
         if (!cancelled) setItems(Array.isArray(data) ? data : []);
       } catch (e) {
         if (!cancelled) setError(e && e.message || 'Erreur de chargement');
@@ -2142,8 +2145,12 @@ function RapportsView({
     setDocError(null);
     setLoadingDoc(true);
     try {
-      const html = await window.algorAuth.loadZoneRaw(entry.fichier);
-      setOpenHtml(html);
+      const c = window.algorAuth && window.algorAuth.supabase;
+      if (!c) throw new Error('Service de stockage indisponible');
+      await c.auth.getSession();
+      const res = await c.storage.from('zones').download(entry.fichier);
+      if (res.error) throw res.error;
+      setOpenHtml(await res.data.text());
     } catch (e) {
       setDocError(e && e.message || 'Rapport indisponible');
     } finally {
