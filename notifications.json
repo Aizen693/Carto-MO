@@ -9,20 +9,21 @@
       "source": "Mali Actu",
       "source_url": "https://maliactu.net/aes-10000-jeunes-enroles-sahel/",
       "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20900.jpg",
-      "titre": "AES mobilise 10 000 jeunes au Sahel pour souveraineté régionale",
-      "resume": "L'Alliance des États du Sahel (AES) annonce l'enrôlement de 10 000 jeunes dans un projet de souveraineté régionale.",
-      "detail": "Ce programme volontaire vise à renforcer la légitimité des juntes par une mobilisation massive de la jeunesse face aux défis sécuritaires et économiques. L'initiative pourrait accentuer les tensions avec les acteurs internationaux déjà critiques des régimes militaires. La structuration d'une force locale pourrait aussi modifier les équilibres géopolitiques dans la zone.",
-      "lieu": "Sahel (Mali, Burkina Faso, Niger)",
-      "lat": null,
-      "lon": null,
+      "titre": "AES enrôle 10 000 jeunes au Sahel dans un projet de souveraineté",
+      "resume": "L'Alliance des États du Sahel mobilise 10 000 jeunes volontaires pour renforcer la souveraineté régionale. Analyse des enjeux socio-politiques et sécuritaires.",
+      "detail": "Cette initiative reflète une stratégie de consolidation du pouvoir par les juntes du Sahel en misant sur la jeunesse pour contrer les influences étrangères. Le recrutement massif pourrait accentuer les tensions internes et régionales. Les fonds mobilisés pourraient aussi détourner des ressources d'autres secteurs critiques comme la santé ou l'éducation. L'impact sur la stabilité à moyen terme reste incertain.",
+      "lieu": "Sahel",
+      "lat": 14.0279165,
+      "lon": -0.7717776,
       "implications": [
-        "Risque accru de radicalisation des jeunes recruits",
-        "Renforcement des alliances militaires régionales (AES)",
-        "Tensions avec les partenaires internationaux (France, CEDEAO)"
+        "Risque accru de radicalisation parmi les jeunes recrutés",
+        "Détournement potentiel de fonds publics vers des projets politiques",
+        "Tensions accrues avec les partenaires internationaux"
       ],
       "recommandations": [
-        "Surveiller les canaux de recrutement de l'AES",
-        "Analyser les réactions des ONG locales sur les droits des jeunes"
+        "Surveiller les recrutements et leur impact sur les dynamiques locales",
+        "Évaluer les priorités budgétaires des juntes du Sahel",
+        "Préparer des scénarios de réponse en cas d'escalade sécuritaire"
       ]
     },
     {
@@ -53,24 +54,25 @@
       "id": "u-maliactu-net-aes-jeux-forum-jeunesse-sahel",
       "date": "2026-06-27",
       "theatre": "sahel",
-      "severite": "alerte",
+      "severite": "info",
       "source": "Mali Actu",
       "source_url": "https://maliactu.net/aes-jeux-forum-jeunesse-sahel/",
       "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20887.jpg",
-      "titre": "AES lance Jeux et Forum de la Jeunesse à Ouagadougou",
-      "resume": "L'AES organise des Jeux et un Forum de la Jeunesse pour lutter contre le chômage des jeunes au Sahel.",
-      "detail": "Ces événements visent à promouvoir l'unité régionale et à contrer l'exclusion des jeunes. Ils pourraient servir de plateforme de recrutement informel pour les structures sécuritaires ou politiques. La participation des autres pays de la CEDEAO reste incertaine en raison des tensions politiques actuelles.",
-      "lieu": "Ouagadougou, Burkina Faso",
+      "titre": "AES lance Jeux et Forum de la Jeunesse au Sahel",
+      "resume": "L'Alliance des États du Sahel organise des Jeux et un Forum de la Jeunesse pour lutter contre le chômage des jeunes.",
+      "detail": "Cette initiative vise à contrer l'exclusion des jeunes et à renforcer la cohésion régionale. Les Jeux et le Forum pourraient mobiliser des ressources et des partenariats internationaux. L'impact réel sur la jeunesse sahélienne reste à évaluer. Une opportunité pour observer les dynamiques de soft power de l'AES.",
+      "lieu": "Sahel",
       "lat": 12.3681873,
       "lon": -1.5270944,
       "implications": [
-        "Renforcement de la légitimité des régimes militaires",
-        "Possible instrumentalisation politique des événements",
-        "Risque de marginalisation des acteurs non alignés sur l'AES"
+        "Opportunité de renforcer les liens régionaux",
+        "Potentiel de mobilisation des jeunes autour de projets communs",
+        "Risque de récupération politique des événements"
       ],
       "recommandations": [
-        "Identifier les participants clés et leurs affiliations",
-        "Surveiller les discours officiels lors des événements"
+        "Analyser les partenariats et financements associés aux Jeux et Forum",
+        "Suivre la participation des jeunes et leur perception de l'initiative",
+        "Évaluer l'impact réel sur l'emploi et la cohésion sociale"
       ]
     },
     {
@@ -119,6 +121,81 @@
       "recommandations": [
         "Renforcer la communication sur les mesures de prévention",
         "Planifier des interventions ciblées dans les zones les plus vulnérables"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-bamako-canicule-41c-urgence-sante",
+      "date": "2026-06-27",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/bamako-canicule-41c-urgence-sante/",
+      "image": "",
+      "titre": "Bamako sous canicule extrême : 41°C, urgence sanitaire déclarée",
+      "resume": "Bamako enregistre 41°C ressentis, mettant à rude épreuve les systèmes de santé publique. La situation pourrait s'aggraver dans les prochains jours.",
+      "detail": "Les températures extrêmes exposent la population à des risques sanitaires immédiats, notamment pour les groupes vulnérables. Les infrastructures sanitaires de Bamako pourraient être débordées. Cette crise climatique aggrave les tensions sociales et économiques existantes. Les autorités maliennes doivent prioriser les mesures d'urgence.",
+      "lieu": "Bamako, Mali",
+      "lat": 12.6132656,
+      "lon": -7.9847391,
+      "implications": [
+        "Risque d'épidémies liées à la chaleur et à la déshydratation",
+        "Détérioration des conditions de vie en milieu urbain",
+        "Impact sur la productivité économique locale"
+      ],
+      "recommandations": [
+        "Renforcer les capacités des centres de santé pour les urgences climatiques",
+        "Mobiliser des ressources d'urgence pour les populations vulnérables",
+        "Coordonner avec les acteurs locaux pour une réponse rapide"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-expulsions-afrique-sud-diaspora-malienne",
+      "date": "2026-06-27",
+      "theatre": "afrique",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/expulsions-afrique-sud-diaspora-malienne/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20886.jpg",
+      "titre": "15 162 migrants expulsés d'Afrique du Sud dont des Maliens",
+      "resume": "L'Afrique du Sud expulse massivement des migrants africains, incluant des Maliens. Analyse des tensions xénophobes et de leurs impacts.",
+      "detail": "Cette vague d'expulsions reflète une montée des tensions xénophobes en Afrique du Sud. Les Maliens expulsés pourraient aggraver la crise migratoire régionale. Les relations diplomatiques entre le Mali et l'Afrique du Sud sont mises à l'épreuve. Les conséquences humanitaires et économiques pourraient être lourdes.",
+      "lieu": "Afrique du Sud",
+      "lat": -28.8166236,
+      "lon": 24.991639,
+      "implications": [
+        "Crise humanitaire pour les migrants expulsés",
+        "Tensions diplomatiques accrues entre le Mali et l'Afrique du Sud",
+        "Risque de radicalisation parmi les populations expulsées"
+      ],
+      "recommandations": [
+        "Surveiller l'évolution des tensions xénophobes en Afrique du Sud",
+        "Préparer des mécanismes de soutien aux migrants malien",
+        "Renforcer le dialogue diplomatique pour désamorcer la crise"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-guinee-interdiction-or-brut-economie",
+      "date": "2026-06-27",
+      "theatre": "afrique",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/guinee-interdiction-or-brut-economie/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20898.jpg",
+      "titre": "Guinée interdit l'exportation d'or brut pour capter la valeur ajoutée",
+      "resume": "La Guinée interdit l'exportation d'or brut pour développer son industrie locale. Une décision risquée pour l'économie et l'environnement.",
+      "detail": "Cette mesure protectionniste vise à capter la valeur ajoutée mais pourrait décourager les investissements étrangers. Les impacts sur l'économie et l'environnement doivent être suivis de près. Les risques de contrebande et de corruption pourraient augmenter. Une analyse approfondie des conséquences à moyen terme est nécessaire.",
+      "lieu": "Guinée",
+      "lat": 10.7226226,
+      "lon": -10.7083587,
+      "implications": [
+        "Risque de ralentissement des investissements miniers",
+        "Augmentation potentielle du trafic illégal d'or",
+        "Tensions avec les partenaires commerciaux internationaux"
+      ],
+      "recommandations": [
+        "Surveiller les flux commerciaux et les réactions des investisseurs",
+        "Renforcer les capacités de contrôle des frontières",
+        "Évaluer l'impact environnemental des nouvelles régulations"
       ]
     },
     {
@@ -664,81 +741,6 @@
         "Préparer cartographie des zones à risque humanitaire accru post-orages",
         "Monitorer les mouvements de populations induites par la catastrophe climatique",
         "Analyser l'impact sur les forces de sécurité et la stabilité régionale"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-transition-energetique-afrique-4500-milliards",
-      "date": "2026-06-21",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/transition-energetique-afrique-4500-milliards/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19240.jpg",
-      "titre": "Transition énergétique Afrique de l'Ouest : 4500 milliards euros en jeu",
-      "resume": "Un rapport estime que la transition vers les énergies renouvelables pourrait générer 4500 milliards d'euros de gains économiques pour l'Afrique de l'Ouest. Enjeu stratégique majeur pour la souveraineté régionale.",
-      "detail": "Les énergies renouvelables représentent un potentiel économique colossal pour l'Afrique de l'Ouest, transformant les équilibres géopolitiques énergétiques. Ce rapport soulève la bataille de la souveraineté énergétique entre les puissances occidentales, la Chine et la Russie. L'AES, particulièrement le Mali et le Niger riches en ressources minérales essentielles aux énergies renouvelables, devient stratégiquement crucial. Le contrôle de cette transition énergétique déterminera les alignements géopolitiques régionaux pour la décennie.",
-      "lieu": "Afrique de l'Ouest, Mali, Niger",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Compétition accrue Occident-Chine-Russie pour le contrôle des ressources énergétiques régionales",
-        "Potentiel de diversification économique réduisant la dépendance aux matières premières classiques",
-        "Enjeu de souveraineté technologique et financière pour les États sahéliens"
-      ],
-      "recommandations": [
-        "Cartographier les investissements chinois et russes en énergies renouvelables au Sahel",
-        "Analyser les partenariats énergétiques émergents de l'AES",
-        "Suivre les négociations sur l'extraction des minéraux critiques (lithium, cobalt, nickel)"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-reforme-constitutionnelle-senegal-sahel",
-      "date": "2026-06-21",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/reforme-constitutionnelle-senegal-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19247.jpg",
-      "titre": "Sénégal : réforme constitutionnelle Pastef impact régional",
-      "resume": "Le Sénégal engage une réforme constitutionnelle majeure sous la direction de Pastef. Ce changement pourrait modifier les équilibres politiques régionaux du Sahel et affecter les alliances sous-régionales.",
-      "detail": "La réforme constitutionnelle du régime Pastef au Sénégal intervient dans un contexte de recomposition géopolitique sahélienne accentuée par l'AES. Cette réforme interne sénégalaise pourrait renforcer ou affaiblir les alliances régionales existantes selon son orientation. La stabilité institutionnelle sénégalaise reste cruciale pour l'équilibre régional face à l'alliance AES. Le processus de réforme révèle des tensions entre les visions intégrationnistes ouest-africaines et les nouvelles orientations géopolitiques.",
-      "lieu": "Sénégal",
-      "lat": 14.4750607,
-      "lon": -14.4529612,
-      "implications": [
-        "Potential shift géopolitique du Sénégal face à l'AES et la CEDEAO",
-        "Redéfinition de l'architecture de gouvernance interne impactant les politiques régionales",
-        "Risque d'instabilité institutionnelle durant la transition constitutionnelle"
-      ],
-      "recommandations": [
-        "Monitorer les dispositions constitutionnelles affectant la politique régionale sénégalaise",
-        "Analyser la position du Sénégal vis-à-vis de l'AES post-réforme",
-        "Suivre l'impact sur les relations CEDEAO et les alliances sous-régionales"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-ebola-rdc-menace-sahel-mali",
-      "date": "2026-06-20",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/ebola-rdc-menace-sahel-mali/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18879.jpg",
-      "titre": "Épidémie Ebola en RDC : 896 cas confirmés, risque régional",
-      "resume": "L'épidémie d'Ebola en RDC s'aggrave avec 896 cas confirmés. L'OMS alerte sur les risques de propagation régionale au Sahel pendant que le Mali et l'AES renforcent les mesures de surveillance.",
-      "detail": "La RDC fait face à une épidémie d'Ebola en phase critique avec près de 900 cas confirmés. L'OMS évalue le risque de propagation transfrontalière comme élevé, particulièrement vers les pays sahéliens adjacents. Le Mali et l'alliance AES ont activé des protocoles de contrôle aux frontières et de traçage des contacts. Cette menace sanitaire intervient dans un contexte régional déjà fragilisé par l'insécurité et les défaillances des systèmes de santé.",
-      "lieu": "République Démocratique du Congo",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Renforcement des contrôles sanitaires aux frontières Mali RDC Congo Brazzaville",
-        "Mobilisation des ressources médicales limitées de l'AES pour contenir une épidémie",
-        "Risque de panique et mouvements de population vers les zones non affectées"
-      ],
-      "recommandations": [
-        "Établir un corridor humanitaire coordonné avec l'OMS pour l'acheminement de vaccins et équipements",
-        "Mettre en place un système d'alerte précoce partagé entre pays sahéliens",
-        "Préparer des unités de quarantaine mobiles aux points de passage frontaliers critiques"
       ]
     }
   ]
