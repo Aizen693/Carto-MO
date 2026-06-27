@@ -1,6 +1,126 @@
 {
-  "updated": "2026-06-26",
+  "updated": "2026-06-27",
   "items": [
+    {
+      "id": "u-maliactu-net-aes-10000-jeunes-enroles-sahel",
+      "date": "2026-06-27",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-10000-jeunes-enroles-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20900.jpg",
+      "titre": "AES mobilise 10 000 jeunes au Sahel pour souveraineté régionale",
+      "resume": "L'Alliance des États du Sahel (AES) annonce l'enrôlement de 10 000 jeunes dans un projet de souveraineté régionale.",
+      "detail": "Ce programme volontaire vise à renforcer la légitimité des juntes par une mobilisation massive de la jeunesse face aux défis sécuritaires et économiques. L'initiative pourrait accentuer les tensions avec les acteurs internationaux déjà critiques des régimes militaires. La structuration d'une force locale pourrait aussi modifier les équilibres géopolitiques dans la zone.",
+      "lieu": "Sahel (Mali, Burkina Faso, Niger)",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque accru de radicalisation des jeunes recruits",
+        "Renforcement des alliances militaires régionales (AES)",
+        "Tensions avec les partenaires internationaux (France, CEDEAO)"
+      ],
+      "recommandations": [
+        "Surveiller les canaux de recrutement de l'AES",
+        "Analyser les réactions des ONG locales sur les droits des jeunes"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-aes-emploi-jeunes-sahel",
+      "date": "2026-06-27",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-emploi-jeunes-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20896.jpg",
+      "titre": "AES mise sur l'emploi des jeunes pour contrer l'influence française",
+      "resume": "L'AES lance des programmes d'emploi ciblant la jeunesse sahélienne pour réduire l'influence française.",
+      "detail": "Cette stratégie s'inscrit dans la volonté de rompre avec l'ancienne puissance coloniale et de légitimer les régimes militaires. Les projets pourraient inclure des formations professionnelles et des emplois dans les secteurs de la sécurité ou des infrastructures. L'impact sur l'économie informelle et les réseaux de migration reste à évaluer.",
+      "lieu": "Sahel (Mali, Burkina Faso, Niger)",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Réduction de l'influence des acteurs français au Sahel",
+        "Possible augmentation des tensions diplomatiques",
+        "Dépendance accrue aux partenariats régionaux (Russie, Turkménistan)"
+      ],
+      "recommandations": [
+        "Cartographier les nouveaux programmes d'emploi lancés par l'AES",
+        "Évaluer les partenariats économiques émergents avec la Russie et la Turquie"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-aes-jeux-forum-jeunesse-sahel",
+      "date": "2026-06-27",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-jeux-forum-jeunesse-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20887.jpg",
+      "titre": "AES lance Jeux et Forum de la Jeunesse à Ouagadougou",
+      "resume": "L'AES organise des Jeux et un Forum de la Jeunesse pour lutter contre le chômage des jeunes au Sahel.",
+      "detail": "Ces événements visent à promouvoir l'unité régionale et à contrer l'exclusion des jeunes. Ils pourraient servir de plateforme de recrutement informel pour les structures sécuritaires ou politiques. La participation des autres pays de la CEDEAO reste incertaine en raison des tensions politiques actuelles.",
+      "lieu": "Ouagadougou, Burkina Faso",
+      "lat": 12.3681873,
+      "lon": -1.5270944,
+      "implications": [
+        "Renforcement de la légitimité des régimes militaires",
+        "Possible instrumentalisation politique des événements",
+        "Risque de marginalisation des acteurs non alignés sur l'AES"
+      ],
+      "recommandations": [
+        "Identifier les participants clés et leurs affiliations",
+        "Surveiller les discours officiels lors des événements"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-canicule-bamako-41c-urgence-sante",
+      "date": "2026-06-27",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/canicule-bamako-41c-urgence-sante/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20871.jpg",
+      "titre": "Bamako sous canicule extrême à 41°C, urgence sanitaire déclarée",
+      "resume": "Bamako enregistre 41°C ressentis, déclenchant une urgence sanitaire et des risques pour la stabilité.",
+      "detail": "Cette canicule aggrave les tensions sociales existantes, notamment dans les quartiers défavorisés. Les infrastructures sanitaires pourraient être submergées, et les risques de troubles civils augmentent. Le gouvernement malien a déjà appelé à des mesures d'urgence, mais les capacités de réponse restent limitées.",
+      "lieu": "Bamako, Mali",
+      "lat": 12.6132656,
+      "lon": -7.9847391,
+      "implications": [
+        "Risque d'émeutes liées aux pénuries d'eau et d'électricité",
+        "Surcharge des services médicaux et sociaux",
+        "Potentiel de migration climatique interne"
+      ],
+      "recommandations": [
+        "Cartographier les zones les plus exposées à Bamako",
+        "Coordonner avec les acteurs humanitaires pour une réponse rapide"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-bamako-canicule-41c-mali",
+      "date": "2026-06-27",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/bamako-canicule-41c-mali/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20885.jpg",
+      "titre": "Canicule record à Bamako, défi climatique et sanitaire pour le Mali",
+      "resume": "Bamako subit une canicule historique à 41°C, mettant en péril la santé publique et la stabilité.",
+      "detail": "La répétition de tels événements climatiques extrêmes pourrait s'inscrire dans une tendance durable, aggravée par la déforestation et l'urbanisation non contrôlée. Les autorités maliennes appellent à une mobilisation nationale, mais les moyens disponibles sont insuffisants. Ce phénomène pourrait accélérer les départs vers les zones moins touchées du pays.",
+      "lieu": "Bamako, Mali",
+      "lat": 12.6132656,
+      "lon": -7.9847391,
+      "implications": [
+        "Augmentation des maladies liées à la chaleur (déshydratation, coups de chaleur)",
+        "Perturbation des activités économiques et scolaires",
+        "Renforcement des inégalités sociales"
+      ],
+      "recommandations": [
+        "Renforcer la communication sur les mesures de prévention",
+        "Planifier des interventions ciblées dans les zones les plus vulnérables"
+      ]
+    },
     {
       "id": "u-maliactu-net-mali-france-expulsion-ambassadeur-rupture-diplomatique",
       "date": "2026-06-26",
@@ -619,131 +739,6 @@
         "Établir un corridor humanitaire coordonné avec l'OMS pour l'acheminement de vaccins et équipements",
         "Mettre en place un système d'alerte précoce partagé entre pays sahéliens",
         "Préparer des unités de quarantaine mobiles aux points de passage frontaliers critiques"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-monnaie-unique-aes-mali-burkina-niger",
-      "date": "2026-06-20",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/monnaie-unique-aes-mali-burkina-niger/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18899.jpg",
-      "titre": "Monnaie unique AES : lancement prévu 2026, sortie du franc CFA",
-      "resume": "Mali, Burkina Faso et Niger projettent de créer une monnaie unique pour 2026, marquant une rupture économique majeure avec le franc CFA français.",
-      "detail": "L'Alliance des États du Sahel prépare le lancement d'une monnaie commune en 2026, projet stratégique visant à redessiner l'architecture économique régionale et réduire la dépendance vis à vis de la France. Cette initiative comporte des risques de volatilité monétaire mais reflète une volonté d'autonomie macroéconomique. Le projet nécessite la convergence de politiques budgétaires et l'établissement d'institutions monétaires communes. Les impacts sur le commerce régional et l'inflation seront déterminants pour la stabilité économique du Sahel.",
-      "lieu": "Mali, Burkina Faso, Niger",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Réduction de l'influence française sur les politiques économiques sahéliennes",
-        "Risques d'instabilité monétaire et d'inflation durant la période de transition",
-        "Renforcement de l'intégration économique AES et de l'autonomie stratégique"
-      ],
-      "recommandations": [
-        "Suivre les évolutions des réserves de change des trois pays et leur politique budgétaire",
-        "Analyser les impacts probables sur les flux commerciaux régionaux et les partenaires commerciaux",
-        "Anticiper les mesures de réaction potentielles des partenaires occidentaux"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-tensions-frontiere-cote-ivoire-burkina-faso",
-      "date": "2026-06-20",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/tensions-frontiere-cote-ivoire-burkina-faso/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18888.jpg",
-      "titre": "Tensions à la frontière Côte d'Ivoire-Burkina Faso : risque d'instabilité",
-      "resume": "La frontière entre la Côte d'Ivoire et le Burkina Faso connaît des tensions inédites menaçant la stabilité régionale ouest africaine.",
-      "detail": "Les tensions à cette frontière critique reflètent l'intersection de plusieurs enjeux : la présence de groupes armés non étatiques dans le Sahel, les différends sur les ressources frontalières et les dynamiques migratoires. La Côte d'Ivoire, relativement stable, confrontée à l'instabilité croissante du Burkina voisin, craint la contagion sécuritaire. Les incidents frontaliers pourraient déclencher un conflit inter états ou accélérer la déstabilisation de la Côte d'Ivoire. Cette tension affecte le commerce régional et les populations civiles frontalières.",
-      "lieu": "Côte d'Ivoire, Burkina Faso",
-      "lat": 5.3239157,
-      "lon": -4.0236245,
-      "implications": [
-        "Risque de conflit armé direct entre États ouest africains",
-        "Perturbation des corridors commerciaux critiques pour la sous région",
-        "Flux migratoires accélérés vers la Côte d'Ivoire et la Guinée"
-      ],
-      "recommandations": [
-        "Renforcer la médiation diplomatique via la CEDEAO et l'Union Africaine",
-        "Établir une zone tampon démilitarisée avec observation neutre",
-        "Faciliter les mécanismes d'alerte précoce sur incidents frontaliers"
-      ]
-    },
-    {
-      "id": "u-aljazeera-com-news-2026-6-20-israel-fetes-somalilands-leader-as-it-see",
-      "date": "2026-06-20",
-      "theatre": "moyen-orient",
-      "severite": "alerte",
-      "source": "Al Jazeera English",
-      "source_url": "https://www.aljazeera.com/news/2026/6/20/israel-fetes-somalilands-leader-as-it-seeks-to-expand-red-Sea-influence?traffic_source=rss",
-      "image": "",
-      "titre": "Israël renforce son influence en Mer Rouge via Somaliland",
-      "resume": "Six mois après la reconnaissance du Somaliland par Israël, les deux acteurs passent de la symbolique à la coopération stratégique dans la Mer Rouge.",
-      "detail": "Israël développe un partenariat stratégique avec Somaliland pour consolider son contrôle des routes maritimes critiques de la Mer Rouge. Cette approche s'inscrit dans une stratégie plus large d'encerclement et contournement face aux acteurs régionaux hostiles. Somaliland, en quête de reconnaissance internationale, trouve dans cette alliance une validation géopolitique et des avantages économiques. Le partenariat couvre probablement l'infrastructure portuaire, les capacités navales et le renseignement.",
-      "lieu": "Somaliland",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Renforcement du contrôle israélien des détroits clés du commerce mondial",
-        "Consolidation de la fragmentation de la Somalie et du positionnement de Somaliland",
-        "Augmentation des tensions avec l'Égypte et les acteurs hostiles à Israël"
-      ],
-      "recommandations": [
-        "Surveiller le développement des installations portuaires israéliennes à Somaliland",
-        "Analyser les impacts sur la liberté de navigation et les corridors commerciaux",
-        "Évaluer les réactions potentielles des pays arabes et de la Turquie"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-reouverture-frontiere-niger-benin-sahel-6",
-      "date": "2026-06-20",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/reouverture-frontiere-niger-benin-sahel-6/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18876.jpg",
-      "titre": "Réouverture frontière Niger-Bénin : relance économique sahélienne",
-      "resume": "La réouverture de la frontière Niger-Bénin marque un tournant pour le commerce et la connectivité économique du Sahel.",
-      "detail": "Cette réouverture est un signal majeur d'amélioration des relations dans la région et de volonté de relancer les échanges commerciaux vitaux. Elle reflète les efforts de l'AES pour renforcer l'intégration économique face aux défis sécuritaires. Le corridor commercial revitalisé bénéficiera aux économies nigérienne et béninoise, réduira les coûts de transport régionaux et stimulera les flux de biens essentiels. Ce succès diplomatique peut servir de modèle pour résoudre d'autres tensions frontalières.",
-      "lieu": "Niger, Bénin",
-      "lat": 11.7957038,
-      "lon": 3.5186962,
-      "implications": [
-        "Augmentation des flux commerciaux régionaux et réduction des contournements coûteux",
-        "Renforcement de la cohésion régionale et de la coordination AES",
-        "Accélération des échanges de biens alimentaires et énergétiques critiques"
-      ],
-      "recommandations": [
-        "Documenter les mécanismes de coopération ayant permis la réouverture pour les appliquer ailleurs",
-        "Surveiller les volumes commerciaux et les impacts économiques mesurables",
-        "Évaluer les opportunités de médiation similaire pour d'autres frontières fermées"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-mali-sanctions-diaspora-avoir-geles",
-      "date": "2026-06-20",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/mali-sanctions-diaspora-avoir-geles/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-18893.jpg",
-      "titre": "Mali : gels d'avoirs contre 12 exilés, tensions diaspora",
-      "resume": "Le Mali sanctionne 12 ressortissants en exil en gelant leurs avoirs, créant des tensions au sein de la diaspora malienne.",
-      "detail": "Cette mesure reflète une volonté des autorités maliennes de contrôler les acteurs d'opposition en diaspora et potentiellement d'accéder à des ressources financières. Les gels d'avoirs peuvent concerner des critiques politiques, des militants des droits de l'homme ou des personnalités liées à l'ancien régime. Cette action inquiète la diaspora mondiale et pourrait affecter les transferts de fonds vers les familles restées au Mali. Elle illustre le durcissement du contrôle politique dans le contexte de la gouvernance militaire en transition.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Réduction des envois de fonds de la diaspora vers les ménages maliens",
-        "Escalade potentielle des mobilisations de la diaspora contre Bamako",
-        "Renforcement du contrôle des capitaux et de la surveillance des opposants"
-      ],
-      "recommandations": [
-        "Suivre les impacts économiques sur les transferts de fonds et le secteur financier",
-        "Monitorer les réactions de la diaspora et les campagnes internationales de soutien",
-        "Analyser les personnes ciblées pour comprendre les priorités politiques de Bamako"
       ]
     }
   ]
