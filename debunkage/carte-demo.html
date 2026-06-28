@@ -978,6 +978,39 @@
     border: 1px solid rgba(180,150,230,0.3); background: rgba(255,255,255,0.06); color: #E8E2F6; cursor: pointer;
     font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background .15s; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
   #netgraph-close:hover { background: rgba(255,255,255,0.14); }
+  /* Contrôles d'exploitabilité du réseau (additif) */
+  .netgraph-iconbtn { position: absolute; top: 18px; width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid rgba(180,150,230,0.3); background: rgba(255,255,255,0.06); color: #E8E2F6; cursor: pointer;
+    font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background .15s;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  .netgraph-iconbtn:hover { background: rgba(255,255,255,0.14); }
+  .netgraph-iconbtn[aria-pressed="true"] { background: rgba(107,63,160,0.55); border-color: rgba(180,150,230,0.6); }
+  #netgraph-pause { right: 110px; }
+  #netgraph-recenter { right: 64px; }
+  #netgraph-depth { position: absolute; top: 56px; left: 24px; display: flex; align-items: stretch;
+    border: 1px solid rgba(180,150,230,0.3); border-radius: 7px; overflow: hidden;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  #netgraph-depth span { color: #9C8FC8; font-family: 'JetBrains Mono'; font-size: 9px; align-self: center; padding: 0 8px 0 10px; pointer-events: none; }
+  #netgraph-depth button { background: rgba(255,255,255,0.04); color: #C7BBE6; border: none; cursor: pointer;
+    font-family: 'JetBrains Mono'; font-size: 10px; padding: 5px 10px; transition: background .15s; }
+  #netgraph-depth button[aria-pressed="true"] { background: rgba(107,63,160,0.6); color: #fff; }
+  #netgraph-phases { position: absolute; bottom: 52px; left: 24px; display: flex; flex-wrap: wrap; gap: 8px; max-width: 70vw; }
+  .netgraph-chip { font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 700; letter-spacing: .03em;
+    border-radius: 5px; padding: 4px 9px; cursor: pointer; user-select: none; transition: opacity .15s, filter .15s; }
+  .netgraph-chip.off { opacity: .35; filter: grayscale(0.8); text-decoration: line-through; }
+  #netgraph-legend span.flt { cursor: pointer; pointer-events: auto; transition: opacity .15s, filter .15s; }
+  #netgraph-legend span.flt.off { opacity: .32; filter: grayscale(0.8); text-decoration: line-through; }
+  #netgraph-detail { position: absolute; top: 70px; right: 18px; width: 244px; max-height: 70vh; overflow-y: auto;
+    background: rgba(20,12,40,0.72); border: 1px solid rgba(180,150,230,0.22); border-radius: 12px; padding: 16px 16px 14px;
+    color: #ECE6FA; font-family: 'Plus Jakarta Sans'; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); display: none; }
+  #netgraph-detail.show { display: block; }
+  #netgraph-detail h4 { margin: 0 0 6px; font-size: 14px; font-weight: 700; line-height: 1.3; }
+  #netgraph-detail .ngd-meta { font-family: 'JetBrains Mono'; font-size: 10px; color: #B6ABD8; margin-bottom: 4px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  #netgraph-detail .ngd-h5 { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: #8E81BE; margin: 12px 0 6px; font-family: 'JetBrains Mono'; }
+  #netgraph-detail .ngd-nb { display: block; width: 100%; text-align: left; background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(180,150,230,0.18); color: #DAD2F2; border-radius: 7px; padding: 6px 9px; margin-bottom: 5px;
+    cursor: pointer; font-size: 11.5px; font-family: 'Plus Jakarta Sans'; transition: background .15s; }
+  #netgraph-detail .ngd-nb:hover { background: rgba(107,63,160,0.4); }
   /* ── Bouton flottant « Réseau complet » (bas droite de la carte) ── */
   .deb-netbtn { position: absolute; right: 16px; bottom: 16px; z-index: 6;
     display: inline-flex; align-items: center; gap: 8px; padding: 10px 15px; border-radius: 100px; border: none; cursor: pointer;
@@ -2604,12 +2637,16 @@ window.openNetGraph = function(){
   if (!ov){
     ov = document.createElement('div'); ov.id = 'netgraph-overlay';
     ov.innerHTML = '<canvas id="netgraph-canvas"></canvas>'
-      + '<div id="netgraph-title">Réseau complet · Société Lumière<span> — glisser pour faire tourner · molette pour zoomer · survol pour isoler</span></div>'
-      + '<div id="netgraph-legend"><span><i style="background:#FF6B4A"></i>Commanditaire</span><span><i style="background:#F4B83C"></i>Appareil / relais</span><span><i style="background:#C8392B"></i>Incident</span><span><i style="background:#B79BFF"></i>Filiale</span><span><i style="background:#8B6BF0"></i>Société Lumière</span></div>'
+      + '<div id="netgraph-title">Réseau complet · Société Lumière<span> — clic pour sélectionner · phases et légende pour filtrer · espace = lecture/pause · échap = désélectionner</span></div>'
+      + '<div id="netgraph-depth" role="group" aria-label="Profondeur de voisinage"><span>Voisinage</span><button type="button" data-depth="1" aria-pressed="true">1 saut</button><button type="button" data-depth="2" aria-pressed="false">2 sauts</button></div>'
+      + '<div id="netgraph-phases" role="group" aria-label="Filtrer par phase"></div>'
+      + '<div id="netgraph-legend"></div>'
+      + '<div id="netgraph-detail" aria-live="polite"></div>'
+      + '<button id="netgraph-pause" class="netgraph-iconbtn" type="button" aria-label="Lecture/Pause de la rotation" aria-pressed="false">▶</button>'
+      + '<button id="netgraph-recenter" class="netgraph-iconbtn" type="button" aria-label="Recentrer la vue">⟲</button>'
       + '<button id="netgraph-close" aria-label="Fermer">✕</button>';
     document.body.appendChild(ov);
     ov.querySelector('#netgraph-close').addEventListener('click', closeNetGraph);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) closeNetGraph(); });
   }
   ov.classList.add('open'); document.body.classList.add('modal-open');
   startNetGraph();
@@ -2639,7 +2676,16 @@ function startNetGraph(){
   const R0 = 320;
   nodes.forEach((nd, i) => { const y = 1 - 2 * (i + 0.5) / N, rad = Math.sqrt(Math.max(0, 1 - y * y)), th = Math.PI * (1 + Math.sqrt(5)) * i;
     nd.x = R0 * Math.cos(th) * rad; nd.y = R0 * y; nd.z = R0 * Math.sin(th) * rad; nd.vx = nd.vy = nd.vz = 0; });
-  let ry = 0.6, rx = -0.3, zoom = 1, hover = null, dragging = false, lastM = null, alpha = 1, autorot = true, focal = 1800, sphereR = R0, baseScale = 1;
+  let ry = 0.6, rx = -0.3, zoom = 1, hover = null, dragging = false, lastM = null, alpha = 1, autorot = false, focal = 1800, sphereR = R0, baseScale = 1;
+  // Exploitabilité (additif) : sélection persistante + filtres soustractifs.
+  let selected = null, focusSet = null, depth = 1, downAt = null;
+  const hiddenTypes = new Set(), hiddenPhases = new Set();
+  const phaseKey = nd => (nd && nd.type === 'incident' ? String(phaseOfNode(nd) || '') : '');
+  const visible = nd => !hiddenTypes.has(nd.type) && (nd.type !== 'incident' || !hiddenPhases.has(phaseKey(nd)));
+  // BFS de voisinage non-orienté jusqu'à profondeur d. Recalculé UNIQUEMENT sur événement
+  // (sélection / profondeur / filtre), JAMAIS dans loop()/draw() — garde-fou perf.
+  function computeFocus(id, d){ const seen = new Set([id]); let frontier = [id]; for (let k = 0; k < d; k++){ const next = []; frontier.forEach(fid => { (adj[fid] || new Set()).forEach(nid => { if (!seen.has(nid)) { seen.add(nid); next.push(nid); } }); }); frontier = next; } return seen; }
+  function recomputeFocus(){ focusSet = selected ? computeFocus(selected.id, depth) : null; }
   const cx = () => canvas.width / dpr / 2, cy = () => canvas.height / dpr / 2;
   // Physique 3D : répulsion + ressorts (longs = aéré) + rappel vers le centre → boule pleine.
   function step(a){
@@ -2665,40 +2711,137 @@ function startNetGraph(){
     const persp = focal / (focal + z2), s = persp * zoom * baseScale, XSTRETCH = 1.5;
     return { sx: cx() + x1 * s * XSTRETCH, sy: cy() + y1 * s, z: z2, s };
   }
-  function nodeAt(mx, my){ let best = null, bd = 1e9; nodes.forEach(nd => { const p = project(nd), rr = Math.max(3, nd.r * p.s), d = Math.hypot(p.sx - mx, p.sy - my); if (d < rr + 5 && d < bd) { bd = d; best = nd; } }); return best; }
+  function nodeAt(mx, my){ let best = null, bd = 1e9; nodes.forEach(nd => { if (!visible(nd)) return; const p = project(nd), rr = Math.max(3, nd.r * p.s), d = Math.hypot(p.sx - mx, p.sy - my); if (d < rr + 5 && d < bd) { bd = d; best = nd; } }); return best; }
   function draw(){
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const proj = nodes.map(nd => ({ nd, p: project(nd) })); const pm = {}; proj.forEach(o => pm[o.nd.id] = o.p);
+    // Désencombrement soustractif : on ne projette que les nœuds visibles (non filtrés).
+    const proj = []; const pm = {};
+    nodes.forEach(nd => { if (!visible(nd)) return; const p = project(nd); pm[nd.id] = p; proj.push({ nd, p }); });
+    const focus = selected ? focusSet : null; // null au repos => tout est « in focus », la structure se lit.
+    const inFocus = id => !focus || focus.has(id);
     ctx.lineCap = 'round';
-    edges.forEach(e => { const A = pm[e.from], B = pm[e.to]; if (!A || !B) return; const hl = hover && (e.from === hover.id || e.to === hover.id);
-      ctx.lineWidth = hl ? 1.7 : 0.8; ctx.strokeStyle = hl ? 'rgba(206,188,255,0.85)' : 'rgba(150,130,224,0.13)';
+    edges.forEach(e => { const A = pm[e.from], B = pm[e.to]; if (!A || !B) return; // arête masquée si une extrémité filtrée
+      const sel = focus && focus.has(e.from) && focus.has(e.to);
+      const hl = !focus && hover && (e.from === hover.id || e.to === hover.id);
+      if (sel || hl) { ctx.lineWidth = 1.7; ctx.strokeStyle = 'rgba(206,188,255,0.85)'; }
+      else if (focus) { ctx.lineWidth = 0.7; ctx.strokeStyle = 'rgba(150,130,224,0.06)'; }
+      else { ctx.lineWidth = 0.9; ctx.strokeStyle = 'rgba(160,140,232,0.22)'; } // repos remonté (était 0.13) => lisible sans survol
       ctx.beginPath(); ctx.moveTo(A.sx, A.sy); ctx.lineTo(B.sx, B.sy); ctx.stroke(); });
     const ordered = proj.slice().sort((a, b) => b.p.z - a.p.z);
-    ordered.forEach(o => { const nd = o.nd, p = o.p, near = !hover || nd.id === hover.id || adj[hover.id].has(nd.id);
+    ordered.forEach(o => { const nd = o.nd, p = o.p, on = inFocus(nd.id);
       let da = 0.4 + 0.6 * (1 - (p.z + sphereR) / (2 * sphereR)); da = Math.max(0.28, Math.min(1, da));
-      ctx.globalAlpha = near ? da : da * 0.16; const rr = Math.max(1.5, nd.r * p.s);
+      ctx.globalAlpha = on ? da : da * 0.10; const rr = Math.max(1.5, nd.r * p.s);
       ctx.beginPath(); ctx.arc(p.sx, p.sy, rr + 4, 0, 7); ctx.fillStyle = nd.color + '2b'; ctx.fill();
       ctx.beginPath(); ctx.arc(p.sx, p.sy, rr, 0, 7); ctx.fillStyle = nd.color; ctx.fill();
-      ctx.lineWidth = (hover && nd.id === hover.id) ? 2.4 : 1.1; ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.stroke(); ctx.globalAlpha = 1; });
+      const isSel = selected && nd.id === selected.id;
+      ctx.lineWidth = isSel ? 2.6 : 1.1; ctx.strokeStyle = isSel ? '#FFFFFF' : 'rgba(255,255,255,0.85)'; ctx.stroke(); ctx.globalAlpha = 1; });
     ctx.textAlign = 'center';
-    ordered.forEach(o => { const nd = o.nd, p = o.p, near = hover && (nd.id === hover.id || adj[hover.id].has(nd.id)), front = p.z < sphereR * 0.2;
-      const show = (nd.r >= 13 && front) || near || (zoom > 1.7 && front); if (!show) return;
-      ctx.globalAlpha = (!hover || near) ? 0.95 : 0.14; const fs = Math.max(8, nd.r >= 13 ? 12.5 : 10.5);
+    ordered.forEach(o => { const nd = o.nd, p = o.p, front = p.z < sphereR * 0.2, on = inFocus(nd.id);
+      // Tête de chaîne (cible + filiales) toujours labellisée au repos ; incidents libellés seulement en focus.
+      const structural = nd.type === 'groupe' || nd.type === 'filiale' || nd.r >= 11;
+      const hov = !focus && hover && (nd.id === hover.id || (adj[hover.id] && adj[hover.id].has(nd.id)));
+      const show = (structural && front) || (selected && on) || hov || (zoom > 1.7 && front); if (!show) return;
+      ctx.globalAlpha = on ? 0.95 : 0.16; const fs = Math.max(8, nd.r >= 13 ? 12.5 : 10.5);
       ctx.font = '600 ' + fs + 'px "Plus Jakarta Sans", sans-serif'; ctx.fillStyle = '#ECE6FA';
-      ctx.fillText(near ? nd.label : flxLabel(nd.label), p.sx, p.sy + nd.r * p.s + 12); ctx.globalAlpha = 1; });
+      ctx.fillText((structural || on) ? nd.label : flxLabel(nd.label), p.sx, p.sy + nd.r * p.s + 12); ctx.globalAlpha = 1; });
   }
   function loop(){ step(alpha); alpha = Math.max(0.04, alpha * 0.97); if (autorot && !dragging) ry += 0.0024; draw(); _ngRAF = requestAnimationFrame(loop); }
   if (_ngRAF) cancelAnimationFrame(_ngRAF); loop();
+  // ── Sélection persistante + panneau détail ──
+  function selectNode(nd){ selected = nd || null; recomputeFocus(); renderDetail(); }
+  function purgeHidden(){ if (selected && !visible(selected)){ selected = null; focusSet = null; renderDetail(); } if (hover && !visible(hover)) hover = null; }
+  function renderDetail(){
+    const box = ov.querySelector('#netgraph-detail'); if (!box) return;
+    if (!selected){ box.classList.remove('show'); box.innerHTML = ''; return; }
+    const nd = selected;
+    const typeLabel = { groupe: 'Société Lumière', filiale: 'Filiale', incident: 'Incident', etat: 'Commanditaire', app: 'Appareil / relais', local: 'Acteur local' }[nd.type] || nd.type;
+    let meta = '<span>' + escapeHtml(typeLabel) + '</span>';
+    if (nd.type === 'incident'){ const k = phaseKey(nd); if (k) meta += phaseChipHTML(k); }
+    meta += '<span>degré ' + (adj[nd.id] ? adj[nd.id].size : 0) + '</span>';
+    const neigh = adj[nd.id] ? [...adj[nd.id]] : [];
+    let nb = '';
+    neigh.forEach(nid => { const n = nodes[idx[nid]]; if (n) nb += '<button type="button" class="ngd-nb" data-id="' + escapeHtml(nid) + '">' + escapeHtml(n.label) + '</button>'; });
+    box.innerHTML = '<h4>' + escapeHtml(nd.label) + '</h4><div class="ngd-meta">' + meta + '</div>'
+      + (nb ? '<div class="ngd-h5">Voisins (' + neigh.length + ')</div>' + nb : '');
+    box.classList.add('show');
+    box.querySelectorAll('.ngd-nb').forEach(b => b.addEventListener('click', () => { const n = nodes[idx[b.getAttribute('data-id')]]; if (n) selectNode(n); }));
+  }
+  // ── Filtres soustractifs : chips de phase (levier principal) + légende de type auto-adaptative ──
+  function buildPhaseChips(){
+    const wrap = ov.querySelector('#netgraph-phases'); if (!wrap) return; wrap.innerHTML = '';
+    const present = [...new Set(nodes.filter(n => n.type === 'incident').map(n => phaseKey(n)).filter(Boolean))].sort();
+    const def = phasesDef();
+    present.forEach(k => {
+      const col = phaseColor(k), num = { '1': '①', '2': '②', '3': '③', '4': '④', '5': '⑤' }[k] || k;
+      const sp = def ? (def.find(p => String(p.n) === k) ? splitPhaseLabel(def.find(p => String(p.n) === k).nom, k) : { name: 'Phase ' + k }) : { name: 'Phase ' + k };
+      const c = document.createElement('span'); c.className = 'netgraph-chip'; c.setAttribute('role', 'button'); c.setAttribute('tabindex', '0'); c.setAttribute('aria-pressed', 'true'); c.dataset.phase = k;
+      c.style.color = col; c.style.background = col + '1F'; c.style.border = '1px solid ' + col + '55'; c.textContent = num + ' ' + sp.name;
+      const toggle = () => { hiddenPhases.has(k) ? hiddenPhases.delete(k) : hiddenPhases.add(k); const off = hiddenPhases.has(k); c.classList.toggle('off', off); c.setAttribute('aria-pressed', off ? 'false' : 'true'); purgeHidden(); };
+      c.addEventListener('click', toggle);
+      c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); } });
+      wrap.appendChild(c);
+    });
+  }
+  function buildLegend(){
+    const leg = ov.querySelector('#netgraph-legend'); if (!leg) return; leg.innerHTML = '';
+    const meta = { groupe: { label: 'Société Lumière', color: '#8B6BF0' }, filiale: { label: 'Filiale', color: '#B79BFF' }, etat: { label: 'Commanditaire', color: '#FF6B4A' }, app: { label: 'Appareil / relais', color: '#F4B83C' }, local: { label: 'Acteur local', color: '#7C7498' } };
+    [...new Set(nodes.map(n => n.type))].filter(t => t !== 'incident' && meta[t]).forEach(t => {
+      const m = meta[t];
+      const s = document.createElement('span'); s.className = 'flt'; s.setAttribute('role', 'button'); s.setAttribute('tabindex', '0'); s.setAttribute('aria-pressed', 'true'); s.dataset.type = t;
+      s.innerHTML = '<i style="background:' + m.color + '"></i>' + m.label;
+      const toggle = () => { hiddenTypes.has(t) ? hiddenTypes.delete(t) : hiddenTypes.add(t); const off = hiddenTypes.has(t); s.classList.toggle('off', off); s.setAttribute('aria-pressed', off ? 'false' : 'true'); purgeHidden(); };
+      s.addEventListener('click', toggle);
+      s.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); } });
+      leg.appendChild(s);
+    });
+    if (nodes.some(n => n.type === 'incident')){ const s = document.createElement('span'); s.style.opacity = '.85'; s.innerHTML = '<i style="background:linear-gradient(90deg,#6B3FA0,#2F9E8F,#E0652C,#C8392B)"></i>Incident (par phase)'; leg.appendChild(s); }
+  }
+  buildPhaseChips(); buildLegend(); renderDetail();
+  // ── Contrôles caméra (3D conservée) ──
+  const pauseBtn = ov.querySelector('#netgraph-pause'), recenterBtn = ov.querySelector('#netgraph-recenter');
+  function syncPause(){ if (pauseBtn){ pauseBtn.textContent = autorot ? '❚❚' : '▶'; pauseBtn.setAttribute('aria-pressed', autorot ? 'true' : 'false'); } }
+  function togglePause(){ autorot = !autorot; syncPause(); }
+  function recenter(){ ry = 0.6; rx = -0.3; zoom = 1; selected = null; focusSet = null; hover = null; hiddenTypes.clear(); hiddenPhases.clear();
+    ov.querySelectorAll('.netgraph-chip.off, #netgraph-legend .flt.off').forEach(el => { el.classList.remove('off'); el.setAttribute('aria-pressed', 'true'); });
+    renderDetail(); recalc(); }
+  const depthBtns = [...ov.querySelectorAll('#netgraph-depth button')];
+  function onDepth(e){ const b = e.currentTarget; depth = parseInt(b.dataset.depth, 10) || 1; depthBtns.forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false')); recomputeFocus(); }
+  depthBtns.forEach((b, i) => b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false'));
+  if (pauseBtn) pauseBtn.addEventListener('click', togglePause);
+  if (recenterBtn) recenterBtn.addEventListener('click', recenter);
+  depthBtns.forEach(b => b.addEventListener('click', onDepth));
+  syncPause();
+  // ── Souris : glisser = rotation, clic (< 4px de déplacement) = sélection ──
   function onMove(e){ if (!ov.classList.contains('open')) return; const r = canvas.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
     if (dragging && lastM) { ry += (e.clientX - lastM.x) * 0.006; rx += (e.clientY - lastM.y) * 0.006; rx = Math.max(-1.45, Math.min(1.45, rx)); lastM = { x: e.clientX, y: e.clientY }; }
     else { hover = nodeAt(mx, my); canvas.style.cursor = hover ? 'pointer' : 'grab'; } }
-  function onDown(e){ dragging = true; autorot = false; lastM = { x: e.clientX, y: e.clientY }; canvas.style.cursor = 'grabbing'; }
-  function onUp(){ dragging = false; setTimeout(() => { if (!dragging) autorot = true; }, 2500); }
+  function onDown(e){ dragging = true; lastM = { x: e.clientX, y: e.clientY }; downAt = { x: e.clientX, y: e.clientY }; canvas.style.cursor = 'grabbing'; }
+  function onUp(e){ dragging = false; canvas.style.cursor = 'grab';
+    if (downAt){ const moved = Math.hypot((e.clientX || downAt.x) - downAt.x, (e.clientY || downAt.y) - downAt.y);
+      if (moved < 4){ const r = canvas.getBoundingClientRect(); selectNode(nodeAt((e.clientX || downAt.x) - r.left, (e.clientY || downAt.y) - r.top)); }
+      downAt = null; } }
   function onWheel(e){ e.preventDefault(); zoom = Math.max(0.45, Math.min(4, zoom * Math.exp(-e.deltaY * 0.0015))); }
+  // ── Tactile (tablette = terminal analyste) : 1 doigt = rotation, tap = sélection ──
+  function onTStart(e){ if (e.touches.length !== 1) return; const t = e.touches[0]; dragging = true; lastM = { x: t.clientX, y: t.clientY }; downAt = { x: t.clientX, y: t.clientY }; }
+  function onTMove(e){ if (e.touches.length !== 1 || !dragging || !lastM) return; e.preventDefault(); const t = e.touches[0]; ry += (t.clientX - lastM.x) * 0.006; rx += (t.clientY - lastM.y) * 0.006; rx = Math.max(-1.45, Math.min(1.45, rx)); lastM = { x: t.clientX, y: t.clientY }; }
+  function onTEnd(e){ dragging = false; if (downAt){ const t = (e.changedTouches && e.changedTouches[0]) || null; if (t){ const moved = Math.hypot(t.clientX - downAt.x, t.clientY - downAt.y); if (moved < 6){ const r = canvas.getBoundingClientRect(); selectNode(nodeAt(t.clientX - r.left, t.clientY - r.top)); } } downAt = null; } }
+  // ── Clavier : espace = lecture/pause, échap = désélectionner puis fermer ──
+  function onKey(e){ if (!ov.classList.contains('open')) return; if (e.key === ' ' || e.code === 'Space'){ e.preventDefault(); togglePause(); } else if (e.key === 'Escape'){ if (selected) selectNode(null); else closeNetGraph(); } }
   canvas.addEventListener('mousedown', onDown); window.addEventListener('mousemove', onMove);
   window.addEventListener('mouseup', onUp); canvas.addEventListener('wheel', onWheel, { passive: false });
-  window.addEventListener('resize', function onR(){ resize(); recalc(); });
-  _ngCleanup = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+  canvas.addEventListener('touchstart', onTStart, { passive: false }); canvas.addEventListener('touchmove', onTMove, { passive: false }); canvas.addEventListener('touchend', onTEnd);
+  document.addEventListener('keydown', onKey);
+  function onR(){ resize(); recalc(); }
+  window.addEventListener('resize', onR);
+  _ngCleanup = () => {
+    window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp);
+    canvas.removeEventListener('mousedown', onDown); canvas.removeEventListener('wheel', onWheel);
+    canvas.removeEventListener('touchstart', onTStart); canvas.removeEventListener('touchmove', onTMove); canvas.removeEventListener('touchend', onTEnd);
+    document.removeEventListener('keydown', onKey); window.removeEventListener('resize', onR);
+    if (pauseBtn) pauseBtn.removeEventListener('click', togglePause);
+    if (recenterBtn) recenterBtn.removeEventListener('click', recenter);
+    depthBtns.forEach(b => b.removeEventListener('click', onDepth));
+  };
 }
 
 // Mind map en grand (modale) — graphe d'acteurs façon Obsidian, à côté du bouton Rapport.
