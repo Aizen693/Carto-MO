@@ -1,6 +1,131 @@
 {
-  "updated": "2026-06-27",
+  "updated": "2026-06-28",
   "items": [
+    {
+      "id": "u-maliactu-net-afrique-ouest-hub-production-drogues",
+      "date": "2026-06-28",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/afrique-ouest-hub-production-drogues/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21309.jpg",
+      "titre": "Guinée et Sénégal deviennent des hubs de production de drogues",
+      "resume": "L'ONUDC révèle que la Guinée et le Sénégal sont désormais des centres de production de drogues menaçant la stabilité régionale.",
+      "detail": "Selon l'ONUDC, le trafic de drogues en Afrique de l'Ouest a connu une expansion significative ces dernières années. La Guinée et le Sénégal, en particulier, sont identifiés comme des plaques tournantes pour le transit et la production de substances illicites. Cette situation expose les pays voisins à une hausse de la criminalité organisée et à une corruption accrue. Les infrastructures portuaires et les routes commerciales traditionnelles favorisent ces activités illégales. Les autorités locales peinent à endiguer ce phénomène en raison de moyens limités et de la porosité des frontières.",
+      "lieu": "Guinée, Sénégal",
+      "lat": 12.8705148,
+      "lon": -14.1252741,
+      "implications": [
+        "Risque accru de criminalité transfrontalière",
+        "Menace pour la stabilité politique régionale",
+        "Impact négatif sur les investissements étrangers"
+      ],
+      "recommandations": [
+        "Renforcer la coopération sécuritaire avec les pays voisins",
+        "Investir dans des programmes de lutte contre la corruption",
+        "Développer des infrastructures portuaires sécurisées"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-aes-centre-jeunesse-sport-sahel-2026",
+      "date": "2026-06-28",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-centre-jeunesse-sport-sahel-2026/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21300.jpg",
+      "titre": "AES lance un centre stratégique pour la jeunesse au Sahel",
+      "resume": "L'AES annonce un centre sportif et éducatif pour la jeunesse sahélienne en 2026, projet perçu comme une provocation envers la France.",
+      "detail": "L'Alliance des États du Sahel (AES) a dévoilé un projet de centre stratégique pour la jeunesse, combinant sport et éducation, prévu pour 2026. Ce centre vise à promouvoir la souveraineté culturelle et éducative des jeunes sahéliens, tout en réduisant la dépendance vis-à-vis des anciennes puissances coloniales. Le projet s'inscrit dans une stratégie plus large de réorientation géopolitique des pays membres de l'AES. Les autorités françaises y voient une provocation directe, tandis que les pays de l'AES soulignent la nécessité de renforcer l'autonomie régionale.",
+      "lieu": "Sahel",
+      "lat": 14.0279165,
+      "lon": -0.7717776,
+      "implications": [
+        "Renforcement de l'autonomie stratégique de l'AES",
+        "Tensions accrues avec les anciennes puissances coloniales",
+        "Potentiel de radicalisation des jeunes populations"
+      ],
+      "recommandations": [
+        "Surveiller les alliances géopolitiques émergentes dans la région",
+        "Évaluer l'impact des projets éducatifs sur la radicalisation",
+        "Renforcer les dialogues diplomatiques pour éviter une escalade des tensions"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-aes-arme-economique-sahel-2026",
+      "date": "2026-06-28",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-arme-economique-sahel-2026/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21298.jpg",
+      "titre": "AES lance une initiative économique pour réduire la dépendance occidentale",
+      "resume": "Le FIMAES-BKF 2026 marque un tournant économique pour le Mali, le Burkina et le Niger visant à réduire la dépendance occidentale.",
+      "detail": "Le Forum international des économies de l'Alliance des États du Sahel (FIMAES) et le Burkina-Kaya Forum (BKF) 2026 sont présentés comme des leviers stratégiques pour réduire la dépendance économique vis-à-vis de l'Occident. Ces initiatives visent à promouvoir les échanges intra-régionaux et à développer des alternatives aux partenariats traditionnels. Les projets incluent des investissements dans les secteurs miniers, agricoles et énergétiques, avec un accent sur la souveraineté alimentaire. Cependant, les défis logistiques et financiers pourraient limiter leur efficacité à court terme.",
+      "lieu": "Mali, Burkina Faso, Niger",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Réduction potentielle des revenus des anciennes puissances coloniales",
+        "Dépendance accrue aux partenariats avec la Russie et la Chine",
+        "Risque de pénuries alimentaires et énergétiques"
+      ],
+      "recommandations": [
+        "Diversifier les partenariats économiques pour éviter une dépendance accrue",
+        "Investir dans les infrastructures logistiques régionales",
+        "Renforcer les mécanismes de résilience alimentaire"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-cyberattaques-maroc-menace-sahel",
+      "date": "2026-06-28",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/cyberattaques-maroc-menace-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21304.jpg",
+      "titre": "Cyberattaques au Maroc : menace croissante pour le Sahel",
+      "resume": "8% des victimes marocaines de cyberattaques perdent plus de 1 350 dollars, une menace qui s'étend au Sahel.",
+      "detail": "Une étude récente révèle que 8% des victimes de cyberattaques au Maroc subissent des pertes financières dépassant 1 350 dollars. Cette menace s'étend au Sahel, où les infrastructures numériques sont de plus en plus ciblées. Les cybercriminels exploitent les faiblesses des systèmes de sécurité locaux, souvent sous-financés. Les secteurs bancaires et gouvernementaux sont particulièrement vulnérables. La propagation de ces attaques pourrait perturber les services essentiels et exacerber les instabilités régionales.",
+      "lieu": "Maroc, Sahel",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Perturbation des services bancaires et gouvernementaux",
+        "Augmentation des coûts de cybersécurité pour les entreprises",
+        "Risque de fuite de données sensibles"
+      ],
+      "recommandations": [
+        "Renforcer les capacités de cybersécurité des institutions locales",
+        "Collaborer avec des partenaires internationaux pour des audits de sécurité",
+        "Sensibiliser les populations aux bonnes pratiques numériques"
+      ]
+    },
+    {
+      "id": "u-theguardian-com-world-2026-jun-28-ukraine-war-briefing-ballistic-missi",
+      "date": "2026-06-28",
+      "theatre": "afrique",
+      "severite": "critique",
+      "source": "The Guardian",
+      "source_url": "https://www.theguardian.com/world/2026/jun/28/ukraine-war-briefing-ballistic-missile-attack-in-kyiv-forces-residents-into-shelters",
+      "image": "",
+      "titre": "Missile balistique frappe Kyiv : deux blessés",
+      "resume": "Une attaque au missile balistique sur Kyiv blesse au moins deux personnes et force les résidents à se mettre à l'abri.",
+      "detail": "Une attaque au missile balistique russe a frappé la capitale ukrainienne de Kyiv tôt le matin, blessant au moins deux civils. Les autorités locales ont immédiatement ordonné aux résidents de se mettre à l'abri, signalant une intensification des frappes dans le cadre du conflit en cours. Cette attaque survient après une journée de violences frontalières ayant causé des pertes civiles des deux côtés. L'escalade militaire en Ukraine continue de menacer la stabilité régionale et de perturber les chaînes d'approvisionnement énergétiques en Europe.",
+      "lieu": "Kyiv, Ukraine",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque d'escalade militaire accrue",
+        "Perturbation des approvisionnements énergétiques en Europe",
+        "Menace pour la stabilité des pays frontaliers"
+      ],
+      "recommandations": [
+        "Évaluer l'impact des sanctions économiques sur les chaînes d'approvisionnement",
+        "Renforcer les mesures de sécurité civile dans les zones frontalières",
+        "Coordonner les réponses humanitaires avec les partenaires internationaux"
+      ]
+    },
     {
       "id": "u-maliactu-net-aes-10000-jeunes-enroles-sahel",
       "date": "2026-06-27",
@@ -616,131 +741,6 @@
         "Suivre la mise en œuvre concrète de l'accord",
         "Évaluer les premiers impacts économiques",
         "Comparer avec d'autres initiatives frontalières"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-burkina-faso-survie-quotidienne-sahel-crise",
-      "date": "2026-06-22",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/burkina-faso-survie-quotidienne-sahel-crise/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19586.jpg",
-      "titre": "Burkina Faso lutte pour survivre en zone de crise",
-      "resume": "Le Burkina Faso fait face à des défis économiques et sécuritaires majeurs malgré la crise sahélienne.",
-      "detail": "Les préoccupations quotidiennes des Burkinabè sont dominées par l'insécurité persistante et la dégradation des conditions économiques. Les déplacements internes et l'accès aux services de base restent des enjeux critiques. La situation humanitaire s'aggrave avec des besoins croissants en protection et en assistance. La résilience des populations est mise à l'épreuve dans un contexte de restrictions budgétaires.",
-      "lieu": "Burkina Faso",
-      "lat": 12.0753083,
-      "lon": -1.6880314,
-      "implications": [
-        "Augmentation des besoins humanitaires",
-        "Risque de radicalisation accrue",
-        "Pression sur les services publics"
-      ],
-      "recommandations": [
-        "Cartographier les zones de crise humanitaire",
-        "Renforcer les capacités locales de réponse",
-        "Surveiller les indicateurs socio-économiques"
-      ]
-    },
-    {
-      "id": "u-africa24tv-com-nigeria-une-attaque-de-liswap-repoussee-par-les-forces-",
-      "date": "2026-06-22",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "Africa24tv",
-      "source_url": "https://africa24tv.com/nigeria-une-attaque-de-liswap-repoussee-par-les-forces-de-securite-dans-le-nord-est-2/",
-      "image": "",
-      "titre": "ISWAP repoussé par les forces nigérianes dans le nord-est",
-      "resume": "L'ISWAP a lancé une attaque repoussée par les forces de sécurité nigérianes dans la région du Borno.",
-      "detail": "Cette attaque confirme la persistance de la menace jihadiste dans le nord-est du Nigeria malgré les offensives militaires. L'ISWAP continue de cibler les civils et les infrastructures locales. La région reste instable avec des déplacements massifs de populations. La capacité des forces locales à maintenir la sécurité est un enjeu majeur pour la stabilité régionale.",
-      "lieu": "Borno, Nigeria",
-      "lat": 12.1875392,
-      "lon": 13.3080034,
-      "implications": [
-        "Persistance de la menace jihadiste",
-        "Impact humanitaire continu",
-        "Besoin de coordination militaire régionale"
-      ],
-      "recommandations": [
-        "Analyser les dynamiques locales de l'ISWAP",
-        "Évaluer les capacités de réponse nigérianes",
-        "Renforcer les mécanismes de coordination régionale"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-mali-burkina-niger-diplomatie-onu",
-      "date": "2026-06-21",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-mali-burkina-niger-diplomatie-onu/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19290.jpg",
-      "titre": "AES consolide alliance diplomatique face à l'ONU 2026",
-      "resume": "Le Mali, Burkina Faso et Niger renforcent leur coordination diplomatique avant l'assemblée générale de l'ONU 2026. Cette alliance défie l'ordre géopolitique occidental et consolide leur position face aux pressions internationales.",
-      "detail": "L'Alliance des États du Sahel (AES) intensifie sa stratégie diplomatique commune pour contester l'isolement imposé par les puissances occidentales et les sanctions de la CEDEAO. Cette coordination tripartite vise à diversifier les partenariats internationaux et à affirmer la souveraineté des trois États face aux défis sécuritaires régionaux. Les ministres des Affaires étrangères multiplient les initiatives pour présenter une position unie aux instances internationales. Cette consolidation reflète une volonté de briser l'encerclement diplomatique et d'établir des contre-équilibres géopolitiques durables.",
-      "lieu": "Mali, Burkina Faso, Niger",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Isolement diplomatique occidental aggravé par une alliance unie au Sahel",
-        "Réalignement géopolitique majeur avec partenaires non-occidentaux (Russie, Chine)",
-        "Fragilisation de l'architecture de sécurité régionale CEDEAO-OTAN"
-      ],
-      "recommandations": [
-        "Monitorer les accords bilatéraux AES avec puissances alternatives",
-        "Cartographier les nouvelles alliances militaires et économiques de l'AES",
-        "Analyser l'impact sur les flux migratoires et les équilibres régionaux"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-rapatriement-maliens-cote-divoire-tensions",
-      "date": "2026-06-21",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/rapatriement-maliens-cote-divoire-tensions/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19246.jpg",
-      "titre": "415 Maliens rapatriés de Côte d'Ivoire après démolitions",
-      "resume": "Un drame humanitaire se dessine avec le rapatriement de 415 Maliens de Port-Bouët après des démolitions massives. Cet incident révèle des tensions régionales croissantes et des failles dans la protection consulaire.",
-      "detail": "Les démolitions à Port-Bouët en Côte d'Ivoire ont entraîné le rapatriement forcé de 415 ressortissants maliens, mettant en lumière les défaillances de la protection consulaire malienne. Cet événement traduit des tensions sous-jacentes entre le Mali et la Côte d'Ivoire malgré les initiatives de paix transfrontalière. Les rapatriements massifs de migrants maliens soulignent l'instabilité économique et les risques d'escalade des tensions communautaires. La crise consulaire s'aggrave avec les expulsions parallèles depuis l'Europe, créant une pression démographique et sécuritaire accrue au Mali.",
-      "lieu": "Côte d'Ivoire, Mali",
-      "lat": 12.6267755,
-      "lon": -8.0349475,
-      "implications": [
-        "Dégradation des relations Mali-Côte d'Ivoire malgré dialogues pacifiques",
-        "Retour de populations vulnérables surchargeant les zones frontalières",
-        "Risque d'instrumentalisation politique des rapatriés dans le contexte électoral sahélien"
-      ],
-      "recommandations": [
-        "Renforcer le suivi des tensions communautaires aux frontières Mali-CI",
-        "Analyser l'impact des rapatriements massifs sur la stabilité régionale",
-        "Documenter les violations des droits des migrants maliens expulsés"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-senegal-alerte-meteo-orages-violents",
-      "date": "2026-06-21",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/senegal-alerte-meteo-orages-violents/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19248.jpg",
-      "titre": "Sénégal : alerte météo majeure, 8 régions menacées par orages violents",
-      "resume": "Le Sénégal fait face à une alerte météorologique imminente avec orages et pluies intenses attendus dans 8 régions. Risques majeurs pour les populations et les infrastructures sécuritaires régionales.",
-      "detail": "Une dépression météorologique majeure se dessine au Sénégal avec des orages violents et des pluies torrentielles prévus dans 8 régions identifiées. Cette alerte intervient dans un contexte de fragilité institutionnelle suite aux réformes constitutionnelles du régime Pastef. Les inondations et perturbations pourraient désorganiser les opérations de sécurité et aggraver les vulnérabilités humanitaires existantes. Dans un Sahel déjà sous stress climatique et sécuritaire, ces phénomènes extrêmes risquent de créer des mouvements de population supplémentaires et de perturber l'économie agricole.",
-      "lieu": "Sénégal",
-      "lat": 14.4750607,
-      "lon": -14.4529612,
-      "implications": [
-        "Perturbation des opérations de sécurité durant une période de transition politique",
-        "Aggravation des déplacements internes et des crises humanitaires",
-        "Impact sur les corridors logistiques régionaux et l'approvisionnement alimentaire"
-      ],
-      "recommandations": [
-        "Préparer cartographie des zones à risque humanitaire accru post-orages",
-        "Monitorer les mouvements de populations induites par la catastrophe climatique",
-        "Analyser l'impact sur les forces de sécurité et la stabilité régionale"
       ]
     }
   ]
