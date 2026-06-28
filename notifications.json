@@ -5,25 +5,25 @@
       "id": "u-maliactu-net-afrique-ouest-hub-production-drogues",
       "date": "2026-06-28",
       "theatre": "sahel",
-      "severite": "info",
+      "severite": "alerte",
       "source": "Mali Actu",
       "source_url": "https://maliactu.net/afrique-ouest-hub-production-drogues/",
       "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21309.jpg",
-      "titre": "Guinée et Sénégal deviennent des hubs de production de drogues",
-      "resume": "L'ONUDC révèle que la Guinée et le Sénégal sont désormais des centres de production de drogues menaçant la stabilité régionale.",
-      "detail": "Selon l'ONUDC, le trafic de drogues en Afrique de l'Ouest a connu une expansion significative ces dernières années. La Guinée et le Sénégal, en particulier, sont identifiés comme des plaques tournantes pour le transit et la production de substances illicites. Cette situation expose les pays voisins à une hausse de la criminalité organisée et à une corruption accrue. Les infrastructures portuaires et les routes commerciales traditionnelles favorisent ces activités illégales. Les autorités locales peinent à endiguer ce phénomène en raison de moyens limités et de la porosité des frontières.",
+      "titre": "Guinée et Sénégal deviennent hubs de production de drogues",
+      "resume": "L'ONUDC révèle que la Guinée et le Sénégal sont devenus des hubs de production de drogues menaçant la stabilité régionale.",
+      "detail": "L'ONUDC a officiellement identifié la Guinée et le Sénégal comme nouveaux centres de production de drogues en Afrique de l'Ouest. Cette situation aggrave les flux transfrontaliers de substances illicites et pourrait alimenter des réseaux criminels plus larges. Les autorités locales et régionales doivent renforcer les contrôles aux frontières et la coopération judiciaire pour limiter l'expansion de ces activités. Les conséquences humanitaires et sécuritaires pourraient s'étendre au-delà des deux pays concernés.",
       "lieu": "Guinée, Sénégal",
       "lat": 12.8705148,
       "lon": -14.1252741,
       "implications": [
-        "Risque accru de criminalité transfrontalière",
-        "Menace pour la stabilité politique régionale",
-        "Impact négatif sur les investissements étrangers"
+        "Risque accru de trafic vers l'Europe via les routes sahéliennes",
+        "Impact possible sur la stabilité politique au Sénégal et en Guinée",
+        "Menace sur les opérations des forces régionales antiterroristes"
       ],
       "recommandations": [
-        "Renforcer la coopération sécuritaire avec les pays voisins",
-        "Investir dans des programmes de lutte contre la corruption",
-        "Développer des infrastructures portuaires sécurisées"
+        "Renforcer les patrouilles douanières aux frontières Guinée-Sénégal",
+        "Coordonner avec l'ONUDC pour des opérations ciblées",
+        "Établir des cellules de renseignement conjointes"
       ]
     },
     {
@@ -34,21 +34,21 @@
       "source": "Mali Actu",
       "source_url": "https://maliactu.net/aes-centre-jeunesse-sport-sahel-2026/",
       "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21300.jpg",
-      "titre": "AES lance un centre stratégique pour la jeunesse au Sahel",
-      "resume": "L'AES annonce un centre sportif et éducatif pour la jeunesse sahélienne en 2026, projet perçu comme une provocation envers la France.",
-      "detail": "L'Alliance des États du Sahel (AES) a dévoilé un projet de centre stratégique pour la jeunesse, combinant sport et éducation, prévu pour 2026. Ce centre vise à promouvoir la souveraineté culturelle et éducative des jeunes sahéliens, tout en réduisant la dépendance vis-à-vis des anciennes puissances coloniales. Le projet s'inscrit dans une stratégie plus large de réorientation géopolitique des pays membres de l'AES. Les autorités françaises y voient une provocation directe, tandis que les pays de l'AES soulignent la nécessité de renforcer l'autonomie régionale.",
-      "lieu": "Sahel",
+      "titre": "AES lance un centre stratégique pour la jeunesse sahélienne",
+      "resume": "L'AES annonce un centre stratégique sport-éducation pour la jeunesse sahélienne en 2026 marquant une autonomie face à la France.",
+      "detail": "L'Alliance des États du Sahel (AES) a annoncé le lancement d'un centre stratégique dédié à la jeunesse, combinant sport et éducation pour 2026. Ce projet s'inscrit dans une stratégie plus large de souveraineté régionale et pourrait marquer un tournant dans les relations avec les anciennes puissances coloniales. Les détails opérationnels restent flous mais l'initiative vise à contrer l'influence occidentale via des programmes éducatifs et sportifs. Les retombées concrètes dépendront des financements et de l'adhésion des populations locales",
+      "lieu": "Non précisé, Sahel",
       "lat": 14.0279165,
       "lon": -0.7717776,
       "implications": [
-        "Renforcement de l'autonomie stratégique de l'AES",
-        "Tensions accrues avec les anciennes puissances coloniales",
-        "Potentiel de radicalisation des jeunes populations"
+        "Possible réduction de l'influence française au Sahel",
+        "Création d'un réseau de jeunesse aligné sur les valeurs de l'AES",
+        "Risque de polarisation accrue avec les pays occidentaux"
       ],
       "recommandations": [
-        "Surveiller les alliances géopolitiques émergentes dans la région",
-        "Évaluer l'impact des projets éducatifs sur la radicalisation",
-        "Renforcer les dialogues diplomatiques pour éviter une escalade des tensions"
+        "Surveiller les financements et partenariats du projet",
+        "Analyser l'impact sur les programmes éducatifs existants",
+        "Évaluer les réactions des pays voisins non membres de l'AES"
       ]
     },
     {
@@ -84,20 +84,20 @@
       "source": "Mali Actu",
       "source_url": "https://maliactu.net/cyberattaques-maroc-menace-sahel/",
       "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21304.jpg",
-      "titre": "Cyberattaques au Maroc : menace croissante pour le Sahel",
-      "resume": "8% des victimes marocaines de cyberattaques perdent plus de 1 350 dollars, une menace qui s'étend au Sahel.",
-      "detail": "Une étude récente révèle que 8% des victimes de cyberattaques au Maroc subissent des pertes financières dépassant 1 350 dollars. Cette menace s'étend au Sahel, où les infrastructures numériques sont de plus en plus ciblées. Les cybercriminels exploitent les faiblesses des systèmes de sécurité locaux, souvent sous-financés. Les secteurs bancaires et gouvernementaux sont particulièrement vulnérables. La propagation de ces attaques pourrait perturber les services essentiels et exacerber les instabilités régionales.",
+      "titre": "Cyberattaques au Maroc menacent le Sahel avec pertes financières",
+      "resume": "8% des victimes marocaines de cyberattaques perdent plus de 1 350 dollars une menace qui inquiète le Sahel.",
+      "detail": "Une étude révèle que 8% des victimes marocaines de cyberattaques subissent des pertes financières dépassant 1 350 dollars. Cette menace cyber s'étend au Sahel où les infrastructures critiques restent vulnérables. Les pays sahéliens partagent des réseaux numériques avec le Maroc ce qui expose la région à des risques similaires. Les cybercriminels exploitent les faiblesses des systèmes de paiement et des administrations publiques. La coopération régionale en cybersécurité devient une priorité absolue",
       "lieu": "Maroc, Sahel",
       "lat": null,
       "lon": null,
       "implications": [
-        "Perturbation des services bancaires et gouvernementaux",
-        "Augmentation des coûts de cybersécurité pour les entreprises",
-        "Risque de fuite de données sensibles"
+        "Risque accru de perturbation des services publics au Sahel",
+        "Menace sur les transferts d'argent via systèmes numériques",
+        "Exposition des données sensibles des États et entreprises"
       ],
       "recommandations": [
-        "Renforcer les capacités de cybersécurité des institutions locales",
-        "Collaborer avec des partenaires internationaux pour des audits de sécurité",
+        "Renforcer les cellules de cybersécurité nationales",
+        "Créer un centre de réponse aux incidents cyber régional",
         "Sensibiliser les populations aux bonnes pratiques numériques"
       ]
     },
@@ -124,6 +124,56 @@
         "Évaluer l'impact des sanctions économiques sur les chaînes d'approvisionnement",
         "Renforcer les mesures de sécurité civile dans les zones frontalières",
         "Coordonner les réponses humanitaires avec les partenaires internationaux"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-herve-koffi-kouakou-etalon-or-2026",
+      "date": "2026-06-28",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/herve-koffi-kouakou-etalon-or-2026/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21318.jpg",
+      "titre": "Hervé Koffi Kouakou sacré Étalon d’Or 2026 au Sahel",
+      "resume": "Le gardien burkinabè Hervé Koffi Kouakou remporte l'Étalon d'Or 2026, symbole de résilience pour le Sahel.",
+      "detail": "La victoire d'Hervé Koffi Kouakou, gardien burkinabè, à l'Étalon d'Or 2026 est présentée comme un symbole de résilience pour le Sahel face aux défis sécuritaires et socio-économiques. Cet événement culturel et sportif pourrait renforcer la cohésion régionale et servir de levier diplomatique pour les pays de l'AES. Les médias locaux mettent en avant cette réussite comme une alternative positive aux narratives de crise. L'impact sur l'image du Sahel reste à évaluer",
+      "lieu": "Ouagadougou, Burkina Faso",
+      "lat": 12.3681873,
+      "lon": -1.5270944,
+      "implications": [
+        "Amélioration potentielle de l'image internationale du Sahel",
+        "Opportunité de soft power pour les pays de l'AES",
+        "Renforcement de la coopération sportive régionale"
+      ],
+      "recommandations": [
+        "Capitaliser sur cet événement pour des campagnes de communication positive",
+        "Encourager les échanges sportifs intra-saheliens",
+        "Utiliser ce succès comme outil de diplomatie culturelle"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-afrique-sud-sahel-tensions-immigres-27-juin",
+      "date": "2026-06-28",
+      "theatre": "afrique",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/afrique-sud-sahel-tensions-immigres-27-juin/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21308.jpg",
+      "titre": "Manifestations anti-immigrés en Afrique du Sud menacent la stabilité régionale",
+      "resume": "Les manifestations anti-immigrés du 27 juin 2026 en Afrique du Sud risquent d'enflammer les tensions au Sahel.",
+      "detail": "Les violentes manifestations anti-immigrés prévues le 27 juin 2026 en Afrique du Sud pourraient déclencher une crise humanitaire et exacerber les tensions au Sahel. Les pays de la région craignent un afflux de migrants fuyant les violences et une radicalisation accrue des communautés locales. Les réseaux migratoires entre l'Afrique du Sud et le Sahel sont bien établis ce qui pourrait amplifier la propagation des conflits. Les gouvernements concernés doivent anticiper des mesures de gestion de crise et de protection des populations vulnérables",
+      "lieu": "Afrique du Sud, Sahel",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque d'afflux de migrants vers le Sahel",
+        "Radicalisation possible des communautés locales",
+        "Tensions diplomatiques accrues entre l'Afrique du Sud et ses voisins"
+      ],
+      "recommandations": [
+        "Préparer des plans d'accueil d'urgence pour les migrants",
+        "Renforcer les patrouilles aux frontières sud-africaines",
+        "Coordonner avec l'Union Africaine pour une réponse continentale"
       ]
     },
     {
@@ -691,56 +741,6 @@
         "Cartographier les zones frontalières critiques",
         "Renforcer les patrouilles conjointes",
         "Surveiller les flux commerciaux"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-diplomatie-sahel-defis-internationaux",
-      "date": "2026-06-22",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-diplomatie-sahel-defis-internationaux/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19585.jpg",
-      "titre": "AES harmonise sa diplomatie face aux défis sahéliens",
-      "resume": "Les ministres des Affaires étrangères du Mali, Burkina Faso et Niger unifient leur stratégie diplomatique à Bamako.",
-      "detail": "La réunion à Bamako marque une volonté d'harmonisation des positions face aux pressions internationales. L'AES cherche à consolider son unité face aux défis sécuritaires et économiques. Cependant cette alliance pourrait aussi renforcer des dynamiques de rejet des partenariats traditionnels comme ceux avec la France. La coordination diplomatique pourrait modifier l'équilibre des forces au Sahel.",
-      "lieu": "Bamako, Mali",
-      "lat": 12.6132656,
-      "lon": -7.9847391,
-      "implications": [
-        "Renforcement de l'autonomie politique de l'AES",
-        "Risque de marginalisation des partenaires historiques",
-        "Potentiel conflit diplomatique accru"
-      ],
-      "recommandations": [
-        "Analyser les déclarations officielles de l'AES",
-        "Évaluer les impacts sur les alliances militaires",
-        "Surveiller les réactions des pays voisins"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-accord-frontalier-guinee-cote-ivoire",
-      "date": "2026-06-22",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/accord-frontalier-guinee-cote-ivoire/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19583.jpg",
-      "titre": "Guinée-Côte d'Ivoire stabilisent leur frontière après accord",
-      "resume": "Un accord historique après quatre ans de négociations impacte la stabilité ouest-africaine.",
-      "detail": "L'accord frontalier entre la Guinée et la Côte d'Ivoire pourrait servir de modèle de coopération en Afrique de l'Ouest. Il vise à réduire les tensions liées à la circulation transfrontalière et au commerce informel. La stabilisation de cette frontière pourrait aussi limiter les mouvements de groupes armés. Cependant une mise en œuvre efficace nécessite des ressources et une volonté politique durable.",
-      "lieu": "Frontière Guinée-Côte d'Ivoire",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Réduction des tensions locales",
-        "Amélioration des échanges commerciaux",
-        "Potentiel modèle pour d'autres frontières"
-      ],
-      "recommandations": [
-        "Suivre la mise en œuvre concrète de l'accord",
-        "Évaluer les premiers impacts économiques",
-        "Comparer avec d'autres initiatives frontalières"
       ]
     }
   ]
