@@ -1,5 +1,5 @@
 {
-  "generated": "humint-live-2026-06-17",
+  "generated": "build-humint-manifest",
   "countries": [
     {
       "name": "Nigeria",
@@ -10,46 +10,33 @@
         9.6
       ],
       "zoom": 5.4,
-      "count": 540,
+      "count": 366,
       "events": [
-        "Affrontements",
-        "Alerte",
         "Arrestation",
         "Assassinat",
         "Attaque",
-        "Combat",
+        "Combat / Affrontement",
+        "Déplacement / Réfugiés",
         "Destruction",
-        "Discours Déclaration",
-        "Divers",
         "Embuscade",
-        "Enlèvement",
-        "Frappe aérienne / Drône",
+        "Enlèvement / Prise d'otage",
+        "Frappe / Drône",
         "IED / Explosif",
-        "Libération",
-        "Manifestations Emeutes",
-        "Menaces",
-        "Opération",
-        "Position",
-        "Présence / Regroupement",
-        "Réfugiés",
-        "Renforcement",
-        "Revendication",
-        "Trafic armes drogues",
-        "Violence",
-        "Vol Braquage"
+        "Information / Divers",
+        "Menaces / Alerte",
+        "Opération (forces)",
+        "Présence / Mouvement",
+        "Vol / Pillage / Extorsion"
       ],
       "actors": [
-        "Boko Haram",
+        "Al Shabaab",
         "BOKO HARAM",
         "CIVILS",
         "Ei",
         "EI",
-        "EI-S",
         "FDS",
-        "Forces armées Nigérianes",
         "FR",
         "GAE",
-        "GANE",
         "GAT",
         "GAT EI",
         "GAT, BOKO HARAM",
@@ -58,7 +45,6 @@
         "GSIM",
         "HANI",
         "ISWAP",
-        "NAF",
         "OPHK (opération Hadin Kai)",
         "USA"
       ],
@@ -82,10 +68,6 @@
         {
           "key": "2026-04",
           "label": "Avril 2026"
-        },
-        {
-          "key": "2026-05",
-          "label": "Mai 2026"
         }
       ]
     },
@@ -98,47 +80,23 @@
         12.3
       ],
       "zoom": 5.8,
-      "count": 539,
+      "count": 325,
       "events": [
-        "Affrontement",
-        "Affrontements",
-        "Alerte",
-        "Alertes",
         "Arrestation",
         "Assassinat",
         "Attaque",
-        "Combat",
-        "Cotisations",
-        "Déplacement",
-        "Déplacements",
+        "Combat / Affrontement",
+        "Déplacement / Réfugiés",
         "Destruction",
-        "Discours Déclaration",
-        "Disparition",
-        "Divers",
-        "EID",
         "Embuscade",
-        "Enlèvement",
-        "Exfiltration",
-        "Frappe aérienne / Drône",
+        "Enlèvement / Prise d'otage",
+        "Frappe / Drône",
         "IED / Explosif",
-        "IEF",
-        "Incursion",
-        "Manifestations Emeutes",
-        "Menaces",
-        "Mouvement",
-        "Mouvements",
-        "Offensive",
-        "Offensives",
-        "Opération",
-        "Pénétrations",
-        "Prélèvement",
-        "Présence / Regroupement",
-        "Rassemblement",
-        "Reconnaissance",
-        "Rencontre",
-        "Renforcement",
-        "Réunion",
-        "Vol"
+        "Information / Divers",
+        "Menaces / Alerte",
+        "Opération (forces)",
+        "Présence / Mouvement",
+        "Vol / Pillage / Extorsion"
       ],
       "actors": [
         "Civil",
@@ -147,17 +105,12 @@
         "CIVIL-GENERAL INT",
         "CIVILS",
         "EI",
-        "EI-S",
-        "EIGS",
-        "FAN",
         "FDS",
         "FDS-VDP",
-        "FDS/VDP",
         "GAT",
         "GENERAL EXT",
         "GENERAL INT",
         "GSIM",
-        "GSIM et CIVILS",
         "HANI",
         "USA"
       ],
@@ -181,14 +134,81 @@
         {
           "key": "2026-04",
           "label": "Avril 2026"
+        }
+      ]
+    },
+    {
+      "name": "Niger",
+      "zone": "sahel",
+      "file": "/sahel/humint.geojson",
+      "center": [
+        8.1,
+        17.6
+      ],
+      "zoom": 5,
+      "count": 180,
+      "events": [
+        "Arrestation",
+        "Assassinat",
+        "Attaque",
+        "Combat / Affrontement",
+        "Déplacement / Réfugiés",
+        "Destruction",
+        "Embuscade",
+        "Enlèvement / Prise d'otage",
+        "Frappe / Drône",
+        "IED / Explosif",
+        "Information / Divers",
+        "Menaces / Alerte",
+        "Présence / Mouvement",
+        "Vol / Pillage / Extorsion"
+      ],
+      "actors": [
+        "BOKO HARAM",
+        "Civil",
+        "Civil INT",
+        "CIVILS",
+        "EI",
+        "EI-S",
+        "EI-Sahel",
+        "EI-SAHEL",
+        "EIFS",
+        "EIGS",
+        "FAN",
+        "FDS",
+        "GANE",
+        "GAT",
+        "GENERAL EXT",
+        "GENERAL INT",
+        "Groupe armé",
+        "GSIM",
+        "HANI",
+        "ISWAP",
+        "JAS",
+        "Lakurawa (EIGS)",
+        "Lukawara",
+        "USA"
+      ],
+      "months": [
+        {
+          "key": "2025-12",
+          "label": "Décembre 2025"
         },
         {
-          "key": "2026-05",
-          "label": "Mai 2026"
+          "key": "2026-01",
+          "label": "Janvier 2026"
         },
         {
-          "key": "2026-06",
-          "label": "Juin 2026"
+          "key": "2026-02",
+          "label": "Février 2026"
+        },
+        {
+          "key": "2026-03",
+          "label": "Mars 2026"
+        },
+        {
+          "key": "2026-04",
+          "label": "Avril 2026"
         }
       ]
     },
@@ -201,53 +221,25 @@
         17.6
       ],
       "zoom": 5.2,
-      "count": 364,
+      "count": 168,
       "events": [
-        "Affrontement",
-        "Affrontements",
-        "Alerte",
         "Arrestation",
         "Assassinat",
         "Attaque",
-        "Combat",
-        "Contrôle",
-        "Convoi",
-        "Crash aéronef",
-        "Départ",
-        "Déplacement",
-        "Désertion",
+        "Combat / Affrontement",
+        "Déplacement / Réfugiés",
         "Destruction",
-        "Discours",
-        "Discours Déclaration",
-        "Divers",
         "Embuscade",
-        "Enlèvement",
-        "Evacuation",
-        "Exécution",
-        "Frappe aérienne / Drône",
+        "Enlèvement / Prise d'otage",
+        "Frappe / Drône",
         "IED / Explosif",
-        "Libération",
-        "Libérations",
-        "Manifestation",
-        "Menaces",
-        "Mouvements",
-        "Négociations",
-        "Opération",
-        "Politique",
-        "Position",
-        "Présence / Regroupement",
-        "Prise de position",
-        "Rencontre",
-        "Renforcement",
-        "Repli",
-        "Sabotage",
-        "Situation",
-        "Violence",
-        "Vol",
-        "Vol Braquage"
+        "Information / Divers",
+        "Menaces / Alerte",
+        "Opération (forces)",
+        "Présence / Mouvement",
+        "Vol / Pillage / Extorsion"
       ],
       "actors": [
-        "A/C",
         "AK",
         "CIVILS",
         "EI",
@@ -255,22 +247,16 @@
         "EI-Sahel",
         "EIGS",
         "FAMA",
-        "FAMA/AC",
         "FAMA/AK",
         "FDS",
         "FLA",
-        "FLA/GSIM",
-        "FMA/AC",
         "GANE",
         "GAT",
-        "GAT EI",
         "GAT GSIM",
         "GENERAL EXT",
         "GENERAL INT",
         "GSIM",
-        "GSIM/FLA",
         "HANI",
-        "JNIM",
         "ONG",
         "SMP",
         "USA"
@@ -295,168 +281,6 @@
         {
           "key": "2026-04",
           "label": "Avril 2026"
-        },
-        {
-          "key": "2026-05",
-          "label": "Mai 2026"
-        }
-      ]
-    },
-    {
-      "name": "Niger",
-      "zone": "sahel",
-      "file": "/sahel/humint.geojson",
-      "center": [
-        8.1,
-        17.6
-      ],
-      "zoom": 5,
-      "count": 260,
-      "events": [
-        "Accrochage",
-        "Affrontements",
-        "Alerte",
-        "Alerte sécurité",
-        "Arrestation",
-        "Assassinat",
-        "Attaque",
-        "Braquage",
-        "Combat",
-        "Déplacement",
-        "Destruction",
-        "Discours Déclaration",
-        "Divers",
-        "Embuscade",
-        "Enlèvement",
-        "Frappe aérienne / Drône",
-        "IED / Explosif",
-        "Incursion",
-        "Interception",
-        "Libération",
-        "Menaces",
-        "Mouvement",
-        "Mouvements",
-        "Pillage",
-        "Pilonnage",
-        "Présence / Regroupement",
-        "Reddition",
-        "Renforcement",
-        "Tir",
-        "Vol",
-        "Vols"
-      ],
-      "actors": [
-        "Bandits",
-        "Boko Haram",
-        "BOKO HARAM",
-        "Civil",
-        "Civil INT",
-        "CIVILS",
-        "EI",
-        "EI-S",
-        "EI-Sahel",
-        "EI-SAHEL",
-        "EIFS",
-        "EIGS",
-        "FAN",
-        "FDS",
-        "GANE",
-        "GAT",
-        "GAT EI",
-        "GENERAL EXT",
-        "GENERAL INT",
-        "Groupe armé",
-        "GSIM",
-        "HANI",
-        "ISWAP",
-        "JAS",
-        "Lakurawa (EIGS)",
-        "Lukawara",
-        "Milices",
-        "USA"
-      ],
-      "months": [
-        {
-          "key": "2025-12",
-          "label": "Décembre 2025"
-        },
-        {
-          "key": "2026-01",
-          "label": "Janvier 2026"
-        },
-        {
-          "key": "2026-02",
-          "label": "Février 2026"
-        },
-        {
-          "key": "2026-03",
-          "label": "Mars 2026"
-        },
-        {
-          "key": "2026-04",
-          "label": "Avril 2026"
-        },
-        {
-          "key": "2026-05",
-          "label": "Mai 2026"
-        }
-      ]
-    },
-    {
-      "name": "Bénin",
-      "zone": "sahel",
-      "file": "/sahel/humint.geojson",
-      "center": [
-        2.3,
-        9.5
-      ],
-      "zoom": 6.2,
-      "count": 70,
-      "events": [
-        "Accident",
-        "Arrestation",
-        "Assassinat",
-        "Attaque",
-        "Déplacement",
-        "Destruction",
-        "Discours Déclaration",
-        "Divers",
-        "Elections",
-        "Opération",
-        "Présence / Regroupement",
-        "Renforcement",
-        "Vol"
-      ],
-      "actors": [
-        "CIVIL INT",
-        "CIVILS",
-        "FDS",
-        "FR",
-        "GAT",
-        "GENERAL EXT",
-        "GSIM",
-        "HANI"
-      ],
-      "months": [
-        {
-          "key": "2026-01",
-          "label": "Janvier 2026"
-        },
-        {
-          "key": "2026-02",
-          "label": "Février 2026"
-        },
-        {
-          "key": "2026-03",
-          "label": "Mars 2026"
-        },
-        {
-          "key": "2026-04",
-          "label": "Avril 2026"
-        },
-        {
-          "key": "2026-05",
-          "label": "Mai 2026"
         }
       ]
     },
@@ -473,19 +297,15 @@
       "events": [
         "Assassinat",
         "Attaque",
-        "Combat",
-        "Discours Déclaration",
-        "Divers",
+        "Combat / Affrontement",
+        "Déplacement / Réfugiés",
         "Embuscade",
-        "Enlèvement",
-        "Frappe aérienne / Drône",
-        "Menaces",
-        "Position",
-        "Présence / Regroupement",
-        "Réfugiés",
-        "Renforcement",
-        "Violence",
-        "Vol Braquage"
+        "Enlèvement / Prise d'otage",
+        "Frappe / Drône",
+        "Information / Divers",
+        "Menaces / Alerte",
+        "Présence / Mouvement",
+        "Vol / Pillage / Extorsion"
       ],
       "actors": [
         "CIVILS",
@@ -524,23 +344,72 @@
       ]
     },
     {
+      "name": "Bénin",
+      "zone": "sahel",
+      "file": "/sahel/humint.geojson",
+      "center": [
+        2.3,
+        9.5
+      ],
+      "zoom": 6.2,
+      "count": 46,
+      "events": [
+        "Arrestation",
+        "Assassinat",
+        "Attaque",
+        "Déplacement / Réfugiés",
+        "Destruction",
+        "Information / Divers",
+        "Opération (forces)",
+        "Présence / Mouvement",
+        "Vol / Pillage / Extorsion"
+      ],
+      "actors": [
+        "CIVIL INT",
+        "CIVILS",
+        "FDS",
+        "FR",
+        "GAT",
+        "GENERAL EXT",
+        "GSIM",
+        "HANI"
+      ],
+      "months": [
+        {
+          "key": "2026-01",
+          "label": "Janvier 2026"
+        },
+        {
+          "key": "2026-02",
+          "label": "Février 2026"
+        },
+        {
+          "key": "2026-03",
+          "label": "Mars 2026"
+        },
+        {
+          "key": "2026-04",
+          "label": "Avril 2026"
+        }
+      ]
+    },
+    {
       "name": "Togo",
       "zone": "sahel",
       "file": "/sahel/humint.geojson",
       "center": [
-        1,
-        8.6
+        0.8433509999999999,
+        9.590762833333335
       ],
-      "zoom": 6.4,
-      "count": 10,
+      "zoom": 5.5,
+      "count": 6,
       "events": [
-        "Déplacement",
-        "Divers",
-        "Opération",
-        "Présence / Regroupement"
+        "Déplacement / Réfugiés",
+        "Information / Divers",
+        "Opération (forces)",
+        "Présence / Mouvement"
       ],
       "actors": [
-        "CIVILS",
         "FDS",
         "GENERL EXT",
         "GSIM"
@@ -561,10 +430,6 @@
         {
           "key": "2026-04",
           "label": "Avril 2026"
-        },
-        {
-          "key": "2026-05",
-          "label": "Mai 2026"
         }
       ]
     }

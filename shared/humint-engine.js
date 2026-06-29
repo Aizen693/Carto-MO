@@ -48,18 +48,21 @@
   function canonEvent(raw) {
     if (!raw) return null;
     var s = String(raw).trim(), low = s.toLowerCase();
-    if (/\bied\b|mine|explosif/.test(low)) return 'IED / Explosif';
-    if (/frappe|dr[ôo]ne/.test(low)) return 'Frappe aérienne / Drône';
-    if (/assassinat/.test(low)) return 'Assassinat';
-    if (/embuscade/.test(low)) return 'Embuscade';
-    if (/enl[èe]vem|kidnapp|rapt/.test(low)) return 'Enlèvement';
-    if (/attaque/.test(low)) return 'Attaque';
-    if (/combat/.test(low)) return 'Combat';
-    if (/menace/.test(low)) return 'Menaces';
-    if (/op[ée]ration/.test(low)) return 'Opération';
-    if (/arrestation/.test(low)) return 'Arrestation';
-    if (/regroupement|pr[ée]sence/.test(low)) return 'Présence / Regroupement';
-    if (/divers|information/.test(low)) return 'Divers';
+    if (/frappe|dr[ôo]ne|artillerie|missile|pilonnage|a[ée]rienne/.test(low)) return 'Frappe / Drône';
+    if (/\bied\b|\bie[df]\b|\beid\b|mine|explosif/.test(low)) return 'IED / Explosif';
+    if (/assassinat|meurtre/.test(low)) return 'Assassinat';
+    if (/enl[èe]vem|kidnapp|rapt|otage|s[ée]questr|disparition/.test(low)) return 'Enlèvement / Prise d\'otage';
+    if (/embuscade|interception/.test(low)) return 'Embuscade';
+    if (/combat|affront|accroch/.test(low)) return 'Combat / Affrontement';
+    if (/vol|braquage|pillage|pr[ée]l[èe]vement|cotisation|extorsion|racket/.test(low)) return 'Vol / Pillage / Extorsion';
+    if (/menace|ultimatum|alerte|intimidation/.test(low)) return 'Menaces / Alerte';
+    if (/arrestation|interpellation|reddition/.test(low)) return 'Arrestation';
+    if (/op[ée]ration|offensive|ratissage|reconnaissance|contr[ôo]le/.test(low)) return 'Opération (forces)';
+    if (/attaque|incursion|p[ée]n[ée]trat|raid|\btir\b/.test(low)) return 'Attaque';
+    if (/d[ée]placement|r[ée]fugi/.test(low)) return 'Déplacement / Réfugiés';
+    if (/regroupement|pr[ée]sence|rassemblement|renforcement|position|mouvement/.test(low)) return 'Présence / Mouvement';
+    if (/destruction|incendie/.test(low)) return 'Destruction';
+    if (/discours|d[ée]claration|revendication|rencontre|r[ée]union|[ée]lection|manifestation|[ée]meute|divers|information|crash|trafic|lib[ée]ration|violence/.test(low)) return 'Information / Divers';
     return s.charAt(0).toUpperCase() + s.slice(1);
   }
   function normalizeActor(raw) {
