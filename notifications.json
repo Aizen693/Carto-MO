@@ -1,6 +1,126 @@
 {
-  "updated": "2026-06-28",
+  "updated": "2026-06-29",
   "items": [
+    {
+      "id": "u-bamada-net-droits-de-lenfance-et-conflits-armes-laes-denonce-a-la-trib",
+      "date": "2026-06-29",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/droits-de-lenfance-et-conflits-armes-laes-denonce-a-la-tribune-de-lonu",
+      "image": "http://bamada.net/wp-content/uploads/2026/06/conseil-securite-mali-onu.jpg",
+      "titre": "L’AES dénonce à l’ONU les violations des droits des enfants en zone de conflit",
+      "resume": "La Confédération des États du Sahel (AES) a alerté l’ONU sur l’augmentation des violations des droits des enfants dans la région.",
+      "detail": "L’intervention de l’AES au Conseil de Sécurité de l’ONU souligne une hausse des attaques contre les enfants dans les zones de conflit du Sahel. L’alliance met en avant des données locales et des rapports d’ONG pour appuyer ses revendications. Cette mobilisation pourrait influencer les futures résolutions internationales sur la protection des mineurs. Les États membres sont incités à renforcer les mécanismes de suivi et de sanction.",
+      "lieu": "Burkina Faso",
+      "lat": 12.0753083,
+      "lon": -1.6880314,
+      "implications": [
+        "Risque accru de radicalisation des jeunes",
+        "Pression accrue sur les forces de sécurité locales",
+        "Renforcement des partenariats internationaux"
+      ],
+      "recommandations": [
+        "Renforcer les programmes de réinsertion des enfants affectés",
+        "Coordonner avec les acteurs humanitaires locaux"
+      ]
+    },
+    {
+      "id": "u-maliweb-net-armee-operations-des-fama-contre-les-groupes-terroristes-t",
+      "date": "2026-06-29",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Maliweb.net",
+      "source_url": "https://www.maliweb.net/armee/operations-des-fama-contre-les-groupes-terroristes-traque-tous-azimuts-3117957.html",
+      "image": "",
+      "titre": "Opérations militaires maliennes ciblent les groupes terroristes au Sahel",
+      "resume": "Les Forces Armées Maliennes (FAMA) mènent des opérations contre les groupes terroristes dans plusieurs régions du Mali.",
+      "detail": "Les FAMA ont annoncé des frappes ciblées contre des réseaux de ravitaillement et des cadres terroristes dans le centre et le nord du Mali. Ces opérations visent à asphyxier les groupes armés et à sécuriser les zones stratégiques. Les résultats concrets restent à évaluer, mais l’approche reflète une stratégie de contre-insurrection renforcée. La coordination avec les forces partenaires régionales est cruciale pour éviter les replis tactiques.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Renforcement possible des capacités militaires maliennes",
+        "Risque de représailles contre les civils",
+        "Impact sur les flux logistiques des groupes armés"
+      ],
+      "recommandations": [
+        "Suivre l’évolution des déplacements de population",
+        "Évaluer l’impact humanitaire des opérations"
+      ]
+    },
+    {
+      "id": "u-aljazeera-com-economy-2026-6-29-oil-prices-rise-as-us-iranian-strikes-",
+      "date": "2026-06-29",
+      "theatre": "moyen-orient",
+      "severite": "critique",
+      "source": "Al Jazeera English",
+      "source_url": "https://www.aljazeera.com/economy/2026/6/29/oil-prices-rise-as-us-iranian-strikes-threaten-strait-of-hormuz-reopening?traffic_source=rss",
+      "image": "https://www.aljazeera.com/wp-content/uploads/2026/06/AFP__20260627__B8J44ZQ__v1__MidRes__OmanIranUsIsraelWar-1782699418.jpg?resize=1200%2C630",
+      "titre": "Tensions USA-Iran menacent la réouverture du détroit d’Ormuz",
+      "resume": "Les prix du pétrole augmentent en raison des frappes USA-Iran qui bloquent la réouverture du détroit d’Ormuz.",
+      "detail": "Les frappes croisées entre les États-Unis et l’Iran perturbent les efforts de réhabilitation du détroit d’Ormuz, une voie maritime stratégique pour les exportations pétrolières. Les prix du Brent ont augmenté, reflétant les tensions persistantes. La situation pourrait aggraver les perturbations logistiques en Asie et en Europe. Une escalade militaire directe reste un risque majeur.",
+      "lieu": "Détroit d’Ormuz",
+      "lat": 26.4494061,
+      "lon": 56.2027702,
+      "implications": [
+        "Fluctuation des prix du pétrole",
+        "Risque de blocus maritime",
+        "Impact sur les chaînes d’approvisionnement globales"
+      ],
+      "recommandations": [
+        "Surveiller les stocks stratégiques de pétrole",
+        "Évaluer les alternatives de routage maritime"
+      ]
+    },
+    {
+      "id": "u-theguardian-com-world-2026-jun-29-pakistan-deadly-airstrikes-afghanist",
+      "date": "2026-06-29",
+      "theatre": "asie-sud",
+      "severite": "alerte",
+      "source": "The Guardian",
+      "source_url": "https://www.theguardian.com/world/2026/jun/29/pakistan-deadly-airstrikes-afghanistan-border",
+      "image": "",
+      "titre": "Frappes aériennes pakistanaises tuent des civils en Afghanistan",
+      "resume": "Le Pakistan mène des frappes aériennes le long de la frontière afghane, faisant des dizaines de morts civils.",
+      "detail": "Les frappes pakistanaises ont visé trois provinces orientales de l’Afghanistan, selon les autorités talibanes. Le bilan fait état de 36 morts et 163 blessés parmi les civils. Ces attaques surviennent dans un contexte de tensions récurrentes entre les deux pays. Elles risquent d’exacerber les relations déjà tendues et de compromettre les efforts de stabilisation régionale.",
+      "lieu": "Afghanistan",
+      "lat": 33.7680065,
+      "lon": 66.2385139,
+      "implications": [
+        "Escalade des tensions Pakistan-Afghanistan",
+        "Risque de représailles asymétriques",
+        "Impact sur les opérations humanitaires"
+      ],
+      "recommandations": [
+        "Évaluer l’impact humanitaire des frappes",
+        "Renforcer les canaux de communication diplomatique"
+      ]
+    },
+    {
+      "id": "u-jeuneafrique-com-1803818-economie-entreprises-telecoms-comment-mattel-",
+      "date": "2026-06-29",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "JeuneAfrique.comGabon - JeuneAfrique.com",
+      "source_url": "https://www.jeuneafrique.com/1803818/economie-entreprises/telecoms-comment-mattel-a-remonte-la-pente-en-mauritanie/",
+      "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2026/06/24/jad20260624-mmo-mauritanie-objectif-eco-mattel.jpg",
+      "titre": "Mattel concurrence Mauritel en Mauritanie",
+      "resume": "L’opérateur Mattel, contrôlé par Tunisie Telecom, concurrence désormais Mauritel en Mauritanie.",
+      "detail": "Cinq ans après sa tentative de vente, Mattel a consolidé sa position en Mauritanie, notamment dans la capitale Nouakchott. L’opérateur se positionne comme un concurrent sérieux face à Mauritel, filiale de Maroc Telecom. Cette dynamique pourrait influencer les politiques de régulation du secteur télécoms en Afrique de l’Ouest. L’impact sur les consommateurs reste à évaluer.",
+      "lieu": "Mauritanie",
+      "lat": 20.2540382,
+      "lon": -9.2399263,
+      "implications": [
+        "Concurrence accrue dans le secteur des télécoms",
+        "Possibles baisses des tarifs",
+        "Innovation dans les services proposés"
+      ],
+      "recommandations": [
+        "Analyser les stratégies commerciales des opérateurs",
+        "Suivre l’évolution des parts de marché"
+      ]
+    },
     {
       "id": "u-maliactu-net-afrique-ouest-hub-production-drogues",
       "date": "2026-06-28",
@@ -616,131 +736,6 @@
       "recommandations": [
         "Cartographier les zones agricoles prioritaires",
         "Évaluer l'accès aux intrants dans les zones instables"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-guinee-fin-exportation-or-brut",
-      "date": "2026-06-23",
-      "theatre": "afrique",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/guinee-fin-exportation-or-brut/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/guinee_exportation_or_brut.jpeg",
-      "titre": "Guinée interdit l'exportation d'or brut pour capter la valeur ajoutée",
-      "resume": "La Guinée stoppe l'exportation d'or brut pour renforcer sa souveraineté minière et capter plus de valeur économique.",
-      "detail": "Cette décision s'inscrit dans une stratégie de capture de la rente minière locale. Elle pourrait perturber les flux commerciaux transfrontaliers avec le Mali et le Sénégal, déjà sous pression sécuritaire. Les acteurs miniers internationaux pourraient réévaluer leurs investissements. Bamako risque une hausse des coûts d'approvisionnement en or.",
-      "lieu": "Guinée",
-      "lat": 10.7226226,
-      "lon": -10.7083587,
-      "implications": [
-        "Risque de pénuries locales d'or",
-        "Tensions commerciales avec les pays voisins",
-        "Réduction des marges pour les négociants étrangers"
-      ],
-      "recommandations": [
-        "Surveiller les réactions des acteurs miniers au Mali",
-        "Analyser l'impact sur les prix de l'or au Sahel",
-        "Cartographier les nouveaux circuits d'approvisionnement"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-bourse-burkina-faso-rtb-marches-tension",
-      "date": "2026-06-23",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/bourse-burkina-faso-rtb-marches-tension/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19863.jpg",
-      "titre": "Marchés financiers burkinabè sous forte tension régionale",
-      "resume": "La RTB révèle une dégradation préoccupante des marchés financiers burkinabè dans un contexte de tensions sécuritaires accrues.",
-      "detail": "Cette situation reflète l'instabilité macroéconomique liée aux crises sécuritaires régionales. Les indicateurs boursiers et la confiance des investisseurs sont en baisse. Le Burkina Faso pourrait subir une fuite des capitaux. La dépendance aux partenaires internationaux s'accroît.",
-      "lieu": "Burkina Faso",
-      "lat": 12.0753083,
-      "lon": -1.6880314,
-      "implications": [
-        "Fuite des capitaux et dépréciation monétaire",
-        "Risque de défaut de paiement sur la dette souveraine",
-        "Réduction des financements pour les PME locales"
-      ],
-      "recommandations": [
-        "Suivre les indicateurs boursiers de la BRVM",
-        "Évaluer les risques de dépréciation du FCFA",
-        "Renforcer les mécanismes de protection des investisseurs locaux"
-      ]
-    },
-    {
-      "id": "u-afrik-info-cd-2026-06-23-kinshasa-felix-tshisekedi-et-evariste-ndayish",
-      "date": "2026-06-23",
-      "theatre": "afrique",
-      "severite": "critique",
-      "source": "afrik-info.cd",
-      "source_url": "https://afrik-info.cd/2026/06/23/kinshasa-felix-tshisekedi-et-evariste-ndayishimiye-renforcent-la-cooperation-securitaire-et-sanitaire-entre-la-rdc-et-le-burundi/",
-      "image": "",
-      "titre": "RDC et Burundi renforcent leur coopération sécuritaire et sanitaire",
-      "resume": "Les présidents Tshisekedi et Ndayishimiye officialisent un accord de coopération sécuritaire et sanitaire entre la RDC et le Burundi.",
-      "detail": "Cet accord intervient dans un contexte de tensions régionales avec les groupes armés en RDC. Il pourrait limiter les infiltrations transfrontalières depuis le Burundi. Cooperation sanitaire renforcée face aux épidémies comme Ebola. Impact positif attendu sur la stabilité des Grands Lacs.",
-      "lieu": "RDC, Burundi",
-      "lat": -3.3604168,
-      "lon": 29.3996185,
-      "implications": [
-        "Réduction des flux de groupes armés entre les deux pays",
-        "Amélioration de la réponse aux épidémies",
-        "Renforcement des échanges commerciaux sécurisés"
-      ],
-      "recommandations": [
-        "Cartographier les zones frontalières prioritaires",
-        "Coordonner avec MONUSCO pour soutenir cet accord",
-        "Analyser les retombées économiques à court terme"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-faladie-dechets-bamako-crise-sanitaire",
-      "date": "2026-06-23",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/faladie-dechets-bamako-crise-sanitaire/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19858.jpg",
-      "titre": "Bamako confronté à une crise sanitaire majeure due aux déchets",
-      "resume": "L'ancien parc à bétail de Faladié est devenu un dépotoir géant menaçant la santé publique à Bamako.",
-      "detail": "Cette crise sanitaire aggrave les tensions sociales dans la capitale malienne. Les autorités peinent à gérer ce site critique. Risque d'épidémies accru en saison des pluies. Impact économique sur les activités commerciales locales.",
-      "lieu": "Bamako, Mali",
-      "lat": 12.6132656,
-      "lon": -7.9847391,
-      "implications": [
-        "Épidémies de choléra ou de paludisme",
-        "Blocage des activités économiques autour de Faladié",
-        "Crise de confiance envers les autorités locales"
-      ],
-      "recommandations": [
-        "Prioriser le nettoyage de Faladié",
-        "Renforcer les capacités de gestion des déchets",
-        "Mobiliser les acteurs locaux pour des solutions durables"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-niger-benin-3-accords-frontiere",
-      "date": "2026-06-22",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/niger-benin-3-accords-frontiere/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-19584.jpg",
-      "titre": "Niger-Bénin rouvrent leur frontière sous accords secrets",
-      "resume": "Niger et Bénin finalisent trois accords pour rouvrir leur frontière. Enjeux majeurs pour la sécurité et le commerce régional.",
-      "detail": "Les trois accords portent sur la défense la sécurité et le commerce. Leur signature intervient dans un contexte de tension sécuritaire persistante au Sahel. La réouverture de la frontière pourrait faciliter la circulation des groupes armés non étatiques et des flux illicites. Une coordination renforcée entre les deux pays est nécessaire pour éviter une exploitation hostile des corridors.",
-      "lieu": "Frontière Niger-Bénin",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque accru de trafic d'armes",
-        "Opportunité pour les groupes jihadistes",
-        "Impact potentiel sur les marchés locaux"
-      ],
-      "recommandations": [
-        "Cartographier les zones frontalières critiques",
-        "Renforcer les patrouilles conjointes",
-        "Surveiller les flux commerciaux"
       ]
     }
   ]
