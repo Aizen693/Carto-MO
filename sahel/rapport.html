@@ -288,7 +288,7 @@ body{min-height:100vh}
         <div class="security-grid">
           <div class="security-box" style="border-top:2px solid #ff5252">
             <div style="font-family:var(--bc);font-size:12px;font-weight:600;color:#ff5252;text-transform:uppercase;margin-bottom:12px">Frontiere Est — Hodh El Chargui</div>
-            <div class="security-row"><span>Reseau HUMINT</span><span class="security-val" style="color:#66bb6a">Actif &#x2713;</span></div>
+            <div class="security-row"><span>Couverture terrain</span><span class="security-val" style="color:#66bb6a">Actif &#x2713;</span></div>
             <div style="font-family:var(--m);font-size:7px;color:var(--tx2);margin-bottom:4px">Couverture renseignement</div>
             <div class="bar-indicator"><div class="bar-fill" style="width:65%;background:#66bb6a"></div></div>
             <div class="security-row"><span>Drones surveillance</span><span class="security-val" style="color:#66bb6a">Deployes</span></div>
@@ -756,7 +756,7 @@ new Chart(document.getElementById('c-corridor'), {
 new Chart(document.getElementById('c-security'), {
   type: 'radar',
   data: {
-    labels: ['Renseignement HUMINT', 'Surveillance aerienne (drones)', 'Unites mobiles terrain', 'Cooperation internationale', 'Controle biometrique', 'Presence physique postes'],
+    labels: ['Renseignement de terrain', 'Surveillance aerienne (drones)', 'Unites mobiles terrain', 'Cooperation internationale', 'Controle biometrique', 'Presence physique postes'],
     datasets: [
       { label: 'Hodh El Chargui (Est)', data: [80, 70, 75, 60, 40, 55], backgroundColor: 'rgba(230,57,70,0.15)', borderColor: '#e63946', borderWidth: 2, pointBackgroundColor: '#e63946', pointRadius: 4 },
       { label: 'Hodh El Gharbi / Assaba (Sud)', data: [30, 25, 40, 45, 50, 35], backgroundColor: 'rgba(102,187,106,0.15)', borderColor: '#66bb6a', borderWidth: 2, pointBackgroundColor: '#66bb6a', pointRadius: 4 }

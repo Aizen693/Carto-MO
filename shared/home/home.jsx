@@ -304,7 +304,7 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
               <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             {sub ? (
-              <span>Indiquez <strong>un pays suivi</strong> dans la barre sous le globe pour ouvrir sa carte de renseignement HUMINT : événements, acteurs et dates, filtrables.</span>
+              <span>Indiquez <strong>un pays suivi</strong> dans la barre sous le globe pour ouvrir sa carte de renseignement : événements, acteurs et dates, filtrables.</span>
             ) : (
               <span>Essayez la démo : indiquez <strong>n'importe quelle ville, région ou pays du monde</strong> dans la barre de recherche, sous le globe.
                 <em className="hero__demo-warn">Données fictives, à titre d'illustration du rendu de nos cartes.</em>

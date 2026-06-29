@@ -76,11 +76,11 @@ function SidePanel({ open, action, onClose }) {
 
 // ─── Root frame factory ───────────────────────────────────
 function rootFor(action) {
-  if (action === 'region')  return { kind: 'pays',    title: 'Pays',     subtitle: 'Sélectionnez un pays suivi pour ouvrir sa carte de renseignement HUMINT.' };
+  if (action === 'region')  return { kind: 'pays',    title: 'Pays',     subtitle: 'Sélectionnez un pays suivi pour ouvrir sa carte de renseignement.' };
   if (action === 'rapport') return { kind: 'zones-r', title: 'Rapports', subtitle: 'Classement par zone, puis par rapport. Notes hebdomadaires, synthèses et études.' };
   if (action === 'graph')   return { kind: 'zones-g', title: 'Graphs',   subtitle: 'Visualisations et indicateurs : flux, densités, réseaux, séries temporelles.' };
   if (action === 'theme')   return { kind: 'themes',  title: 'Thèmes',   subtitle: 'Lectures transversales : un sujet, plusieurs zones. Ports, Mines, JNIM, etc.' };
-  if (action === 'cartographie') return { kind: 'pays', title: 'Cartographie', subtitle: 'Choisissez un pays pour ouvrir sa carte de renseignement HUMINT.' };
+  if (action === 'cartographie') return { kind: 'pays', title: 'Cartographie', subtitle: 'Choisissez un pays pour ouvrir sa carte de renseignement.' };
   return null;
 }
 
@@ -160,7 +160,7 @@ function PaysList({ q }) {
           <span className="panel-row__flag">{c.name.slice(0, 2).toUpperCase()}</span>
           <span className="panel-row__body">
             <span className="panel-row__title">{c.name}</span>
-            <span className="panel-row__meta">{c.count} renseignements HUMINT</span>
+            <span className="panel-row__meta">{c.count} renseignements</span>
           </span>
           <span className="panel-row__badge ok">{(c.events || []).length} évts</span>
           <ChevRight />

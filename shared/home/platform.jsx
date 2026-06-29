@@ -31,7 +31,7 @@ function PlatformView({ onBack }) {
 
         <div className="actions-grid">
           <ActionCard
-            num="01" name="Region" desc="Choisir un pays suivi pour ouvrir sa carte de renseignement HUMINT."
+            num="01" name="Region" desc="Choisir un pays suivi pour ouvrir sa carte de renseignement."
             count="7 pays" icon={<RegionIcon />}
             onClick={() => openAction('region')} />
 
@@ -51,7 +51,7 @@ function PlatformView({ onBack }) {
             onClick={() => openAction('theme')} />
 
           <ActionCard
-            num="05" name="Cartographie" desc="Accès direct aux cartes HUMINT par pays : événements, acteurs et dates filtrables."
+            num="05" name="Cartographie" desc="Accès direct aux cartes de renseignement par pays : événements, acteurs et dates filtrables."
             count="7 pays" icon={<CartoIconLg />}
             onClick={() => openAction('cartographie')} />
         </div>
@@ -81,7 +81,7 @@ function PlatformView({ onBack }) {
 const PAYS_HUMINT = ['Mali', 'Niger', 'Burkina Faso', 'Nigeria', 'RDC', 'Bénin', 'Togo'];
 function paysCascade() {
   return PAYS_HUMINT.map(p => ({
-    label: p, meta: 'HUMINT',
+    label: p, meta: 'Renseignement',
     actions: [
       { label: 'Ouvrir la carte du pays', meta: 'Événements · Acteurs · Dates',
         href: '/carte/?pays=' + encodeURIComponent(p) },

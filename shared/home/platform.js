@@ -37,7 +37,7 @@ function PlatformView({
   }, /*#__PURE__*/React.createElement(ActionCard, {
     num: "01",
     name: "Region",
-    desc: "Choisir un pays suivi pour ouvrir sa carte de renseignement HUMINT.",
+    desc: "Choisir un pays suivi pour ouvrir sa carte de renseignement.",
     count: "7 pays",
     icon: /*#__PURE__*/React.createElement(RegionIcon, null),
     onClick: () => openAction('region')
@@ -65,7 +65,7 @@ function PlatformView({
   }), /*#__PURE__*/React.createElement(ActionCard, {
     num: "05",
     name: "Cartographie",
-    desc: "Acc\xE8s direct aux cartes HUMINT par pays : \xE9v\xE9nements, acteurs et dates filtrables.",
+    desc: "Acc\xE8s direct aux cartes de renseignement par pays : \xE9v\xE9nements, acteurs et dates filtrables.",
     count: "7 pays",
     icon: /*#__PURE__*/React.createElement(CartoIconLg, null),
     onClick: () => openAction('cartographie')
@@ -114,7 +114,7 @@ const PAYS_HUMINT = ['Mali', 'Niger', 'Burkina Faso', 'Nigeria', 'RDC', 'Bénin'
 function paysCascade() {
   return PAYS_HUMINT.map(p => ({
     label: p,
-    meta: 'HUMINT',
+    meta: 'Renseignement',
     actions: [{
       label: 'Ouvrir la carte du pays',
       meta: 'Événements · Acteurs · Dates',

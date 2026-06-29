@@ -77,7 +77,7 @@ function rootFor(action) {
   if (action === 'region') return {
     kind: 'pays',
     title: 'Pays',
-    subtitle: 'Sélectionnez un pays suivi pour ouvrir sa carte de renseignement HUMINT.'
+    subtitle: 'Sélectionnez un pays suivi pour ouvrir sa carte de renseignement.'
   };
   if (action === 'rapport') return {
     kind: 'zones-r',
@@ -97,7 +97,7 @@ function rootFor(action) {
   if (action === 'cartographie') return {
     kind: 'pays',
     title: 'Cartographie',
-    subtitle: 'Choisissez un pays pour ouvrir sa carte de renseignement HUMINT.'
+    subtitle: 'Choisissez un pays pour ouvrir sa carte de renseignement.'
   };
   return null;
 }
@@ -250,7 +250,7 @@ function PaysList({
     className: "panel-row__title"
   }, c.name), /*#__PURE__*/React.createElement("span", {
     className: "panel-row__meta"
-  }, c.count, " renseignements HUMINT")), /*#__PURE__*/React.createElement("span", {
+  }, c.count, " renseignements")), /*#__PURE__*/React.createElement("span", {
     className: "panel-row__badge ok"
   }, (c.events || []).length, " \xE9vts"), /*#__PURE__*/React.createElement(ChevRight, null))), !filtered.length && /*#__PURE__*/React.createElement(Empty, {
     q: q
