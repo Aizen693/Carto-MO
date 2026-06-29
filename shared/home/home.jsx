@@ -228,8 +228,8 @@ function VeilleSystem(){
         <div className="home-sec__wrap">
           <div className="veille-sec__head">
             <SectionHead eyebrow="Veille · mise à jour hebdomadaire"
-              title="Ce que notre veille a" em="capté cette semaine"
-              intro="Flux OSINT consolidé en continu sur nos six théâtres. Sélection sourcée et datée. L'analyse complète et l'archive sont réservées aux abonnés." />
+              title="Ce que notre veille a" em="relevé cette semaine"
+              intro="Nous consolidons en continu un flux OSINT sur nos six théâtres, sélectionné, sourcé et daté. L'analyse complète et l'archive sont réservées aux abonnés." />
             <span className="veille-live"><span className="veille-live__dot" />Veille active</span>
           </div>
           <div className="veille-grid">
@@ -888,7 +888,7 @@ function ConsoleView({ onBack, onArchives, onVeille, onComptes, onRapports }) {
           Console <em>interne</em>
         </h1>
         <p className="hero__lede">
-          Outil de travail des analystes Algor Int sur six théâtres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'État, OSINT social et flux Telegram sont agrégés sur une carte unique, sourcée, datée et auditable événement par événement.
+          Outil de travail des analystes Algor Int sur six théâtres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'État, SOCMINT et flux Telegram sont agrégés sur une carte unique, sourcée, datée et auditable événement par événement.
         </p>
 
         <div className="console-tabs">

@@ -480,8 +480,8 @@ function VeilleSystem() {
   }, /*#__PURE__*/React.createElement(SectionHead, {
     eyebrow: "Veille \xB7 mise \xE0 jour hebdomadaire",
     title: "Ce que notre veille a",
-    em: "capt\xE9 cette semaine",
-    intro: "Flux OSINT consolid\xE9 en continu sur nos six th\xE9\xE2tres. S\xE9lection sourc\xE9e et dat\xE9e. L'analyse compl\xE8te et l'archive sont r\xE9serv\xE9es aux abonn\xE9s."
+    em: "relev\xE9 cette semaine",
+    intro: "Nous consolidons en continu un flux OSINT sur nos six th\xE9\xE2tres, s\xE9lectionn\xE9, sourc\xE9 et dat\xE9. L'analyse compl\xE8te et l'archive sont r\xE9serv\xE9es aux abonn\xE9s."
   }), /*#__PURE__*/React.createElement("span", {
     className: "veille-live"
   }, /*#__PURE__*/React.createElement("span", {
@@ -1463,7 +1463,7 @@ function ConsoleView({
     className: "hero__title"
   }, "Console ", /*#__PURE__*/React.createElement("em", null, "interne")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
-  }, "Outil de travail des analystes Algor Int sur six th\xE9\xE2tres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'\xC9tat, OSINT social et flux Telegram sont agr\xE9g\xE9s sur une carte unique, sourc\xE9e, dat\xE9e et auditable \xE9v\xE9nement par \xE9v\xE9nement."), /*#__PURE__*/React.createElement("div", {
+  }, "Outil de travail des analystes Algor Int sur six th\xE9\xE2tres : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Imagerie satellite, ACLED, GDELT, presse d'\xC9tat, SOCMINT et flux Telegram sont agr\xE9g\xE9s sur une carte unique, sourc\xE9e, dat\xE9e et auditable \xE9v\xE9nement par \xE9v\xE9nement."), /*#__PURE__*/React.createElement("div", {
     className: "console-tabs"
   }, /*#__PURE__*/React.createElement(ConsoleTab, {
     href: "/admin/",

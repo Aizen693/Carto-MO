@@ -725,7 +725,7 @@
           <strong style="color:#181428;font-weight:700">Le débunkage</strong> consiste à démonter une fausse information en remontant à son origine, à identifier qui la propage et par quels moyens, puis à la réfuter à l'aide de preuves vérifiables.
         </p>
         <p class="page-hero__lede">
-          Quand une marque, une institution ou un dirigeant est ciblé par une désinformation coordonnée, nous retraçons la chaîne jusqu'au patient zéro et cartographions le réseau d'amplification, pour comprendre, démentir et, si nécessaire, agir.
+          Quand une marque, une institution ou un dirigeant est ciblé par une désinformation coordonnée, nous retraçons la chaîne jusqu'au primo diffuseur et cartographions le réseau d'amplification, pour comprendre, démentir et, si nécessaire, agir.
         </p>
         <div class="page-hero__cta">
           <a class="btn btn--ghost btn--lg" href="#methode" onclick="event.preventDefault(); document.getElementById('methode').scrollIntoView({block:'start'});">Voir la méthode</a>
@@ -875,7 +875,7 @@
         <article class="deb-step">
           <div class="deb-step__num">02</div>
           <h3 class="deb-step__h">Remonter</h3>
-          <p class="deb-step__p">Cœur différenciant. Reconstruction de la chaîne de diffusion par recoupement timestamp et similarité textuelle. Identification du contenu source, le patient zéro, et géolocalisation du point de départ.</p>
+          <p class="deb-step__p">Cœur différenciant. Reconstruction de la chaîne de diffusion par recoupement timestamp et similarité textuelle. Identification du contenu source, le primo diffuseur, et géolocalisation du point de départ.</p>
         </article>
         <article class="deb-step">
           <div class="deb-step__num">03</div>
@@ -1064,7 +1064,7 @@ const TYPE_COLOR = {
   site_copie:   '#C94A4A'
 };
 const TYPE_LABEL = {
-  patient_zero: 'Patient zéro',
+  patient_zero: 'Primo diffuseur',
   relai:        'Relais primaire',
   amplificateur:'Amplificateur',
   site_copie:   'Site copie'
@@ -1529,7 +1529,7 @@ function renderActeursVictimes(){
     amplificateur:'linear-gradient(135deg,#2E84D4,#1A5FA0)',
     site_copie:   'linear-gradient(135deg,#C94A4A,#8E2A2A)'
   };
-  const TYPE_LBL = { patient_zero: 'Patient zéro', relai: 'Relais primaire', amplificateur: 'Amplificateur', site_copie: 'Site copie' };
+  const TYPE_LBL = { patient_zero: 'Primo diffuseur', relai: 'Relais primaire', amplificateur: 'Amplificateur', site_copie: 'Site copie' };
 
   const acteursWrap = document.getElementById('av-acteurs');
   acteursWrap.innerHTML = actorsArr.map(a => {
