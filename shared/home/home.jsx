@@ -676,11 +676,11 @@ function DiffSection() {
 // ── 3. Pour qui — segments clients.
 const HOME_AUD = [
   { t: "Décideurs & directions",
-    d: "Arbitrer rapidement sur un risque-pays, sans avoir à dépouiller la presse." },
+    d: "Arbitrer rapidement sur un risque-pays, sans avoir à suivre toute la presse." },
   { t: "Sûreté & sécurité",
     d: "Évaluer la menace sur des sites, des trajets et des implantations." },
   { t: "Conseil & due diligence",
-    d: "Étayer une recommandation avec des sources datées et sourcées." },
+    d: "Étayer une recommandation sur des faits datés, sourcés et cotés." },
   { t: "Opérateurs sur zone",
     d: "ONG, industriels et logisticiens présents sur des théâtres sensibles." },
 ];
