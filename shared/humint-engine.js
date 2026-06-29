@@ -259,7 +259,7 @@
         showLoader(false);
         tryRender();
       })
-      .catch(function (e) { showLoader(false); showError('Données HUMINT indisponibles.'); console.error(e); });
+      .catch(function (e) { showLoader(false); showError('Données indisponibles.'); console.error(e); });
   }
 
   // Rendu dès que la donnée ET la carte sont prêtes (ordre d'arrivée indifférent).
@@ -762,7 +762,7 @@
     }
     var title = $('country-title');
     if (title) title.textContent = state.country || 'Choisir un pays';
-    document.title = (state.country || 'Carte') + ' — HUMINT — Algor Int';
+    document.title = (state.country || 'Carte') + ' · Algor Access';
   }
 
   function facetChip(key, label, value, active) {
@@ -997,16 +997,8 @@
     if (p.type) rows += '<div class="popup-row"><span class="popup-key">Typologie d\'événement</span><span class="popup-val">' + esc(p.type) + '</span></div>';
     if (p.iso) rows += '<div class="popup-row"><span class="popup-key">Date</span><span class="popup-val">' + esc(p.iso) + '</span></div>';
     if (p.description) rows += '<div class="popup-row popup-desc"><span class="popup-val">' + esc(p.description) + '</span></div>';
-    var src = '';
-    if (p.sources) {
-      var links = String(p.sources).split(/\s+(?=[^\s|]+\|http)/).map(function (s) {
-        var parts = s.split('|');
-        if (parts.length === 2 && parts[1].indexOf('http') === 0) return '<a href="' + esc(parts[1]) + '" target="_blank" rel="noopener">' + esc(parts[0]) + '</a>';
-        return '<span>' + esc(s) + '</span>';
-      }).join(' ');
-      src = '<div class="popup-sources"><span class="popup-key">Sources</span>' + links + '</div>';
-    }
-    return head + '<div class="popup-body">' + rows + src + '</div>';
+    // Carte vue client : aucune source ni origine affichee (HUMINT / OSINT jamais montres).
+    return head + '<div class="popup-body">' + rows + '</div>';
   }
 
   function fitToFiltered() {
