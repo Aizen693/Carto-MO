@@ -328,7 +328,7 @@
           try { map.flyTo({ center: f.coords, zoom: 9, duration: 700 }); } catch (e) { /* */ }
           new mapboxgl.Popup({ closeButton: true, maxWidth: '320px', className: 'humint-popup' })
             .setLngLat(f.coords)
-            .setHTML(makePopup({ acteur: f.acteur, type: f.type, iso: f.iso, description: f.description, sources: f.sources, _color: actorColor(f.acteur) }))
+            .setHTML(makePopup({ acteur: f.acteur, type: f.type, iso: f.iso, description: f.description, sources: f.sources, corrobore: f.corrobore, _color: actorColor(f.acteur) }))
             .addTo(map);
         }
       };
@@ -494,7 +494,7 @@
             try { map.flyTo({ center: f.coords, zoom: 9, duration: 700 }); } catch (e) { /* */ }
             new mapboxgl.Popup({ closeButton: true, maxWidth: '320px', className: 'humint-popup' })
               .setLngLat(f.coords)
-              .setHTML(makePopup({ acteur: f.acteur, type: f.type, iso: f.iso, description: f.description, sources: f.sources, _color: actorColor(f.acteur) }))
+              .setHTML(makePopup({ acteur: f.acteur, type: f.type, iso: f.iso, description: f.description, sources: f.sources, corrobore: f.corrobore, _color: actorColor(f.acteur) }))
               .addTo(map);
           }
         };
@@ -704,6 +704,8 @@
       pays: normalizePays(pays), ville: villeOf(pays), iso: iso, mkey: monthKey(iso),
       type: canonEvent(type), acteur: normalizeActor(acteur) || '—',
       description: p.description || detail || '', sources: p.sources || '', coords: coords,
+      // Statut client : info recoupee (renseignement + OSINT) ou non. Defaut = non corrobore.
+      corrobore: !!(p.corrobore === true || /corrobor|recoup/i.test(String(p.statut || ''))),
       added: p.added ? String(p.added).slice(0, 10) : null,
     };
   }
@@ -730,7 +732,7 @@
       type: 'FeatureCollection',
       features: shown.map(function (f) {
         return { type: 'Feature', geometry: { type: 'Point', coordinates: f.coords },
-          properties: { acteur: f.acteur, type: f.type, iso: f.iso || '', description: f.description, sources: f.sources, _color: actorColor(f.acteur) } };
+          properties: { acteur: f.acteur, type: f.type, iso: f.iso || '', description: f.description, sources: f.sources, corrobore: f.corrobore ? 1 : 0, _color: actorColor(f.acteur) } };
       }),
     });
     updateLegend(shown);
@@ -994,6 +996,11 @@
     var color = p._color || '#888';
     var head = '<div class="popup-header"><div class="popup-dot-bar" style="background:' + color + '"></div><div class="popup-actor">' + esc(p.acteur) + '</div></div>';
     var rows = '';
+    // Statut de recoupement : seul indicateur de fiabilite montre au client (jamais HUMINT / OSINT).
+    var corr = !!p.corrobore;
+    var sColor = corr ? '#2e9e5b' : '#9aa0a6';
+    var sLabel = corr ? 'Corroboré' : 'Non corroboré';
+    rows += '<div class="popup-row"><span class="popup-key">Statut</span><span class="popup-val"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + sColor + ';margin-right:6px;vertical-align:middle"></span>' + sLabel + '</span></div>';
     if (p.type) rows += '<div class="popup-row"><span class="popup-key">Typologie d\'événement</span><span class="popup-val">' + esc(p.type) + '</span></div>';
     if (p.iso) rows += '<div class="popup-row"><span class="popup-key">Date</span><span class="popup-val">' + esc(p.iso) + '</span></div>';
     if (p.description) rows += '<div class="popup-row popup-desc"><span class="popup-val">' + esc(p.description) + '</span></div>';
