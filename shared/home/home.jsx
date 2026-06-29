@@ -1472,6 +1472,7 @@ function RapportsView({ onBack }) {
   const [openHtml, setOpenHtml] = useState(null);
   const [loadingDoc, setLoadingDoc] = useState(false);
   const [docError, setDocError] = useState(null);
+  const [pub, setPub] = useState({});       // etat de publication carte par rapport
 
   useEffect(() => {
     let cancelled = false;
@@ -1513,6 +1514,27 @@ function RapportsView({ onBack }) {
   }
 
   function close() { setOpen(null); setOpenHtml(null); setDocError(null); }
+
+  // Publie sur la carte LIVE les points en attente de ce rapport (edge function publier-carte).
+  // Le client n'ecrit jamais le bucket : la fusion se fait cote serveur avec le service_role.
+  async function publish(r) {
+    const c = window.algorAuth && window.algorAuth.supabase;
+    if (!c) return;
+    setPub((p) => ({ ...p, [r.fichier]: { state: 'busy' } }));
+    try {
+      await c.auth.getSession();
+      const { data, error } = await c.functions.invoke('publier-carte', { body: { zone: r.zone, date: r.date } });
+      if (error) {
+        let msg = error.message;
+        try { const ctx = await error.context.json(); if (ctx && ctx.error) msg = ctx.error; } catch (e) {}
+        throw new Error(msg);
+      }
+      if (data && data.error) throw new Error(data.error);
+      setPub((p) => ({ ...p, [r.fichier]: { state: 'done', msg: (data && data.ajoutes != null ? data.ajoutes : 0) + ' point(s) publié(s)' } }));
+    } catch (e) {
+      setPub((p) => ({ ...p, [r.fichier]: { state: 'error', msg: (e && e.message) || 'Échec de publication' } }));
+    }
+  }
 
   const needle = query.toLowerCase().trim();
   const visible = (items || []).filter((r) => {
@@ -1567,7 +1589,7 @@ function RapportsView({ onBack }) {
                 <thead>
                   <tr>
                     <th>Titre</th><th>Théâtre</th><th>Date</th>
-                    <th>HUMINT</th><th>OSINT</th><th></th>
+                    <th>HUMINT</th><th>OSINT</th><th>Carte</th><th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1578,6 +1600,24 @@ function RapportsView({ onBack }) {
                       <td>{rapDateFR(r.date)}</td>
                       <td><span className="rapport-count rapport-count--humint">{r.nb_humint != null ? r.nb_humint : 0}</span></td>
                       <td><span className="rapport-count rapport-count--osint">{r.nb_osint != null ? r.nb_osint : 0}</span></td>
+                      <td>
+                        {(() => {
+                          const st = pub[r.fichier] || {};
+                          if (st.state === 'done') return <span className="rapport-pub rapport-pub--done" title={st.msg}>Publié ✓</span>;
+                          return (
+                            <>
+                              <button
+                                className="rapport-btn rapport-btn--sm rapport-btn--pub"
+                                disabled={st.state === 'busy'}
+                                title="Publier les points de ce rapport sur la carte"
+                                onClick={() => publish(r)}>
+                                {st.state === 'busy' ? 'Publication...' : st.state === 'error' ? 'Réessayer' : 'Publier'}
+                              </button>
+                              {st.state === 'error' && <span className="rapport-pub-err">{st.msg}</span>}
+                            </>
+                          );
+                        })()}
+                      </td>
                       <td><button className="rapport-btn rapport-btn--sm" onClick={() => view(r)}>Voir</button></td>
                     </tr>
                   ))}

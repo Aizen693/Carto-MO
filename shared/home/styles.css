@@ -3579,6 +3579,10 @@ button:focus-visible,
 .rapport-btn--sm { padding:5px 12px; font-size:12px; }
 .rapport-btn--ghost { color:var(--violet); background:transparent; }
 .rapport-btn--ghost:hover:not(:disabled) { background:var(--violet-bg); }
+.rapport-btn--pub { color:var(--violet); background:transparent; border-color:var(--violet); }
+.rapport-btn--pub:hover:not(:disabled) { background:var(--violet); color:#fff; }
+.rapport-pub--done { font:700 12px/1 'Plus Jakarta Sans',sans-serif; color:#2e9e5b; }
+.rapport-pub-err { display:block; margin-top:4px; font:500 11px/1.3 'Plus Jakarta Sans',sans-serif; color:#c0392b; max-width:160px; }
 
 .rapport-modal-overlay {
   position:fixed; inset:0; z-index:200;
