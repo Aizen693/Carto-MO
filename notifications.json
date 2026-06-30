@@ -1,6 +1,156 @@
 {
-  "updated": "2026-06-29",
+  "updated": "2026-06-30",
   "items": [
+    {
+      "id": "u-trthaber-com-haber-dunya-iran-savasi-abdnin-mutfagini-vurdu-hane-basin",
+      "date": "2026-06-30",
+      "theatre": "moyen-orient",
+      "severite": "alerte",
+      "source": "TRT Haber",
+      "source_url": "https://www.trthaber.com/haber/dunya/iran-savasi-abdnin-mutfagini-vurdu-hane-basina-1000-dolar-949738.html",
+      "image": "https://trthaberstatic.cdn.wp.trt.com.tr/resimler/2454000/abd-iran-2454861.jpg",
+      "titre": "Conflit Iran-USA alourdit les dépenses américaines de 1000 USD par foyer",
+      "resume": "Les tensions Iran-USA depuis février 2026 impactent directement les coûts énergétiques et opérationnels aux États-Unis.",
+      "detail": "Les analystes économiques estiment que les coûts supplémentaires liés aux tensions géopolitiques entre l'Iran et les États-Unis depuis février 2026 ont entraîné une hausse d'au moins 1000 USD par foyer américain. Cette augmentation touche notamment les prix du carburant et des denrées alimentaires, reflétant une pression inflationniste liée à la volatilité géopolitique. Les tensions régionales pourraient persister et aggraver cette tendance, avec des répercussions sur les marchés globaux.",
+      "lieu": "États-Unis",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque accru d'inflation aux États-Unis",
+        "Impact sur les chaînes d'approvisionnement énergétiques",
+        "Renforcement des tensions commerciales globales"
+      ],
+      "recommandations": [
+        "Surveiller les indicateurs économiques américains liés aux tensions géopolitiques",
+        "Anticiper des ajustements dans les budgets énergétiques des entreprises",
+        "Renforcer les analyses de risque géopolitique pour les investissements"
+      ]
+    },
+    {
+      "id": "u-scmp-com-week-asia-health-environment-article-3358859-border-security-",
+      "date": "2026-06-30",
+      "theatre": "asie-sud",
+      "severite": "alerte",
+      "source": "South China Morning Post",
+      "source_url": "https://www.scmp.com/week-asia/health-environment/article/3358859/border-security-stepped-after-2-malaysians-hurt-roadside-bomb-thai-south?utm_source=rss_feed",
+      "image": "",
+      "titre": "Attentat à la bombe près de la frontière Malaisie-Thaïlande",
+      "resume": "Deux Malaisiens blessés par une bombe artisanale dans la province de Narathiwat, Thaïlande.",
+      "detail": "Un engin explosif improvisé a blessé deux Malaisiens dans la province de Narathiwat, région soumise à une insurrection séparatiste. Les autorités thaïlandaises ont renforcé la sécurité aux frontières. Cet incident illustre la persistance de la violence dans le sud de la Thaïlande, où les tensions ethniques et religieuses alimentent un conflit latent depuis des années.",
+      "lieu": "Narathiwat, Thaïlande",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque accru pour les civils et les travailleurs frontaliers",
+        "Impact potentiel sur les échanges commerciaux entre Malaisie et Thaïlande",
+        "Renforcement des mesures de sécurité aux points de passage"
+      ],
+      "recommandations": [
+        "Évaluer les risques pour les ressortissants malaisiens en Thaïlande",
+        "Renforcer les protocoles de sécurité pour les entreprises opérant près de la frontière",
+        "Surveiller les évolutions de la situation sécuritaire dans le sud de la Thaïlande"
+      ]
+    },
+    {
+      "id": "u-laprunellerdc-cd-30-juin-2026-dans-une-lettre-ouverte-a-felix-tshiseke",
+      "date": "2026-06-30",
+      "theatre": "rdc",
+      "severite": "alerte",
+      "source": "La Prunelle RDC",
+      "source_url": "https://laprunellerdc.cd/30-juin-2026-dans-une-lettre-ouverte-a-felix-tshisekedi-denis-mukwege-denonce-les-choix-diplomatiques-et-securitaires-de-la-rdc/",
+      "image": "",
+      "titre": "Denis Mukwege critique la politique sécuritaire de la RDC",
+      "resume": "Le prix Nobel dénonce les choix diplomatiques et sécuritaires du gouvernement congolais dans une lettre ouverte.",
+      "detail": "Denis Mukwege a publié une lettre ouverte critiquant les orientations sécuritaires et diplomatiques de la RDC depuis 2021. Il remet en cause la gestion de l'état de siège et les interventions militaires, soulignant des lacunes dans la stratégie de stabilisation. Cette prise de position intervient dans un contexte de tensions persistantes dans l'est du pays et de pressions internationales pour une solution durable.",
+      "lieu": "République Démocratique du Congo",
+      "lat": -2.9814344,
+      "lon": 23.8222636,
+      "implications": [
+        "Risque de polarisation politique accrue",
+        "Pression sur les autorités pour réformer la stratégie sécuritaire",
+        "Impact potentiel sur la stabilité régionale"
+      ],
+      "recommandations": [
+        "Suivre les réactions politiques et sécuritaires à cette critique",
+        "Analyser les risques de dégradation de la situation dans l'est de la RDC",
+        "Évaluer l'impact sur les relations internationales de la RDC"
+      ]
+    },
+    {
+      "id": "u-bamada-net-mopti-le-couvre-feu-de-nouveau-prolonge-jusquau-30-juillet",
+      "date": "2026-06-30",
+      "theatre": "afrique",
+      "severite": "alerte",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/mopti-le-couvre-feu-de-nouveau-prolonge-jusquau-30-juillet",
+      "image": "http://bamada.net/wp-content/uploads/2024/12/mopti-ville-1024x768.jpg",
+      "titre": "Prolongation du couvre-feu dans la région de Mopti",
+      "resume": "Les autorités maliennes prolongent le couvre-feu dans la région de Mopti jusqu'au 30 juillet 2026.",
+      "detail": "La région de Mopti est soumise à un couvre-feu depuis le 30 mai 2026 en raison d'une insécurité persistante. Cette mesure, initialement prévue pour un mois, a été prolongée d'un mois supplémentaire. Les autorités locales justifient cette décision par la nécessité de maintenir l'ordre et de protéger les populations face à la menace djihadiste et aux tensions communautaires.",
+      "lieu": "Mopti, Mali",
+      "lat": 14.514489,
+      "lon": -3.6464581,
+      "implications": [
+        "Restriction des libertés civiles dans la région",
+        "Risque accru de tensions entre militaires et civils",
+        "Impact sur les activités économiques locales"
+      ],
+      "recommandations": [
+        "Évaluer les besoins humanitaires dans la région de Mopti",
+        "Renforcer la coordination entre les acteurs sécuritaires et humanitaires",
+        "Surveiller les réactions des populations et des groupes armés"
+      ]
+    },
+    {
+      "id": "u-bamada-net-protection-des-migrants-vulnerables-au-mali-le-mecanisme-na",
+      "date": "2026-06-30",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/protection-des-migrants-vulnerables-au-mali-le-mecanisme-national-de-referencement-revise",
+      "image": "http://bamada.net/wp-content/uploads/2026/06/diaspora-mossa-ag-ataher-1024x683.jpg",
+      "titre": "Mali révisé son mécanisme national de référencement pour les migrants",
+      "resume": "Le Mali modernise son dispositif de protection des migrants vulnérables avec l'appui de l'OIM.",
+      "detail": "Le Mali a organisé un atelier technique pour opérationnaliser son Mécanisme National de Référencement (MNR), avec l'appui de l'OIM et de ses partenaires. Cette initiative vise à améliorer la protection des migrants vulnérables et à renforcer leur accès aux services de base. Elle s'inscrit dans une dynamique de réforme des politiques migratoires au Mali.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Amélioration potentielle de la protection des migrants",
+        "Renforcement de la coopération internationale",
+        "Impact sur les politiques migratoires nationales"
+      ],
+      "recommandations": [
+        "Analyser les résultats concrets de cette réforme",
+        "Évaluer les besoins en financement et en ressources pour sa mise en œuvre",
+        "Surveiller les évolutions des flux migratoires depuis le Mali"
+      ]
+    },
+    {
+      "id": "u-timeslive-co-za-news-south-africa-2026-06-30-children-survive-on-bread",
+      "date": "2026-06-30",
+      "theatre": "afrique",
+      "severite": "alerte",
+      "source": "TimesLive",
+      "source_url": "https://www.timeslive.co.za/news/south-africa/2026-06-30-children-survive-on-bread-as-hundreds-of-zimbabweans-spend-freezing-rainy-night-outside-cape-town-home-affairs-office/",
+      "image": "",
+      "titre": "Zimbabwéens dans une situation humanitaire critique à Cape Town",
+      "resume": "Des centaines de Zimbabwéens, dont des enfants, ont passé une nuit glaciale devant un bureau gouvernemental sud-africain.",
+      "detail": "Des centaines de migrants zimbabwéens, dont des enfants, ont passé une nuit glaciale et pluvieuse devant un bureau des affaires intérieures à Cape Town. Ils survivent principalement grâce à du pain distribué par des organisations locales. Cet incident met en lumière les difficultés des migrants en situation irrégulière en Afrique du Sud, confrontés à des conditions de vie précaires et à des politiques migratoires restrictives.",
+      "lieu": "Le Cap, Afrique du Sud",
+      "lat": -33.9288301,
+      "lon": 18.4172197,
+      "implications": [
+        "Crise humanitaire croissante pour les migrants en Afrique du Sud",
+        "Pression accrue sur les services sociaux locaux",
+        "Risque de tensions entre populations locales et migrants"
+      ],
+      "recommandations": [
+        "Évaluer les besoins humanitaires immédiats des migrants",
+        "Renforcer la coordination entre les acteurs humanitaires et les autorités locales",
+        "Analyser les politiques migratoires sud-africaines et leurs impacts"
+      ]
+    },
     {
       "id": "u-bamada-net-droits-de-lenfance-et-conflits-armes-laes-denonce-a-la-trib",
       "date": "2026-06-29",
@@ -591,151 +741,6 @@
         "Surveiller l'allocation et l'utilisation des fonds",
         "Évaluer l'impact réel sur les populations locales",
         "Renforcer les contrôles dans les zones frontalières"
-      ]
-    },
-    {
-      "id": "u-radiookapi-net-2026-06-26-actualite-securite-des-congolais-bloques-la-",
-      "date": "2026-06-26",
-      "theatre": "rdc",
-      "severite": "info",
-      "source": "Radio Okapi",
-      "source_url": "https://www.radiookapi.net/2026/06/26/actualite/securite/des-congolais-bloques-la-frontiere-tanzanienne-de-rusumo-regagnent",
-      "image": "https://photos.radiookapi.net/picture/20240815130938103973_IMG_4113.jpg?imgmax=1200",
-      "titre": "Congolais bloqués à la frontière Tanzanie regagnent Goma",
-      "resume": "Des Congolais bloqués plusieurs jours à la frontière tanzanienne de Rusumo regagnent Goma au Nord-Kivu",
-      "detail": "Ce mouvement de population reflète les tensions persistantes à la frontière entre RDC et Tanzanie. Les retards dans le retour suggèrent des difficultés logistiques ou des obstacles administratifs. La situation pourrait s'aggraver avec l'arrivée de la saison des pluies. Une surveillance accrue nécessaire sur les mouvements transfrontaliers.",
-      "lieu": "Goma, République démocratique du Congo",
-      "lat": -1.6665685,
-      "lon": 29.225652,
-      "implications": [
-        "Tensions persistantes à la frontière RDC-Tanzanie",
-        "Risque d'afflux de réfugiés dans les zones instables",
-        "Impact humanitaire sur les populations locales"
-      ],
-      "recommandations": [
-        "Cartographier les points de passage frontaliers sensibles",
-        "Renforcer la surveillance des mouvements de population",
-        "Anticiper les besoins humanitaires saisonniers"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-guinee-interdiction-or-brut-aes",
-      "date": "2026-06-24",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/guinee-interdiction-or-brut-aes/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20083.jpg",
-      "titre": "Guinée interdit l'exportation d'or brut pour renforcer l'AES",
-      "resume": "La Guinée interdit l'exportation d'or brut pour imposer sa transformation locale.",
-      "detail": "Cette mesure vise à réduire la dépendance aux exportations brutes et à valoriser les ressources minières localement. Elle s'inscrit dans la stratégie économique de l'AES pour renforcer la souveraineté régionale. Les acteurs miniers locaux pourraient en tirer profit mais les conditions de mise en œuvre restent à clarifier.",
-      "lieu": "Guinée",
-      "lat": 10.7226226,
-      "lon": -10.7083587,
-      "implications": [
-        "Renforcement économique de l'AES",
-        "Impact sur les flux commerciaux traditionnels",
-        "Opportunités pour les raffineries locales"
-      ],
-      "recommandations": [
-        "Cartographier les acteurs miniers locaux en Guinée",
-        "Analyser les capacités de traitement de l'or en Afrique de l'Ouest"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-echec-unowas-senegal-gendarme-sahel",
-      "date": "2026-06-24",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/echec-unowas-senegal-gendarme-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20081.jpg",
-      "titre": "Sénégal émerge comme acteur sécuritaire régional",
-      "resume": "L'échec de l'UNOWAS propulse le Sénégal comme nouveau gendarme du Sahel.",
-      "detail": "Avec 24,3 millions de Sahéliens en besoin d'aide la région fait face à une crise humanitaire. Le Sénégal développe des capacités militaires et logistiques pour combler le vide laissé par l'UNOWAS. Cette montée en puissance pourrait modifier les équilibres sécuritaires régionaux.",
-      "lieu": "Sénégal",
-      "lat": 14.4750607,
-      "lon": -14.4529612,
-      "implications": [
-        "Changement des alliances militaires",
-        "Risque de tensions avec les groupes armés",
-        "Opportunité pour une stabilisation progressive"
-      ],
-      "recommandations": [
-        "Évaluer les capacités militaires sénégalaises",
-        "Suivre les réactions des groupes armés au Sahel"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-benin-budget-rectificatif-2026-crise-sahel",
-      "date": "2026-06-24",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/benin-budget-rectificatif-2026-crise-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20074.jpg",
-      "titre": "Bénin alloue 4 148 milliards FCFA pour résister à la crise sahélienne",
-      "resume": "Le Bénin adopte un budget rectificatif pour faire face aux défis sécuritaires régionaux.",
-      "detail": "Cette enveloppe budgétaire vise à renforcer les capacités de résilience économique et sécuritaire du Bénin face à la crise sahélienne. Le pays pourrait devenir un hub économique pour les pays voisins en cas d'effondrement sécuritaire. Les fonds seront-ils suffisants et bien alloués.",
-      "lieu": "Bénin",
-      "lat": 9.5293472,
-      "lon": 2.2584408,
-      "implications": [
-        "Renforcement des infrastructures béninoises",
-        "Impact sur les flux économiques régionaux",
-        "Risque de tensions internes si mal répartis"
-      ],
-      "recommandations": [
-        "Analyser l'allocation sectorielle des fonds",
-        "Surveiller les réactions des populations béninoises"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-guinee-raffinerie-alumine-chalco-sahel",
-      "date": "2026-06-24",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/guinee-raffinerie-alumine-chalco-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20082.jpg",
-      "titre": "Guinée lance une raffinerie d'alumine à 1 milliard de dollars",
-      "resume": "La Guinée ouvre une raffinerie d'alumine avec Chalco pour renforcer sa souveraineté.",
-      "detail": "Ce projet de 1 milliard de dollars marque une étape clé dans la transformation locale des ressources minières. Il pourrait servir de modèle pour d'autres pays du Sahel cherchant à réduire leur dépendance aux exportations brutes. Les bénéfices économiques restent à concrétiser.",
-      "lieu": "Guinée",
-      "lat": 10.7226226,
-      "lon": -10.7083587,
-      "implications": [
-        "Réduction de la dépendance aux exportations",
-        "Nouveaux partenariats industriels",
-        "Impact sur les marchés internationaux"
-      ],
-      "recommandations": [
-        "Étudier les retombées économiques locales",
-        "Analyser les partenariats avec la Chine"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-revolution-agricole-mali-sahel",
-      "date": "2026-06-24",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/revolution-agricole-mali-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20065.jpg",
-      "titre": "Mali mise sur une révolution agricole pour contrer la crise sahélienne",
-      "resume": "Le Mali anticipe 11,9 millions de tonnes de céréales grâce à une stratégie agricole renforcée.",
-      "detail": "Cette initiative gouvernementale vise à assurer la sécurité alimentaire malgré les crises sécuritaires récurrentes. Les résultats dépendront de la stabilité des zones rurales et de l'accès aux intrants. Les initiatives locales pourraient jouer un rôle clé dans la résilience.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Amélioration de la sécurité alimentaire",
-        "Réduction de la dépendance aux importations",
-        "Opportunités pour les petits producteurs"
-      ],
-      "recommandations": [
-        "Cartographier les zones agricoles prioritaires",
-        "Évaluer l'accès aux intrants dans les zones instables"
       ]
     }
   ]
