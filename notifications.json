@@ -152,6 +152,131 @@
       ]
     },
     {
+      "id": "u-mali24-info-justice-internationale-le-niger-ouvre-la-voie-au-retrait-d",
+      "date": "2026-06-30",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "MALI 24 INFO",
+      "source_url": "https://mali24.info/justice-internationale-le-niger-ouvre-la-voie-au-retrait-du-bloc-sahelien-de-la-cpi/",
+      "image": "https://mali24.info/wp-content/uploads/2025/07/biographie-general-brigade-tiani-abdourahamane.jpeg",
+      "titre": "Niger initie retrait collectif de la CPI pour les pays sahéliens",
+      "resume": "Le Niger a déposé une demande officielle de retrait de la CPI. Cette initiative pourrait entraîner un mouvement régional majeur.",
+      "detail": "Le dépôt par le Niger de sa demande de retrait de la Cour pénale internationale marque une étape politique symbolique et juridique majeure pour le Sahel. Ce geste s'inscrit dans un contexte de tensions récurrentes avec la justice internationale concernant la lutte antiterroriste. L'adhésion d'autres pays de la région à cette démarche pourrait fragiliser davantage l'autorité de la CPI en Afrique de l'Ouest et modifier l'équilibre des partenariats sécuritaires avec l'UE et les États-Unis.",
+      "lieu": "Niger",
+      "lat": 17.7356214,
+      "lon": 9.3238432,
+      "implications": [
+        "Risque de création d'une juridiction alternative régionale",
+        "Impact potentiel sur les financements internationaux",
+        "Renforcement des alliances politiques entre pays du Sahel"
+      ],
+      "recommandations": [
+        "Cartographier les positions des autres pays du G5 Sahel",
+        "Évaluer les conséquences sur les accords de coopération judiciaire",
+        "Anticiper les réactions des bailleurs de fonds internationaux"
+      ]
+    },
+    {
+      "id": "u-mali24-info-diplomatie-le-fosse-entre-l-aes-et-la-france-va-t-il-selar",
+      "date": "2026-06-30",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "MALI 24 INFO",
+      "source_url": "https://mali24.info/diplomatie-le-fosse-entre-l-aes-et-la-france-va-t-il-selargir/",
+      "image": "",
+      "titre": "Burkina Faso annonce rupture diplomatique immédiate avec la France",
+      "resume": "Le Burkina Faso a officiellement rompu ses relations diplomatiques avec la France. La décision pourrait s'étendre à d'autres pays de l'AES.",
+      "detail": "La rupture diplomatique annoncée par le Burkina Faso avec la France représente une escalade majeure dans les tensions régionales. Cette décision s'inscrit dans la continuité de la politique de retrait des influences occidentales menée par les juntes du Mali, Burkina et Niger. Elle pourrait entraîner une reconfiguration des alliances militaires et économiques dans le Sahel, avec un recentrage vers la Russie, la Turquie ou l'Iran. Le risque d'isolement diplomatique et économique des pays de l'AES s'accroît.",
+      "lieu": "Burkina Faso",
+      "lat": 12.0753083,
+      "lon": -1.6880314,
+      "implications": [
+        "Accélération des partenariats avec des acteurs non-occidentaux",
+        "Risque de sanctions économiques de l'UE et de la CEDEAO",
+        "Renforcement des mouvements anti-français dans la région"
+      ],
+      "recommandations": [
+        "Analyser les implications sur les missions de maintien de la paix",
+        "Évaluer les alternatives logistiques pour les opérations humanitaires",
+        "Suivre l'évolution des alliances militaires avec Moscou et Ankara"
+      ]
+    },
+    {
+      "id": "u-info-matin-ml-actualite-transition-les-vraies-raisons-de-lexil-de-lima",
+      "date": "2026-06-30",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "INFO-MATIN",
+      "source_url": "https://info-matin.ml/actualite/transition-les-vraies-raisons-de-lexil-de-limam-dicko/",
+      "image": "",
+      "titre": "Exil de l'imam Dicko marque un tournant politique au Mali",
+      "resume": "L'imam Mahmoud Dicko, figure majeure de l'opposition, a quitté le Mali. Son départ pourrait affaiblir l'opposition religieuse et sociale.",
+      "detail": "L'exil de l'imam Mahmoud Dicko, après son rôle central dans les manifestations de 2020 contre Ibrahim Boubacar Keïta, constitue un symbole de l'affaiblissement de l'opposition malienne face à la junte militaire. Son départ pourrait réduire les capacités de mobilisation sociale et religieuse contre le régime. Ce départ intervient dans un contexte de durcissement politique et de restrictions accrues des libertés publiques.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Affaiblissement des mouvements de protestation",
+        "Risque de radicalisation des soutiens de Dicko",
+        "Impact sur la cohésion sociale et religieuse"
+      ],
+      "recommandations": [
+        "Surveiller les réactions des mouvements islamistes modérés",
+        "Analyser l'évolution des alliances politiques post-Dicko",
+        "Évaluer les risques de fragmentation des groupes d'opposition"
+      ]
+    },
+    {
+      "id": "u-info-matin-ml-actualite-apurement-de-la-dette-interieure-une-baisse-re",
+      "date": "2026-06-30",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "INFO-MATIN",
+      "source_url": "https://info-matin.ml/actualite/apurement-de-la-dette-interieure-une-baisse-record-de-4756-a-2315-milliards-de-fcfa/",
+      "image": "",
+      "titre": "Baisse record de la dette intérieure malienne affaiblit l'économie",
+      "resume": "Le Mali a réduit sa dette intérieure de 475,6 à 231,5 milliards FCFA. La situation économique reste fragile malgré cette baisse.",
+      "detail": "La réduction de la dette intérieure malienne de près de 50% en un an reflète une gestion financière temporaire mais ne résout pas les problèmes structurels de l'économie. Cette baisse s'explique principalement par des apurements administratifs et des restructurations plutôt que par une croissance économique réelle. Le Mali reste confronté à des défis majeurs : inflation élevée, pénuries d'énergie, et dépendance aux importations. La baisse de la dette pourrait aussi limiter la capacité de l'État à financer des projets sociaux ou sécuritaires.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Risque de crise de liquidités pour les entreprises locales",
+        "Difficultés accrues pour financer les services publics",
+        "Dépendance accrue aux bailleurs internationaux"
+      ],
+      "recommandations": [
+        "Analyser la soutenabilité de la dette extérieure",
+        "Évaluer l'impact sur les investissements privés",
+        "Anticiper les tensions sociales liées aux restrictions budgétaires"
+      ]
+    },
+    {
+      "id": "u-mali24-info-emploi-le-bilan-de-la-transition-rectifiee",
+      "date": "2026-06-30",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "MALI 24 INFO",
+      "source_url": "https://mali24.info/emploi-le-bilan-de-la-transition-rectifiee/",
+      "image": "https://mali24.info/wp-content/uploads/2025/02/Oumou-Sall-Seck.jpeg",
+      "titre": "Bilan de l'emploi sous la Transition rectifiée au Mali critiqué",
+      "resume": "Le Mali revendique la création d'emplois sous la Transition mais les données restent contestées. La situation de l'emploi reste préoccupante.",
+      "detail": "Le bilan officiel de la Transition militaire malienne concernant la création d'emplois suscite des interrogations. Les chiffres avancés (création de postes dans l'administration et les forces de sécurité) masquent une réalité plus complexe : précarité des emplois, fuite des compétences, et absence de réformes structurelles. Le secteur privé reste atone en raison de l'instabilité politique, des coupures d'électricité récurrentes, et de la méfiance des investisseurs. La jeunesse malienne, principale concernée, continue de subir un chômage massif et des perspectives limitées.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Risque de radicalisation de la jeunesse",
+        "Exode des compétences vers les pays voisins",
+        "Affaiblissement du tissu économique local"
+      ],
+      "recommandations": [
+        "Étudier les alternatives pour l'emploi des jeunes",
+        "Analyser les politiques de formation professionnelle",
+        "Évaluer les partenariats avec le secteur privé pour relancer l'économie"
+      ]
+    },
+    {
       "id": "u-bamada-net-droits-de-lenfance-et-conflits-armes-laes-denonce-a-la-trib",
       "date": "2026-06-29",
       "theatre": "sahel",
@@ -616,131 +741,6 @@
         "Surveiller l'évolution des tensions xénophobes en Afrique du Sud",
         "Préparer des mécanismes de soutien aux migrants malien",
         "Renforcer le dialogue diplomatique pour désamorcer la crise"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-guinee-interdiction-or-brut-economie",
-      "date": "2026-06-27",
-      "theatre": "afrique",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/guinee-interdiction-or-brut-economie/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20898.jpg",
-      "titre": "Guinée interdit l'exportation d'or brut pour capter la valeur ajoutée",
-      "resume": "La Guinée interdit l'exportation d'or brut pour développer son industrie locale. Une décision risquée pour l'économie et l'environnement.",
-      "detail": "Cette mesure protectionniste vise à capter la valeur ajoutée mais pourrait décourager les investissements étrangers. Les impacts sur l'économie et l'environnement doivent être suivis de près. Les risques de contrebande et de corruption pourraient augmenter. Une analyse approfondie des conséquences à moyen terme est nécessaire.",
-      "lieu": "Guinée",
-      "lat": 10.7226226,
-      "lon": -10.7083587,
-      "implications": [
-        "Risque de ralentissement des investissements miniers",
-        "Augmentation potentielle du trafic illégal d'or",
-        "Tensions avec les partenaires commerciaux internationaux"
-      ],
-      "recommandations": [
-        "Surveiller les flux commerciaux et les réactions des investisseurs",
-        "Renforcer les capacités de contrôle des frontières",
-        "Évaluer l'impact environnemental des nouvelles régulations"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-mali-france-expulsion-ambassadeur-rupture-diplomatique",
-      "date": "2026-06-26",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/mali-france-expulsion-ambassadeur-rupture-diplomatique/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20668.jpg",
-      "titre": "Mali-FR rupture diplomatique après expulsion de l'ambassadeur",
-      "resume": "Le Mali expulse l'ambassadeur de France en 72 heures marquant une rupture historique entre les deux pays",
-      "detail": "La décision reflète une détérioration rapide des relations bilatérales déjà fragilisées par des sanctions récentes. Une expulsion en si peu de temps indique une escalade diplomatique majeure avec des conséquences potentielles sur la coopération sécuritaire et économique. Les acteurs locaux pourraient exploiter cette rupture pour renforcer leur positionnement géopolitique au Sahel. Surveillance accrue nécessaire sur les réactions régionales et internationales.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Risque d'isolement diplomatique accru pour le Mali",
-        "Possible durcissement des positions des juntes régionales",
-        "Opportunité pour d'autres acteurs comme la Russie ou la Turquie"
-      ],
-      "recommandations": [
-        "Cartographier les nouveaux acteurs clés au Sahel",
-        "Évaluer l'impact sur les missions de sécurité régionales",
-        "Anticiper les mesures économiques de rétorsion"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-souverainete-numerique-etat-malien-acquiert-56-capital-so",
-      "date": "2026-06-26",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/souverainete-numerique-etat-malien-acquiert-56-capital-sotelma/",
-      "image": "",
-      "titre": "Mali prend le contrôle de Sotelma pour souveraineté numérique",
-      "resume": "L'État malien acquiert 56% du capital de la Sotelma mettant fin à 17 ans de domination marocaine",
-      "detail": "Cette nationalisation marque un tournant dans la stratégie numérique du Mali vis-à-vis des acteurs étrangers. Le contrôle d'un opérateur clé pourrait faciliter la surveillance des communications mais aussi exposer des vulnérabilités cyber. La transition nécessite une période d'adaptation pour maintenir la continuité du service. Les partenaires internationaux pourraient réévaluer leur engagement technologique.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Nouveaux risques de cybersurveillance interne",
-        "Opportunité pour développement d'infrastructures locales",
-        "Potentiel conflit avec anciens partenaires marocains"
-      ],
-      "recommandations": [
-        "Analyser les capacités cyber du nouvel opérateur",
-        "Évaluer les risques de perturbation des services",
-        "Surveiller les mouvements des partenaires technologiques"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-diaspora-malienne-france-5-milliards-sahel",
-      "date": "2026-06-26",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/diaspora-malienne-france-5-milliards-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20670.jpg",
-      "titre": "Diaspora malienne FR injecte 5 milliards EUR au Sahel",
-      "resume": "La diaspora malienne en France transfère 5 milliards d'euros dans le Sahel créant 10 000 emplois",
-      "detail": "Ces flux financiers privés deviennent un acteur économique majeur face à l'affaiblissement des aides publiques traditionnelles. Les montants injectés soutiennent directement des projets locaux mais peuvent aussi créer des dépendances. La stabilité de ces transferts dépend des politiques migratoires européennes. Une opportunité pour des partenariats public-privé innovants.",
-      "lieu": "Sahel",
-      "lat": 14.0279165,
-      "lon": -0.7717776,
-      "implications": [
-        "Nouveau levier économique en dehors des canaux traditionnels",
-        "Risque de blanchiment ou de financement informel",
-        "Opportunité pour projets d'infrastructure ciblés"
-      ],
-      "recommandations": [
-        "Cartographier les flux financiers de la diaspora",
-        "Identifier les projets prioritaires soutenus",
-        "Renforcer les mécanismes de contrôle des transferts"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-sahel-500-millions-agriculture-aes",
-      "date": "2026-06-26",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/sahel-500-millions-agriculture-aes/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20662.jpg",
-      "titre": "500 millions EUR investis dans l'agriculture sahélienne",
-      "resume": "500 millions d'euros sont investis dans l'agriculture sahélienne pour renforcer la souveraineté alimentaire",
-      "detail": "Ce fonds stratégique vise à contrer l'insécurité alimentaire dans une région sous haute pression climatique et sécuritaire. Les projets ciblent la résilience des petits producteurs et l'innovation technologique. Une partie des fonds pourrait être détournée par des groupes armés ou des intermédiaires corrompus. Nécessité de mécanismes de suivi indépendants.",
-      "lieu": "Sahel",
-      "lat": 14.0279165,
-      "lon": -0.7717776,
-      "implications": [
-        "Amélioration potentielle de la sécurité alimentaire",
-        "Risque de corruption ou détournement de fonds",
-        "Impact limité en zones de conflit actif"
-      ],
-      "recommandations": [
-        "Surveiller l'allocation et l'utilisation des fonds",
-        "Évaluer l'impact réel sur les populations locales",
-        "Renforcer les contrôles dans les zones frontalières"
       ]
     }
   ]
