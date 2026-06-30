@@ -477,27 +477,27 @@ const HOME_GET = [
   { tag: "La carte",
     t: "Une carte de situation",
     d: "Chaque pays sur une carte interactive : incidents, acteurs et zones se lisent d'un coup d'oeil, là où il faudrait autrement compiler des dizaines d'articles.",
-    img: "/shared/home/assets/get-carte.jpg?v=20260622c",
-    vid: "/shared/home/assets/get-carte.mp4?v=20260622f",
+    img: "/shared/home/assets/get-carte.jpg?v=20260630a",
+    vid: "/shared/home/assets/get-carte.mp4?v=20260630a",
     gif: "/shared/home/assets/get-carte.gif?v=20260622e",
     auto: false,
-    alt: "Carte de situation Algor Access : incidents et acteurs géolocalisés, ici le Mali" },
+    alt: "Carte de situation Algor Access : incidents géolocalisés et statut de corroboration, ici le Bénin" },
   { tag: "L'analyse",
     t: "Une lecture analytique immédiate",
     d: "Pour chaque pays, la répartition des incidents par région, par type et par acteur, calculée automatiquement à partir des données collectées.",
-    img: "/shared/home/assets/get-analyse.jpg?v=20260622c",
-    vid: "/shared/home/assets/get-analyse.mp4?v=20260622f",
+    img: "/shared/home/assets/get-analyse.jpg?v=20260630a",
+    vid: "/shared/home/assets/get-analyse.mp4?v=20260630a",
     gif: "/shared/home/assets/get-analyse.gif?v=20260622e",
     auto: false,
     alt: "Panneau d'analyse : répartition des incidents par région, type et acteur" },
-  { tag: "L'accès",
-    t: "Un accès continu",
-    d: "Plutôt qu'un rapport figé, une plateforme mise à jour chaque semaine, consultable au moment où la décision se pose.",
-    img: "/shared/home/assets/get-acces.jpg?v=20260622i",
-    vid: "/shared/home/assets/get-acces.mp4?v=20260622i",
-    gif: "/shared/home/assets/get-acces.gif?v=20260622e",
+  { tag: "La décision",
+    t: "Une appréciation de situation",
+    d: "Plus que des faits : une appréciation de situation générée à la demande, qui dégage les tendances dominantes, les acteurs et les implications pour la décision.",
+    img: "/shared/home/assets/get-decision.jpg?v=20260630a",
+    vid: "/shared/home/assets/get-decision.mp4?v=20260630a",
+    gif: "/shared/home/assets/get-decision.gif?v=20260630a",
     auto: false,
-    alt: "Plateforme Algor Access : couverture continue, ici la région des Grands Lacs" },
+    alt: "Appréciation de situation Algor Access : tendances, acteurs et implications, ici le Mali" },
 ];
 
 function GetSection() {
@@ -523,7 +523,7 @@ function GetSection() {
           eyebrow="Ce que vous obtenez"
           title="De la donnée brute"
           em="à la décision"
-          intro="Trois outils pour lire une situation, en évaluer la portée et y revenir quand la décision se pose." />
+          intro="Trois temps pour passer de la donnée à la décision : cartographier la situation, l'analyser, puis en tirer une appréciation." />
         <div className="get-grid">
           {HOME_GET.map((g, i) => (
             <article className="get-card get-card--solo" key={i}
