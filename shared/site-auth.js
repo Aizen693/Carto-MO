@@ -48,12 +48,22 @@ const authStorage = {
   },
 };
 
+// Retour depuis un lien email (confirmation d'inscription, lien magique,
+// réinitialisation) : Supabase (flow implicit) renvoie les jetons dans le hash,
+// p.ex. #access_token=…&type=signup. On le repère AVANT que detectSessionInUrl
+// ne nettoie l'URL, pour afficher ensuite le message « Vous êtes bien connecté ».
+const EMAIL_RETURN = /[#&](access_token|code)=/.test(location.hash)
+                  || /[?&]code=/.test(location.search);
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: {
     storageKey: 'carto-admin-auth',
     storage: authStorage,
     flowType: 'implicit',
-    detectSessionInUrl: false,
+    // true : consomme le jeton présent dans l'URL au retour d'un lien email et
+    // ouvre la session automatiquement → l'utilisateur est connecté dès qu'il
+    // revient sur le site après avoir confirmé son adresse (auto-login).
+    detectSessionInUrl: true,
     persistSession: true,
     autoRefreshToken: true,
   },
@@ -205,7 +215,7 @@ const OVERLAY_HTML = `
           <form id="site-auth-signup-form" autocomplete="on">
             ${FIELD(ICON_MAIL, `<input id="sa-signup-email" type="email" placeholder="Adresse email" autocomplete="email" required spellcheck="false">`)}
             ${PASSWORD_FIELD('sa-signup-password', 'Mot de passe (12 caractères min.)', 'new-password')}
-            ${FIELD(ICON_LOCK, `<input id="sa-signup-confirm" type="password" placeholder="Confirmer le mot de passe" autocomplete="new-password" required>`)}
+            ${PASSWORD_FIELD('sa-signup-confirm', 'Confirmer le mot de passe', 'new-password')}
             <div class="sa-error" id="site-auth-signup-error" role="alert" aria-live="polite"></div>
             ${SUBMIT('Créer mon compte')}
           </form>
@@ -269,7 +279,7 @@ const OVERLAY_HTML = `
 const OVERLAY_CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
-:root.sa-pending body > *:not(#site-auth-overlay) {
+:root.sa-pending body > *:not(#site-auth-overlay):not(#algor-welcome-toast) {
   filter: blur(8px); pointer-events: none; user-select: none;
 }
 
@@ -490,10 +500,11 @@ const OVERLAY_CSS = `
   width: 30px; height: 30px;
   display: flex; align-items: center; justify-content: center;
   background: none; border: 0; padding: 0; cursor: pointer;
-  color: var(--sa-tx-f);
-  transition: color 0.2s ease;
+  color: var(--sa-tx-d);
+  transition: color 0.2s ease, background 0.2s ease;
+  border-radius: 7px;
 }
-.sa-eye:hover { color: #fff; }
+.sa-eye:hover { color: #fff; background: rgba(255,255,255,0.08); }
 .sa-eye svg { width: 16px; height: 16px; }
 .sa-eye .sa-eye-on  { display: none; }
 .sa-eye.is-open .sa-eye-off { display: none; }
@@ -665,6 +676,49 @@ const OVERLAY_CSS = `
 }
 `;
 
+// Message de bienvenue : styles autonomes (aucune dépendance à l'overlay) →
+// fonctionne sur toutes les pages, y compris la homepage publique.
+const TOAST_CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+#algor-welcome-toast {
+  position: fixed; z-index: 1000000;
+  right: 20px; bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+  max-width: min(360px, calc(100vw - 40px));
+  padding: 14px 16px;
+  background: linear-gradient(150deg, #7c4dbf 0%, #6B3FA0 100%);
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(107,63,160,0.45);
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .3s ease, transform .3s cubic-bezier(0.22,1,0.36,1);
+}
+#algor-welcome-toast.awt-in { opacity: 1; transform: translateY(0); }
+#algor-welcome-toast .awt-icon {
+  flex: 0 0 30px; width: 30px; height: 30px; border-radius: 9px;
+  background: rgba(255,255,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+}
+#algor-welcome-toast .awt-icon svg { width: 16px; height: 16px; color: #fff; }
+#algor-welcome-toast .awt-text { font-size: 13.5px; font-weight: 600; line-height: 1.4; }
+#algor-welcome-toast .awt-email {
+  display: block; font-weight: 500; font-size: 12.5px;
+  opacity: 0.92; word-break: break-all;
+}
+#algor-welcome-toast .awt-close {
+  flex: 0 0 auto; margin-left: 2px;
+  background: none; border: 0; padding: 4px; cursor: pointer;
+  color: rgba(255,255,255,0.8); display: flex; border-radius: 6px;
+  transition: color .2s ease, background .2s ease;
+}
+#algor-welcome-toast .awt-close:hover { color: #fff; background: rgba(255,255,255,0.16); }
+#algor-welcome-toast .awt-close svg { width: 15px; height: 15px; }
+@media (prefers-reduced-motion: reduce) {
+  #algor-welcome-toast, #algor-welcome-toast.awt-in { transition: opacity .2s ease; transform: none; }
+}
+`;
+
 const VIEWS = {
   login: {
     title: 'Authentification',
@@ -763,6 +817,39 @@ function setError(el, message, kind) {
   el.className = 'sa-error visible' + (kind ? ' ' + kind : '');
 }
 function clearError(el) { el.className = 'sa-error'; }
+
+// Affiche « Vous êtes bien connecté en tant que <email> ». Autonome : injecte
+// ses propres styles si besoin, ne dépend pas de l'overlay. Auto-disparition.
+let _welcomeTimer = null;
+function showWelcomeToast(email) {
+  if (!document.getElementById('algor-toast-styles')) {
+    const st = document.createElement('style');
+    st.id = 'algor-toast-styles';
+    st.textContent = TOAST_CSS;
+    document.head.appendChild(st);
+  }
+  document.getElementById('algor-welcome-toast')?.remove();
+  clearTimeout(_welcomeTimer);
+
+  const toast = document.createElement('div');
+  toast.id = 'algor-welcome-toast';
+  toast.setAttribute('role', 'status');
+  toast.innerHTML = `
+    <span class="awt-icon">${ICON_CHECK}</span>
+    <span class="awt-text">Vous êtes bien connecté<span class="awt-email"></span></span>
+    <button type="button" class="awt-close" aria-label="Fermer">${ICON_CLOSE}</button>`;
+  // email injecté en textContent (jamais innerHTML) → aucune injection possible.
+  toast.querySelector('.awt-email').textContent = email ? 'en tant que ' + email : '';
+  document.body.appendChild(toast);
+
+  requestAnimationFrame(() => toast.classList.add('awt-in'));
+  const dismiss = () => {
+    toast.classList.remove('awt-in');
+    setTimeout(() => toast.remove(), 300);
+  };
+  toast.querySelector('.awt-close').addEventListener('click', dismiss);
+  _welcomeTimer = setTimeout(dismiss, 6000);
+}
 
 function buildOverlay(opts) {
   injectStyles();
@@ -892,6 +979,7 @@ function buildOverlay(opts) {
       });
       if (error) throw error;
       await proceedAfterAuth(data.user.id);
+      showWelcomeToast(data.user?.email);
     } catch (err) {
       const code = (err && (err.status || err.code)) || 'auth';
       setError(loginErr, 'Échec de connexion · code ' + code + ' · vérifier email et mot de passe', null);
@@ -926,9 +1014,11 @@ function buildOverlay(opts) {
       if (data.session && data.user) {
         // Inscription immédiate (confirmation email désactivée) → compte gratuit
         await proceedAfterAuth(data.user.id);
+        showWelcomeToast(data.user?.email);
       } else {
-        // Confirmation email requise
-        setError(signupErr, 'Compte créé. Vérifiez votre email pour le confirmer, puis connectez-vous.', 'sa-ok');
+        // Confirmation email requise → au clic sur le lien, l'utilisateur
+        // revient sur le site déjà connecté (detectSessionInUrl + toast).
+        setError(signupErr, 'Compte créé. Cliquez sur le lien reçu par email : vous serez connecté automatiquement.', 'sa-ok');
         signupForm.reset();
       }
     } catch (err) {
@@ -1028,7 +1118,17 @@ async function notifyAuthState(session) {
 // supabase-js v2 tient un verrou pendant l'event et toute requete qui le
 // redemande provoque un deadlock (bouton qui tourne sans fin). On se sert
 // donc directement de la session fournie par l'event.
-supabase.auth.onAuthStateChange((_event, session) => notifyAuthState(session));
+supabase.auth.onAuthStateChange((event, session) => {
+  notifyAuthState(session);
+  // Retour d'un lien email : detectSessionInUrl vient d'ouvrir la session
+  // → confirmation visible « Vous êtes bien connecté… », une seule fois.
+  // (On n'appelle JAMAIS getSession()/from() ici : on se sert de `session`.)
+  if (EMAIL_RETURN && session?.user && !window.__algorWelcomed
+      && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')) {
+    window.__algorWelcomed = true;
+    showWelcomeToast(session.user.email);
+  }
+});
 
 async function gateSite() {
   try {
