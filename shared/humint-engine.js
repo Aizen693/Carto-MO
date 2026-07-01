@@ -225,6 +225,8 @@
       setupPopups();
       state.mapReady = true;
       tryRender();
+      // Signale aux modules additifs (zones-3d.js) que la carte est exploitable.
+      window.dispatchEvent(new Event('algorMapReady'));
     });
   }
 
@@ -1023,5 +1025,13 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 
-  window.HumintMap = { recenter: fitToFiltered };
+  window.HumintMap = {
+    recenter: fitToFiltered,
+    getMap: function () { return map; },
+    getCountry: function () { return state.country; },
+    isReady: function () { return !!state.mapReady; },
+    // Features normalisées du pays courant (HUMINT + flag corrobore OSINT) —
+    // exploitées par zones-3d.js pour relier les incidents aux emprises bâties.
+    getFeatures: function () { return state.all || []; },
+  };
 })();
