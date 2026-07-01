@@ -1,6 +1,156 @@
 {
-  "updated": "2026-06-30",
+  "updated": "2026-07-01",
   "items": [
+    {
+      "id": "u-maliactu-net-ebola-rdc-300-cas-fantomes-alerte",
+      "date": "2026-07-01",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/ebola-rdc-300-cas-fantomes-alerte/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21594.jpg",
+      "titre": "Ebola en RDC : 300 cas fantômes déclenchent alerte sanitaire",
+      "resume": "La RDC fait face à 300 cas non localisés d'Ebola, déclenchant une alerte sanitaire majeure en Afrique francophone.",
+      "detail": "L'absence de localisation précise des cas complique la riposte et augmente les risques de propagation transfrontalière. La situation pourrait s'aggraver en saison des pluies avec la mobilité accrue des populations. Les systèmes de santé régionaux devraient se préparer à une réponse coordonnée urgente.",
+      "lieu": "République démocratique du Congo",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque de propagation transfrontalière vers le Sahel",
+        "Surcharge des systèmes de santé locaux",
+        "Crise humanitaire possible"
+      ],
+      "recommandations": [
+        "Renforcer les contrôles sanitaires aux frontières",
+        "Prépositionner du matériel médical en RDC et pays voisins",
+        "Coordonner avec l'OMS pour une réponse régionale"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-ultimatum-migrants-saheliens-afrique-sud",
+      "date": "2026-07-01",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/ultimatum-migrants-saheliens-afrique-sud/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21583.jpg",
+      "titre": "Afrique du Sud fixe ultimatum aux migrants sahéliens",
+      "resume": "30 juin 2026 : date butoir contestée pour des milliers de migrants sahéliens en Afrique du Sud entre xénophobie et crise diplomatique.",
+      "detail": "L'ultimatum sud-africain pourrait déclencher une crise humanitaire pour les migrants sahéliens non réguliers. Risque accru de violences xénophobes et de déplacements forcés vers d'autres pays africains. La situation nécessite une surveillance diplomatique accrue.",
+      "lieu": "Afrique du Sud",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Crise humanitaire pour les migrants",
+        "Risque de violences xénophobes",
+        "Tensions diplomatiques accrues"
+      ],
+      "recommandations": [
+        "Surveiller les mouvements migratoires vers l'Afrique du Sud",
+        "Renforcer la coopération consulaire pour les ressortissants sahéliens",
+        "Préparer des plans d'évacuation d'urgence"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-education-mobile-mali-500000-jeunes",
+      "date": "2026-07-01",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/education-mobile-mali-500000-jeunes/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21587.jpg",
+      "titre": "Mali : 500 000 jeunes connectés à l'éducation mobile",
+      "resume": "Au Mali, 500 000 jeunes utilisent désormais l'éducation mobile malgré les défis du Sahel.",
+      "detail": "L'éducation mobile représente une avancée significative dans l'accès à l'éducation pour les jeunes sahéliens. Cela pourrait améliorer le capital humain mais nécessite un accompagnement pour éviter les risques de désinformation. Le projet pourrait inspirer d'autres pays de la région.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Amélioration de l'accès à l'éducation",
+        "Potentiel d'innovation pédagogique",
+        "Risque de fracture numérique"
+      ],
+      "recommandations": [
+        "Cartographier les initiatives similaires dans le Sahel",
+        "Évaluer l'impact sur l'emploi des jeunes",
+        "Soutenir les partenariats public-privé pour étendre le projet"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-aes-sommet-culturel-ouagadougou-2026",
+      "date": "2026-07-01",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-sommet-culturel-ouagadougou-2026/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21581.jpg",
+      "titre": "AES lance sommet culturel à Ouagadougou pour affirmer son identité",
+      "resume": "En août 2026, l'AES organise son 1er sommet culturel à Ouagadougou, un événement clé pour affirmer son identité face à l'Occident.",
+      "detail": "Ce sommet culturel s'inscrit dans une stratégie plus large de l'AES pour consolider son autonomie vis-à-vis des influences occidentales. Il pourrait servir de plateforme pour des alliances économiques et sécuritaires alternatives. La réussite de l'événement pourrait renforcer la légitimité du groupe.",
+      "lieu": "Ouagadougou, Burkina Faso",
+      "lat": 12.3681873,
+      "lon": -1.5270944,
+      "implications": [
+        "Renforcement de la cohésion de l'AES",
+        "Alternative aux partenariats traditionnels",
+        "Influence culturelle accrue"
+      ],
+      "recommandations": [
+        "Analyser les discours officiels lors du sommet",
+        "Évaluer les partenariats annoncés",
+        "Suivre les réactions des pays voisins non membres"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-aes-300-milliards-sahel",
+      "date": "2026-07-01",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-300-milliards-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21544.jpg",
+      "titre": "AES annonce plan de 300 milliards de dollars pour le Sahel",
+      "resume": "L'AES (Mali, Burkina, Niger) annonce un plan de 300 milliards de dollars pour le Sahel entre espoir de développement et pari risqué.",
+      "detail": "Ce plan économique ambitieux pourrait transformer le paysage économique du Sahel s'il est mis en œuvre efficacement. Les défis incluent la mobilisation des fonds, la coordination entre les trois pays et la lutte contre la corruption. Sa réussite dépendra des partenariats internationaux et de la stabilité interne.",
+      "lieu": "Sahel (Mali, Burkina Faso, Niger)",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Potentiel de transformation économique",
+        "Risque de mauvaise allocation des ressources",
+        "Besoin de partenariats internationaux"
+      ],
+      "recommandations": [
+        "Analyser la faisabilité du plan et ses sources de financement",
+        "Cartographier les acteurs économiques impliqués",
+        "Suivre les premiers projets pilotes"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-manuscrits-tombouctou-unesco-mali",
+      "date": "2026-07-01",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/manuscrits-tombouctou-unesco-mali/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21573.jpg",
+      "titre": "UNESCO et Mali lancent programme pour sauver manuscrits de Tombouctou",
+      "resume": "Face aux menaces jihadistes et climatiques, l'UNESCO et le Mali lancent un programme urgent pour sauver les manuscrits de Tombouctou.",
+      "detail": "Ce programme de sauvegarde culturelle est crucial pour préserver un patrimoine historique majeur du Sahel. Les manuscrits sont menacés par les conflits, le changement climatique et le manque de ressources. Leur préservation pourrait aussi servir de levier pour le tourisme culturel dans la région.",
+      "lieu": "Tombouctou, Mali",
+      "lat": 16.7719091,
+      "lon": -3.0087272,
+      "implications": [
+        "Préservation du patrimoine culturel sahélien",
+        "Potentiel touristique",
+        "Renforcement de la coopération internationale"
+      ],
+      "recommandations": [
+        "Évaluer les besoins logistiques et financiers du projet",
+        "Coordonner avec les communautés locales pour la protection des sites",
+        "Intégrer le projet dans les stratégies de développement touristique"
+      ]
+    },
     {
       "id": "u-trthaber-com-haber-dunya-iran-savasi-abdnin-mutfagini-vurdu-hane-basin",
       "date": "2026-06-30",
@@ -594,153 +744,6 @@
         "Surveiller les recrutements et leur impact sur les dynamiques locales",
         "Évaluer les priorités budgétaires des juntes du Sahel",
         "Préparer des scénarios de réponse en cas d'escalade sécuritaire"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-emploi-jeunes-sahel",
-      "date": "2026-06-27",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-emploi-jeunes-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20896.jpg",
-      "titre": "AES mise sur l'emploi des jeunes pour contrer l'influence française",
-      "resume": "L'AES lance des programmes d'emploi ciblant la jeunesse sahélienne pour réduire l'influence française.",
-      "detail": "Cette stratégie s'inscrit dans la volonté de rompre avec l'ancienne puissance coloniale et de légitimer les régimes militaires. Les projets pourraient inclure des formations professionnelles et des emplois dans les secteurs de la sécurité ou des infrastructures. L'impact sur l'économie informelle et les réseaux de migration reste à évaluer.",
-      "lieu": "Sahel (Mali, Burkina Faso, Niger)",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Réduction de l'influence des acteurs français au Sahel",
-        "Possible augmentation des tensions diplomatiques",
-        "Dépendance accrue aux partenariats régionaux (Russie, Turkménistan)"
-      ],
-      "recommandations": [
-        "Cartographier les nouveaux programmes d'emploi lancés par l'AES",
-        "Évaluer les partenariats économiques émergents avec la Russie et la Turquie"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-jeux-forum-jeunesse-sahel",
-      "date": "2026-06-27",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-jeux-forum-jeunesse-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20887.jpg",
-      "titre": "AES lance Jeux et Forum de la Jeunesse au Sahel",
-      "resume": "L'Alliance des États du Sahel organise des Jeux et un Forum de la Jeunesse pour lutter contre le chômage des jeunes.",
-      "detail": "Cette initiative vise à contrer l'exclusion des jeunes et à renforcer la cohésion régionale. Les Jeux et le Forum pourraient mobiliser des ressources et des partenariats internationaux. L'impact réel sur la jeunesse sahélienne reste à évaluer. Une opportunité pour observer les dynamiques de soft power de l'AES.",
-      "lieu": "Sahel",
-      "lat": 12.3681873,
-      "lon": -1.5270944,
-      "implications": [
-        "Opportunité de renforcer les liens régionaux",
-        "Potentiel de mobilisation des jeunes autour de projets communs",
-        "Risque de récupération politique des événements"
-      ],
-      "recommandations": [
-        "Analyser les partenariats et financements associés aux Jeux et Forum",
-        "Suivre la participation des jeunes et leur perception de l'initiative",
-        "Évaluer l'impact réel sur l'emploi et la cohésion sociale"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-canicule-bamako-41c-urgence-sante",
-      "date": "2026-06-27",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/canicule-bamako-41c-urgence-sante/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20871.jpg",
-      "titre": "Bamako sous canicule extrême à 41°C, urgence sanitaire déclarée",
-      "resume": "Bamako enregistre 41°C ressentis, déclenchant une urgence sanitaire et des risques pour la stabilité.",
-      "detail": "Cette canicule aggrave les tensions sociales existantes, notamment dans les quartiers défavorisés. Les infrastructures sanitaires pourraient être submergées, et les risques de troubles civils augmentent. Le gouvernement malien a déjà appelé à des mesures d'urgence, mais les capacités de réponse restent limitées.",
-      "lieu": "Bamako, Mali",
-      "lat": 12.6132656,
-      "lon": -7.9847391,
-      "implications": [
-        "Risque d'émeutes liées aux pénuries d'eau et d'électricité",
-        "Surcharge des services médicaux et sociaux",
-        "Potentiel de migration climatique interne"
-      ],
-      "recommandations": [
-        "Cartographier les zones les plus exposées à Bamako",
-        "Coordonner avec les acteurs humanitaires pour une réponse rapide"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-bamako-canicule-41c-mali",
-      "date": "2026-06-27",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/bamako-canicule-41c-mali/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20885.jpg",
-      "titre": "Canicule record à Bamako, défi climatique et sanitaire pour le Mali",
-      "resume": "Bamako subit une canicule historique à 41°C, mettant en péril la santé publique et la stabilité.",
-      "detail": "La répétition de tels événements climatiques extrêmes pourrait s'inscrire dans une tendance durable, aggravée par la déforestation et l'urbanisation non contrôlée. Les autorités maliennes appellent à une mobilisation nationale, mais les moyens disponibles sont insuffisants. Ce phénomène pourrait accélérer les départs vers les zones moins touchées du pays.",
-      "lieu": "Bamako, Mali",
-      "lat": 12.6132656,
-      "lon": -7.9847391,
-      "implications": [
-        "Augmentation des maladies liées à la chaleur (déshydratation, coups de chaleur)",
-        "Perturbation des activités économiques et scolaires",
-        "Renforcement des inégalités sociales"
-      ],
-      "recommandations": [
-        "Renforcer la communication sur les mesures de prévention",
-        "Planifier des interventions ciblées dans les zones les plus vulnérables"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-bamako-canicule-41c-urgence-sante",
-      "date": "2026-06-27",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/bamako-canicule-41c-urgence-sante/",
-      "image": "",
-      "titre": "Bamako sous canicule extrême : 41°C, urgence sanitaire déclarée",
-      "resume": "Bamako enregistre 41°C ressentis, mettant à rude épreuve les systèmes de santé publique. La situation pourrait s'aggraver dans les prochains jours.",
-      "detail": "Les températures extrêmes exposent la population à des risques sanitaires immédiats, notamment pour les groupes vulnérables. Les infrastructures sanitaires de Bamako pourraient être débordées. Cette crise climatique aggrave les tensions sociales et économiques existantes. Les autorités maliennes doivent prioriser les mesures d'urgence.",
-      "lieu": "Bamako, Mali",
-      "lat": 12.6132656,
-      "lon": -7.9847391,
-      "implications": [
-        "Risque d'épidémies liées à la chaleur et à la déshydratation",
-        "Détérioration des conditions de vie en milieu urbain",
-        "Impact sur la productivité économique locale"
-      ],
-      "recommandations": [
-        "Renforcer les capacités des centres de santé pour les urgences climatiques",
-        "Mobiliser des ressources d'urgence pour les populations vulnérables",
-        "Coordonner avec les acteurs locaux pour une réponse rapide"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-expulsions-afrique-sud-diaspora-malienne",
-      "date": "2026-06-27",
-      "theatre": "afrique",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/expulsions-afrique-sud-diaspora-malienne/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20886.jpg",
-      "titre": "15 162 migrants expulsés d'Afrique du Sud dont des Maliens",
-      "resume": "L'Afrique du Sud expulse massivement des migrants africains, incluant des Maliens. Analyse des tensions xénophobes et de leurs impacts.",
-      "detail": "Cette vague d'expulsions reflète une montée des tensions xénophobes en Afrique du Sud. Les Maliens expulsés pourraient aggraver la crise migratoire régionale. Les relations diplomatiques entre le Mali et l'Afrique du Sud sont mises à l'épreuve. Les conséquences humanitaires et économiques pourraient être lourdes.",
-      "lieu": "Afrique du Sud",
-      "lat": -28.8166236,
-      "lon": 24.991639,
-      "implications": [
-        "Crise humanitaire pour les migrants expulsés",
-        "Tensions diplomatiques accrues entre le Mali et l'Afrique du Sud",
-        "Risque de radicalisation parmi les populations expulsées"
-      ],
-      "recommandations": [
-        "Surveiller l'évolution des tensions xénophobes en Afrique du Sud",
-        "Préparer des mécanismes de soutien aux migrants malien",
-        "Renforcer le dialogue diplomatique pour désamorcer la crise"
       ]
     }
   ]
