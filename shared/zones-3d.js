@@ -192,6 +192,16 @@
       '.z3d-det-c{flex:none;min-width:22px;text-align:right;font:800 12px/1 var(--jakarta)}',
       '.z3d-det-l{flex:0 0 96px;font:600 10.5px/1.15 var(--jakarta);color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
       '.z3d-sec-t{padding:10px 14px 2px;font:800 8.5px/1 var(--jakarta);letter-spacing:.12em;text-transform:uppercase;color:var(--violet)}',
+      // chiffres clés (grille) + chronologie (sparkline)
+      '.z3d-metrics{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ln-soft);border-bottom:1px solid var(--ln-soft)}',
+      '.z3d-m{background:#fff;padding:9px 12px}',
+      '.z3d-m-v{font:800 16px/1.1 var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+      '.z3d-m-v.sm{font-size:12px}',
+      '.z3d-m-l{font:700 7.5px/1 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}',
+      '.z3d-tl{padding:10px 14px 6px;border-bottom:1px solid var(--ln-soft)}',
+      '.z3d-spark{display:flex;align-items:flex-end;gap:2px;height:38px;margin-top:6px}',
+      '.z3d-bar{flex:1;min-width:2px;background:var(--grad);border-radius:2px 2px 0 0;opacity:.85}',
+      '.z3d-spark-x{display:flex;justify-content:space-between;font:600 7.5px var(--mono,monospace);color:var(--muted);margin-top:4px}',
       '.z3d-row-date{flex:none;font:600 9px/1 var(--jakarta);color:var(--muted);white-space:nowrap}',
       '.z3d-empty{padding:12px 14px;font:500 11px/1.5 var(--jakarta);color:var(--muted)}',
       '.z3d-statpill{display:inline-block;font:800 8.5px/1 var(--jakarta);letter-spacing:.04em;text-transform:uppercase;color:#fff;border-radius:6px;padding:3px 7px;vertical-align:middle;margin-left:4px}',
@@ -662,11 +672,57 @@
   function ensureRank() {
     if ($('z3d-rank')) return;
     var p = document.createElement('div'); p.id = 'z3d-rank';
-    p.innerHTML = '<div class="z3d-rank-head"><div class="z3d-rank-t">Renseignement du complexe</div><div class="z3d-rank-s" id="z3d-rank-s"></div></div>' +
-      '<div class="z3d-det" id="z3d-det"></div>' +
-      '<div class="z3d-sec-t" id="z3d-sec-bat">Bâtiments les plus touchés</div>' +
+    p.innerHTML = '<div class="z3d-rank-head"><div class="z3d-rank-t">Fiche infrastructure</div><div class="z3d-rank-s" id="z3d-rank-s"></div></div>' +
+      '<div class="z3d-ana" id="z3d-ana">' +
+      '  <div class="z3d-metrics" id="z3d-metrics"></div>' +
+      '  <div class="z3d-tl" id="z3d-tl"></div>' +
+      '  <div class="z3d-det" id="z3d-det"></div>' +
+      '  <div class="z3d-det" id="z3d-actors"></div>' +
+      '</div>' +
+      '<div class="z3d-sec-t" id="z3d-sec-bat">Renseignement (source du marquage)</div>' +
       '<div class="z3d-rank-list" id="z3d-rank-list"></div>';
     document.body.appendChild(p);
+  }
+  // Analyse dense (style Palantir) : chiffres clés + chronologie + répartition type & acteurs,
+  // calculés sur les incidents RÉELS du secteur (rayon) autour de l'infrastructure.
+  function renderAnalysis(zone) {
+    var sector = sectorFeatures(zone);
+    var linkedN = (state.linkedEnts && state.linkedEnts.length) || (zone.events || []).length;
+    var isos = sector.map(function (f) { return f.iso; }).filter(Boolean).sort();
+    var first = isos[0] || '—', last = isos[isos.length - 1] || '—';
+    var hum = sector.filter(function (f) { return !f.corrobore; }).length, osi = sector.length - hum;
+    function topOf(key) { var m = {}; sector.forEach(function (f) { var v = f[key] || '—'; m[v] = (m[v] || 0) + 1; }); return Object.keys(m).map(function (k) { return { k: k, n: m[k] }; }).sort(function (a, b) { return b.n - a.n; }); }
+    var byType = topOf('type'), byActor = topOf('acteur');
+    // Chiffres clés
+    var mBox = $('z3d-metrics');
+    if (mBox) mBox.innerHTML =
+      metric(linkedN, 'liés') + metric(sector.length, 'secteur') +
+      metric(byActor[0] ? byActor[0].k : '—', 'acteur #1', true) +
+      metric((first !== '—' ? first.slice(2) : '—') + '→' + (last !== '—' ? last.slice(2) : '—'), 'période', true);
+    // Chronologie mensuelle (sparkline)
+    var months = {}; isos.forEach(function (d) { var k = d.slice(0, 7); months[k] = (months[k] || 0) + 1; });
+    var mk = Object.keys(months).sort(); var mmax = Math.max.apply(null, mk.map(function (k) { return months[k]; })) || 1;
+    var tlBox = $('z3d-tl');
+    if (tlBox) tlBox.innerHTML = mk.length ? ('<div class="z3d-det-h"><span>Activité dans le temps</span><span>' + hum + ' HUM / ' + osi + ' OSINT</span></div>' +
+      '<div class="z3d-spark">' + mk.map(function (k) { return '<span class="z3d-bar" style="height:' + Math.max(8, Math.round(months[k] / mmax * 100)) + '%" title="' + k + ' : ' + months[k] + '"></span>'; }).join('') + '</div>' +
+      '<div class="z3d-spark-x"><span>' + (mk[0] || '') + '</span><span>' + (mk[mk.length - 1] || '') + '</span></div>') : '';
+    // Répartition par type
+    fillBars($('z3d-det'), 'Répartition par événement', byType.slice(0, 6), function (r) { return entColor(entKind(r.k)); });
+    // Acteurs
+    fillBars($('z3d-actors'), 'Acteurs impliqués', byActor.slice(0, 6), function () { return '#6B3FA0'; });
+  }
+  function metric(val, lbl, small) { return '<div class="z3d-m"><div class="z3d-m-v' + (small ? ' sm' : '') + '">' + esc(String(val)) + '</div><div class="z3d-m-l">' + esc(lbl) + '</div></div>'; }
+  function fillBars(box, title, rows, colFn) {
+    if (!box) return;
+    if (!rows.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
+    box.style.display = 'block';
+    var max = Math.max.apply(null, rows.map(function (r) { return r.n; })) || 1;
+    box.innerHTML = '<div class="z3d-det-h"><span>' + esc(title) + '</span></div>' + rows.map(function (r) {
+      var col = colFn(r), pct = Math.round(r.n / max * 100);
+      return '<div class="z3d-det-row"><span class="z3d-det-c" style="color:' + col + '">' + r.n + '</span>' +
+        '<span class="z3d-det-l">' + esc(r.k) + '</span>' +
+        '<span class="z3d-track"><span class="z3d-fill" style="width:' + pct + '%;background:' + col + '"></span></span></div>';
+    }).join('');
   }
   // Panneau « activité détectée » : entités HUMINT/OSINT comptées par type (style Palantir).
   function updateDetections() {
@@ -718,7 +774,7 @@
         };
       });
     }
-    updateDetections();   // le panneau existe maintenant → on (re)remplit l'activité détectée
+    renderAnalysis(zone);   // chiffres clés + chronologie + répartitions (dense, style Palantir)
     $('z3d-rank').classList.add('on');
   }
   function hideRank() { var p = $('z3d-rank'); if (p) p.classList.remove('on'); }
