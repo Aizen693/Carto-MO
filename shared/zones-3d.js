@@ -52,13 +52,6 @@
 
   var IMAGERY = {
     mapbox: { source: { type: 'raster', url: 'mapbox://mapbox.satellite', tileSize: 256 } },
-    esri: {
-      source: {
-        type: 'raster', tileSize: 256, maxzoom: 19,
-        tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
-        attribution: 'Imagerie © Esri, Maxar, Earthstar Geographics',
-      },
-    },
   };
 
   var CAT_LABEL = { aeroport: 'Aéroport', hopital: 'Hôpital', militaire: 'Militaire', infrastructure: 'Infrastructure' };
@@ -68,7 +61,7 @@
     detruit: { base: 4, label: 'Détruit', cls: 'z3d-dmg-bad' },
   };
 
-  var state = { zones: [], map: null, active: null, imagery: 'esri', in3D: false, chipReady: false, structById: {}, linkRadiusM: 220, entities: [], linkedEnts: [], trace: { on: false, pts: [] }, orbit: { on: false, raf: null, stop: null } };
+  var state = { zones: [], map: null, active: null, imagery: 'mapbox', in3D: false, chipReady: false, structById: {}, linkRadiusM: 220, entities: [], linkedEnts: [], trace: { on: false, pts: [] }, orbit: { on: false, raf: null, stop: null } };
 
   function $(id) { return document.getElementById(id); }
   function safe(fn) { try { fn(); } catch (e) { /* teardown résilient : un retrait qui échoue ne doit pas bloquer la suite */ } }
@@ -136,9 +129,6 @@
       '  box-shadow:var(--shadow);padding:9px 13px 9px 16px;max-width:calc(100% - 60px)}',
       '#z3d-bar.on{display:flex}',
       '.z3d-name{font:800 13px var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px}',
-      '.z3d-seg{display:inline-flex;border:1px solid var(--ln);border-radius:10px;overflow:hidden}',
-      '.z3d-seg button{border:none;background:#fff;cursor:pointer;font:700 10px/1 var(--jakarta);letter-spacing:.04em;color:var(--violet);padding:8px 12px}',
-      '.z3d-seg button.on{background:var(--grad);color:#fff}',
       '.z3d-exit{border:1px solid var(--ln);background:#fff;color:var(--violet);cursor:pointer;font:700 9px/1 var(--jakarta);letter-spacing:.08em;text-transform:uppercase;padding:9px 13px;border-radius:10px}',
       '.z3d-exit:hover{background:rgba(107,63,160,.07)}',
       '.z3d-sub{font:600 9px/1 var(--jakarta);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}',
@@ -206,6 +196,28 @@
       '.z3d-empty{padding:12px 14px;font:500 11px/1.5 var(--jakarta);color:var(--muted)}',
       '.z3d-statpill{display:inline-block;font:800 8.5px/1 var(--jakarta);letter-spacing:.04em;text-transform:uppercase;color:#fff;border-radius:6px;padding:3px 7px;vertical-align:middle;margin-left:4px}',
       '.z3d-approx{display:inline-block;font:700 8px/1 var(--mono,monospace);color:var(--muted);border:1px solid var(--ln);border-radius:5px;padding:3px 6px;margin-left:4px}',
+      // chronologie détaillée (liste)
+      '.z3d-chrono-row{display:flex;gap:8px;align-items:baseline;padding:5px 0;border-top:1px solid var(--ln-soft)}',
+      '.z3d-chrono-row:first-of-type{border-top:none}',
+      '.z3d-chrono-d{flex:none;font:700 8.5px/1.2 var(--mono,monospace);color:var(--violet);min-width:52px}',
+      '.z3d-chrono-b{flex:1;min-width:0}',
+      '.z3d-chrono-t{font:700 10px/1.25 var(--jakarta);color:var(--ink)}',
+      '.z3d-chrono-m{font:500 9.5px/1.35 var(--jakarta);color:var(--muted);margin-top:1px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}',
+      // ── analyse IA (Mistral) ──
+      '.z3d-ai{padding:11px 14px 13px;border-bottom:1px solid var(--ln-soft)}',
+      '.z3d-ai-btn{width:100%;cursor:pointer;font:800 9.5px/1 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--grad,#6B3FA0);border:none;border-radius:9px;padding:11px 12px;transition:opacity .15s}',
+      '.z3d-ai-btn:hover{opacity:.9}',
+      '.z3d-ai-btn:disabled{opacity:.55;cursor:default}',
+      '.z3d-ai-out{margin-top:10px}',
+      '.z3d-ai-out:empty{margin-top:0}',
+      '.z3d-ai-load{font:600 10.5px/1.5 var(--jakarta);color:var(--muted)}',
+      '.z3d-ai-err{font:600 10.5px/1.5 var(--jakarta);color:#C0392B}',
+      '.z3d-ai-txt{font:500 11.5px/1.6 var(--jakarta);color:var(--tx)}',
+      '.z3d-ai-txt h4{font:800 9px/1.3 var(--jakarta);letter-spacing:.08em;text-transform:uppercase;color:var(--violet);margin:11px 0 4px}',
+      '.z3d-ai-txt strong{color:var(--ink);font-weight:800}',
+      '.z3d-ai-txt ul{margin:5px 0;padding-left:16px}',
+      '.z3d-ai-txt li{margin:2px 0}',
+      '.z3d-ai-foot{font:600 8px/1.4 var(--mono,monospace);color:var(--muted);margin-top:9px;letter-spacing:.02em}',
       // ── HUD « ops » : réticule de coins + bandeau télémétrie ──
       '#z3d-hud{position:absolute;inset:0;z-index:6;display:none;pointer-events:none}',
       '#z3d-hud.on{display:block}',
@@ -596,12 +608,10 @@
     if ($('z3d-bar')) return;
     var bar = document.createElement('div'); bar.id = 'z3d-bar';
     bar.innerHTML = '<span class="z3d-sub">3D</span><span class="z3d-name" id="z3d-name"></span>' +
-      '<span class="z3d-seg" id="z3d-seg"><button data-k="mapbox">Mapbox</button><button data-k="esri">Esri</button></span>' +
       '<button class="z3d-trace-btn" id="z3d-trace-btn" title="Tracer l\'emprise du bâtiment sur le satellite">✎ Tracer</button>' +
       '<span class="z3d-trace-live" id="z3d-trace-live"><button class="z3d-trace-ok" id="z3d-trace-ok">✓ Terminer</button><button class="z3d-trace-cancel" id="z3d-trace-cancel">✕</button></span>' +
       '<button class="z3d-exit" id="z3d-exit">Quitter la 3D</button>';
     document.body.appendChild(bar);
-    bar.querySelectorAll('#z3d-seg button').forEach(function (b) { b.onclick = function () { setImagery(b.getAttribute('data-k')); }; });
     $('z3d-exit').onclick = exit3D;
     $('z3d-trace-btn').onclick = startTrace;
     $('z3d-trace-ok').onclick = finishTrace;
@@ -675,9 +685,11 @@
     p.innerHTML = '<div class="z3d-rank-head"><div class="z3d-rank-t">Fiche infrastructure</div><div class="z3d-rank-s" id="z3d-rank-s"></div></div>' +
       '<div class="z3d-ana" id="z3d-ana">' +
       '  <div class="z3d-metrics" id="z3d-metrics"></div>' +
+      '  <div class="z3d-ai" id="z3d-ai"><button class="z3d-ai-btn" id="z3d-ai-btn">✶ Générer l’analyse IA</button><div class="z3d-ai-out" id="z3d-ai-out"></div></div>' +
       '  <div class="z3d-tl" id="z3d-tl"></div>' +
       '  <div class="z3d-det" id="z3d-det"></div>' +
       '  <div class="z3d-det" id="z3d-actors"></div>' +
+      '  <div class="z3d-det" id="z3d-chrono"></div>' +
       '</div>' +
       '<div class="z3d-sec-t" id="z3d-sec-bat">Renseignement (source du marquage)</div>' +
       '<div class="z3d-rank-list" id="z3d-rank-list"></div>';
@@ -693,12 +705,25 @@
     var hum = sector.filter(function (f) { return !f.corrobore; }).length, osi = sector.length - hum;
     function topOf(key) { var m = {}; sector.forEach(function (f) { var v = f[key] || '—'; m[v] = (m[v] || 0) + 1; }); return Object.keys(m).map(function (k) { return { k: k, n: m[k] }; }).sort(function (a, b) { return b.n - a.n; }); }
     var byType = topOf('type'), byActor = topOf('acteur');
+    var corrPct = sector.length ? Math.round(osi / sector.length * 100) : 0;
+    var recence = '—';
+    if (last !== '—') {
+      var d = new Date(last + 'T00:00:00'), now = new Date();
+      var days = Math.max(0, Math.round((now - d) / 86400000));
+      recence = days === 0 ? "auj." : days < 31 ? (days + 'j') : days < 365 ? (Math.round(days / 30) + ' mois') : (Math.round(days / 365) + ' an');
+    }
     // Chiffres clés
     var mBox = $('z3d-metrics');
     if (mBox) mBox.innerHTML =
       metric(linkedN, 'liés') + metric(sector.length, 'secteur') +
       metric(byActor[0] ? byActor[0].k : '—', 'acteur #1', true) +
-      metric((first !== '—' ? first.slice(2) : '—') + '→' + (last !== '—' ? last.slice(2) : '—'), 'période', true);
+      metric((first !== '—' ? first.slice(2) : '—') + '→' + (last !== '—' ? last.slice(2) : '—'), 'période', true) +
+      metric(corrPct + '%', 'corroboré') +
+      metric(recence, 'dernier');
+    // Bouton analyse IA (Mistral)
+    var aiBtn = $('z3d-ai-btn'), aiOut = $('z3d-ai-out');
+    if (aiOut) aiOut.innerHTML = '';
+    if (aiBtn) { aiBtn.disabled = false; aiBtn.textContent = '✶ Générer l’analyse IA'; aiBtn.onclick = function () { generateAnalysis(zone, sector, byType, byActor, first, last); }; }
     // Chronologie mensuelle (sparkline)
     var months = {}; isos.forEach(function (d) { var k = d.slice(0, 7); months[k] = (months[k] || 0) + 1; });
     var mk = Object.keys(months).sort(); var mmax = Math.max.apply(null, mk.map(function (k) { return months[k]; })) || 1;
@@ -710,6 +735,86 @@
     fillBars($('z3d-det'), 'Répartition par événement', byType.slice(0, 6), function (r) { return entColor(entKind(r.k)); });
     // Acteurs
     fillBars($('z3d-actors'), 'Acteurs impliqués', byActor.slice(0, 6), function () { return '#6B3FA0'; });
+    // Chronologie détaillée (liste)
+    var chrono = sector.slice().filter(function (f) { return f.iso; }).sort(function (a, b) { return (b.iso || '').localeCompare(a.iso || ''); });
+    var cBox = $('z3d-chrono');
+    if (cBox) {
+      if (!chrono.length) { cBox.style.display = 'none'; cBox.innerHTML = ''; }
+      else {
+        cBox.style.display = 'block';
+        cBox.innerHTML = '<div class="z3d-det-h"><span>Chronologie détaillée</span><span>' + chrono.length + ' incident' + (chrono.length > 1 ? 's' : '') + '</span></div>' +
+          chrono.slice(0, 14).map(function (f) {
+            return '<div class="z3d-chrono-row"><span class="z3d-chrono-d">' + esc((f.iso || '').slice(2)) + '</span>' +
+              '<span class="z3d-chrono-b"><span class="z3d-chrono-t">' + esc(f.type || '—') + (f.acteur && f.acteur !== '—' ? ' · ' + esc(f.acteur) : '') + (f.corrobore ? '' : '') + '</span>' +
+              (f.description ? '<span class="z3d-chrono-m">' + esc(f.description) + '</span>' : '') + '</span></div>';
+          }).join('') +
+          (chrono.length > 14 ? '<div class="z3d-empty" style="padding:6px 0 0">+ ' + (chrono.length - 14) + ' antérieurs</div>' : '');
+      }
+    }
+  }
+  // ── mini markdown → HTML (pour la synthèse IA) ──
+  function mdMini(t) {
+    var lines = String(t || '').replace(/\r/g, '').split('\n'); var out = [], inUl = false;
+    function closeUl() { if (inUl) { out.push('</ul>'); inUl = false; } }
+    lines.forEach(function (ln) {
+      var s = ln.trim();
+      var inl = function (x) { return esc(x).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<strong>$1</strong>'); };
+      if (!s) { closeUl(); return; }
+      var h = s.match(/^#{1,4}\s+(.*)$/);
+      if (h) { closeUl(); out.push('<h4>' + inl(h[1]) + '</h4>'); return; }
+      var b = s.match(/^[-*•]\s+(.*)$/);
+      if (b) { if (!inUl) { out.push('<ul>'); inUl = true; } out.push('<li>' + inl(b[1]) + '</li>'); return; }
+      closeUl(); out.push('<p style="margin:5px 0">' + inl(s) + '</p>');
+    });
+    closeUl(); return out.join('');
+  }
+  // ── Analyse IA : rapport rédigé par Mistral sur l'infrastructure ──
+  function generateAnalysis(zone, sector, byType, byActor, first, last) {
+    if (state._z3dAiBusy) return;
+    var btn = $('z3d-ai-btn'), out = $('z3d-ai-out');
+    if (!out) return;
+    var done = function (html, label) { state._z3dAiBusy = false; if (btn) { btn.disabled = false; btn.textContent = label || '↻ Regénérer l’analyse'; } out.innerHTML = html; };
+    var sa = window.algorAuth && window.algorAuth.supabase;
+    if (!sa) { out.innerHTML = '<div class="z3d-ai-err">Session indisponible. Recharge la page.</div>'; return; }
+    state._z3dAiBusy = true;
+    if (btn) { btn.disabled = true; btn.textContent = 'Analyse en cours…'; }
+    out.innerHTML = '<div class="z3d-ai-load">Mistral analyse ' + esc(zone.name) + ' sur ' + sector.length + ' incident' + (sector.length > 1 ? 's' : '') + ' du secteur…</div>';
+    // Contexte structuré transmis au modèle
+    var hum = sector.filter(function (f) { return !f.corrobore; }).length, osi = sector.length - hum;
+    var lines = [];
+    lines.push('INFRASTRUCTURE : ' + zone.name + ' (' + (zone.category || 'infrastructure') + '), pays ' + (zone.pays || '—') + ', statut ' + (STATUS_LABEL[zone.status] || zone.status || 'intact') + '.');
+    if (zone.summary) lines.push('Contexte : ' + zone.summary);
+    lines.push(sector.length + ' incidents dans un rayon de 9 km (' + osi + ' corroborés, ' + hum + ' HUMINT non corroboré). Période ' + first + ' → ' + last + '.');
+    lines.push('Types dominants : ' + byType.slice(0, 6).map(function (r) { return r.k + ' (' + r.n + ')'; }).join(', ') + '.');
+    lines.push('Acteurs impliqués : ' + byActor.slice(0, 6).map(function (r) { return r.k + ' (' + r.n + ')'; }).join(', ') + '.');
+    lines.push('');
+    lines.push('INCIDENTS (du plus récent au plus ancien) :');
+    sector.slice().sort(function (a, b) { return (b.iso || '').localeCompare(a.iso || ''); }).slice(0, 20).forEach(function (f) {
+      lines.push('- ' + (f.iso || '?') + ' · ' + (f.type || '—') + ' · ' + (f.acteur || '—') + (f.corrobore ? ' [corroboré]' : '') + ' : ' + String(f.description || '').slice(0, 220));
+    });
+    var statsText = lines.join('\n');
+    var periode = (first !== '—' ? first : '') + (last !== '—' ? ' → ' + last : '');
+    sa.auth.getSession().then(function (res) {
+      var token = res && res.data && res.data.session && res.data.session.access_token;
+      if (!token) { done('<div class="z3d-ai-err">Session expirée. Recharge la page.</div>', '✶ Générer l’analyse IA'); return; }
+      return fetch('https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/brief-securite-mistral', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: zone.name, pays: zone.pays || '', mode: 'analyse',
+          context: { stats: statsText, total: String(sector.length), periode: periode || 'toutes dates', infrastructure: zone.name },
+        }),
+      }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (o) {
+          if (!o.ok) { done('<div class="z3d-ai-err">' + esc((o.j && (o.j.error || o.j.hint)) || 'Erreur IA') + '</div>', '↻ Réessayer'); return; }
+          var src = ((o.j && o.j.sources) || []).slice(0, 6).map(function (s) {
+            return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title || 'source') + '</a>';
+          }).join(' · ');
+          done('<div class="z3d-ai-txt">' + mdMini((o.j && o.j.brief) || '') + '</div>' +
+            (src ? '<div class="z3d-ai-foot">Sources : ' + src + '</div>' : '') +
+            '<div class="z3d-ai-foot">Généré par ' + esc((o.j && o.j.model) || 'Mistral') + ' · interprétation de ' + sector.length + ' incidents du secteur</div>');
+        });
+    }).catch(function (e) { done('<div class="z3d-ai-err">Échec réseau. ' + esc(String((e && e.message) || e)) + '</div>', '↻ Réessayer'); });
   }
   function metric(val, lbl, small) { return '<div class="z3d-m"><div class="z3d-m-v' + (small ? ' sm' : '') + '">' + esc(String(val)) + '</div><div class="z3d-m-l">' + esc(lbl) + '</div></div>'; }
   function fillBars(box, title, rows, colFn) {
