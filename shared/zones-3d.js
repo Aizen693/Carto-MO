@@ -203,21 +203,15 @@
       '.z3d-chrono-b{flex:1;min-width:0}',
       '.z3d-chrono-t{font:700 10px/1.25 var(--jakarta);color:var(--ink)}',
       '.z3d-chrono-m{font:500 9.5px/1.35 var(--jakarta);color:var(--muted);margin-top:1px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}',
-      // ── analyse IA (Mistral) ──
-      '.z3d-ai{padding:11px 14px 13px;border-bottom:1px solid var(--ln-soft)}',
-      '.z3d-ai-btn{width:100%;cursor:pointer;font:800 9.5px/1 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--grad,#6B3FA0);border:none;border-radius:9px;padding:11px 12px;transition:opacity .15s}',
-      '.z3d-ai-btn:hover{opacity:.9}',
-      '.z3d-ai-btn:disabled{opacity:.55;cursor:default}',
-      '.z3d-ai-out{margin-top:10px}',
-      '.z3d-ai-out:empty{margin-top:0}',
-      '.z3d-ai-load{font:600 10.5px/1.5 var(--jakarta);color:var(--muted)}',
-      '.z3d-ai-err{font:600 10.5px/1.5 var(--jakarta);color:#C0392B}',
-      '.z3d-ai-txt{font:500 11.5px/1.6 var(--jakarta);color:var(--tx)}',
-      '.z3d-ai-txt h4{font:800 9px/1.3 var(--jakarta);letter-spacing:.08em;text-transform:uppercase;color:var(--violet);margin:11px 0 4px}',
-      '.z3d-ai-txt strong{color:var(--ink);font-weight:800}',
-      '.z3d-ai-txt ul{margin:5px 0;padding-left:16px}',
-      '.z3d-ai-txt li{margin:2px 0}',
-      '.z3d-ai-foot{font:600 8px/1.4 var(--mono,monospace);color:var(--muted);margin-top:9px;letter-spacing:.02em}',
+      // ── rapport client : cases « inclure » + bouton export ──
+      '.z3d-inc{display:inline-flex;align-items:center;gap:6px;cursor:pointer;user-select:none}',
+      '.z3d-inc input{accent-color:var(--violet,#6B3FA0);width:13px;height:13px;cursor:pointer;flex:none}',
+      '.z3d-inc-h{padding:10px 14px 2px}',
+      '.z3d-off{opacity:.4}',
+      '.z3d-rep-bar{padding:12px 14px 14px;border-top:1px solid var(--ln-soft);background:#fff}',
+      '.z3d-rep-btn{width:100%;cursor:pointer;font:800 9.5px/1 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--grad,#6B3FA0);border:none;border-radius:9px;padding:12px;transition:opacity .15s}',
+      '.z3d-rep-btn:hover{opacity:.9}',
+      '.z3d-rep-hint{font:500 8.5px/1.4 var(--jakarta);color:var(--muted);margin-top:7px;text-align:center}',
       // ── HUD « ops » : réticule de coins + bandeau télémétrie ──
       '#z3d-hud{position:absolute;inset:0;z-index:6;display:none;pointer-events:none}',
       '#z3d-hud.on{display:block}',
@@ -589,7 +583,6 @@
         paint: { 'text-color': ['get', 'color'], 'text-halo-color': 'rgba(10,8,20,0.85)', 'text-halo-width': 1.3 },
       });
     }
-    updateDetections();
   }
   function entityPopup(e) {
     var kind = entKind(e.type), color = entColor(kind);
@@ -685,15 +678,42 @@
     p.innerHTML = '<div class="z3d-rank-head"><div class="z3d-rank-t">Fiche infrastructure</div><div class="z3d-rank-s" id="z3d-rank-s"></div></div>' +
       '<div class="z3d-ana" id="z3d-ana">' +
       '  <div class="z3d-metrics" id="z3d-metrics"></div>' +
-      '  <div class="z3d-ai" id="z3d-ai"><button class="z3d-ai-btn" id="z3d-ai-btn">✶ Générer l’analyse IA</button><div class="z3d-ai-out" id="z3d-ai-out"></div></div>' +
       '  <div class="z3d-tl" id="z3d-tl"></div>' +
-      '  <div class="z3d-det" id="z3d-det"></div>' +
-      '  <div class="z3d-det" id="z3d-actors"></div>' +
+      '  <div id="z3d-report"></div>' +
       '  <div class="z3d-det" id="z3d-chrono"></div>' +
       '</div>' +
-      '<div class="z3d-sec-t" id="z3d-sec-bat">Renseignement (source du marquage)</div>' +
-      '<div class="z3d-rank-list" id="z3d-rank-list"></div>';
+      '<div class="z3d-inc-h"><label class="z3d-inc"><input type="checkbox" data-rep="renseignement" checked><span class="z3d-sec-t" id="z3d-sec-bat">Renseignement (source du marquage)</span></label></div>' +
+      '<div class="z3d-rank-list" id="z3d-rank-list"></div>' +
+      '<div class="z3d-rep-bar"><button class="z3d-rep-btn" id="z3d-rep-btn">⤓ Générer le rapport client</button><div class="z3d-rep-hint">Décoche ce que tu ne veux pas montrer au client.</div></div>';
     document.body.appendChild(p);
+  }
+  // Couleurs d'acteurs — identiques au panneau ANALYSE (parité visuelle).
+  function actorColor(actor) {
+    if (!actor) return '#ff9800';
+    var a = String(actor).toUpperCase();
+    if (/CIVIL/.test(a)) return '#c49a3c';
+    if (/GENERAL/.test(a)) return '#7b1fa2';
+    if (/\b(FR|USA|ONU|UE|UN|ONG|SMP)\b/.test(a)) return '#1565c0';
+    if (/FAMA|FDS|FAN|\bANT\b|VDP|BIR|GMI|\bFA\b|FORCES/.test(a)) return '#2e7d32';
+    if (/EI|GSIM|GAT|JAS|ISWAP|AQ|GANE|HANI|JNIM|ISCAP|GAE|\bAK\b|FLA/.test(a)) return '#d32f2f';
+    return '#ff9800';
+  }
+  // Section de données style ANALYSE : compteur + libellé + barre + %, avec case « inclure au rapport ».
+  function anaSec(repKey, title, rows, total, colorFn, moreNoun) {
+    var max = rows.length ? rows[0].n : 1;
+    var body = rows.slice(0, 8).map(function (r) {
+      var w = Math.max(4, Math.round(r.n / max * 100));
+      var p = total ? Math.round(r.n / total * 100) : 0;
+      return '<div class="ana-row"><span class="ana-row-c">' + r.n + '</span>' +
+        '<span class="ana-row-l">' + esc(r.k) + '</span>' +
+        '<span class="ana-row-track"><span class="ana-row-fill" style="width:' + w + '%;background:' + colorFn(r.k) + '"></span></span>' +
+        '<span class="ana-row-v">' + p + '%</span></div>';
+    }).join('') || '<div class="ana-empty">Aucune donnée</div>';
+    var more = rows.length > 8 ? '<div class="ana-more">+ ' + (rows.length - 8) + ' autres ' + (moreNoun || 'entrées') + '</div>' : '';
+    return '<div class="ana-sec" data-sec="' + repKey + '"><div class="ana-sec-h">' +
+      '<label class="z3d-inc"><input type="checkbox" data-rep="' + repKey + '" checked><span class="ana-sec-t">' + esc(title) + '</span></label>' +
+      '<span class="ana-sec-n">' + rows.length + '</span></div>' +
+      '<div class="ana-bars">' + body + more + '</div></div>';
   }
   // Analyse dense (style Palantir) : chiffres clés + chronologie + répartition type & acteurs,
   // calculés sur les incidents RÉELS du secteur (rayon) autour de l'infrastructure.
@@ -720,10 +740,6 @@
       metric((first !== '—' ? first.slice(2) : '—') + '→' + (last !== '—' ? last.slice(2) : '—'), 'période', true) +
       metric(corrPct + '%', 'corroboré') +
       metric(recence, 'dernier');
-    // Bouton analyse IA (Mistral)
-    var aiBtn = $('z3d-ai-btn'), aiOut = $('z3d-ai-out');
-    if (aiOut) aiOut.innerHTML = '';
-    if (aiBtn) { aiBtn.disabled = false; aiBtn.textContent = '✶ Générer l’analyse IA'; aiBtn.onclick = function () { generateAnalysis(zone, sector, byType, byActor, first, last); }; }
     // Chronologie mensuelle (sparkline)
     var months = {}; isos.forEach(function (d) { var k = d.slice(0, 7); months[k] = (months[k] || 0) + 1; });
     var mk = Object.keys(months).sort(); var mmax = Math.max.apply(null, mk.map(function (k) { return months[k]; })) || 1;
@@ -731,125 +747,112 @@
     if (tlBox) tlBox.innerHTML = mk.length ? ('<div class="z3d-det-h"><span>Activité dans le temps</span><span>' + hum + ' HUM / ' + osi + ' OSINT</span></div>' +
       '<div class="z3d-spark">' + mk.map(function (k) { return '<span class="z3d-bar" style="height:' + Math.max(8, Math.round(months[k] / mmax * 100)) + '%" title="' + k + ' : ' + months[k] + '"></span>'; }).join('') + '</div>' +
       '<div class="z3d-spark-x"><span>' + (mk[0] || '') + '</span><span>' + (mk[mk.length - 1] || '') + '</span></div>') : '';
-    // Répartition par type
-    fillBars($('z3d-det'), 'Répartition par événement', byType.slice(0, 6), function (r) { return entColor(entKind(r.k)); });
-    // Acteurs
-    fillBars($('z3d-actors'), 'Acteurs impliqués', byActor.slice(0, 6), function () { return '#6B3FA0'; });
+    // Sections de données (style ANALYSE) — cochables pour le rapport client
+    var corr = [{ k: 'Corroboré (OSINT)', n: osi }, { k: 'HUMINT seul', n: hum }].filter(function (r) { return r.n; });
+    var rep = $('z3d-report');
+    if (rep) rep.innerHTML =
+      anaSec('typologie', "Typologie d'événement", byType, sector.length, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }, 'typologies') +
+      anaSec('acteurs', 'Acteurs impliqués', byActor, sector.length, function (k) { return actorColor(k); }, 'acteurs') +
+      (corr.length ? anaSec('corroboration', 'Corroboration', corr, sector.length, function (k) { return /Corrobor/.test(k) ? '#2e7d32' : '#c49a3c'; }, 'états') : '');
     // Chronologie détaillée (liste)
     var chrono = sector.slice().filter(function (f) { return f.iso; }).sort(function (a, b) { return (b.iso || '').localeCompare(a.iso || ''); });
     var cBox = $('z3d-chrono');
     if (cBox) {
       if (!chrono.length) { cBox.style.display = 'none'; cBox.innerHTML = ''; }
       else {
-        cBox.style.display = 'block';
-        cBox.innerHTML = '<div class="z3d-det-h"><span>Chronologie détaillée</span><span>' + chrono.length + ' incident' + (chrono.length > 1 ? 's' : '') + '</span></div>' +
+        cBox.style.display = 'block'; cBox.setAttribute('data-sec', 'chronologie');
+        cBox.innerHTML = '<div class="z3d-det-h"><label class="z3d-inc"><input type="checkbox" data-rep="chronologie" checked><span>Chronologie détaillée</span></label><span>' + chrono.length + ' incident' + (chrono.length > 1 ? 's' : '') + '</span></div>' +
           chrono.slice(0, 14).map(function (f) {
             return '<div class="z3d-chrono-row"><span class="z3d-chrono-d">' + esc((f.iso || '').slice(2)) + '</span>' +
-              '<span class="z3d-chrono-b"><span class="z3d-chrono-t">' + esc(f.type || '—') + (f.acteur && f.acteur !== '—' ? ' · ' + esc(f.acteur) : '') + (f.corrobore ? '' : '') + '</span>' +
+              '<span class="z3d-chrono-b"><span class="z3d-chrono-t">' + esc(f.type || '—') + (f.acteur && f.acteur !== '—' ? ' · ' + esc(f.acteur) : '') + '</span>' +
               (f.description ? '<span class="z3d-chrono-m">' + esc(f.description) + '</span>' : '') + '</span></div>';
           }).join('') +
           (chrono.length > 14 ? '<div class="z3d-empty" style="padding:6px 0 0">+ ' + (chrono.length - 14) + ' antérieurs</div>' : '');
       }
     }
-  }
-  // ── mini markdown → HTML (pour la synthèse IA) ──
-  function mdMini(t) {
-    var lines = String(t || '').replace(/\r/g, '').split('\n'); var out = [], inUl = false;
-    function closeUl() { if (inUl) { out.push('</ul>'); inUl = false; } }
-    lines.forEach(function (ln) {
-      var s = ln.trim();
-      var inl = function (x) { return esc(x).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<strong>$1</strong>'); };
-      if (!s) { closeUl(); return; }
-      var h = s.match(/^#{1,4}\s+(.*)$/);
-      if (h) { closeUl(); out.push('<h4>' + inl(h[1]) + '</h4>'); return; }
-      var b = s.match(/^[-*•]\s+(.*)$/);
-      if (b) { if (!inUl) { out.push('<ul>'); inUl = true; } out.push('<li>' + inl(b[1]) + '</li>'); return; }
-      closeUl(); out.push('<p style="margin:5px 0">' + inl(s) + '</p>');
+    // Toggles → grise la section décochée dans la fiche (aperçu de ce que verra le client)
+    $('z3d-rank').querySelectorAll('input[data-rep]').forEach(function (cb) {
+      var apply = function () { var sec = cb.closest('[data-sec]') || cb.closest('.ana-sec') || cb.closest('.z3d-inc-h') || cb.closest('.z3d-det'); if (sec) sec.classList.toggle('z3d-off', !cb.checked); };
+      cb.onchange = apply; apply();
     });
-    closeUl(); return out.join('');
+    // Bouton rapport client
+    var repBtn = $('z3d-rep-btn');
+    if (repBtn) repBtn.onclick = function () { openReport(zone, sector, byType, byActor, corr, chrono, { linkedN: linkedN, first: first, last: last, corrPct: corrPct, recence: recence }); };
   }
-  // ── Analyse IA : rapport rédigé par Mistral sur l'infrastructure ──
-  function generateAnalysis(zone, sector, byType, byActor, first, last) {
-    if (state._z3dAiBusy) return;
-    var btn = $('z3d-ai-btn'), out = $('z3d-ai-out');
-    if (!out) return;
-    var done = function (html, label) { state._z3dAiBusy = false; if (btn) { btn.disabled = false; btn.textContent = label || '↻ Regénérer l’analyse'; } out.innerHTML = html; };
-    var sa = window.algorAuth && window.algorAuth.supabase;
-    if (!sa) { out.innerHTML = '<div class="z3d-ai-err">Session indisponible. Recharge la page.</div>'; return; }
-    state._z3dAiBusy = true;
-    if (btn) { btn.disabled = true; btn.textContent = 'Analyse en cours…'; }
-    out.innerHTML = '<div class="z3d-ai-load">Mistral analyse ' + esc(zone.name) + ' sur ' + sector.length + ' incident' + (sector.length > 1 ? 's' : '') + ' du secteur…</div>';
-    // Contexte structuré transmis au modèle
-    var hum = sector.filter(function (f) { return !f.corrobore; }).length, osi = sector.length - hum;
-    var lines = [];
-    lines.push('INFRASTRUCTURE : ' + zone.name + ' (' + (zone.category || 'infrastructure') + '), pays ' + (zone.pays || '—') + ', statut ' + (STATUS_LABEL[zone.status] || zone.status || 'intact') + '.');
-    if (zone.summary) lines.push('Contexte : ' + zone.summary);
-    lines.push(sector.length + ' incidents dans un rayon de 9 km (' + osi + ' corroborés, ' + hum + ' HUMINT non corroboré). Période ' + first + ' → ' + last + '.');
-    lines.push('Types dominants : ' + byType.slice(0, 6).map(function (r) { return r.k + ' (' + r.n + ')'; }).join(', ') + '.');
-    lines.push('Acteurs impliqués : ' + byActor.slice(0, 6).map(function (r) { return r.k + ' (' + r.n + ')'; }).join(', ') + '.');
-    lines.push('');
-    lines.push('INCIDENTS (du plus récent au plus ancien) :');
-    sector.slice().sort(function (a, b) { return (b.iso || '').localeCompare(a.iso || ''); }).slice(0, 20).forEach(function (f) {
-      lines.push('- ' + (f.iso || '?') + ' · ' + (f.type || '—') + ' · ' + (f.acteur || '—') + (f.corrobore ? ' [corroboré]' : '') + ' : ' + String(f.description || '').slice(0, 220));
-    });
-    var statsText = lines.join('\n');
-    var periode = (first !== '—' ? first : '') + (last !== '—' ? ' → ' + last : '');
-    sa.auth.getSession().then(function (res) {
-      var token = res && res.data && res.data.session && res.data.session.access_token;
-      if (!token) { done('<div class="z3d-ai-err">Session expirée. Recharge la page.</div>', '✶ Générer l’analyse IA'); return; }
-      return fetch('https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/brief-securite-mistral', {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: zone.name, pays: zone.pays || '', mode: 'analyse',
-          context: { stats: statsText, total: String(sector.length), periode: periode || 'toutes dates', infrastructure: zone.name },
-        }),
-      }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
-        .then(function (o) {
-          if (!o.ok) { done('<div class="z3d-ai-err">' + esc((o.j && (o.j.error || o.j.hint)) || 'Erreur IA') + '</div>', '↻ Réessayer'); return; }
-          var src = ((o.j && o.j.sources) || []).slice(0, 6).map(function (s) {
-            return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title || 'source') + '</a>';
-          }).join(' · ');
-          done('<div class="z3d-ai-txt">' + mdMini((o.j && o.j.brief) || '') + '</div>' +
-            (src ? '<div class="z3d-ai-foot">Sources : ' + src + '</div>' : '') +
-            '<div class="z3d-ai-foot">Généré par ' + esc((o.j && o.j.model) || 'Mistral') + ' · interprétation de ' + sector.length + ' incidents du secteur</div>');
-        });
-    }).catch(function (e) { done('<div class="z3d-ai-err">Échec réseau. ' + esc(String((e && e.message) || e)) + '</div>', '↻ Réessayer'); });
+  // ── Rapport client : document imprimable, sections cochées uniquement ──
+  function openReport(zone, sector, byType, byActor, corr, chrono, m) {
+    function want(k) { var el = document.querySelector('#z3d-rank input[data-rep="' + k + '"]'); return !el || el.checked; }
+    function bars(rows, total, colorFn) {
+      var max = rows.length ? rows[0].n : 1;
+      return '<div class="bars">' + rows.slice(0, 12).map(function (r) {
+        var w = Math.max(4, Math.round(r.n / max * 100)), p = total ? Math.round(r.n / total * 100) : 0;
+        return '<div class="row"><span class="c">' + r.n + '</span><span class="l">' + esc(r.k) + '</span><span class="t"><span class="f" style="width:' + w + '%;background:' + colorFn(r.k) + '"></span></span><span class="v">' + p + '%</span></div>';
+      }).join('') + '</div>';
+    }
+    var st = zone.status || 'intact';
+    var head = '<header><div class="brand">ALGORA ACCESS · RENSEIGNEMENT</div>' +
+      '<h1>' + esc(zone.name) + ' <span class="pill" style="background:' + statusColor(st) + '">' + esc(STATUS_LABEL[st] || '—') + '</span></h1>' +
+      '<div class="sub">' + esc(zone.pays || '') + ' · ' + esc(CAT_LABEL[zone.category] || zone.category || 'Infrastructure') + (zone.center ? ' · ' + zone.center[1].toFixed(4) + '°, ' + zone.center[0].toFixed(4) + '°' : '') + '</div>' +
+      (zone.summary ? '<p class="ctx">' + esc(zone.summary) + '</p>' : '') + '</header>';
+    var kpis = '<div class="kpis">' +
+      '<div class="k"><b>' + m.linkedN + '</b><span>liés</span></div>' +
+      '<div class="k"><b>' + sector.length + '</b><span>secteur</span></div>' +
+      '<div class="k"><b>' + m.corrPct + '%</b><span>corroboré</span></div>' +
+      '<div class="k"><b>' + esc(m.recence) + '</b><span>dernier</span></div>' +
+      '<div class="k"><b>' + (byActor[0] ? esc(byActor[0].k) : '—') + '</b><span>acteur #1</span></div>' +
+      '<div class="k"><b>' + (m.first !== '—' ? esc(m.first) : '—') + ' → ' + (m.last !== '—' ? esc(m.last) : '—') + '</b><span>période</span></div>' +
+      '</div>';
+    var body = [head, kpis];
+    if (want('typologie') && byType.length) body.push('<section><h2>Typologie d’événement</h2>' + bars(byType, sector.length, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }) + '</section>');
+    if (want('acteurs') && byActor.length) body.push('<section><h2>Acteurs impliqués</h2>' + bars(byActor, sector.length, function (k) { return actorColor(k); }) + '</section>');
+    if (want('corroboration') && corr.length) body.push('<section><h2>Corroboration</h2>' + bars(corr, sector.length, function (k) { return /Corrobor/.test(k) ? '#2e7d32' : '#c49a3c'; }) + '</section>');
+    if (want('chronologie') && chrono.length) body.push('<section><h2>Chronologie</h2><div class="chr">' + chrono.slice(0, 60).map(function (f) {
+      return '<div class="ci"><span class="cd">' + esc(f.iso || '') + '</span><div class="cb"><div class="ct">' + esc(f.type || '—') + (f.acteur && f.acteur !== '—' ? ' · ' + esc(f.acteur) : '') + (f.corrobore ? ' <em>corroboré</em>' : '') + '</div>' + (f.description ? '<div class="cm">' + esc(f.description) + '</div>' : '') + '</div></div>';
+    }).join('') + '</div></section>');
+    if (want('renseignement')) {
+      var linked = state.linkedEnts || (zone.events || []).map(function (ev) { return { type: ev.type, source: ev.source, corrobore: ev.corrobore, date: ev.date, detail: ev.description, where: ev.actor }; });
+      if (linked.length) body.push('<section><h2>Renseignement (source du marquage)</h2><div class="chr">' + linked.slice(0, 60).map(function (e) {
+        return '<div class="ci"><span class="cd">' + esc(e.date || '') + '</span><div class="cb"><div class="ct">' + esc(e.type || 'Renseignement') + (e.where ? ' · ' + esc(e.where) : '') + ' <em class="src ' + (e.source === 'OSINT' ? 'o' : 'h') + '">' + esc(e.source || '') + (e.corrobore ? ' ✓' : '') + '</em></div>' + (e.detail ? '<div class="cm">' + esc(e.detail) + '</div>' : '') + '</div></div>';
+      }).join('') + '</div></section>');
+    }
+    var css = "@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');" +
+      ":root{--v:#6B3FA0;--ink:#1a1526;--muted:#7b7488;--ln:#ece8f2}*{box-sizing:border-box}" +
+      "body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);background:#f4f2f8}" +
+      ".wrap{max-width:760px;margin:0 auto;background:#fff;padding:34px 40px 48px}" +
+      "header{border-bottom:2px solid var(--v);padding-bottom:16px;margin-bottom:20px}" +
+      ".brand{font:800 10px/1 'Plus Jakarta Sans';letter-spacing:.18em;color:var(--v);text-transform:uppercase}" +
+      "h1{font:800 26px/1.15 'Plus Jakarta Sans';margin:10px 0 4px}" +
+      ".pill{display:inline-block;font:800 11px/1 'Plus Jakarta Sans';color:#fff;border-radius:7px;padding:4px 9px;vertical-align:middle}" +
+      ".sub{font:600 12px/1.4 'Plus Jakarta Sans';color:var(--muted)}" +
+      ".ctx{font:500 13px/1.6 'Plus Jakarta Sans';color:#443b57;margin:12px 0 0}" +
+      ".kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ln);border:1px solid var(--ln);margin:0 0 24px;border-radius:10px;overflow:hidden}" +
+      ".k{background:#fff;padding:12px 14px}.k b{display:block;font:800 18px/1.1 'Plus Jakarta Sans'}" +
+      ".k span{font:700 8.5px/1 'Plus Jakarta Sans';letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block}" +
+      "section{margin:0 0 22px;break-inside:avoid}" +
+      "h2{font:800 12px/1 'Plus Jakarta Sans';letter-spacing:.1em;text-transform:uppercase;color:var(--v);margin:0 0 12px;padding-bottom:7px;border-bottom:1px solid var(--ln)}" +
+      ".row{display:flex;align-items:center;gap:10px;margin:0 0 8px}" +
+      ".c{flex:none;min-width:26px;text-align:right;font:800 13px/1 'Plus Jakarta Sans';color:var(--v)}" +
+      ".l{flex:0 0 150px;font:600 12px/1.2 'Plus Jakarta Sans';white-space:nowrap;overflow:hidden;text-overflow:ellipsis}" +
+      ".t{flex:1;height:9px;background:var(--ln);border-radius:6px;overflow:hidden}.f{display:block;height:100%;border-radius:6px}" +
+      ".v{flex:none;min-width:34px;text-align:right;font:800 12px/1 'Plus Jakarta Sans'}" +
+      ".chr{display:flex;flex-direction:column}" +
+      ".ci{display:flex;gap:12px;padding:7px 0;border-top:1px solid var(--ln)}.ci:first-child{border-top:none}" +
+      ".cd{flex:none;min-width:74px;font:700 10px/1.3 ui-monospace,monospace;color:var(--v)}" +
+      ".ct{font:700 12px/1.3 'Plus Jakarta Sans'}" +
+      ".ct em{font-style:normal;font:700 9px/1 'Plus Jakarta Sans';color:#2e7d32;border:1px solid #2e7d32;border-radius:5px;padding:2px 5px;margin-left:5px}" +
+      ".ct .src{border:none;color:#fff;background:var(--v)}.ct .src.o{background:#2E84D4}" +
+      ".cm{font:500 11px/1.5 'Plus Jakarta Sans';color:#5c5470;margin-top:2px}" +
+      "footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--ln);font:700 9px/1 'Plus Jakarta Sans';letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}" +
+      ".act{position:fixed;top:16px;right:16px}.act button{font:800 11px/1 'Plus Jakarta Sans';letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--v);border:none;border-radius:9px;padding:11px 16px;cursor:pointer}" +
+      "@media print{body{background:#fff}.wrap{max-width:none;padding:0}.noprint{display:none}}";
+    var doc = '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rapport · ' + esc(zone.name) + '</title><style>' + css + '</style></head><body>' +
+      '<div class="wrap">' + body.join('') + '<footer>Algora Access · confidentiel entreprise · ' + esc(zone.pays || '') + '</footer></div>' +
+      '<div class="noprint act"><button onclick="window.print()">Imprimer / PDF</button></div></body></html>';
+    var w = window.open('', '_blank');
+    if (!w) { alert('Autorise les pop-ups pour ouvrir le rapport.'); return; }
+    w.document.open(); w.document.write(doc); w.document.close();
   }
   function metric(val, lbl, small) { return '<div class="z3d-m"><div class="z3d-m-v' + (small ? ' sm' : '') + '">' + esc(String(val)) + '</div><div class="z3d-m-l">' + esc(lbl) + '</div></div>'; }
-  function fillBars(box, title, rows, colFn) {
-    if (!box) return;
-    if (!rows.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
-    box.style.display = 'block';
-    var max = Math.max.apply(null, rows.map(function (r) { return r.n; })) || 1;
-    box.innerHTML = '<div class="z3d-det-h"><span>' + esc(title) + '</span></div>' + rows.map(function (r) {
-      var col = colFn(r), pct = Math.round(r.n / max * 100);
-      return '<div class="z3d-det-row"><span class="z3d-det-c" style="color:' + col + '">' + r.n + '</span>' +
-        '<span class="z3d-det-l">' + esc(r.k) + '</span>' +
-        '<span class="z3d-track"><span class="z3d-fill" style="width:' + pct + '%;background:' + col + '"></span></span></div>';
-    }).join('');
-  }
-  // Panneau « activité détectée » : entités HUMINT/OSINT comptées par type (style Palantir).
-  function updateDetections() {
-    var box = $('z3d-det'); if (!box) return;
-    var ents = state.entities || [];
-    // Zones curées (1-2 renseignements) : le détail est déjà dans la liste, on masque ce résumé.
-    if (ents.length < 3) { box.innerHTML = ''; box.style.display = 'none'; return; }
-    box.style.display = 'block';
-    var byType = {};
-    ents.forEach(function (e) { var t = e.type || 'Divers'; byType[t] = (byType[t] || 0) + 1; });
-    var rows = Object.keys(byType).map(function (t) { return { t: t, n: byType[t], k: entKind(t) }; })
-      .sort(function (a, b) { return b.n - a.n; }).slice(0, 6);
-    var max = Math.max.apply(null, rows.map(function (r) { return r.n; })) || 1;
-    var hum = ents.filter(function (e) { return e.source === 'HUMINT'; }).length, osi = ents.length - hum;
-    box.innerHTML = '<div class="z3d-det-h"><span>Activité détectée</span><span>' + ents.length + ' entités · ' + hum + ' HUM / ' + osi + ' OSINT</span></div>' +
-      rows.map(function (r) {
-        var col = entColor(r.k), pct = Math.round(r.n / max * 100);
-        return '<div class="z3d-det-row"><span class="z3d-det-c" style="color:' + col + '">' + r.n + '</span>' +
-          '<span class="z3d-det-l">' + esc(r.t) + '</span>' +
-          '<span class="z3d-track"><span class="z3d-fill" style="width:' + pct + '%;background:' + col + '"></span></span></div>';
-      }).join('');
-  }
   function renderRank(zone) {
     ensureRank();
     // Renseignement(s) RÉEL(S) du/des point(s) qui ont fait modéliser cette infrastructure.
