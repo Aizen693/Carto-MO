@@ -255,7 +255,10 @@
        africaine), masqué par défaut, activé automatiquement au zoom site. */
     map.addSource('sat', { type: 'raster',
       tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
-      tileSize: 256, maxzoom: 19,
+      // maxzoom 16 : au-delà, Mapbox agrandit la dernière tuile disponible au
+      // lieu de demander des tuiles Esri inexistantes en zone rurale (ce qui
+      // affichait « Map data not yet available »).
+      tileSize: 256, maxzoom: 16,
       attribution: 'Imagerie © Esri, Maxar, Earthstar Geographics' });
     map.addLayer({ id: 'sat', type: 'raster', source: 'sat',
       layout: { visibility: 'none' }, paint: { 'raster-opacity': 1 } },
