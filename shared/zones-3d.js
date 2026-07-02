@@ -279,11 +279,9 @@
     if (val) val.textContent = state.in3D && state.active ? state.active.name : (list.length ? 'Explorer' : 'Indispo.');
   }
   function onChipClick() {
-    // 3D directement DANS la carte (pas de page séparée) : on choisit une
-    // infrastructure, puis la carte plonge en 3D sur place.
-    if (state.in3D) { exit3D(); return; }
-    var list = zonesFor(country());
-    if (list.length) openPicker(list, $('chip-3d'));
+    // Infras 3D = la vue 3D dense et fluide, ouverte directement sur le pays.
+    var c = country();
+    window.location.href = '/carte/sites-3d/' + (c ? '?pays=' + encodeURIComponent(c) : '');
   }
 
   /* ─────────── Popover : choix du complexe (avec sévérité agrégée) ─────────── */

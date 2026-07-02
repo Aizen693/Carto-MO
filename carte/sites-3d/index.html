@@ -410,6 +410,23 @@
     map.on('rotatestart', function (e) { if (e.originalEvent) stopOrbit(); });
     if (state.mode !== 'carte') setMode(state.mode);   /* un site a été choisi avant que la carte soit prête */
     updateCenters();
+    autoEnterFromParam();   /* pays reçu depuis /carte/ → on plonge direct dans son site principal */
+  }
+
+  // Ouverture directe : si ?pays= est fourni, on entre dans la 3D du site le
+  // plus touché de ce pays, sans passer par la liste.
+  function autoEnterFromParam() {
+    var m = /[?&]pays=([^&]+)/.exec(location.search);
+    if (!m) return;
+    var want = decodeURIComponent(m[1]).toLowerCase();
+    var rank = { detruit: 2, endommage: 1 };
+    var idx = null, best = -1;
+    SITES.forEach(function (s, i) {
+      if ((s.pays || '').toLowerCase().indexOf(want) !== 0) return;
+      var sc = (rank[s.status] || 0);
+      if (sc > best) { best = sc; idx = i; }
+    });
+    if (idx != null) selectSite(idx);
   }
 
   function firstSymbolId() {
@@ -463,7 +480,7 @@
     var s = SITES[i];
     if (!s) return;
     state.site = i;
-    setMode('maq');   /* au niveau site : rendu maquette sur décor réel restylé */
+    setMode('sat');   /* au niveau site : satellite réel + bâtiments denses (jamais de vide) */
     updateCenters();  /* le marqueur du site disparaît une fois plongé */
     document.querySelectorAll('.vbtn').forEach(function (b) { b.classList.toggle('on', b.dataset.v === 'site'); });
     showGestures();
@@ -477,7 +494,7 @@
         bearing: s.bearing || 0,
         duration: 3000, curve: 1.35, essential: true
       });
-      map.once('moveend', function () { if (state.mode === 'maq' && state.site === i) startOrbit(); });
+      map.once('moveend', function () { if (state.site === i) startOrbit(); });
     }
 
     document.getElementById('sites').style.display = 'none';
