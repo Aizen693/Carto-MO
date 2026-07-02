@@ -271,17 +271,16 @@
     } else if (chip !== bar.lastElementChild) {
       bar.appendChild(chip);
     }
-    var list = zonesFor(country());
-    chip.disabled = list.length === 0;
-    chip.title = list.length ? list.length + ' infrastructure(s)' : 'Aucune infrastructure pour ce pays';
-    chip.classList.toggle('on', state.in3D);
+    chip.disabled = false;
+    chip.title = 'Ouvrir la modélisation 3D des infrastructures';
     var val = $('chip-3d-val');
-    if (val) val.textContent = state.in3D && state.active ? state.active.name : (list.length ? 'Explorer' : 'Indispo.');
+    if (val) val.textContent = 'Explorer';
   }
   function onChipClick() {
-    if (state.in3D) { exit3D(); return; }
-    var list = zonesFor(country());
-    if (list.length) openPicker(list, $('chip-3d'));
+    // Infras 3D = la page dédiée de modélisation 3D (rendu maquette, noms OSM,
+    // 4 modes). On y va en emportant le pays courant pour arriver au bon endroit.
+    var c = country();
+    window.location.href = '/carte/sites-3d/' + (c ? '?pays=' + encodeURIComponent(c) : '');
   }
 
   /* ─────────── Popover : choix du complexe (avec sévérité agrégée) ─────────── */

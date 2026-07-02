@@ -427,7 +427,7 @@
     SITES.forEach(function (s, i) { (byPays[s.pays] = byPays[s.pays] || []).push(i); });
     Object.keys(byPays).sort().forEach(function (pays) {
       var g = document.createElement('div');
-      g.className = 'grp'; g.textContent = pays;
+      g.className = 'grp'; g.textContent = pays; g.setAttribute('data-pays', pays);
       host.appendChild(g);
       byPays[pays].forEach(function (i) {
         var s = SITES[i];
@@ -441,6 +441,22 @@
         host.appendChild(b);
       });
     });
+    focusFromParam();
+  }
+
+  // Pays reçu depuis la carte /carte/ (chip Infras 3D) : on amène le groupe du
+  // pays en tête et on l'accentue brièvement, pour arriver au bon endroit.
+  function focusFromParam() {
+    var m = /[?&]pays=([^&]+)/.exec(location.search);
+    if (!m) return;
+    var want = decodeURIComponent(m[1]).toLowerCase();
+    var host = document.getElementById('site-list');
+    var grp = Array.prototype.slice.call(host.querySelectorAll('.grp')).find(function (g) {
+      return (g.getAttribute('data-pays') || '').toLowerCase().indexOf(want) === 0;
+    });
+    if (!grp) return;
+    grp.scrollIntoView({ block: 'start' });
+    grp.style.color = 'var(--violet)';
   }
 
   function selectSite(i) {
