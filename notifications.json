@@ -1,6 +1,102 @@
 {
-  "updated": "2026-07-01",
+  "updated": "2026-07-02",
   "items": [
+    {
+      "id": "u-jeuneafrique-com-1807952-politique-mahmoud-dicko-les-secrets-de-lexil-",
+      "date": "2026-07-02",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "JeuneAfrique.comGabon - JeuneAfrique.com",
+      "source_url": "https://www.jeuneafrique.com/1807952/politique/mahmoud-dicko-les-secrets-de-lexil-algerien-de-limam-malien/",
+      "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2026/06/29/jad20260629-ass-mali-enquete-dicko-exil-algerien-1.jpg",
+      "titre": "Exil algérien de l'imam malien Mahmoud Dicko",
+      "resume": "L'imam Mahmoud Dicko vit depuis deux ans en exil en Algérie après avoir été un acteur clé au Mali.",
+      "detail": "Mahmoud Dicko, figure religieuse et politique influente au Mali, est désormais en exil en Algérie depuis deux ans. Son influence persiste malgré son absence, courtisé tant par les opposants que par les groupes armés. Les services algériens et maliens le surveillent étroitement, soulignant son rôle potentiel dans les dynamiques géopolitiques régionales. Son exclusion du paysage politique malien pourrait indiquer une stratégie de marginalisation par les autorités actuelles.",
+      "lieu": "Algérie",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque de radicalisation accrue au Sahel",
+        "Influence persistante sur les mouvements sociaux",
+        "Tensions diplomatiques Algérie-Mali"
+      ],
+      "recommandations": [
+        "Surveiller les discours de Dicko depuis l'Algérie",
+        "Renforcer la diplomatie avec Alger sur les figures religieuses exilées"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-inondations-accra-ghana-afrique-ouest",
+      "date": "2026-07-02",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/inondations-accra-ghana-afrique-ouest/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21972.jpg",
+      "titre": "12 morts à Accra inondations au Ghana",
+      "resume": "12 décès et des dégâts majeurs à Accra après des inondations liées au changement climatique.",
+      "detail": "Les inondations à Accra ont causé la mort de 12 personnes et exposé les vulnérabilités climatiques de l'Afrique de l'Ouest. Les risques d'inondations récurrentes menacent la stabilité socio-économique de la région, aggravant les tensions autour des ressources. Les autorités ghanéennes appellent à une action régionale coordonnée pour atténuer les impacts futurs. Ce phénomène illustre l'urgence d'adaptation climatique dans le Sahel.",
+      "lieu": "Accra, Ghana",
+      "lat": 5.5571096,
+      "lon": -0.2012376,
+      "implications": [
+        "Crise humanitaire en Afrique de l'Ouest",
+        "Risque de conflits pour l'accès à l'eau",
+        "Mobilisation internationale nécessaire"
+      ],
+      "recommandations": [
+        "Évaluer les plans d'urgence des pays voisins",
+        "Renforcer les infrastructures de drainage à Accra"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-saibari-bayern-munich-impact-sahel",
+      "date": "2026-07-02",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/saibari-bayern-munich-impact-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21963.jpg",
+      "titre": "Saibari au Bayern Munich 55M€ impact géopolitique",
+      "resume": "Le transfert du joueur malien Ismaël Saibari au Bayern Munich pour 55M€ marque un tournant sportif et économique.",
+      "detail": "Le transfert d'Ismaël Saibari au Bayern Munich pour 55M€ représente le plus important transfert de l'histoire du football malien. Ce transfert pourrait inspirer d'autres talents locaux et renforcer l'attractivité du Sahel dans le football mondial. Il pourrait aussi servir de levier pour des partenariats économiques entre l'Europe et l'Afrique. Cependant, des questions subsistent sur la gestion des fonds générés au Mali.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Nouveau modèle économique pour le football",
+        "Attractivité accrue du Sahel",
+        "Opportunités d'investissement"
+      ],
+      "recommandations": [
+        "Analyser les retombées économiques locales",
+        "Étudier les partenariats futurs avec l'Europe"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-diaspora-malienne-aes-opportunites",
+      "date": "2026-07-02",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/diaspora-malienne-aes-opportunites/",
+      "image": "",
+      "titre": "AES redessine règles économiques pour diaspora malienne",
+      "resume": "L'Alliance des États du Sahel (AES) lance une offensive pour attirer les investissements de la diaspora malienne.",
+      "detail": "L'AES cherche à attirer les investissements de la diaspora malienne, traditionnellement orientée vers la France, en offrant de nouvelles opportunités économiques. Cette stratégie pourrait réduire la dépendance du Mali vis-à-vis de Paris et renforcer l'intégration régionale. Elle pourrait aussi favoriser l'émergence de nouveaux acteurs économiques locaux. Cependant, la mise en œuvre de ces mesures reste à démontrer.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Réduction de l'influence française",
+        "Nouveaux partenariats économiques",
+        "Dynamique régionale renforcée"
+      ],
+      "recommandations": [
+        "Évaluer les dispositifs proposés par l'AES",
+        "Identifier les acteurs économiques locaux ciblés"
+      ]
+    },
     {
       "id": "u-maliactu-net-ebola-rdc-300-cas-fantomes-alerte",
       "date": "2026-07-01",
@@ -644,106 +740,6 @@
         "Renforcer les cellules de cybersécurité nationales",
         "Créer un centre de réponse aux incidents cyber régional",
         "Sensibiliser les populations aux bonnes pratiques numériques"
-      ]
-    },
-    {
-      "id": "u-theguardian-com-world-2026-jun-28-ukraine-war-briefing-ballistic-missi",
-      "date": "2026-06-28",
-      "theatre": "afrique",
-      "severite": "critique",
-      "source": "The Guardian",
-      "source_url": "https://www.theguardian.com/world/2026/jun/28/ukraine-war-briefing-ballistic-missile-attack-in-kyiv-forces-residents-into-shelters",
-      "image": "",
-      "titre": "Missile balistique frappe Kyiv : deux blessés",
-      "resume": "Une attaque au missile balistique sur Kyiv blesse au moins deux personnes et force les résidents à se mettre à l'abri.",
-      "detail": "Une attaque au missile balistique russe a frappé la capitale ukrainienne de Kyiv tôt le matin, blessant au moins deux civils. Les autorités locales ont immédiatement ordonné aux résidents de se mettre à l'abri, signalant une intensification des frappes dans le cadre du conflit en cours. Cette attaque survient après une journée de violences frontalières ayant causé des pertes civiles des deux côtés. L'escalade militaire en Ukraine continue de menacer la stabilité régionale et de perturber les chaînes d'approvisionnement énergétiques en Europe.",
-      "lieu": "Kyiv, Ukraine",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque d'escalade militaire accrue",
-        "Perturbation des approvisionnements énergétiques en Europe",
-        "Menace pour la stabilité des pays frontaliers"
-      ],
-      "recommandations": [
-        "Évaluer l'impact des sanctions économiques sur les chaînes d'approvisionnement",
-        "Renforcer les mesures de sécurité civile dans les zones frontalières",
-        "Coordonner les réponses humanitaires avec les partenaires internationaux"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-herve-koffi-kouakou-etalon-or-2026",
-      "date": "2026-06-28",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/herve-koffi-kouakou-etalon-or-2026/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21318.jpg",
-      "titre": "Hervé Koffi Kouakou sacré Étalon d’Or 2026 au Sahel",
-      "resume": "Le gardien burkinabè Hervé Koffi Kouakou remporte l'Étalon d'Or 2026, symbole de résilience pour le Sahel.",
-      "detail": "La victoire d'Hervé Koffi Kouakou, gardien burkinabè, à l'Étalon d'Or 2026 est présentée comme un symbole de résilience pour le Sahel face aux défis sécuritaires et socio-économiques. Cet événement culturel et sportif pourrait renforcer la cohésion régionale et servir de levier diplomatique pour les pays de l'AES. Les médias locaux mettent en avant cette réussite comme une alternative positive aux narratives de crise. L'impact sur l'image du Sahel reste à évaluer",
-      "lieu": "Ouagadougou, Burkina Faso",
-      "lat": 12.3681873,
-      "lon": -1.5270944,
-      "implications": [
-        "Amélioration potentielle de l'image internationale du Sahel",
-        "Opportunité de soft power pour les pays de l'AES",
-        "Renforcement de la coopération sportive régionale"
-      ],
-      "recommandations": [
-        "Capitaliser sur cet événement pour des campagnes de communication positive",
-        "Encourager les échanges sportifs intra-saheliens",
-        "Utiliser ce succès comme outil de diplomatie culturelle"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-afrique-sud-sahel-tensions-immigres-27-juin",
-      "date": "2026-06-28",
-      "theatre": "afrique",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/afrique-sud-sahel-tensions-immigres-27-juin/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21308.jpg",
-      "titre": "Manifestations anti-immigrés en Afrique du Sud menacent la stabilité régionale",
-      "resume": "Les manifestations anti-immigrés du 27 juin 2026 en Afrique du Sud risquent d'enflammer les tensions au Sahel.",
-      "detail": "Les violentes manifestations anti-immigrés prévues le 27 juin 2026 en Afrique du Sud pourraient déclencher une crise humanitaire et exacerber les tensions au Sahel. Les pays de la région craignent un afflux de migrants fuyant les violences et une radicalisation accrue des communautés locales. Les réseaux migratoires entre l'Afrique du Sud et le Sahel sont bien établis ce qui pourrait amplifier la propagation des conflits. Les gouvernements concernés doivent anticiper des mesures de gestion de crise et de protection des populations vulnérables",
-      "lieu": "Afrique du Sud, Sahel",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque d'afflux de migrants vers le Sahel",
-        "Radicalisation possible des communautés locales",
-        "Tensions diplomatiques accrues entre l'Afrique du Sud et ses voisins"
-      ],
-      "recommandations": [
-        "Préparer des plans d'accueil d'urgence pour les migrants",
-        "Renforcer les patrouilles aux frontières sud-africaines",
-        "Coordonner avec l'Union Africaine pour une réponse continentale"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-10000-jeunes-enroles-sahel",
-      "date": "2026-06-27",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-10000-jeunes-enroles-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-20900.jpg",
-      "titre": "AES enrôle 10 000 jeunes au Sahel dans un projet de souveraineté",
-      "resume": "L'Alliance des États du Sahel mobilise 10 000 jeunes volontaires pour renforcer la souveraineté régionale. Analyse des enjeux socio-politiques et sécuritaires.",
-      "detail": "Cette initiative reflète une stratégie de consolidation du pouvoir par les juntes du Sahel en misant sur la jeunesse pour contrer les influences étrangères. Le recrutement massif pourrait accentuer les tensions internes et régionales. Les fonds mobilisés pourraient aussi détourner des ressources d'autres secteurs critiques comme la santé ou l'éducation. L'impact sur la stabilité à moyen terme reste incertain.",
-      "lieu": "Sahel",
-      "lat": 14.0279165,
-      "lon": -0.7717776,
-      "implications": [
-        "Risque accru de radicalisation parmi les jeunes recrutés",
-        "Détournement potentiel de fonds publics vers des projets politiques",
-        "Tensions accrues avec les partenaires internationaux"
-      ],
-      "recommandations": [
-        "Surveiller les recrutements et leur impact sur les dynamiques locales",
-        "Évaluer les priorités budgétaires des juntes du Sahel",
-        "Préparer des scénarios de réponse en cas d'escalade sécuritaire"
       ]
     }
   ]
