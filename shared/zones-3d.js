@@ -43,7 +43,8 @@
   var ENT_SRC = 'zones3d-ent';
   var L_FILL = 'zones3d-fill', L_EXTRUDE = 'zones3d-extrude', L_LINE = 'zones3d-line', L_LABEL = 'zones3d-label';
   var L_PERI_F = 'zones3d-peri-fill', L_PERI_L = 'zones3d-peri-line';
-  var L_ENT_GLOW = 'zones3d-ent-glow', L_ENT = 'zones3d-ent-mark';
+  var L_ENT_GLOW = 'zones3d-ent-glow', L_ENT = 'zones3d-ent-mark', L_ENT_RING = 'zones3d-ent-ring';
+  var SECT_SRC = 'zones3d-sector', L_SECT = 'zones3d-sector-pt';   // incidents réels du secteur (contexte + replay)
   var ENT_RADIUS_M = 9000;  // rayon « secteur » autour du complexe pour les entités HUMINT/OSINT de contexte
   var TRACE_SRC = 'zones3d-trace', L_TRACE_FILL = 'zones3d-trace-fill', L_TRACE_LINE = 'zones3d-trace-line', L_TRACE_PT = 'zones3d-trace-pt';
   var TRACE_KEY = 'algor-z3d-traces';   // emprises tracées à la main (localStorage), par id de zone
@@ -51,6 +52,10 @@
   function saveTraces(t) { try { localStorage.setItem(TRACE_KEY, JSON.stringify(t)); } catch (e) { /* */ } }
 
   var IMAGERY = {
+    // Esri/Maxar : nettement plus net que Mapbox en zone rurale africaine.
+    esri: { source: { type: 'raster', tileSize: 256, maxzoom: 19,
+      tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+      attribution: 'Imagerie © Esri, Maxar, Earthstar Geographics' } },
     mapbox: { source: { type: 'raster', url: 'mapbox://mapbox.satellite', tileSize: 256 } },
   };
 
@@ -61,7 +66,7 @@
     detruit: { base: 4, label: 'Détruit', cls: 'z3d-dmg-bad' },
   };
 
-  var state = { zones: [], map: null, active: null, imagery: 'mapbox', in3D: false, chipReady: false, structById: {}, linkRadiusM: 220, entities: [], linkedEnts: [], trace: { on: false, pts: [] }, orbit: { on: false, raf: null, stop: null } };
+  var state = { zones: [], map: null, active: null, imagery: 'esri', mode: 'satellite', light: 'day', in3D: false, chipReady: false, structById: {}, linkRadiusM: 220, entities: [], linkedEnts: [], sectorEnts: [], trace: { on: false, pts: [] }, orbit: { on: false, raf: null, stop: null }, pulse: { raf: null }, replay: { on: false, raf: null }, _replayDate: null, _teleH: null };
 
   function $(id) { return document.getElementById(id); }
   function safe(fn) { try { fn(); } catch (e) { /* teardown résilient : un retrait qui échoue ne doit pas bloquer la suite */ } }
@@ -125,10 +130,17 @@
       '.chip-3d.on .chip-caret{color:rgba(255,255,255,.85)}',
       '.chip-3d[disabled]{opacity:.5;cursor:default}',
       '#z3d-bar{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:9;display:none;',
-      '  align-items:center;gap:12px;background:#fff;border:1px solid var(--ln);border-radius:14px;',
+      '  align-items:center;gap:12px;background:rgba(255,255,255,.9);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border:1px solid var(--ln);border-radius:14px;',
       '  box-shadow:var(--shadow);padding:9px 13px 9px 16px;max-width:calc(100% - 60px)}',
-      '#z3d-bar.on{display:flex}',
-      '.z3d-name{font:800 13px var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px}',
+      '#z3d-bar.on{display:flex;animation:z3dIn .4s cubic-bezier(.16,.84,.3,1)}',
+      '@keyframes z3dIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}',
+      '@keyframes z3dInPanel{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}',
+      '@media (prefers-reduced-motion:reduce){#z3d-bar.on,#z3d-rank.on{animation:none}}',
+      '.z3d-name{font:800 13px var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}',
+      '.z3d-seg{display:inline-flex;gap:3px;background:rgba(107,63,160,.07);border-radius:11px;padding:3px}',
+      '.z3d-seg button{border:none;background:none;cursor:pointer;font:700 9px/1 var(--jakarta);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 11px;border-radius:8px;white-space:nowrap;transition:all .15s}',
+      '.z3d-seg button:hover{color:var(--violet)}',
+      '.z3d-seg button.on{background:var(--grad);color:#fff;box-shadow:0 5px 14px -5px rgba(86,80,198,.55)}',
       '.z3d-exit{border:1px solid var(--ln);background:#fff;color:var(--violet);cursor:pointer;font:700 9px/1 var(--jakarta);letter-spacing:.08em;text-transform:uppercase;padding:9px 13px;border-radius:10px}',
       '.z3d-exit:hover{background:rgba(107,63,160,.07)}',
       '.z3d-sub{font:600 9px/1 var(--jakarta);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}',
@@ -139,9 +151,9 @@
       '.z3d-sevbadge{flex:none;font:800 9px/1 var(--jakarta);color:#fff;border-radius:7px;padding:4px 8px}',
       // panneau classement
       '#z3d-rank{position:absolute;top:64px;left:18px;z-index:7;display:none;flex-direction:column;width:312px;',
-      '  max-height:calc(100% - 150px);background:#fff;border:1px solid var(--ln);border-radius:16px;',
-      '  box-shadow:0 16px 44px -14px rgba(46,24,87,.3);overflow:hidden}',
-      '#z3d-rank.on{display:flex}',
+      '  max-height:calc(100% - 150px);background:rgba(255,255,255,.93);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid var(--ln);border-radius:18px;',
+      '  box-shadow:0 24px 60px -18px rgba(46,24,87,.38);overflow:hidden}',
+      '#z3d-rank.on{display:flex;animation:z3dInPanel .45s cubic-bezier(.16,.84,.3,1)}',
       '.z3d-rank-head{padding:13px 15px;border-bottom:1px solid var(--ln-soft);background:linear-gradient(180deg,rgba(107,63,160,.06),rgba(107,63,160,0))}',
       '.z3d-rank-t{font:800 8.5px/1.35 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;color:var(--violet)}',
       '.z3d-rank-s{font:700 12px/1.3 var(--jakarta);color:var(--ink);margin-top:5px}',
@@ -183,8 +195,12 @@
       '.z3d-det-l{flex:0 0 96px;font:600 10.5px/1.15 var(--jakarta);color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
       '.z3d-sec-t{padding:10px 14px 2px;font:800 8.5px/1 var(--jakarta);letter-spacing:.12em;text-transform:uppercase;color:var(--violet)}',
       // chiffres clés (grille) + chronologie (sparkline)
-      '.z3d-metrics{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ln-soft);border-bottom:1px solid var(--ln-soft)}',
-      '.z3d-m{background:#fff;padding:9px 12px}',
+      '.z3d-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ln-soft);border-bottom:1px solid var(--ln-soft)}',
+      '.z3d-m{background:rgba(255,255,255,.72);padding:9px 10px}',
+      // bouton replay (rejoue l'activité du secteur sur la 3D)
+      '.z3d-play{border:1px solid var(--ln);background:#fff;color:var(--violet);cursor:pointer;font:800 9px/1 var(--jakarta);width:24px;height:24px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:background .15s}',
+      '.z3d-play:hover{background:rgba(107,63,160,.08)}',
+      '.z3d-play.on{background:var(--grad);color:#fff;border:none}',
       '.z3d-m-v{font:800 16px/1.1 var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
       '.z3d-m-v.sm{font-size:12px}',
       '.z3d-m-l{font:700 7.5px/1 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}',
@@ -345,7 +361,7 @@
   // se fond → fini le fouillis de boîtes au loin), labels secondaires masqués.
   function applyQuality() {
     var map = state.map;
-    safe(function () { map.setConfigProperty('basemap', 'lightPreset', 'day'); });
+    safe(function () { map.setConfigProperty('basemap', 'lightPreset', state.light); });
     // VRAIE ville 3D Mapbox (ombrée) en contexte → réalisme ; notre infra en surbrillance par-dessus.
     safe(function () { map.setConfigProperty('basemap', 'show3dObjects', true); });
     safe(function () { map.setConfigProperty('basemap', 'showPointOfInterestLabels', false); });
@@ -355,17 +371,21 @@
   /* ─────────── Entrée / sortie ─────────── */
   function enter3D(zone) {
     var map = state.map; if (!map) return;
-    state.active = zone; state.in3D = true;
+    state.active = zone; state.in3D = true; state.mode = 'satellite'; state.imagery = 'esri';
     document.body.classList.add('z3d-active');
     setImagery(state.imagery);
     enableTerrain();
     applyQuality();
     renderPerimeter(zone);
     renderStructures(zone);
+    renderSector(zone);      // incidents réels du secteur (contexte + replay chronologique)
     renderEntities(zone);
-    map.flyTo({ center: zone.center, zoom: zone.zoom || 15.5, pitch: zone.pitch != null ? zone.pitch : 60, bearing: zone.bearing || 0, duration: 1700, essential: true });
-    // Survol cinématique : légère orbite auto (arrêtée dès que l'utilisateur bouge la carte).
-    setTimeout(startOrbit, 1900);
+    startPulse();            // anneau sonar animé sur le(s) renseignement(s) source
+    // Approche cinématique : arc haute altitude (curve) puis plongée sur l'infrastructure ;
+    // les bâtiments « poussent » pendant la descente (growBuildings, déclenché au rendu).
+    map.flyTo({ center: zone.center, zoom: zone.zoom || 15.5, pitch: zone.pitch != null ? zone.pitch : 60, bearing: zone.bearing || 0, duration: 2600, curve: 1.55, essential: true });
+    // Survol cinématique : orbite auto à accélération progressive (arrêtée dès que l'utilisateur bouge la carte).
+    setTimeout(startOrbit, 2750);
     showBar(zone);
     renderRank(zone);
     showHud(zone);
@@ -379,9 +399,12 @@
     var stop = function () { stopOrbit(); };
     state.orbit.stop = stop;
     ['mousedown', 'touchstart', 'wheel', 'dragstart'].forEach(function (ev) { map.on(ev, stop); });
-    var step = function () {
+    var t0 = performance.now();
+    var step = function (now) {
       if (!state.orbit.on || !state.in3D) return;
-      try { map.setBearing((map.getBearing() + 0.12) % 360); } catch (e) { /* */ }
+      // Montée en vitesse progressive (3 s) → départ imperceptible, fluide.
+      var ramp = Math.min(1, (now - t0) / 3000);
+      try { map.setBearing((map.getBearing() + 0.12 * ramp * ramp) % 360); } catch (e) { /* */ }
       state.orbit.raf = requestAnimationFrame(step);
     };
     state.orbit.raf = requestAnimationFrame(step);
@@ -393,13 +416,15 @@
   }
 
   function exit3D() {
-    var map = state.map; closePopups(); stopOrbit();
+    var map = state.map; closePopups(); stopOrbit(); stopPulse(); stopReplay();
     if (map) {
       // Le relief d'abord (libère la dépendance terrain → source DEM), puis les couches, puis les sources.
       safe(function () { if (state.trace.on) endTraceMode(); });
       safe(function () { map.setTerrain(null); });
-      [L_ENT, L_ENT_GLOW, L_LABEL, L_LINE, L_EXTRUDE, L_FILL, L_PERI_L, L_PERI_F, L_TRACE_PT, L_TRACE_LINE, L_TRACE_FILL, SAT_LAYER].forEach(dropLayer);
-      [ENT_SRC, SRC, PERI_SRC, TRACE_SRC, SAT_SRC, DEM_SRC].forEach(dropSource);
+      [L_ENT, L_ENT_GLOW, L_ENT_RING, L_SECT, L_LABEL, L_LINE, L_EXTRUDE, L_FILL, L_PERI_L, L_PERI_F, L_TRACE_PT, L_TRACE_LINE, L_TRACE_FILL, SAT_LAYER].forEach(dropLayer);
+      [ENT_SRC, SECT_SRC, SRC, PERI_SRC, TRACE_SRC, SAT_SRC, DEM_SRC].forEach(dropSource);
+      state.light = 'day';
+      safe(function () { map.setConfigProperty('basemap', 'lightPreset', 'day'); });
       safe(function () { map.setConfigProperty('basemap', 'show3dObjects', true); });
       safe(function () { map.setConfigProperty('basemap', 'showPointOfInterestLabels', true); });
       safe(function () { map.setConfigProperty('basemap', 'showTransitLabels', true); });
@@ -407,7 +432,7 @@
       safe(function () { map.easeTo({ pitch: 0, bearing: 0, duration: 900 }); });
       setTimeout(function () { if (window.HumintMap && window.HumintMap.recenter) window.HumintMap.recenter(); }, 950);
     }
-    state.in3D = false; state.active = null; state.entities = [];
+    state.in3D = false; state.active = null; state.entities = []; state.sectorEnts = [];
     document.body.classList.remove('z3d-active');
     hideBar(); hideRank(); hideHud(); ensureChip();
   }
@@ -466,7 +491,7 @@
       };
     });
     var fc = { type: 'FeatureCollection', features: features };
-    if (map.getSource(SRC)) { map.getSource(SRC).setData(fc); return; }
+    if (map.getSource(SRC)) { map.getSource(SRC).setData(fc); growBuildings(); return; }
     map.addSource(SRC, { type: 'geojson', data: fc });
     // Aplat au sol UNIQUEMENT pour les surfaces plates (piste/apron/enceinte) ;
     // les bâtiments sont rendus en volume (l'aplat ferait doublon).
@@ -482,7 +507,24 @@
     map.addLayer({ id: L_LABEL, type: 'symbol', source: SRC, slot: 'top', filter: ['==', ['get', '_lab'], 1],
       layout: { 'text-field': ['get', 'name'], 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'], 'text-size': 12, 'text-anchor': 'center', 'text-max-width': 9, 'text-allow-overlap': false },
       paint: { 'text-color': '#1F1437', 'text-halo-color': '#fff', 'text-halo-width': 1.7 } });
+    growBuildings();
     wirePopups();
+  }
+  // Croissance animée : les volumes partent du sol et « poussent » pendant l'approche caméra.
+  function growBuildings() {
+    var map = state.map;
+    safe(function () {
+      if (!map.getLayer(L_EXTRUDE)) return;
+      map.setPaintProperty(L_EXTRUDE, 'fill-extrusion-height-transition', { duration: 0 });
+      map.setPaintProperty(L_EXTRUDE, 'fill-extrusion-height', ['*', ['get', '_h'], 0.02]);
+      setTimeout(function () {
+        safe(function () {
+          if (!map.getLayer(L_EXTRUDE)) return;
+          map.setPaintProperty(L_EXTRUDE, 'fill-extrusion-height-transition', { duration: 1300, delay: 0 });
+          map.setPaintProperty(L_EXTRUDE, 'fill-extrusion-height', ['get', '_h']);
+        });
+      }, 1400);
+    });
   }
 
   var _wired = false;
@@ -505,6 +547,14 @@
         if (ent.length) {
           var en = state.entities[ent[0].properties._i];
           if (en) { new mapboxgl.Popup({ closeButton: true, maxWidth: '320px', className: 'humint-popup' }).setLngLat(en.coords).setHTML(entityPopup(en)).addTo(map); return; }
+        }
+      }
+      // Points « secteur » (incidents réels autour de l'infra) → popup renseignement.
+      if (map.getLayer(L_SECT)) {
+        var sp = map.queryRenderedFeatures(e.point, { layers: [L_SECT] });
+        if (sp.length) {
+          var se = state.sectorEnts[sp[0].properties._i];
+          if (se) { new mapboxgl.Popup({ closeButton: true, maxWidth: '320px', className: 'humint-popup' }).setLngLat(se.coords).setHTML(entityPopup(se)).addTo(map); return; }
         }
       }
       var bL = [L_EXTRUDE, L_FILL].filter(function (l) { return map.getLayer(l); });
@@ -600,11 +650,20 @@
   function ensureBar() {
     if ($('z3d-bar')) return;
     var bar = document.createElement('div'); bar.id = 'z3d-bar';
-    bar.innerHTML = '<span class="z3d-sub">3D</span><span class="z3d-name" id="z3d-name"></span>' +
+    bar.innerHTML = '<span class="z3d-name" id="z3d-name"></span>' +
+      '<span class="z3d-seg" id="z3d-seg">' +
+        '<button data-m="maquette">Maquette</button>' +
+        '<button data-m="satellite">Satellite</button>' +
+        '<button data-m="vue3d">Vue 3D</button>' +
+        '<button data-m="general">Vue générale</button>' +
+      '</span>' +
       '<button class="z3d-trace-btn" id="z3d-trace-btn" title="Tracer l\'emprise du bâtiment sur le satellite">✎ Tracer</button>' +
       '<span class="z3d-trace-live" id="z3d-trace-live"><button class="z3d-trace-ok" id="z3d-trace-ok">✓ Terminer</button><button class="z3d-trace-cancel" id="z3d-trace-cancel">✕</button></span>' +
       '<button class="z3d-exit" id="z3d-exit">Quitter la 3D</button>';
     document.body.appendChild(bar);
+    $('z3d-seg').querySelectorAll('button').forEach(function (b) {
+      b.onclick = function () { setMode(b.getAttribute('data-m')); };
+    });
     $('z3d-exit').onclick = exit3D;
     $('z3d-trace-btn').onclick = startTrace;
     $('z3d-trace-ok').onclick = finishTrace;
@@ -612,7 +671,33 @@
   }
   function showBar(zone) { ensureBar(); $('z3d-name').textContent = zone.name; $('z3d-bar').classList.add('on'); syncSeg(); }
   function hideBar() { var b = $('z3d-bar'); if (b) b.classList.remove('on'); }
-  function syncSeg() { var seg = $('z3d-seg'); if (seg) seg.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-k') === state.imagery); }); }
+  function syncSeg() { var seg = $('z3d-seg'); if (seg) seg.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-m') === state.mode); }); }
+
+  /* ─────────── Les 4 modes de vue ─────────── */
+  // Maquette : fond clair Mapbox (pas de satellite), ville 3D + emprises → rendu
+  // épuré. Satellite : imagerie Esri/Maxar sous les volumes. Vue 3D / Vue générale :
+  // bascule de perspective (plongée ↔ aplomb) sans quitter la 3D.
+  function setMode(mode) {
+    var map = state.map; if (!map || !state.in3D) return;
+    stopOrbit();
+    if (mode === 'maquette') {
+      state.mode = 'maquette';
+      dropLayer(SAT_LAYER); dropSource(SAT_SRC);           // fond clair révélé
+      safe(function () { map.easeTo({ pitch: state.active && state.active.pitch != null ? state.active.pitch : 60, duration: 700 }); });
+    } else if (mode === 'satellite') {
+      state.mode = 'satellite';
+      setImagery('esri');
+      safe(function () { map.easeTo({ pitch: state.active && state.active.pitch != null ? state.active.pitch : 60, duration: 700 }); });
+    } else if (mode === 'vue3d') {
+      state.mode = 'vue3d';
+      safe(function () { map.easeTo({ pitch: 62, duration: 800 }); });
+      setTimeout(startOrbit, 850);
+    } else if (mode === 'general') {
+      state.mode = 'general';
+      safe(function () { map.easeTo({ pitch: 0, bearing: 0, duration: 800 }); });
+    }
+    syncSeg();
+  }
 
   /* ─────────── Traçage manuel d'emprise sur le satellite ─────────── */
   function startTrace() {
