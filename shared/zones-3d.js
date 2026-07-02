@@ -470,7 +470,7 @@
     // On ne rend QUE l'infrastructure (bâtiments clés, touchés, ou emprise tracée/approx) ;
     // le reste de la ville vient du bâti 3D natif Mapbox (ombré) → réalisme sans doublon.
     var toRender = (zone.structures || []).filter(function (st) {
-      return st.key || (st.damage && st.damage !== 'intact') || st.approx || st._trace;
+      return st.key || (st.damage && st.damage !== 'intact') || st.approx || st._trace || st._context;
     });
     if (!toRender.length) toRender = (zone.structures || []).slice(0, 1);
     var features = toRender.map(function (st) {
