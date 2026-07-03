@@ -107,6 +107,55 @@
     return '#ff9800';
   }
 
+  /* ─────────── Libellé complet d'un acteur (survol) ───────────
+     Clés normalisées (majuscules, sans accent ni ponctuation) → nom entier.
+     Un acteur absent de la table conserve son sigle en info-bulle.
+     ⚠ À COMPLÉTER / VALIDER par l'analyste pour les sigles internes. */
+  var ACTOR_FULLNAMES = {
+    GSIM: 'Groupe de soutien à l’islam et aux musulmans (JNIM)',
+    JNIM: 'Groupe de soutien à l’islam et aux musulmans (JNIM)',
+    GAT: 'Groupe armé terroriste',
+    GANE: 'Groupe armé non étatique',
+    GAE: 'Groupe armé étranger',
+    FDS: 'Forces de défense et de sécurité',
+    FAMA: 'Forces armées maliennes',
+    FAN: 'Forces armées nigériennes',
+    VDP: 'Volontaires pour la défense de la patrie',
+    FDSVDP: 'Forces de défense et de sécurité, Volontaires pour la défense de la patrie',
+    EI: 'État islamique',
+    EIS: 'État islamique au Sahel',
+    EISAHEL: 'État islamique au Sahel',
+    EIGS: 'État islamique au Grand Sahara',
+    EIFS: 'État islamique, province d’Afrique de l’Ouest',
+    ISWAP: 'État islamique en Afrique de l’Ouest (ISWAP)',
+    ISCAP: 'État islamique en Afrique centrale (ISCAP)',
+    JAS: 'Jama’atu Ahlis Sunna (Boko Haram)',
+    BOKOHARAM: 'Boko Haram',
+    FLA: 'Front de libération de l’Azawad',
+    AQ: 'Al-Qaïda',
+    ALSHABAAB: 'Al Shabaab',
+    LAKURAWA: 'Lakurawa',
+    LUKAWARA: 'Lakurawa',
+    CIVILS: 'Population civile',
+    CIVIL: 'Population civile',
+    FR: 'Forces françaises',
+    USA: 'Forces américaines',
+    ONU: 'Nations unies',
+    UN: 'Nations unies',
+    UE: 'Union européenne',
+    ONG: 'Organisation non gouvernementale',
+    SMP: 'Société militaire privée',
+    OPHK: 'Opération Hadin Kai'
+    /* Sigles internes à confirmer par l'analyste :
+       HANI, AK, GENERAL INT, GENERAL EXT, CIVIL INT, GMI, BIR, ANT, FA */
+  };
+  function actorKey(a) {
+    return String(a == null ? '' : a).toUpperCase().normalize('NFD')
+      .replace(/[̀-ͯ]/g, '').replace(/[^A-Z0-9]/g, '');
+  }
+  // Nom entier si connu, sinon le sigle tel quel (l'info-bulle reste utile/uniforme).
+  function actorFull(a) { return ACTOR_FULLNAMES[actorKey(a)] || String(a == null ? '' : a); }
+
   /* ─────────── État ─────────── */
   // Affichage : la requête (pays/date/typo/acteur) est construite sur l'accueil
   // (barre du globe) et passée en paramètres d'URL. Ici on charge et on affiche.
@@ -316,7 +365,7 @@
         '<span class="news-main">' +
           '<span class="news-top"><span class="news-type">' + esc(f.type || 'Renseignement') + '</span>' +
           '<span class="news-when">' + esc(relTime(f.iso)) + '</span></span>' +
-          '<span class="news-actor">' + esc(f.acteur) + '</span>' +
+          '<span class="news-actor" title="' + esc(actorFull(f.acteur)) + '">' + esc(f.acteur) + '</span>' +
         '</span>' +
         '<span class="news-go">→</span>' +
       '</button>';
@@ -391,7 +440,7 @@
     return state._regionsP;
   }
 
-  function anaSection(title, rows, total, colorFn, moreNoun, clickable) {
+  function anaSection(title, rows, total, colorFn, moreNoun, clickable, labelTitleFn) {
     var max = rows.length ? rows[0].n : 1;
     var body = rows.slice(0, 8).map(function (r) {
       var w = Math.max(4, Math.round(r.n / max * 100));
@@ -403,7 +452,7 @@
       // On évite « 3 · 8% » qui se lirait « 3,8% ».
       return '<div class="ana-row' + clic + '"' + dv + (clic ? ' title="Voir ' + esc(r.k) + ' sur la carte"' : '') + '>' +
         '<span class="ana-row-c" title="' + r.n + ' événement' + (r.n > 1 ? 's' : '') + '">' + r.n + '</span>' +
-        '<span class="ana-row-l">' + esc(r.k) + '</span>' +
+        '<span class="ana-row-l"' + (labelTitleFn ? ' title="' + esc(labelTitleFn(r.k)) + '"' : '') + '>' + esc(r.k) + '</span>' +
         '<span class="ana-row-track"><span class="ana-row-fill" style="width:' + w + '%;background:' + colorFn(r.k) + '"></span></span>' +
         '<span class="ana-row-v">' + p + '%</span>' +
         (clic ? '<span class="ana-row-go">→</span>' : '') + '</div>';
@@ -452,7 +501,7 @@
         '<div class="ana-bars"><div class="ana-empty">Calcul des régions…</div></div></div>';
     return geo +
       anaSection("Typologie d'événement", stats.types, stats.total, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }, "typologies") +
-      anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); }, 'acteurs') +
+      anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); }, 'acteurs', false, actorFull) +
       '<div class="ana-ia"><button class="ana-ia-btn" type="button">✶ Générer la synthèse IA</button><div class="ana-ia-out"></div></div>';
   }
 
@@ -835,7 +884,8 @@
     rows += items.map(function (o) {
       var dot = isActor ? '<span class="fp-dot" style="background:' + actorColor(o.v) + '"></span>' : '';
       var caret = (withLayers && (NEIGHBORS[o.v] || []).length) ? '<span class="fp-more">›</span>' : '';
-      return '<button class="fp-opt' + (o.v === current ? ' on' : '') + '" data-v="' + esc(o.v) + '">' + dot + '<span class="fp-l">' + esc(o.v) + '</span><span class="fp-n">' + o.n + '</span>' + caret + '</button>';
+      var lt = isActor ? ' title="' + esc(actorFull(o.v)) + '"' : '';
+      return '<button class="fp-opt' + (o.v === current ? ' on' : '') + '" data-v="' + esc(o.v) + '"' + lt + '>' + dot + '<span class="fp-l">' + esc(o.v) + '</span><span class="fp-n">' + o.n + '</span>' + caret + '</button>';
     }).join('') || '<div class="fp-empty">Aucune valeur</div>';
     openPop(anchor, '<div class="fp-head">' + esc(title) + '</div><div class="fp-body">' + rows + '</div>', function (p) {
       p.querySelectorAll('.fp-opt').forEach(function (b) {
@@ -977,7 +1027,7 @@
     var rows = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
     if (!rows.length) { box.innerHTML = '<div class="legend-empty">' + (state.country ? 'Aucun renseignement pour ces filtres' : 'Choisissez un pays pour commencer') + '</div>'; return; }
     box.innerHTML = rows.map(function (a) {
-      return '<div class="legend-row"><span class="legend-dot" style="background:' + actorColor(a) + '"></span><span class="legend-name">' + esc(a) + '</span><span class="legend-count">' + counts[a] + '</span></div>';
+      return '<div class="legend-row"><span class="legend-dot" style="background:' + actorColor(a) + '"></span><span class="legend-name" title="' + esc(actorFull(a)) + '">' + esc(a) + '</span><span class="legend-count">' + counts[a] + '</span></div>';
     }).join('');
   }
   function updateCounter(n) {
@@ -996,7 +1046,7 @@
   }
   function makePopup(p) {
     var color = p._color || '#888';
-    var head = '<div class="popup-header"><div class="popup-dot-bar" style="background:' + color + '"></div><div class="popup-actor">' + esc(p.acteur) + '</div></div>';
+    var head = '<div class="popup-header"><div class="popup-dot-bar" style="background:' + color + '"></div><div class="popup-actor" title="' + esc(actorFull(p.acteur)) + '">' + esc(p.acteur) + '</div></div>';
     var rows = '';
     // Statut de recoupement : seul indicateur de fiabilite montre au client (jamais HUMINT / OSINT).
     var corr = !!p.corrobore;
