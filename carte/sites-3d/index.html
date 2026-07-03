@@ -24,14 +24,6 @@
   *{box-sizing:border-box}
   html,body{margin:0;height:100%;background:#eef0f4;color:var(--tx);font-family:var(--jakarta);overflow:hidden}
   #map{position:absolute;inset:0}
-  /* Spotlight tactique : le pourtour s'assombrit, la zone d'intérêt (centre)
-     ressort. N'ajoute aucune couleur, juste de la profondeur. Actif en vue site. */
-  #scene-fx{position:absolute;inset:0;pointer-events:none;z-index:3;opacity:0;transition:opacity .9s ease}
-  #scene-fx.on{opacity:1}
-  #scene-fx::before{content:"";position:absolute;inset:0;
-    background:radial-gradient(120% 90% at 50% 46%, transparent 34%, rgba(31,20,55,.16) 68%, rgba(20,12,38,.42) 100%)}
-  #scene-fx::after{content:"";position:absolute;inset:0;
-    background:linear-gradient(to bottom, rgba(20,12,38,.10) 0%, transparent 22%, transparent 82%, rgba(20,12,38,.14) 100%)}
   /* Fond studio du mode maquette (le canvas Mapbox devient transparent
      quand le fond de carte est masqué) */
   #map.maq{background:radial-gradient(1300px 850px at 50% 42%,#FBFAF6 0%,#EFEBF4 55%,#E3DDEC 100%)}
@@ -128,7 +120,6 @@
 <body>
 
 <div id="map"></div>
-<div id="scene-fx"></div>
 <div id="loader"><div class="ring"></div><span>Chargement des sites</span></div>
 
 <header id="header">
@@ -204,18 +195,19 @@
     map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
 
     map.on('style.load', function () {
-      /* Brume profonde : premier plan net, le lointain se fond → sensation d'espace. */
+      /* Brume légère (ambiance d'origine conservée) : juste assez pour aérer le
+         lointain sans assombrir la scène. */
       map.setFog({
-        range: [1.2, 12], color: 'rgb(246,244,250)', 'high-color': 'rgb(202,192,230)',
-        'horizon-blend': 0.03, 'space-color': 'rgb(224,220,238)', 'star-intensity': 0
+        color: 'rgb(244,242,248)', 'high-color': 'rgb(210,200,235)',
+        'horizon-blend': 0.06, 'space-color': 'rgb(233,230,242)', 'star-intensity': 0
       });
-      /* Soleil bas + ambiance basse = ombres portées longues et fort contraste de
-         volumes. C'est le principal levier de profondeur. */
+      /* Éclairage doux avec ombres portées nettes : donne du volume et sépare
+         les bâtiments, sans dramatiser l'ambiance. */
       if (map.setLights) map.setLights([
-        { id: 'ambient', type: 'ambient', properties: { color: '#e9ecf6', intensity: 0.35 } },
+        { id: 'ambient', type: 'ambient', properties: { color: '#ffffff', intensity: 0.5 } },
         { id: 'sun', type: 'directional', properties: {
-            color: '#fff4e2', intensity: 1.0, direction: [222, 20],
-            'cast-shadows': true, 'shadow-intensity': 1 } }
+            color: '#fff6ea', intensity: 0.85, direction: [216, 42],
+            'cast-shadows': true, 'shadow-intensity': 0.7 } }
       ]);
     });
 
@@ -272,10 +264,8 @@
       attribution: 'Imagerie © Esri, Maxar, Earthstar Geographics' });
     map.addLayer({ id: 'sat', type: 'raster', source: 'sat',
       layout: { visibility: 'none' },
-      /* Traitement tactique : contraste renforcé, imagerie légèrement désaturée
-         et assombrie → les volumes 3D et la cible ressortent, lecture plus nette. */
-      paint: { 'raster-opacity': 1, 'raster-contrast': 0.12, 'raster-saturation': -0.28,
-               'raster-brightness-max': 0.86, 'raster-brightness-min': 0.02, 'raster-fade-duration': 300 } },
+      /* Léger gain de netteté sur l'imagerie, sans changer sa tonalité. */
+      paint: { 'raster-opacity': 1, 'raster-contrast': 0.06, 'raster-fade-duration': 250 } },
       firstSymbolId());
 
     /* Bâtiments OSM de la ville (contexte, via le style light) */
@@ -386,10 +376,11 @@
       paint: {
         'fill-extrusion-color': ['match', ['get', 'damage'], 'detruit', '#E8564C', '#F08A3C'],
         'fill-extrusion-base': ['get', 'h'],
-        'fill-extrusion-height': ['*', ['get', 'h'], 2.1],
-        'fill-extrusion-opacity': 0.16,
-        'fill-extrusion-emissive-strength': 1,
-        'fill-extrusion-height-transition': { duration: 700, delay: 0 }
+        /* léger surplomb lumineux au-dessus du toit, pas une colonne */
+        'fill-extrusion-height': ['+', ['get', 'h'], 3],
+        'fill-extrusion-opacity': 0.2,
+        'fill-extrusion-emissive-strength': 0.9,
+        'fill-extrusion-height-transition': { duration: 600, delay: 0 }
       }
     });
 
@@ -579,8 +570,7 @@
     state.site = i;
     setMode('sat');   /* au niveau site : satellite réel + bâtiments denses (jamais de vide) */
     updateCenters();  /* le marqueur du site disparaît une fois plongé */
-    setFocus(s);      /* halo + aura autour du bâtiment visé */
-    document.getElementById('scene-fx').classList.add('on');   /* spotlight sur la zone */
+    setFocus(s);      /* mise en valeur du seul bâtiment visé */
     document.querySelectorAll('.vbtn').forEach(function (b) { b.classList.toggle('on', b.dataset.v === 'site'); });
     showGestures();
 
@@ -594,9 +584,9 @@
         center: s.center, zoom: s.zoom || 16.8,
         pitch: state.is3d ? (s.pitch || 60) : 0,
         bearing: s.bearing || 0,
-        duration: 3400, curve: 1.42, essential: true,
-        /* décélération premium : la caméra glisse et se pose en douceur */
-        easing: function (t) { return 1 - Math.pow(1 - t, 4); }
+        duration: 3000, curve: 1.35, essential: true,
+        /* juste une décélération douce en fin de course, cadrage inchangé */
+        easing: function (t) { return 1 - Math.pow(1 - t, 3); }
       });
     }
 
@@ -639,7 +629,6 @@
     setMode('carte');  /* retour vue d'ensemble : fond clair lisible */
     updateCenters();
     clearFocus();
-    document.getElementById('scene-fx').classList.remove('on');
     document.getElementById('detail').style.display = 'none';
     document.getElementById('sites').style.display = 'flex';
     if (map) map.flyTo(Object.assign({ duration: 2200, essential: true }, HOME));
@@ -673,25 +662,29 @@
   }
   function setFocus(site) {
     if (!map || !map.getSource('focus')) return;
-    var hits = (site.structures || []).filter(function (b) { return b.key || (b.damage && b.damage !== 'intact'); });
-    var hit = hits[0];
-    var cen = site.center;
-    var targetFeats = [];
-    hits.forEach(function (b) {
-      if (b.footprint && b.footprint[0]) {
-        targetFeats.push({ type: 'Feature',
-          properties: { h: b.height || 8, damage: b.damage || 'endommage' },
-          geometry: { type: 'Polygon', coordinates: b.footprint } });
-      }
-    });
-    if (hit && hit.footprint && hit.footprint[0]) {
-      var ring = hit.footprint[0], cx = 0, cy = 0;
-      ring.forEach(function (p) { cx += p[0]; cy += p[1]; });
-      cen = [cx / ring.length, cy / ring.length];
+    /* UN SEUL bâtiment mis en valeur : le bâtiment clé (celui qui a été visé).
+       Priorité au flag key ; à défaut, le bâtiment touché le plus central. */
+    var structs = site.structures || [];
+    var hit = structs.filter(function (b) { return b.key; })[0];
+    if (!hit) {
+      var c0 = site.center;
+      var damaged = structs.filter(function (b) { return b.damage && b.damage !== 'intact' && b.footprint && b.footprint[0]; });
+      hit = damaged.sort(function (a, b) {
+        return dist2(cenOf(a), c0) - dist2(cenOf(b), c0);
+      })[0];
     }
-    map.getSource('focus').setData(ringPoly(cen, 55));
+    var cen = site.center, targetFeats = [];
+    if (hit && hit.footprint && hit.footprint[0]) {
+      cen = cenOf(hit);
+      targetFeats.push({ type: 'Feature',
+        properties: { h: hit.height || 8, damage: hit.damage || 'endommage' },
+        geometry: { type: 'Polygon', coordinates: hit.footprint } });
+    }
+    map.getSource('focus').setData(ringPoly(cen, 48));
     if (map.getSource('target')) map.getSource('target').setData({ type: 'FeatureCollection', features: targetFeats });
   }
+  function cenOf(b) { var r = b.footprint[0], x = 0, y = 0; r.forEach(function (p) { x += p[0]; y += p[1]; }); return [x / r.length, y / r.length]; }
+  function dist2(a, b) { var dx = a[0] - b[0], dy = a[1] - b[1]; return dx * dx + dy * dy; }
   function clearFocus() {
     if (map && map.getSource('focus')) map.getSource('focus').setData({ type: 'FeatureCollection', features: [] });
     if (map && map.getSource('target')) map.getSource('target').setData({ type: 'FeatureCollection', features: [] });
