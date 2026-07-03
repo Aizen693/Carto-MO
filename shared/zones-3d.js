@@ -279,9 +279,11 @@
     if (val) val.textContent = state.in3D && state.active ? state.active.name : (list.length ? 'Explorer' : 'Indispo.');
   }
   function onChipClick() {
-    // Infras 3D = la vue 3D dense et fluide, ouverte directement sur le pays.
-    var c = country();
-    window.location.href = '/carte/sites-3d/' + (c ? '?pays=' + encodeURIComponent(c) : '');
+    // Menu déroulant cohérent avec les autres chips (Pays, Période...) : on
+    // choisit l'infrastructure dans le popup, puis on ouvre sa vue 3D dense.
+    if (state.in3D) { exit3D(); return; }
+    var list = zonesFor(country());
+    if (list.length) openPicker(list, $('chip-3d'));
   }
 
   /* ─────────── Popover : choix du complexe (avec sévérité agrégée) ─────────── */
@@ -337,7 +339,7 @@
     pop.style.left = Math.max(8, Math.min(r.left, window.innerWidth - pop.offsetWidth - 8)) + 'px';
     pop.style.top = (r.bottom + 6) + 'px';
     pop.querySelectorAll('.fp-opt').forEach(function (el) {
-      el.onclick = function () { var z = list.find(function (x) { return x.id === el.getAttribute('data-id'); }); closePicker(); if (z) enter3D(z); };
+      el.onclick = function () { var z = list.find(function (x) { return x.id === el.getAttribute('data-id'); }); closePicker(); if (z) window.location.href = '/carte/sites-3d/?site=' + encodeURIComponent(z.id); };
     });
     setTimeout(function () { document.addEventListener('mousedown', outside); }, 0);
   }

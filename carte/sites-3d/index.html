@@ -416,19 +416,15 @@
     autoEnterFromParam();   /* pays reçu depuis /carte/ → on plonge direct dans son site principal */
   }
 
-  // Ouverture directe : si ?pays= est fourni, on entre dans la 3D du site le
-  // plus touché de ce pays, sans passer par la liste.
+  // Ouverture d'un site précis choisi dans le popup Infras 3D de /carte/
+  // (paramètre ?site=<id>). Sans ce paramètre, on reste sur la liste (pas de
+  // saut automatique sur un point).
   function autoEnterFromParam() {
-    var m = /[?&]pays=([^&]+)/.exec(location.search);
+    var m = /[?&]site=([^&]+)/.exec(location.search);
     if (!m) return;
-    var want = decodeURIComponent(m[1]).toLowerCase();
-    var rank = { detruit: 2, endommage: 1 };
-    var idx = null, best = -1;
-    SITES.forEach(function (s, i) {
-      if ((s.pays || '').toLowerCase().indexOf(want) !== 0) return;
-      var sc = (rank[s.status] || 0);
-      if (sc > best) { best = sc; idx = i; }
-    });
+    var want = decodeURIComponent(m[1]);
+    var idx = null;
+    SITES.forEach(function (s, i) { if (s.id === want) idx = i; });
     if (idx != null) selectSite(idx);
   }
 
