@@ -24,6 +24,14 @@
   *{box-sizing:border-box}
   html,body{margin:0;height:100%;background:#eef0f4;color:var(--tx);font-family:var(--jakarta);overflow:hidden}
   #map{position:absolute;inset:0}
+  /* Spotlight tactique : le pourtour s'assombrit, la zone d'intérêt (centre)
+     ressort. N'ajoute aucune couleur, juste de la profondeur. Actif en vue site. */
+  #scene-fx{position:absolute;inset:0;pointer-events:none;z-index:3;opacity:0;transition:opacity .9s ease}
+  #scene-fx.on{opacity:1}
+  #scene-fx::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(120% 90% at 50% 46%, transparent 34%, rgba(31,20,55,.16) 68%, rgba(20,12,38,.42) 100%)}
+  #scene-fx::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom, rgba(20,12,38,.10) 0%, transparent 22%, transparent 82%, rgba(20,12,38,.14) 100%)}
   /* Fond studio du mode maquette (le canvas Mapbox devient transparent
      quand le fond de carte est masqué) */
   #map.maq{background:radial-gradient(1300px 850px at 50% 42%,#FBFAF6 0%,#EFEBF4 55%,#E3DDEC 100%)}
@@ -120,6 +128,7 @@
 <body>
 
 <div id="map"></div>
+<div id="scene-fx"></div>
 <div id="loader"><div class="ring"></div><span>Chargement des sites</span></div>
 
 <header id="header">
@@ -195,19 +204,17 @@
     map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
 
     map.on('style.load', function () {
+      /* Brume profonde : premier plan net, le lointain se fond → sensation d'espace. */
       map.setFog({
-        color: 'rgb(244,242,248)', 'high-color': 'rgb(210,200,235)',
-        'horizon-blend': 0.06, 'space-color': 'rgb(233,230,242)', 'star-intensity': 0
+        range: [1.2, 12], color: 'rgb(246,244,250)', 'high-color': 'rgb(202,192,230)',
+        'horizon-blend': 0.03, 'space-color': 'rgb(224,220,238)', 'star-intensity': 0
       });
-      /* Pas de terrain DEM : sa résolution est trop grossière au zoom site et
-         l'exagération ondule les pistes et les routes (faux relief). Sol plat,
-         c'est la 3D des bâtiments qui porte le volume. */
-      /* Éclairage 3D : soleil directionnel avec ombres portées, c'est lui qui
-         donne du volume aux bâtiments (sinon : pavés plats). */
+      /* Soleil bas + ambiance basse = ombres portées longues et fort contraste de
+         volumes. C'est le principal levier de profondeur. */
       if (map.setLights) map.setLights([
-        { id: 'ambient', type: 'ambient', properties: { color: '#ffffff', intensity: 0.45 } },
+        { id: 'ambient', type: 'ambient', properties: { color: '#e9ecf6', intensity: 0.35 } },
         { id: 'sun', type: 'directional', properties: {
-            color: '#fff6e8', intensity: 0.9, direction: [215, 40],
+            color: '#fff4e2', intensity: 1.0, direction: [222, 20],
             'cast-shadows': true, 'shadow-intensity': 1 } }
       ]);
     });
@@ -264,7 +271,11 @@
       tileSize: 256, maxzoom: 16,
       attribution: 'Imagerie © Esri, Maxar, Earthstar Geographics' });
     map.addLayer({ id: 'sat', type: 'raster', source: 'sat',
-      layout: { visibility: 'none' }, paint: { 'raster-opacity': 1 } },
+      layout: { visibility: 'none' },
+      /* Traitement tactique : contraste renforcé, imagerie légèrement désaturée
+         et assombrie → les volumes 3D et la cible ressortent, lecture plus nette. */
+      paint: { 'raster-opacity': 1, 'raster-contrast': 0.12, 'raster-saturation': -0.28,
+               'raster-brightness-max': 0.86, 'raster-brightness-min': 0.02, 'raster-fade-duration': 300 } },
       firstSymbolId());
 
     /* Bâtiments OSM de la ville (contexte, via le style light) */
@@ -319,6 +330,7 @@
     map.addSource('centers', { type: 'geojson', data: { type: 'FeatureCollection', features: centers } });
     map.addSource('hits', { type: 'geojson', data: { type: 'FeatureCollection', features: hits } });
     map.addSource('focus', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+    map.addSource('target', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
 
     /* Halo de focus au sol autour du bâtiment visé : anneau discret, statique */
     map.addLayer({
@@ -350,7 +362,6 @@
         'fill-extrusion-edge-radius': 0.4,
         'fill-extrusion-ambient-occlusion-intensity': 0.5,
         'fill-extrusion-ambient-occlusion-radius': 4,
-        'fill-extrusion-ambient-occlusion-ground-radius': 2,
         /* Les bâtiments touchés restent saturés même à l'ombre ; le bâtiment
            survolé s'illumine (feature-state hover) */
         'fill-extrusion-emissive-strength': ['case',
@@ -359,6 +370,29 @@
         'fill-extrusion-height-transition': { duration: 900, delay: 0 }
       }
     });
+
+    /* ── Traitement PREMIUM du bâtiment visé ──
+       Contour net au sol + aura verticale translucide lumineuse qui s'élève
+       au-dessus de la cible : elle se détache en volume, pas juste en couleur. */
+    map.addLayer({
+      id: 'target-outline', type: 'line', source: 'target',
+      paint: {
+        'line-color': '#2E84D4', 'line-width': ['interpolate', ['linear'], ['zoom'], 14, 1.5, 17, 3.5],
+        'line-opacity': 0.9, 'line-blur': 0.4
+      }
+    });
+    map.addLayer({
+      id: 'target-glow', type: 'fill-extrusion', source: 'target',
+      paint: {
+        'fill-extrusion-color': ['match', ['get', 'damage'], 'detruit', '#E8564C', '#F08A3C'],
+        'fill-extrusion-base': ['get', 'h'],
+        'fill-extrusion-height': ['*', ['get', 'h'], 2.1],
+        'fill-extrusion-opacity': 0.16,
+        'fill-extrusion-emissive-strength': 1,
+        'fill-extrusion-height-transition': { duration: 700, delay: 0 }
+      }
+    });
+
     /* Courbes de niveau réelles (terrain-v2) : le relief en filigrane,
        visible uniquement en mode maquette */
     map.addLayer({
@@ -545,7 +579,8 @@
     state.site = i;
     setMode('sat');   /* au niveau site : satellite réel + bâtiments denses (jamais de vide) */
     updateCenters();  /* le marqueur du site disparaît une fois plongé */
-    setFocus(s);      /* halo discret autour du bâtiment visé */
+    setFocus(s);      /* halo + aura autour du bâtiment visé */
+    document.getElementById('scene-fx').classList.add('on');   /* spotlight sur la zone */
     document.querySelectorAll('.vbtn').forEach(function (b) { b.classList.toggle('on', b.dataset.v === 'site'); });
     showGestures();
 
@@ -559,7 +594,9 @@
         center: s.center, zoom: s.zoom || 16.8,
         pitch: state.is3d ? (s.pitch || 60) : 0,
         bearing: s.bearing || 0,
-        duration: 3000, curve: 1.35, essential: true
+        duration: 3400, curve: 1.42, essential: true,
+        /* décélération premium : la caméra glisse et se pose en douceur */
+        easing: function (t) { return 1 - Math.pow(1 - t, 4); }
       });
     }
 
@@ -602,6 +639,7 @@
     setMode('carte');  /* retour vue d'ensemble : fond clair lisible */
     updateCenters();
     clearFocus();
+    document.getElementById('scene-fx').classList.remove('on');
     document.getElementById('detail').style.display = 'none';
     document.getElementById('sites').style.display = 'flex';
     if (map) map.flyTo(Object.assign({ duration: 2200, essential: true }, HOME));
@@ -624,7 +662,7 @@
   /* Trois fonds : carte (style clair), satellite (imagerie seule sous les
      volumes, aplats vectoriels masqués), maquette (RIEN d'autre que les
      données Algor Int : dalle + volumes sur fond studio, orbite lente). */
-  var OWN_LAYERS = { sat: 1, 'city-3d': 1, 'structures-3d': 1, 'perims': 1, 'perims-fill': 1, hits: 1, centers: 1, 'centers-lb': 1, 'maq-contours': 1, 'focus-fill': 1, 'focus-line': 1 };
+  var OWN_LAYERS = { sat: 1, 'city-3d': 1, 'structures-3d': 1, 'perims': 1, 'perims-fill': 1, hits: 1, centers: 1, 'centers-lb': 1, 'maq-contours': 1, 'focus-fill': 1, 'focus-line': 1, 'target-outline': 1, 'target-glow': 1 };
 
   /* Cercle géographique (rayon en mètres) pour le halo de focus */
   function ringPoly(center, radiusM) {
@@ -635,16 +673,29 @@
   }
   function setFocus(site) {
     if (!map || !map.getSource('focus')) return;
-    var hit = (site.structures || []).filter(function (b) { return b.key || (b.damage && b.damage !== 'intact'); })[0];
+    var hits = (site.structures || []).filter(function (b) { return b.key || (b.damage && b.damage !== 'intact'); });
+    var hit = hits[0];
     var cen = site.center;
+    var targetFeats = [];
+    hits.forEach(function (b) {
+      if (b.footprint && b.footprint[0]) {
+        targetFeats.push({ type: 'Feature',
+          properties: { h: b.height || 8, damage: b.damage || 'endommage' },
+          geometry: { type: 'Polygon', coordinates: b.footprint } });
+      }
+    });
     if (hit && hit.footprint && hit.footprint[0]) {
       var ring = hit.footprint[0], cx = 0, cy = 0;
       ring.forEach(function (p) { cx += p[0]; cy += p[1]; });
       cen = [cx / ring.length, cy / ring.length];
     }
     map.getSource('focus').setData(ringPoly(cen, 55));
+    if (map.getSource('target')) map.getSource('target').setData({ type: 'FeatureCollection', features: targetFeats });
   }
-  function clearFocus() { if (map && map.getSource('focus')) map.getSource('focus').setData({ type: 'FeatureCollection', features: [] }); }
+  function clearFocus() {
+    if (map && map.getSource('focus')) map.getSource('focus').setData({ type: 'FeatureCollection', features: [] });
+    if (map && map.getSource('target')) map.getSource('target').setData({ type: 'FeatureCollection', features: [] });
+  }
   /* Décor maquette : la VRAIE géographie restylée en rendu « clay ».
      Sol sable uniforme, routes réelles en rubans blancs, eau réelle en bleu
      mat, relief conservé, zéro étiquette. Rien d'inventé : seul le style
