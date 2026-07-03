@@ -51,6 +51,9 @@
   .dot{width:9px;height:9px;border-radius:50%;flex:none}
   .site-name{flex:1;font:600 12.5px/1.3 var(--jakarta);color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .site-st{font:700 8px/1 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .site-prio{font:800 7.5px/1 var(--jakarta);letter-spacing:.11em;text-transform:uppercase;flex:none;
+    padding:4px 7px;border-radius:6px;background:rgba(123,90,189,.06);white-space:nowrap}
+  .grp-prio{color:var(--violet);border-bottom:2px solid var(--violet);margin:0 8px 2px;padding-left:2px}
 
   #detail{display:none;flex:0 1 auto;min-height:0;flex-direction:column;overflow:hidden}
   #detail .d-head{padding:13px 15px 12px;border-bottom:1px solid var(--ln-soft)}
@@ -274,8 +277,10 @@
         'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 13, 0, 14.2, ['get', 'height']],
         'fill-extrusion-base': ['case', ['>=', ['get', 'min_height'], 0], ['get', 'min_height'], 0],
         'fill-extrusion-opacity': 1,
-        'fill-extrusion-ambient-occlusion-intensity': 0.35,
-        'fill-extrusion-ambient-occlusion-radius': 3,
+        'fill-extrusion-vertical-gradient': true,
+        'fill-extrusion-edge-radius': 0.35,
+        'fill-extrusion-ambient-occlusion-intensity': 0.4,
+        'fill-extrusion-ambient-occlusion-radius': 3.5,
         'fill-extrusion-height-transition': { duration: 900, delay: 0 }
       }
     });
@@ -313,6 +318,17 @@
     map.addSource('perims', { type: 'geojson', data: { type: 'FeatureCollection', features: perims } });
     map.addSource('centers', { type: 'geojson', data: { type: 'FeatureCollection', features: centers } });
     map.addSource('hits', { type: 'geojson', data: { type: 'FeatureCollection', features: hits } });
+    map.addSource('focus', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+
+    /* Halo de focus au sol autour du bâtiment visé : anneau discret, statique */
+    map.addLayer({
+      id: 'focus-fill', type: 'fill', source: 'focus',
+      paint: { 'fill-color': '#6B3FA0', 'fill-opacity': 0.07 }
+    });
+    map.addLayer({
+      id: 'focus-line', type: 'line', source: 'focus',
+      paint: { 'line-color': '#6B3FA0', 'line-width': 1.6, 'line-opacity': 0.55 }
+    });
 
     map.addLayer({
       id: 'perims-fill', type: 'fill', source: 'perims', minzoom: 12,
@@ -330,8 +346,11 @@
         'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 11.5, 0, 13, ['get', 'h']],
         'fill-extrusion-base': 0,
         'fill-extrusion-opacity': 1,
-        'fill-extrusion-ambient-occlusion-intensity': 0.45,
-        'fill-extrusion-ambient-occlusion-radius': 3.5,
+        'fill-extrusion-vertical-gradient': true,
+        'fill-extrusion-edge-radius': 0.4,
+        'fill-extrusion-ambient-occlusion-intensity': 0.5,
+        'fill-extrusion-ambient-occlusion-radius': 4,
+        'fill-extrusion-ambient-occlusion-ground-radius': 2,
         /* Les bâtiments touchés restent saturés même à l'ombre ; le bâtiment
            survolé s'illumine (feature-state hover) */
         'fill-extrusion-emissive-strength': ['case',
@@ -435,27 +454,72 @@
   }
 
   /* ─────────── Panneau ─────────── */
+  /* ─── Score décisionnel : quoi regarder en premier ───
+     gravité (détruit>endommagé) + récence (dernier incident) + répétition
+     (nb d'incidents) + corroboration OSINT. 100% sur les données réelles. */
+  var REFDATE = null;
+  function computeScores() {
+    var maxd = '';
+    SITES.forEach(function (s) { (s.events || []).forEach(function (e) { if (e.date && e.date > maxd) maxd = e.date; }); });
+    REFDATE = maxd ? new Date(maxd) : null;
+    SITES.forEach(function (s) {
+      var evs = s.events || [];
+      var grav = s.status === 'detruit' ? 3 : (s.status === 'endommage' ? 2 : 1);
+      var rep = Math.min(evs.length, 5);
+      var corr = evs.some(function (e) { return e.corrobore; }) ? 2 : 0;
+      var last = evs.map(function (e) { return e.date; }).filter(Boolean).sort().pop();
+      var rec = 0;
+      if (last && REFDATE) {
+        var days = (REFDATE - new Date(last)) / 864e5;
+        rec = days < 7 ? 4 : days < 30 ? 3 : days < 90 ? 2 : 1;
+      }
+      s._score = grav * 3 + rec + rep + corr;
+    });
+    /* Seuils par percentile : prioritaire = top ~18%, élevé = ~42% suivants */
+    var sorted = SITES.map(function (s) { return s._score; }).sort(function (a, b) { return b - a; });
+    var n = sorted.length;
+    var pHi = sorted[Math.floor(n * 0.18)] || 0, pMid = sorted[Math.floor(n * 0.60)] || 0;
+    SITES.forEach(function (s) {
+      s._tier = s._score >= pHi ? 'PRIORITAIRE' : s._score >= pMid ? 'ÉLEVÉ' : 'MODÉRÉ';
+    });
+  }
+  function tierColor(t) { return t === 'PRIORITAIRE' ? DMG_COLOR.detruit : t === 'ÉLEVÉ' ? DMG_COLOR.endommage : '#9089AA'; }
+
+  function siteRow(i) {
+    var s = SITES[i];
+    var b = document.createElement('button');
+    b.className = 'site';
+    b.innerHTML =
+      '<span class="dot" style="background:' + (s.status === 'detruit' ? DMG_COLOR.detruit : DMG_COLOR.endommage) + '"></span>' +
+      '<span class="site-name">' + esc(s.name.replace(/\s*[—-]\s*/g, ' · ')) + '</span>' +
+      '<span class="site-prio" style="color:' + tierColor(s._tier) + '">' + s._tier + '</span>';
+    b.addEventListener('click', function () { selectSite(i); });
+    return b;
+  }
+
   function buildList() {
+    computeScores();
     document.getElementById('site-count').textContent = SITES.length;
     var host = document.getElementById('site-list');
     host.innerHTML = '';
+    var idxs = SITES.map(function (_, i) { return i; });
+
+    /* Section PRIORITÉ : les sites à traiter en premier, tous pays confondus */
+    var top = idxs.slice().sort(function (a, b) { return SITES[b]._score - SITES[a]._score; }).slice(0, 6);
+    var gh = document.createElement('div');
+    gh.className = 'grp grp-prio'; gh.textContent = 'Priorité · à traiter en premier';
+    host.appendChild(gh);
+    top.forEach(function (i) { host.appendChild(siteRow(i)); });
+
+    /* Groupes par pays, triés par score décroissant */
     var byPays = {};
-    SITES.forEach(function (s, i) { (byPays[s.pays] = byPays[s.pays] || []).push(i); });
+    idxs.forEach(function (i) { (byPays[SITES[i].pays] = byPays[SITES[i].pays] || []).push(i); });
     Object.keys(byPays).sort().forEach(function (pays) {
       var g = document.createElement('div');
       g.className = 'grp'; g.textContent = pays; g.setAttribute('data-pays', pays);
       host.appendChild(g);
-      byPays[pays].forEach(function (i) {
-        var s = SITES[i];
-        var b = document.createElement('button');
-        b.className = 'site';
-        b.innerHTML =
-          '<span class="dot" style="background:' + (s.status === 'detruit' ? DMG_COLOR.detruit : DMG_COLOR.endommage) + '"></span>' +
-          '<span class="site-name">' + esc(s.name.replace(/\s*[—-]\s*/g, ' · ')) + '</span>' +
-          '<span class="site-st">' + (s.status === 'detruit' ? 'détruit' : 'endom.') + '</span>';
-        b.addEventListener('click', function () { selectSite(i); });
-        host.appendChild(b);
-      });
+      byPays[pays].sort(function (a, b) { return SITES[b]._score - SITES[a]._score; })
+        .forEach(function (i) { host.appendChild(siteRow(i)); });
     });
     focusFromParam();
   }
@@ -481,6 +545,7 @@
     state.site = i;
     setMode('sat');   /* au niveau site : satellite réel + bâtiments denses (jamais de vide) */
     updateCenters();  /* le marqueur du site disparaît une fois plongé */
+    setFocus(s);      /* halo discret autour du bâtiment visé */
     document.querySelectorAll('.vbtn').forEach(function (b) { b.classList.toggle('on', b.dataset.v === 'site'); });
     showGestures();
 
@@ -536,6 +601,7 @@
     state.site = null;
     setMode('carte');  /* retour vue d'ensemble : fond clair lisible */
     updateCenters();
+    clearFocus();
     document.getElementById('detail').style.display = 'none';
     document.getElementById('sites').style.display = 'flex';
     if (map) map.flyTo(Object.assign({ duration: 2200, essential: true }, HOME));
@@ -558,7 +624,27 @@
   /* Trois fonds : carte (style clair), satellite (imagerie seule sous les
      volumes, aplats vectoriels masqués), maquette (RIEN d'autre que les
      données Algor Int : dalle + volumes sur fond studio, orbite lente). */
-  var OWN_LAYERS = { sat: 1, 'city-3d': 1, 'structures-3d': 1, 'perims': 1, 'perims-fill': 1, hits: 1, centers: 1, 'centers-lb': 1, 'maq-contours': 1 };
+  var OWN_LAYERS = { sat: 1, 'city-3d': 1, 'structures-3d': 1, 'perims': 1, 'perims-fill': 1, hits: 1, centers: 1, 'centers-lb': 1, 'maq-contours': 1, 'focus-fill': 1, 'focus-line': 1 };
+
+  /* Cercle géographique (rayon en mètres) pour le halo de focus */
+  function ringPoly(center, radiusM) {
+    var lng = center[0], lat = center[1];
+    var dx = radiusM / (111320 * Math.cos(lat * Math.PI / 180)), dy = radiusM / 110540, r = [];
+    for (var i = 0; i <= 48; i++) { var a = i / 48 * 6.2832; r.push([lng + dx * Math.cos(a), lat + dy * Math.sin(a)]); }
+    return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [r] }, properties: {} };
+  }
+  function setFocus(site) {
+    if (!map || !map.getSource('focus')) return;
+    var hit = (site.structures || []).filter(function (b) { return b.key || (b.damage && b.damage !== 'intact'); })[0];
+    var cen = site.center;
+    if (hit && hit.footprint && hit.footprint[0]) {
+      var ring = hit.footprint[0], cx = 0, cy = 0;
+      ring.forEach(function (p) { cx += p[0]; cy += p[1]; });
+      cen = [cx / ring.length, cy / ring.length];
+    }
+    map.getSource('focus').setData(ringPoly(cen, 55));
+  }
+  function clearFocus() { if (map && map.getSource('focus')) map.getSource('focus').setData({ type: 'FeatureCollection', features: [] }); }
   /* Décor maquette : la VRAIE géographie restylée en rendu « clay ».
      Sol sable uniforme, routes réelles en rubans blancs, eau réelle en bleu
      mat, relief conservé, zéro étiquette. Rien d'inventé : seul le style
