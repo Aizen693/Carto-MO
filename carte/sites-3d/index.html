@@ -484,16 +484,18 @@
     document.querySelectorAll('.vbtn').forEach(function (b) { b.classList.toggle('on', b.dataset.v === 'site'); });
     showGestures();
 
-    /* La bascule « Google Maps » : plongée cinématique, les volumes se dressent
-       en franchissant le zoom, puis l'orbite démarre. */
+    /* Plongée cinématique sur le site, puis on rend la main : navigation libre
+       (glisser = déplacer, Ctrl/clic droit + glisser = pivoter et incliner,
+       molette = zoomer). Pas d'orbite auto qui bloquerait les déplacements ;
+       l'orbite reste disponible à la demande via le bouton « Orbite ». */
     if (map) {
+      stopOrbit();
       map.flyTo({
         center: s.center, zoom: s.zoom || 16.8,
         pitch: state.is3d ? (s.pitch || 60) : 0,
         bearing: s.bearing || 0,
         duration: 3000, curve: 1.35, essential: true
       });
-      map.once('moveend', function () { if (state.site === i) startOrbit(); });
     }
 
     document.getElementById('sites').style.display = 'none';
@@ -707,7 +709,7 @@
     var g = document.getElementById('gestures');
     g.classList.add('show');
     clearTimeout(gesturesTimer);
-    gesturesTimer = setTimeout(function () { g.classList.remove('show'); }, 6000);
+    gesturesTimer = setTimeout(function () { g.classList.remove('show'); }, 9000);
   }
 
   /* Marqueurs de sites : visibles seulement en vue d'ensemble */
