@@ -612,6 +612,39 @@
     }
   }
 
+  /* Étiquettes lisibles sur satellite : encre foncée + halo blanc, couleurs
+     d'origine sauvegardées puis restaurées en quittant le mode. */
+  var LBL_SAVED = null;
+  function applySatLabels(on) {
+    if (on) {
+      if (LBL_SAVED) return;
+      LBL_SAVED = {};
+      map.getStyle().layers.forEach(function (l) {
+        if (l.type !== 'symbol' || OWN_LAYERS[l.id]) return;
+        var s = {
+          color: map.getPaintProperty(l.id, 'text-color'),
+          halo: map.getPaintProperty(l.id, 'text-halo-color'),
+          hw: map.getPaintProperty(l.id, 'text-halo-width')
+        };
+        try {
+          map.setPaintProperty(l.id, 'text-color', '#1F1437');
+          map.setPaintProperty(l.id, 'text-halo-color', 'rgba(255,255,255,0.95)');
+          map.setPaintProperty(l.id, 'text-halo-width', 1.6);
+          LBL_SAVED[l.id] = s;
+        } catch (e) { /* couche sans texte */ }
+      });
+    } else if (LBL_SAVED) {
+      Object.keys(LBL_SAVED).forEach(function (id) {
+        if (!map.getLayer(id)) return;
+        var s = LBL_SAVED[id];
+        map.setPaintProperty(id, 'text-color', s.color);
+        map.setPaintProperty(id, 'text-halo-color', s.halo);
+        map.setPaintProperty(id, 'text-halo-width', s.hw);
+      });
+      LBL_SAVED = null;
+    }
+  }
+
   function setMode(mode) {
     state.mode = mode;
     document.getElementById('btn-sat').classList.toggle('on', mode === 'sat');
@@ -624,11 +657,13 @@
       if (!OWN_LAYERS[l.id]) map.setLayoutProperty(l.id, 'visibility', 'visible');
     });
     map.setLayoutProperty('sat', 'visibility', mode === 'sat' ? 'visible' : 'none');
+    applySatLabels(false);   /* toujours restaurer avant d'appliquer le mode cible */
     if (mode === 'sat') {
       map.getStyle().layers.forEach(function (l) {
         if (OWN_LAYERS[l.id]) return;
         map.setLayoutProperty(l.id, 'visibility', l.type === 'symbol' ? 'visible' : 'none');
       });
+      applySatLabels(true);
     } else if (mode === 'maq') {
       applyMaqBase(true);
     }
