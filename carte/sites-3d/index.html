@@ -131,10 +131,6 @@
     </div>
   </a>
   <div class="spacer"></div>
-  <button class="hbtn" id="btn-maq" title="Rendu maquette : uniquement les données Algor Int">Maquette</button>
-  <button class="hbtn" id="btn-sat" title="Fond satellite">Satellite</button>
-  <button class="hbtn on" id="btn-3d" title="Basculer la perspective">Vue 3D</button>
-  <button class="hbtn" id="btn-reset" title="Vue d'ensemble des sites">Vue générale</button>
 </header>
 
 <aside id="panel">
@@ -634,20 +630,6 @@
     if (map) map.flyTo(Object.assign({ duration: 2200, essential: true }, HOME));
   });
 
-  /* ─────────── Bascules ─────────── */
-  document.getElementById('btn-3d').addEventListener('click', function () {
-    state.is3d = !state.is3d;
-    this.classList.toggle('on', state.is3d);
-    this.textContent = state.is3d ? 'Vue 3D' : 'Vue 2D';
-    if (!map || !mapReady) return;
-    map.easeTo({ pitch: state.is3d ? 60 : 0, duration: 1000 });
-    /* Aplatissement façon Google : les volumes retombent en 2D */
-    var z = ['interpolate', ['linear'], ['zoom'], 13.5, 0, 15, ['get', 'h']];
-    map.setPaintProperty('structures-3d', 'fill-extrusion-height', state.is3d ? z : 0);
-    map.setPaintProperty('city-3d', 'fill-extrusion-height',
-      state.is3d ? ['interpolate', ['linear'], ['zoom'], 14, 0, 15.2, ['get', 'height']] : 0);
-  });
-
   /* Trois fonds : carte (style clair), satellite (imagerie seule sous les
      volumes, aplats vectoriels masqués), maquette (RIEN d'autre que les
      données Algor Int : dalle + volumes sur fond studio, orbite lente). */
@@ -775,8 +757,6 @@
 
   function setMode(mode) {
     state.mode = mode;
-    document.getElementById('btn-sat').classList.toggle('on', mode === 'sat');
-    document.getElementById('btn-maq').classList.toggle('on', mode === 'maq');
     if (mode !== 'maq') stopOrbit();
     if (!map || !mapReady || !map.getLayer('sat')) return;
     /* Retour à l'état de base du style, puis application du mode cible */
@@ -806,11 +786,6 @@
     map.setPaintProperty('perims', 'line-dasharray', mode === 'maq' ? [1, 0] : [2.2, 1.6]);
     map.setPaintProperty('perims', 'line-width', mode === 'maq' ? 3 : 2.5);
   }
-  document.getElementById('btn-sat').addEventListener('click', function () { setMode(state.mode === 'sat' ? 'carte' : 'sat'); });
-  document.getElementById('btn-maq').addEventListener('click', function () {
-    setMode(state.mode === 'maq' ? 'carte' : 'maq');
-    if (state.mode === 'maq' && state.site != null) startOrbit();
-  });
 
   /* Perspectives : bascule fluide entre points de vue sur le site courant */
   function goView(kind) {
@@ -861,11 +836,6 @@
     })();
   }
   function stopOrbit() { state.orbiting = false; }
-
-  document.getElementById('btn-reset').addEventListener('click', function () {
-    setMode('carte');
-    if (map) map.flyTo(Object.assign({ duration: 2200, essential: true }, HOME));
-  });
 
   /* ─────────── Utilitaires ─────────── */
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
