@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 3D · bâtiment cible (Three.js)</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
+<style>
+  html,body,#map{margin:0;height:100%;width:100%;font-family:system-ui}
+  #hint{position:absolute;left:14px;top:14px;z-index:5;background:#fff;border-radius:10px;
+    padding:9px 13px;font:600 12px system-ui;color:#4A4460;box-shadow:0 8px 26px -8px rgba(46,24,87,.3);max-width:300px}
+  #hint b{color:#6B3FA0}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="hint"><b>Lab 3D</b> · aéroport de Niamey. Le bâtiment <b>cible</b> (terracotta, arêtes nettes, halo) est un vrai maillage Three.js. Les autres sont les extrusions Mapbox standard. Compare la crédibilité. Ctrl+glisser pour tourner.</div>
+
+<script type="module">
+import * as THREE from 'https://esm.sh/three@0.160.0';
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+
+/* Cible : un bâtiment de l'aéroport de Niamey (coord réelle) */
+var TARGET = { lng: 2.17240, lat: 13.48160, w: 46, d: 20, h: 13, color: 0xC45A3C };
+
+var map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-streets-v12',
+  center: [TARGET.lng, TARGET.lat], zoom: 16.4, pitch: 62, bearing: 24, antialias: true
+});
+
+map.on('style.load', function () {
+  map.setFog({ color: 'rgb(244,242,248)', 'high-color': 'rgb(210,200,235)', 'horizon-blend': 0.06, 'star-intensity': 0 });
+  if (map.setLights) map.setLights([
+    { id: 'a', type: 'ambient', properties: { color: '#ffffff', intensity: 0.5 } },
+    { id: 's', type: 'directional', properties: { color: '#fff6ea', intensity: 0.85, direction: [216, 42], 'cast-shadows': true, 'shadow-intensity': 0.7 } }
+  ]);
+
+  /* Contexte : extrusions Mapbox standard (comme ta scène actuelle) */
+  map.addLayer({
+    id: 'ctx', type: 'fill-extrusion', source: 'composite', 'source-layer': 'building', minzoom: 14,
+    filter: ['==', ['get', 'extrude'], 'true'],
+    paint: {
+      'fill-extrusion-color': '#EFE9DC',
+      'fill-extrusion-height': ['get', 'height'],
+      'fill-extrusion-base': ['get', 'min_height'],
+      'fill-extrusion-opacity': 1,
+      'fill-extrusion-vertical-gradient': true,
+      'fill-extrusion-edge-radius': 0.35,
+      'fill-extrusion-ambient-occlusion-intensity': 0.4,
+      'fill-extrusion-ambient-occlusion-radius': 3.5
+    }
+  });
+
+  /* Anneau de focus au sol (natif, comme ta scène) */
+  var ring = ringPoly([TARGET.lng, TARGET.lat], 42);
+  map.addSource('focus', { type: 'geojson', data: ring });
+  map.addLayer({ id: 'focus-fill', type: 'fill', source: 'focus', paint: { 'fill-color': '#6B3FA0', 'fill-opacity': 0.08 } });
+  map.addLayer({ id: 'focus-line', type: 'line', source: 'focus', paint: { 'line-color': '#6B3FA0', 'line-width': 1.6, 'line-opacity': 0.6 } });
+
+  map.addLayer(makeTargetLayer());
+});
+
+function ringPoly(c, rM) {
+  var dx = rM / (111320 * Math.cos(c[1] * Math.PI / 180)), dy = rM / 110540, r = [];
+  for (var i = 0; i <= 48; i++) { var a = i / 48 * 6.2832; r.push([c[0] + dx * Math.cos(a), c[1] + dy * Math.sin(a)]); }
+  return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [r] }, properties: {} };
+}
+
+/* ── Couche custom Three.js : le bâtiment cible en vrai maillage 3D ── */
+function makeTargetLayer() {
+  var origin = mapboxgl.MercatorCoordinate.fromLngLat([TARGET.lng, TARGET.lat], 0);
+  var scale = origin.meterInMercatorCoordinateUnits();
+  var t = { x: origin.x, y: origin.y, z: origin.z, rx: Math.PI / 2, scale: scale };
+
+  return {
+    id: 'target-3d', type: 'custom', renderingMode: '3d',
+    onAdd: function (m, gl) {
+      this.cam = new THREE.Camera();
+      this.scene = new THREE.Scene();
+      this.scene.add(new THREE.AmbientLight(0xffffff, 1.4));
+      var sun = new THREE.DirectionalLight(0xfff4e2, 2.6); sun.position.set(-0.7, 1.2, -0.6); this.scene.add(sun);
+      var sky = new THREE.DirectionalLight(0xdfe3f2, 0.6); sky.position.set(0.4, 0.6, 0.8); this.scene.add(sky);
+
+      /* Corps : boîte, matériau mat premium, base au sol (y de 0 à h) */
+      var geo = new THREE.BoxGeometry(TARGET.w, TARGET.h, TARGET.d);
+      geo.translate(0, TARGET.h / 2, 0);
+      var mat = new THREE.MeshStandardMaterial({ color: TARGET.color, roughness: 0.62, metalness: 0.05,
+        emissive: new THREE.Color(TARGET.color), emissiveIntensity: 0.22 });
+      var body = new THREE.Mesh(geo, mat);
+
+      /* Arêtes nettes : ce qui donne le côté « objet rendu » vs bloc plat */
+      var edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo),
+        new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 }));
+
+      /* Toit accent (fine dalle sombre) pour la lecture de la masse */
+      var roof = new THREE.Mesh(new THREE.BoxGeometry(TARGET.w * 1.01, 0.6, TARGET.d * 1.01),
+        new THREE.MeshStandardMaterial({ color: 0x8f3f29, roughness: 0.5 }));
+      roof.position.y = TARGET.h;
+
+      this.group = new THREE.Group();
+      this.group.add(body); this.group.add(edges); this.group.add(roof);
+      this.scene.add(this.group);
+
+      this.renderer = new THREE.WebGLRenderer({ canvas: m.getCanvas(), context: gl, antialias: true });
+      this.renderer.autoClear = false;
+      this.map = m;
+    },
+    render: function (gl, matrix) {
+      var rx = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(1, 0, 0), t.rx);
+      var l = new THREE.Matrix4()
+        .makeTranslation(t.x, t.y, t.z)
+        .scale(new THREE.Vector3(t.scale, -t.scale, t.scale))
+        .multiply(rx);
+      this.cam.projectionMatrix = new THREE.Matrix4().fromArray(matrix).multiply(l);
+      this.renderer.resetState();
+      this.renderer.render(this.scene, this.cam);
+      this.map.triggerRepaint();
+    }
+  };
+}
+</script>
+</body>
+</html>
