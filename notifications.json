@@ -1,6 +1,131 @@
 {
-  "updated": "2026-07-02",
+  "updated": "2026-07-03",
   "items": [
+    {
+      "id": "u-theguardian-com-business-live-2026-jul-03-oil-price-fall-strait-of-hor",
+      "date": "2026-07-03",
+      "theatre": "moyen-orient",
+      "severite": "alerte",
+      "source": "The Guardian",
+      "source_url": "https://www.theguardian.com/business/live/2026/jul/03/oil-price-fall-strait-of-hormuz-traffic-jumps-food-price-inflation-services-sector-live-news-updates",
+      "image": "",
+      "titre": "Trafic maritime multiplié dans le détroit d'Ormuz menace la stabilité énergétique",
+      "resume": "Le trafic maritime dans le détroit d'Ormuz a quadruplé en une semaine, augmentant les risques de perturbations géopolitiques.",
+      "detail": "Cette hausse coïncide avec la trêve de 60 jours entre les États-Unis et l'Iran, ce qui pourrait influencer les dynamiques régionales. Une escalade ou un incident pourrait perturber les approvisionnements pétroliers mondiaux. Les acteurs maritimes et énergétiques doivent surveiller les annonces officielles pour anticiper des mesures de sécurité renforcées.",
+      "lieu": "Détroit d'Ormuz, Iran",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque accru d'incidents maritimes dans une zone stratégique",
+        "Impact potentiel sur les cours du pétrole",
+        "Nécéssité d'évaluer la vulnérabilité des chaînes logistiques"
+      ],
+      "recommandations": [
+        "Renforcer le suivi des alertes maritimes par les navires",
+        "Évaluer les stocks stratégiques de carburant",
+        "Coordonner avec les acteurs locaux pour sécuriser les infrastructures portuaires"
+      ]
+    },
+    {
+      "id": "u-jeuneafrique-com-1807954-politique-mahmoud-dicko-et-les-jihadistes-les",
+      "date": "2026-07-03",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "JeuneAfrique.comGabon - JeuneAfrique.com",
+      "source_url": "https://www.jeuneafrique.com/1807954/politique/mahmoud-dicko-et-les-jihadistes-les-liaisons-dangereuses-de-limam-malien/",
+      "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2026/07/01/jad20260701-ass-mali-enquete-dicko-liaisons-dangereuses-2.jpg",
+      "titre": "Mahmoud Dicko acteur clé des réseaux islamistes au Mali",
+      "resume": "L'imam Mahmoud Dicko entretient des liens avec des figures jihadistes et des cercles wahhabites, renforçant son influence politique et religieuse.",
+      "detail": "Dicko, proche de chefs jihadistes, pourrait jouer un rôle dans les dynamiques de radicalisation du Sahel. Son réseau religieux et politique est un atout pour les groupes armés, mais aussi un levier pour l'État. Une analyse approfondie de ses alliances est cruciale pour comprendre les équilibres locaux.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Risque de radicalisation accrue dans les communautés",
+        "Potentiel de légitimation des groupes armés",
+        "Nécéssité de surveiller les réseaux de financement"
+      ],
+      "recommandations": [
+        "Cartographier les réseaux de Dicko et leurs connexions",
+        "Renforcer les programmes de contre-radicalisation ciblés",
+        "Coordonner avec les autorités maliennes pour un suivi rapproché"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-aes-quitte-cpi-mali-niger-burkina",
+      "date": "2026-07-03",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-quitte-cpi-mali-niger-burkina/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22226.jpg",
+      "titre": "Mali Niger Burkina Faso quittent la CPI renforçant l'isolement juridique",
+      "resume": "Les trois pays de l'Alliance des États du Sahel officialisent leur retrait de la Cour pénale internationale.",
+      "detail": "Cette décision s'inscrit dans une stratégie de rejet des institutions internationales perçues comme partiales. Elle pourrait compliquer les enquêtes sur les crimes de guerre et crimes contre l'humanité dans la région. Les acteurs humanitaires et diplomatiques devront adapter leurs stratégies.",
+      "lieu": "Mali, Niger, Burkina Faso",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Diminution de la pression judiciaire internationale",
+        "Risque de violations accrues des droits humains",
+        "Complexification des mécanismes de coopération judiciaire"
+      ],
+      "recommandations": [
+        "Analyser les conséquences juridiques pour les missions humanitaires",
+        "Identifier les alternatives locales pour la justice transitionnelle",
+        "Renforcer les partenariats avec les organisations régionales"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-parlement-confederal-aes-mise-en-place",
+      "date": "2026-07-03",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/parlement-confederal-aes-mise-en-place/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22220.jpg",
+      "titre": "Mise en place du Parlement confédéral de l'AES renforçant l'intégration sahélienne",
+      "resume": "Le Mali, le Burkina Faso et le Niger désignent les députés du Parlement confédéral de l'Alliance des États du Sahel.",
+      "detail": "Cette étape marque une avancée vers une intégration politique et économique entre les trois pays. Les dynamiques régionales pourraient être redéfinies, avec des implications pour la sécurité et la gouvernance. Les acteurs économiques et militaires doivent surveiller les décisions prises par ce Parlement.",
+      "lieu": "Mali, Niger, Burkina Faso",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Renforcement de la coopération sécuritaire entre les trois pays",
+        "Potentiel de convergence des politiques économiques",
+        "Risque de tensions avec les organisations régionales existantes"
+      ],
+      "recommandations": [
+        "Suivre les décisions du Parlement confédéral pour anticiper les impacts",
+        "Évaluer les opportunités de partenariats économiques",
+        "Adapter les stratégies de sécurité en fonction des évolutions régionales"
+      ]
+    },
+    {
+      "id": "u-timeslive-co-za-politics-2026-07-03-listen-easy-to-shout-mbalula-says-",
+      "date": "2026-07-03",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "TimesLive",
+      "source_url": "https://www.timeslive.co.za/politics/2026-07-03-listen-easy-to-shout-mbalula-says-vote-to-secure-borders/",
+      "image": "",
+      "titre": "Mbalula prône vote plutôt que manifestations pour sécuriser les frontières",
+      "resume": "Le secrétaire général de l'ANC encourage les Sud-Africains à voter pour résoudre les problèmes de frontières poreuses.",
+      "detail": "Cette déclaration reflète une volonté de canaliser les frustrations populaires vers des solutions institutionnelles. Cependant, cela pourrait aussi masquer l'inaction gouvernementale sur les questions migratoires. Une analyse des politiques migratoires sud-africaines est nécessaire.",
+      "lieu": "Afrique du Sud",
+      "lat": -28.8166236,
+      "lon": 24.991639,
+      "implications": [
+        "Stabilisation potentielle du débat sur les frontières",
+        "Risque de report des réformes migratoires",
+        "Nécéssité de surveiller les tensions sociales liées à l'immigration"
+      ],
+      "recommandations": [
+        "Analyser les propositions politiques pour sécuriser les frontières",
+        "Surveiller les indicateurs de tensions sociales",
+        "Évaluer l'impact des politiques migratoires sur la sécurité intérieure"
+      ]
+    },
     {
       "id": "u-jeuneafrique-com-1807952-politique-mahmoud-dicko-les-secrets-de-lexil-",
       "date": "2026-07-02",
@@ -616,130 +741,6 @@
       "recommandations": [
         "Évaluer l’impact humanitaire des frappes",
         "Renforcer les canaux de communication diplomatique"
-      ]
-    },
-    {
-      "id": "u-jeuneafrique-com-1803818-economie-entreprises-telecoms-comment-mattel-",
-      "date": "2026-06-29",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "JeuneAfrique.comGabon - JeuneAfrique.com",
-      "source_url": "https://www.jeuneafrique.com/1803818/economie-entreprises/telecoms-comment-mattel-a-remonte-la-pente-en-mauritanie/",
-      "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2026/06/24/jad20260624-mmo-mauritanie-objectif-eco-mattel.jpg",
-      "titre": "Mattel concurrence Mauritel en Mauritanie",
-      "resume": "L’opérateur Mattel, contrôlé par Tunisie Telecom, concurrence désormais Mauritel en Mauritanie.",
-      "detail": "Cinq ans après sa tentative de vente, Mattel a consolidé sa position en Mauritanie, notamment dans la capitale Nouakchott. L’opérateur se positionne comme un concurrent sérieux face à Mauritel, filiale de Maroc Telecom. Cette dynamique pourrait influencer les politiques de régulation du secteur télécoms en Afrique de l’Ouest. L’impact sur les consommateurs reste à évaluer.",
-      "lieu": "Mauritanie",
-      "lat": 20.2540382,
-      "lon": -9.2399263,
-      "implications": [
-        "Concurrence accrue dans le secteur des télécoms",
-        "Possibles baisses des tarifs",
-        "Innovation dans les services proposés"
-      ],
-      "recommandations": [
-        "Analyser les stratégies commerciales des opérateurs",
-        "Suivre l’évolution des parts de marché"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-afrique-ouest-hub-production-drogues",
-      "date": "2026-06-28",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/afrique-ouest-hub-production-drogues/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21309.jpg",
-      "titre": "Guinée et Sénégal deviennent hubs de production de drogues",
-      "resume": "L'ONUDC révèle que la Guinée et le Sénégal sont devenus des hubs de production de drogues menaçant la stabilité régionale.",
-      "detail": "L'ONUDC a officiellement identifié la Guinée et le Sénégal comme nouveaux centres de production de drogues en Afrique de l'Ouest. Cette situation aggrave les flux transfrontaliers de substances illicites et pourrait alimenter des réseaux criminels plus larges. Les autorités locales et régionales doivent renforcer les contrôles aux frontières et la coopération judiciaire pour limiter l'expansion de ces activités. Les conséquences humanitaires et sécuritaires pourraient s'étendre au-delà des deux pays concernés.",
-      "lieu": "Guinée, Sénégal",
-      "lat": 12.8705148,
-      "lon": -14.1252741,
-      "implications": [
-        "Risque accru de trafic vers l'Europe via les routes sahéliennes",
-        "Impact possible sur la stabilité politique au Sénégal et en Guinée",
-        "Menace sur les opérations des forces régionales antiterroristes"
-      ],
-      "recommandations": [
-        "Renforcer les patrouilles douanières aux frontières Guinée-Sénégal",
-        "Coordonner avec l'ONUDC pour des opérations ciblées",
-        "Établir des cellules de renseignement conjointes"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-centre-jeunesse-sport-sahel-2026",
-      "date": "2026-06-28",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-centre-jeunesse-sport-sahel-2026/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21300.jpg",
-      "titre": "AES lance un centre stratégique pour la jeunesse sahélienne",
-      "resume": "L'AES annonce un centre stratégique sport-éducation pour la jeunesse sahélienne en 2026 marquant une autonomie face à la France.",
-      "detail": "L'Alliance des États du Sahel (AES) a annoncé le lancement d'un centre stratégique dédié à la jeunesse, combinant sport et éducation pour 2026. Ce projet s'inscrit dans une stratégie plus large de souveraineté régionale et pourrait marquer un tournant dans les relations avec les anciennes puissances coloniales. Les détails opérationnels restent flous mais l'initiative vise à contrer l'influence occidentale via des programmes éducatifs et sportifs. Les retombées concrètes dépendront des financements et de l'adhésion des populations locales",
-      "lieu": "Non précisé, Sahel",
-      "lat": 14.0279165,
-      "lon": -0.7717776,
-      "implications": [
-        "Possible réduction de l'influence française au Sahel",
-        "Création d'un réseau de jeunesse aligné sur les valeurs de l'AES",
-        "Risque de polarisation accrue avec les pays occidentaux"
-      ],
-      "recommandations": [
-        "Surveiller les financements et partenariats du projet",
-        "Analyser l'impact sur les programmes éducatifs existants",
-        "Évaluer les réactions des pays voisins non membres de l'AES"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-arme-economique-sahel-2026",
-      "date": "2026-06-28",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-arme-economique-sahel-2026/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21298.jpg",
-      "titre": "AES lance une initiative économique pour réduire la dépendance occidentale",
-      "resume": "Le FIMAES-BKF 2026 marque un tournant économique pour le Mali, le Burkina et le Niger visant à réduire la dépendance occidentale.",
-      "detail": "Le Forum international des économies de l'Alliance des États du Sahel (FIMAES) et le Burkina-Kaya Forum (BKF) 2026 sont présentés comme des leviers stratégiques pour réduire la dépendance économique vis-à-vis de l'Occident. Ces initiatives visent à promouvoir les échanges intra-régionaux et à développer des alternatives aux partenariats traditionnels. Les projets incluent des investissements dans les secteurs miniers, agricoles et énergétiques, avec un accent sur la souveraineté alimentaire. Cependant, les défis logistiques et financiers pourraient limiter leur efficacité à court terme.",
-      "lieu": "Mali, Burkina Faso, Niger",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Réduction potentielle des revenus des anciennes puissances coloniales",
-        "Dépendance accrue aux partenariats avec la Russie et la Chine",
-        "Risque de pénuries alimentaires et énergétiques"
-      ],
-      "recommandations": [
-        "Diversifier les partenariats économiques pour éviter une dépendance accrue",
-        "Investir dans les infrastructures logistiques régionales",
-        "Renforcer les mécanismes de résilience alimentaire"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-cyberattaques-maroc-menace-sahel",
-      "date": "2026-06-28",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/cyberattaques-maroc-menace-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/06/maliactu-21304.jpg",
-      "titre": "Cyberattaques au Maroc menacent le Sahel avec pertes financières",
-      "resume": "8% des victimes marocaines de cyberattaques perdent plus de 1 350 dollars une menace qui inquiète le Sahel.",
-      "detail": "Une étude révèle que 8% des victimes marocaines de cyberattaques subissent des pertes financières dépassant 1 350 dollars. Cette menace cyber s'étend au Sahel où les infrastructures critiques restent vulnérables. Les pays sahéliens partagent des réseaux numériques avec le Maroc ce qui expose la région à des risques similaires. Les cybercriminels exploitent les faiblesses des systèmes de paiement et des administrations publiques. La coopération régionale en cybersécurité devient une priorité absolue",
-      "lieu": "Maroc, Sahel",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque accru de perturbation des services publics au Sahel",
-        "Menace sur les transferts d'argent via systèmes numériques",
-        "Exposition des données sensibles des États et entreprises"
-      ],
-      "recommandations": [
-        "Renforcer les cellules de cybersécurité nationales",
-        "Créer un centre de réponse aux incidents cyber régional",
-        "Sensibiliser les populations aux bonnes pratiques numériques"
       ]
     }
   ]
