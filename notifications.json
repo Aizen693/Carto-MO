@@ -1,6 +1,156 @@
 {
-  "updated": "2026-07-03",
+  "updated": "2026-07-04",
   "items": [
+    {
+      "id": "u-jeuneafrique-com-1808765-societe-je-ne-pense-pas-pouvoir-survivre-une-",
+      "date": "2026-07-04",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "JeuneAfrique.com",
+      "source_url": "https://www.jeuneafrique.com/1808765/societe/je-ne-pense-pas-pouvoir-survivre-une-annee-de-plus-les-enfants-sacrifies-des-mines-dor-du-mali/",
+      "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover,gravity=0.8217x0.4739/https://prod.cdn-medias.jeuneafrique.com/medias/2026/07/01/jad20260701-ass-mali-societe-enfants-mines-or.jpg",
+      "titre": "Enfants exploités dans les mines d'or du Mali ouest",
+      "resume": "Dizaines de milliers d'enfants travaillent dans les mines d'or illégales de l'ouest du Mali, soumis à l'exploitation et à la maltraitance",
+      "detail": "L'exploitation des enfants dans les mines d'or du Mali occidental reflète une crise humanitaire profonde et une gouvernance défaillante. Les conditions de travail extrêmes, incluant le travail forcé et les violences, exposent les mineurs à des risques sanitaires et psychologiques majeurs. Ce phénomène s'inscrit dans un contexte de pauvreté généralisée et de conflits persistants qui affaiblissent les structures de protection de l'enfance.",
+      "lieu": "Ouest du Mali",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque accru de recrutement par des groupes armés",
+        "Crise sanitaire et sociale en aggravation",
+        "Pression accrue sur les ressources minières locales"
+      ],
+      "recommandations": [
+        "Renforcer les contrôles dans les zones minières via des patrouilles mixtes",
+        "Sensibiliser les communautés locales sur les droits des enfants",
+        "Collaborer avec les ONG locales pour des programmes de réinsertion"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-aes-zone-commerciale-transfrontaliere",
+      "date": "2026-07-04",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-zone-commerciale-transfrontaliere/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22398.jpg",
+      "titre": "Zone commerciale transfrontalière AES à 1,2 milliard d'euros",
+      "resume": "L'Alliance des États du Sahel lance une zone commerciale transfrontalière visant 1,2 milliard d'euros d'échanges annuels",
+      "detail": "La création de cette zone transfrontalière entre le Mali, le Burkina Faso et le Niger s'inscrit dans une stratégie de résilience économique face aux embargos et sanctions internationales. Elle pourrait renforcer les échanges intra-AES mais aussi accentuer les tensions avec les pays voisins exclus. La réussite dépendra de la coordination institutionnelle et de la stabilité sécuritaire dans la région.",
+      "lieu": "Alliance des États du Sahel",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Nouveaux flux commerciaux à surveiller",
+        "Risque de tensions géopolitiques accru",
+        "Opportunités économiques pour les acteurs locaux"
+      ],
+      "recommandations": [
+        "Cartographier les acteurs économiques impliqués",
+        "Anticiper les réactions des pays voisins",
+        "Évaluer les besoins en infrastructure logistique"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-cote-ivoire-senegal-crises-sahel",
+      "date": "2026-07-04",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/cote-ivoire-senegal-crises-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22430.jpg",
+      "titre": "Crises Côte d'Ivoire et Sénégal menacent stabilité Sahel",
+      "resume": "59 morts en Côte d'Ivoire et tensions au Sénégal : deux crises majeures qui fragilisent l'Afrique de l'Ouest",
+      "detail": "Les crises simultanées en Côte d'Ivoire et au Sénégal créent un environnement régional instable, susceptible d'aggraver les dynamiques migratoires et les activités des groupes armés. La conjonction de violences politiques et de tensions sociales alimente l'insécurité et complique les opérations humanitaires et sécuritaires au Sahel.",
+      "lieu": "Côte d'Ivoire, Sénégal",
+      "lat": 5.355378,
+      "lon": -4.0023512,
+      "implications": [
+        "Risque de propagation des violences au Sahel",
+        "Affaiblissement des alliances régionales",
+        "Déstabilisation des flux migratoires"
+      ],
+      "recommandations": [
+        "Renforcer les mécanismes de médiation régionale",
+        "Anticiper les besoins logistiques pour les opérations de secours",
+        "Coordonner avec les partenaires internationaux pour une réponse unifiée"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-niger-crise-alimentaire-alerte-pam",
+      "date": "2026-07-04",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/niger-crise-alimentaire-alerte-pam/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22426.jpg",
+      "titre": "17 millions de personnes au bord de la famine au Niger",
+      "resume": "Le PAM alerte sur une crise alimentaire sans précédent avec 17 millions de personnes touchées au Niger",
+      "detail": "Cette crise alimentaire, aggravée par l'inflation et l'insécurité, menace la stabilité sociale et politique du Niger. Les 17 millions de personnes concernées incluent des déplacés internes et des populations vulnérables dans les zones frontalières avec le Mali et le Burkina Faso. La réponse humanitaire doit être immédiate pour éviter une catastrophe majeure.",
+      "lieu": "Niger",
+      "lat": 17.7356214,
+      "lon": 9.3238432,
+      "implications": [
+        "Exode massif vers les pays voisins",
+        "Risque de conflits pour les ressources",
+        "Pression accrue sur les ONG et agences de l'ONU"
+      ],
+      "recommandations": [
+        "Coordonner avec le PAM pour un plan d'urgence",
+        "Renforcer les corridors humanitaires",
+        "Anticiper les besoins en sécurité pour les convois"
+      ]
+    },
+    {
+      "id": "u-bamada-net-les-parlements-de-laes-font-bloc-derriere-le-burkina-faso-e",
+      "date": "2026-07-04",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/les-parlements-de-laes-font-bloc-derriere-le-burkina-faso-et-denoncent-la-resolution-du-parlement-europeen",
+      "image": "http://bamada.net/wp-content/uploads/2025/12/general-assimi-goita-president-transition-malienne-abdourahamane-tiani-niger-ibrahim-traore-burkina-faso-colleges-chefs-etats-ceremonies-ouverture-aes-palais-koulouba-1024x682.jpg",
+      "titre": "Parlements de l'AES solidaires du Burkina Faso contre l'UE",
+      "resume": "Les Parlements de l'Alliance des États du Sahel ont adopté une motion de soutien au Burkina Faso face à une résolution du Parlement européen",
+      "detail": "Cette position unifiée de l'AES marque un tournant dans les relations internationales de la région, avec une rhétorique anti-occidentale de plus en plus marquée. La dénonciation de la résolution européenne pourrait isoler davantage les pays de l'AES et compliquer les partenariats sécuritaires et économiques avec l'Europe.",
+      "lieu": "Ouagadougou, Burkina Faso",
+      "lat": 12.3681873,
+      "lon": -1.5270944,
+      "implications": [
+        "Rupture des canaux diplomatiques avec l'UE",
+        "Renforcement des alliances avec des acteurs non-occidentaux",
+        "Risque de sanctions supplémentaires"
+      ],
+      "recommandations": [
+        "Évaluer l'impact des sanctions potentielles",
+        "Adapter les stratégies de communication avec l'UE",
+        "Renforcer les relations avec la Russie et la Turquie"
+      ]
+    },
+    {
+      "id": "u-scmp-com-news-world-middle-east-article-3359402-no-one-lifts-finger-ga",
+      "date": "2026-07-04",
+      "theatre": "moyen-orient",
+      "severite": "alerte",
+      "source": "South China Morning Post",
+      "source_url": "https://www.scmp.com/news/world/middle-east/article/3359402/no-one-lifts-finger-gazas-fate-eclipsed-middle-east-war?utm_source=rss_feed",
+      "image": "",
+      "titre": "Gaza oublié au profit de la guerre Iran-USA",
+      "resume": "Le sort de Gaza est éclipsé par les conflits entre les États-Unis, Israël et l'Iran, malgré une situation humanitaire désastreuse",
+      "detail": "La focalisation médiatique et géopolitique sur les tensions Iran-USA a relégué la crise humanitaire à Gaza au second plan. Cette situation risque d'aggraver les souffrances de la population civile et de compliquer les efforts de reconstruction et d'aide humanitaire dans le territoire assiégé.",
+      "lieu": "Gaza",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Aggravation de la crise humanitaire",
+        "Réduction des financements pour Gaza",
+        "Risque d'escalade régionale"
+      ],
+      "recommandations": [
+        "Maintenir une pression médiatique sur Gaza",
+        "Coordonner avec les ONG sur place pour une réponse adaptée",
+        "Anticiper les besoins en reconstruction à long terme"
+      ]
+    },
     {
       "id": "u-theguardian-com-business-live-2026-jul-03-oil-price-fall-strait-of-hor",
       "date": "2026-07-03",
@@ -595,152 +745,6 @@
         "Surveiller les réactions des mouvements islamistes modérés",
         "Analyser l'évolution des alliances politiques post-Dicko",
         "Évaluer les risques de fragmentation des groupes d'opposition"
-      ]
-    },
-    {
-      "id": "u-info-matin-ml-actualite-apurement-de-la-dette-interieure-une-baisse-re",
-      "date": "2026-06-30",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "INFO-MATIN",
-      "source_url": "https://info-matin.ml/actualite/apurement-de-la-dette-interieure-une-baisse-record-de-4756-a-2315-milliards-de-fcfa/",
-      "image": "",
-      "titre": "Baisse record de la dette intérieure malienne affaiblit l'économie",
-      "resume": "Le Mali a réduit sa dette intérieure de 475,6 à 231,5 milliards FCFA. La situation économique reste fragile malgré cette baisse.",
-      "detail": "La réduction de la dette intérieure malienne de près de 50% en un an reflète une gestion financière temporaire mais ne résout pas les problèmes structurels de l'économie. Cette baisse s'explique principalement par des apurements administratifs et des restructurations plutôt que par une croissance économique réelle. Le Mali reste confronté à des défis majeurs : inflation élevée, pénuries d'énergie, et dépendance aux importations. La baisse de la dette pourrait aussi limiter la capacité de l'État à financer des projets sociaux ou sécuritaires.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Risque de crise de liquidités pour les entreprises locales",
-        "Difficultés accrues pour financer les services publics",
-        "Dépendance accrue aux bailleurs internationaux"
-      ],
-      "recommandations": [
-        "Analyser la soutenabilité de la dette extérieure",
-        "Évaluer l'impact sur les investissements privés",
-        "Anticiper les tensions sociales liées aux restrictions budgétaires"
-      ]
-    },
-    {
-      "id": "u-mali24-info-emploi-le-bilan-de-la-transition-rectifiee",
-      "date": "2026-06-30",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "MALI 24 INFO",
-      "source_url": "https://mali24.info/emploi-le-bilan-de-la-transition-rectifiee/",
-      "image": "https://mali24.info/wp-content/uploads/2025/02/Oumou-Sall-Seck.jpeg",
-      "titre": "Bilan de l'emploi sous la Transition rectifiée au Mali critiqué",
-      "resume": "Le Mali revendique la création d'emplois sous la Transition mais les données restent contestées. La situation de l'emploi reste préoccupante.",
-      "detail": "Le bilan officiel de la Transition militaire malienne concernant la création d'emplois suscite des interrogations. Les chiffres avancés (création de postes dans l'administration et les forces de sécurité) masquent une réalité plus complexe : précarité des emplois, fuite des compétences, et absence de réformes structurelles. Le secteur privé reste atone en raison de l'instabilité politique, des coupures d'électricité récurrentes, et de la méfiance des investisseurs. La jeunesse malienne, principale concernée, continue de subir un chômage massif et des perspectives limitées.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Risque de radicalisation de la jeunesse",
-        "Exode des compétences vers les pays voisins",
-        "Affaiblissement du tissu économique local"
-      ],
-      "recommandations": [
-        "Étudier les alternatives pour l'emploi des jeunes",
-        "Analyser les politiques de formation professionnelle",
-        "Évaluer les partenariats avec le secteur privé pour relancer l'économie"
-      ]
-    },
-    {
-      "id": "u-bamada-net-droits-de-lenfance-et-conflits-armes-laes-denonce-a-la-trib",
-      "date": "2026-06-29",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/droits-de-lenfance-et-conflits-armes-laes-denonce-a-la-tribune-de-lonu",
-      "image": "http://bamada.net/wp-content/uploads/2026/06/conseil-securite-mali-onu.jpg",
-      "titre": "L’AES dénonce à l’ONU les violations des droits des enfants en zone de conflit",
-      "resume": "La Confédération des États du Sahel (AES) a alerté l’ONU sur l’augmentation des violations des droits des enfants dans la région.",
-      "detail": "L’intervention de l’AES au Conseil de Sécurité de l’ONU souligne une hausse des attaques contre les enfants dans les zones de conflit du Sahel. L’alliance met en avant des données locales et des rapports d’ONG pour appuyer ses revendications. Cette mobilisation pourrait influencer les futures résolutions internationales sur la protection des mineurs. Les États membres sont incités à renforcer les mécanismes de suivi et de sanction.",
-      "lieu": "Burkina Faso",
-      "lat": 12.0753083,
-      "lon": -1.6880314,
-      "implications": [
-        "Risque accru de radicalisation des jeunes",
-        "Pression accrue sur les forces de sécurité locales",
-        "Renforcement des partenariats internationaux"
-      ],
-      "recommandations": [
-        "Renforcer les programmes de réinsertion des enfants affectés",
-        "Coordonner avec les acteurs humanitaires locaux"
-      ]
-    },
-    {
-      "id": "u-maliweb-net-armee-operations-des-fama-contre-les-groupes-terroristes-t",
-      "date": "2026-06-29",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Maliweb.net",
-      "source_url": "https://www.maliweb.net/armee/operations-des-fama-contre-les-groupes-terroristes-traque-tous-azimuts-3117957.html",
-      "image": "",
-      "titre": "Opérations militaires maliennes ciblent les groupes terroristes au Sahel",
-      "resume": "Les Forces Armées Maliennes (FAMA) mènent des opérations contre les groupes terroristes dans plusieurs régions du Mali.",
-      "detail": "Les FAMA ont annoncé des frappes ciblées contre des réseaux de ravitaillement et des cadres terroristes dans le centre et le nord du Mali. Ces opérations visent à asphyxier les groupes armés et à sécuriser les zones stratégiques. Les résultats concrets restent à évaluer, mais l’approche reflète une stratégie de contre-insurrection renforcée. La coordination avec les forces partenaires régionales est cruciale pour éviter les replis tactiques.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Renforcement possible des capacités militaires maliennes",
-        "Risque de représailles contre les civils",
-        "Impact sur les flux logistiques des groupes armés"
-      ],
-      "recommandations": [
-        "Suivre l’évolution des déplacements de population",
-        "Évaluer l’impact humanitaire des opérations"
-      ]
-    },
-    {
-      "id": "u-aljazeera-com-economy-2026-6-29-oil-prices-rise-as-us-iranian-strikes-",
-      "date": "2026-06-29",
-      "theatre": "moyen-orient",
-      "severite": "critique",
-      "source": "Al Jazeera English",
-      "source_url": "https://www.aljazeera.com/economy/2026/6/29/oil-prices-rise-as-us-iranian-strikes-threaten-strait-of-hormuz-reopening?traffic_source=rss",
-      "image": "https://www.aljazeera.com/wp-content/uploads/2026/06/AFP__20260627__B8J44ZQ__v1__MidRes__OmanIranUsIsraelWar-1782699418.jpg?resize=1200%2C630",
-      "titre": "Tensions USA-Iran menacent la réouverture du détroit d’Ormuz",
-      "resume": "Les prix du pétrole augmentent en raison des frappes USA-Iran qui bloquent la réouverture du détroit d’Ormuz.",
-      "detail": "Les frappes croisées entre les États-Unis et l’Iran perturbent les efforts de réhabilitation du détroit d’Ormuz, une voie maritime stratégique pour les exportations pétrolières. Les prix du Brent ont augmenté, reflétant les tensions persistantes. La situation pourrait aggraver les perturbations logistiques en Asie et en Europe. Une escalade militaire directe reste un risque majeur.",
-      "lieu": "Détroit d’Ormuz",
-      "lat": 26.4494061,
-      "lon": 56.2027702,
-      "implications": [
-        "Fluctuation des prix du pétrole",
-        "Risque de blocus maritime",
-        "Impact sur les chaînes d’approvisionnement globales"
-      ],
-      "recommandations": [
-        "Surveiller les stocks stratégiques de pétrole",
-        "Évaluer les alternatives de routage maritime"
-      ]
-    },
-    {
-      "id": "u-theguardian-com-world-2026-jun-29-pakistan-deadly-airstrikes-afghanist",
-      "date": "2026-06-29",
-      "theatre": "asie-sud",
-      "severite": "alerte",
-      "source": "The Guardian",
-      "source_url": "https://www.theguardian.com/world/2026/jun/29/pakistan-deadly-airstrikes-afghanistan-border",
-      "image": "",
-      "titre": "Frappes aériennes pakistanaises tuent des civils en Afghanistan",
-      "resume": "Le Pakistan mène des frappes aériennes le long de la frontière afghane, faisant des dizaines de morts civils.",
-      "detail": "Les frappes pakistanaises ont visé trois provinces orientales de l’Afghanistan, selon les autorités talibanes. Le bilan fait état de 36 morts et 163 blessés parmi les civils. Ces attaques surviennent dans un contexte de tensions récurrentes entre les deux pays. Elles risquent d’exacerber les relations déjà tendues et de compromettre les efforts de stabilisation régionale.",
-      "lieu": "Afghanistan",
-      "lat": 33.7680065,
-      "lon": 66.2385139,
-      "implications": [
-        "Escalade des tensions Pakistan-Afghanistan",
-        "Risque de représailles asymétriques",
-        "Impact sur les opérations humanitaires"
-      ],
-      "recommandations": [
-        "Évaluer l’impact humanitaire des frappes",
-        "Renforcer les canaux de communication diplomatique"
       ]
     }
   ]
