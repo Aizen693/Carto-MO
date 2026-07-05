@@ -1,6 +1,81 @@
 {
-  "updated": "2026-07-04",
+  "updated": "2026-07-05",
   "items": [
+    {
+      "id": "u-maliactu-net-bombardement-danefis-et-konna-au-mali-ce-que-revelent-les",
+      "date": "2026-07-05",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/bombardement-danefis-et-konna-au-mali-ce-que-revelent-les-videos-des-drones-bayraktar-tb2/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/739609612_1306978314979175_8820565241300824117_n.jpg",
+      "titre": "Frappe de drones Bayraktar au Mali : ciblage d'Anefis et Konna",
+      "resume": "Des vidéos confirment des frappes de drones turcs Bayraktar TB2 sur des localités maliennes. Les cibles et l'impact humanitaire restent à préciser.",
+      "detail": "Les frappes visaient des positions présumées de groupes armés à Anefis et Konna. Les drones TB2, opérés par des forces maliennes ou étrangères, confirment une militarisation accrue. Risque de victimes civiles si les frappes étaient mal ciblées. La présence de drones étrangers au Sahel s'intensifie, notamment turcs et russes.",
+      "lieu": "Anefis et Konna, Mali",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Escalade des tensions locales",
+        "Risque de réactions anti-étrangères",
+        "Impact sur les populations civiles"
+      ],
+      "recommandations": [
+        "Surveiller les réactions des groupes armés",
+        "Évaluer les dommages collatéraux",
+        "Anticiper des représailles"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-senegal-joueurs-bloques-usa-mondial-2026",
+      "date": "2026-07-05",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/senegal-joueurs-bloques-usa-mondial-2026/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22545.jpg",
+      "titre": "Équipe du Sénégal bloquée aux USA après élimination en Mondial",
+      "resume": "L'annulation d'un vol charter a bloqué l'équipe sénégalaise aux États-Unis après son élimination. Une crise logistique et diplomatique s'ensuit.",
+      "detail": "Le Sénégal, éliminé en Coupe du Monde, attend un nouveau vol après l'annulation du charter. Les joueurs sont bloqués aux USA, suscitant des tensions diplomatiques. Les autorités sénégalaises et américaines gèrent la crise, mais des retards pourraient aggraver la situation. L'incident révèle des failles dans la logistique sportive internationale.",
+      "lieu": "États-Unis",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Tensions diplomatiques Sénégal-USA",
+        "Risque de crise médiatique",
+        "Impact sur la préparation des équipes"
+      ],
+      "recommandations": [
+        "Suivre les négociations diplomatiques",
+        "Évaluer les risques de blocage futur",
+        "Renforcer les procédures logistiques"
+      ]
+    },
+    {
+      "id": "u-theguardian-com-world-2026-jul-05-ukraine-war-briefing-trump-repositio",
+      "date": "2026-07-05",
+      "theatre": "moyen-orient",
+      "severite": "alerte",
+      "source": "The Guardian",
+      "source_url": "https://www.theguardian.com/world/2026/jul/05/ukraine-war-briefing-trump-repositions-himself-as-peacemaker-in-long-call-with-putin",
+      "image": "",
+      "titre": "Trump propose son aide pour mettre fin à la guerre en Ukraine",
+      "resume": "Donald Trump a discuté avec Vladimir Poutine d'une possible médiation pour mettre fin à la guerre en Ukraine. L'appel intervient avant le sommet de l'OTAN.",
+      "detail": "Trump s'est positionné en médiateur entre Kiev et Moscou, proposant d'aider à trouver une solution. Cette initiative pourrait influencer les négociations, mais suscite des interrogations sur son rôle. La Russie et l'Ukraine n'ont pas encore réagi officiellement. La Turquie, hôte du sommet de l'OTAN, pourrait jouer un rôle clé dans le processus.",
+      "lieu": "Russie / Ukraine",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque de division au sein de l'OTAN",
+        "Opportunité de désescalade",
+        "Impact sur les livraisons d'armes"
+      ],
+      "recommandations": [
+        "Surveiller les réactions de l'OTAN",
+        "Analyser les propositions de Trump",
+        "Évaluer les risques de manipulation"
+      ]
+    },
     {
       "id": "u-jeuneafrique-com-1808765-societe-je-ne-pense-pas-pouvoir-survivre-une-",
       "date": "2026-07-04",
@@ -149,6 +224,56 @@
         "Maintenir une pression médiatique sur Gaza",
         "Coordonner avec les ONG sur place pour une réponse adaptée",
         "Anticiper les besoins en reconstruction à long terme"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-inondations-guinee-34-morts-crise-sahel",
+      "date": "2026-07-04",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/inondations-guinee-34-morts-crise-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22538.jpg",
+      "titre": "Inondations en Guinée : 34 morts et menace sur la stabilité régionale",
+      "resume": "Des inondations meurtrières en Guinée ont causé 34 morts et risquent d'aggraver les tensions sociales. La crise climatique accentue les risques dans la région.",
+      "detail": "Les fortes pluies ont submergé plusieurs zones en Guinée, notamment à Conakry et Labé. Les autorités peinent à gérer les secours et la reconstruction. Cette catastrophe pourrait alimenter des mouvements de contestation ou des conflits locaux pour l'accès aux ressources. Les groupes armés pourraient exploiter le mécontentement pour recruter.",
+      "lieu": "Guinée",
+      "lat": 10.7226226,
+      "lon": -10.7083587,
+      "implications": [
+        "Risque accru d'instabilité politique",
+        "Opportunité pour groupes armés",
+        "Besoin urgent d'aide humanitaire"
+      ],
+      "recommandations": [
+        "Évaluer les besoins humanitaires",
+        "Renforcer la surveillance des zones à risque",
+        "Anticiper les déplacements de population"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-ghana-elimine-colombie-mondial-2026",
+      "date": "2026-07-04",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/ghana-elimine-colombie-mondial-2026/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22543.jpg",
+      "titre": "Ghana éliminé par la Colombie en Mondial 2026",
+      "resume": "Le Ghana quitte la Coupe du Monde après une défaite face à la Colombie. Un revers sportif et symbolique pour le football africain.",
+      "detail": "L'élimination du Ghana, finaliste en 2022, marque un revers pour le football africain. Les analyses soulignent des problèmes tactiques et une préparation insuffisante. Cet échec pourrait affecter la confiance des sponsors et des fédérations. La performance des équipes africaines reste un sujet de débat continental.",
+      "lieu": "Mexique",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Impact sur la crédibilité du football africain",
+        "Risque de désengagement des sponsors",
+        "Débat sur la gestion des équipes"
+      ],
+      "recommandations": [
+        "Analyser les causes de l'échec du Ghana",
+        "Renforcer les préparations des équipes",
+        "Évaluer l'impact médiatique"
       ]
     },
     {
@@ -620,131 +745,6 @@
         "Évaluer les besoins humanitaires dans la région de Mopti",
         "Renforcer la coordination entre les acteurs sécuritaires et humanitaires",
         "Surveiller les réactions des populations et des groupes armés"
-      ]
-    },
-    {
-      "id": "u-bamada-net-protection-des-migrants-vulnerables-au-mali-le-mecanisme-na",
-      "date": "2026-06-30",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/protection-des-migrants-vulnerables-au-mali-le-mecanisme-national-de-referencement-revise",
-      "image": "http://bamada.net/wp-content/uploads/2026/06/diaspora-mossa-ag-ataher-1024x683.jpg",
-      "titre": "Mali révisé son mécanisme national de référencement pour les migrants",
-      "resume": "Le Mali modernise son dispositif de protection des migrants vulnérables avec l'appui de l'OIM.",
-      "detail": "Le Mali a organisé un atelier technique pour opérationnaliser son Mécanisme National de Référencement (MNR), avec l'appui de l'OIM et de ses partenaires. Cette initiative vise à améliorer la protection des migrants vulnérables et à renforcer leur accès aux services de base. Elle s'inscrit dans une dynamique de réforme des politiques migratoires au Mali.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Amélioration potentielle de la protection des migrants",
-        "Renforcement de la coopération internationale",
-        "Impact sur les politiques migratoires nationales"
-      ],
-      "recommandations": [
-        "Analyser les résultats concrets de cette réforme",
-        "Évaluer les besoins en financement et en ressources pour sa mise en œuvre",
-        "Surveiller les évolutions des flux migratoires depuis le Mali"
-      ]
-    },
-    {
-      "id": "u-timeslive-co-za-news-south-africa-2026-06-30-children-survive-on-bread",
-      "date": "2026-06-30",
-      "theatre": "afrique",
-      "severite": "alerte",
-      "source": "TimesLive",
-      "source_url": "https://www.timeslive.co.za/news/south-africa/2026-06-30-children-survive-on-bread-as-hundreds-of-zimbabweans-spend-freezing-rainy-night-outside-cape-town-home-affairs-office/",
-      "image": "",
-      "titre": "Zimbabwéens dans une situation humanitaire critique à Cape Town",
-      "resume": "Des centaines de Zimbabwéens, dont des enfants, ont passé une nuit glaciale devant un bureau gouvernemental sud-africain.",
-      "detail": "Des centaines de migrants zimbabwéens, dont des enfants, ont passé une nuit glaciale et pluvieuse devant un bureau des affaires intérieures à Cape Town. Ils survivent principalement grâce à du pain distribué par des organisations locales. Cet incident met en lumière les difficultés des migrants en situation irrégulière en Afrique du Sud, confrontés à des conditions de vie précaires et à des politiques migratoires restrictives.",
-      "lieu": "Le Cap, Afrique du Sud",
-      "lat": -33.9288301,
-      "lon": 18.4172197,
-      "implications": [
-        "Crise humanitaire croissante pour les migrants en Afrique du Sud",
-        "Pression accrue sur les services sociaux locaux",
-        "Risque de tensions entre populations locales et migrants"
-      ],
-      "recommandations": [
-        "Évaluer les besoins humanitaires immédiats des migrants",
-        "Renforcer la coordination entre les acteurs humanitaires et les autorités locales",
-        "Analyser les politiques migratoires sud-africaines et leurs impacts"
-      ]
-    },
-    {
-      "id": "u-mali24-info-justice-internationale-le-niger-ouvre-la-voie-au-retrait-d",
-      "date": "2026-06-30",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "MALI 24 INFO",
-      "source_url": "https://mali24.info/justice-internationale-le-niger-ouvre-la-voie-au-retrait-du-bloc-sahelien-de-la-cpi/",
-      "image": "https://mali24.info/wp-content/uploads/2025/07/biographie-general-brigade-tiani-abdourahamane.jpeg",
-      "titre": "Niger initie retrait collectif de la CPI pour les pays sahéliens",
-      "resume": "Le Niger a déposé une demande officielle de retrait de la CPI. Cette initiative pourrait entraîner un mouvement régional majeur.",
-      "detail": "Le dépôt par le Niger de sa demande de retrait de la Cour pénale internationale marque une étape politique symbolique et juridique majeure pour le Sahel. Ce geste s'inscrit dans un contexte de tensions récurrentes avec la justice internationale concernant la lutte antiterroriste. L'adhésion d'autres pays de la région à cette démarche pourrait fragiliser davantage l'autorité de la CPI en Afrique de l'Ouest et modifier l'équilibre des partenariats sécuritaires avec l'UE et les États-Unis.",
-      "lieu": "Niger",
-      "lat": 17.7356214,
-      "lon": 9.3238432,
-      "implications": [
-        "Risque de création d'une juridiction alternative régionale",
-        "Impact potentiel sur les financements internationaux",
-        "Renforcement des alliances politiques entre pays du Sahel"
-      ],
-      "recommandations": [
-        "Cartographier les positions des autres pays du G5 Sahel",
-        "Évaluer les conséquences sur les accords de coopération judiciaire",
-        "Anticiper les réactions des bailleurs de fonds internationaux"
-      ]
-    },
-    {
-      "id": "u-mali24-info-diplomatie-le-fosse-entre-l-aes-et-la-france-va-t-il-selar",
-      "date": "2026-06-30",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "MALI 24 INFO",
-      "source_url": "https://mali24.info/diplomatie-le-fosse-entre-l-aes-et-la-france-va-t-il-selargir/",
-      "image": "",
-      "titre": "Burkina Faso annonce rupture diplomatique immédiate avec la France",
-      "resume": "Le Burkina Faso a officiellement rompu ses relations diplomatiques avec la France. La décision pourrait s'étendre à d'autres pays de l'AES.",
-      "detail": "La rupture diplomatique annoncée par le Burkina Faso avec la France représente une escalade majeure dans les tensions régionales. Cette décision s'inscrit dans la continuité de la politique de retrait des influences occidentales menée par les juntes du Mali, Burkina et Niger. Elle pourrait entraîner une reconfiguration des alliances militaires et économiques dans le Sahel, avec un recentrage vers la Russie, la Turquie ou l'Iran. Le risque d'isolement diplomatique et économique des pays de l'AES s'accroît.",
-      "lieu": "Burkina Faso",
-      "lat": 12.0753083,
-      "lon": -1.6880314,
-      "implications": [
-        "Accélération des partenariats avec des acteurs non-occidentaux",
-        "Risque de sanctions économiques de l'UE et de la CEDEAO",
-        "Renforcement des mouvements anti-français dans la région"
-      ],
-      "recommandations": [
-        "Analyser les implications sur les missions de maintien de la paix",
-        "Évaluer les alternatives logistiques pour les opérations humanitaires",
-        "Suivre l'évolution des alliances militaires avec Moscou et Ankara"
-      ]
-    },
-    {
-      "id": "u-info-matin-ml-actualite-transition-les-vraies-raisons-de-lexil-de-lima",
-      "date": "2026-06-30",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "INFO-MATIN",
-      "source_url": "https://info-matin.ml/actualite/transition-les-vraies-raisons-de-lexil-de-limam-dicko/",
-      "image": "",
-      "titre": "Exil de l'imam Dicko marque un tournant politique au Mali",
-      "resume": "L'imam Mahmoud Dicko, figure majeure de l'opposition, a quitté le Mali. Son départ pourrait affaiblir l'opposition religieuse et sociale.",
-      "detail": "L'exil de l'imam Mahmoud Dicko, après son rôle central dans les manifestations de 2020 contre Ibrahim Boubacar Keïta, constitue un symbole de l'affaiblissement de l'opposition malienne face à la junte militaire. Son départ pourrait réduire les capacités de mobilisation sociale et religieuse contre le régime. Ce départ intervient dans un contexte de durcissement politique et de restrictions accrues des libertés publiques.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Affaiblissement des mouvements de protestation",
-        "Risque de radicalisation des soutiens de Dicko",
-        "Impact sur la cohésion sociale et religieuse"
-      ],
-      "recommandations": [
-        "Surveiller les réactions des mouvements islamistes modérés",
-        "Analyser l'évolution des alliances politiques post-Dicko",
-        "Évaluer les risques de fragmentation des groupes d'opposition"
       ]
     }
   ]
