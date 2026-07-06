@@ -1,6 +1,56 @@
 {
-  "updated": "2026-07-05",
+  "updated": "2026-07-06",
   "items": [
+    {
+      "id": "u-trthaber-com-haber-turkiye-burdurda-saganak-sonrasi-kopru-yolunda-cokm",
+      "date": "2026-07-06",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "TRT Haber",
+      "source_url": "https://www.trthaber.com/haber/turkiye/burdurda-saganak-sonrasi-kopru-yolunda-cokme-950333.html",
+      "image": "https://trthaberstatic.cdn.wp.trt.com.tr/resimler/2474000/kopru-cokme-iha-2474054.jpg",
+      "titre": "Effondrement d'un pont en Turquie après intempéries",
+      "resume": "Un pont routier s'est effondré à Burdur après des pluies intenses, entraînant sa fermeture immédiate.",
+      "detail": "Les fortes précipitations en Turquie ont causé l'effondrement d'un pont dans la province de Burdur, perturbant la circulation et nécessitant des mesures de sécurité. Bien que l'incident soit localisé, il souligne les vulnérabilités des infrastructures en cas d'événements climatiques extrêmes. La Turquie, en tant que corridor logistique régional, pourrait subir des retards dans les mouvements de troupes ou de marchandises.",
+      "lieu": "Burdur, Turquie",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Retards logistiques possibles",
+        "Risques pour les corridors d'approvisionnement",
+        "Vulnérabilité des infrastructures critiques"
+      ],
+      "recommandations": [
+        "Vérifier l'état des routes clés en Turquie",
+        "Anticiper des perturbations dans les chaînes logistiques",
+        "Renforcer la surveillance des infrastructures"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-4-juillet-2026-video-recap-des-operations-coordonnees",
+      "date": "2026-07-06",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/4-juillet-2026-video-recap-des-operations-coordonnees/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/740953087_1007152872184715_5840159594218251424_n.jpg",
+      "titre": "Récapitulatif des opérations aériennes au Mali",
+      "resume": "Vidéo récapitulative des frappes aériennes du 4 juillet 2026 dans le centre et le nord du Mali.",
+      "detail": "Les images montrent des opérations coordonnées impliquant des frappes aériennes à Ti-Somadougou, Konna, Kouakourou et Anefis. Les cibles incluent des positions tenues par les groupes armés (JNIM et FLA). Ces frappes visent à affaiblir les capacités opérationnelles des groupes rebelles, mais pourraient aussi entraîner des représailles contre les populations civiles. La coordination entre forces maliennes et russes est visible dans les vidéos.",
+      "lieu": "Ti-Somadougou, Konna, Kouakourou, Anefis, Mali",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Impact sur les groupes armés locaux",
+        "Risque de représailles contre les civils",
+        "Coordination renforcée entre forces maliennes et russes"
+      ],
+      "recommandations": [
+        "Analyser l'efficacité des frappes aériennes",
+        "Surveiller les réactions des groupes armés",
+        "Évaluer les besoins humanitaires post-opérations"
+      ]
+    },
     {
       "id": "u-maliactu-net-bombardement-danefis-et-konna-au-mali-ce-que-revelent-les",
       "date": "2026-07-05",
@@ -74,6 +124,31 @@
         "Surveiller les réactions de l'OTAN",
         "Analyser les propositions de Trump",
         "Évaluer les risques de manipulation"
+      ]
+    },
+    {
+      "id": "u-instagram-com-reel-daaezj0je7h",
+      "date": "2026-07-05",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Alerte Google : site:instagram.com",
+      "source_url": "https://www.instagram.com/reel/DaaEzj0je7H/",
+      "image": "",
+      "titre": "Convoi Russie-Mali en mouvement vers Anefis",
+      "resume": "Un convoi composé de mercenaires russes et de soldats maliennes a quitté Gao en direction d'Anefis.",
+      "detail": "Les images vérifiées montrent un mouvement de troupes combinées (Russia's Africa Corps et Forces armées maliennes) depuis Gao vers la zone d'Anefis, région sous pression des groupes armés. Ce déplacement suggère une réponse militaire coordonnée pour contrer les attaques récentes du JNIM et du FLA. La zone d'Anefis est un point clé pour les opérations, avec des risques de combats intenses et d'affrontements avec les groupes rebelles.",
+      "lieu": "Gao, Anefis, Mali",
+      "lat": 18.0359837,
+      "lon": 0.5751845,
+      "implications": [
+        "Déploiement accru de forces étrangères",
+        "Risque de confrontation directe avec les groupes armés",
+        "Impact potentiel sur les civils dans la zone"
+      ],
+      "recommandations": [
+        "Surveiller les mouvements de troupes dans le Nord",
+        "Évaluer les capacités logistiques du convoi",
+        "Anticiper des réactions des groupes armés"
       ]
     },
     {
@@ -274,6 +349,31 @@
         "Analyser les causes de l'échec du Ghana",
         "Renforcer les préparations des équipes",
         "Évaluer l'impact médiatique"
+      ]
+    },
+    {
+      "id": "u-instagram-com-reel-dayukkoke3p",
+      "date": "2026-07-04",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Alerte Google : site:instagram.com",
+      "source_url": "https://www.instagram.com/reel/DaYuKkOke3p/",
+      "image": "",
+      "titre": "Coordinated jihadist and Tuareg attacks across northern Mali",
+      "resume": "Nouveaux assauts coordonnés impliquant le JNIM et le Front de libération de l'Azawad (FLA) dans le nord du Mali.",
+      "detail": "Les groupes armés JNIM (affilié à Al-Qaïda) et FLA (mouvements indépendantistes touaregs) ont mené des attaques simultanées dans plusieurs localités du nord du Mali. Les cibles incluent des bases militaires maliennes et des positions tenues par le Corps africain russe (Africa Corps). Les vidéos circulant sur les réseaux sociaux montrent des frappes aériennes et des évacuations de blessés. Ces opérations illustrent une coordination renforcée entre groupes djihadistes et rebelles touaregs, une menace majeure pour la stabilité régionale.",
+      "lieu": "Nord du Mali, Mali",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Intensification des combats dans le Nord",
+        "Risque accru pour les convois humanitaires",
+        "Pression sur les forces maliennes et russes"
+      ],
+      "recommandations": [
+        "Renforcer les patrouilles aériennes dans le Nord",
+        "Coordonner avec les acteurs humanitaires locaux",
+        "Évaluer les risques pour les infrastructures critiques"
       ]
     },
     {
@@ -645,106 +745,6 @@
         "Évaluer les besoins logistiques et financiers du projet",
         "Coordonner avec les communautés locales pour la protection des sites",
         "Intégrer le projet dans les stratégies de développement touristique"
-      ]
-    },
-    {
-      "id": "u-trthaber-com-haber-dunya-iran-savasi-abdnin-mutfagini-vurdu-hane-basin",
-      "date": "2026-06-30",
-      "theatre": "moyen-orient",
-      "severite": "alerte",
-      "source": "TRT Haber",
-      "source_url": "https://www.trthaber.com/haber/dunya/iran-savasi-abdnin-mutfagini-vurdu-hane-basina-1000-dolar-949738.html",
-      "image": "https://trthaberstatic.cdn.wp.trt.com.tr/resimler/2454000/abd-iran-2454861.jpg",
-      "titre": "Conflit Iran-USA alourdit les dépenses américaines de 1000 USD par foyer",
-      "resume": "Les tensions Iran-USA depuis février 2026 impactent directement les coûts énergétiques et opérationnels aux États-Unis.",
-      "detail": "Les analystes économiques estiment que les coûts supplémentaires liés aux tensions géopolitiques entre l'Iran et les États-Unis depuis février 2026 ont entraîné une hausse d'au moins 1000 USD par foyer américain. Cette augmentation touche notamment les prix du carburant et des denrées alimentaires, reflétant une pression inflationniste liée à la volatilité géopolitique. Les tensions régionales pourraient persister et aggraver cette tendance, avec des répercussions sur les marchés globaux.",
-      "lieu": "États-Unis",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque accru d'inflation aux États-Unis",
-        "Impact sur les chaînes d'approvisionnement énergétiques",
-        "Renforcement des tensions commerciales globales"
-      ],
-      "recommandations": [
-        "Surveiller les indicateurs économiques américains liés aux tensions géopolitiques",
-        "Anticiper des ajustements dans les budgets énergétiques des entreprises",
-        "Renforcer les analyses de risque géopolitique pour les investissements"
-      ]
-    },
-    {
-      "id": "u-scmp-com-week-asia-health-environment-article-3358859-border-security-",
-      "date": "2026-06-30",
-      "theatre": "asie-sud",
-      "severite": "alerte",
-      "source": "South China Morning Post",
-      "source_url": "https://www.scmp.com/week-asia/health-environment/article/3358859/border-security-stepped-after-2-malaysians-hurt-roadside-bomb-thai-south?utm_source=rss_feed",
-      "image": "",
-      "titre": "Attentat à la bombe près de la frontière Malaisie-Thaïlande",
-      "resume": "Deux Malaisiens blessés par une bombe artisanale dans la province de Narathiwat, Thaïlande.",
-      "detail": "Un engin explosif improvisé a blessé deux Malaisiens dans la province de Narathiwat, région soumise à une insurrection séparatiste. Les autorités thaïlandaises ont renforcé la sécurité aux frontières. Cet incident illustre la persistance de la violence dans le sud de la Thaïlande, où les tensions ethniques et religieuses alimentent un conflit latent depuis des années.",
-      "lieu": "Narathiwat, Thaïlande",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque accru pour les civils et les travailleurs frontaliers",
-        "Impact potentiel sur les échanges commerciaux entre Malaisie et Thaïlande",
-        "Renforcement des mesures de sécurité aux points de passage"
-      ],
-      "recommandations": [
-        "Évaluer les risques pour les ressortissants malaisiens en Thaïlande",
-        "Renforcer les protocoles de sécurité pour les entreprises opérant près de la frontière",
-        "Surveiller les évolutions de la situation sécuritaire dans le sud de la Thaïlande"
-      ]
-    },
-    {
-      "id": "u-laprunellerdc-cd-30-juin-2026-dans-une-lettre-ouverte-a-felix-tshiseke",
-      "date": "2026-06-30",
-      "theatre": "rdc",
-      "severite": "alerte",
-      "source": "La Prunelle RDC",
-      "source_url": "https://laprunellerdc.cd/30-juin-2026-dans-une-lettre-ouverte-a-felix-tshisekedi-denis-mukwege-denonce-les-choix-diplomatiques-et-securitaires-de-la-rdc/",
-      "image": "",
-      "titre": "Denis Mukwege critique la politique sécuritaire de la RDC",
-      "resume": "Le prix Nobel dénonce les choix diplomatiques et sécuritaires du gouvernement congolais dans une lettre ouverte.",
-      "detail": "Denis Mukwege a publié une lettre ouverte critiquant les orientations sécuritaires et diplomatiques de la RDC depuis 2021. Il remet en cause la gestion de l'état de siège et les interventions militaires, soulignant des lacunes dans la stratégie de stabilisation. Cette prise de position intervient dans un contexte de tensions persistantes dans l'est du pays et de pressions internationales pour une solution durable.",
-      "lieu": "République Démocratique du Congo",
-      "lat": -2.9814344,
-      "lon": 23.8222636,
-      "implications": [
-        "Risque de polarisation politique accrue",
-        "Pression sur les autorités pour réformer la stratégie sécuritaire",
-        "Impact potentiel sur la stabilité régionale"
-      ],
-      "recommandations": [
-        "Suivre les réactions politiques et sécuritaires à cette critique",
-        "Analyser les risques de dégradation de la situation dans l'est de la RDC",
-        "Évaluer l'impact sur les relations internationales de la RDC"
-      ]
-    },
-    {
-      "id": "u-bamada-net-mopti-le-couvre-feu-de-nouveau-prolonge-jusquau-30-juillet",
-      "date": "2026-06-30",
-      "theatre": "afrique",
-      "severite": "alerte",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/mopti-le-couvre-feu-de-nouveau-prolonge-jusquau-30-juillet",
-      "image": "http://bamada.net/wp-content/uploads/2024/12/mopti-ville-1024x768.jpg",
-      "titre": "Prolongation du couvre-feu dans la région de Mopti",
-      "resume": "Les autorités maliennes prolongent le couvre-feu dans la région de Mopti jusqu'au 30 juillet 2026.",
-      "detail": "La région de Mopti est soumise à un couvre-feu depuis le 30 mai 2026 en raison d'une insécurité persistante. Cette mesure, initialement prévue pour un mois, a été prolongée d'un mois supplémentaire. Les autorités locales justifient cette décision par la nécessité de maintenir l'ordre et de protéger les populations face à la menace djihadiste et aux tensions communautaires.",
-      "lieu": "Mopti, Mali",
-      "lat": 14.514489,
-      "lon": -3.6464581,
-      "implications": [
-        "Restriction des libertés civiles dans la région",
-        "Risque accru de tensions entre militaires et civils",
-        "Impact sur les activités économiques locales"
-      ],
-      "recommandations": [
-        "Évaluer les besoins humanitaires dans la région de Mopti",
-        "Renforcer la coordination entre les acteurs sécuritaires et humanitaires",
-        "Surveiller les réactions des populations et des groupes armés"
       ]
     }
   ]
