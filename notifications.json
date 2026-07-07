@@ -1,6 +1,106 @@
 {
-  "updated": "2026-07-06",
+  "updated": "2026-07-07",
   "items": [
+    {
+      "id": "u-aljazeera-com-video-newsfeed-2026-7-7-aje-onl-nf-russia-sends-weapons-",
+      "date": "2026-07-07",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Al Jazeera English",
+      "source_url": "https://www.aljazeera.com/video/newsfeed/2026/7/7/aje-onl-nf_russia-sends-weapons-to-mali-hold-off-rebel-siege-060726?traffic_source=rss",
+      "image": "https://www.aljazeera.com/wp-content/uploads/2026/07/image-1783391096.jpg?resize=1920%2C1080&amp;quality=80",
+      "titre": "Russie envoie des armes pour soutenir le gouvernement malien face aux rebelles",
+      "resume": "La marine russe livre des armes au Mali pour contrer une avancée rebelle. Soutien logistique et militaire en cours.",
+      "detail": "Cette livraison de matériel militaire russe intervient dans un contexte de pression accrue des groupes rebelles contre le gouvernement malien. Les armes pourraient inclure des équipements terrestres ou aériens selon les besoins identifiés. Ce soutien s'ajoute aux engagements précédents de Wagner au Mali bien que sous une forme différente. La logistique navale suggère une coordination étroite entre Bamako et Moscou.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Renforcement capacité militaire gouvernementale",
+        "Risque d'escalade avec groupes armés",
+        "Dépendance accrue envers acteurs extérieurs"
+      ],
+      "recommandations": [
+        "Cartographier flux logistiques d'approvisionnement",
+        "Surveiller communications entre acteurs russes et maliens",
+        "Analyser impact sur équilibre des forces locales"
+      ]
+    },
+    {
+      "id": "u-radiookapi-net-2026-07-07-actualite-societe-chute-du-prix-des-regimes-",
+      "date": "2026-07-07",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Radio Okapi",
+      "source_url": "https://www.radiookapi.net/2026/07/07/actualite/societe/chute-du-prix-des-regimes-de-bananes-beni",
+      "image": "https://photos.radiookapi.net/picture/20220831181220519127_IMG-20220831-WA0076.jpg?imgmax=1200",
+      "titre": "Chute des prix de bananes à Beni due à la fermeture de la frontière RDC-Ouganda",
+      "resume": "Fermeture frontalière RDC-Ouganda pour Ebola fait chuter les prix des bananes à Beni. Impact économique majeur.",
+      "detail": "La fermeture de la frontière Kasindi-Lubiriha depuis début juillet perturbe gravement les échanges commerciaux entre la RDC et l'Ouganda. Les producteurs de bananes de Beni, dont les régimes étaient exportés vers l'Ouganda, subissent une chute des prix de 60 à 80 %. Cette mesure sanitaire aggrave une crise économique déjà présente dans la région du Nord-Kivu.",
+      "lieu": "Beni, RDC",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Pertes économiques pour agriculteurs locaux",
+        "Risque de tensions sociales accrues",
+        "Perturbation chaînes d'approvisionnement régionales"
+      ],
+      "recommandations": [
+        "Évaluer impact socio-économique local",
+        "Suivre évolution mesures sanitaires frontalières",
+        "Cartographier alternatives commerciales"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-femafoot-conference-de-presse-ma-vedette-cest-lequipe-les",
+      "date": "2026-07-07",
+      "theatre": "afrique",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/femafoot-conference-de-presse-ma-vedette-cest-lequipe-les-temps-forts/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/740365854_1573608151134354_295221872230556193_n.jpg",
+      "titre": "Nouveau sélectionneur des Aigles du Mali prend ses fonctions",
+      "resume": "Anthony Da Silva nommé sélectionneur des Aigles du Mali. Conférence de presse pour présenter sa vision.",
+      "detail": "Anthony Da Silva a officiellement pris ses fonctions de sélectionneur national du Mali lors d'une conférence de presse à Bamako. Il a insisté sur l'importance de l'esprit d'équipe et a présenté les contours de sa stratégie pour les prochains matchs. Cette nomination intervient après plusieurs changements récents au sein de la FEMAFOOT.",
+      "lieu": "Bamako, Mali",
+      "lat": 12.6132656,
+      "lon": -7.9847391,
+      "implications": [
+        "Stabilité relative direction technique",
+        "Potentiel impact sur recrutement joueurs",
+        "Attentes accrues supporters maliens"
+      ],
+      "recommandations": [
+        "Analyser composition équipe nationale",
+        "Surveiller déclarations officielles futures",
+        "Évaluer performance lors prochains matchs"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-interruption-du-trafic-routier-entre-tenenkou-et-mopti-en",
+      "date": "2026-07-07",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/interruption-du-trafic-routier-entre-tenenkou-et-mopti-en-raison-de-la-montee-des-eaux/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22587.jpg",
+      "titre": "Interruption trafic routier entre Tenenkou et Mopti à cause des inondations",
+      "resume": "Montée des eaux bloque la route entre Tenenkou et Mopti. Impact sur approvisionnement et mobilité.",
+      "detail": "Les fortes pluies récentes dans la région de Mopti ont provoqué une montée des eaux bloquant la route nationale entre Tenenkou et Mopti. Cette situation perturbe les déplacements de personnes et de marchandises dans une zone déjà vulnérable aux crises alimentaires. Les autorités locales appellent à la prudence.",
+      "lieu": "Mopti, Mali",
+      "lat": 14.514489,
+      "lon": -3.6464581,
+      "implications": [
+        "Ralentissement approvisionnements humanitaires",
+        "Isolement zones rurales",
+        "Risque sanitaire accru"
+      ],
+      "recommandations": [
+        "Surveiller évolutions météo locales",
+        "Évaluer besoins en logistique alternative",
+        "Cartographier zones sinistrées"
+      ]
+    },
     {
       "id": "u-trthaber-com-haber-turkiye-burdurda-saganak-sonrasi-kopru-yolunda-cokm",
       "date": "2026-07-06",
@@ -645,106 +745,6 @@
         "Surveiller les mouvements migratoires vers l'Afrique du Sud",
         "Renforcer la coopération consulaire pour les ressortissants sahéliens",
         "Préparer des plans d'évacuation d'urgence"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-education-mobile-mali-500000-jeunes",
-      "date": "2026-07-01",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/education-mobile-mali-500000-jeunes/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21587.jpg",
-      "titre": "Mali : 500 000 jeunes connectés à l'éducation mobile",
-      "resume": "Au Mali, 500 000 jeunes utilisent désormais l'éducation mobile malgré les défis du Sahel.",
-      "detail": "L'éducation mobile représente une avancée significative dans l'accès à l'éducation pour les jeunes sahéliens. Cela pourrait améliorer le capital humain mais nécessite un accompagnement pour éviter les risques de désinformation. Le projet pourrait inspirer d'autres pays de la région.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Amélioration de l'accès à l'éducation",
-        "Potentiel d'innovation pédagogique",
-        "Risque de fracture numérique"
-      ],
-      "recommandations": [
-        "Cartographier les initiatives similaires dans le Sahel",
-        "Évaluer l'impact sur l'emploi des jeunes",
-        "Soutenir les partenariats public-privé pour étendre le projet"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-sommet-culturel-ouagadougou-2026",
-      "date": "2026-07-01",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-sommet-culturel-ouagadougou-2026/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21581.jpg",
-      "titre": "AES lance sommet culturel à Ouagadougou pour affirmer son identité",
-      "resume": "En août 2026, l'AES organise son 1er sommet culturel à Ouagadougou, un événement clé pour affirmer son identité face à l'Occident.",
-      "detail": "Ce sommet culturel s'inscrit dans une stratégie plus large de l'AES pour consolider son autonomie vis-à-vis des influences occidentales. Il pourrait servir de plateforme pour des alliances économiques et sécuritaires alternatives. La réussite de l'événement pourrait renforcer la légitimité du groupe.",
-      "lieu": "Ouagadougou, Burkina Faso",
-      "lat": 12.3681873,
-      "lon": -1.5270944,
-      "implications": [
-        "Renforcement de la cohésion de l'AES",
-        "Alternative aux partenariats traditionnels",
-        "Influence culturelle accrue"
-      ],
-      "recommandations": [
-        "Analyser les discours officiels lors du sommet",
-        "Évaluer les partenariats annoncés",
-        "Suivre les réactions des pays voisins non membres"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-300-milliards-sahel",
-      "date": "2026-07-01",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-300-milliards-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21544.jpg",
-      "titre": "AES annonce plan de 300 milliards de dollars pour le Sahel",
-      "resume": "L'AES (Mali, Burkina, Niger) annonce un plan de 300 milliards de dollars pour le Sahel entre espoir de développement et pari risqué.",
-      "detail": "Ce plan économique ambitieux pourrait transformer le paysage économique du Sahel s'il est mis en œuvre efficacement. Les défis incluent la mobilisation des fonds, la coordination entre les trois pays et la lutte contre la corruption. Sa réussite dépendra des partenariats internationaux et de la stabilité interne.",
-      "lieu": "Sahel (Mali, Burkina Faso, Niger)",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Potentiel de transformation économique",
-        "Risque de mauvaise allocation des ressources",
-        "Besoin de partenariats internationaux"
-      ],
-      "recommandations": [
-        "Analyser la faisabilité du plan et ses sources de financement",
-        "Cartographier les acteurs économiques impliqués",
-        "Suivre les premiers projets pilotes"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-manuscrits-tombouctou-unesco-mali",
-      "date": "2026-07-01",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/manuscrits-tombouctou-unesco-mali/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21573.jpg",
-      "titre": "UNESCO et Mali lancent programme pour sauver manuscrits de Tombouctou",
-      "resume": "Face aux menaces jihadistes et climatiques, l'UNESCO et le Mali lancent un programme urgent pour sauver les manuscrits de Tombouctou.",
-      "detail": "Ce programme de sauvegarde culturelle est crucial pour préserver un patrimoine historique majeur du Sahel. Les manuscrits sont menacés par les conflits, le changement climatique et le manque de ressources. Leur préservation pourrait aussi servir de levier pour le tourisme culturel dans la région.",
-      "lieu": "Tombouctou, Mali",
-      "lat": 16.7719091,
-      "lon": -3.0087272,
-      "implications": [
-        "Préservation du patrimoine culturel sahélien",
-        "Potentiel touristique",
-        "Renforcement de la coopération internationale"
-      ],
-      "recommandations": [
-        "Évaluer les besoins logistiques et financiers du projet",
-        "Coordonner avec les communautés locales pour la protection des sites",
-        "Intégrer le projet dans les stratégies de développement touristique"
       ]
     }
   ]
