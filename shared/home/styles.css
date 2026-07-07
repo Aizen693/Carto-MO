@@ -2778,6 +2778,32 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 .premium-badge:hover { filter: brightness(1.08); transform: translateY(-1px); }
 .premium-badge__icon { width: 15px; height: 15px; flex: 0 0 15px; }
 
+/* Animation « acquisition » : la pupille de l'œil pulse comme un indicateur
+   de surveillance active, et le badge respire avec un halo violet lent. */
+.premium-badge { animation: premiumGlow 3.8s ease-in-out infinite; }
+@keyframes premiumGlow {
+  0%, 100% {
+    box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--violet) 55%, transparent),
+                inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+  50% {
+    box-shadow: 0 4px 22px -3px color-mix(in srgb, var(--violet) 85%, transparent),
+                inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+}
+.premium-badge__icon circle,
+.premium-chip svg circle {
+  transform-box: fill-box; transform-origin: center;
+  animation: premiumPupil 2.6s ease-in-out infinite;
+}
+@keyframes premiumPupil {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(2); opacity: 0.5; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .premium-badge, .premium-badge__icon circle, .premium-chip svg circle { animation: none; }
+}
+
 /* Pastille compacte près du logo : reste visible sur mobile quand la partie
    droite du header est repliée dans le menu burger. */
 .premium-chip {

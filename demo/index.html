@@ -103,6 +103,16 @@
     background: linear-gradient(135deg, #8B5FC0, #6B3FA0);
   }
   #premium-banner .pb-star svg { width: 17px; height: 17px; }
+  /* Pupille qui pulse : même indicateur de surveillance active que le badge du header */
+  #premium-banner .pb-star svg circle {
+    transform-box: fill-box; transform-origin: center;
+    animation: pbPupil 2.6s ease-in-out infinite;
+  }
+  @keyframes pbPupil {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(2); opacity: 0.5; }
+  }
+  @media (prefers-reduced-motion: reduce) { #premium-banner .pb-star svg circle { animation: none; } }
   #premium-banner .pb-text { font-size: 13px; line-height: 1.45; }
   #premium-banner .pb-text b { color: #6B3FA0; }
   #premium-banner .pb-cta {
