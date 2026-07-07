@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page introuvable · Algor Access</title>
+<link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+<meta name="robots" content="noindex" />
+<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<style>
+  :root { --violet: #6B3FA0; --encre: #181428; --gris: #5A5470; --fond: #F4F2F8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--fond); color: var(--encre);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .np { text-align: center; max-width: 460px; }
+  .np__code {
+    font-size: 96px; font-weight: 800; letter-spacing: -0.04em; line-height: 1;
+    background: linear-gradient(100deg, var(--violet), #4B6BD6);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .np__titre { font-size: 22px; font-weight: 700; margin-top: 18px; letter-spacing: -0.01em; }
+  .np__texte { font-size: 15px; line-height: 1.6; color: var(--gris); margin-top: 10px; }
+  .np__btn {
+    display: inline-block; margin-top: 28px; padding: 13px 26px;
+    background: linear-gradient(100deg, var(--violet), #4B6BD6); color: #fff;
+    border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .np__btn:hover { opacity: .92; transform: translateY(-1px); }
+  .np__btn:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; }
+</style>
+</head>
+<body>
+  <main class="np">
+    <div class="np__code">404</div>
+    <h1 class="np__titre">Cette page n'existe pas</h1>
+    <p class="np__texte">L'adresse demandée a peut-être changé lors d'une mise à jour de la plateforme. Les théâtres suivis restent accessibles depuis l'accueil.</p>
+    <a class="np__btn" href="/">Retour à l'accueil</a>
+  </main>
+</body>
+</html>

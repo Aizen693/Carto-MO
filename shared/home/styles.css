@@ -2010,7 +2010,7 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   font-weight: 700;
   letter-spacing: -0.01em;
 }
-.da-modal__head h3 em { font-family: var(--serif); font-style: normal; color: var(--violet); font-weight: 400; }
+.da-modal__head h3 em { font-style: normal; color: var(--violet); }
 .da-modal__body {
   padding: 32px 36px;
   overflow-y: auto;
