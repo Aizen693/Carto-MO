@@ -83,6 +83,41 @@
   @keyframes nar-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(107,63,160,0); } 50% { box-shadow: 0 0 0 4px rgba(107,63,160,0.30); } }
   #btn-sidebar.nar-hint { animation: nar-pulse 1.1s ease-in-out 3; border-radius: 6px; }
   @media (max-width: 640px) { .narration { top: auto; bottom: 78px; width: calc(100% - 28px); } }
+
+  /* ── Bandeau compte premium : rappelle que cette page est une démo fictive
+        et rouvre le chemin vers les théâtres réels (DA violet/blanc/Jakarta) ── */
+  #premium-banner {
+    position: fixed; top: 62px; left: 50%; transform: translateX(-50%); z-index: 60;
+    display: flex; align-items: center; gap: 13px;
+    max-width: min(640px, calc(100vw - 24px));
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: #F4F2F8; color: #2A2438;
+    border: 1.5px solid rgba(107, 63, 160, 0.35);
+    border-radius: 14px; padding: 12px 14px 12px 12px;
+    box-shadow: 0 16px 42px -12px rgba(107, 63, 160, 0.45);
+  }
+  #premium-banner .pb-star {
+    flex: 0 0 auto; width: 32px; height: 32px; border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 15px;
+    background: linear-gradient(135deg, #8B5FC0, #6B3FA0);
+  }
+  #premium-banner .pb-text { font-size: 13px; line-height: 1.45; }
+  #premium-banner .pb-text b { color: #6B3FA0; }
+  #premium-banner .pb-cta {
+    flex: 0 0 auto; font-size: 12.5px; font-weight: 700; color: #fff; text-decoration: none;
+    padding: 9px 14px; border-radius: 10px;
+    background: linear-gradient(135deg, #8B5FC0, #6B3FA0);
+    box-shadow: 0 6px 18px -6px rgba(107, 63, 160, 0.6);
+    white-space: nowrap;
+  }
+  #premium-banner .pb-close {
+    flex: 0 0 auto; border: none; background: none; color: #9089AA;
+    font-size: 17px; line-height: 1; cursor: pointer; padding: 2px;
+  }
+  @media (max-width: 640px) {
+    #premium-banner { flex-wrap: wrap; justify-content: flex-end; }
+  }
 </style>
 </head>
 <body>
@@ -856,6 +891,54 @@
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
+</script>
+
+<!-- Compte premium : la démo reste publique, mais un compte ayant déjà l'accès
+     réel (plan premium ou rôle équipe) voit un bandeau vers les théâtres au
+     lieu des invitations à s'abonner. -->
+<script type="module">
+  import '../shared/site-auth.js?v=20260707a';
+
+  async function checkPremium() {
+    try {
+      const a = window.algorAuth;
+      if (!a || !a.supabase) return;
+      const { data } = await a.supabase.auth.getSession();
+      const user = data && data.session && data.session.user;
+      if (!user) return;
+      const r = await a.supabase.from('profiles').select('role, plan').eq('id', user.id).single();
+      const p = r.data || {};
+      if (p.plan === 'premium' || p.role === 'admin' || p.role === 'editor') showPremium();
+    } catch (e) { /* page publique : ne jamais casser la démo */ }
+  }
+
+  function showPremium() {
+    if (document.getElementById('premium-banner')) return;
+
+    // Les CTA d'abonnement n'ont plus de sens pour ce compte → accès direct.
+    const unlock = document.querySelector('.hbtn[href="../offres/"]');
+    if (unlock) {
+      unlock.href = '../theatres/';
+      unlock.title = 'Ouvrir les théâtres suivis';
+      unlock.innerHTML = '<span style="font-size:10px;line-height:1">★</span> Mes théâtres';
+    }
+    const nar = document.getElementById('nar-cta');
+    if (nar) { nar.href = '../theatres/'; nar.textContent = 'Accéder aux théâtres →'; }
+
+    const el = document.createElement('div');
+    el.id = 'premium-banner';
+    el.setAttribute('role', 'status');
+    el.innerHTML =
+      '<span class="pb-star">★</span>' +
+      '<span class="pb-text">Votre compte est <b>premium</b> : cette page est une démonstration en données fictives. Vos théâtres réels vous attendent.</span>' +
+      '<a class="pb-cta" href="../theatres/">Accéder aux théâtres</a>' +
+      '<button type="button" class="pb-close" aria-label="Fermer">✕</button>';
+    document.body.appendChild(el);
+    el.querySelector('.pb-close').addEventListener('click', () => el.remove());
+  }
+
+  window.addEventListener('algorAuthStateChanged', checkPremium);
+  checkPremium();
 </script>
 
 </body>

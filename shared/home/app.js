@@ -52,6 +52,64 @@ function useStaff() {
   }, []);
   return staff;
 }
+
+// Statut « premium » du compte connecté : plan premium ou rôle équipe
+// (admin/editor), soit l'accès réel aux 6 théâtres. Alimente le badge
+// Premium du header. Même mécanique de détection que useStaff.
+function usePremium() {
+  const [premium, setPremium] = useState(false);
+  useEffect(() => {
+    let on = true,
+      tries = 0;
+    async function check() {
+      const c = window.algorAuth && window.algorAuth.supabase;
+      if (!c) {
+        if (on && tries++ < 20) setTimeout(check, 250);
+        return;
+      }
+      try {
+        const {
+          data: s
+        } = await c.auth.getSession();
+        const uid = s && s.session && s.session.user && s.session.user.id;
+        if (!uid) {
+          if (on) setPremium(false);
+          return;
+        }
+        const r = await c.from('profiles').select('role, plan').eq('id', uid).single();
+        const p = r.data || {};
+        if (on) setPremium(p.plan === 'premium' || p.role === 'admin' || p.role === 'editor');
+      } catch (e) {
+        if (on) setPremium(false);
+      }
+    }
+    check();
+    const recheck = () => {
+      tries = 0;
+      check();
+    };
+    window.addEventListener('algorAuthStateChanged', recheck);
+    window.addEventListener('algorAuthReady', recheck);
+    return () => {
+      on = false;
+      window.removeEventListener('algorAuthStateChanged', recheck);
+      window.removeEventListener('algorAuthReady', recheck);
+    };
+  }, []);
+  return premium;
+}
+function StarIcon({
+  className
+}) {
+  return /*#__PURE__*/React.createElement("svg", {
+    className: className,
+    viewBox: "0 0 24 24",
+    fill: "currentColor",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 2l2.9 6.26 6.6.7-4.9 4.5 1.35 6.54L12 16.9 6.05 20l1.35-6.54-4.9-4.5 6.6-.7z"
+  }));
+}
 function PopCheck() {
   return /*#__PURE__*/React.createElement("svg", {
     className: "cta-pop__check",
@@ -72,6 +130,7 @@ function App() {
   const [view, setView] = useState(window.location.hash === '#comptes' ? 'comptes' : window.location.hash === '#rapports' ? 'rapports' : window.location.hash === '#console' ? 'console' : 'home');
   const [clock, setClock] = useState('--:--');
   const staff = useStaff();
+  const premium = usePremium();
   const [menuOpen, setMenuOpen] = useState(false);
   const [authLoggedIn, setAuthLoggedIn] = useState(!!(window.algorAuthState && window.algorAuthState.loggedIn));
 
@@ -249,7 +308,10 @@ function App() {
     className: "brand__body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "brand__name"
-  }, "Algor ", /*#__PURE__*/React.createElement("span", null, "Access")))), /*#__PURE__*/React.createElement("nav", {
+  }, "Algor ", /*#__PURE__*/React.createElement("span", null, "Access")))), premium && /*#__PURE__*/React.createElement("span", {
+    className: "premium-chip",
+    "aria-label": "Compte premium"
+  }, /*#__PURE__*/React.createElement(StarIcon, null), " Premium"), /*#__PURE__*/React.createElement("nav", {
     className: "site-nav",
     "aria-label": "Rubriques"
   }, /*#__PURE__*/React.createElement("a", {
@@ -303,11 +365,21 @@ function App() {
     className: "logo-reset",
     onClick: resetLogo,
     title: "R\xE9tablir le logo Algor Access"
-  }, "R\xE9tablir")), /*#__PURE__*/React.createElement("a", {
+  }, "R\xE9tablir")), premium ? /*#__PURE__*/React.createElement("a", {
+    className: "premium-badge",
+    href: "#",
+    "data-algor-login": true,
+    title: "Compte premium : acc\xE8s complet aux 6 th\xE9\xE2tres"
+  }, /*#__PURE__*/React.createElement(StarIcon, {
+    className: "premium-badge__star"
+  }), " Premium") : /*#__PURE__*/React.createElement("a", {
     className: 'site-login' + (authLoggedIn ? ' is-logged' : ''),
     href: "#",
     "data-algor-login": true
-  }, authLoggedIn ? 'Connecté' : 'Connexion'), /*#__PURE__*/React.createElement("a", {
+  }, authLoggedIn ? 'Connecté' : 'Connexion'), premium ? /*#__PURE__*/React.createElement("a", {
+    className: "site-cta",
+    href: "/theatres/"
+  }, "Acc\xE9der aux th\xE9\xE2tres") : /*#__PURE__*/React.createElement("a", {
     className: "site-cta",
     href: "/offres/"
   }, "Voir les offres")), /*#__PURE__*/React.createElement("button", {

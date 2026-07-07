@@ -34,6 +34,46 @@ function useStaff() {
   return staff;
 }
 
+// Statut « premium » du compte connecté : plan premium ou rôle équipe
+// (admin/editor), soit l'accès réel aux 6 théâtres. Alimente le badge
+// Premium du header. Même mécanique de détection que useStaff.
+function usePremium() {
+  const [premium, setPremium] = useState(false);
+  useEffect(() => {
+    let on = true, tries = 0;
+    async function check() {
+      const c = window.algorAuth && window.algorAuth.supabase;
+      if (!c) { if (on && tries++ < 20) setTimeout(check, 250); return; }
+      try {
+        const { data: s } = await c.auth.getSession();
+        const uid = s && s.session && s.session.user && s.session.user.id;
+        if (!uid) { if (on) setPremium(false); return; }
+        const r = await c.from('profiles').select('role, plan').eq('id', uid).single();
+        const p = r.data || {};
+        if (on) setPremium(p.plan === 'premium' || p.role === 'admin' || p.role === 'editor');
+      } catch (e) { if (on) setPremium(false); }
+    }
+    check();
+    const recheck = () => { tries = 0; check(); };
+    window.addEventListener('algorAuthStateChanged', recheck);
+    window.addEventListener('algorAuthReady', recheck);
+    return () => {
+      on = false;
+      window.removeEventListener('algorAuthStateChanged', recheck);
+      window.removeEventListener('algorAuthReady', recheck);
+    };
+  }, []);
+  return premium;
+}
+
+function StarIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2l2.9 6.26 6.6.7-4.9 4.5 1.35 6.54L12 16.9 6.05 20l1.35-6.54-4.9-4.5 6.6-.7z" />
+    </svg>
+  );
+}
+
 function PopCheck() {
   return (
     <svg className="cta-pop__check" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -54,6 +94,7 @@ function App() {
   );
   const [clock, setClock] = useState('--:--');
   const staff = useStaff();
+  const premium = usePremium();
   const [menuOpen, setMenuOpen] = useState(false);
   const [authLoggedIn, setAuthLoggedIn] = useState(
     !!(window.algorAuthState && window.algorAuthState.loggedIn)
@@ -166,6 +207,13 @@ function App() {
               </div>
             )}
           </div>
+          {/* Pastille compacte : garde le statut premium visible quand le
+              menu mobile replie la partie droite du header. */}
+          {premium && (
+            <span className="premium-chip" aria-label="Compte premium">
+              <StarIcon /> Premium
+            </span>
+          )}
 
           <nav className="site-nav" aria-label="Rubriques">
             <a href="/plateforme/">Plateforme</a>
@@ -190,11 +238,22 @@ function App() {
                 )}
               </span>
             )}
-            <a className={'site-login' + (authLoggedIn ? ' is-logged' : '')}
-               href="#" data-algor-login>
-              {authLoggedIn ? 'Connecté' : 'Connexion'}
-            </a>
-            <a className="site-cta" href="/offres/">Voir les offres</a>
+            {premium ? (
+              <a className="premium-badge" href="#" data-algor-login
+                 title="Compte premium : accès complet aux 6 théâtres">
+                <StarIcon className="premium-badge__star" /> Premium
+              </a>
+            ) : (
+              <a className={'site-login' + (authLoggedIn ? ' is-logged' : '')}
+                 href="#" data-algor-login>
+                {authLoggedIn ? 'Connecté' : 'Connexion'}
+              </a>
+            )}
+            {premium ? (
+              <a className="site-cta" href="/theatres/">Accéder aux théâtres</a>
+            ) : (
+              <a className="site-cta" href="/offres/">Voir les offres</a>
+            )}
           </div>
           <button className="site-burger" aria-label="Menu" aria-expanded={menuOpen}
                   onClick={() => setMenuOpen((o) => !o)}>
