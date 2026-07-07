@@ -528,7 +528,7 @@ function VeilleSystem() {
     d: "M13.7 21a2 2 0 0 1-3.4 0"
   })), unread > 0 && /*#__PURE__*/React.createElement("span", {
     className: "veille-bell__badge"
-  }, unread)), /*#__PURE__*/React.createElement("div", {
+  }, unread > 9 ? '9+' : unread)), /*#__PURE__*/React.createElement("div", {
     className: 'veille-panel-scrim' + (open ? ' is-open' : ''),
     onClick: () => setOpen(false)
   }), /*#__PURE__*/React.createElement("aside", {
@@ -623,7 +623,7 @@ const FOOT_COLS = [{
   links: [['Théâtres', '/theatres/'], ['Offres', '/offres/'], ['Méthodologie', '/methodologie/'], ['La plateforme', '/plateforme/']]
 }, {
   head: 'Théâtres suivis',
-  links: [['Sahel', '/sahel/'], ['Moyen-Orient', '/moyen-orient/'], ['RDC', '/rdc/'], ['Afrique', '/afrique/']]
+  links: [['Sahel', '/sahel/'], ['Moyen-Orient', '/moyen-orient/'], ['RDC', '/rdc/'], ['Madagascar', '/madagascar/'], ['Afrique Maritime', '/afrique/'], ['Asie du Sud', '/asie-sud/']]
 }, {
   head: 'Société',
   links: [['À propos', '/a-propos/'], ['Débunkage', '/debunkage/'], ['Contact', '/contact/']]
