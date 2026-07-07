@@ -278,17 +278,29 @@ function VeilleRow({
     className: "vrow",
     onClick: onOpen
   }, /*#__PURE__*/React.createElement("span", {
+    className: "vrow__thumb"
+  }, it.image && /*#__PURE__*/React.createElement("img", {
+    src: it.image,
+    alt: "",
+    loading: "lazy",
+    referrerPolicy: "no-referrer",
+    onError: e => {
+      e.target.style.display = 'none';
+    }
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "vrow__body"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vrow__meta"
+  }, /*#__PURE__*/React.createElement("span", {
     className: "vrow__dot",
     style: {
       background: sev.c
     }
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "vrow__body"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "vrow__meta"
-  }, veilleZone(it.theatre), " \xB7 ", veilleDateFR(it.date), " \xB7 ", it.source), /*#__PURE__*/React.createElement("span", {
+  }), veilleZone(it.theatre), " \xB7 ", veilleDateFR(it.date), " \xB7 ", it.source), /*#__PURE__*/React.createElement("span", {
     className: "vrow__t"
-  }, it.titre)));
+  }, it.titre), it.resume && /*#__PURE__*/React.createElement("span", {
+    className: "vrow__r"
+  }, it.resume)));
 }
 function VeilleModal({
   it,

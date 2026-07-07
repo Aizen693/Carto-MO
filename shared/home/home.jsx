@@ -126,10 +126,14 @@ function VeilleRow({ it, onOpen }){
   const sev = SEV[it.severite] || SEV.info;
   return (
     <button className="vrow" onClick={onOpen}>
-      <span className="vrow__dot" style={{ background: sev.c }} />
+      <span className="vrow__thumb">
+        {it.image && <img src={it.image} alt="" loading="lazy" referrerPolicy="no-referrer"
+          onError={(e)=>{ e.target.style.display='none'; }} />}
+      </span>
       <span className="vrow__body">
-        <span className="vrow__meta">{veilleZone(it.theatre)} · {veilleDateFR(it.date)} · {it.source}</span>
+        <span className="vrow__meta"><span className="vrow__dot" style={{ background: sev.c }} />{veilleZone(it.theatre)} · {veilleDateFR(it.date)} · {it.source}</span>
         <span className="vrow__t">{it.titre}</span>
+        {it.resume && <span className="vrow__r">{it.resume}</span>}
       </span>
     </button>
   );
