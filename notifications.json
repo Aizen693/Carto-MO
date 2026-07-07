@@ -29,7 +29,7 @@
     {
       "id": "u-radiookapi-net-2026-07-07-actualite-societe-chute-du-prix-des-regimes-",
       "date": "2026-07-07",
-      "theatre": "sahel",
+      "theatre": "rdc",
       "severite": "alerte",
       "source": "Radio Okapi",
       "source_url": "https://www.radiookapi.net/2026/07/07/actualite/societe/chute-du-prix-des-regimes-de-bananes-beni",
@@ -49,31 +49,6 @@
         "Évaluer impact socio-économique local",
         "Suivre évolution mesures sanitaires frontalières",
         "Cartographier alternatives commerciales"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-femafoot-conference-de-presse-ma-vedette-cest-lequipe-les",
-      "date": "2026-07-07",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/femafoot-conference-de-presse-ma-vedette-cest-lequipe-les-temps-forts/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/740365854_1573608151134354_295221872230556193_n.jpg",
-      "titre": "Nouveau sélectionneur des Aigles du Mali prend ses fonctions",
-      "resume": "Anthony Da Silva nommé sélectionneur des Aigles du Mali. Conférence de presse pour présenter sa vision.",
-      "detail": "Anthony Da Silva a officiellement pris ses fonctions de sélectionneur national du Mali lors d'une conférence de presse à Bamako. Il a insisté sur l'importance de l'esprit d'équipe et a présenté les contours de sa stratégie pour les prochains matchs. Cette nomination intervient après plusieurs changements récents au sein de la FEMAFOOT.",
-      "lieu": "Bamako, Mali",
-      "lat": 12.6132656,
-      "lon": -7.9847391,
-      "implications": [
-        "Stabilité relative direction technique",
-        "Potentiel impact sur recrutement joueurs",
-        "Attentes accrues supporters maliens"
-      ],
-      "recommandations": [
-        "Analyser composition équipe nationale",
-        "Surveiller déclarations officielles futures",
-        "Évaluer performance lors prochains matchs"
       ]
     },
     {
@@ -104,7 +79,7 @@
     {
       "id": "u-trthaber-com-haber-turkiye-burdurda-saganak-sonrasi-kopru-yolunda-cokm",
       "date": "2026-07-06",
-      "theatre": "sahel",
+      "theatre": "moyen-orient",
       "severite": "alerte",
       "source": "TRT Haber",
       "source_url": "https://www.trthaber.com/haber/turkiye/burdurda-saganak-sonrasi-kopru-yolunda-cokme-950333.html",
@@ -174,56 +149,6 @@
         "Surveiller les réactions des groupes armés",
         "Évaluer les dommages collatéraux",
         "Anticiper des représailles"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-senegal-joueurs-bloques-usa-mondial-2026",
-      "date": "2026-07-05",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/senegal-joueurs-bloques-usa-mondial-2026/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22545.jpg",
-      "titre": "Équipe du Sénégal bloquée aux USA après élimination en Mondial",
-      "resume": "L'annulation d'un vol charter a bloqué l'équipe sénégalaise aux États-Unis après son élimination. Une crise logistique et diplomatique s'ensuit.",
-      "detail": "Le Sénégal, éliminé en Coupe du Monde, attend un nouveau vol après l'annulation du charter. Les joueurs sont bloqués aux USA, suscitant des tensions diplomatiques. Les autorités sénégalaises et américaines gèrent la crise, mais des retards pourraient aggraver la situation. L'incident révèle des failles dans la logistique sportive internationale.",
-      "lieu": "États-Unis",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Tensions diplomatiques Sénégal-USA",
-        "Risque de crise médiatique",
-        "Impact sur la préparation des équipes"
-      ],
-      "recommandations": [
-        "Suivre les négociations diplomatiques",
-        "Évaluer les risques de blocage futur",
-        "Renforcer les procédures logistiques"
-      ]
-    },
-    {
-      "id": "u-theguardian-com-world-2026-jul-05-ukraine-war-briefing-trump-repositio",
-      "date": "2026-07-05",
-      "theatre": "moyen-orient",
-      "severite": "alerte",
-      "source": "The Guardian",
-      "source_url": "https://www.theguardian.com/world/2026/jul/05/ukraine-war-briefing-trump-repositions-himself-as-peacemaker-in-long-call-with-putin",
-      "image": "",
-      "titre": "Trump propose son aide pour mettre fin à la guerre en Ukraine",
-      "resume": "Donald Trump a discuté avec Vladimir Poutine d'une possible médiation pour mettre fin à la guerre en Ukraine. L'appel intervient avant le sommet de l'OTAN.",
-      "detail": "Trump s'est positionné en médiateur entre Kiev et Moscou, proposant d'aider à trouver une solution. Cette initiative pourrait influencer les négociations, mais suscite des interrogations sur son rôle. La Russie et l'Ukraine n'ont pas encore réagi officiellement. La Turquie, hôte du sommet de l'OTAN, pourrait jouer un rôle clé dans le processus.",
-      "lieu": "Russie / Ukraine",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque de division au sein de l'OTAN",
-        "Opportunité de désescalade",
-        "Impact sur les livraisons d'armes"
-      ],
-      "recommandations": [
-        "Surveiller les réactions de l'OTAN",
-        "Analyser les propositions de Trump",
-        "Évaluer les risques de manipulation"
       ]
     },
     {
@@ -355,7 +280,7 @@
       "id": "u-bamada-net-les-parlements-de-laes-font-bloc-derriere-le-burkina-faso-e",
       "date": "2026-07-04",
       "theatre": "sahel",
-      "severite": "critique",
+      "severite": "alerte",
       "source": "Bamada.net",
       "source_url": "https://bamada.net/les-parlements-de-laes-font-bloc-derriere-le-burkina-faso-et-denoncent-la-resolution-du-parlement-europeen",
       "image": "http://bamada.net/wp-content/uploads/2025/12/general-assimi-goita-president-transition-malienne-abdourahamane-tiani-niger-ibrahim-traore-burkina-faso-colleges-chefs-etats-ceremonies-ouverture-aes-palais-koulouba-1024x682.jpg",
@@ -399,56 +324,6 @@
         "Maintenir une pression médiatique sur Gaza",
         "Coordonner avec les ONG sur place pour une réponse adaptée",
         "Anticiper les besoins en reconstruction à long terme"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-inondations-guinee-34-morts-crise-sahel",
-      "date": "2026-07-04",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/inondations-guinee-34-morts-crise-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22538.jpg",
-      "titre": "Inondations en Guinée : 34 morts et menace sur la stabilité régionale",
-      "resume": "Des inondations meurtrières en Guinée ont causé 34 morts et risquent d'aggraver les tensions sociales. La crise climatique accentue les risques dans la région.",
-      "detail": "Les fortes pluies ont submergé plusieurs zones en Guinée, notamment à Conakry et Labé. Les autorités peinent à gérer les secours et la reconstruction. Cette catastrophe pourrait alimenter des mouvements de contestation ou des conflits locaux pour l'accès aux ressources. Les groupes armés pourraient exploiter le mécontentement pour recruter.",
-      "lieu": "Guinée",
-      "lat": 10.7226226,
-      "lon": -10.7083587,
-      "implications": [
-        "Risque accru d'instabilité politique",
-        "Opportunité pour groupes armés",
-        "Besoin urgent d'aide humanitaire"
-      ],
-      "recommandations": [
-        "Évaluer les besoins humanitaires",
-        "Renforcer la surveillance des zones à risque",
-        "Anticiper les déplacements de population"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-ghana-elimine-colombie-mondial-2026",
-      "date": "2026-07-04",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/ghana-elimine-colombie-mondial-2026/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22543.jpg",
-      "titre": "Ghana éliminé par la Colombie en Mondial 2026",
-      "resume": "Le Ghana quitte la Coupe du Monde après une défaite face à la Colombie. Un revers sportif et symbolique pour le football africain.",
-      "detail": "L'élimination du Ghana, finaliste en 2022, marque un revers pour le football africain. Les analyses soulignent des problèmes tactiques et une préparation insuffisante. Cet échec pourrait affecter la confiance des sponsors et des fédérations. La performance des équipes africaines reste un sujet de débat continental.",
-      "lieu": "Mexique",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Impact sur la crédibilité du football africain",
-        "Risque de désengagement des sponsors",
-        "Débat sur la gestion des équipes"
-      ],
-      "recommandations": [
-        "Analyser les causes de l'échec du Ghana",
-        "Renforcer les préparations des équipes",
-        "Évaluer l'impact médiatique"
       ]
     },
     {
@@ -530,7 +405,7 @@
       "id": "u-maliactu-net-aes-quitte-cpi-mali-niger-burkina",
       "date": "2026-07-03",
       "theatre": "sahel",
-      "severite": "critique",
+      "severite": "alerte",
       "source": "Mali Actu",
       "source_url": "https://maliactu.net/aes-quitte-cpi-mali-niger-burkina/",
       "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22226.jpg",
@@ -577,31 +452,6 @@
       ]
     },
     {
-      "id": "u-timeslive-co-za-politics-2026-07-03-listen-easy-to-shout-mbalula-says-",
-      "date": "2026-07-03",
-      "theatre": "afrique",
-      "severite": "info",
-      "source": "TimesLive",
-      "source_url": "https://www.timeslive.co.za/politics/2026-07-03-listen-easy-to-shout-mbalula-says-vote-to-secure-borders/",
-      "image": "",
-      "titre": "Mbalula prône vote plutôt que manifestations pour sécuriser les frontières",
-      "resume": "Le secrétaire général de l'ANC encourage les Sud-Africains à voter pour résoudre les problèmes de frontières poreuses.",
-      "detail": "Cette déclaration reflète une volonté de canaliser les frustrations populaires vers des solutions institutionnelles. Cependant, cela pourrait aussi masquer l'inaction gouvernementale sur les questions migratoires. Une analyse des politiques migratoires sud-africaines est nécessaire.",
-      "lieu": "Afrique du Sud",
-      "lat": -28.8166236,
-      "lon": 24.991639,
-      "implications": [
-        "Stabilisation potentielle du débat sur les frontières",
-        "Risque de report des réformes migratoires",
-        "Nécéssité de surveiller les tensions sociales liées à l'immigration"
-      ],
-      "recommandations": [
-        "Analyser les propositions politiques pour sécuriser les frontières",
-        "Surveiller les indicateurs de tensions sociales",
-        "Évaluer l'impact des politiques migratoires sur la sécurité intérieure"
-      ]
-    },
-    {
       "id": "u-jeuneafrique-com-1807952-politique-mahmoud-dicko-les-secrets-de-lexil-",
       "date": "2026-07-02",
       "theatre": "sahel",
@@ -623,54 +473,6 @@
       "recommandations": [
         "Surveiller les discours de Dicko depuis l'Algérie",
         "Renforcer la diplomatie avec Alger sur les figures religieuses exilées"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-inondations-accra-ghana-afrique-ouest",
-      "date": "2026-07-02",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/inondations-accra-ghana-afrique-ouest/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21972.jpg",
-      "titre": "12 morts à Accra inondations au Ghana",
-      "resume": "12 décès et des dégâts majeurs à Accra après des inondations liées au changement climatique.",
-      "detail": "Les inondations à Accra ont causé la mort de 12 personnes et exposé les vulnérabilités climatiques de l'Afrique de l'Ouest. Les risques d'inondations récurrentes menacent la stabilité socio-économique de la région, aggravant les tensions autour des ressources. Les autorités ghanéennes appellent à une action régionale coordonnée pour atténuer les impacts futurs. Ce phénomène illustre l'urgence d'adaptation climatique dans le Sahel.",
-      "lieu": "Accra, Ghana",
-      "lat": 5.5571096,
-      "lon": -0.2012376,
-      "implications": [
-        "Crise humanitaire en Afrique de l'Ouest",
-        "Risque de conflits pour l'accès à l'eau",
-        "Mobilisation internationale nécessaire"
-      ],
-      "recommandations": [
-        "Évaluer les plans d'urgence des pays voisins",
-        "Renforcer les infrastructures de drainage à Accra"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-saibari-bayern-munich-impact-sahel",
-      "date": "2026-07-02",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/saibari-bayern-munich-impact-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21963.jpg",
-      "titre": "Saibari au Bayern Munich 55M€ impact géopolitique",
-      "resume": "Le transfert du joueur malien Ismaël Saibari au Bayern Munich pour 55M€ marque un tournant sportif et économique.",
-      "detail": "Le transfert d'Ismaël Saibari au Bayern Munich pour 55M€ représente le plus important transfert de l'histoire du football malien. Ce transfert pourrait inspirer d'autres talents locaux et renforcer l'attractivité du Sahel dans le football mondial. Il pourrait aussi servir de levier pour des partenariats économiques entre l'Europe et l'Afrique. Cependant, des questions subsistent sur la gestion des fonds générés au Mali.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Nouveau modèle économique pour le football",
-        "Attractivité accrue du Sahel",
-        "Opportunités d'investissement"
-      ],
-      "recommandations": [
-        "Analyser les retombées économiques locales",
-        "Étudier les partenariats futurs avec l'Europe"
       ]
     },
     {
@@ -700,7 +502,7 @@
     {
       "id": "u-maliactu-net-ebola-rdc-300-cas-fantomes-alerte",
       "date": "2026-07-01",
-      "theatre": "sahel",
+      "theatre": "rdc",
       "severite": "alerte",
       "source": "Mali Actu",
       "source_url": "https://maliactu.net/ebola-rdc-300-cas-fantomes-alerte/",
