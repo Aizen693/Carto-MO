@@ -2757,47 +2757,37 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 }
 .site-login.is-logged:hover { color: var(--violet); }
 /* ── Badge Premium (header) : compte connecté avec accès aux 6 théâtres.
-      Remplace le bouton « Connecté » ; le clic ouvre le récap compte. ── */
+      Remplace le bouton « Connecté » ; le clic ouvre le récap compte.
+      Sobre et institutionnel : capitale espacée + icône de surveillance. ── */
 .premium-badge {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: 13.5px; font-weight: 700; letter-spacing: 0.02em;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11.5px; font-weight: 700;
+  letter-spacing: 0.11em; text-transform: uppercase;
   color: #fff;
-  padding: 8px 17px;
-  border-radius: 999px;
+  padding: 9px 15px;
+  border-radius: var(--r-sm);
   background: var(--violet-grad);
-  box-shadow: 0 4px 16px -4px color-mix(in srgb, var(--violet) 60%, transparent),
-              inset 0 1px 0 rgba(255, 255, 255, 0.28);
-  position: relative; overflow: hidden;
+  box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--violet) 55%, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, 0.18);
   white-space: nowrap;
   transition: filter 0.15s var(--ease), transform 0.15s var(--ease);
 }
 .premium-badge:hover { filter: brightness(1.08); transform: translateY(-1px); }
-.premium-badge__star { width: 13px; height: 13px; flex: 0 0 13px; }
-/* Reflet discret qui traverse le badge, façon carte de membre */
-.premium-badge::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.32) 50%, transparent 70%);
-  transform: translateX(-100%);
-  animation: premiumSheen 4.5s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes premiumSheen {
-  0%, 55% { transform: translateX(-100%); }
-  85%, 100% { transform: translateX(100%); }
-}
-@media (prefers-reduced-motion: reduce) { .premium-badge::after { animation: none; } }
+.premium-badge__icon { width: 15px; height: 15px; flex: 0 0 15px; }
 
 /* Pastille compacte près du logo : reste visible sur mobile quand la partie
    droite du header est repliée dans le menu burger. */
 .premium-chip {
-  display: none; align-items: center; gap: 5px;
-  font-size: 11.5px; font-weight: 700; color: var(--violet);
-  padding: 4px 11px; border-radius: 999px;
+  display: none; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--violet);
+  padding: 5px 11px; border-radius: 8px;
   border: 1.5px solid var(--violet-bd);
-  background: color-mix(in srgb, var(--violet) 8%, var(--bg));
+  background: color-mix(in srgb, var(--violet) 7%, var(--bg));
   white-space: nowrap;
 }
-.premium-chip svg { width: 11px; height: 11px; flex: 0 0 11px; }
+.premium-chip svg { width: 12px; height: 12px; flex: 0 0 12px; }
 @media (max-width: 1080px) { .premium-chip { display: inline-flex; } }
 
 .site-cta {

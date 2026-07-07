@@ -98,16 +98,34 @@ function usePremium() {
   }, []);
   return premium;
 }
-function StarIcon({
+
+// Icône « renseignement » : œil de surveillance dans un cadre de visée.
+function IntelIcon({
   className
 }) {
   return /*#__PURE__*/React.createElement("svg", {
     className: className,
     viewBox: "0 0 24 24",
-    fill: "currentColor",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
     "aria-hidden": "true"
   }, /*#__PURE__*/React.createElement("path", {
-    d: "M12 2l2.9 6.26 6.6.7-4.9 4.5 1.35 6.54L12 16.9 6.05 20l1.35-6.54-4.9-4.5 6.6-.7z"
+    d: "M3 7V5a2 2 0 0 1 2-2h2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M17 3h2a2 2 0 0 1 2 2v2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M21 17v2a2 2 0 0 1-2 2h-2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M7 21H5a2 2 0 0 1-2-2v-2"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "1"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M18.944 12.33a1 1 0 0 0 0-.66 7.5 7.5 0 0 0-13.888 0 1 1 0 0 0 0 .66 7.5 7.5 0 0 0 13.888 0"
   }));
 }
 function PopCheck() {
@@ -311,7 +329,7 @@ function App() {
   }, "Algor ", /*#__PURE__*/React.createElement("span", null, "Access")))), premium && /*#__PURE__*/React.createElement("span", {
     className: "premium-chip",
     "aria-label": "Compte premium"
-  }, /*#__PURE__*/React.createElement(StarIcon, null), " Premium"), /*#__PURE__*/React.createElement("nav", {
+  }, /*#__PURE__*/React.createElement(IntelIcon, null), " Premium"), /*#__PURE__*/React.createElement("nav", {
     className: "site-nav",
     "aria-label": "Rubriques"
   }, /*#__PURE__*/React.createElement("a", {
@@ -370,8 +388,8 @@ function App() {
     href: "#",
     "data-algor-login": true,
     title: "Compte premium : acc\xE8s complet aux 6 th\xE9\xE2tres"
-  }, /*#__PURE__*/React.createElement(StarIcon, {
-    className: "premium-badge__star"
+  }, /*#__PURE__*/React.createElement(IntelIcon, {
+    className: "premium-badge__icon"
   }), " Premium") : /*#__PURE__*/React.createElement("a", {
     className: 'site-login' + (authLoggedIn ? ' is-logged' : ''),
     href: "#",

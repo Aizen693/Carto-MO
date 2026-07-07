@@ -97,11 +97,12 @@
     box-shadow: 0 16px 42px -12px rgba(107, 63, 160, 0.45);
   }
   #premium-banner .pb-star {
-    flex: 0 0 auto; width: 32px; height: 32px; border-radius: 999px;
+    flex: 0 0 auto; width: 32px; height: 32px; border-radius: 9px;
     display: flex; align-items: center; justify-content: center;
-    color: #fff; font-size: 15px;
+    color: #fff;
     background: linear-gradient(135deg, #8B5FC0, #6B3FA0);
   }
+  #premium-banner .pb-star svg { width: 17px; height: 17px; }
   #premium-banner .pb-text { font-size: 13px; line-height: 1.45; }
   #premium-banner .pb-text b { color: #6B3FA0; }
   #premium-banner .pb-cta {
@@ -920,7 +921,7 @@
     if (unlock) {
       unlock.href = '../theatres/';
       unlock.title = 'Ouvrir les théâtres suivis';
-      unlock.innerHTML = '<span style="font-size:10px;line-height:1">★</span> Mes théâtres';
+      unlock.textContent = 'Mes théâtres';
     }
     const nar = document.getElementById('nar-cta');
     if (nar) { nar.href = '../theatres/'; nar.textContent = 'Accéder aux théâtres →'; }
@@ -929,7 +930,7 @@
     el.id = 'premium-banner';
     el.setAttribute('role', 'status');
     el.innerHTML =
-      '<span class="pb-star">★</span>' +
+      '<span class="pb-star"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="1"/><path d="M18.944 12.33a1 1 0 0 0 0-.66 7.5 7.5 0 0 0-13.888 0 1 1 0 0 0 0 .66 7.5 7.5 0 0 0 13.888 0"/></svg></span>' +
       '<span class="pb-text">Votre compte est <b>premium</b> : cette page est une démonstration en données fictives. Vos théâtres réels vous attendent.</span>' +
       '<a class="pb-cta" href="../theatres/">Accéder aux théâtres</a>' +
       '<button type="button" class="pb-close" aria-label="Fermer">✕</button>';
