@@ -38,8 +38,8 @@
       "resume": "Fermeture frontalière RDC-Ouganda pour Ebola fait chuter les prix des bananes à Beni. Impact économique majeur.",
       "detail": "La fermeture de la frontière Kasindi-Lubiriha depuis début juillet perturbe gravement les échanges commerciaux entre la RDC et l'Ouganda. Les producteurs de bananes de Beni, dont les régimes étaient exportés vers l'Ouganda, subissent une chute des prix de 60 à 80 %. Cette mesure sanitaire aggrave une crise économique déjà présente dans la région du Nord-Kivu.",
       "lieu": "Beni, RDC",
-      "lat": null,
-      "lon": null,
+      "lat": 0.3974023,
+      "lon": 29.2117178,
       "implications": [
         "Pertes économiques pour agriculteurs locaux",
         "Risque de tensions sociales accrues",
@@ -77,6 +77,131 @@
       ]
     },
     {
+      "id": "u-maliweb-net-economie-cooperation-russie-aes-3a-deuxi-c3-a8me-round-des",
+      "date": "2026-07-07",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "L'actualité au Mali en direct et en continu - Derniers messages",
+      "source_url": "https://www.maliweb.net/economie/cooperation/Russie-AES-%3A-deuxi%C3%A8me-round-des-consultations-3118195.html",
+      "image": "",
+      "titre": "Deuxième round de consultations Russie-AES à Niamey",
+      "resume": "Les ministres des Affaires étrangères de l'AES et de la Russie se réunissent pour consolider leur coopération. Une rencontre stratégique dans un contexte géopolitique tendu au Sahel.",
+      "detail": "Cette deuxième session de consultations entre la Confédération des États du Sahel (AES) et la Russie confirme le renforcement des liens diplomatiques et militaires entre Moscou et les juntes malienne, burkinabè et nigérienne. La rencontre à Niamey souligne l'isolement croissant de ces pays face à la CEDEAO et à l'ONU. L'AES cherche à diversifier ses partenariats pour contourner les sanctions et sécuriser un soutien logistique face aux groupes armés. La présence russe s'intensifie, avec des implications directes sur les équilibres régionaux.",
+      "lieu": "Niamey, Niger",
+      "lat": 13.524834,
+      "lon": 2.109823,
+      "implications": [
+        "Renforcement influence russe au Sahel",
+        "Affaiblissement pression CEDEAO",
+        "Risque escalade tensions régionales"
+      ],
+      "recommandations": [
+        "Surveiller déploiement conseillers militaires russes",
+        "Évaluer impact sanctions CEDEAO",
+        "Cartographier zones de collaboration sécuritaire"
+      ]
+    },
+    {
+      "id": "u-bamada-net-lutte-contre-le-terrorisme-africa-corps-place-alghabass-ag-",
+      "date": "2026-07-07",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/lutte-contre-le-terrorisme-africa-corps-place-alghabass-ag-intalla-dans-son-viseur-et-affirme-poursuivre-les-chefs-armes",
+      "image": "http://bamada.net/wp-content/uploads/2026/07/alghabass-ag-intalla-touareg-cma-rebelles-mnla-azawad-africa-corps-701x1024.jpg",
+      "titre": "Africa Corps cible chef touareg Alghabass Ag Intalla",
+      "resume": "Les forces pro-malianaises, avec le soutien de l'Africa Corps, traquent activement Alghabass Ag Intalla, figure touarègue, dans le cadre de la lutte antiterroriste.",
+      "detail": "Alghabass Ag Intalla est visé par les forces engagées aux côtés du Mali pour son implication présumée dans des activités terroristes dans le nord du pays. Son arrestation ou neutralisation pourrait fragiliser les groupes armés touaregs et réduire leur capacité à opérer dans la région de Kidal. L'intervention de l'Africa Corps, acteur russe, marque une escalade dans la lutte contre l'insurrection. Cette opération s'inscrit dans une stratégie plus large de reconquête territoriale par Bamako, avec un soutien extérieur accru.",
+      "lieu": "Kidal, Mali",
+      "lat": 19.802089,
+      "lon": 0.7253125,
+      "implications": [
+        "Déstabilisation groupes armés touaregs",
+        "Montée en puissance Africa Corps",
+        "Risque crise humanitaire Nord Mali"
+      ],
+      "recommandations": [
+        "Analyser impact sur mouvements touaregs",
+        "Surveiller déploiement Africa Corps",
+        "Évaluer risques pour populations civiles"
+      ]
+    },
+    {
+      "id": "u-laprunellerdc-cd-sud-kivu-le-gouverneur-interimaire-jean-jacques-elaka",
+      "date": "2026-07-07",
+      "theatre": "rdc",
+      "severite": "alerte",
+      "source": "La Prunelle RDC",
+      "source_url": "https://laprunellerdc.cd/sud-kivu-le-gouverneur-interimaire-jean-jacques-elakano-assure-que-la-situation-reste-sous-controle-a-fizi-et-uvira/",
+      "image": "",
+      "titre": "Gouverneur du Sud-Kivu assure contrôle à Fizi et Uvira",
+      "resume": "Le gouverneur intérimaire du Sud-Kivu affirme que la situation sécuritaire reste maîtrisée dans les territoires de Fizi et Uvira malgré les tensions persistantes.",
+      "detail": "Jean-Jacques Elakano a rassuré la population sur la capacité des FARDC à maintenir l'ordre dans ces zones frontalières avec le Burundi et le Rwanda. Cependant, la présence de groupes armés et les tensions intercommunautaires persistent en arrière-plan. La région reste sous haute surveillance en raison de son importance stratégique pour le contrôle des ressources minières. Les déclarations du gouverneur visent à limiter les risques de panique et à maintenir la stabilité politique locale.",
+      "lieu": "Fizi et Uvira, Sud-Kivu, RDC",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque résurgence violences intercommunautaires",
+        "Pression sur ressources minières",
+        "Menace déstabilisation régionale"
+      ],
+      "recommandations": [
+        "Cartographier déploiement FARDC",
+        "Surveiller migrations population",
+        "Analyser impact groupes armés"
+      ]
+    },
+    {
+      "id": "u-maliweb-net-nation-5-ans-de-transition-du-president-assimi-goita-le-mi",
+      "date": "2026-07-07",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Maliweb.net",
+      "source_url": "https://www.maliweb.net/nation/5-ans-de-transition-du-president-assimi-goita-le-ministre-kassogue-evoque-dimportantes-innovations-et-dambitieuses-perspectives-3118199.html",
+      "image": "",
+      "titre": "5 ans de transition au Mali : bilan et perspectives présentés",
+      "resume": "Le gouvernement malien dresse un bilan des réformes menées depuis 5 ans de transition. Plusieurs innovations institutionnelles et perspectives de développement sont évoquées.",
+      "detail": "Le ministre Kassogué a présenté un bilan positif des réformes engagées depuis le coup d'État de 2020, avec des avancées sur la gouvernance et la sécurité. Cependant, les défis structurels (corruption, insécurité, crise économique) persistent. Les perspectives incluent une accélération des projets d'infrastructure et une intensification de la lutte contre le terrorisme. Ce discours vise à renforcer la légitimité du régime et à rallier la population autour du projet de transition.",
+      "lieu": "Bamako, Mali",
+      "lat": 12.6132656,
+      "lon": -7.9847391,
+      "implications": [
+        "Renforcement légitimité Assimi Goïta",
+        "Poursuite réformes institutionnelles",
+        "Risque mécontentement population"
+      ],
+      "recommandations": [
+        "Évaluer impact réformes sur sécurité",
+        "Analyser perception internationale",
+        "Surveiller développement infrastructures"
+      ]
+    },
+    {
+      "id": "u-mali24-info-justice-le-journaliste-chahana-takiou-nobtient-pas-la-libe",
+      "date": "2026-07-07",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "MALI 24 INFO",
+      "source_url": "https://mali24.info/justice-le-journaliste-chahana-takiou-nobtient-pas-la-liberte-provisoire/",
+      "image": "https://mali24.info/wp-content/uploads/2026/06/FB_IMG_1780925808211-1.jpg",
+      "titre": "Journaliste malien maintenu en détention",
+      "resume": "Le directeur de publication du journal 22 Septembre, Chahana Takiou, reste incarcéré malgré sa demande de liberté provisoire.",
+      "detail": "Incarcéré depuis le 8 juin 2026, Chahana Takiou est poursuivi pour des motifs non précisés, dans un contexte de restrictions croissantes de la liberté de la presse au Mali. Son maintien en détention s'inscrit dans une tendance de répression des voix critiques, notamment celles relayant des informations sur les violations des droits humains ou la corruption. Cette affaire illustre les tensions entre le régime et les médias indépendants, avec des implications sur la transparence et la démocratie.",
+      "lieu": "Bamako, Mali",
+      "lat": 12.6132656,
+      "lon": -7.9847391,
+      "implications": [
+        "Restriction liberté de la presse",
+        "Risque dégradation droits humains",
+        "Impact perception internationale"
+      ],
+      "recommandations": [
+        "Surveiller traitement médias indépendants",
+        "Analyser impact sur société civile",
+        "Évaluer risques pour espace démocratique"
+      ]
+    },
+    {
       "id": "u-trthaber-com-haber-turkiye-burdurda-saganak-sonrasi-kopru-yolunda-cokm",
       "date": "2026-07-06",
       "theatre": "moyen-orient",
@@ -88,8 +213,8 @@
       "resume": "Un pont routier s'est effondré à Burdur après des pluies intenses, entraînant sa fermeture immédiate.",
       "detail": "Les fortes précipitations en Turquie ont causé l'effondrement d'un pont dans la province de Burdur, perturbant la circulation et nécessitant des mesures de sécurité. Bien que l'incident soit localisé, il souligne les vulnérabilités des infrastructures en cas d'événements climatiques extrêmes. La Turquie, en tant que corridor logistique régional, pourrait subir des retards dans les mouvements de troupes ou de marchandises.",
       "lieu": "Burdur, Turquie",
-      "lat": null,
-      "lon": null,
+      "lat": 37.5183407,
+      "lon": 30.1691254,
       "implications": [
         "Retards logistiques possibles",
         "Risques pour les corridors d'approvisionnement",
@@ -511,8 +636,8 @@
       "resume": "La RDC fait face à 300 cas non localisés d'Ebola, déclenchant une alerte sanitaire majeure en Afrique francophone.",
       "detail": "L'absence de localisation précise des cas complique la riposte et augmente les risques de propagation transfrontalière. La situation pourrait s'aggraver en saison des pluies avec la mobilité accrue des populations. Les systèmes de santé régionaux devraient se préparer à une réponse coordonnée urgente.",
       "lieu": "République démocratique du Congo",
-      "lat": null,
-      "lon": null,
+      "lat": -2.9814344,
+      "lon": 23.8222636,
       "implications": [
         "Risque de propagation transfrontalière vers le Sahel",
         "Surcharge des systèmes de santé locaux",
