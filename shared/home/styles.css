@@ -2764,7 +2764,10 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   font-size: 11.5px; font-weight: 700;
   letter-spacing: 0.11em; text-transform: uppercase;
   color: #fff;
-  padding: 9px 15px;
+  /* Mêmes métriques verticales que .site-cta (14px/normal + 10px de padding)
+     pour que les deux boutons du header aient exactement la même hauteur. */
+  line-height: 17.5px;
+  padding: 10px 16px;
   border-radius: var(--r-sm);
   background: var(--violet-grad);
   box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--violet) 55%, transparent),
