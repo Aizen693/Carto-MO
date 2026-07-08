@@ -1,0 +1,6 @@
+obsidian-notes
+
+# Cles API locales (jamais commitees)
+.env
+n8n/.env
+n8n/test-out.json
