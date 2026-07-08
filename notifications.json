@@ -1,6 +1,31 @@
 {
-  "updated": "2026-07-07",
+  "updated": "2026-07-08",
   "items": [
+    {
+      "id": "u-youtube-com-watch-v-isibuq2oxis",
+      "date": "2026-07-08",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Reuters",
+      "source_url": "https://www.youtube.com/watch?v=isibuq2Oxis",
+      "image": "",
+      "titre": "Ouganda déploie des équipes médicales pour l'épidémie d'Ebola en RDC",
+      "resume": "L'Ouganda envoie des experts médicaux et ouvre de nouveaux centres de traitement pour aider la RDC à contenir une épidémie d'Ebola.",
+      "detail": "Cette coopération transfrontalière intervient alors que l'épidémie d'Ebola s'étend dans l'est de la RDC, une région déjà fragilisée par les conflits. L'Ouganda, voisin direct, renforce ses capacités de réponse pour éviter une propagation régionale. Les autorités sanitaires locales et internationales surveillent la situation de près.",
+      "lieu": "Est de la République Démocratique du Congo",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque accru de propagation de maladies infectieuses",
+        "Impact potentiel sur la stabilité sociale et économique",
+        "Nécessité d'une coordination régionale renforcée"
+      ],
+      "recommandations": [
+        "Surveiller les mouvements transfrontaliers liés à l'épidémie",
+        "Renforcer les capacités locales de détection et de réponse",
+        "Planifier des protocoles d'urgence pour les crises sanitaires"
+      ]
+    },
     {
       "id": "u-aljazeera-com-video-newsfeed-2026-7-7-aje-onl-nf-russia-sends-weapons-",
       "date": "2026-07-07",
@@ -199,6 +224,31 @@
         "Surveiller traitement médias indépendants",
         "Analyser impact sur société civile",
         "Évaluer risques pour espace démocratique"
+      ]
+    },
+    {
+      "id": "u-instagram-com-p-daezjxcjgrj",
+      "date": "2026-07-07",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Gambiaj.com",
+      "source_url": "https://www.instagram.com/p/DaezJxCjgRJ/",
+      "image": "",
+      "titre": "Camp d'Anefis cible d'offensives rebelles et jihadistes",
+      "resume": "Le camp militaire d'Anefis, considéré comme stratégique, fait l'objet d'attaques répétées par des groupes armés au Mali.",
+      "detail": "Les affrontements impliquent des forces maliennes, l'Africa Corps, ainsi que des rebelles du FLA et des djihadistes du JNIM. Bien que l'armée malienne affirme avoir repoussé les offensives, les groupes armés maintiennent une pression significative. La localisation d'Anefis en fait un point clé pour le contrôle du nord du Mali.",
+      "lieu": "Anefis, Mali",
+      "lat": 18.04589,
+      "lon": 0.602897,
+      "implications": [
+        "Affaiblissement de la position gouvernementale dans le nord",
+        "Risque de fragmentation des alliances militaires locales",
+        "Possible intervention accrue des partenaires internationaux"
+      ],
+      "recommandations": [
+        "Évaluer la vulnérabilité des camps militaires dans la région",
+        "Renforcer les capacités de renseignement pour anticiper les attaques",
+        "Prévoir des mécanismes de réponse rapide aux crises"
       ]
     },
     {
