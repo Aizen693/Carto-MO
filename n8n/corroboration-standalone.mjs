@@ -37,6 +37,11 @@ function pickModel(task) { return MODEL_BY_TASK[task] || 'mistral-small-latest';
 /* -------- Helpers -------- */
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 function statusOf(e) { const m = String((e && e.message) || '').match(/\b(429|5\d\d)\b/); return Number((e && (e.status || e.statusCode)) || (m && m[1]) || 0); }
+// fetch avec delai maxi (evite tout blocage si une API ne repond pas).
+async function fetchT(url, opts = {}, ms = 25000) {
+  const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), ms);
+  try { return await fetch(url, { ...opts, signal: ctrl.signal }); } finally { clearTimeout(t); }
+}
 function parseJSON(txt, fb) {
   if (txt == null) return fb;
   let s = String(txt).trim().replace(/^```(?:json)?/i, '').replace(/```$/, '').trim();
@@ -50,7 +55,7 @@ async function mistralChat({ task, system, user, temperature = 0.2 }) {
   for (let a = 0; a < 3; a++) {
     await sleep(250);
     try {
-      const res = await fetch('https://api.mistral.ai/v1/chat/completions', { method: 'POST', headers: { Authorization: 'Bearer ' + CONFIG.mistralKey, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const res = await fetchT('https://api.mistral.ai/v1/chat/completions', { method: 'POST', headers: { Authorization: 'Bearer ' + CONFIG.mistralKey, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       if (!res.ok) { const e = new Error('mistral ' + res.status); e.status = res.status; throw e; }
       const data = await res.json();
       return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
@@ -66,7 +71,7 @@ async function braveSearch(query, { count = 5, country = 'fr', lang = 'fr' } = {
   const wait = 1100 - (Date.now() - braveLast); if (wait > 0) await sleep(wait); braveLast = Date.now();
   try {
     const qs = new URLSearchParams({ q: query, count: String(count), country, search_lang: lang });
-    const r = await fetch('https://api.search.brave.com/res/v1/web/search?' + qs, { headers: { 'X-Subscription-Token': CONFIG.braveKey, Accept: 'application/json' } });
+    const r = await fetchT('https://api.search.brave.com/res/v1/web/search?' + qs, { headers: { 'X-Subscription-Token': CONFIG.braveKey, Accept: 'application/json' } });
     if (!r.ok) return [];
     const data = await r.json();
     return ((data.web && data.web.results) || []).map((it) => ({ source: (it.meta_url && it.meta_url.hostname) || 'web', titre: it.title || '', url: it.url || '', extrait: it.description || '', date: it.page_age || it.age || '' }));
@@ -78,7 +83,7 @@ async function googleGround(query) {
   if (!CONFIG.useGoogleFallback || !CONFIG.googleKey) return [];
   try {
     const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + CONFIG.googleKey;
-    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: 'Sources publiques recentes sur: ' + query }] }], tools: [{ google_search: {} }] }) });
+    const r = await fetchT(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: 'Sources publiques recentes sur: ' + query }] }], tools: [{ google_search: {} }] }) });
     if (!r.ok) return [];
     const data = await r.json();
     const chunks = (((data.candidates || [])[0] || {}).groundingMetadata || {}).groundingChunks || [];
@@ -156,9 +161,11 @@ const points = inPath ? JSON.parse(await readFile(inPath, 'utf8')) : POINTS_TEST
 console.log('Corroboration de ' + points.length + ' points (Brave + Mistral small, Google fallback=' + CONFIG.useGoogleFallback + ').');
 const resultats = [];
 for (const p of points) {
-  const r = await corroborate(p);
+  let r;
+  try { r = await corroborate(p); }
+  catch (e) { r = { id: p.id, zone: p.zone, lieu: p.pays, corrobore: false, confiance: 0, sources: [], raison: 'erreur: ' + ((e && e.message) || e) }; }
   resultats.push(r);
-  console.log((r.corrobore ? 'OK ' : '.. ') + '#' + r.id + ' ' + (r.lieu || r.zone) + '  conf=' + (r.confiance || 0).toFixed(2));
+  console.log((r.corrobore ? 'OK ' : '.. ') + '#' + r.id + ' ' + (r.lieu || r.zone) + '  conf=' + (r.confiance || 0).toFixed(2) + (r.raison && r.raison.startsWith('erreur') ? '  [' + r.raison + ']' : ''));
 }
 const nb = resultats.filter((r) => r.corrobore).length;
 const taux = points.length ? Math.round((nb / points.length) * 100) : 0;
