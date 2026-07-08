@@ -110,27 +110,33 @@ function prefilter(point, candidates) {
   return (kept.length ? kept : candidates.slice(0, 5)).slice(0, 8);
 }
 
-const JUDGE_SYS = ['Tu es analyste OSINT. On te donne un incident HUMINT et des candidats publics.', 'corrobore=true seulement si au moins un candidat rapporte le MEME evenement: meme lieu, date a plus ou moins 3 jours, acteur ou type coherent.', "Meme region ou meme conflit mais autre evenement = rejet. N'invente jamais d'URL: utilise uniquement les URL des candidats.", 'texte_reformule: reecris le fait en version publiable OSINT, attribuee aux sources ("selon ..."), sans aucun detail que seule une source humaine pourrait connaitre.', 'Reponds en JSON strict: {"corrobore":bool,"confiance":0..1,"sources":[{"nom":"","url":"","date":""}],"texte_reformule":"","raison":""}.'].join(' ');
-const VERIFY_SYS = ['Verification adversariale OSINT. Sois sceptique par defaut: ton role est de REFUTER les correspondances faibles.', "On te donne un incident HUMINT et des sources retenues avec leurs extraits.", 'Sur la seule base des extraits fournis, garde une source uniquement si elle rapporte le MEME evenement: meme lieu, date a plus ou moins 3 jours, acteur ou type coherent. Meme region mais autre evenement = rejet.', 'corrobore=true seulement si au moins une source resiste. sources_validees ne contient QUE les URL fournies confirmees.', 'Reponds en JSON strict: {"corrobore":bool,"confiance":0..1,"sources_validees":[{"nom":"","url":"","date":""}],"raison":""}.'].join(' ');
+const QGEN_SYS = ["Tu es analyste OSINT. A partir d'un renseignement, genere 2 a 3 requetes de recherche web courtes (francais ET anglais) pour retrouver CET evenement precis dans la presse, ACLED, rapports ONU ou trackers OSINT.", 'Vise les mots-cles distinctifs (lieu, acteur, nature du fait), pas la date. Une requete peut reformuler le fait (ex: "MONUSCO mandat prolongation" plutot que "UN Kinshasa").', 'Reponds en JSON strict: {"requetes":["",""]}.'].join(' ');
 
-function queriesFor(p) {
+const JUDGE_SYS = ['Tu es analyste OSINT. On te donne un incident HUMINT et des candidats publics.', 'corrobore=true seulement si au moins un candidat rapporte le MEME evenement: meme lieu, date a plus ou moins 3 jours, acteur ou type coherent.', "Meme region ou meme conflit mais autre evenement = rejet. N'invente jamais d'URL: utilise uniquement les URL des candidats.", 'texte_reformule: reecris le fait en version publiable OSINT, attribuee aux sources ("selon ..."), sans aucun detail que seule une source humaine pourrait connaitre.', 'Reponds en JSON strict: {"corrobore":bool,"confiance":0..1,"sources":[{"nom":"","url":"","date":""}],"texte_reformule":"","raison":""}.'].join(' ');
+
+// Requetes mecaniques (repli si la generation IA echoue).
+function queriesMecaniques(p) {
   const lieu = (p.pays || '').split('-').pop().trim();
   const base = [p.actor, lieu, p.date].filter(Boolean).join(' ').trim();
   const alt = [lieu, p.type].filter(Boolean).join(' ').trim();
   return [base || p.fait.slice(0, 60), alt].filter(Boolean);
 }
 
+// Requetes generees par Mistral small a partir du fait (gros levier de rappel).
+async function genQueries(p) {
+  const j = parseJSON(await mistralChat({ task: 'gather', system: QGEN_SYS, user: JSON.stringify({ acteur: p.actor, type: p.type, lieu: p.pays, date: p.date, fait: p.fait }) }), null);
+  const q = (j && Array.isArray(j.requetes)) ? j.requetes.map((x) => String(x || '').trim()).filter(Boolean).slice(0, 3) : [];
+  return q.length ? q : queriesMecaniques(p);
+}
+
 async function corroborate(p) {
-  const cand = prefilter(p, await findSources(queriesFor(p)));
+  const cand = prefilter(p, await findSources(await genQueries(p)));
   if (!cand.length) return { id: p.id, zone: p.zone, lieu: p.pays, corrobore: false, confiance: 0, sources: [], raison: 'aucune source' };
   const j = parseJSON(await mistralChat({ task: 'judge', system: JUDGE_SYS, user: JSON.stringify({ incident: { acteur: p.actor, type: p.type, date: p.date, lieu: p.pays, fait: p.fait }, candidats: cand }) }), null);
   const conf = j ? Number(j.confiance || 0) : 0;
   const srcJudge = (j && j.corrobore) ? (j.sources || []).filter((s) => s && /^https?:/i.test(s.url || '')) : [];
-  if (!srcJudge.length || conf < CONFIG.seuil) return { id: p.id, zone: p.zone, lieu: p.pays, corrobore: false, confiance: conf, sources: [], texte_reformule: (j && j.texte_reformule) || '', raison: (j && j.raison) || 'sous le seuil' };
-  const retenus = cand.filter((c) => srcJudge.some((s) => s.url === c.url));
-  const v = parseJSON(await mistralChat({ task: 'verify', system: VERIFY_SYS, user: JSON.stringify({ incident: { acteur: p.actor, type: p.type, date: p.date, lieu: p.pays, fait: p.fait }, sources: retenus.length ? retenus : srcJudge }) }), null);
-  const ok = !!(v && v.corrobore && (v.sources_validees || []).length);
-  return { id: p.id, zone: p.zone, acteur: p.actor, type: p.type, date: p.date, lieu: p.pays, corrobore: ok, confiance: ok ? Number(v.confiance || conf) : conf, sources: ok ? v.sources_validees : [], texte_reformule: (j && j.texte_reformule) || '', raison: ok ? (v.raison || '') : ('refute a la verif: ' + ((v && v.raison) || 'aucune source resistante')) };
+  const ok = !!(srcJudge.length && conf >= CONFIG.seuil);
+  return { id: p.id, zone: p.zone, acteur: p.actor, type: p.type, date: p.date, lieu: p.pays, corrobore: ok, confiance: conf, sources: ok ? srcJudge : [], texte_reformule: (j && j.texte_reformule) || '', raison: (j && j.raison) || (ok ? '' : 'sous le seuil ou sans source') };
 }
 
 /* -------- 5 points de test integres (utilises si aucun fichier passe) -------- */
