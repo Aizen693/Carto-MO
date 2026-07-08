@@ -293,7 +293,24 @@
     #country-title{font-size:15px}
     #tl-slider{width:44vw}
     #tl-label{min-width:0;font-size:11px}
-    #analysis{width:calc(100vw - 36px);max-height:calc(100% - 150px)}
+
+    /* Barre constructeur : une seule ligne qui defile, plus d'empilement. */
+    #header{height:auto;padding:8px 10px;gap:10px}
+    #header .brand img{height:26px}
+    #chipbar{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+      scrollbar-width:none;padding:2px 2px 6px;margin-right:-10px}
+    #chipbar::-webkit-scrollbar{display:none}
+    .chip{flex:none;padding:7px 11px 9px;gap:7px;border-radius:11px}
+    .chip-key{font-size:8px}
+    .chip-val{font-size:12.5px}
+    .builder-input-wrap{flex:none;min-width:150px;padding:7px 11px}
+    .builder-input{min-width:110px;font-size:12px}
+
+    /* Panneaux : pleine largeur sous la barre, hauteur bornee pour laisser
+       la carte visible ; l'analyse demarre repliee (voir humint-engine). */
+    #analysis{top:62px;left:10px;width:calc(100vw - 20px);max-height:52vh}
+    #news{top:62px;right:10px;width:min(280px,calc(100vw - 20px));max-height:52vh}
+    #timeline{bottom:12px;max-width:calc(100% - 20px);padding:8px 12px;gap:9px}
   }
 </style>
 </head>
@@ -312,7 +329,7 @@
 <div id="news"></div>
 <div id="analysis"></div>
 
-<script src="../shared/humint-engine.js?v=20260703a"></script>
+<script src="../shared/humint-engine.js?v=20260708a"></script>
 <script src="../shared/zones-3d.js?v=20260703a"></script>
 </body>
 </html>
