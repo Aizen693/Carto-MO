@@ -1032,11 +1032,32 @@ function ComptesView({ onBack }) {
     setBusy(u.id + field);
     setUsers((list) => list.map((x) => (x.id === u.id ? { ...x, [field]: value } : x)));
     const { error } = await c.from('profiles').update({ [field]: value }).eq('id', u.id);
-    setBusy(null);
     if (error) {
+      setBusy(null);
       setUsers((list) => list.map((x) => (x.id === u.id ? { ...x, [field]: prev } : x)));
       alert('Échec de la mise à jour : ' + (error.message || 'réessayez'));
+      return;
     }
+    // Accorder premium confirme aussi l'email de la personne : sans ça, un compte
+    // non confirmé reste bloqué à la connexion et ne voit jamais son accès.
+    if (field === 'plan' && value === 'premium') {
+      try {
+        const { data: s } = await c.auth.getSession();
+        const token = s && s.session && s.session.access_token;
+        const r = await fetch(SB_URL + '/functions/v1/admin-confirm-email', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ targetId: u.id }),
+        });
+        if (!r.ok) {
+          const d = await r.json().catch(() => ({}));
+          alert('Premium accordé, mais la confirmation d’email a échoué : ' + (d.error || r.status) + '. La personne devra confirmer via le lien reçu par mail.');
+        }
+      } catch (e) {
+        alert('Premium accordé, mais la confirmation d’email n’a pas pu être envoyée. La personne devra confirmer via le lien reçu par mail.');
+      }
+    }
+    setBusy(null);
   }
 
   const needle = query.toLowerCase().trim();
