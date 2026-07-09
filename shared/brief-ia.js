@@ -215,6 +215,33 @@ function renderError(msg, hint) {
   return `<div id="brief-ia-error">${esc(msg)}${hint ? `<div id="brief-ia-error-hint">${esc(hint)}</div>` : ''}</div>`;
 }
 
+// Rate limit du fournisseur IA (429) : message sobre + compte a rebours et
+// bouton de relance automatique, plutot qu'une erreur alarmante.
+function renderRateLimited(seconds, retry) {
+  const secs = Math.max(1, Number(seconds) || 15);
+  const box = document.createElement('div');
+  box.id = 'brief-ia-error';
+  box.style.color = '#c49a3c';
+  box.style.background = 'rgba(196,154,60,0.06)';
+  box.style.borderColor = 'rgba(196,154,60,0.25)';
+  let remaining = secs;
+  const label = () => `Le fournisseur IA limite temporairement les requetes. Nouvel essai dans ${remaining} s…`;
+  box.innerHTML = `<div class="bia-rl-msg"></div>`
+    + `<div id="brief-ia-error-hint">Patiente un instant, la relance est automatique.</div>`;
+  box.querySelector('.bia-rl-msg').textContent = label();
+  const tick = setInterval(() => {
+    remaining -= 1;
+    if (remaining <= 0) {
+      clearInterval(tick);
+      if (typeof retry === 'function') retry();
+      return;
+    }
+    const el = box.querySelector('.bia-rl-msg');
+    if (el) el.textContent = label();
+  }, 1000);
+  return box;
+}
+
 // Parseur markdown minimaliste : ##, **bold**, listes "- ", paragraphes.
 // On echappe le HTML d'abord pour eviter toute injection, puis on reapplique
 // les balises markdown explicitement + auto-linkification des URLs.
@@ -342,37 +369,67 @@ window.openBriefIA = async function openBriefIA(payloadOrName, _legacyPays, _leg
       return;
     }
 
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/brief-securite`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: ctx.name,
-        ville: ctx.ville || ctx.Ville || '',
-        pays: ctx.pays || ctx.Pays || '',
-        context: ctx,
-      }),
-    });
+    // Boucle de generation : relance automatiquement sur 429 (rate limit IA),
+    // avec un plafond de tentatives pour eviter une relance infinie.
+    const MAX_RATE_LIMIT_RETRIES = 4;
+    let rlAttempts = 0;
 
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      overlay.querySelector('#brief-ia-body').innerHTML = renderError(
-        json.error || `Erreur HTTP ${res.status}`,
-        json.hint || json.detail || ''
-      );
-      return;
-    }
-    overlay.querySelector('#brief-ia-body').innerHTML = renderBrief(json);
-    currentBrief = {
-      name: ctx.name || 'Point',
-      brief: json.brief || '',
-      sources: json.sources || [],
-      model: json.model || '',
-      generatedAt: Date.now(),
+    const run = async () => {
+      const body = overlay.querySelector('#brief-ia-body');
+      if (!body || !overlay.classList.contains('open')) return; // modale fermee entre-temps
+      body.innerHTML = renderLoading();
+
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/brief-securite`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: ctx.name,
+          ville: ctx.ville || ctx.Ville || '',
+          pays: ctx.pays || ctx.Pays || '',
+          context: ctx,
+        }),
+      });
+
+      const json = await res.json().catch(() => ({}));
+
+      if (res.status === 429 || json.rateLimited) {
+        rlAttempts += 1;
+        const wait = Number(json.retryAfter) || Number(res.headers.get('retry-after')) || 15;
+        if (rlAttempts <= MAX_RATE_LIMIT_RETRIES) {
+          body.innerHTML = '';
+          body.appendChild(renderRateLimited(wait, run));
+        } else {
+          body.innerHTML = renderError(
+            'Le fournisseur IA est toujours sature.',
+            'Reessaie dans une minute.'
+          );
+        }
+        return;
+      }
+
+      if (!res.ok) {
+        body.innerHTML = renderError(
+          json.error || `Erreur HTTP ${res.status}`,
+          json.hint || json.detail || ''
+        );
+        return;
+      }
+
+      body.innerHTML = renderBrief(json);
+      currentBrief = {
+        name: ctx.name || 'Point',
+        brief: json.brief || '',
+        sources: json.sources || [],
+        model: json.model || '',
+        generatedAt: Date.now(),
+      };
+      setExportEnabled(true);
     };
-    setExportEnabled(true);
+
+    await run();
   } catch (e) {
     overlay.querySelector('#brief-ia-body').innerHTML = renderError(
       'Echec reseau.',

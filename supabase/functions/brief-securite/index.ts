@@ -136,21 +136,51 @@ interface BriefResult {
   model: string;
 }
 
+// Erreur typee : permet a l'appelant de distinguer un rate-limit (429) d'un
+// echec generique et de renvoyer un message clair au lieu d'une erreur brute.
+class GeminiError extends Error {
+  status: number;
+  rateLimited: boolean;
+  retryAfterMs: number;
+  constructor(status: number, message: string, retryAfterMs = 0) {
+    super(message);
+    this.name = 'GeminiError';
+    this.status = status;
+    this.rateLimited = status === 429;
+    this.retryAfterMs = retryAfterMs;
+  }
+}
+
 // Tente d'abord gemini-2.5-flash puis fallback gemini-2.0-flash-001 si 503 persistant
 const FALLBACK_MODEL = 'gemini-2.0-flash-001';
 const FALLBACK_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${FALLBACK_MODEL}:generateContent`;
 
+// Lit l'en-tete Retry-After (secondes ou date HTTP) renvoye sur un 429.
+function parseRetryAfterMs(response: Response): number {
+  const h = response.headers.get('retry-after');
+  if (!h) return 0;
+  const secs = Number(h);
+  if (Number.isFinite(secs)) return Math.max(0, secs * 1000);
+  const when = Date.parse(h);
+  return Number.isFinite(when) ? Math.max(0, when - Date.now()) : 0;
+}
+
 async function callGemini(prompt: string): Promise<BriefResult> {
-  // Retry sur 503 (modele surcharge) — 5 tentatives, max ~28s total
-  // Pics de charge Gemini 2.5 Flash durent souvent 15-25s
-  const delays = [0, 1500, 4000, 9000, 14000];
+  // Retry sur 503 (modele surcharge) et 429 (rate limit) — 6 tentatives.
+  // Backoff progressif ; sur 429 on respecte Retry-After si Gemini le fournit,
+  // avec un jitter pour eviter que plusieurs clients ne retentent en meme temps.
+  const delays = [0, 1500, 4000, 9000, 14000, 20000];
   let response: Response | null = null;
   let lastErrText = '';
+  let lastStatus = 0;
+  let lastRetryAfterMs = 0;
   let usedModel = GEMINI_MODEL;
   for (let i = 0; i < delays.length; i++) {
-    const d = delays[i];
+    // Sur un 429 precedent, privilegie le delai Retry-After serveur si plus long.
+    const jitter = lastStatus === 429 ? Math.floor(Math.random() * 500) : 0;
+    const d = Math.max(delays[i], lastRetryAfterMs) + (i > 0 ? jitter : 0);
     if (d > 0) await new Promise((r) => setTimeout(r, d));
-    // A la derniere tentative, bascule sur le modele fallback si 503 persistant
+    // A la derniere tentative, bascule sur le modele fallback si surcharge persistante
     const endpoint = (i === delays.length - 1) ? FALLBACK_ENDPOINT : `${GEMINI_ENDPOINT}`;
     if (i === delays.length - 1) usedModel = FALLBACK_MODEL;
     response = await fetch(`${endpoint}?key=${GEMINI_API_KEY}`, {
@@ -163,12 +193,18 @@ async function callGemini(prompt: string): Promise<BriefResult> {
       }),
     });
     if (response.ok) break;
+    lastStatus = response.status;
+    lastRetryAfterMs = response.status === 429 ? parseRetryAfterMs(response) : 0;
     lastErrText = await response.text();
     // Ne retry que sur 503 (UNAVAILABLE) et 429 (rate limit transitoire)
     if (response.status !== 503 && response.status !== 429) break;
   }
   if (!response || !response.ok) {
-    throw new Error(`Gemini API ${response?.status ?? '???'}: ${lastErrText}`);
+    throw new GeminiError(
+      lastStatus || response?.status || 502,
+      `Gemini API ${lastStatus || response?.status || '???'}: ${lastErrText}`,
+      lastRetryAfterMs,
+    );
   }
 
   const data = await response.json();
@@ -266,6 +302,20 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error('brief-securite error:', e);
+    // Rate limit du fournisseur IA (429) : message clair + Retry-After, pas une
+    // erreur brute. Le front peut proposer de reessayer sans alarmer l'utilisateur.
+    if (e instanceof GeminiError && e.rateLimited) {
+      const retryAfterS = Math.max(1, Math.ceil((e.retryAfterMs || 15000) / 1000));
+      return new Response(JSON.stringify({
+        error: 'Le fournisseur IA limite temporairement les requetes.',
+        hint: `Patiente quelques secondes puis reessaie.`,
+        retryAfter: retryAfterS,
+        rateLimited: true,
+      }), {
+        status: 429,
+        headers: { ...cors, 'content-type': 'application/json', 'retry-after': String(retryAfterS) },
+      });
+    }
     return new Response(JSON.stringify({ error: 'Echec generation', detail: String(e) }), {
       status: 502,
       headers: { ...cors, 'content-type': 'application/json' },
