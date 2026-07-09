@@ -1,6 +1,56 @@
 {
-  "updated": "2026-07-08",
+  "updated": "2026-07-09",
   "items": [
+    {
+      "id": "u-maliactu-net-captain-traore-7-priorites-strategiques-pour-le-burkina-f",
+      "date": "2026-07-09",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/captain-traore-7-priorites-strategiques-pour-le-burkina-faso-dans-laes/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22645.jpg",
+      "titre": "Burkina Faso : 7 priorités stratégiques de Captain Traoré dans l'AES",
+      "resume": "Captain Traoré présente sept priorités stratégiques pour le Burkina Faso au sein de l'Alliance des États du Sahel.",
+      "detail": "L'Alliance des États du Sahel (AES) cherche à redéfinir la gouvernance et la sécurité régionale. Les sept priorités annoncées par Captain Traoré pourraient inclure des mesures de sécurité renforcées, une coopération économique accrue et une autonomie stratégique. Ces orientations visent à renforcer la résilience des États membres face aux défis sécuritaires et économiques.",
+      "lieu": "Burkina Faso",
+      "lat": 12.0753083,
+      "lon": -1.6880314,
+      "implications": [
+        "Renforcement de la coopération régionale",
+        "Impact potentiel sur les relations internationales",
+        "Adaptation des stratégies de sécurité"
+      ],
+      "recommandations": [
+        "Analyser les priorités stratégiques annoncées",
+        "Évaluer les implications régionales",
+        "Adapter les plans de coopération"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-aes-redessine-geopolitique-sahel",
+      "date": "2026-07-09",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/aes-redessine-geopolitique-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22655.jpg",
+      "titre": "AES : redéfinition des équilibres géopolitiques au Sahel",
+      "resume": "L'Alliance des États du Sahel bouleverse les équilibres régionaux selon une analyse géopolitique.",
+      "detail": "L'Alliance des États du Sahel (AES), regroupant des pays comme le Mali, le Burkina Faso et le Niger, cherche à redéfinir les dynamiques régionales. Ce mouvement pourrait entraîner des changements majeurs dans les alliances traditionnelles et les politiques de sécurité. Les implications pour les partenaires internationaux, notamment la France et la Russie, restent à évaluer.",
+      "lieu": "Sahel",
+      "lat": 14.0279165,
+      "lon": -0.7717776,
+      "implications": [
+        "Changement des alliances régionales",
+        "Impact sur les partenariats internationaux",
+        "Risque de fragmentation régionale"
+      ],
+      "recommandations": [
+        "Analyser les dynamiques de l'AES",
+        "Évaluer les implications pour les partenaires",
+        "Adapter les stratégies de coopération"
+      ]
+    },
     {
       "id": "u-youtube-com-watch-v-isibuq2oxis",
       "date": "2026-07-08",
@@ -24,6 +74,56 @@
         "Surveiller les mouvements transfrontaliers liés à l'épidémie",
         "Renforcer les capacités locales de détection et de réponse",
         "Planifier des protocoles d'urgence pour les crises sanitaires"
+      ]
+    },
+    {
+      "id": "u-bamada-net-au-mali-etat-et-partenaires-accelerent-la-recherche-de-solu",
+      "date": "2026-07-08",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/au-mali-etat-et-partenaires-accelerent-la-recherche-de-solutions-durables-pour-les-personnes-deplacees",
+      "image": "http://bamada.net/wp-content/uploads/2026/05/Deplace-faladie.jpg",
+      "titre": "Mali : accélération des solutions pour les déplacés internes",
+      "resume": "Le Mali et ses partenaires renforcent les efforts pour trouver des solutions durables aux centaines de milliers de déplacés internes.",
+      "detail": "La crise sécuritaire au Mali a provoqué des déplacements massifs de population depuis plusieurs années. Les autorités maliennes, en collaboration avec des partenaires internationaux, accélèrent la recherche de solutions durables pour ces populations vulnérables. Cette situation reflète les défis persistants de stabilisation dans le pays, malgré les initiatives en cours.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Risque accru de tensions locales",
+        "Pression sur les ressources des zones d'accueil",
+        "Nécessité d'une coordination renforcée"
+      ],
+      "recommandations": [
+        "Renforcer le suivi des déplacés",
+        "Évaluer les besoins humanitaires urgents",
+        "Coordonner avec les acteurs locaux et internationaux"
+      ]
+    },
+    {
+      "id": "u-askanews-it-2026-07-09-iran-nuovi-raid-usa-trump-se-teheran-continua-a",
+      "date": "2026-07-08",
+      "theatre": "moyen-orient",
+      "severite": "critique",
+      "source": "askanews.it",
+      "source_url": "https://askanews.it/2026/07/09/iran-nuovi-raid-usa-trump-se-teheran-continua-andra-molto-peggio/",
+      "image": "https://askanews.it/wp-content/uploads/2026/07/20260709_005134_96B25FE1.jpg",
+      "titre": "États-Unis lancent de nouveaux raids aériens sur l'Iran",
+      "resume": "Les États-Unis ont mené une nouvelle série de raids aériens contre l'Iran, selon les ordres de Donald Trump.",
+      "detail": "Ces raids, menés pour la deuxième journée consécutive, visent à réduire les capacités militaires de l'Iran. Donald Trump a averti que la situation pourrait empirer si Téhéran poursuit ses actions. Ces frappes s'inscrivent dans une escalade des tensions entre les deux pays, avec des implications potentielles pour la stabilité régionale.",
+      "lieu": "Iran",
+      "lat": 32.6475314,
+      "lon": 54.5643516,
+      "implications": [
+        "Escalade des tensions régionales",
+        "Risque d'instabilité accrue",
+        "Impact sur les relations diplomatiques"
+      ],
+      "recommandations": [
+        "Surveiller les réactions iraniennes",
+        "Analyser les implications régionales",
+        "Évaluer les risques pour les intérêts internationaux"
       ]
     },
     {
@@ -648,80 +748,6 @@
       "recommandations": [
         "Surveiller les discours de Dicko depuis l'Algérie",
         "Renforcer la diplomatie avec Alger sur les figures religieuses exilées"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-diaspora-malienne-aes-opportunites",
-      "date": "2026-07-02",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/diaspora-malienne-aes-opportunites/",
-      "image": "",
-      "titre": "AES redessine règles économiques pour diaspora malienne",
-      "resume": "L'Alliance des États du Sahel (AES) lance une offensive pour attirer les investissements de la diaspora malienne.",
-      "detail": "L'AES cherche à attirer les investissements de la diaspora malienne, traditionnellement orientée vers la France, en offrant de nouvelles opportunités économiques. Cette stratégie pourrait réduire la dépendance du Mali vis-à-vis de Paris et renforcer l'intégration régionale. Elle pourrait aussi favoriser l'émergence de nouveaux acteurs économiques locaux. Cependant, la mise en œuvre de ces mesures reste à démontrer.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Réduction de l'influence française",
-        "Nouveaux partenariats économiques",
-        "Dynamique régionale renforcée"
-      ],
-      "recommandations": [
-        "Évaluer les dispositifs proposés par l'AES",
-        "Identifier les acteurs économiques locaux ciblés"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-ebola-rdc-300-cas-fantomes-alerte",
-      "date": "2026-07-01",
-      "theatre": "rdc",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/ebola-rdc-300-cas-fantomes-alerte/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21594.jpg",
-      "titre": "Ebola en RDC : 300 cas fantômes déclenchent alerte sanitaire",
-      "resume": "La RDC fait face à 300 cas non localisés d'Ebola, déclenchant une alerte sanitaire majeure en Afrique francophone.",
-      "detail": "L'absence de localisation précise des cas complique la riposte et augmente les risques de propagation transfrontalière. La situation pourrait s'aggraver en saison des pluies avec la mobilité accrue des populations. Les systèmes de santé régionaux devraient se préparer à une réponse coordonnée urgente.",
-      "lieu": "République démocratique du Congo",
-      "lat": -2.9814344,
-      "lon": 23.8222636,
-      "implications": [
-        "Risque de propagation transfrontalière vers le Sahel",
-        "Surcharge des systèmes de santé locaux",
-        "Crise humanitaire possible"
-      ],
-      "recommandations": [
-        "Renforcer les contrôles sanitaires aux frontières",
-        "Prépositionner du matériel médical en RDC et pays voisins",
-        "Coordonner avec l'OMS pour une réponse régionale"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-ultimatum-migrants-saheliens-afrique-sud",
-      "date": "2026-07-01",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/ultimatum-migrants-saheliens-afrique-sud/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-21583.jpg",
-      "titre": "Afrique du Sud fixe ultimatum aux migrants sahéliens",
-      "resume": "30 juin 2026 : date butoir contestée pour des milliers de migrants sahéliens en Afrique du Sud entre xénophobie et crise diplomatique.",
-      "detail": "L'ultimatum sud-africain pourrait déclencher une crise humanitaire pour les migrants sahéliens non réguliers. Risque accru de violences xénophobes et de déplacements forcés vers d'autres pays africains. La situation nécessite une surveillance diplomatique accrue.",
-      "lieu": "Afrique du Sud",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Crise humanitaire pour les migrants",
-        "Risque de violences xénophobes",
-        "Tensions diplomatiques accrues"
-      ],
-      "recommandations": [
-        "Surveiller les mouvements migratoires vers l'Afrique du Sud",
-        "Renforcer la coopération consulaire pour les ressortissants sahéliens",
-        "Préparer des plans d'évacuation d'urgence"
       ]
     }
   ]
