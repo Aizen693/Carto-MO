@@ -1,6 +1,81 @@
 {
-  "updated": "2026-07-09",
+  "updated": "2026-07-10",
   "items": [
+    {
+      "id": "u-aljazeera-com-video-newsfeed-2026-7-10-iran-says-strikes-hit-southern-",
+      "date": "2026-07-10",
+      "theatre": "moyen-orient",
+      "severite": "critique",
+      "source": "Al Jazeera English",
+      "source_url": "https://www.aljazeera.com/video/newsfeed/2026/7/10/iran-says-strikes-hit-southern-areas-but-us-denies-it-carried-attacks?traffic_source=rss",
+      "image": "https://www.aljazeera.com/wp-content/uploads/2026/07/image-1783652738.jpg?resize=1301%2C1080&amp;quality=80",
+      "titre": "Frappes signalées en Iran, les États-Unis démentissent",
+      "resume": "Des frappes ont été rapportées dans la province de Bushehr et la ville de Konarak en Iran selon les médias d'État. Les États-Unis nient toute implication.",
+      "detail": "Les médias iraniens ont annoncé que des frappes ont ciblé des installations militaires dans le sud de l'Iran, notamment dans la province de Bushehr et la ville de Konarak. Les autorités américaines ont immédiatement démenti toute responsabilité, refusant de confirmer ou d'infirmer ces allégations. Une escalade verbale entre Téhéran et Washington pourrait s'ensuivre si les accusations persistent. La région de Bushehr est stratégique en raison de ses infrastructures énergétiques et militaires.",
+      "lieu": "Bushehr, Konarak, Iran",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Risque d'escalade militaire régionale",
+        "Impact potentiel sur la stabilité énergétique",
+        "Possibilité de cyberattaques ou de représailles indirectes"
+      ],
+      "recommandations": [
+        "Surveiller les flux d'informations officiels iraniens et américains",
+        "Évaluer les risques pour les infrastructures stratégiques en Iran",
+        "Préparer des scénarios de crise en cas d'escalade"
+      ]
+    },
+    {
+      "id": "u-bamada-net-kayes-500-jeunes-formes-a-des-metiers-generateurs-de-revenu",
+      "date": "2026-07-10",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/kayes-500-jeunes-formes-a-des-metiers-generateurs-de-revenus",
+      "image": "http://bamada.net/wp-content/uploads/2023/03/ville-Kayes-1.jpg",
+      "titre": "500 jeunes formés à des métiers générateurs de revenus à Kayes",
+      "resume": "Un projet de formation pour 500 jeunes à Kayes vise à renforcer leur employabilité dans des secteurs variés.",
+      "detail": "Le projet SIRA-KURA, lancé dans la région de Kayes, a formé 500 jeunes à des métiers comme la pâtisserie, la coupe-couture et la saponification. Cette initiative, soutenue par des acteurs locaux, pourrait réduire les tensions socio-économiques en offrant des alternatives à la radicalisation. Cependant, la durabilité de ces formations dépendra de l'accompagnement post-formation et de l'accès au marché du travail.",
+      "lieu": "Kayes, Mali",
+      "lat": 13.8001844,
+      "lon": -10.2245548,
+      "implications": [
+        "Potentiel de réduction de la radicalisation",
+        "Création d'opportunités économiques locales",
+        "Besoins de suivi des bénéficiaires après formation"
+      ],
+      "recommandations": [
+        "Évaluer l'impact à moyen terme des formations sur l'emploi local",
+        "Identifier les partenariats possibles avec des entreprises locales",
+        "Surveiller les indicateurs de radicalisation dans la région"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-uemoa-budget-2026-dette-sahel",
+      "date": "2026-07-10",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/uemoa-budget-2026-dette-sahel/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22699.jpg",
+      "titre": "Budget 2026 de l'UEMOA adopté sous tension dette et souveraineté",
+      "resume": "L'UEMOA adopte son budget 2026 dans un contexte de dette publique élevée et de tensions géopolitiques avec l'Alliance des États du Sahel.",
+      "detail": "Le budget de l'UEMOA pour 2026 a été adopté malgré des désaccords persistants sur la gestion de la dette publique et les tensions avec l'Alliance des États du Sahel (AES). Les pays membres doivent concilier leurs besoins de financement avec les exigences des créanciers internationaux, ce qui pourrait limiter leur marge de manœuvre budgétaire. Cette situation aggrave les risques de crise économique et sociale dans la région.",
+      "lieu": "Sahel",
+      "lat": 14.0279165,
+      "lon": -0.7717776,
+      "implications": [
+        "Risque de crise économique régionale",
+        "Tensions accrues entre pays membres de l'UEMOA",
+        "Difficultés à financer des projets de développement"
+      ],
+      "recommandations": [
+        "Analyser les impacts des politiques budgétaires sur les pays les plus endettés",
+        "Évaluer les risques de défaut de paiement ou de restructuration de la dette",
+        "Surveiller les réactions des populations face aux mesures d'austérité"
+      ]
+    },
     {
       "id": "u-maliactu-net-captain-traore-7-priorites-strategiques-pour-le-burkina-f",
       "date": "2026-07-09",
@@ -49,6 +124,56 @@
         "Analyser les dynamiques de l'AES",
         "Évaluer les implications pour les partenaires",
         "Adapter les stratégies de coopération"
+      ]
+    },
+    {
+      "id": "u-instagram-com-reel-dalelrqetey",
+      "date": "2026-07-09",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Alerte Google : site:instagram.com \"Mali\"",
+      "source_url": "https://www.instagram.com/reel/DalELrQETeY/",
+      "image": "",
+      "titre": "Armée malienne et Russian Africa Corps reprennent Anéfis",
+      "resume": "L'armée malienne et la Russian Africa Corps ont repris le contrôle de la ville d'Anéfis aux mains de groupes armés.",
+      "detail": "Des sources locales rapportent que les forces maliennes appuyées par des mercenaires russes ont mené une opération réussie pour reprendre la ville d'Anéfis, située dans la région de Gao. Cette ville est un point stratégique pour le contrôle des routes commerciales et militaires dans le nord du Mali. La présence de la Russian Africa Corps pourrait renforcer la position du gouvernement malien face aux groupes insurgés, mais suscite également des tensions géopolitiques avec la France et d'autres partenaires internationaux.",
+      "lieu": "Anéfis, Mali",
+      "lat": 18.04589,
+      "lon": 0.602897,
+      "implications": [
+        "Renforcement des capacités militaires maliennes",
+        "Risque de tensions avec les partenaires traditionnels",
+        "Changement potentiel dans la dynamique des conflits locaux"
+      ],
+      "recommandations": [
+        "Analyser l'impact de la collaboration avec la Russian Africa Corps sur la stabilité régionale",
+        "Évaluer les réactions des partenaires internationaux du Mali",
+        "Cartographier les nouvelles zones de contrôle et les déplacements de populations"
+      ]
+    },
+    {
+      "id": "u-bamada-net-tombouctou-des-femmes-journalistes-outillees-contre-la-desi",
+      "date": "2026-07-09",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/tombouctou-des-femmes-journalistes-outillees-contre-la-desinformation",
+      "image": "http://bamada.net/wp-content/uploads/2025/06/tombouctou-ville-no.jpg",
+      "titre": "Formation de femmes journalistes à Tombouctou contre la désinformation",
+      "resume": "Vingt femmes journalistes à Tombouctou reçoivent une formation sur le journalisme sensible aux conflits et la lutte contre la désinformation.",
+      "detail": "Une initiative soutenue par l'UNESCO forme des femmes journalistes et communicatrices à Tombouctou pour renforcer leur capacité à couvrir les conflits et lutter contre la désinformation. Cette formation est cruciale dans une région où la désinformation alimente les tensions intercommunautaires. Cependant, le succès de ce projet dépendra de la sécurité des participantes et de leur capacité à diffuser l'information dans des zones reculées.",
+      "lieu": "Tombouctou, Mali",
+      "lat": 16.7719091,
+      "lon": -3.0087272,
+      "implications": [
+        "Renforcement de la résilience médiatique locale",
+        "Réduction des risques de désinformation dans les conflits",
+        "Autonomisation des femmes dans les zones sensibles"
+      ],
+      "recommandations": [
+        "Soutenir la diffusion des contenus produits par les participantes",
+        "Assurer la sécurité des journalistes formées après la formation",
+        "Étudier l'impact de cette formation sur la cohésion sociale"
       ]
     },
     {
@@ -624,130 +749,6 @@
         "Renforcer les patrouilles aériennes dans le Nord",
         "Coordonner avec les acteurs humanitaires locaux",
         "Évaluer les risques pour les infrastructures critiques"
-      ]
-    },
-    {
-      "id": "u-theguardian-com-business-live-2026-jul-03-oil-price-fall-strait-of-hor",
-      "date": "2026-07-03",
-      "theatre": "moyen-orient",
-      "severite": "alerte",
-      "source": "The Guardian",
-      "source_url": "https://www.theguardian.com/business/live/2026/jul/03/oil-price-fall-strait-of-hormuz-traffic-jumps-food-price-inflation-services-sector-live-news-updates",
-      "image": "",
-      "titre": "Trafic maritime multiplié dans le détroit d'Ormuz menace la stabilité énergétique",
-      "resume": "Le trafic maritime dans le détroit d'Ormuz a quadruplé en une semaine, augmentant les risques de perturbations géopolitiques.",
-      "detail": "Cette hausse coïncide avec la trêve de 60 jours entre les États-Unis et l'Iran, ce qui pourrait influencer les dynamiques régionales. Une escalade ou un incident pourrait perturber les approvisionnements pétroliers mondiaux. Les acteurs maritimes et énergétiques doivent surveiller les annonces officielles pour anticiper des mesures de sécurité renforcées.",
-      "lieu": "Détroit d'Ormuz, Iran",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque accru d'incidents maritimes dans une zone stratégique",
-        "Impact potentiel sur les cours du pétrole",
-        "Nécéssité d'évaluer la vulnérabilité des chaînes logistiques"
-      ],
-      "recommandations": [
-        "Renforcer le suivi des alertes maritimes par les navires",
-        "Évaluer les stocks stratégiques de carburant",
-        "Coordonner avec les acteurs locaux pour sécuriser les infrastructures portuaires"
-      ]
-    },
-    {
-      "id": "u-jeuneafrique-com-1807954-politique-mahmoud-dicko-et-les-jihadistes-les",
-      "date": "2026-07-03",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "JeuneAfrique.comGabon - JeuneAfrique.com",
-      "source_url": "https://www.jeuneafrique.com/1807954/politique/mahmoud-dicko-et-les-jihadistes-les-liaisons-dangereuses-de-limam-malien/",
-      "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2026/07/01/jad20260701-ass-mali-enquete-dicko-liaisons-dangereuses-2.jpg",
-      "titre": "Mahmoud Dicko acteur clé des réseaux islamistes au Mali",
-      "resume": "L'imam Mahmoud Dicko entretient des liens avec des figures jihadistes et des cercles wahhabites, renforçant son influence politique et religieuse.",
-      "detail": "Dicko, proche de chefs jihadistes, pourrait jouer un rôle dans les dynamiques de radicalisation du Sahel. Son réseau religieux et politique est un atout pour les groupes armés, mais aussi un levier pour l'État. Une analyse approfondie de ses alliances est cruciale pour comprendre les équilibres locaux.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Risque de radicalisation accrue dans les communautés",
-        "Potentiel de légitimation des groupes armés",
-        "Nécéssité de surveiller les réseaux de financement"
-      ],
-      "recommandations": [
-        "Cartographier les réseaux de Dicko et leurs connexions",
-        "Renforcer les programmes de contre-radicalisation ciblés",
-        "Coordonner avec les autorités maliennes pour un suivi rapproché"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-quitte-cpi-mali-niger-burkina",
-      "date": "2026-07-03",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-quitte-cpi-mali-niger-burkina/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22226.jpg",
-      "titre": "Mali Niger Burkina Faso quittent la CPI renforçant l'isolement juridique",
-      "resume": "Les trois pays de l'Alliance des États du Sahel officialisent leur retrait de la Cour pénale internationale.",
-      "detail": "Cette décision s'inscrit dans une stratégie de rejet des institutions internationales perçues comme partiales. Elle pourrait compliquer les enquêtes sur les crimes de guerre et crimes contre l'humanité dans la région. Les acteurs humanitaires et diplomatiques devront adapter leurs stratégies.",
-      "lieu": "Mali, Niger, Burkina Faso",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Diminution de la pression judiciaire internationale",
-        "Risque de violations accrues des droits humains",
-        "Complexification des mécanismes de coopération judiciaire"
-      ],
-      "recommandations": [
-        "Analyser les conséquences juridiques pour les missions humanitaires",
-        "Identifier les alternatives locales pour la justice transitionnelle",
-        "Renforcer les partenariats avec les organisations régionales"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-parlement-confederal-aes-mise-en-place",
-      "date": "2026-07-03",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/parlement-confederal-aes-mise-en-place/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22220.jpg",
-      "titre": "Mise en place du Parlement confédéral de l'AES renforçant l'intégration sahélienne",
-      "resume": "Le Mali, le Burkina Faso et le Niger désignent les députés du Parlement confédéral de l'Alliance des États du Sahel.",
-      "detail": "Cette étape marque une avancée vers une intégration politique et économique entre les trois pays. Les dynamiques régionales pourraient être redéfinies, avec des implications pour la sécurité et la gouvernance. Les acteurs économiques et militaires doivent surveiller les décisions prises par ce Parlement.",
-      "lieu": "Mali, Niger, Burkina Faso",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Renforcement de la coopération sécuritaire entre les trois pays",
-        "Potentiel de convergence des politiques économiques",
-        "Risque de tensions avec les organisations régionales existantes"
-      ],
-      "recommandations": [
-        "Suivre les décisions du Parlement confédéral pour anticiper les impacts",
-        "Évaluer les opportunités de partenariats économiques",
-        "Adapter les stratégies de sécurité en fonction des évolutions régionales"
-      ]
-    },
-    {
-      "id": "u-jeuneafrique-com-1807952-politique-mahmoud-dicko-les-secrets-de-lexil-",
-      "date": "2026-07-02",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "JeuneAfrique.comGabon - JeuneAfrique.com",
-      "source_url": "https://www.jeuneafrique.com/1807952/politique/mahmoud-dicko-les-secrets-de-lexil-algerien-de-limam-malien/",
-      "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2026/06/29/jad20260629-ass-mali-enquete-dicko-exil-algerien-1.jpg",
-      "titre": "Exil algérien de l'imam malien Mahmoud Dicko",
-      "resume": "L'imam Mahmoud Dicko vit depuis deux ans en exil en Algérie après avoir été un acteur clé au Mali.",
-      "detail": "Mahmoud Dicko, figure religieuse et politique influente au Mali, est désormais en exil en Algérie depuis deux ans. Son influence persiste malgré son absence, courtisé tant par les opposants que par les groupes armés. Les services algériens et maliens le surveillent étroitement, soulignant son rôle potentiel dans les dynamiques géopolitiques régionales. Son exclusion du paysage politique malien pourrait indiquer une stratégie de marginalisation par les autorités actuelles.",
-      "lieu": "Algérie",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque de radicalisation accrue au Sahel",
-        "Influence persistante sur les mouvements sociaux",
-        "Tensions diplomatiques Algérie-Mali"
-      ],
-      "recommandations": [
-        "Surveiller les discours de Dicko depuis l'Algérie",
-        "Renforcer la diplomatie avec Alger sur les figures religieuses exilées"
       ]
     }
   ]
