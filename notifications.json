@@ -1,6 +1,131 @@
 {
-  "updated": "2026-07-10",
+  "updated": "2026-07-11",
   "items": [
+    {
+      "id": "u-jeuneafrique-com-1810931-politique-secrets-securitaires-au-togo-nouvel",
+      "date": "2026-07-11",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "JeuneAfrique.com",
+      "source_url": "https://www.jeuneafrique.com/1810931/politique/secrets-securitaires-au-togo-nouvelle-offensive-jihadiste-au-mali-reprise-en-main-des-mines-au-senegal-les-5-infos-quil-ne-fallait-pas-manquer/",
+      "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2026/07/10/jad20260710-ass-mali-anefis-africa-corps.jpg",
+      "titre": "Nouvelle offensive jihadiste au Mali centre",
+      "resume": "Le Brief de Jeune Afrique rapporte une nouvelle offensive jihadiste dans la région centrale du Mali",
+      "detail": "Les groupes armés jihadistes accentuent leurs attaques dans les zones de Mopti et Ségou malgré les opérations militaires en cours. Cette escalade pourrait fragiliser davantage la stabilité régionale et compliquer les efforts de gouvernance locale. Les acteurs locaux évoquent une coordination accrue entre les groupes affiliés à AQMI et l'État islamique. La situation sécuritaire reste volatile avec des risques persistants pour les populations civiles et les infrastructures économiques.",
+      "lieu": "Mopti et Ségou, Mali",
+      "lat": null,
+      "lon": null,
+      "implications": [
+        "Renforcement des patrouilles militaires dans le centre du Mali",
+        "Risque accru de déplacements de populations vers le sud",
+        "Impact potentiel sur les corridors logistiques régionaux"
+      ],
+      "recommandations": [
+        "Surveillance accrue des zones frontalières avec le Burkina Faso",
+        "Coordination renforcée avec les acteurs humanitaires locaux",
+        "Analyse des chaînes d'approvisionnement vulnérables"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-sahel-lemergence-des-partenaires-la-fin-des-tuteurs",
+      "date": "2026-07-11",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/sahel-lemergence-des-partenaires-la-fin-des-tuteurs/",
+      "image": "",
+      "titre": "Le Sahel affirme sa souveraineté face aux tutelles extérieures",
+      "resume": "Le Sahel annonce vouloir définir ses alliances et conduire son développement sans contraintes extérieures",
+      "detail": "Cette déclaration marque un tournant dans la diplomatie régionale avec une volonté affichée de diversifier les partenariats économiques et sécuritaires. Les pays du G5 Sahel cherchent à réduire leur dépendance vis-à-vis des anciennes puissances coloniales. Cette dynamique pourrait redéfinir les équilibres géopolitiques et économiques en Afrique de l'Ouest. Les implications pour les investisseurs étrangers restent à préciser mais pourraient entraîner des ajustements réglementaires.",
+      "lieu": "Sahel",
+      "lat": 14.0279165,
+      "lon": -0.7717776,
+      "implications": [
+        "Possibles ajustements dans les accords miniers en vigueur",
+        "Nouveaux appels d'offres potentiellement plus restrictifs",
+        "Risque de tensions avec les partenaires traditionnels"
+      ],
+      "recommandations": [
+        "Analyse des clauses contractuelles existantes dans les secteurs miniers",
+        "Veille sur les nouvelles politiques d'investissement annoncées",
+        "Cartographie des nouveaux partenaires économiques potentiels"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-mali-maroc-partenariat-strategique",
+      "date": "2026-07-11",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/mali-maroc-partenariat-strategique/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22749.jpg",
+      "titre": "Mali et Maroc renforcent leur partenariat sécuritaire",
+      "resume": "Le Mali et le Maroc officialisent une coopération stratégique face à la crise sécuritaire",
+      "detail": "Ce rapprochement s'inscrit dans un contexte de tensions sécuritaires croissantes au Mali. Les deux pays envisagent des échanges de renseignements et des formations militaires conjointes. Cette alliance pourrait reconfigurer les dynamiques régionales de sécurité. Les implications pour les groupes armés locaux et les acteurs internationaux restent à observer. La coordination avec les forces françaises pourrait être affectée.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Nouveaux flux de coopération militaire entre Bamako et Rabat",
+        "Impact potentiel sur les opérations Barkhane",
+        "Risque de fragmentation des alliances sécuritaires"
+      ],
+      "recommandations": [
+        "Cartographie des nouvelles capacités militaires maliennes",
+        "Veille sur les collaborations avec les acteurs non traditionnels",
+        "Analyse des répercussions sur les missions de maintien de la paix"
+      ]
+    },
+    {
+      "id": "u-maliweb-net-nation-paix-reconciliation-et-cohesion-nationale-cinq-anne",
+      "date": "2026-07-11",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Maliweb.net",
+      "source_url": "https://www.maliweb.net/nation/paix-reconciliation-et-cohesion-nationale-cinq-annees-dengagement-3118303.html",
+      "image": "",
+      "titre": "Cinq ans de réformes de réconciliation nationale au Mali",
+      "resume": "Le gouvernement malien présente le bilan de cinq années de politiques de réconciliation nationale",
+      "detail": "Le bilan quinquennal met en avant des initiatives de cohésion sociale et de réforme judiciaire. Les résultats incluent des programmes de désarmement et de réintégration. Ces efforts pourraient contribuer à stabiliser certaines zones affectées par les conflits. Cependant, leur impact global reste limité dans les régions les plus instables. La pérennité de ces réformes dépendra des ressources allouées et de la volonté politique.",
+      "lieu": "Mali",
+      "lat": 16.3700359,
+      "lon": -2.2900239,
+      "implications": [
+        "Renforcement progressif de la gouvernance locale",
+        "Persistance des défis dans les zones rurales",
+        "Impact limité sur les groupes armés actifs"
+      ],
+      "recommandations": [
+        "Analyse des zones où les réformes ont eu le plus d'impact",
+        "Veille sur les financements dédiés à la réconciliation",
+        "Cartographie des zones encore instables"
+      ]
+    },
+    {
+      "id": "u-maliactu-net-mali-2026-diaspora-economie-defis",
+      "date": "2026-07-11",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/mali-2026-diaspora-economie-defis/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22746.jpg",
+      "titre": "Mali mise sur sa diaspora pour relancer son économie",
+      "resume": "Le Mali organise un forum en 2026 pour mobiliser sa diaspora dans la reprise économique",
+      "detail": "Face aux défis sécuritaires et économiques, le gouvernement mise sur les transferts financiers et l'investissement de la diaspora. Ce forum vise à créer des mécanismes de retour des capitaux et d'expertise. Les résultats dépendront de la capacité à sécuriser les investissements. Cette initiative pourrait diversifier les sources de financement mais comporte des risques de fuite des capitaux.",
+      "lieu": "Bamako, Mali",
+      "lat": 12.649319,
+      "lon": -8.000337,
+      "implications": [
+        "Nouveaux flux financiers potentiels vers le Mali",
+        "Risque de détournement des fonds vers des zones instables",
+        "Impact sur les politiques de change et de rapatriement"
+      ],
+      "recommandations": [
+        "Analyse des secteurs cibles pour les investissements de la diaspora",
+        "Cartographie des canaux de transfert sécurisés",
+        "Veille sur les incitations fiscales proposées"
+      ]
+    },
     {
       "id": "u-aljazeera-com-video-newsfeed-2026-7-10-iran-says-strikes-hit-southern-",
       "date": "2026-07-10",
@@ -624,131 +749,6 @@
         "Cartographier les acteurs économiques impliqués",
         "Anticiper les réactions des pays voisins",
         "Évaluer les besoins en infrastructure logistique"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-cote-ivoire-senegal-crises-sahel",
-      "date": "2026-07-04",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/cote-ivoire-senegal-crises-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22430.jpg",
-      "titre": "Crises Côte d'Ivoire et Sénégal menacent stabilité Sahel",
-      "resume": "59 morts en Côte d'Ivoire et tensions au Sénégal : deux crises majeures qui fragilisent l'Afrique de l'Ouest",
-      "detail": "Les crises simultanées en Côte d'Ivoire et au Sénégal créent un environnement régional instable, susceptible d'aggraver les dynamiques migratoires et les activités des groupes armés. La conjonction de violences politiques et de tensions sociales alimente l'insécurité et complique les opérations humanitaires et sécuritaires au Sahel.",
-      "lieu": "Côte d'Ivoire, Sénégal",
-      "lat": 5.355378,
-      "lon": -4.0023512,
-      "implications": [
-        "Risque de propagation des violences au Sahel",
-        "Affaiblissement des alliances régionales",
-        "Déstabilisation des flux migratoires"
-      ],
-      "recommandations": [
-        "Renforcer les mécanismes de médiation régionale",
-        "Anticiper les besoins logistiques pour les opérations de secours",
-        "Coordonner avec les partenaires internationaux pour une réponse unifiée"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-niger-crise-alimentaire-alerte-pam",
-      "date": "2026-07-04",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/niger-crise-alimentaire-alerte-pam/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22426.jpg",
-      "titre": "17 millions de personnes au bord de la famine au Niger",
-      "resume": "Le PAM alerte sur une crise alimentaire sans précédent avec 17 millions de personnes touchées au Niger",
-      "detail": "Cette crise alimentaire, aggravée par l'inflation et l'insécurité, menace la stabilité sociale et politique du Niger. Les 17 millions de personnes concernées incluent des déplacés internes et des populations vulnérables dans les zones frontalières avec le Mali et le Burkina Faso. La réponse humanitaire doit être immédiate pour éviter une catastrophe majeure.",
-      "lieu": "Niger",
-      "lat": 17.7356214,
-      "lon": 9.3238432,
-      "implications": [
-        "Exode massif vers les pays voisins",
-        "Risque de conflits pour les ressources",
-        "Pression accrue sur les ONG et agences de l'ONU"
-      ],
-      "recommandations": [
-        "Coordonner avec le PAM pour un plan d'urgence",
-        "Renforcer les corridors humanitaires",
-        "Anticiper les besoins en sécurité pour les convois"
-      ]
-    },
-    {
-      "id": "u-bamada-net-les-parlements-de-laes-font-bloc-derriere-le-burkina-faso-e",
-      "date": "2026-07-04",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/les-parlements-de-laes-font-bloc-derriere-le-burkina-faso-et-denoncent-la-resolution-du-parlement-europeen",
-      "image": "http://bamada.net/wp-content/uploads/2025/12/general-assimi-goita-president-transition-malienne-abdourahamane-tiani-niger-ibrahim-traore-burkina-faso-colleges-chefs-etats-ceremonies-ouverture-aes-palais-koulouba-1024x682.jpg",
-      "titre": "Parlements de l'AES solidaires du Burkina Faso contre l'UE",
-      "resume": "Les Parlements de l'Alliance des États du Sahel ont adopté une motion de soutien au Burkina Faso face à une résolution du Parlement européen",
-      "detail": "Cette position unifiée de l'AES marque un tournant dans les relations internationales de la région, avec une rhétorique anti-occidentale de plus en plus marquée. La dénonciation de la résolution européenne pourrait isoler davantage les pays de l'AES et compliquer les partenariats sécuritaires et économiques avec l'Europe.",
-      "lieu": "Ouagadougou, Burkina Faso",
-      "lat": 12.3681873,
-      "lon": -1.5270944,
-      "implications": [
-        "Rupture des canaux diplomatiques avec l'UE",
-        "Renforcement des alliances avec des acteurs non-occidentaux",
-        "Risque de sanctions supplémentaires"
-      ],
-      "recommandations": [
-        "Évaluer l'impact des sanctions potentielles",
-        "Adapter les stratégies de communication avec l'UE",
-        "Renforcer les relations avec la Russie et la Turquie"
-      ]
-    },
-    {
-      "id": "u-scmp-com-news-world-middle-east-article-3359402-no-one-lifts-finger-ga",
-      "date": "2026-07-04",
-      "theatre": "moyen-orient",
-      "severite": "alerte",
-      "source": "South China Morning Post",
-      "source_url": "https://www.scmp.com/news/world/middle-east/article/3359402/no-one-lifts-finger-gazas-fate-eclipsed-middle-east-war?utm_source=rss_feed",
-      "image": "",
-      "titre": "Gaza oublié au profit de la guerre Iran-USA",
-      "resume": "Le sort de Gaza est éclipsé par les conflits entre les États-Unis, Israël et l'Iran, malgré une situation humanitaire désastreuse",
-      "detail": "La focalisation médiatique et géopolitique sur les tensions Iran-USA a relégué la crise humanitaire à Gaza au second plan. Cette situation risque d'aggraver les souffrances de la population civile et de compliquer les efforts de reconstruction et d'aide humanitaire dans le territoire assiégé.",
-      "lieu": "Gaza",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Aggravation de la crise humanitaire",
-        "Réduction des financements pour Gaza",
-        "Risque d'escalade régionale"
-      ],
-      "recommandations": [
-        "Maintenir une pression médiatique sur Gaza",
-        "Coordonner avec les ONG sur place pour une réponse adaptée",
-        "Anticiper les besoins en reconstruction à long terme"
-      ]
-    },
-    {
-      "id": "u-instagram-com-reel-dayukkoke3p",
-      "date": "2026-07-04",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Alerte Google : site:instagram.com",
-      "source_url": "https://www.instagram.com/reel/DaYuKkOke3p/",
-      "image": "",
-      "titre": "Coordinated jihadist and Tuareg attacks across northern Mali",
-      "resume": "Nouveaux assauts coordonnés impliquant le JNIM et le Front de libération de l'Azawad (FLA) dans le nord du Mali.",
-      "detail": "Les groupes armés JNIM (affilié à Al-Qaïda) et FLA (mouvements indépendantistes touaregs) ont mené des attaques simultanées dans plusieurs localités du nord du Mali. Les cibles incluent des bases militaires maliennes et des positions tenues par le Corps africain russe (Africa Corps). Les vidéos circulant sur les réseaux sociaux montrent des frappes aériennes et des évacuations de blessés. Ces opérations illustrent une coordination renforcée entre groupes djihadistes et rebelles touaregs, une menace majeure pour la stabilité régionale.",
-      "lieu": "Nord du Mali, Mali",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Intensification des combats dans le Nord",
-        "Risque accru pour les convois humanitaires",
-        "Pression sur les forces maliennes et russes"
-      ],
-      "recommandations": [
-        "Renforcer les patrouilles aériennes dans le Nord",
-        "Coordonner avec les acteurs humanitaires locaux",
-        "Évaluer les risques pour les infrastructures critiques"
       ]
     }
   ]
