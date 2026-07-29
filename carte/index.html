@@ -205,12 +205,11 @@
     transition:opacity .16s,transform .16s}
   .news-row:hover .news-go{opacity:1;transform:translateX(0)}
   .news-check{flex:none;align-self:center;width:19px;height:19px;border-radius:6px;cursor:pointer;position:relative;
-    background:var(--violet);border:1.6px solid var(--violet);transition:background .14s,border-color .14s}
-  .news-check::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:#fff;border:1.6px solid var(--ln);transition:background .14s,border-color .14s}
+  .news-check:hover{border-color:var(--violet)}
+  .news-check.news-check-on{background:var(--grad);border-color:transparent}
+  .news-check.news-check-on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     font:800 12px/1 var(--jakarta);color:#fff}
-  .news-check.news-check-off{background:#fff;border-color:var(--ln)}
-  .news-check.news-check-off::after{content:''}
-  .news-check.news-check-off:hover{border-color:var(--violet)}
   .news-hint{padding:0 4px 9px;font:600 9.5px/1.4 var(--jakarta);color:var(--muted);letter-spacing:.01em}
   .news-empty{padding:14px 15px;font:500 12px/1.5 var(--jakarta);color:var(--muted)}
   @keyframes newsIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
@@ -339,7 +338,7 @@
 <div id="news"></div>
 <div id="analysis"></div>
 
-<script src="../shared/humint-engine.js?v=20260729d"></script>
+<script src="../shared/humint-engine.js?v=20260729e"></script>
 <script src="../shared/basemap-toggle.js?v=20260729c"></script>
 <!-- Outil « Infras 3D » désactivé (budget + peu efficace pour l'instant). Le code
      reste dans shared/zones-3d.js : réactiver en décommentant la ligne ci-dessous.

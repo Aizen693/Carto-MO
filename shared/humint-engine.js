@@ -168,7 +168,7 @@
     allRaw: [],          // toutes les features du fichier chargé (pays + voisins)
     layers: new Set(),   // pays frontaliers affichés en calque
     sel: { from: null, to: null, event: null, actor: null },
-    newsHidden: new Set(),   // points décochés dans le panneau « nouveauté » → retirés de la carte
+    newsPicked: new Set(),   // nouveautés cochées → la carte n'affiche QU'ELLES (isolat) ; vide = vue complète
     dataFor: null,
     mapReady: false,
     tl: { gran: 'jour', buckets: [], idx: 0, playing: false, timer: null },
@@ -359,10 +359,10 @@
       box.innerHTML = head + '<div class="news-list"><div class="news-empty">Aucune nouvelle donnée cette semaine pour ' + esc(state.country || 'ce pays') + '.</div></div>';
       box.style.display = 'flex'; wireToggle(); return;
     }
-    var hint = '<div class="news-hint">Cochées, ces nouveautés sont sur la carte. Décochez une ligne pour l’en retirer.</div>';
+    var hint = '<div class="news-hint">Cochez une nouveauté pour n’afficher qu’elle sur la carte. Décochez tout pour revenir à la vue complète.</div>';
     box.innerHTML = head + '<div class="news-list">' + hint + pts.slice(0, 60).map(function (f, i) {
       var c = actorColor(f.acteur);
-      var hidden = state.newsHidden.has(newsKey(f));
+      var picked = state.newsPicked.has(newsKey(f));
       return '<div class="news-row" data-i="' + i + '" style="--c:' + c + ';--i:' + i + '">' +
         '<span class="news-accent"></span>' +
         '<button class="news-open-pt" type="button" data-i="' + i + '">' +
@@ -373,8 +373,8 @@
           '</span>' +
           '<span class="news-go">→</span>' +
         '</button>' +
-        '<span class="news-check' + (hidden ? ' news-check-off' : '') + '" data-i="' + i + '" role="checkbox" tabindex="0"' +
-          ' aria-checked="' + (hidden ? 'false' : 'true') + '" title="Afficher ce point sur la carte"></span>' +
+        '<span class="news-check' + (picked ? ' news-check-on' : '') + '" data-i="' + i + '" role="checkbox" tabindex="0"' +
+          ' aria-checked="' + (picked ? 'true' : 'false') + '" title="N’afficher que ce point sur la carte"></span>' +
       '</div>';
     }).join('') + '</div>';
     box.style.display = 'flex';
@@ -391,17 +391,17 @@
         }
       };
     });
-    // Cases à cocher : décocher retire le point de la carte (sans toucher aux autres).
+    // Cases à cocher : cocher isole ce point sur la carte (n'affiche que les cochés).
     box.querySelectorAll('.news-check').forEach(function (cb) {
       function toggle(e) {
         e.preventDefault(); e.stopPropagation();
         var f = pts[+cb.getAttribute('data-i')];
         if (!f) return;
         var k = newsKey(f);
-        if (state.newsHidden.has(k)) state.newsHidden.delete(k); else state.newsHidden.add(k);
-        var hidden = state.newsHidden.has(k);
-        cb.classList.toggle('news-check-off', hidden);
-        cb.setAttribute('aria-checked', hidden ? 'false' : 'true');
+        if (state.newsPicked.has(k)) state.newsPicked.delete(k); else state.newsPicked.add(k);
+        var picked = state.newsPicked.has(k);
+        cb.classList.toggle('news-check-on', picked);
+        cb.setAttribute('aria-checked', picked ? 'true' : 'false');
         applyFacets();
       }
       cb.onclick = toggle;
@@ -804,7 +804,13 @@
     // Jeu de points RÉELLEMENT affiché sur la carte (mêmes filtres : pays/calques,
     // facettes, ET curseur temporel). L'analyse est calculée sur CE jeu → les
     // chiffres du panneau == les points visibles, vérifiable à l'œil.
-    var shown = (state.allRaw || []).filter(function (f) { return inScope(f) && passes(f) && tlPasses(f) && !state.newsHidden.has(newsKey(f)); });
+    // Isolat « nouveauté » : si au moins une nouveauté est cochée, la carte
+    // n'affiche QUE celles-ci (tous les autres points sont retirés). Sinon, vue
+    // complète filtrée normalement.
+    var picked = state.newsPicked;
+    var shown = (picked && picked.size)
+      ? (state.allRaw || []).filter(function (f) { return picked.has(newsKey(f)); })
+      : (state.allRaw || []).filter(function (f) { return inScope(f) && passes(f) && tlPasses(f); });
     renderAnalysis(shown);
     if (!map || !map.getSource(SRC)) return;
     map.getSource(SRC).setData({
