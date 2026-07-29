@@ -359,7 +359,13 @@
       box.innerHTML = head + '<div class="news-list"><div class="news-empty">Aucune nouvelle donnée cette semaine pour ' + esc(state.country || 'ce pays') + '.</div></div>';
       box.style.display = 'flex'; wireToggle(); return;
     }
-    var hint = '<div class="news-hint">Cochez une nouveauté pour n’afficher qu’elle sur la carte. Décochez tout pour revenir à la vue complète.</div>';
+    // Outil distinct de la simple liste « Nouveauté » : cocher une case ISOLE la
+    // nouveauté sur la carte (fonction d'analyse), nommée explicitement pour ne
+    // pas être confondue avec le fil d'actualité.
+    var hint = '<div class="news-tool">' +
+      '<span class="news-tool-tag">◎ Analyse nouveauté</span>' +
+      '<span class="news-tool-txt">Cochez une case à droite pour <b>isoler</b> cette nouveauté sur la carte (les autres points disparaissent). Décochez tout pour revenir à la vue complète. Cliquer le texte ouvre le point sans rien filtrer.</span>' +
+      '</div>';
     box.innerHTML = head + '<div class="news-list">' + hint + pts.slice(0, 60).map(function (f, i) {
       var c = actorColor(f.acteur);
       var picked = state.newsPicked.has(newsKey(f));

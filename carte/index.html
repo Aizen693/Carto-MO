@@ -210,7 +210,12 @@
   .news-check.news-check-on{background:var(--grad);border-color:transparent}
   .news-check.news-check-on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     font:800 12px/1 var(--jakarta);color:#fff}
-  .news-hint{padding:0 4px 9px;font:600 9.5px/1.4 var(--jakarta);color:var(--muted);letter-spacing:.01em}
+  .news-tool{margin:0 1px 9px;padding:9px 11px;border-radius:10px;display:flex;flex-direction:column;gap:5px;
+    background:color-mix(in srgb,var(--violet) 6%,#fff);border:1px solid var(--ln-soft)}
+  .news-tool-tag{display:inline-flex;align-items:center;gap:5px;font:800 8.5px/1 var(--jakarta);
+    letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+  .news-tool-txt{font:600 9.5px/1.45 var(--jakarta);color:var(--muted)}
+  .news-tool-txt b{color:var(--violet);font-weight:800}
   .news-empty{padding:14px 15px;font:500 12px/1.5 var(--jakarta);color:var(--muted)}
   @keyframes newsIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
   @keyframes newsPulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
@@ -338,7 +343,7 @@
 <div id="news"></div>
 <div id="analysis"></div>
 
-<script src="../shared/humint-engine.js?v=20260729e"></script>
+<script src="../shared/humint-engine.js?v=20260729f"></script>
 <script src="../shared/basemap-toggle.js?v=20260729c"></script>
 <!-- Outil « Infras 3D » désactivé (budget + peu efficace pour l'instant). Le code
      reste dans shared/zones-3d.js : réactiver en décommentant la ligne ci-dessous.
