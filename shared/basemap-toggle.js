@@ -2,85 +2,116 @@
  * basemap-toggle.js — Bascule de fond « Carte ↔ Satellite » pour la carte HUMINT (/carte/).
  *
  * Module IIFE autonome et ADDITIF : n'édite pas humint-engine.js. Il récupère
- * l'instance Mapbox via window.HumintMap.getMap() (après l'event `algorMapReady`),
- * ajoute une couche raster satellite (masquée par défaut) sous les points HUMINT,
- * et injecte un bouton flottant dans la charte violet/blanc.
+ * l'instance Mapbox via window.HumintMap.getMap() (après l'event `algorMapReady`).
  *
- * Imagerie = Mapbox Satellite (mapbox://mapbox.satellite) : déjà couvert par le
- * token du site (restreint à localhost:8768 + algoracces.fr), haute résolution,
- * gratuit dans le quota Mapbox. Aucune clé supplémentaire.
+ * 1) Jeton dans la barre à jetons (#chipbar), en dernière position (là où était
+ *    « Infras 3D »). Le moteur reconstruit #chipbar à chaque filtre → un
+ *    MutationObserver ré-insère notre jeton à la fin.
+ * 2) Fond satellite = Mapbox Satellite (mapbox://mapbox.satellite), déjà couvert
+ *    par le token du site, gratuit. En mode satellite on ajoute AU-DESSUS de
+ *    l'imagerie les FRONTIÈRES (blanches) et les NOMS DE PAYS (sinon invisibles
+ *    au dézoom), depuis mapbox-streets-v8.
  */
 (function () {
   'use strict';
 
   var SAT_SRC = 'basemap-sat-src';
+  var STREETS_SRC = 'basemap-streets-src';
   var SAT_LYR = 'basemap-sat-layer';
+  var ADMIN_LYR = 'basemap-sat-admin';
+  var LABEL_LYR = 'basemap-sat-label';
+  var SAT_LAYERS = [SAT_LYR, ADMIN_LYR, LABEL_LYR];
+
   var on = false;
   var map = null;
+  var chip = null;
 
-  var ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>';
-
-  function injectCSS() {
-    if (document.getElementById('basemap-toggle-css')) return;
-    var s = document.createElement('style');
-    s.id = 'basemap-toggle-css';
-    s.textContent = [
-      '#basemap-toggle{position:absolute;left:16px;bottom:52px;z-index:7;display:inline-flex;align-items:center;gap:9px;',
-      'cursor:pointer;appearance:none;-webkit-appearance:none;border:1px solid var(--ln,rgba(20,16,40,.1));background:#fff;',
-      'color:var(--violet,#6B3FA0);padding:9px 14px;border-radius:13px;',
-      'box-shadow:var(--shadow,0 10px 30px -12px rgba(46,24,87,.4));',
-      "font-family:var(--jakarta,'Plus Jakarta Sans',system-ui,sans-serif);",
-      'transition:border-color .12s,box-shadow .12s,background .12s}',
-      '#basemap-toggle:hover{border-color:var(--violet,#6B3FA0)}',
-      '#basemap-toggle.on{background:var(--grad,linear-gradient(95deg,#6B3FA0,#5650C6 55%,#2E84D4));border:none;color:#fff;box-shadow:0 8px 22px -7px rgba(86,80,198,.6)}',
-      '#basemap-toggle .bt-key{font:700 9px/1 inherit;letter-spacing:.14em;text-transform:uppercase;opacity:.72}',
-      '#basemap-toggle .bt-val{font:700 13px/1 inherit}',
-      '#basemap-toggle svg{width:15px;height:15px;flex:none}',
-      '@media(max-width:680px){#basemap-toggle{bottom:auto;top:120px;left:16px}}',
-    ].join('');
-    document.head.appendChild(s);
-  }
-
-  function addSatLayer() {
-    if (map.getSource(SAT_SRC)) return;
+  /* ─────────── Calques satellite (imagerie + frontières + noms pays) ─────────── */
+  function addSatLayers() {
+    if (!map || map.getSource(SAT_SRC)) return;
+    var beforeId = map.getLayer('humint-glow') ? 'humint-glow' : undefined;
     try {
+      // Imagerie satellite.
       map.addSource(SAT_SRC, { type: 'raster', url: 'mapbox://mapbox.satellite', tileSize: 256 });
-      // Sous les points HUMINT (glow/ring/dots) pour qu'ils restent lisibles.
-      var beforeId = map.getLayer('humint-glow') ? 'humint-glow' : undefined;
       map.addLayer({ id: SAT_LYR, type: 'raster', source: SAT_SRC, layout: { visibility: 'none' }, paint: { 'raster-opacity': 1 } }, beforeId);
+
+      // Frontières + noms de pays (depuis Mapbox Streets), visibles seulement en satellite.
+      if (!map.getSource(STREETS_SRC)) map.addSource(STREETS_SRC, { type: 'vector', url: 'mapbox://mapbox.mapbox-streets-v8' });
+      map.addLayer({
+        id: ADMIN_LYR, type: 'line', source: STREETS_SRC, 'source-layer': 'admin',
+        filter: ['all', ['==', ['get', 'admin_level'], 0], ['==', ['get', 'maritime'], 'false']],
+        layout: { visibility: 'none', 'line-join': 'round', 'line-cap': 'round' },
+        paint: {
+          'line-color': '#ffffff',
+          'line-opacity': 0.6,
+          'line-width': ['interpolate', ['linear'], ['zoom'], 3, 0.8, 6, 1.7, 9, 2.6, 12, 3.4],
+        },
+      }, beforeId);
+      map.addLayer({
+        id: LABEL_LYR, type: 'symbol', source: STREETS_SRC, 'source-layer': 'place_label',
+        filter: ['==', ['get', 'class'], 'country'],
+        layout: {
+          visibility: 'none',
+          'text-field': ['coalesce', ['get', 'name_fr'], ['get', 'name_en'], ['get', 'name']],
+          'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
+          'text-size': ['interpolate', ['linear'], ['zoom'], 3, 11, 6, 15, 9, 18],
+          'text-transform': 'uppercase',
+          'text-letter-spacing': 0.08,
+          'text-max-width': 7,
+        },
+        paint: { 'text-color': '#ffffff', 'text-halo-color': 'rgba(0,0,0,0.7)', 'text-halo-width': 1.5 },
+      }, beforeId);
     } catch (e) { console.warn('[basemap] satellite indisponible', e && e.message); }
   }
 
-  function render(btn) {
-    btn.classList.toggle('on', on);
-    btn.innerHTML = ICON + '<span class="bt-key">Fond</span><span class="bt-val">' + (on ? 'Satellite' : 'Carte') + '</span>';
-    btn.title = on ? 'Revenir au fond carte' : 'Basculer vers le satellite';
-    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  function applyVisibility() {
+    SAT_LAYERS.forEach(function (id) {
+      if (map.getLayer(id)) { try { map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none'); } catch (e) { /* */ } }
+    });
+  }
+
+  /* ─────────── Jeton dans la barre ─────────── */
+  function render() {
+    chip.className = 'chip chip-edit chip-basemap' + (on ? ' chip-pays' : '');
+    chip.innerHTML = '<span class="chip-key">Fond</span><span class="chip-val">' + (on ? 'Satellite' : 'Carte') + '</span><span class="chip-caret">◑</span>';
+    chip.title = on ? 'Revenir au fond carte' : 'Basculer vers le satellite';
+    chip.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+
+  function makeChip() {
+    chip = document.createElement('button');
+    chip.type = 'button';
+    chip.id = 'chip-basemap';
+    render();
+    chip.onclick = function (e) {
+      e.stopPropagation();
+      if (!map.getSource(SAT_SRC)) addSatLayers();
+      on = !on;
+      applyVisibility();
+      render();
+    };
+  }
+
+  function ensureInBar() {
+    var bar = document.getElementById('chipbar');
+    if (!bar || !chip) return;
+    if (chip.parentNode !== bar || chip !== bar.lastElementChild) bar.appendChild(chip);
   }
 
   function build() {
-    if (document.getElementById('basemap-toggle')) return;
+    if (chip) return;
     map = window.HumintMap && window.HumintMap.getMap && window.HumintMap.getMap();
     if (!map) return;
-    injectCSS();
-    addSatLayer();
-    var btn = document.createElement('button');
-    btn.id = 'basemap-toggle';
-    btn.type = 'button';
-    render(btn);
-    btn.onclick = function () {
-      if (!map.getLayer(SAT_LYR)) addSatLayer();
-      on = !on;
-      try { map.setLayoutProperty(SAT_LYR, 'visibility', on ? 'visible' : 'none'); } catch (e) { /* */ }
-      render(btn);
-    };
-    document.body.appendChild(btn);
+    addSatLayers();
+    makeChip();
+    ensureInBar();
+    var bar = document.getElementById('chipbar');
+    if (bar) new MutationObserver(ensureInBar).observe(bar, { childList: true });
   }
 
   function boot() {
     if (window.HumintMap && window.HumintMap.getMap && window.HumintMap.getMap()) { build(); return; }
     window.addEventListener('algorMapReady', build, { once: true });
-    // Filet de sécurité si l'event est déjà passé avant le chargement du module.
     var n = 0, t = setInterval(function () {
       n++;
       if (window.HumintMap && window.HumintMap.getMap && window.HumintMap.getMap()) { clearInterval(t); build(); }
