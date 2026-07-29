@@ -29,7 +29,10 @@
   /* ─────────── Calques satellite (imagerie + frontières + noms pays) ─────────── */
   function addSatLayers() {
     if (!map || map.getSource(SAT_SRC)) return;
-    var beforeId = map.getLayer('humint-glow') ? 'humint-glow' : undefined;
+    // Insère SOUS le surlignage de région (region-hl-fill) pour que le cadrillage
+    // de région et les points restent visibles par-dessus l'imagerie satellite.
+    var beforeId = map.getLayer('region-hl-fill') ? 'region-hl-fill'
+      : (map.getLayer('humint-glow') ? 'humint-glow' : undefined);
     try {
       // Imagerie satellite.
       map.addSource(SAT_SRC, { type: 'raster', url: 'mapbox://mapbox.satellite', tileSize: 256 });
