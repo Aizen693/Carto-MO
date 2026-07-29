@@ -168,6 +168,7 @@
     allRaw: [],          // toutes les features du fichier chargé (pays + voisins)
     layers: new Set(),   // pays frontaliers affichés en calque
     sel: { from: null, to: null, event: null, actor: null },
+    newsHidden: new Set(),   // points décochés dans le panneau « nouveauté » → retirés de la carte
     dataFor: null,
     mapReady: false,
     tl: { gran: 'jour', buckets: [], idx: 0, playing: false, timer: null },
@@ -358,21 +359,27 @@
       box.innerHTML = head + '<div class="news-list"><div class="news-empty">Aucune nouvelle donnée cette semaine pour ' + esc(state.country || 'ce pays') + '.</div></div>';
       box.style.display = 'flex'; wireToggle(); return;
     }
-    box.innerHTML = head + '<div class="news-list">' + pts.slice(0, 60).map(function (f, i) {
+    var hint = '<div class="news-hint">Cochées, ces nouveautés sont sur la carte. Décochez une ligne pour l’en retirer.</div>';
+    box.innerHTML = head + '<div class="news-list">' + hint + pts.slice(0, 60).map(function (f, i) {
       var c = actorColor(f.acteur);
-      return '<button class="news-row" data-i="' + i + '" style="--c:' + c + ';--i:' + i + '">' +
+      var hidden = state.newsHidden.has(newsKey(f));
+      return '<div class="news-row" data-i="' + i + '" style="--c:' + c + ';--i:' + i + '">' +
         '<span class="news-accent"></span>' +
-        '<span class="news-main">' +
-          '<span class="news-top"><span class="news-type">' + esc(f.type || 'Renseignement') + '</span>' +
-          '<span class="news-when">' + esc(relTime(f.iso)) + '</span></span>' +
-          '<span class="news-actor" title="' + esc(actorFull(f.acteur)) + '">' + esc(f.acteur) + '</span>' +
-        '</span>' +
-        '<span class="news-go">→</span>' +
-      '</button>';
+        '<button class="news-open-pt" type="button" data-i="' + i + '">' +
+          '<span class="news-main">' +
+            '<span class="news-top"><span class="news-type">' + esc(f.type || 'Renseignement') + '</span>' +
+            '<span class="news-when">' + esc(relTime(f.iso)) + '</span></span>' +
+            '<span class="news-actor" title="' + esc(actorFull(f.acteur)) + '">' + esc(f.acteur) + '</span>' +
+          '</span>' +
+          '<span class="news-go">→</span>' +
+        '</button>' +
+        '<span class="news-check' + (hidden ? ' news-check-off' : '') + '" data-i="' + i + '" role="checkbox" tabindex="0"' +
+          ' aria-checked="' + (hidden ? 'false' : 'true') + '" title="Afficher ce point sur la carte"></span>' +
+      '</div>';
     }).join('') + '</div>';
     box.style.display = 'flex';
     wireToggle();
-    box.querySelectorAll('.news-row').forEach(function (el) {
+    box.querySelectorAll('.news-open-pt').forEach(function (el) {
       el.onclick = function () {
         var f = pts[+el.getAttribute('data-i')];
         if (f && map) {
@@ -383,6 +390,22 @@
             .addTo(map);
         }
       };
+    });
+    // Cases à cocher : décocher retire le point de la carte (sans toucher aux autres).
+    box.querySelectorAll('.news-check').forEach(function (cb) {
+      function toggle(e) {
+        e.preventDefault(); e.stopPropagation();
+        var f = pts[+cb.getAttribute('data-i')];
+        if (!f) return;
+        var k = newsKey(f);
+        if (state.newsHidden.has(k)) state.newsHidden.delete(k); else state.newsHidden.add(k);
+        var hidden = state.newsHidden.has(k);
+        cb.classList.toggle('news-check-off', hidden);
+        cb.setAttribute('aria-checked', hidden ? 'false' : 'true');
+        applyFacets();
+      }
+      cb.onclick = toggle;
+      cb.onkeydown = function (e) { if (e.key === ' ' || e.key === 'Enter') toggle(e); };
     });
   }
 
@@ -763,6 +786,10 @@
   }
 
   /* ─────────── Filtrage → source Mapbox ─────────── */
+  // Clé stable d'un point (partagée entre le panneau « nouveauté » et la carte).
+  function newsKey(f) {
+    return [f.iso, f.type, f.acteur, f.coords && f.coords[0], f.coords && f.coords[1], f.added].join('|');
+  }
   function passes(f) {
     if (state.sel.from || state.sel.to) {
       if (!f.iso) return false;
@@ -777,7 +804,7 @@
     // Jeu de points RÉELLEMENT affiché sur la carte (mêmes filtres : pays/calques,
     // facettes, ET curseur temporel). L'analyse est calculée sur CE jeu → les
     // chiffres du panneau == les points visibles, vérifiable à l'œil.
-    var shown = (state.allRaw || []).filter(function (f) { return inScope(f) && passes(f) && tlPasses(f); });
+    var shown = (state.allRaw || []).filter(function (f) { return inScope(f) && passes(f) && tlPasses(f) && !state.newsHidden.has(newsKey(f)); });
     renderAnalysis(shown);
     if (!map || !map.getSource(SRC)) return;
     map.getSource(SRC).setData({
