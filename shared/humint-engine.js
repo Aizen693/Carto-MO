@@ -363,7 +363,13 @@
     // nouveauté sur la carte (fonction d'analyse), nommée explicitement pour ne
     // pas être confondue avec le fil d'actualité.
     var hint = '<div class="news-tool">' +
-      '<span class="news-tool-tag">◎ Analyse nouveauté</span>' +
+      '<div class="news-tool-hd">' +
+        '<span class="news-tool-tag">◎ Analyse nouveauté</span>' +
+        '<button class="news-switch" type="button" role="switch" aria-checked="false" title="Cocher ou décocher toutes les nouveautés d’un coup">' +
+          '<span class="news-switch-lbl">Tout cocher</span>' +
+          '<span class="news-switch-track"><span class="news-switch-dot"></span></span>' +
+        '</button>' +
+      '</div>' +
       '<span class="news-tool-txt">Cochez une case à droite pour <b>isoler</b> cette nouveauté sur la carte (les autres points disparaissent). Décochez tout pour revenir à la vue complète. Cliquer le texte ouvre le point sans rien filtrer.</span>' +
       '</div>';
     box.innerHTML = head + '<div class="news-list">' + hint + pts.slice(0, 60).map(function (f, i) {
@@ -408,11 +414,38 @@
         var picked = state.newsPicked.has(k);
         cb.classList.toggle('news-check-on', picked);
         cb.setAttribute('aria-checked', picked ? 'true' : 'false');
+        updateMaster();
         applyFacets();
       }
       cb.onclick = toggle;
       cb.onkeydown = function (e) { if (e.key === ' ' || e.key === 'Enter') toggle(e); };
     });
+    // Curseur maître : coche / décoche TOUTES les nouveautés d'un coup.
+    var master = box.querySelector('.news-switch');
+    function allPicked() { return pts.length > 0 && pts.every(function (f) { return state.newsPicked.has(newsKey(f)); }); }
+    function updateMaster() {
+      if (!master) return;
+      var all = allPicked();
+      master.classList.toggle('on', all);
+      master.setAttribute('aria-checked', all ? 'true' : 'false');
+      var lbl = master.querySelector('.news-switch-lbl');
+      if (lbl) lbl.textContent = all ? 'Tout décocher' : 'Tout cocher';
+    }
+    if (master) {
+      master.onclick = function () {
+        var all = allPicked();
+        pts.forEach(function (f) { var k = newsKey(f); if (all) state.newsPicked.delete(k); else state.newsPicked.add(k); });
+        box.querySelectorAll('.news-check').forEach(function (cb) {
+          var f = pts[+cb.getAttribute('data-i')];
+          var p = !!(f && state.newsPicked.has(newsKey(f)));
+          cb.classList.toggle('news-check-on', p);
+          cb.setAttribute('aria-checked', p ? 'true' : 'false');
+        });
+        updateMaster();
+        applyFacets();
+      };
+    }
+    updateMaster();
   }
 
   /* ─────────── Panneau d'analyse (graphiques data + synthèse IA) ─────────── */

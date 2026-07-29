@@ -216,6 +216,15 @@
     letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
   .news-tool-txt{font:600 9.5px/1.45 var(--jakarta);color:var(--muted)}
   .news-tool-txt b{color:var(--violet);font-weight:800}
+  .news-tool-hd{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .news-switch{display:inline-flex;align-items:center;gap:7px;background:none;border:none;padding:0;cursor:pointer;flex:none}
+  .news-switch-lbl{font:700 8px/1 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .news-switch-track{position:relative;width:32px;height:18px;border-radius:9px;background:var(--ln);transition:background .16s;flex:none}
+  .news-switch-dot{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;
+    box-shadow:0 1px 3px rgba(46,24,87,.28);transition:transform .16s}
+  .news-switch.on .news-switch-track{background:var(--grad)}
+  .news-switch.on .news-switch-dot{transform:translateX(14px)}
+  .news-switch.on .news-switch-lbl{color:var(--violet)}
   .news-empty{padding:14px 15px;font:500 12px/1.5 var(--jakarta);color:var(--muted)}
   @keyframes newsIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
   @keyframes newsPulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
@@ -343,7 +352,7 @@
 <div id="news"></div>
 <div id="analysis"></div>
 
-<script src="../shared/humint-engine.js?v=20260729f"></script>
+<script src="../shared/humint-engine.js?v=20260729g"></script>
 <script src="../shared/basemap-toggle.js?v=20260729c"></script>
 <!-- Outil « Infras 3D » désactivé (budget + peu efficace pour l'instant). Le code
      reste dans shared/zones-3d.js : réactiver en décommentant la ligne ci-dessous.
