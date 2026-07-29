@@ -503,7 +503,7 @@
     return geo +
       anaSection("Typologie d'événement", stats.types, stats.total, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }, "typologies") +
       anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); }, 'acteurs', false, actorFull) +
-      '<div class="ana-ia"><button class="ana-ia-btn" type="button">✶ Générer la synthèse IA</button><div class="ana-ia-out"></div></div>';
+      '<div class="ana-ia"><button class="ana-ia-btn" type="button">✶ Générer la synthèse par Mistral AI</button><div class="ana-ia-out"></div></div>';
   }
 
   // Liste auditable des événements d'une région (clic sur une ligne « région »).
@@ -620,10 +620,10 @@
       out.innerHTML = html;
     };
     var sa = window.algorAuth && window.algorAuth.supabase;
-    if (!sa) { done('<div class="ana-ia-err">Session indisponible. Recharge la page.</div>', '✶ Générer la synthèse IA'); return; }
+    if (!sa) { done('<div class="ana-ia-err">Session indisponible. Recharge la page.</div>', '✶ Générer la synthèse par Mistral AI'); return; }
     sa.auth.getSession().then(function (res) {
       var token = res && res.data && res.data.session && res.data.session.access_token;
-      if (!token) { done('<div class="ana-ia-err">Session expirée. Recharge la page.</div>', '✶ Générer la synthèse IA'); return; }
+      if (!token) { done('<div class="ana-ia-err">Session expirée. Recharge la page.</div>', '✶ Générer la synthèse par Mistral AI'); return; }
       var periode = (state.sel.from && state.sel.to) ? (frDate(state.sel.from) + ' – ' + frDate(state.sel.to)) : 'toutes dates';
       return fetch(SUPABASE_URL + '/functions/v1/brief-securite-mistral', {
         method: 'POST',
