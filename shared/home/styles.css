@@ -2790,23 +2790,52 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 /* ── Badge Premium (header) : compte connecté avec accès aux 6 théâtres.
       Remplace le bouton « Connecté » ; le clic ouvre le récap compte.
       Sobre et institutionnel : capitale espacée + icône de surveillance.
-      Surligné en dégradé AlgorInt, comme le CTA. Sans animation en boucle :
-      le halo pulsé et la pupille qui grossissait se lisaient comme un bug. ── */
+      Non rempli : intérieur transparent, contour ET texte en dégradé Algor Int.
+      Sans animation en boucle : le halo pulsé et la pupille qui grossissait se
+      lisaient comme un bug. ── */
 .premium-badge {
+  position: relative;
   gap: 8px;
   font-size: 11.5px; font-weight: 700;
   letter-spacing: 0.11em; text-transform: uppercase;
-  color: #fff;
+  color: var(--violet); /* repli si background-clip: text n'est pas supporté */
   padding: 0 16px;
   border-radius: var(--r-sm);
-  background: var(--violet-grad);
-  box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--violet) 55%, transparent),
-              inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  background: transparent;
   white-space: nowrap;
-  transition: filter 0.15s var(--ease), transform 0.15s var(--ease);
+  transition: transform 0.15s var(--ease), box-shadow 0.15s var(--ease);
 }
-.premium-badge:hover { filter: brightness(1.08); transform: translateY(-1px); }
-.premium-badge__icon { width: 15px; height: 15px; flex: 0 0 15px; }
+/* Le contour : un rectangle en dégradé dont on ne garde que la bordure, via un
+   masque qui évide le centre. border-image ne conviendrait pas, il ignore le
+   border-radius et ferait des angles droits. */
+.premium-badge::before {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: var(--violet-grad);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+/* Le texte prend le même dégradé, découpé sur les lettres. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .premium-badge {
+    background: var(--violet-grad);
+    -webkit-background-clip: text;
+            background-clip: text;
+    color: transparent;
+  }
+}
+.premium-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: inset 0 0 0 100px color-mix(in srgb, var(--violet) 8%, transparent);
+}
+/* L'icône est un tracé SVG : elle ne peut pas prendre background-clip, on la
+   cale sur la teinte de départ du dégradé (elle est à l'extrémité gauche). */
+.premium-badge__icon { width: 15px; height: 15px; flex: 0 0 15px; stroke: #6B3FA0; }
 
 /* Pastille compacte près du logo : reste visible sur mobile quand la partie
    droite du header est repliée dans le menu burger. */
