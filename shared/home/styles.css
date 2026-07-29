@@ -220,12 +220,12 @@ img, svg { display: block; max-width: 100%; }
 .brand {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 13px;
   cursor: pointer;
 }
 .brand__mark {
-  width: 52px; height: 52px;
-  border-radius: 12px;
+  width: 44px; height: 44px;
+  border-radius: 10px;
   background-image: url('../../favicon.jpg');
   background-size: cover;
   background-position: center;
@@ -233,7 +233,7 @@ img, svg { display: block; max-width: 100%; }
   flex-shrink: 0;
 }
 .brand { flex-shrink: 0; }
-.brand__body { display: flex; flex-direction: column; gap: 5px; line-height: 1; }
+.brand__body { display: flex; flex-direction: column; gap: 6px; line-height: 1; }
 .brand__name {
   font-family: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 34px;
@@ -244,11 +244,14 @@ img, svg { display: block; max-width: 100%; }
   white-space: nowrap;
 }
 .brand__name span { color: inherit; }
+/* Le sous-titre se cale sous le wordmark : a 10px/0.16em il debordait de ~100px
+   a droite d'« Algor Access » et elargissait le bloc marque d'autant, ce qui
+   poussait la nav et les boutons hors de l'axe du header. */
 .brand__tag {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 8px;
   color: var(--muted);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   line-height: 1;
   text-align: justify;
@@ -263,7 +266,7 @@ img, svg { display: block; max-width: 100%; }
 /* Co-branding : logo client + bouton d'import (abonné connecté) */
 .brand__logo { height: 48px; width: auto; max-width: 200px; object-fit: contain; border-radius: 8px; display: block; flex-shrink: 0; }
 .logo-tool { display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; }
-.logo-import { position: relative; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; color: var(--violet); background: #fff; border: 1px solid rgba(123,90,189,.3); border-radius: 10px; padding: 0; cursor: pointer; transition: background .15s, border-color .15s; }
+.logo-import { position: relative; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; color: var(--violet); background: #fff; border: 1px solid rgba(123,90,189,.3); border-radius: var(--r-sm); padding: 0; cursor: pointer; transition: background .15s, border-color .15s; }
 .logo-import:hover { background: rgba(107,63,160,.06); border-color: var(--violet); }
 .logo-import svg { width: 17px; height: 17px; display: block; }
 /* Bulle au survol (pas d'espace pris dans le header) */
@@ -280,9 +283,27 @@ img, svg { display: block; max-width: 100%; }
   align-items: center;
   gap: 14px;
 }
-/* Nav recentré : espaces égaux entre logo et connexion */
+/* Nav centree entre le logo et les boutons : marges auto de part et d'autre,
+   donc le meme espace a gauche et a droite de la nav. Ne tient que parce que
+   le bloc marque tient desormais dans la largeur du wordmark ; avant, la barre
+   depassait de 30px et poussait les boutons hors du padding droit. */
 .app-header__inner .site-nav { margin-left: auto; margin-right: auto; }
 .app-header__inner .app-header__right { margin-left: 0; }
+/* Bande intermediaire : la barre complete tient encore, mais tout juste.
+   On resserre la nav et on retire le sous-titre plutot que de laisser la
+   partie droite deborder du padding. */
+@media (min-width: 1201px) and (max-width: 1400px) {
+  .app-header__inner { padding-left: 28px; padding-right: 28px; gap: 16px; }
+  .app-header .brand { gap: 11px; }
+  .app-header .brand__mark { width: 40px; height: 40px; }
+  .app-header .brand__name { font-size: 27px; }
+  .app-header .brand__tag { display: none; }
+  .app-header .site-nav { gap: 13px; }
+  .app-header .site-nav a { font-size: 13.5px; }
+  .app-header .app-header__right { gap: 10px; }
+  .app-header .premium-badge { padding: 0 12px; }
+  .app-header .site-cta { padding: 0 14px; }
+}
 .header-cta {
   display: inline-flex;
   align-items: center;
@@ -2740,11 +2761,21 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 .site-nav a:hover { color: var(--ink); }
 .site-nav a.is-active { color: var(--ink); font-weight: 600; }
 .site-header__right { margin-left: auto; display: flex; align-items: center; gap: 22px; }
+/* Hauteur commune a tous les elements du header (bouton logo, Connexion,
+   badge Premium, CTA) : sans ca chacun se calait sur sa propre line-height et
+   les quatre blocs n'avaient pas la meme hauteur au pixel pres. */
+.site-login, .premium-badge, .site-cta {
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
 .site-login {
   font-size: 14px; font-weight: 600; color: var(--ink-2);
   border: 1.5px solid var(--line-2);
-  border-radius: 10px;
-  padding: 8px 16px;
+  border-radius: var(--r-sm);
+  padding: 0 16px;
   background: transparent;
   transition: color 0.15s, border-color 0.15s;
 }
@@ -2758,16 +2789,15 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 .site-login.is-logged:hover { color: var(--violet); }
 /* ── Badge Premium (header) : compte connecté avec accès aux 6 théâtres.
       Remplace le bouton « Connecté » ; le clic ouvre le récap compte.
-      Sobre et institutionnel : capitale espacée + icône de surveillance. ── */
+      Sobre et institutionnel : capitale espacée + icône de surveillance.
+      Surligné en dégradé AlgorInt, comme le CTA. Sans animation en boucle :
+      le halo pulsé et la pupille qui grossissait se lisaient comme un bug. ── */
 .premium-badge {
-  display: inline-flex; align-items: center; gap: 8px;
+  gap: 8px;
   font-size: 11.5px; font-weight: 700;
   letter-spacing: 0.11em; text-transform: uppercase;
   color: #fff;
-  /* Mêmes métriques verticales que .site-cta (14px/normal + 10px de padding)
-     pour que les deux boutons du header aient exactement la même hauteur. */
-  line-height: 17.5px;
-  padding: 10px 16px;
+  padding: 0 16px;
   border-radius: var(--r-sm);
   background: var(--violet-grad);
   box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--violet) 55%, transparent),
@@ -2777,32 +2807,6 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 }
 .premium-badge:hover { filter: brightness(1.08); transform: translateY(-1px); }
 .premium-badge__icon { width: 15px; height: 15px; flex: 0 0 15px; }
-
-/* Animation « acquisition » : la pupille de l'œil pulse comme un indicateur
-   de surveillance active, et le badge respire avec un halo violet lent. */
-.premium-badge { animation: premiumGlow 3.8s ease-in-out infinite; }
-@keyframes premiumGlow {
-  0%, 100% {
-    box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--violet) 55%, transparent),
-                inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  }
-  50% {
-    box-shadow: 0 4px 22px -3px color-mix(in srgb, var(--violet) 85%, transparent),
-                inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  }
-}
-.premium-badge__icon circle,
-.premium-chip svg circle {
-  transform-box: fill-box; transform-origin: center;
-  animation: premiumPupil 2.6s ease-in-out infinite;
-}
-@keyframes premiumPupil {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(2); opacity: 0.5; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .premium-badge, .premium-badge__icon circle, .premium-chip svg circle { animation: none; }
-}
 
 /* Pastille compacte près du logo : reste visible sur mobile quand la partie
    droite du header est repliée dans le menu burger. */
@@ -2817,10 +2821,10 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   white-space: nowrap;
 }
 .premium-chip svg { width: 12px; height: 12px; flex: 0 0 12px; }
-@media (max-width: 1080px) { .premium-chip { display: inline-flex; } }
+@media (max-width: 1200px) { .premium-chip { display: inline-flex; } }
 
 .site-cta {
-  padding: 10px 18px;
+  padding: 0 18px;
   border-radius: var(--r-sm);
   background: var(--violet-grad);
   color: #fff;
@@ -3383,7 +3387,9 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
 .site-header.is-open .site-burger span:nth-child(3),
 .app-header.is-open .site-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-@media (max-width: 1080px) {
+/* 1200px et non 1080 : en dessous, les 7 rubriques + les boutons ne tiennent
+   plus sur une ligne et la partie droite sortait de l'ecran (boutons coupes). */
+@media (max-width: 1200px) {
   .site-burger { display: flex; }
   .site-header__inner, .app-header__inner { flex-wrap: wrap; row-gap: 0; }
   .app-header__inner { padding-left: 24px; padding-right: 24px; }
@@ -3409,6 +3415,14 @@ a.cascade-sub__item:hover .cascade-sub__label { color: var(--violet); }
   }
   .site-header.is-open .site-cta,
   .site-header.is-open .site-login { flex: 1; text-align: center; justify-content: center; }
+}
+
+/* Mobile : le bloc marque + le burger doivent tenir sur une seule ligne, sinon
+   le burger passe au-dessous et le header fait 120px de haut. */
+@media (max-width: 700px) {
+  .app-header__inner { padding-left: 18px; padding-right: 18px; gap: 12px; }
+  .app-header .brand { gap: 12px; }
+  .app-header .brand__mark { width: 40px; height: 40px; }
 }
 
 /* ─── Pied de page ─── */
