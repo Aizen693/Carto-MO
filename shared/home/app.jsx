@@ -211,6 +211,7 @@ function App() {
             {!clientLogo && (
               <div className="brand__body">
                 <div className="brand__name">Algor <span>Access</span></div>
+                <div className="brand__tag">La plateforme de cartographie d'Algor Int</div>
               </div>
             )}
           </div>
