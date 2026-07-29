@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pilotage partagé · Matrice de qualification · Algora Access</title>
+<style>
+  :root{
+    --ground:#F1F4F9;--surface:#FFFFFF;--surface-2:#E9EEF6;--ink:#17202E;--ink-soft:#47566B;--ink-faint:#7A8AA1;
+    --line:#D8E0EC;--line-strong:#C3CEDE;--navy:#1E3A5F;--navy-bright:#2C5788;--steel:#56708F;
+    --rouge:#A9382B;--rouge-bg:#F6E6E3;--orange:#A46A1F;--orange-bg:#F7EEDA;--vert:#23694C;--vert-bg:#E1EFE7;
+    --amber:#9A6B12;--amber-bg:#F5EBD3;--slate:#4C5D72;--slate-bg:#E6EBF1;--violet:#6A3F8C;--violet-bg:#EEE6F4;
+    --shadow:0 1px 2px rgba(23,32,46,.05),0 8px 24px rgba(23,32,46,.06);--radius:10px;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --ground:#0D121B;--surface:#151D29;--surface-2:#1C2634;--ink:#E9EEF6;--ink-soft:#AAB8CB;--ink-faint:#6C7C93;
+    --line:#27313F;--line-strong:#35404F;--navy:#7DA8DA;--navy-bright:#9CC0EA;--steel:#8298B4;
+    --rouge:#E38477;--rouge-bg:#2E1A17;--orange:#DBA95E;--orange-bg:#2C2416;--vert:#6FC49B;--vert-bg:#16271F;
+    --amber:#D8B25E;--amber-bg:#2A2314;--slate:#9AA9BC;--slate-bg:#1B2430;--violet:#B993D8;--violet-bg:#241A2E;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  }}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:"Plus Jakarta Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1120px;margin:0 auto;padding:clamp(16px,3vw,40px) clamp(12px,3vw,36px) 72px;}
+  .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);}
+  h1{font-size:clamp(1.4rem,3vw,2rem);line-height:1.14;font-weight:800;letter-spacing:-.02em;margin:10px 0 0;}
+  .lede{font-size:1rem;color:var(--ink-soft);max-width:60ch;margin:12px 0 0;}
+
+  /* login */
+  #login{max-width:440px;margin:8vh auto 0;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:30px 28px;}
+  #login h1{font-size:1.5rem;margin:6px 0 0;}
+  #login p{color:var(--ink-soft);font-size:.92rem;margin:12px 0 20px;}
+  .field{display:flex;gap:8px;flex-wrap:wrap;}
+  #login input{flex:1;min-width:180px;font:inherit;font-size:.95rem;padding:11px 13px;border:1px solid var(--line-strong);border-radius:9px;background:var(--surface);color:var(--ink);}
+  #login input:focus{outline:2px solid var(--navy-bright);outline-offset:1px;}
+  #code{letter-spacing:.3em;font-weight:700;}
+  .btn{font:inherit;font-size:.9rem;font-weight:700;padding:11px 18px;border-radius:9px;border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn:disabled{opacity:.5;cursor:default;}
+  @media (prefers-color-scheme:dark){.btn{color:#0D121B;}}
+  .msg{margin-top:16px;font-size:.88rem;padding:10px 13px;border-radius:8px;}
+  .msg.ok{background:var(--vert-bg);color:var(--vert);}
+  .msg.err{background:var(--rouge-bg);color:var(--rouge);}
+  .msg.info{background:var(--surface-2);color:var(--ink-soft);}
+  .hidden{display:none !important;}
+
+  /* app header */
+  .topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+  .who{margin-left:auto;display:flex;align-items:center;gap:12px;font-size:.82rem;color:var(--ink-soft);}
+  .live{display:inline-flex;align-items:center;gap:6px;font-size:.76rem;font-weight:700;}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--ink-faint);}
+  .dot.on{background:var(--vert);box-shadow:0 0 0 3px color-mix(in srgb,var(--vert) 30%,transparent);}
+  .lnk{font-size:.8rem;font-weight:600;color:var(--navy-bright);background:none;border:none;cursor:pointer;padding:4px 6px;}
+
+  .tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:22px;}
+  .tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);}
+  .tile .n{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
+  .tile .k{font-size:.72rem;color:var(--ink-soft);margin-top:3px;}
+  .tile.r .n{color:var(--rouge);}.tile.o .n{color:var(--orange);}.tile.v .n{color:var(--vert);}.tile.g .n{color:var(--navy-bright);}
+
+  .bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .bar h2{font-size:1.1rem;font-weight:780;margin:0;}
+  .spacer{flex:1;}
+  .tip{font-size:.82rem;color:var(--ink-faint);}
+
+  .table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow);}
+  table{width:100%;border-collapse:collapse;background:var(--surface);font-size:.84rem;min-width:820px;}
+  thead th{position:sticky;top:0;z-index:2;text-align:left;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;color:var(--steel);padding:11px 12px;background:var(--surface-2);border-bottom:1px solid var(--line-strong);white-space:nowrap;}
+  tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  tr.grp td{background:var(--surface-2);padding:11px 12px;}
+  tr.grp .gid{font-family:ui-monospace,Menlo,monospace;font-weight:700;color:var(--navy-bright);margin-right:8px;}
+  tr.grp .gname{font-weight:750;font-size:.9rem;}
+  .rchip{font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--surface);border:1px solid var(--line-strong);color:var(--steel);margin-left:5px;}
+  tr.m .mid{font-family:ui-monospace,Menlo,monospace;font-weight:700;color:var(--ink-soft);white-space:nowrap;}
+  tr.m .mname{font-weight:600;}
+  .caret{display:inline-block;width:13px;color:var(--ink-faint);cursor:pointer;transition:transform .15s;}
+  tr.m.open .caret{transform:rotate(90deg);}
+  tr.m:hover td{background:var(--surface-2);}
+  .pill{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;display:inline-block;}
+  .pal{font-family:ui-monospace,Menlo,monospace;font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:5px;border:1px solid var(--line-strong);color:var(--ink-soft);background:var(--surface);}
+  .st-Rouge{color:#fff;background:var(--rouge);}.st-Orange{color:#3a2a0e;background:var(--orange);}.st-Vert{color:#fff;background:var(--vert);}
+  @media (prefers-color-scheme:dark){.st-Rouge,.st-Vert,.st-Orange{color:#0D121B;}}
+  .stcycle{cursor:pointer;position:relative;padding-right:20px;}
+  .stcycle::after{content:"⇄";position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:.72em;opacity:.7;}
+  .stcycle:hover{filter:brightness(1.08);}
+  .imp,.cha{font-size:.78rem;color:var(--ink-soft);white-space:nowrap;}
+  .cad{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:6px;white-space:nowrap;}
+  .cad-Cœur{color:var(--amber);background:var(--amber-bg);}.cad-Consolider{color:var(--vert);background:var(--vert-bg);}
+  .cad-Courant{color:var(--slate);background:var(--slate-bg);}.cad-Questionner{color:var(--violet);background:var(--violet-bg);}
+  .ar{font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:5px;white-space:nowrap;}
+  .ar-Oui{color:var(--rouge);background:var(--rouge-bg);}.ar-Non{color:var(--vert);background:var(--vert-bg);}.ar-Av{color:var(--amber);background:var(--amber-bg);}
+  select.ed{font:inherit;font-size:.8rem;padding:4px 6px;border:1px solid var(--line-strong);border-radius:6px;background:var(--surface);color:var(--ink);cursor:pointer;}
+  select.ed.stsel{border:none;border-radius:999px;font-weight:700;}
+  input.ed,textarea.ed{font:inherit;font-size:.82rem;padding:5px 7px;border:1px solid var(--line-strong);border-radius:6px;background:var(--surface);color:var(--ink);width:100%;}
+  textarea.ed{min-height:52px;resize:vertical;line-height:1.4;}
+  tr.det td{padding:0;border-bottom:1px solid var(--line);}
+  .det-in{padding:14px 18px 18px;background:var(--surface-2);display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;}
+  .det-block .dh{font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--steel);margin-bottom:6px;}
+  .det-block .dv{font-size:.85rem;}
+  .det-block ul{margin:0;padding-left:16px;display:grid;gap:3px;}
+  .det-arret{grid-column:1/-1;padding:10px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:.85rem;}
+  .det-defi{grid-column:1/-1;}.det-defi .dv{color:var(--ink-soft);font-style:italic;}
+  .savedflash{animation:flash 1s ease;}
+  @keyframes flash{0%{background:var(--vert-bg);}100%{background:transparent;}}
+  @media (max-width:720px){.tiles{grid-template-columns:repeat(2,1fr);}.det-in{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- ECRAN DE CONNEXION -->
+<div id="login">
+  <div class="eyebrow">Algora Access · Pilotage partagé</div>
+  <h1>Connexion</h1>
+  <p>Connecte-toi avec ton e-mail et ton mot de passe. Aucun renvoi vers un autre site : tu accèdes directement au document. Accès réservé aux membres autorisés.</p>
+  <div class="field">
+    <input type="email" id="email" placeholder="ton.email@exemple.fr" autocomplete="email">
+  </div>
+  <div class="field" style="margin-top:10px;">
+    <input type="password" id="password" placeholder="Mot de passe" autocomplete="current-password">
+    <button class="btn" id="loginBtn">Se connecter</button>
+  </div>
+  <div id="loginMsg" class="msg info hidden"></div>
+</div>
+
+<!-- APPLICATION -->
+<div id="app" class="wrap hidden">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow">Matrice de qualification · onglet Pilotage</div>
+      <h1 style="font-size:1.4rem;">Tableau de pilotage partagé</h1>
+    </div>
+    <div class="who">
+      <span class="live"><span class="dot" id="liveDot"></span><span id="liveTxt">connexion…</span></span>
+      <span id="userEmail"></span>
+      <button class="lnk" id="logout">Se déconnecter</button>
+    </div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile g"><div class="n" id="t-total">–</div><div class="k">sous mesures</div></div>
+    <div class="tile g"><div class="n" id="t-arret">–</div><div class="k">points d'arrêt (Oui)</div></div>
+    <div class="tile r"><div class="n" id="t-rouge">–</div><div class="k">Rouge</div></div>
+    <div class="tile o"><div class="n" id="t-orange">–</div><div class="k">Orange</div></div>
+    <div class="tile v"><div class="n" id="t-vert">–</div><div class="k">Vert</div></div>
+  </div>
+
+  <div class="bar">
+    <h2>Tableau de pilotage</h2>
+    <div class="spacer"></div>
+    <span class="tip" id="editHint">Clique une pastille de statut pour la changer. Bouton Éditer pour tout le reste.</span>
+    <button class="btn" id="editToggle" style="padding:8px 15px;">Éditer</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:52px">ID</th><th>Élément</th><th>Palier</th><th>Statut</th><th>Impact</th><th>Charge</th><th>Cadran</th><th>Pt d'arrêt</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <p class="tip" style="margin-top:12px;" id="foot">Chaque modification est enregistrée dans Supabase et apparaît en direct chez l'autre. Données en eu-west-1 (UE).</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  var SB_URL="https://lwgrjdpuagnvvzmdbyzb.supabase.co";
+  var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3Z3JqZHB1YWdudnZ6bWRieXpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMDEzNDMsImV4cCI6MjA5MDc3NzM0M30.DspOEoYSCHnsHK9iNDg2JElooBdih_96fifCf1fIQkI";
+  var sb=window.supabase.createClient(SB_URL,SB_KEY);
+
+  var CAD_FULL={"Cœur":"Cœur d'architecture à calibrer","Consolider":"À consolider sans délai","Courant":"À intégrer au fonctionnement courant","Questionner":"À questionner : légitimité à confirmer"};
+  var AR_LABEL={"Oui":"Oui","Non":"Non","Av":"Avant eng."};
+  var GRILLE_LABEL={R:"Robust.",O:"Orga",T:"Tech.",S:"Sect.","É":"À éval."};
+  var OPTS={pal:["P0","P1","P2","P3"],st:["Rouge","Orange","Vert"],imp:["Élevé","Faible"],ch:["Élevée","Faible"],cad:["Cœur","Consolider","Courant","Questionner"],ar:["Oui","Non","Av"]};
+  var COLOR_SEL={st:"st-",cad:"cad-",ar:"ar-"};
+  var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
+
+  var STATE=[], editing=false, userEmail="", channel=null, openIds={};
+  var $=function(id){return document.getElementById(id);};
+
+  // ---------- AUTH ----------
+  function showLogin(){$("login").classList.remove("hidden");$("app").classList.add("hidden");}
+  function showApp(){$("login").classList.add("hidden");$("app").classList.remove("hidden");}
+  function loginMsg(txt,cls){var m=$("loginMsg");m.textContent=txt;m.className="msg "+cls;m.classList.remove("hidden");}
+
+  $("loginBtn").addEventListener("click",async function(){
+    var email=$("email").value.trim(), password=$("password").value;
+    if(!email||!password){loginMsg("Entre ton e-mail et ton mot de passe.","err");return;}
+    $("loginBtn").disabled=true;
+    var {error}=await sb.auth.signInWithPassword({email:email,password:password});
+    $("loginBtn").disabled=false;
+    if(error){loginMsg("Connexion refusée : "+error.message,"err");}
+  });
+  $("email").addEventListener("keydown",function(e){if(e.key==="Enter")$("password").focus();});
+  $("password").addEventListener("keydown",function(e){if(e.key==="Enter")$("loginBtn").click();});
+  $("logout").addEventListener("click",async function(){await sb.auth.signOut();location.reload();});
+
+  async function boot(){
+    var {data:{session}}=await sb.auth.getSession();
+    if(session){onLogin(session);}else{showLogin();}
+    sb.auth.onAuthStateChange(function(_ev,sess){
+      if(sess&&$("app").classList.contains("hidden")){onLogin(sess);}
+      if(!sess){showLogin();}
+    });
+  }
+
+  async function onLogin(session){
+    userEmail=session.user.email||"";
+    $("userEmail").textContent=userEmail;
+    showApp();
+    await loadData();
+    subscribeRealtime();
+  }
+
+  // ---------- DATA ----------
+  async function loadData(){
+    var {data,error}=await sb.from("pilotage_mesures").select("*").order("ordre",{ascending:true});
+    if(error){
+      $("tbody").innerHTML='<tr><td colspan="8" style="padding:24px;color:var(--rouge)">Accès refusé ou erreur : '+esc(error.message)+'. Ton adresse n\'est peut-être pas encore autorisée.</td></tr>';
+      return;
+    }
+    STATE=data||[];
+    render();
+  }
+
+  function subscribeRealtime(){
+    if(channel)sb.removeChannel(channel);
+    channel=sb.channel("pilotage-live")
+      .on("postgres_changes",{event:"*",schema:"public",table:"pilotage_mesures"},function(payload){
+        if(payload.eventType==="DELETE"){STATE=STATE.filter(function(m){return m.id!==payload.old.id;});}
+        else{
+          var row=payload.new, i=STATE.findIndex(function(m){return m.id===row.id;});
+          if(i>=0)STATE[i]=row; else STATE.push(row);
+          STATE.sort(function(a,b){return a.ordre-b.ordre;});
+        }
+        render(row?row.id:null);
+      })
+      .subscribe(function(status){
+        var on=status==="SUBSCRIBED";
+        $("liveDot").className="dot"+(on?" on":"");
+        $("liveTxt").textContent=on?"synchro en direct":"hors ligne";
+      });
+  }
+
+  // write one field (optimistic + persist)
+  async function saveField(id,patch){
+    var i=STATE.findIndex(function(m){return m.id===id;});
+    if(i>=0)Object.assign(STATE[i],patch);
+    refreshCounts();
+    patch.updated_by=userEmail;
+    var {error}=await sb.from("pilotage_mesures").update(patch).eq("id",id);
+    if(error){alert("Échec de l'enregistrement : "+error.message);loadData();}
+  }
+
+  // ---------- RENDER ----------
+  function refreshCounts(){
+    var c={Rouge:0,Orange:0,Vert:0},oui=0;
+    STATE.forEach(function(m){c[m.st]=(c[m.st]||0)+1;if(m.ar==="Oui")oui++;});
+    $("t-total").textContent=STATE.length;
+    $("t-arret").textContent=oui;
+    $("t-rouge").textContent=c.Rouge;$("t-orange").textContent=c.Orange;$("t-vert").textContent=c.Vert;
+  }
+
+  function sel(kind,cur,on){
+    var s=document.createElement("select");var pre=COLOR_SEL[kind];
+    function cls(){s.className="ed"+(pre?" "+kind+"sel "+pre+s.value:"");}
+    OPTS[kind].forEach(function(o){var op=document.createElement("option");op.value=o;op.textContent=(kind==="cad")?CAD_FULL[o]:(kind==="ar")?AR_LABEL[o]:o;if(o===cur)op.selected=true;s.appendChild(op);});
+    cls();
+    s.addEventListener("change",function(){on(s.value);cls();});
+    s.addEventListener("click",function(e){e.stopPropagation();});
+    return s;
+  }
+  function inp(cls,val,on){var i=document.createElement(cls==="textarea"?"textarea":"input");i.className="ed";i.value=val||"";i.addEventListener("change",function(){on(i.value);});i.addEventListener("click",function(e){e.stopPropagation();});return i;}
+
+  function detail(m){
+    var det=document.createElement("tr");det.className="det";if(!openIds[m.id])det.style.display="none";
+    var td=document.createElement("td");td.colSpan=8;var box=document.createElement("div");box.className="det-in";
+    if(editing){
+      var a=document.createElement("div");a.className="det-block det-arret";a.innerHTML='<div class="dh">Condition du point d\'arrêt</div>';a.appendChild(inp("input",m.art,function(v){saveField(m.id,{art:v});}));
+      var me=document.createElement("div");me.className="det-block";me.innerHTML='<div class="dh">Type de mesure</div>';me.appendChild(inp("input",m.mes,function(v){saveField(m.id,{mes:v});}));
+      var at=document.createElement("div");at.className="det-block";at.innerHTML='<div class="dh">Attendus (une ligne par élément)</div>';
+      var ta=document.createElement("textarea");ta.className="ed";ta.value=(m.att||[]).join("\n");ta.addEventListener("change",function(){saveField(m.id,{att:ta.value.split("\n").map(function(x){return x.trim();}).filter(Boolean)});});ta.addEventListener("click",function(e){e.stopPropagation();});at.appendChild(ta);
+      var df=document.createElement("div");df.className="det-block det-defi";df.innerHTML='<div class="dh">Défi associé · contexte no-code</div>';var t2=document.createElement("textarea");t2.className="ed";t2.value=m.defi||"";t2.addEventListener("change",function(){saveField(m.id,{defi:t2.value});});t2.addEventListener("click",function(e){e.stopPropagation();});df.appendChild(t2);
+      box.appendChild(a);box.appendChild(me);box.appendChild(at);box.appendChild(df);
+    }else{
+      var attH=(m.att&&m.att.length)?"<ul>"+m.att.map(function(x){return "<li>"+esc(x)+"</li>";}).join("")+"</ul>":'<span class="dv" style="color:var(--ink-faint)">non précisé</span>';
+      var arF=(m.ar==="Oui"?"Point d'arrêt : oui, ":m.ar==="Av"?"Avant engagement, ":"Non bloquant, ")+esc(m.art)+".";
+      box.innerHTML='<div class="det-block det-arret"><b>'+arF+'</b></div><div class="det-block"><div class="dh">Type de mesure</div><div class="dv">'+esc(m.mes)+'</div></div><div class="det-block"><div class="dh">Attendus à actualiser</div>'+attH+'</div><div class="det-block det-defi"><div class="dh">Défi associé · contexte no-code</div><div class="dv">'+esc(m.defi)+'</div></div>';
+    }
+    td.appendChild(box);det.appendChild(td);return det;
+  }
+
+  function measureRow(m){
+    var tr=document.createElement("tr");tr.className="m"+(openIds[m.id]?" open":"");
+    var det=detail(m);
+    if(editing){
+      var tdId=document.createElement("td");var car=document.createElement("span");car.className="caret";car.textContent="›";tdId.appendChild(car);tdId.appendChild(document.createTextNode(" "+m.id));tr.appendChild(tdId);
+      var tn=document.createElement("td");tn.appendChild(inp("input",m.nom,function(v){saveField(m.id,{nom:v});}));tr.appendChild(tn);
+      var tp=document.createElement("td");tp.appendChild(sel("pal",m.pal,function(v){saveField(m.id,{pal:v});}));tr.appendChild(tp);
+      var ts=document.createElement("td");ts.appendChild(sel("st",m.st,function(v){saveField(m.id,{st:v});}));tr.appendChild(ts);
+      var ti=document.createElement("td");ti.appendChild(sel("imp",m.imp,function(v){saveField(m.id,{imp:v});}));tr.appendChild(ti);
+      var tc=document.createElement("td");tc.appendChild(sel("ch",m.ch,function(v){saveField(m.id,{ch:v});}));tr.appendChild(tc);
+      var td2=document.createElement("td");td2.appendChild(sel("cad",m.cad,function(v){saveField(m.id,{cad:v});}));tr.appendChild(td2);
+      var ta2=document.createElement("td");ta2.appendChild(sel("ar",m.ar,function(v){saveField(m.id,{ar:v});}));tr.appendChild(ta2);
+    }else{
+      tr.innerHTML='<td class="mid"><span class="caret">›</span> '+esc(m.id)+'</td><td class="mname">'+esc(m.nom)+'</td><td><span class="pal">'+esc(m.pal)+'</span></td><td><span class="pill stcycle st-'+m.st+'" title="Cliquer pour changer">'+esc(m.st)+'</span></td><td class="imp">'+esc(m.imp)+'</td><td class="cha">'+esc(m.ch)+'</td><td><span class="cad cad-'+m.cad+'" title="'+esc(CAD_FULL[m.cad]||"")+'">'+esc(CAD_FULL[m.cad]||m.cad)+'</span></td><td><span class="ar ar-'+m.ar+'">'+esc(AR_LABEL[m.ar]||m.ar)+'</span></td>';
+      var pill=tr.querySelector(".stcycle");
+      pill.addEventListener("click",function(e){e.stopPropagation();var NX={Rouge:"Orange",Orange:"Vert",Vert:"Rouge"};var nv=NX[m.st]||"Orange";pill.className="pill stcycle st-"+nv;pill.textContent=nv;saveField(m.id,{st:nv});});
+    }
+    tr.addEventListener("click",function(e){if(e.target.closest("input,select,textarea,button"))return;var open=!openIds[m.id];openIds[m.id]=open;tr.classList.toggle("open",open);det.style.display=open?"":"none";});
+    return [tr,det];
+  }
+
+  function render(flashId){
+    var tb=$("tbody");tb.innerHTML="";
+    var lastBrique=null;
+    STATE.forEach(function(m){
+      if(m.brique_n!==lastBrique){
+        lastBrique=m.brique_n;
+        var gr=document.createElement("tr");gr.className="grp";
+        var reg=(m.brique_reg||[]).map(function(r){return '<span class="rchip">'+esc(r)+'</span>';}).join("");
+        gr.innerHTML='<td colspan="8"><span class="gid">'+esc(m.brique_n)+'</span><span class="gname">'+esc(m.brique_nom)+'</span>'+reg+'</td>';
+        tb.appendChild(gr);
+      }
+      var pair=measureRow(m);tb.appendChild(pair[0]);tb.appendChild(pair[1]);
+      if(flashId&&m.id===flashId)pair[0].classList.add("savedflash");
+    });
+    refreshCounts();
+  }
+
+  $("editToggle").addEventListener("click",function(){editing=!editing;this.textContent=editing?"Terminer":"Éditer";$("editHint").textContent=editing?"Chaque champ modifié est enregistré et synchronisé aussitôt.":"Clique une pastille de statut pour la changer. Bouton Éditer pour tout le reste.";render();});
+
+  boot();
+})();
+</script>
+</body>
+</html>

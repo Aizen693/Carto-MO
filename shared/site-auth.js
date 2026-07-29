@@ -287,10 +287,10 @@ const OVERLAY_CSS = `
   --v:       #7c4dbf;
   --v-deep:  #6B3FA0;
   --v-soft:  #a679e0;
-  --sa-bg:   #0d0a18;
-  --sa-tx:   #ededf2;
-  --sa-tx-d: rgba(255,255,255,0.55);
-  --sa-tx-f: rgba(255,255,255,0.34);
+  --sa-bg:   #F4F2F8;
+  --sa-tx:   #181428;
+  --sa-tx-d: rgba(24,20,40,0.62);
+  --sa-tx-f: rgba(24,20,40,0.38);
 
   position: fixed; inset: 0; z-index: 999999;
   display: flex; align-items: center; justify-content: center;
@@ -310,9 +310,9 @@ const OVERLAY_CSS = `
 .sa-bg-gradient {
   position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(180deg,
-    rgba(124,77,191,0.40) 0%,
-    rgba(107,63,160,0.34) 38%,
-    rgba(13,10,24,1) 88%);
+    rgba(124,77,191,0.16) 0%,
+    rgba(107,63,160,0.10) 38%,
+    rgba(244,242,248,1) 88%);
 }
 .sa-bg-noise {
   position: absolute; inset: 0; pointer-events: none;
@@ -327,18 +327,18 @@ const OVERLAY_CSS = `
 .sa-glow-top {
   top: -22vh; width: 110vh; height: 60vh;
   border-radius: 0 0 50% 50%;
-  background: rgba(166,121,224,0.30);
+  background: rgba(166,121,224,0.22);
   animation: sa-pulse 8s ease-in-out infinite;
 }
 .sa-glow-bottom {
   bottom: -42vh; width: 92vh; height: 92vh;
   border-radius: 50%;
-  background: rgba(124,77,191,0.34);
+  background: rgba(124,77,191,0.18);
   animation: sa-pulse 6s ease-in-out infinite 1s;
 }
 .sa-spot {
   position: absolute; width: 24rem; height: 24rem; border-radius: 50%;
-  background: rgba(255,255,255,0.05); filter: blur(100px);
+  background: rgba(107,63,160,0.07); filter: blur(100px);
   pointer-events: none; opacity: 0.4;
 }
 .sa-spot-1 { left: 22%; top: 20%; animation: sa-breathe 7s ease-in-out infinite; }
@@ -374,11 +374,11 @@ const OVERLAY_CSS = `
 .sa-beam { position: absolute; opacity: 0.65; }
 .sa-beam-top, .sa-beam-bottom {
   height: 2px; width: 50%;
-  background: linear-gradient(90deg, transparent, #fff, transparent);
+  background: linear-gradient(90deg, transparent, #6B3FA0, transparent);
 }
 .sa-beam-left, .sa-beam-right {
   width: 2px; height: 50%;
-  background: linear-gradient(180deg, transparent, #fff, transparent);
+  background: linear-gradient(180deg, transparent, #6B3FA0, transparent);
 }
 .sa-beam-top    { top: 0;    animation: sa-beam-h-l 4s ease-in-out infinite; }
 .sa-beam-right  { right: 0;  animation: sa-beam-v-t 4s ease-in-out infinite 1s; }
@@ -390,7 +390,7 @@ const OVERLAY_CSS = `
 @keyframes sa-beam-v-b { 0% { bottom: -50%; } 70%,100% { bottom: 100%; } }
 .sa-corner {
   position: absolute; width: 7px; height: 7px; border-radius: 50%;
-  background: rgba(255,255,255,0.55); filter: blur(2px);
+  background: rgba(107,63,160,0.55); filter: blur(2px);
   animation: sa-corner-pulse 2.3s ease-in-out infinite;
 }
 .sa-corner-tl { top: 0; left: 0; }
@@ -402,20 +402,20 @@ const OVERLAY_CSS = `
 /* ── Surface verre ─────────────────────────────────────── */
 .sa-card {
   position: relative;
-  background: rgba(20,14,38,0.62);
+  background: rgba(255,255,255,0.74);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(24,20,40,0.08);
   border-radius: 24px;
   padding: 28px 28px 22px;
-  box-shadow: 0 28px 70px rgba(0,0,0,0.55);
+  box-shadow: 0 28px 70px rgba(46,24,87,0.16);
   overflow: hidden;
 }
 .sa-card-pattern {
-  position: absolute; inset: 0; pointer-events: none; opacity: 0.035;
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.04;
   background-image:
-    linear-gradient(135deg, #fff 0.5px, transparent 0.5px),
-    linear-gradient(45deg,  #fff 0.5px, transparent 0.5px);
+    linear-gradient(135deg, #6B3FA0 0.5px, transparent 0.5px),
+    linear-gradient(45deg,  #6B3FA0 0.5px, transparent 0.5px);
   background-size: 30px 30px;
 }
 
@@ -424,17 +424,17 @@ const OVERLAY_CSS = `
   position: absolute; top: 12px; right: 12px;
   width: 30px; height: 30px;
   display: none; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(24,20,40,0.05); border: 1px solid rgba(24,20,40,0.10);
   border-radius: 8px; padding: 0; cursor: pointer;
   color: var(--sa-tx-d); z-index: 2;
   transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
 }
-.sa-close:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.22); }
+.sa-close:hover { background: rgba(24,20,40,0.09); color: #181428; border-color: rgba(24,20,40,0.20); }
 .sa-close svg { width: 15px; height: 15px; }
 #site-auth-overlay.is-dismissible .sa-close { display: flex; }
 
 /* En mode dismissible : fond plus discret pour ne pas masquer la page */
-#site-auth-overlay.is-dismissible { background: rgba(8,5,18,0.78); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+#site-auth-overlay.is-dismissible { background: rgba(244,242,248,0.82); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 #site-auth-overlay.is-dismissible .sa-bg-gradient { opacity: 0.55; }
 
 /* ── En-tête ───────────────────────────────────────────── */
@@ -454,7 +454,7 @@ const OVERLAY_CSS = `
 }
 .sa-title {
   font-size: 21px; font-weight: 700; letter-spacing: -0.01em;
-  margin: 0 0 5px; color: #fff;
+  margin: 0 0 5px; color: #181428;
 }
 .sa-sub {
   font-size: 12.5px; font-weight: 400; line-height: 1.45;
@@ -478,22 +478,22 @@ const OVERLAY_CSS = `
   transition: color 0.25s ease;
 }
 .sa-field-icon svg { width: 100%; height: 100%; }
-.sa-field:focus-within .sa-field-icon { color: #fff; }
+.sa-field:focus-within .sa-field-icon { color: var(--v-deep); }
 .sa-field input {
   width: 100%; box-sizing: border-box;
   height: 44px; padding: 0 14px 0 40px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid transparent;
+  background: rgba(24,20,40,0.04);
+  border: 1px solid rgba(24,20,40,0.07);
   border-radius: 11px;
-  color: #fff; font-family: inherit; font-size: 14px;
+  color: #181428; font-family: inherit; font-size: 14px;
   outline: none;
   transition: border-color 0.25s ease, background 0.25s ease;
 }
 .sa-field input[type="password"] { padding-right: 42px; }
 .sa-field input::placeholder { color: var(--sa-tx-f); }
 .sa-field input:focus {
-  background: rgba(255,255,255,0.09);
-  border-color: rgba(255,255,255,0.20);
+  background: #FFFFFF;
+  border-color: rgba(107,63,160,0.45);
 }
 .sa-eye {
   position: absolute; right: 8px;
@@ -504,7 +504,7 @@ const OVERLAY_CSS = `
   transition: color 0.2s ease, background 0.2s ease;
   border-radius: 7px;
 }
-.sa-eye:hover { color: #fff; background: rgba(255,255,255,0.08); }
+.sa-eye:hover { color: #181428; background: rgba(24,20,40,0.06); }
 .sa-eye svg { width: 16px; height: 16px; }
 .sa-eye .sa-eye-on  { display: none; }
 .sa-eye.is-open .sa-eye-off { display: none; }
@@ -527,39 +527,39 @@ const OVERLAY_CSS = `
 .sa-check {
   width: 17px; height: 17px; flex: 0 0 17px;
   border-radius: 5px;
-  border: 1px solid rgba(255,255,255,0.24);
-  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(24,20,40,0.24);
+  background: rgba(24,20,40,0.04);
   display: inline-flex; align-items: center; justify-content: center;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 .sa-check svg {
-  width: 11px; height: 11px; color: var(--sa-bg);
+  width: 11px; height: 11px; color: #FFFFFF;
   opacity: 0; transition: opacity 0.15s ease;
 }
 .sa-remember input:checked ~ .sa-check {
-  background: #fff; border-color: #fff;
+  background: var(--v-deep); border-color: var(--v-deep);
 }
 .sa-remember input:checked ~ .sa-check svg { opacity: 1; }
 .sa-remember input:focus-visible ~ .sa-check {
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.18);
+  box-shadow: 0 0 0 3px rgba(107,63,160,0.30);
 }
 .sa-link {
   font-size: 12px; color: var(--sa-tx-d);
   text-decoration: none; transition: color 0.2s ease;
 }
-.sa-link:hover { color: #fff; }
-.sa-link-strong { color: #fff; font-weight: 600; }
+.sa-link:hover { color: var(--v-deep); }
+.sa-link-strong { color: var(--v-deep); font-weight: 600; }
 
 /* ── Erreur / info ─────────────────────────────────────── */
 .sa-error {
   display: none;
   font-size: 11.5px; line-height: 1.45;
   padding: 8px 0 2px;
-  color: #ef8d86;
+  color: #b23b3b;
 }
 .sa-error.visible { display: block; }
-.sa-error.sa-info { color: var(--v-soft); }
-.sa-error.sa-ok   { color: #74c69d; }
+.sa-error.sa-info { color: var(--v-deep); }
+.sa-error.sa-ok   { color: #1b7f3b; }
 
 /* ── Bouton principal ──────────────────────────────────── */
 .sa-submit {
@@ -585,12 +585,12 @@ const OVERLAY_CSS = `
 .sa-submit:disabled { opacity: 0.55; cursor: not-allowed; }
 .sa-submit.is-loading { opacity: 1; cursor: progress; }
 .sa-submit-ghost {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(24,20,40,0.04);
+  border: 1px solid rgba(24,20,40,0.12);
   box-shadow: none;
 }
 .sa-submit-ghost:hover:not(:disabled) {
-  background: rgba(255,255,255,0.11);
+  background: rgba(24,20,40,0.08);
   filter: none;
   box-shadow: none;
 }
@@ -627,9 +627,9 @@ const OVERLAY_CSS = `
 }
 .sa-premium-line {
   display: flex; align-items: center; justify-content: center; gap: 7px;
-  font-size: 11.5px; line-height: 1.4; color: var(--v-soft);
+  font-size: 11.5px; line-height: 1.4; color: var(--v-deep);
   margin: 13px 0 0; padding-top: 13px;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(24,20,40,0.08);
   text-align: center;
 }
 .sa-premium-line svg { width: 13px; height: 13px; flex: 0 0 13px; }
@@ -654,14 +654,14 @@ const OVERLAY_CSS = `
   font-size: 12.5px; color: var(--sa-tx);
   padding: 5px 2px;
 }
-.sa-perks li svg { width: 14px; height: 14px; flex: 0 0 14px; color: var(--v-soft); }
+.sa-perks li svg { width: 14px; height: 14px; flex: 0 0 14px; color: var(--v-deep); }
 .sa-upgrade-logout { display: inline-block; margin-top: 14px; }
-.sa-account-plan-line { font-size: 12px; color: var(--v-soft); }
+.sa-account-plan-line { font-size: 12px; color: var(--v-deep); }
 
 .sa-foot {
   display: flex; justify-content: center; gap: 9px;
   margin-top: 18px; padding-top: 14px;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(24,20,40,0.08);
   font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--sa-tx-f);
 }

@@ -38,11 +38,11 @@
   /* Écran de chargement / zone introuvable */
   #demo-boot {
     position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center;
-    background:#0d1117; color:#9aa3b2;
+    background:#F4F2F8; color:#6E6982;
     font:500 12px/1.5 'JetBrains Mono', monospace; letter-spacing:0.08em; text-transform:uppercase;
   }
   #demo-boot .fb { text-align:center; max-width:380px; padding:0 22px; text-transform:none; letter-spacing:0; }
-  #demo-boot .fb b { display:block; font-size:18px; color:#e8e6e1; margin-bottom:8px; font-family:'Plus Jakarta Sans',system-ui,sans-serif; }
+  #demo-boot .fb b { display:block; font-size:18px; color:#181428; margin-bottom:8px; font-family:'Plus Jakarta Sans',system-ui,sans-serif; }
   #demo-boot .fb p { font-size:13px; color:#9aa3b2; margin:0 0 16px; }
   #demo-boot .fb .chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
   #demo-boot .fb a { color:#c49a3c; text-decoration:none; border:1px solid rgba(196,154,60,0.3); border-radius:999px; padding:7px 13px; font-size:11px; }
@@ -175,15 +175,19 @@
 
 <div id="hover-tooltip"></div>
 
-<div id="btn-center-sahel" onclick="centerMap()" title="Recentrer sur la zone" style="
+<style>
+/* Bouton recentrer : hover/clavier alignes DA violet (ex-dore, ex-inline). */
+.btn-recenter:hover { color:#B596E0 !important; background:rgba(107,63,160,0.16) !important; }
+.btn-recenter:focus-visible { outline:2px solid #6B3FA0; outline-offset:2px; color:#B596E0 !important; }
+</style>
+<div id="btn-center-sahel" class="btn-recenter" onclick="centerMap()" title="Recentrer sur la zone" role="button" tabindex="0" onkeydown="if(event.key==='Enter')this.click()" style="
   position: absolute; bottom: 60px; left: 12px; z-index: 6;
   background: rgba(17,18,20,0.97); border: 1px solid rgba(255,255,255,0.07);
-  border-top: 1px solid #c49a3c; padding: 6px 11px; cursor: pointer;
+  border-top: 1px solid #6B3FA0; padding: 6px 11px; cursor: pointer;
   font: 500 8px/1 'JetBrains Mono', monospace; color: #727a87;
   letter-spacing: 0.14em; text-transform: uppercase; user-select: none;
   transition: color .1s, background .1s; white-space: nowrap;
-" onmouseover="this.style.color='#e0b452';this.style.background='rgba(196,154,60,0.09)'"
-   onmouseout="this.style.color='#727a87';this.style.background='rgba(17,18,20,0.97)'">
+">
   Recentrer
 </div>
 

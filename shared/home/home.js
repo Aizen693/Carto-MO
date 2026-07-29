@@ -278,17 +278,29 @@ function VeilleRow({
     className: "vrow",
     onClick: onOpen
   }, /*#__PURE__*/React.createElement("span", {
+    className: "vrow__thumb"
+  }, it.image && /*#__PURE__*/React.createElement("img", {
+    src: it.image,
+    alt: "",
+    loading: "lazy",
+    referrerPolicy: "no-referrer",
+    onError: e => {
+      e.target.style.display = 'none';
+    }
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "vrow__body"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vrow__meta"
+  }, /*#__PURE__*/React.createElement("span", {
     className: "vrow__dot",
     style: {
       background: sev.c
     }
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "vrow__body"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "vrow__meta"
-  }, veilleZone(it.theatre), " \xB7 ", veilleDateFR(it.date), " \xB7 ", it.source), /*#__PURE__*/React.createElement("span", {
+  }), veilleZone(it.theatre), " \xB7 ", veilleDateFR(it.date), " \xB7 ", it.source), /*#__PURE__*/React.createElement("span", {
     className: "vrow__t"
-  }, it.titre)));
+  }, it.titre), it.resume && /*#__PURE__*/React.createElement("span", {
+    className: "vrow__r"
+  }, it.resume)));
 }
 function VeilleModal({
   it,
@@ -516,7 +528,7 @@ function VeilleSystem() {
     d: "M13.7 21a2 2 0 0 1-3.4 0"
   })), unread > 0 && /*#__PURE__*/React.createElement("span", {
     className: "veille-bell__badge"
-  }, unread)), /*#__PURE__*/React.createElement("div", {
+  }, unread > 9 ? '9+' : unread)), /*#__PURE__*/React.createElement("div", {
     className: 'veille-panel-scrim' + (open ? ' is-open' : ''),
     onClick: () => setOpen(false)
   }), /*#__PURE__*/React.createElement("aside", {
@@ -611,7 +623,7 @@ const FOOT_COLS = [{
   links: [['Théâtres', '/theatres/'], ['Offres', '/offres/'], ['Méthodologie', '/methodologie/'], ['La plateforme', '/plateforme/']]
 }, {
   head: 'Théâtres suivis',
-  links: [['Sahel', '/sahel/'], ['Moyen-Orient', '/moyen-orient/'], ['RDC', '/rdc/'], ['Afrique', '/afrique/']]
+  links: [['Sahel', '/sahel/'], ['Moyen-Orient', '/moyen-orient/'], ['RDC', '/rdc/'], ['Madagascar', '/madagascar/'], ['Afrique Maritime', '/afrique/'], ['Asie du Sud', '/asie-sud/']]
 }, {
   head: 'Société',
   links: [['À propos', '/a-propos/'], ['Débunkage', '/debunkage/'], ['Contact', '/contact/']]
@@ -1678,14 +1690,42 @@ function ComptesView({
     } = await c.from('profiles').update({
       [field]: value
     }).eq('id', u.id);
-    setBusy(null);
     if (error) {
+      setBusy(null);
       setUsers(list => list.map(x => x.id === u.id ? {
         ...x,
         [field]: prev
       } : x));
       alert('Échec de la mise à jour : ' + (error.message || 'réessayez'));
+      return;
     }
+    // Accorder premium confirme aussi l'email de la personne : sans ça, un compte
+    // non confirmé reste bloqué à la connexion et ne voit jamais son accès.
+    if (field === 'plan' && value === 'premium') {
+      try {
+        const {
+          data: s
+        } = await c.auth.getSession();
+        const token = s && s.session && s.session.access_token;
+        const r = await fetch(SB_URL + '/functions/v1/admin-confirm-email', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            targetId: u.id
+          })
+        });
+        if (!r.ok) {
+          const d = await r.json().catch(() => ({}));
+          alert('Premium accordé, mais la confirmation d’email a échoué : ' + (d.error || r.status) + '. La personne devra confirmer via le lien reçu par mail.');
+        }
+      } catch (e) {
+        alert('Premium accordé, mais la confirmation d’email n’a pas pu être envoyée. La personne devra confirmer via le lien reçu par mail.');
+      }
+    }
+    setBusy(null);
   }
   const needle = query.toLowerCase().trim();
   const visible = users.filter(u => !needle || (u.email || '').toLowerCase().includes(needle) || (u.display_name || '').toLowerCase().includes(needle));

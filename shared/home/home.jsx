@@ -126,10 +126,14 @@ function VeilleRow({ it, onOpen }){
   const sev = SEV[it.severite] || SEV.info;
   return (
     <button className="vrow" onClick={onOpen}>
-      <span className="vrow__dot" style={{ background: sev.c }} />
+      <span className="vrow__thumb">
+        {it.image && <img src={it.image} alt="" loading="lazy" referrerPolicy="no-referrer"
+          onError={(e)=>{ e.target.style.display='none'; }} />}
+      </span>
       <span className="vrow__body">
-        <span className="vrow__meta">{veilleZone(it.theatre)} · {veilleDateFR(it.date)} · {it.source}</span>
+        <span className="vrow__meta"><span className="vrow__dot" style={{ background: sev.c }} />{veilleZone(it.theatre)} · {veilleDateFR(it.date)} · {it.source}</span>
         <span className="vrow__t">{it.titre}</span>
+        {it.resume && <span className="vrow__r">{it.resume}</span>}
       </span>
     </button>
   );
@@ -245,7 +249,7 @@ function VeilleSystem(){
       <>
       <button className="veille-bell" aria-label="Fil de veille" onClick={()=>setOpen(true)}>
         <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-        {unread>0 && <span className="veille-bell__badge">{unread}</span>}
+        {unread>0 && <span className="veille-bell__badge">{unread>9 ? '9+' : unread}</span>}
       </button>
 
       <div className={'veille-panel-scrim'+(open?' is-open':'')} onClick={()=>setOpen(false)} />
@@ -341,7 +345,9 @@ const FOOT_COLS = [
     ['Sahel', '/sahel/'],
     ['Moyen-Orient', '/moyen-orient/'],
     ['RDC', '/rdc/'],
-    ['Afrique', '/afrique/'],
+    ['Madagascar', '/madagascar/'],
+    ['Afrique Maritime', '/afrique/'],
+    ['Asie du Sud', '/asie-sud/'],
   ] },
   { head: 'Société', links: [
     ['À propos', '/a-propos/'],
@@ -1026,11 +1032,32 @@ function ComptesView({ onBack }) {
     setBusy(u.id + field);
     setUsers((list) => list.map((x) => (x.id === u.id ? { ...x, [field]: value } : x)));
     const { error } = await c.from('profiles').update({ [field]: value }).eq('id', u.id);
-    setBusy(null);
     if (error) {
+      setBusy(null);
       setUsers((list) => list.map((x) => (x.id === u.id ? { ...x, [field]: prev } : x)));
       alert('Échec de la mise à jour : ' + (error.message || 'réessayez'));
+      return;
     }
+    // Accorder premium confirme aussi l'email de la personne : sans ça, un compte
+    // non confirmé reste bloqué à la connexion et ne voit jamais son accès.
+    if (field === 'plan' && value === 'premium') {
+      try {
+        const { data: s } = await c.auth.getSession();
+        const token = s && s.session && s.session.access_token;
+        const r = await fetch(SB_URL + '/functions/v1/admin-confirm-email', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ targetId: u.id }),
+        });
+        if (!r.ok) {
+          const d = await r.json().catch(() => ({}));
+          alert('Premium accordé, mais la confirmation d’email a échoué : ' + (d.error || r.status) + '. La personne devra confirmer via le lien reçu par mail.');
+        }
+      } catch (e) {
+        alert('Premium accordé, mais la confirmation d’email n’a pas pu être envoyée. La personne devra confirmer via le lien reçu par mail.');
+      }
+    }
+    setBusy(null);
   }
 
   const needle = query.toLowerCase().trim();

@@ -477,7 +477,8 @@
     var sig = anaSig() + '#' + feats.length + '#' + state.tl.idx + '#' + (ready ? 'r' : '-');
     if (sig === state._anaSig && box.style.display !== 'none') return;
     state._anaSig = sig;
-    if (state.anaOpen === undefined) state.anaOpen = true;
+    // Mobile : panneau replie par defaut, sinon il masque toute la carte.
+    if (state.anaOpen === undefined) state.anaOpen = window.innerWidth > 680;
     state.anaDrill = null; // nouvelles données → on revient à la vue graphiques
     state._anaStats = {
       total: feats.length,

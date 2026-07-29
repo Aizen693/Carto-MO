@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /archive/
+Disallow: /dashboard/
+Disallow: /cloud/
+
+Sitemap: https://algoracces.fr/sitemap.xml

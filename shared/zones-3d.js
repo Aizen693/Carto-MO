@@ -271,12 +271,16 @@
     } else if (chip !== bar.lastElementChild) {
       bar.appendChild(chip);
     }
+    // Sans pays choisi, le jeton n'a aucun sens (il affichait un « Indispo. »
+    // cryptique) : on le masque jusqu'a la selection d'un pays.
+    if (!country()) { chip.style.display = 'none'; return; }
+    chip.style.display = '';
     var list = zonesFor(country());
     chip.disabled = list.length === 0;
-    chip.title = list.length ? list.length + ' infrastructure(s)' : 'Aucune infrastructure pour ce pays';
+    chip.title = list.length ? list.length + ' infrastructure(s)' : 'Aucune infrastructure modélisée pour ce pays';
     chip.classList.toggle('on', state.in3D);
     var val = $('chip-3d-val');
-    if (val) val.textContent = state.in3D && state.active ? state.active.name : (list.length ? 'Explorer' : 'Indispo.');
+    if (val) val.textContent = state.in3D && state.active ? state.active.name : (list.length ? 'Explorer' : 'Aucun site');
   }
   function onChipClick() {
     // Menu déroulant cohérent avec les autres chips (Pays, Période...) : on

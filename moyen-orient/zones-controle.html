@@ -7,22 +7,22 @@
 <title>Algor Int — Zones de contrôle MO · Animation</title>
 
 
-<link rel="stylesheet" href="/shared/home/fonts.css?v=20260625a" />
+<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
 <style>
 :root {
-  --bg: #111214;
-  --bg1: #161819;
-  --bg2: #1b1d1f;
-  --bg3: #212326;
-  --ln: rgba(255,255,255,0.07);
-  --tx: #c8cdd6;
-  --tx1: #727a87;
-  --tx2: #3e444e;
-  --txh: #e8ecf2;
-  --ac: #c49a3c;
-  --ach: #e0b452;
-  --bc: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --b: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --bg: #F4F2F8;
+  --bg1: #FFFFFF;
+  --bg2: #FFFFFF;
+  --bg3: #F1EDF7;
+  --ln: rgba(24,20,40,0.10);
+  --tx: #4A4460;
+  --tx1: #6E6982;
+  --tx2: #A19DB0;
+  --txh: #181428;
+  --ac: #6B3FA0;
+  --ach: #5A2F8C;
+  --bc: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --b: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --m: 'JetBrains Mono', 'Courier New', monospace;
   --serif: 'Instrument Serif', Georgia, serif;
 }
@@ -90,7 +90,7 @@ html, body {
   position: absolute;
   top: 16px;
   right: 16px;
-  background: rgba(22,24,25,0.92);
+  background: rgba(255,255,255,0.94);
   border: 1px solid var(--ln);
   padding: 12px 16px;
   max-width: 220px;
@@ -129,7 +129,7 @@ html, body {
   position: absolute;
   top: 16px;
   left: 16px;
-  background: rgba(22,24,25,0.92);
+  background: rgba(255,255,255,0.94);
   border: 1px solid var(--ln);
   padding: 14px 18px;
   backdrop-filter: blur(8px);
@@ -216,10 +216,10 @@ html, body {
 .tl-period.active {
   border-color: var(--ac);
   color: var(--ac);
-  background: rgba(196,154,60,0.08);
+  background: rgba(107,63,160,0.08);
 }
 .tl-period.passed {
-  background: rgba(196,154,60,0.04);
+  background: rgba(107,63,160,0.05);
   color: var(--tx1);
 }
 
@@ -264,7 +264,7 @@ html, body {
 #tooltip {
   position: absolute;
   display: none;
-  background: rgba(22,24,25,0.95);
+  background: rgba(255,255,255,0.97);
   border: 1px solid var(--ac);
   padding: 10px 14px;
   max-width: 280px;
@@ -330,37 +330,37 @@ html, body {
     <!-- SIMPLIFIED MO GEOGRAPHY -->
     <g id="geo" opacity="0.2">
       <!-- Mediterranean -->
-      <path d="M50,80 Q120,60 180,100 L180,300 Q140,320 80,280 Z" fill="#1d7ed8" opacity="0.15"/>
+      <path d="M50,80 Q120,60 180,100 L180,300 Q140,320 80,280 Z" fill="#D8E4F3" opacity="1"/>
       <!-- Turkey -->
-      <path d="M180,80 Q350,50 500,70 Q550,60 600,80 L580,140 Q500,160 400,150 Q300,155 200,140 Z" fill="#3e444e" opacity="0.2" stroke="#3e444e" stroke-width="0.5"/>
+      <path d="M180,80 Q350,50 500,70 Q550,60 600,80 L580,140 Q500,160 400,150 Q300,155 200,140 Z" fill="#E6E1EF" opacity="1" stroke="#B7AECB" stroke-width="0.5"/>
       <!-- Syria -->
-      <path d="M200,140 Q300,155 400,150 L420,250 Q350,280 250,270 L200,200 Z" fill="#3e444e" opacity="0.15" stroke="#3e444e" stroke-width="0.5"/>
+      <path d="M200,140 Q300,155 400,150 L420,250 Q350,280 250,270 L200,200 Z" fill="#EAE6F2" opacity="1" stroke="#B7AECB" stroke-width="0.5"/>
       <!-- Iraq -->
-      <path d="M420,150 Q500,160 580,140 L650,200 Q680,300 650,400 L550,420 Q480,380 440,300 L420,250 Z" fill="#3e444e" opacity="0.15" stroke="#3e444e" stroke-width="0.5"/>
+      <path d="M420,150 Q500,160 580,140 L650,200 Q680,300 650,400 L550,420 Q480,380 440,300 L420,250 Z" fill="#EAE6F2" opacity="1" stroke="#B7AECB" stroke-width="0.5"/>
       <!-- Iran -->
-      <path d="M650,100 Q800,80 950,120 L980,300 Q950,400 880,450 L700,420 Q660,350 650,200 Z" fill="#3e444e" opacity="0.15" stroke="#3e444e" stroke-width="0.5"/>
+      <path d="M650,100 Q800,80 950,120 L980,300 Q950,400 880,450 L700,420 Q660,350 650,200 Z" fill="#EAE6F2" opacity="1" stroke="#B7AECB" stroke-width="0.5"/>
       <!-- Saudi Arabia -->
-      <path d="M300,350 Q450,340 550,420 L650,400 L700,420 Q720,500 680,580 Q550,620 400,580 Q320,520 300,420 Z" fill="#3e444e" opacity="0.1" stroke="#3e444e" stroke-width="0.5"/>
+      <path d="M300,350 Q450,340 550,420 L650,400 L700,420 Q720,500 680,580 Q550,620 400,580 Q320,520 300,420 Z" fill="#DCD7E6" opacity="1" stroke="#A19DB0" stroke-width="0.5"/>
       <!-- Lebanon -->
-      <path d="M200,180 L230,170 L240,220 L210,230 Z" fill="#3e444e" opacity="0.2" stroke="#3e444e" stroke-width="0.5"/>
+      <path d="M200,180 L230,170 L240,220 L210,230 Z" fill="#E6E1EF" opacity="1" stroke="#B7AECB" stroke-width="0.5"/>
       <!-- Israel -->
-      <path d="M210,230 L240,220 L250,300 L220,310 Z" fill="#3e444e" opacity="0.2" stroke="#3e444e" stroke-width="0.5"/>
+      <path d="M210,230 L240,220 L250,300 L220,310 Z" fill="#E6E1EF" opacity="1" stroke="#B7AECB" stroke-width="0.5"/>
       <!-- Yemen -->
-      <path d="M500,560 Q600,540 700,560 Q720,600 680,630 Q580,650 500,620 Z" fill="#3e444e" opacity="0.1" stroke="#3e444e" stroke-width="0.5"/>
+      <path d="M500,560 Q600,540 700,560 Q720,600 680,630 Q580,650 500,620 Z" fill="#DCD7E6" opacity="1" stroke="#A19DB0" stroke-width="0.5"/>
       <!-- Gulf -->
-      <path d="M650,300 Q700,350 700,420 L680,420 Q670,360 640,310 Z" fill="#1d7ed8" opacity="0.1"/>
+      <path d="M650,300 Q700,350 700,420 L680,420 Q670,360 640,310 Z" fill="#DEE8F5" opacity="1"/>
       <!-- Red Sea -->
-      <path d="M250,300 Q280,400 300,500 Q310,550 300,600 L260,600 Q270,500 240,400 Q230,350 230,300 Z" fill="#1d7ed8" opacity="0.08"/>
+      <path d="M250,300 Q280,400 300,500 Q310,550 300,600 L260,600 Q270,500 240,400 Q230,350 230,300 Z" fill="#E3ECF7" opacity="1"/>
 
       <!-- Country labels -->
-      <text x="350" y="110" font-family="var(--m)" font-size="9" fill="#3e444e" opacity="0.6" text-anchor="middle">TURQUIE</text>
-      <text x="310" y="220" font-family="var(--m)" font-size="9" fill="#3e444e" opacity="0.6" text-anchor="middle">SYRIE</text>
-      <text x="530" y="290" font-family="var(--m)" font-size="9" fill="#3e444e" opacity="0.6" text-anchor="middle">IRAK</text>
-      <text x="800" y="260" font-family="var(--m)" font-size="9" fill="#3e444e" opacity="0.6" text-anchor="middle">IRAN</text>
-      <text x="215" y="205" font-family="var(--m)" font-size="7" fill="#3e444e" opacity="0.5" text-anchor="middle">LIBAN</text>
-      <text x="235" y="275" font-family="var(--m)" font-size="7" fill="#3e444e" opacity="0.5" text-anchor="middle">ISRAEL</text>
-      <text x="500" y="480" font-family="var(--m)" font-size="9" fill="#3e444e" opacity="0.5" text-anchor="middle">ARABIE SAOUDITE</text>
-      <text x="600" y="590" font-family="var(--m)" font-size="8" fill="#3e444e" opacity="0.5" text-anchor="middle">YEMEN</text>
+      <text x="350" y="110" font-family="var(--m)" font-size="9" fill="#4A4460" opacity="0.75" text-anchor="middle">TURQUIE</text>
+      <text x="310" y="220" font-family="var(--m)" font-size="9" fill="#4A4460" opacity="0.75" text-anchor="middle">SYRIE</text>
+      <text x="530" y="290" font-family="var(--m)" font-size="9" fill="#4A4460" opacity="0.75" text-anchor="middle">IRAK</text>
+      <text x="800" y="260" font-family="var(--m)" font-size="9" fill="#4A4460" opacity="0.75" text-anchor="middle">IRAN</text>
+      <text x="215" y="205" font-family="var(--m)" font-size="7" fill="#A19DB0" opacity="0.5" text-anchor="middle">LIBAN</text>
+      <text x="235" y="275" font-family="var(--m)" font-size="7" fill="#A19DB0" opacity="0.5" text-anchor="middle">ISRAEL</text>
+      <text x="500" y="480" font-family="var(--m)" font-size="9" fill="#A19DB0" opacity="0.5" text-anchor="middle">ARABIE SAOUDITE</text>
+      <text x="600" y="590" font-family="var(--m)" font-size="8" fill="#A19DB0" opacity="0.5" text-anchor="middle">YEMEN</text>
     </g>
 
     <!-- ZONE LAYERS (blurred influence) -->
@@ -429,7 +429,7 @@ function getColor(actor) {
   for (const [key, color] of Object.entries(ACTOR_COLORS)) {
     if (actor.includes(key) || key.includes(actor)) return color;
   }
-  return '#c49a3c';
+  return '#6B3FA0';
 }
 
 // ── GPS → SVG coordinate mapping ──

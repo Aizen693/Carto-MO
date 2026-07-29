@@ -129,6 +129,11 @@ const GS_BUILDER_CSS = `
   background:linear-gradient(120deg,#C8B0EA,#5BB0F2); -webkit-background-clip:text; background-clip:text;
   -webkit-text-fill-color:transparent; color:transparent; }
 .gsb-dateprompt{ flex:1; cursor:pointer; color:#C8B0EA; font:600 13px 'Plus Jakarta Sans',system-ui,sans-serif; }
+.gsb-skip{ flex:0 0 auto; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.24); color:#E9E2F6;
+  cursor:pointer; font:700 10px/1 'Plus Jakarta Sans',system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+  padding:8px 12px; border-radius:999px; transition:background .15s; }
+.gsb-skip:hover{ background:rgba(255,255,255,.2); }
+.gsb-skip:focus-visible{ outline:2px solid #C8B0EA; outline-offset:2px; }
 .cal-pop{ position:absolute; bottom:calc(100% + 12px); left:50%; transform:translateX(-50%); z-index:40;
   width:300px; max-width:92vw; background:#fff; border:1px solid rgba(123,90,189,0.18); border-radius:18px;
   box-shadow:0 22px 60px -18px rgba(46,24,87,.5); padding:14px; cursor:default; }
@@ -180,7 +185,10 @@ function DateRangePopup({ entry, onApply, onClose }) {
   // Dans le mois courant, on ne selectionne pas au-dela d'aujourd'hui.
   const maxDate = (maxKey === nowKey) ? nowKey + '-' + pad(_now.getDate()) : maxKey + '-' + pad(lastDay(maxY, maxM));
 
-  const [view, setView] = React.useState(minKey);
+  // Ouvre sur le dernier mois AVEC donnees : un analyste cherche d'abord le
+  // recent, et le premier mois (souvent croupion, ex. dec. 2025 = 1 seul jour
+  // selectionnable) donnait l'impression d'un calendrier casse.
+  const [view, setView] = React.useState(keys[keys.length - 1] || minKey);
   const [range, setRange] = React.useState({ from: null, to: null });
   const from = range.from, to = range.to;
 
@@ -924,6 +932,12 @@ function Globe() {
             )}
           </>)}
         </span>
+        {logged && (curStage === 'event' || curStage === 'actor') && (
+          <button type="button" className="gsb-skip"
+                  onClick={() => { setNotFound(false); pick({ value: '__all' }); }}>
+            Passer
+          </button>
+        )}
         <button type="submit" aria-label={logged ? 'Valider' : 'Lancer la démo'}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
