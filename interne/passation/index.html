@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Passation · pile technique Algora Access</title>
+<link rel="icon" href="/favicon.jpg">
+<link rel="stylesheet" href="/shared/home/fonts.css">
+<!-- Meme format que le pilotage partage : un document autonome avec sa propre
+     connexion e-mail plus mot de passe, sans renvoi vers un autre site.
+     Le contenu n'est PAS dans ce fichier : il est telecharge du bucket prive
+     « interne » apres authentification, et sa policy Supabase n'ouvre qu'aux
+     roles editor et admin (public.is_staff()). Une copie de ce fichier ne
+     divulgue donc rien, meme si elle circule. -->
+<style>
+  :root{
+    --violet:#6B3FA0; --violet-fonce:#4A2472; --violet-pale:#EDE7F5;
+    --blanc:#F4F2F8; --encre:#1E1730; --gris:#8E869E; --gris-clair:#D3CDDD;
+    --police:'Plus Jakarta Sans','Segoe UI',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;font-family:var(--police);background:var(--blanc);color:var(--encre);
+    overflow:hidden;-webkit-font-smoothing:antialiased;line-height:1.55}
+  .masque{display:none!important}
+
+  /* ── Connexion ───────────────────────────────────────────────────── */
+  #login{max-width:452px;margin:9vh auto 0;background:#fff;border:1px solid var(--gris-clair);
+    border-radius:16px;box-shadow:0 2px 4px rgba(30,23,48,.04),0 18px 44px rgba(30,23,48,.09);
+    padding:32px 30px}
+  .oeil{font-size:10.5px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--violet)}
+  #login h1{font-size:23px;margin:8px 0 0;font-weight:800;letter-spacing:-.02em}
+  #login p{color:#544D63;font-size:13px;margin:11px 0 19px}
+  #login .champ{display:flex;gap:9px;flex-wrap:wrap;margin-top:9px}
+  #login input{flex:1;min-width:190px;font:inherit;font-size:13.5px;padding:11px 13px;
+    border:1px solid var(--gris-clair);border-radius:9px;background:#fff;color:var(--encre)}
+  #login input:focus{outline:2px solid #9B6FD4;outline-offset:1px;border-color:var(--violet)}
+  .btn{font:inherit;font-size:13px;font-weight:700;padding:11px 18px;border-radius:9px;
+    border:1px solid var(--violet);background:var(--violet);color:#fff;cursor:pointer}
+  .btn:hover{background:var(--violet-fonce)}
+  .btn:disabled{opacity:.55;cursor:default}
+  #loginMsg{margin-top:14px;font-size:12.5px;padding:9px 12px;border-radius:9px;line-height:1.45}
+  #loginMsg.err{background:#F8E7E4;color:#8E3327}
+  #loginMsg.info{background:var(--violet-pale);color:var(--violet-fonce)}
+  #login .pied{font-size:11px;color:var(--gris);margin:18px 0 0}
+
+  /* ── Barre ───────────────────────────────────────────────────────── */
+  #app{display:flex;flex-direction:column;height:100vh}
+  .barre{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:9px 16px;
+    background:#fff;border-bottom:1px solid var(--gris-clair);flex-wrap:wrap}
+  .id{display:flex;flex-direction:column;line-height:1.2;white-space:nowrap}
+  .id b{font-size:13.5px;font-weight:800;letter-spacing:-.01em}
+  .id span{font-size:10px;color:var(--gris);font-weight:500}
+  .onglets{display:flex;gap:4px;background:var(--violet-pale);padding:3px;border-radius:10px}
+  .onglets button{height:26px;padding:0 12px;border:0;border-radius:7px;background:none;
+    font-family:inherit;font-size:11.5px;font-weight:700;color:var(--violet-fonce);cursor:pointer}
+  .onglets button[aria-selected=true]{background:#fff;box-shadow:0 1px 3px rgba(45,25,80,.14)}
+  .chiffres{display:flex;gap:7px}
+  .chiffre{background:var(--violet-pale);border-radius:8px;padding:5px 9px;line-height:1.15;white-space:nowrap}
+  .chiffre b{display:block;font-size:13px;font-weight:800;color:var(--violet-fonce)}
+  .chiffre span{font-size:9px;color:var(--violet);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+  input[type=search]{width:168px;padding:7px 10px;border:1px solid var(--gris-clair);border-radius:8px;
+    font-family:inherit;font-size:12px;background:#fff;color:var(--encre)}
+  input[type=search]:focus{outline:2px solid #9B6FD4;outline-offset:1px;border-color:var(--violet)}
+  .puces{display:flex;gap:5px}
+  .puce{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:18px;
+    border:1px solid var(--gris-clair);background:#fff;font-size:11px;font-weight:600;
+    cursor:pointer;color:var(--encre);font-family:inherit;white-space:nowrap}
+  .puce .pt{width:8px;height:8px;border-radius:50%}
+  .puce[aria-pressed=false]{opacity:.34}
+  .puce.actif .pt{background:#3F8F4F}
+  .puce.veille .pt{background:#fff;box-shadow:inset 0 0 0 2px #C98A2A}
+  .puce.gele .pt{background:#fff;border:1.5px solid var(--gris)}
+  .droite{margin-left:auto;display:flex;align-items:center;gap:6px}
+  .droite button{height:30px;padding:0 11px;border-radius:8px;border:1px solid var(--gris-clair);
+    background:#fff;font-family:inherit;font-size:11px;font-weight:700;color:var(--violet-fonce);
+    cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap}
+  .droite button:hover{background:var(--violet-pale)}
+  .droite button.icone{width:30px;padding:0;justify-content:center;font-size:15px}
+  .qui{font-size:11px;color:var(--gris);display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .qui .lnk{background:none;border:0;font:inherit;font-size:11px;font-weight:700;color:var(--violet);
+    cursor:pointer;padding:0;text-decoration:underline}
+
+  /* ── Vue carte ───────────────────────────────────────────────────── */
+  main{flex:1;position:relative;overflow:hidden;min-height:0;
+    background:radial-gradient(1500px 900px at 50% 45%, #FFFFFF 0%, #F7F5FB 45%, #E7E2EF 100%)}
+  svg#scene{width:100%;height:100%;display:block;cursor:grab}
+  svg#scene.attrape{cursor:grabbing}
+  #scene text{font-family:var(--police)}
+  .lien{fill:none;stroke-linecap:round}
+  .cliquable{cursor:pointer}
+  .rangee .fond{opacity:0}
+  .rangee:hover .fond{opacity:1}
+  .terne{opacity:.13}
+  .fiche{position:absolute;left:16px;bottom:16px;width:360px;background:rgba(255,255,255,.95);
+    backdrop-filter:blur(7px);border:1px solid var(--gris-clair);border-radius:13px;padding:13px 15px;
+    box-shadow:0 14px 36px rgba(45,25,80,.14);pointer-events:none}
+  .fiche .chemin{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;margin-bottom:6px}
+  .fiche h3{font-size:14.5px;margin:0 0 7px;font-weight:700;line-height:1.25}
+  .fiche .etat{display:inline-flex;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:14px;margin-bottom:9px}
+  .fiche .etat.actif{background:#E4F1E6;color:#2C6E3C}
+  .fiche .etat.veille{background:#FBEFD9;color:#8A5A12}
+  .fiche .etat.gele{background:#EFEDF2;color:#6E677C}
+  .fiche p{margin:0 0 8px;font-size:12px;line-height:1.5}
+  .fiche .preuve{font-size:11px;color:var(--gris);line-height:1.45;border-top:1px dashed var(--gris-clair);padding-top:8px;margin:0}
+  .fiche .rappel{font-size:10.5px;color:var(--gris);line-height:1.65;margin:0}
+  .fiche .rappel b{color:var(--violet-fonce)}
+  .fiche .rappel i{display:inline-block;width:8px;height:8px;border-radius:50%;margin:0 1px -1px 0}
+
+  /* ── Vue étapes ──────────────────────────────────────────────────── */
+  #vue-etapes{flex:1;overflow-y:auto;min-height:0}
+  .doc{max-width:1120px;margin:0 auto;padding:34px 26px 80px}
+  .marque{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);font-weight:800}
+  .doc h1{font-size:32px;line-height:1.12;margin:11px 0 12px;font-weight:800;letter-spacing:-.025em;max-width:20ch}
+  .doc .intro{font-size:14px;color:#4A4358;max-width:76ch;margin:0 0 8px}
+  .doc .lecture{font-size:12.5px;color:var(--gris);max-width:76ch;margin:0}
+  .cles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:24px 0 30px}
+  .cle{background:#fff;border:1px solid var(--gris-clair);border-radius:12px;padding:13px 15px}
+  .cle b{display:block;font-size:23px;font-weight:800;color:var(--violet-fonce);line-height:1.05}
+  .cle span{font-size:10.5px;color:var(--gris);font-weight:600;line-height:1.35;display:block;margin-top:3px}
+  .doc h2{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--gris);font-weight:800;
+    margin:40px 0 15px;padding-bottom:9px;border-bottom:1px solid var(--gris-clair)}
+  .methode{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .regle{background:#fff;border:1px solid var(--gris-clair);border-left:4px solid var(--violet);
+    border-radius:10px;padding:12px 15px}
+  .regle b{display:block;font-size:12.5px;font-weight:700;margin-bottom:3px}
+  .regle span{font-size:12px;color:#544D63}
+  .etape{position:relative;background:#fff;border:1px solid var(--gris-clair);border-radius:14px;
+    padding:17px 20px 18px 22px;margin-bottom:12px;overflow:hidden}
+  .etape::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--t)}
+  .etape .haut{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;margin-bottom:11px}
+  .etape .num{font-size:11px;font-weight:800;color:#fff;background:var(--t);border-radius:7px;padding:3px 8px}
+  .etape .quand{font-size:11px;font-weight:800;color:var(--t2);letter-spacing:.04em;text-transform:uppercase}
+  .etape h3{font-size:17px;margin:0;font-weight:800;letter-spacing:-.015em;flex:1 1 100%}
+  .etape dl{margin:0;display:grid;grid-template-columns:98px 1fr;gap:5px 14px}
+  .etape dt{font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);padding-top:3px}
+  .etape dd{margin:0;font-size:13px;color:#332C44}
+  .etape dd.leve{color:var(--t2);font-weight:600}
+  .etape.mort{opacity:.72}
+  .etape.mort h3::after{content:' · abandonné';font-size:11px;font-weight:700;color:var(--gris);letter-spacing:0}
+  .chantier{display:flex;gap:14px;background:#fff;border:1px solid var(--gris-clair);border-radius:12px;
+    padding:14px 17px;margin-bottom:10px}
+  .chantier .rang{flex:0 0 30px;height:30px;border-radius:9px;background:var(--violet);color:#fff;
+    font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .chantier h4{margin:0 0 4px;font-size:14.5px;font-weight:800}
+  .chantier p{margin:0 0 5px;font-size:12.5px;color:#413A52}
+  .chantier .ou{font-size:11.5px;color:var(--gris)}
+  .chantier.urgent .rang{background:#B4453C}
+  .chantier.urgent h4{color:#9A3A32}
+  .pied{margin-top:40px;padding-top:16px;border-top:1px solid var(--gris-clair);
+    font-size:11.5px;color:var(--gris);max-width:78ch}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
+    background:var(--violet-pale);color:var(--violet-fonce);padding:1px 5px;border-radius:4px}
+
+  #attente{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:12px;color:var(--gris);font-size:13px;font-weight:600;text-align:center;padding:20px}
+  #attente .rond{width:26px;height:26px;border-radius:50%;border:2.5px solid var(--violet-pale);
+    border-top-color:var(--violet);animation:tourne .8s linear infinite}
+  @keyframes tourne{to{transform:rotate(360deg)}}
+
+  @media (max-width:820px){
+    .cles{grid-template-columns:repeat(2,1fr)}
+    .methode{grid-template-columns:1fr}
+    .etape dl{grid-template-columns:1fr}
+  }
+  @media print{
+    .barre,.fiche,#attente,#login{display:none}
+    html,body{height:auto;overflow:visible}
+    #app{height:auto}
+    main,#vue-etapes{overflow:visible}
+    .etape,.regle,.cle,.chantier{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<!-- ÉCRAN DE CONNEXION -->
+<div id="login">
+  <div class="oeil">Algora Access · passation</div>
+  <h1>Connexion</h1>
+  <p>Connecte-toi avec ton e-mail et ton mot de passe. Aucun renvoi vers un autre site : tu accèdes directement au document. Accès réservé aux comptes internes, rôle éditeur ou admin.</p>
+  <div class="champ"><input type="email" id="email" placeholder="ton.email@algorint.fr" autocomplete="email"></div>
+  <div class="champ">
+    <input type="password" id="password" placeholder="Mot de passe" autocomplete="current-password">
+    <button class="btn" id="loginBtn">Se connecter</button>
+  </div>
+  <div id="loginMsg" class="masque"></div>
+  <p class="pied">Le document lui même n'est pas dans cette page : il est lu dans un dossier privé après authentification. Données en eu-west-1 (UE).</p>
+</div>
+
+<!-- DOCUMENT -->
+<div id="app" class="masque">
+  <div class="barre">
+    <div class="id"><b>Passation Algora Access</b><span id="sous-titre">pile technique et étapes</span></div>
+    <div class="onglets" role="tablist">
+      <button id="ong-carte" role="tab" aria-selected="true">carte de la pile</button>
+      <button id="ong-etapes" role="tab" aria-selected="false">étapes et chantiers</button>
+    </div>
+    <div class="chiffres" id="chiffres">
+      <div class="chiffre"><b id="c-total">·</b><span>briques</span></div>
+      <div class="chiffre"><b id="c-actif">·</b><span>en service</span></div>
+      <div class="chiffre"><b id="c-sonde">·</b><span>sondées</span></div>
+    </div>
+    <input type="search" id="recherche" placeholder="mistral, telegram, cron…" autocomplete="off">
+    <div class="puces" id="filtres">
+      <button class="puce actif" data-etat="actif" aria-pressed="true"><i class="pt"></i>en service</button>
+      <button class="puce veille" data-etat="veille" aria-pressed="true"><i class="pt"></i>monté, pas en marche</button>
+      <button class="puce gele" data-etat="gele" aria-pressed="true"><i class="pt"></i>gelé</button>
+    </div>
+    <div class="droite">
+      <button class="icone" id="zoom-moins" title="Réduire">−</button>
+      <button class="icone" id="zoom-plus" title="Agrandir">+</button>
+      <button id="ajuster">tout voir</button>
+      <span class="qui"><span id="userEmail"></span><button class="lnk" id="logout">Se déconnecter</button></span>
+    </div>
+  </div>
+
+  <main id="vue-carte">
+    <svg id="scene"></svg>
+    <div class="fiche" id="fiche"></div>
+    <div id="attente"><div class="rond"></div><span>Lecture du dossier interne…</span></div>
+  </main>
+
+  <div id="vue-etapes" class="masque"><div class="doc" id="doc"></div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+'use strict';
+/* ═══════════════════════════════════════════════════════════════════════
+   Le contenu ne vit pas dans cette page. Il est lu dans le bucket prive
+   « interne », dont la policy Supabase n'ouvre qu'aux roles editor et admin
+   (public.is_staff()). Une page servie en statique, ou une copie de ce
+   fichier, ne peut donc rien divulguer.
+   ═══════════════════════════════════════════════════════════════════════ */
+var SB_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
+var SB_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
+var sb = window.supabase.createClient(SB_URL, SB_KEY);
+var $ = function (id) { return document.getElementById(id); };
+
+/* ── Connexion, meme parcours que le pilotage partage ───────────────── */
+function montrerLogin() { $('login').classList.remove('masque'); $('app').classList.add('masque'); }
+function montrerDoc()   { $('login').classList.add('masque');   $('app').classList.remove('masque'); }
+function msgLogin(txt, cls) {
+  var m = $('loginMsg'); m.textContent = txt; m.className = cls; m.classList.remove('masque');
+}
+$('loginBtn').addEventListener('click', async function () {
+  var email = $('email').value.trim(), mdp = $('password').value;
+  if (!email || !mdp) { msgLogin('Entre ton e-mail et ton mot de passe.', 'err'); return; }
+  $('loginBtn').disabled = true;
+  msgLogin('Connexion…', 'info');
+  var r = await sb.auth.signInWithPassword({ email: email, password: mdp });
+  $('loginBtn').disabled = false;
+  if (r.error) msgLogin('Connexion refusée : ' + r.error.message, 'err');
+});
+$('email').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('password').focus(); });
+$('password').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('loginBtn').click(); });
+$('logout').addEventListener('click', async function () { await sb.auth.signOut(); location.reload(); });
+
+async function lire(fichier) {
+  var dernier = '';
+  for (var i = 0; i < 5; i++) {                       // le jeton peut arriver apres le premier essai
+    try {
+      await sb.auth.getSession();
+      var r = await sb.storage.from('interne').download(fichier);
+      if (r.data && !r.error) return JSON.parse(await r.data.text());
+      dernier = (r.error && r.error.message) || 'inconnue';
+    } catch (e) { dernier = String(e); }
+    await new Promise(function (ok) { setTimeout(ok, 350 * (i + 1)); });
+  }
+  throw new Error(fichier + ' : ' + dernier);
+}
+
+/* ═══════ Carte de la pile ═══════ */
+var NS = 'http://www.w3.org/2000/svg';
+var C = { ligne:14.5, entete:22, basBloc:9, gapBloc:9, largCol:207, gapCol:13,
+          gapBranche:20, nCol:3, demiRacine:118 };
+var ETAT = {
+  actif:  { plein:'#3F8F4F', trait:'#3F8F4F', texte:'#1F1A2B' },
+  veille: { plein:'#FFFFFF', trait:'#C98A2A', texte:'#4A3E22' },
+  gele:   { plein:'#FFFFFF', trait:'#A9A2B6', texte:'#847D91' }
+};
+var LIBELLE = { actif:'en service', veille:'monté, pas en marche', gele:'gelé ou arrêté' };
+
+var svg = $('scene');
+var etatFiltre = { actif:true, veille:true, gele:true };
+var CARTE = [], tousItems = [], recherche = '';
+var vue = { k:1, x:0, y:0 }, vueAuto = true, focus = null, plan = null, monde = null;
+
+function sat(h) { return (h >= 18 && h <= 200) ? 24 : 0; }
+function couleur(h, l, s) { s = (s === undefined ? 44 : s); return 'hsl(' + h + ' ' + Math.min(s + sat(h), 92) + '% ' + l + '%)'; }
+function el(n, a) { var e = document.createElementNS(NS, n); for (var k in (a || {})) e.setAttribute(k, a[k]); return e; }
+function visibleItem(it) { return etatFiltre[it.s]; }
+
+var POLICE = "'Plus Jakarta Sans','Segoe UI',ui-sans-serif,system-ui,sans-serif";
+var banc = el('svg', { width:0, height:0, style:'position:absolute;left:-9999px;top:0;visibility:hidden' });
+document.body.appendChild(banc);
+var cacheL = {};
+function mesure(txt, taille, poids, espace) {
+  espace = espace || 0;
+  var k = taille + '|' + poids + '|' + espace + '|' + txt;
+  if (cacheL[k] !== undefined) return cacheL[k];
+  var t = el('text', { 'font-size':taille, 'font-weight':poids, 'letter-spacing':espace + 'em',
+                       style:'font-family:' + POLICE });
+  t.textContent = txt; banc.appendChild(t);
+  var w = t.getComputedTextLength(); banc.removeChild(t);
+  cacheL[k] = w; return w;
+}
+function coupeLarg(txt, maxW, taille, poids, espace) {
+  if (mesure(txt, taille, poids, espace) <= maxW) return txt;
+  var s = txt;
+  while (s.length > 1 && mesure(s + '…', taille, poids, espace) > maxW) s = s.slice(0, -1);
+  return s.replace(/[ ,;:·]+$/, '') + '…';
+}
+function pastille(b) {
+  var nom = b.nom.toUpperCase();
+  var nb = String(b.groupes.reduce(function (s, g) { return s + g.items.length; }, 0));
+  var tW = mesure(nom, 12, 800, .03), pW = mesure(nb, 11, 800) + 15;
+  return { nom:nom, nb:nb, tW:tW, pW:pW, W: 13 + tW + 10 + pW + 11 };
+}
+var ZONE_NOM = 0;
+function calerZoneNom() {
+  ZONE_NOM = Math.ceil(Math.max.apply(null, CARTE.map(function (b) { return pastille(b).W; })) + 16);
+}
+function mesurerBranche(b) {
+  var blocs = [];
+  b.groupes.forEach(function (g, i) {
+    var items = g.items.filter(visibleItem);
+    if (items.length) blocs.push({ ref:g, items:items, ordre:i, h: C.entete + items.length * C.ligne + C.basBloc });
+  });
+  if (!blocs.length) return null;
+  var nCol = Math.min(C.nCol, blocs.length);
+  var cols = [];
+  for (var i = 0; i < nCol; i++) cols.push({ h:0, blocs:[] });
+  blocs.slice().sort(function (a, z) { return z.h - a.h; }).forEach(function (bl) {
+    var c = cols.reduce(function (a, x) { return x.h < a.h ? x : a; });
+    c.h += (c.blocs.length ? C.gapBloc : 0) + bl.h;
+    c.blocs.push(bl);
+  });
+  cols.forEach(function (c) {
+    c.blocs.sort(function (a, z) { return a.ordre - z.ordre; });
+    c.h = 0;
+    c.blocs.forEach(function (bl) { if (c.h) c.h += C.gapBloc; bl.y0 = c.h; c.h += bl.h; });
+  });
+  return { ref:b, cols:cols, h:Math.max.apply(null, cols.map(function (c) { return c.h; })),
+           nbTotal: b.groupes.reduce(function (s, g) { return s + g.items.length; }, 0),
+           largeur: C.nCol * C.largCol + (C.nCol - 1) * C.gapCol };
+}
+function calculer() {
+  var mesures = CARTE.map(mesurerBranche).filter(Boolean);
+  var moitie = Math.ceil(mesures.length / 2);
+  var cotes = [mesures.slice(0, moitie), mesures.slice(moitie)];
+  var hauteurs = cotes.map(function (c) {
+    return c.reduce(function (s, b) { return s + b.h + C.gapBranche; }, -C.gapBranche);
+  });
+  var H = Math.max(Math.max.apply(null, hauteurs), 140) + 54;
+  var demiCote = Math.max.apply(null, mesures.map(function (b) { return b.largeur; })) + ZONE_NOM;
+  var L = demiCote * 2 + C.demiRacine * 2;
+  var xRacine = demiCote + C.demiRacine, yRacine = H / 2;
+  var p = { L:L, H:H, xRacine:xRacine, yRacine:yRacine, branches:[] };
+  cotes.forEach(function (cote, iCote) {
+    var sens = iCote === 0 ? 1 : -1;
+    var y = yRacine - hauteurs[iCote] / 2;
+    cote.forEach(function (B) {
+      p.branches.push(Object.assign({}, B, { sens:sens, y0:y, yCentre:y + B.h / 2,
+        xNom: xRacine + sens * (C.demiRacine + 14),
+        xBlocs: xRacine + sens * (C.demiRacine + ZONE_NOM) }));
+      y += B.h + C.gapBranche;
+    });
+  });
+  return p;
+}
+function courbe(x1, y1, x2, y2) {
+  var dx = Math.max(26, Math.abs(x2 - x1) * .5) * (Math.sign(x2 - x1) || 1);
+  return 'M' + x1 + ',' + y1 + ' C' + (x1 + dx) + ',' + y1 + ' ' + (x2 - dx) + ',' + y2 + ' ' + x2 + ',' + y2;
+}
+function dessiner() {
+  plan = calculer();
+  svg.textContent = '';
+  monde = el('g');
+  svg.appendChild(monde);
+  var gLiens = el('g'), gCartes = el('g'), gNoeuds = el('g');
+  monde.appendChild(gLiens); monde.appendChild(gCartes); monde.appendChild(gNoeuds);
+
+  plan.branches.forEach(function (B) {
+    var h = B.ref.teinte, sens = B.sens;
+    var P = pastille(B.ref), largP = P.W;
+    var cVif = couleur(h, 46), cFonce = couleur(h, 30), cTrait = couleur(h, 52);
+
+    var d1 = courbe(plan.xRacine + sens * C.demiRacine, plan.yRacine, B.xNom + sens * 4, B.yCentre);
+    gLiens.appendChild(el('path', { d:d1, 'class':'lien', stroke:cVif, 'stroke-width':16, 'stroke-opacity':'.13' }));
+    gLiens.appendChild(el('path', { d:d1, 'class':'lien', stroke:cVif, 'stroke-width':5, 'stroke-opacity':'.75' }));
+
+    var gn = el('g', { 'class':'cliquable', transform:'translate(' + B.xNom + ',' + B.yCentre + ')' });
+    gn.appendChild(el('rect', { x: sens > 0 ? 0 : -largP, y:-15, width:largP, height:30, rx:10, fill:cVif }));
+    var tx = el('text', { x: sens > 0 ? 13 : -13, y:4.5, 'text-anchor': sens > 0 ? 'start' : 'end',
+      fill:'#fff', 'font-size':'12', 'font-weight':'800', 'letter-spacing':'.03em' });
+    tx.textContent = P.nom;
+    gn.appendChild(tx);
+    var xPuce = sens > 0 ? 13 + P.tW + 10 : -(13 + P.tW + 10 + P.pW);
+    gn.appendChild(el('rect', { x:xPuce, y:-9, width:P.pW, height:18, rx:9, fill:'#fff', 'fill-opacity':'.26' }));
+    var nb = el('text', { x:xPuce + P.pW / 2, y:4.3, 'text-anchor':'middle', fill:'#fff',
+      'font-size':'11', 'font-weight':'800' });
+    nb.textContent = P.nb;
+    gn.appendChild(nb);
+    gn.addEventListener('click', function () { zoomerBranche(B); });
+    gn.addEventListener('mouseenter', function () {
+      ficheGroupe(B.ref.nom, 'branche', B.ref.groupes.reduce(function (a, g) { return a.concat(g.items); }, []), h);
+    });
+    gNoeuds.appendChild(gn);
+
+    B.cols.forEach(function (col, iCol) {
+      if (!col.blocs.length) return;
+      var xInt = B.xBlocs + sens * iCol * (C.largCol + C.gapCol);
+      var yHaut = B.y0 + col.blocs[0].y0 + 13;
+      var yBas = B.y0 + col.blocs[col.blocs.length - 1].y0 + 13;
+      var xEpine = xInt - sens * 8;
+      var dep = iCol === 0 ? B.xNom + sens * (largP + 4) : xInt - sens * (C.gapCol + 3);
+      var d2 = courbe(dep, B.yCentre, xEpine, (yHaut + yBas) / 2);
+      gLiens.appendChild(el('path', { d:d2, 'class':'lien', stroke:cTrait, 'stroke-width':2.6, 'stroke-opacity':'.55' }));
+      if (yBas > yHaut) gLiens.appendChild(el('path', { d:'M' + xEpine + ',' + yHaut + ' L' + xEpine + ',' + yBas,
+        'class':'lien', stroke:cTrait, 'stroke-width':1.8, 'stroke-opacity':'.45' }));
+
+      col.blocs.forEach(function (bl) {
+        var yb = B.y0 + bl.y0;
+        var xCarte = sens > 0 ? xInt : xInt - C.largCol;
+        gLiens.appendChild(el('path', { d:'M' + xEpine + ',' + (yb + 13) + ' L' + xInt + ',' + (yb + 13),
+          'class':'lien', stroke:cTrait, 'stroke-width':1.8, 'stroke-opacity':'.45' }));
+        gCartes.appendChild(el('rect', { x:xCarte, y:yb, width:C.largCol, height:bl.h - 2, rx:9,
+          fill:couleur(h, 96, 70), stroke:cTrait, 'stroke-opacity':'.34' }));
+        gCartes.appendChild(el('rect', { x: sens > 0 ? xCarte : xCarte + C.largCol - 3.5, y:yb + 6,
+          width:3.5, height:bl.h - 14, rx:1.8, fill:cVif, 'fill-opacity':'.85' }));
+
+        var gg = el('g', { 'class':'cliquable', transform:'translate(' + xInt + ',' + yb + ')' });
+        var nbG = String(bl.items.length);
+        var wNb = mesure(nbG, 9.5, 800) + 12;
+        var xNb = sens > 0 ? C.largCol - 9 - wNb : -(C.largCol - 9);
+        gg.appendChild(el('rect', { x:xNb, y:4, width:wNb, height:15, rx:7.5, fill:cVif, 'fill-opacity':'.2' }));
+        var tn = el('text', { x:xNb + wNb / 2, y:15, 'text-anchor':'middle', fill:cFonce,
+          'font-size':'9.5', 'font-weight':'800' });
+        tn.textContent = nbG;
+        gg.appendChild(tn);
+        var te = el('text', { x: sens * 12, y:14.5, 'text-anchor': sens > 0 ? 'start' : 'end',
+          fill:cFonce, 'font-size':'10.5', 'font-weight':'800', 'letter-spacing':'.055em' });
+        te.textContent = coupeLarg(bl.ref.nom.toUpperCase(), C.largCol - 26 - wNb, 10.5, 800, .055);
+        gg.appendChild(te);
+        gg.addEventListener('mouseenter', function () { ficheGroupe(bl.ref.nom, bl.ref.branche.nom, bl.ref.items, h); });
+        gNoeuds.appendChild(gg);
+
+        bl.items.forEach(function (it, k) {
+          var y = yb + C.entete + k * C.ligne;
+          var E = ETAT[it.s];
+          var gi = el('g', { 'class':'rangee', transform:'translate(' + xInt + ',' + y + ')' });
+          gi.setAttribute('data-item', it.cle);
+          gi.appendChild(el('rect', { 'class':'fond', x: sens > 0 ? 4 : -(C.largCol - 4), y:-.5,
+            width:C.largCol - 8, height:C.ligne - 1.5, rx:5, fill:cVif, 'fill-opacity':'.17' }));
+          var cx = sens * 15, cy = C.ligne / 2 - 2.2;
+          gi.appendChild(el('circle', { cx:cx, cy:cy, r:3.4, fill:E.plein, stroke:E.trait,
+            'stroke-width': it.s === 'actif' ? .8 : 1.8 }));
+          if (it.v) gi.appendChild(el('circle', { cx:cx, cy:cy, r:6.3, fill:'none', stroke:E.trait,
+            'stroke-width':'.85', 'stroke-opacity':'.4' }));
+          var ti = el('text', { x: sens * 25, y:C.ligne / 2 + 1.4, 'text-anchor': sens > 0 ? 'start' : 'end',
+            fill:E.texte, 'font-size':'11.5', 'font-weight':'600' });
+          ti.textContent = coupeLarg(it.n, C.largCol - 34, 11.5, 600);
+          gi.appendChild(ti);
+          gi.addEventListener('mouseenter', function () { ficheItem(it); });
+          gNoeuds.appendChild(gi);
+        });
+      });
+    });
+  });
+
+  var gr = el('g', { transform:'translate(' + plan.xRacine + ',' + plan.yRacine + ')' });
+  gr.appendChild(el('rect', { x:-C.demiRacine, y:-35, width:C.demiRacine * 2, height:70, rx:18, fill:'#6B3FA0' }));
+  var r1 = el('text', { y:-6, 'text-anchor':'middle', fill:'#fff', 'font-size':'17', 'font-weight':'800', 'letter-spacing':'-.015em' });
+  r1.textContent = 'Algora Access';
+  var r2 = el('text', { y:12, 'text-anchor':'middle', fill:'#D3BCF0', 'font-size':'10.5', 'font-weight':'600' });
+  r2.textContent = 'pile technique';
+  var r3 = el('text', { y:27, 'text-anchor':'middle', fill:'#AC88DB', 'font-size':'9', 'font-weight':'700', 'letter-spacing':'.08em' });
+  r3.textContent = '30 · 07 · 2026';
+  gr.appendChild(r1); gr.appendChild(r2); gr.appendChild(r3);
+  monde.appendChild(gr);
+
+  if (vueAuto) ajuster(); else appliquerVue();
+  appliquerRecherche();
+}
+function dim() { var r = svg.getBoundingClientRect(); return { w:r.width, h:r.height }; }
+function appliquerVue() {
+  var d = dim();
+  svg.setAttribute('viewBox', '0 0 ' + d.w + ' ' + d.h);
+  monde.setAttribute('transform', 'translate(' + (d.w / 2 + vue.x) + ',' + (d.h / 2 + vue.y) + ') scale(' + vue.k +
+    ') translate(' + (-plan.L / 2) + ',' + (-plan.H / 2) + ')');
+}
+function ajuster() {
+  var d = dim();
+  // Conteneur pas encore mesurable (onglet cache, rendu pas peint) : on repasse
+  // a la frame suivante plutot que de figer une echelle nulle.
+  if (d.w < 40 || d.h < 40) { requestAnimationFrame(function () { if (vueAuto) ajuster(); }); return; }
+  var k = Math.min((d.w - 30) / plan.L, (d.h - 26) / plan.H);
+  vue.k = (isFinite(k) && k > .1) ? Math.min(k, 1.6) : .8;
+  vue.x = 0; vue.y = 0; vueAuto = true; focus = null;
+  appliquerVue();
+}
+function zoomerBranche(B) {
+  if (focus === B.ref.id) { ajuster(); return; }
+  var d = dim();
+  var largeur = ZONE_NOM + B.largeur + 50;
+  var k = Math.min((d.w - 60) / largeur, (d.h - 44) / (B.h + 56), 1.5);
+  vue.k = Math.max(k, .5);
+  var cx = B.sens > 0 ? B.xNom + largeur / 2 - 28 : B.xNom - largeur / 2 + 28;
+  vue.x = -(cx - plan.L / 2) * vue.k;
+  vue.y = -(B.yCentre - plan.H / 2) * vue.k;
+  vueAuto = false; focus = B.ref.id;
+  appliquerVue();
+}
+svg.addEventListener('wheel', function (e) {
+  e.preventDefault(); vueAuto = false; focus = null;
+  vue.k = Math.max(.15, Math.min(4, vue.k * (e.deltaY < 0 ? 1.12 : 1 / 1.12)));
+  appliquerVue();
+}, { passive:false });
+var glisse = null;
+svg.addEventListener('pointerdown', function (e) {
+  glisse = { x:e.clientX, y:e.clientY, vx:vue.x, vy:vue.y }; svg.classList.add('attrape');
+});
+svg.addEventListener('pointermove', function (e) {
+  if (!glisse) return;
+  vueAuto = false;
+  vue.x = glisse.vx + (e.clientX - glisse.x);
+  vue.y = glisse.vy + (e.clientY - glisse.y);
+  appliquerVue();
+});
+window.addEventListener('pointerup', function () { glisse = null; svg.classList.remove('attrape'); });
+window.addEventListener('resize', function () { if (!plan) return; vueAuto ? ajuster() : appliquerVue(); });
+$('zoom-plus').onclick = function () { if (!plan) return; vueAuto = false; vue.k = Math.min(4, vue.k * 1.2); appliquerVue(); };
+$('zoom-moins').onclick = function () { if (!plan) return; vueAuto = false; vue.k = Math.max(.15, vue.k / 1.2); appliquerVue(); };
+$('ajuster').onclick = function () { if (plan) ajuster(); };
+
+var fiche = $('fiche');
+var RAPPEL = '<p class="rappel">' +
+  '<i style="background:#3F8F4F"></i> <b>en service</b> · ' +
+  '<i style="background:#fff;box-shadow:inset 0 0 0 2px #C98A2A"></i> <b>monté, pas en marche</b> · ' +
+  '<i style="background:#fff;box-shadow:inset 0 0 0 1.5px #A9A2B6"></i> <b>gelé</b> · ' +
+  'cercle autour du point : <b>sondé en direct le 30/07</b>.<br>' +
+  'Une teinte par branche. Survole une brique pour son détail et sa preuve. ' +
+  'Clique une pastille de branche pour zoomer dessus, molette pour zoomer, glisser pour déplacer.</p>';
+function ficheVide() { fiche.innerHTML = RAPPEL; }
+svg.addEventListener('mouseleave', ficheVide);
+function ech(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+  return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+function ficheItem(it) {
+  var h = it.branche.teinte;
+  fiche.innerHTML =
+    '<div class="chemin" style="color:' + couleur(h, 34) + '">' + ech(it.branche.nom) + ' › ' + ech(it.groupe.nom) + '</div>' +
+    '<h3>' + ech(it.n) + '</h3>' +
+    '<span class="etat ' + it.s + '">' + LIBELLE[it.s] + (it.v ? ' · sondé le 30/07' : ' · déclaré') + '</span>' +
+    '<p>' + ech(it.d.charAt(0).toUpperCase() + it.d.slice(1)) + '.</p>' +
+    '<p class="preuve">' + ech(it.p) + '</p>';
+}
+function ficheGroupe(nom, chemin, items, h) {
+  function n(e) { return items.filter(function (i) { return i.s === e; }).length; }
+  fiche.innerHTML =
+    '<div class="chemin" style="color:' + couleur(h, 34) + '">' + ech(chemin) + '</div>' +
+    '<h3>' + ech(nom) + '</h3>' +
+    '<p>' + items.length + ' briques : ' + n('actif') + ' en service, ' + n('veille') +
+    ' montées sans tourner, ' + n('gele') + ' gelées.</p>' +
+    '<p class="preuve">Survole une ligne pour son détail. Clique la pastille de branche pour zoomer dessus.</p>';
+}
+function appliquerRecherche() {
+  var q = recherche.trim().toLowerCase();
+  var rangees = monde.querySelectorAll('.rangee');
+  Array.prototype.forEach.call(rangees, function (r) {
+    if (!q) { r.classList.remove('terne'); return; }
+    var cle = r.getAttribute('data-item');
+    var it = tousItems.filter(function (i) { return i.cle === cle; })[0];
+    var ok = it && (it.n + ' ' + it.d + ' ' + it.p + ' ' + it.branche.nom + ' ' + it.groupe.nom)
+      .toLowerCase().indexOf(q) >= 0;
+    r.classList.toggle('terne', !ok);
+  });
+}
+$('recherche').addEventListener('input', function (e) { recherche = e.target.value; if (monde) appliquerRecherche(); });
+Array.prototype.forEach.call(document.querySelectorAll('#filtres .puce'), function (b) {
+  b.addEventListener('click', function () {
+    var e = b.getAttribute('data-etat'), on = b.getAttribute('aria-pressed') === 'true';
+    b.setAttribute('aria-pressed', String(!on)); etatFiltre[e] = !on; if (plan) dessiner();
+  });
+});
+
+/* ═══════ Document des etapes ═══════ */
+function codes(s) { return ech(s).replace(/`([^`]+)`/g, '<code>$1</code>'); }
+function rendreDoc(d) {
+  var b = [];
+  b.push('<div class="marque">' + ech(d.sous_titre) + '</div><h1>' + ech(d.titre) + '</h1>');
+  (d.chapeau || []).forEach(function (p) { b.push('<p class="intro">' + codes(p) + '</p>'); });
+  b.push('<p class="lecture">' + codes(d.lecture) + '</p>');
+  b.push('<div class="cles">' + d.cles.map(function (c) {
+    return '<div class="cle"><b>' + ech(c.valeur) + '</b><span>' + ech(c.quoi) + '</span></div>'; }).join('') + '</div>');
+  b.push('<h2>Six règles de travail à garder</h2><div class="methode">' + d.regles.map(function (r) {
+    return '<div class="regle"><b>' + ech(r.titre) + '</b><span>' + codes(r.texte) + '</span></div>'; }).join('') + '</div>');
+  b.push('<h2>Les étapes, dans l\'ordre</h2>' + d.etapes.map(function (e) {
+    return '<div class="etape' + (e.abandonne ? ' mort' : '') + '" style="--t:' + ech(e.teinte) + ';--t2:' + ech(e.teinte2) + '">' +
+      '<div class="haut"><span class="num">' + ech(e.num) + '</span><span class="quand">' + ech(e.quand) + '</span>' +
+      '<h3>' + ech(e.titre) + '</h3></div><dl>' +
+      e.champs.map(function (c, i) {
+        return '<dt>' + ech(c.cle) + '</dt><dd' + (i === e.champs.length - 1 ? ' class="leve"' : '') + '>' +
+          codes(c.texte) + '</dd>'; }).join('') +
+      '</dl></div>'; }).join(''));
+  b.push('<h2>Par où améliorer la plateforme, dans cet ordre</h2>' + d.chantiers.map(function (c) {
+    return '<div class="chantier' + (c.urgent ? ' urgent' : '') + '"><div class="rang">' + ech(c.rang) + '</div>' +
+      '<div><h4>' + ech(c.titre) + '</h4><p>' + codes(c.texte) + '</p><p class="ou">' + codes(c.ou) + '</p></div></div>';
+  }).join(''));
+  b.push('<p class="pied">' + codes(d.pied) + '</p>');
+  $('doc').innerHTML = b.join('');
+}
+
+/* ═══════ Onglets ═══════ */
+var outilsCarte = ['chiffres', 'recherche', 'filtres', 'zoom-plus', 'zoom-moins', 'ajuster'].map($);
+function onglet(quoi) {
+  var carte = quoi === 'carte';
+  $('ong-carte').setAttribute('aria-selected', String(carte));
+  $('ong-etapes').setAttribute('aria-selected', String(!carte));
+  $('vue-carte').classList.toggle('masque', !carte);
+  $('vue-etapes').classList.toggle('masque', carte);
+  outilsCarte.forEach(function (o) { o.classList.toggle('masque', !carte); });
+  if (carte && plan) { vueAuto = true; ajuster(); }
+}
+$('ong-carte').onclick = function () { onglet('carte'); };
+$('ong-etapes').onclick = function () { onglet('etapes'); };
+
+/* ═══════ Demarrage ═══════ */
+var charge = false;
+async function ouvrir(session) {
+  if (charge) return;
+  charge = true;
+  $('userEmail').textContent = session.user.email || '';
+  montrerDoc();
+  try {
+    var res = await Promise.all([lire('pile.json'), lire('etapes.json')]);
+    var pile = res[0], etapes = res[1];
+    CARTE = pile.branches;
+    CARTE.forEach(function (b) {
+      b.cle = 'b:' + b.id;
+      b.groupes.forEach(function (g, i) {
+        g.cle = 'g:' + b.id + ':' + i; g.branche = b;
+        g.items.forEach(function (it, j) { it.cle = 'i:' + b.id + ':' + i + ':' + j; it.groupe = g; it.branche = b; });
+      });
+    });
+    tousItems = CARTE.reduce(function (a, b) {
+      return a.concat(b.groupes.reduce(function (x, g) { return x.concat(g.items); }, []));
+    }, []);
+    $('c-total').textContent = tousItems.length;
+    $('c-actif').textContent = tousItems.filter(function (i) { return i.s === 'actif'; }).length;
+    $('c-sonde').textContent = tousItems.filter(function (i) { return i.v; }).length;
+    $('sous-titre').textContent = 'état relevé le ' + pile.releve + ' · fenêtre ' + pile.fenetre;
+
+    rendreDoc(etapes);
+    ficheVide();
+    var a = $('attente'); if (a) a.parentNode.removeChild(a);
+    calerZoneNom();
+    dessiner();
+    requestAnimationFrame(function () { if (vueAuto) ajuster(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () {
+      cacheL = {}; calerZoneNom(); dessiner();
+    });
+  } catch (e) {
+    charge = false;
+    var att = $('attente');
+    if (att) att.innerHTML = '<span>Ce compte n\'a pas accès au dossier interne.<br>' +
+      'L\'accès est réservé aux rôles éditeur et admin.</span>' +
+      '<button class="btn" id="autre">Changer de compte</button>';
+    var bt = $('autre');
+    if (bt) bt.addEventListener('click', async function () { await sb.auth.signOut(); location.reload(); });
+    if (window.console) console.warn('[passation]', e && e.message);
+  }
+}
+(async function () {
+  var s = await sb.auth.getSession();
+  if (s.data && s.data.session) ouvrir(s.data.session); else montrerLogin();
+  // On n'ecoute le retour a l'ecran de connexion que sur une vraie deconnexion :
+  // l'evenement INITIAL_SESSION arrive parfois a vide juste apres getSession et
+  // refermerait le document deja ouvert.
+  sb.auth.onAuthStateChange(function (ev, sess) {
+    if (sess) { ouvrir(sess); return; }
+    if (ev === 'SIGNED_OUT') { charge = false; montrerLogin(); }
+  });
+})();
+})();
+</script>
+</body>
+</html>
