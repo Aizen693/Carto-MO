@@ -175,6 +175,38 @@
   .et.heb{background:#EAEDF4;color:#465575}
   .annexe-note{margin:14px 0 0;font-size:12.5px;color:#413A52;background:var(--violet-pale);
     border-radius:11px;padding:13px 16px}
+
+  /* Tableau rempli à plusieurs */
+  .annexe-barre{display:flex;align-items:center;gap:12px;margin:0 0 10px}
+  .annexe-barre .jauge{flex:1;height:7px;border-radius:4px;background:#E4DFEC;overflow:hidden}
+  .annexe-barre .jauge i{display:block;height:100%;background:var(--violet);width:0;
+    transition:width .35s ease;border-radius:4px}
+  .annexe-barre .compte{font-size:11.5px;font-weight:800;color:var(--violet-fonce);white-space:nowrap}
+  .annexe-barre .direct{font-size:11px;color:var(--gris);display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .annexe-barre .direct i{width:7px;height:7px;border-radius:50%;background:#C3BCCF}
+  .annexe-barre .direct.ok i{background:#3F8F4F}
+  .tableau-annexe th.r{width:126px}
+  .tableau-annexe th.p{width:17%}
+  .tableau-annexe th.c{width:19%}
+  .tableau-annexe td.mes .m{color:#332C44}
+  .tableau-annexe td.mes .aide{margin-top:5px;font-size:11px;color:#6B6480;line-height:1.4}
+  .tableau-annexe td.mes .aide .et{margin-right:6px;vertical-align:1px}
+  .choix{display:flex;gap:3px}
+  .choix button{flex:1;font-family:inherit;font-size:10.5px;font-weight:800;padding:5px 0;
+    border:1px solid var(--gris-clair);background:#fff;color:#6B6480;border-radius:7px;cursor:pointer}
+  .choix button:hover{background:var(--violet-pale)}
+  .choix button[aria-pressed=true]{background:var(--violet);border-color:var(--violet);color:#fff}
+  .tableau-annexe textarea{width:100%;font-family:inherit;font-size:11.5px;line-height:1.4;
+    color:#332C44;border:1px solid transparent;border-radius:7px;padding:5px 7px;background:transparent;
+    resize:none;overflow:hidden;min-height:28px}
+  .tableau-annexe textarea:hover{border-color:var(--gris-clair)}
+  .tableau-annexe textarea:focus{outline:none;border-color:var(--violet);background:#fff}
+  .tableau-annexe textarea::placeholder{color:#B6AEC6}
+  .tableau-annexe tr.enregistre td{animation:flash 1.1s ease}
+  @keyframes flash{0%{background:#E4F1E6}100%{background:transparent}}
+  .signature{font-size:10px;color:#A9A2B6;margin-top:3px}
+  .annexe-hors-ligne{font-size:11.5px;color:#8A5A12;background:#FBEFD9;border-radius:9px;
+    padding:8px 12px;margin:0 0 10px}
   code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
     background:var(--violet-pale);color:var(--violet-fonce);padding:1px 5px;border-radius:4px}
 
@@ -638,13 +670,26 @@ function rendreDoc(d) {
     b.push('<div class="annexe-cles">' + (A.cles || []).map(function (c) {
       return '<div class="acle"><b>' + ech(c.valeur) + '</b><span>' + ech(c.quoi) + '</span></div>';
     }).join('') + '</div>');
+    b.push('<div class="annexe-barre">' +
+      '<span class="compte" id="annexe-compte">0 sur ' + A.lignes.length + ' répondues</span>' +
+      '<span class="jauge"><i id="annexe-jauge"></i></span>' +
+      '<span class="direct" id="annexe-direct"><i></i>lecture seule</span></div>');
+    b.push('<p class="annexe-hors-ligne masque" id="annexe-hors-ligne"></p>');
     b.push('<div class="tableau-annexe"><table><thead><tr>' +
-      '<th class="n">' + ech(A.colonnes[0]) + '</th><th>' + ech(A.colonnes[1]) + '</th>' +
-      '<th class="e">' + ech(A.colonnes[2]) + '</th><th>' + ech(A.colonnes[3]) + '</th>' +
-      '</tr></thead><tbody>' + A.lignes.map(function (l) {
-        return '<tr><td class="n">' + l.n + '</td><td>' + codes(l.mesure) + '</td>' +
-          '<td><span class="et ' + ech(l.etat) + '">' + ech(l.etat_libelle) + '</span></td>' +
-          '<td>' + codes(l.aide) + '</td></tr>';
+      '<th class="n">N°</th><th>Mesure demandée, et ce dont on dispose</th>' +
+      '<th class="r">Réponse</th><th class="p">Pièces jointes</th><th class="c">Commentaire</th>' +
+      '</tr></thead><tbody id="annexe-corps">' + A.lignes.map(function (l) {
+        return '<tr data-n="' + l.n + '"><td class="n">' + l.n + '</td>' +
+          '<td class="mes"><div class="m">' + codes(l.mesure) + '</div>' +
+          '<div class="aide"><span class="et ' + ech(l.etat) + '">' + ech(l.etat_libelle) + '</span>' +
+          codes(l.aide) + '</div></td>' +
+          '<td><div class="choix">' +
+            ['Oui', 'Non', 'NPC'].map(function (v) {
+              return '<button data-v="' + v + '" aria-pressed="false" disabled>' + v + '</button>';
+            }).join('') +
+          '</div><div class="signature"></div></td>' +
+          '<td><textarea data-champ="pieces" placeholder="document à l\'appui" disabled></textarea></td>' +
+          '<td><textarea data-champ="commentaire" placeholder="précision" disabled></textarea></td></tr>';
       }).join('') + '</tbody></table></div>');
     b.push('<p class="annexe-note">' + codes(A.note) + '</p>');
   }
@@ -654,6 +699,134 @@ function rendreDoc(d) {
   }).join(''));
   b.push('<p class="pied">' + codes(d.pied) + '</p>');
   $('doc').innerHTML = b.join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Sous-annexe : les reponses se remplissent ici, a plusieurs.
+   Le texte des mesures vient du document, les reponses vivent dans la table
+   annexe_securite, lisible et modifiable par les seuls roles editor et admin.
+   ═══════════════════════════════════════════════════════════════════════ */
+var REP = {}, enEdition = null, canalAnnexe = null, brancheFait = false;
+
+function ligneDOM(n) { return document.querySelector('#annexe-corps tr[data-n="' + n + '"]'); }
+function dateCourte(iso) {
+  try {
+    var d = new Date(iso);
+    return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2);
+  } catch (e) { return ''; }
+}
+function ajusterHauteur(t) { t.style.height = 'auto'; t.style.height = (t.scrollHeight + 2) + 'px'; }
+
+function peindreLigne(n) {
+  var tr = ligneDOM(n), d = REP[n];
+  if (!tr || !d) return;
+  Array.prototype.forEach.call(tr.querySelectorAll('.choix button'), function (b) {
+    b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === d.reponse));
+  });
+  Array.prototype.forEach.call(tr.querySelectorAll('textarea'), function (t) {
+    if (document.activeElement !== t) {
+      t.value = d[t.getAttribute('data-champ')] || '';
+      ajusterHauteur(t);
+    }
+  });
+  tr.querySelector('.signature').textContent =
+    d.maj_par ? (String(d.maj_par).split('@')[0] + ' · ' + dateCourte(d.maj_le)) : '';
+}
+function majProgression() {
+  var cles = Object.keys(REP);
+  var faites = cles.filter(function (k) { return REP[k].reponse; }).length;
+  var tot = cles.length || 23;
+  var c = document.getElementById('annexe-compte');
+  if (c) c.textContent = faites + ' sur ' + tot + ' répondues';
+  var j = document.getElementById('annexe-jauge');
+  if (j) j.style.width = Math.round(faites / tot * 100) + '%';
+}
+function directLibelle(ok, txt) {
+  var d = document.getElementById('annexe-direct');
+  if (!d) return;
+  d.classList.toggle('ok', !!ok);
+  d.innerHTML = '<i></i>' + txt;
+}
+async function enregistrer(n, champ, valeur) {
+  var patch = {};
+  patch[champ] = valeur;
+  var r = await sb.from('annexe_securite').update(patch).eq('n', n).select().single();
+  if (r.error) {
+    directLibelle(false, 'enregistrement refusé');
+    peindreLigne(n);                        // on remet ce que dit la base
+    return;
+  }
+  REP[n] = r.data;
+  peindreLigne(n);
+  majProgression();
+  var tr = ligneDOM(n);
+  if (tr) { tr.classList.remove('enregistre'); void tr.offsetWidth; tr.classList.add('enregistre'); }
+}
+function brancherEvenements() {
+  if (brancheFait) return;
+  brancheFait = true;
+  var corps = document.getElementById('annexe-corps');
+  if (!corps) return;
+  corps.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.choix button') : null;
+    if (!b || b.disabled) return;
+    var n = Number(b.closest('tr').getAttribute('data-n'));
+    var v = b.getAttribute('data-v');
+    var nouvelle = (REP[n] && REP[n].reponse === v) ? null : v;   // reclic = on efface
+    REP[n].reponse = nouvelle;
+    peindreLigne(n); majProgression();
+    enregistrer(n, 'reponse', nouvelle);
+  });
+  corps.addEventListener('input', function (e) {
+    if (e.target.tagName === 'TEXTAREA') ajusterHauteur(e.target);
+  });
+  corps.addEventListener('focusin', function (e) {
+    if (e.target.tagName === 'TEXTAREA') enEdition = Number(e.target.closest('tr').getAttribute('data-n'));
+  });
+  corps.addEventListener('focusout', function (e) {
+    if (e.target.tagName !== 'TEXTAREA') return;
+    var n = Number(e.target.closest('tr').getAttribute('data-n'));
+    var champ = e.target.getAttribute('data-champ');
+    enEdition = null;
+    var valeur = e.target.value.trim();
+    if (REP[n] && (REP[n][champ] || '') !== valeur) enregistrer(n, champ, valeur);
+  });
+}
+function ecouterAnnexe() {
+  if (canalAnnexe) sb.removeChannel(canalAnnexe);
+  canalAnnexe = sb.channel('annexe-live')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'annexe_securite' }, function (p) {
+      if (!p.new) return;
+      REP[p.new.n] = p.new;
+      if (enEdition !== p.new.n) peindreLigne(p.new.n);
+      majProgression();
+    })
+    .subscribe(function (etat) {
+      directLibelle(etat === 'SUBSCRIBED', etat === 'SUBSCRIBED' ? 'partagé en direct' : 'hors ligne');
+    });
+}
+async function chargerReponses() {
+  var hl = document.getElementById('annexe-hors-ligne');
+  var r = await sb.from('annexe_securite').select('*').order('n');
+  // Sans les droits, la base ne renvoie pas d'erreur : elle filtre et renvoie
+  // zero ligne. Les 23 lignes existant toujours, une liste vide veut dire pas d'acces.
+  if (r.error || !r.data || !r.data.length) {
+    if (hl) {
+      hl.textContent = 'Réponses non accessibles avec ce compte : le tableau reste consultable, ' +
+        'mais ne peut pas être rempli ici.';
+      hl.classList.remove('masque');
+    }
+    directLibelle(false, 'lecture seule');
+    return;
+  }
+  r.data.forEach(function (l) { REP[l.n] = l; });
+  Array.prototype.forEach.call(
+    document.querySelectorAll('#annexe-corps button[disabled], #annexe-corps textarea[disabled]'),
+    function (e) { e.removeAttribute('disabled'); });
+  Object.keys(REP).forEach(peindreLigne);
+  majProgression();
+  brancherEvenements();
+  ecouterAnnexe();
 }
 
 /* ═══════ Onglets ═══════ */
@@ -697,6 +870,7 @@ async function ouvrir(session) {
     $('sous-titre').textContent = 'état relevé le ' + pile.releve + ' · fenêtre ' + pile.fenetre;
 
     rendreDoc(etapes);
+    chargerReponses();                       // les reponses arrivent apres, sans bloquer la carte
     ficheVide();
     var a = $('attente'); if (a) a.parentNode.removeChild(a);
     calerZoneNom();
