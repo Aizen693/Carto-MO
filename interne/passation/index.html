@@ -150,6 +150,31 @@
   .chantier.urgent h4{color:#9A3A32}
   .pied{margin-top:40px;padding-top:16px;border-top:1px solid var(--gris-clair);
     font-size:11.5px;color:var(--gris);max-width:78ch}
+
+  /* Sous-annexe mesures de sécurité */
+  .annexe-intro{font-size:13px;color:#4A4358;max-width:82ch;margin:0 0 10px}
+  .annexe-cles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0 16px}
+  .acle{background:#fff;border:1px solid var(--gris-clair);border-radius:11px;padding:11px 13px}
+  .acle b{display:block;font-size:20px;font-weight:800;color:var(--violet-fonce);line-height:1.05}
+  .acle span{font-size:10.5px;color:var(--gris);font-weight:600;display:block;margin-top:3px}
+  .tableau-annexe{background:#fff;border:1px solid var(--gris-clair);border-radius:13px;overflow:hidden}
+  .tableau-annexe table{width:100%;border-collapse:collapse;font-size:12px}
+  .tableau-annexe th{background:var(--violet);color:#fff;font-size:10px;font-weight:800;
+    letter-spacing:.09em;text-transform:uppercase;text-align:left;padding:9px 12px}
+  .tableau-annexe th.n{width:38px;text-align:center}
+  .tableau-annexe th.e{width:98px}
+  .tableau-annexe td{padding:9px 12px;border-top:1px solid #EDEAF2;vertical-align:top;line-height:1.45}
+  .tableau-annexe tbody tr:nth-child(even){background:#FAF9FC}
+  .tableau-annexe td.n{text-align:center;font-weight:800;color:var(--gris);font-size:11px}
+  .tableau-annexe td:nth-child(2){color:#332C44}
+  .tableau-annexe td:last-child{color:#5C5470;font-size:11.5px}
+  .et{display:inline-block;font-size:10px;font-weight:800;padding:3px 8px;border-radius:12px;white-space:nowrap}
+  .et.ok{background:#E4F1E6;color:#2C6E3C}
+  .et.part{background:#FBEFD9;color:#8A5A12}
+  .et.zero{background:#F8E7E4;color:#8E3327}
+  .et.heb{background:#EAEDF4;color:#465575}
+  .annexe-note{margin:14px 0 0;font-size:12.5px;color:#413A52;background:var(--violet-pale);
+    border-radius:11px;padding:13px 16px}
   code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
     background:var(--violet-pale);color:var(--violet-fonce);padding:1px 5px;border-radius:4px}
 
@@ -606,6 +631,23 @@ function rendreDoc(d) {
         return '<dt>' + ech(c.cle) + '</dt><dd' + (i === e.champs.length - 1 ? ' class="leve"' : '') + '>' +
           codes(c.texte) + '</dd>'; }).join('') +
       '</dl></div>'; }).join(''));
+  if (d.annexe) {
+    var A = d.annexe;
+    b.push('<h2>' + ech(A.titre) + '</h2>');
+    (A.intro || []).forEach(function (p) { b.push('<p class="annexe-intro">' + codes(p) + '</p>'); });
+    b.push('<div class="annexe-cles">' + (A.cles || []).map(function (c) {
+      return '<div class="acle"><b>' + ech(c.valeur) + '</b><span>' + ech(c.quoi) + '</span></div>';
+    }).join('') + '</div>');
+    b.push('<div class="tableau-annexe"><table><thead><tr>' +
+      '<th class="n">' + ech(A.colonnes[0]) + '</th><th>' + ech(A.colonnes[1]) + '</th>' +
+      '<th class="e">' + ech(A.colonnes[2]) + '</th><th>' + ech(A.colonnes[3]) + '</th>' +
+      '</tr></thead><tbody>' + A.lignes.map(function (l) {
+        return '<tr><td class="n">' + l.n + '</td><td>' + codes(l.mesure) + '</td>' +
+          '<td><span class="et ' + ech(l.etat) + '">' + ech(l.etat_libelle) + '</span></td>' +
+          '<td>' + codes(l.aide) + '</td></tr>';
+      }).join('') + '</tbody></table></div>');
+    b.push('<p class="annexe-note">' + codes(A.note) + '</p>');
+  }
   b.push('<h2>Par où améliorer la plateforme, dans cet ordre</h2>' + d.chantiers.map(function (c) {
     return '<div class="chantier' + (c.urgent ? ' urgent' : '') + '"><div class="rang">' + ech(c.rang) + '</div>' +
       '<div><h4>' + ech(c.titre) + '</h4><p>' + codes(c.texte) + '</p><p class="ou">' + codes(c.ou) + '</p></div></div>';
