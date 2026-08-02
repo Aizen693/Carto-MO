@@ -1,6 +1,108 @@
 {
-  "updated": "2026-08-01",
+  "updated": "2026-08-02",
   "items": [
+    {
+      "id": "note-2026-08-02-frappe-aerienne-russe-tue-des-civils-au-mali",
+      "date": "2026-08-02",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Al Jazeera English",
+      "source_url": "https://www.aljazeera.com/news/2026/7/31/russias-africa-corps-killed-mali-civilians-in-air-strike-hrw?traffic_source=rss",
+      "image": "https://www.aljazeera.com/wp-content/uploads/2025/06/AP22112753713926-1749748426_5e9f06-1749749139.jpg?resize=1200%2C630&amp;quality=80",
+      "titre": "Frappe aérienne russe tue des civils au Mali",
+      "resume": "Human Rights Watch accuse les forces russes (Africa Corps) d’avoir tué des civils lors d’une frappe aérienne au Mali en juillet 2026.",
+      "detail": "Cette frappe s’inscrit dans une série d’opérations menées par les forces russes en appui aux FAMa. Les victimes civiles pourraient renforcer les tensions locales et alimenter les critiques contre la présence russe, perçue comme peu regardante sur les droits humains. L’absence de réaction internationale souligne l’isolement diplomatique du Mali.",
+      "lieu": "Mali",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-02-fama-neutralisent-un-groupe-arme-a-mopti",
+      "date": "2026-08-02",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Bamada.net",
+      "source_url": "https://bamada.net/lutte-contre-le-terrorisme-les-fama-neutralisent-un-groupe-arme-dissimule-a-megou-mopti",
+      "image": "",
+      "titre": "FAMa neutralisent un groupe armé à Mopti",
+      "resume": "Les Forces armées maliennes (FAMa) ont neutralisé un groupe armé dissimulé dans la localité de Mégou, près de Mopti.",
+      "detail": "Cette opération s’inscrit dans la stratégie de sécurisation des zones rurales, où les groupes armés profitent des vides laissés par le retrait des forces internationales. La localisation précise de l’intervention suggère une pression accrue sur les groupes terroristes dans le centre du Mali.",
+      "lieu": "Mopti",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-02-frappe-aerienne-contre-des-terroristes-a-tessali",
+      "date": "2026-08-02",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Mali Actu",
+      "source_url": "https://maliactu.net/tessalit-les-fama-annoncent-une-frappe-aerienne-contre-des-regroupements-terroristes/",
+      "image": "https://maliactu.net/wp-content/uploads/2026/07/fama-vehicule-mali.jpg",
+      "titre": "Frappe aérienne contre des terroristes à Tessalit",
+      "resume": "Les FAMa ont annoncé une frappe aérienne contre des regroupements terroristes dans la région de Tessalit.",
+      "detail": "Tessalit, proche de la frontière algérienne, est une zone stratégique pour les groupes armés. Cette frappe pourrait viser à perturber leurs lignes d’approvisionnement ou leurs bases arrière. L’opération reflète une montée en puissance des capacités aériennes maliennes, soutenues par des partenaires étrangers.",
+      "lieu": "Tessalit",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-02-stagnation-des-affrontements-au-sahel",
+      "date": "2026-08-02",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Stagnation des affrontements au Sahel",
+      "resume": "Les affrontements au Sahel montrent des signes de décélération, avec une possible reprise après la mousson.",
+      "detail": "Cette pause apparente pourrait refléter un épuisement des belligérants ou une réévaluation de leurs stratégies. L’absence de diplomatie active laisse présager une reprise des hostilités une fois les conditions climatiques plus favorables. Les populations civiles restent les premières victimes de cette instabilité prolongée.",
+      "lieu": "Sahel",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-02-accusations-du-niger-contre-des-etats-etrangers",
+      "date": "2026-08-02",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Accusations du Niger contre des États étrangers",
+      "resume": "Le général Tiani accuse la France, la Côte d’Ivoire, le Bénin, la Mauritanie et l’Ukraine d’avoir soutenu des attaques contre le Mali. Information non confirmée à ce stade.",
+      "detail": "Ces accusations s’inscrivent dans un contexte de tensions régionales croissantes, où les juntes militaires cherchent à consolider leur légitimité en désignant des boucs émissaires extérieurs. Si confirmées, ces allégations pourraient aggraver les fractures diplomatiques et sécuritaires en Afrique de l’Ouest.",
+      "lieu": "Niger",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-02-revelations-sur-une-possible-action-militaire-am",
+      "date": "2026-08-02",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Révélations sur une possible action militaire américaine",
+      "resume": "Le *Washington Post* révèle que les États-Unis envisageraient une action militaire contre le GSIM et le FLA au Mali. Information non confirmée à ce stade.",
+      "detail": "Une intervention américaine directe marquerait un tournant dans la lutte contre le terrorisme au Sahel, traditionnellement menée par la France et ses partenaires européens. Cette éventualité pourrait compliquer davantage les dynamiques régionales, déjà marquées par la présence russe et les tensions entre juntes militaires.",
+      "lieu": "Mali",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
     {
       "id": "note-2026-08-01-frappe-aerienne-russe-tue-des-civils-au-mali",
       "date": "2026-08-01",
@@ -2173,131 +2275,6 @@
         "Vérifier l'état des routes clés en Turquie",
         "Anticiper des perturbations dans les chaînes logistiques",
         "Renforcer la surveillance des infrastructures"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-4-juillet-2026-video-recap-des-operations-coordonnees",
-      "date": "2026-07-06",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/4-juillet-2026-video-recap-des-operations-coordonnees/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/740953087_1007152872184715_5840159594218251424_n.jpg",
-      "titre": "Récapitulatif des opérations aériennes au Mali",
-      "resume": "Vidéo récapitulative des frappes aériennes du 4 juillet 2026 dans le centre et le nord du Mali.",
-      "detail": "Les images montrent des opérations coordonnées impliquant des frappes aériennes à Ti-Somadougou, Konna, Kouakourou et Anefis. Les cibles incluent des positions tenues par les groupes armés (JNIM et FLA). Ces frappes visent à affaiblir les capacités opérationnelles des groupes rebelles, mais pourraient aussi entraîner des représailles contre les populations civiles. La coordination entre forces maliennes et russes est visible dans les vidéos.",
-      "lieu": "Ti-Somadougou, Konna, Kouakourou, Anefis, Mali",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Impact sur les groupes armés locaux",
-        "Risque de représailles contre les civils",
-        "Coordination renforcée entre forces maliennes et russes"
-      ],
-      "recommandations": [
-        "Analyser l'efficacité des frappes aériennes",
-        "Surveiller les réactions des groupes armés",
-        "Évaluer les besoins humanitaires post-opérations"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-bombardement-danefis-et-konna-au-mali-ce-que-revelent-les",
-      "date": "2026-07-05",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/bombardement-danefis-et-konna-au-mali-ce-que-revelent-les-videos-des-drones-bayraktar-tb2/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/739609612_1306978314979175_8820565241300824117_n.jpg",
-      "titre": "Frappe de drones Bayraktar au Mali : ciblage d'Anefis et Konna",
-      "resume": "Des vidéos confirment des frappes de drones turcs Bayraktar TB2 sur des localités maliennes. Les cibles et l'impact humanitaire restent à préciser.",
-      "detail": "Les frappes visaient des positions présumées de groupes armés à Anefis et Konna. Les drones TB2, opérés par des forces maliennes ou étrangères, confirment une militarisation accrue. Risque de victimes civiles si les frappes étaient mal ciblées. La présence de drones étrangers au Sahel s'intensifie, notamment turcs et russes.",
-      "lieu": "Anefis et Konna, Mali",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Escalade des tensions locales",
-        "Risque de réactions anti-étrangères",
-        "Impact sur les populations civiles"
-      ],
-      "recommandations": [
-        "Surveiller les réactions des groupes armés",
-        "Évaluer les dommages collatéraux",
-        "Anticiper des représailles"
-      ]
-    },
-    {
-      "id": "u-instagram-com-reel-daaezj0je7h",
-      "date": "2026-07-05",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Alerte Google : site:instagram.com",
-      "source_url": "https://www.instagram.com/reel/DaaEzj0je7H/",
-      "image": "",
-      "titre": "Convoi Russie-Mali en mouvement vers Anefis",
-      "resume": "Un convoi composé de mercenaires russes et de soldats maliennes a quitté Gao en direction d'Anefis.",
-      "detail": "Les images vérifiées montrent un mouvement de troupes combinées (Russia's Africa Corps et Forces armées maliennes) depuis Gao vers la zone d'Anefis, région sous pression des groupes armés. Ce déplacement suggère une réponse militaire coordonnée pour contrer les attaques récentes du JNIM et du FLA. La zone d'Anefis est un point clé pour les opérations, avec des risques de combats intenses et d'affrontements avec les groupes rebelles.",
-      "lieu": "Gao, Anefis, Mali",
-      "lat": 18.0359837,
-      "lon": 0.5751845,
-      "implications": [
-        "Déploiement accru de forces étrangères",
-        "Risque de confrontation directe avec les groupes armés",
-        "Impact potentiel sur les civils dans la zone"
-      ],
-      "recommandations": [
-        "Surveiller les mouvements de troupes dans le Nord",
-        "Évaluer les capacités logistiques du convoi",
-        "Anticiper des réactions des groupes armés"
-      ]
-    },
-    {
-      "id": "u-jeuneafrique-com-1808765-societe-je-ne-pense-pas-pouvoir-survivre-une-",
-      "date": "2026-07-04",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "JeuneAfrique.com",
-      "source_url": "https://www.jeuneafrique.com/1808765/societe/je-ne-pense-pas-pouvoir-survivre-une-annee-de-plus-les-enfants-sacrifies-des-mines-dor-du-mali/",
-      "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover,gravity=0.8217x0.4739/https://prod.cdn-medias.jeuneafrique.com/medias/2026/07/01/jad20260701-ass-mali-societe-enfants-mines-or.jpg",
-      "titre": "Enfants exploités dans les mines d'or du Mali ouest",
-      "resume": "Dizaines de milliers d'enfants travaillent dans les mines d'or illégales de l'ouest du Mali, soumis à l'exploitation et à la maltraitance",
-      "detail": "L'exploitation des enfants dans les mines d'or du Mali occidental reflète une crise humanitaire profonde et une gouvernance défaillante. Les conditions de travail extrêmes, incluant le travail forcé et les violences, exposent les mineurs à des risques sanitaires et psychologiques majeurs. Ce phénomène s'inscrit dans un contexte de pauvreté généralisée et de conflits persistants qui affaiblissent les structures de protection de l'enfance.",
-      "lieu": "Ouest du Mali",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque accru de recrutement par des groupes armés",
-        "Crise sanitaire et sociale en aggravation",
-        "Pression accrue sur les ressources minières locales"
-      ],
-      "recommandations": [
-        "Renforcer les contrôles dans les zones minières via des patrouilles mixtes",
-        "Sensibiliser les communautés locales sur les droits des enfants",
-        "Collaborer avec les ONG locales pour des programmes de réinsertion"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-zone-commerciale-transfrontaliere",
-      "date": "2026-07-04",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-zone-commerciale-transfrontaliere/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22398.jpg",
-      "titre": "Zone commerciale transfrontalière AES à 1,2 milliard d'euros",
-      "resume": "L'Alliance des États du Sahel lance une zone commerciale transfrontalière visant 1,2 milliard d'euros d'échanges annuels",
-      "detail": "La création de cette zone transfrontalière entre le Mali, le Burkina Faso et le Niger s'inscrit dans une stratégie de résilience économique face aux embargos et sanctions internationales. Elle pourrait renforcer les échanges intra-AES mais aussi accentuer les tensions avec les pays voisins exclus. La réussite dépendra de la coordination institutionnelle et de la stabilité sécuritaire dans la région.",
-      "lieu": "Alliance des États du Sahel",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Nouveaux flux commerciaux à surveiller",
-        "Risque de tensions géopolitiques accru",
-        "Opportunités économiques pour les acteurs locaux"
-      ],
-      "recommandations": [
-        "Cartographier les acteurs économiques impliqués",
-        "Anticiper les réactions des pays voisins",
-        "Évaluer les besoins en infrastructure logistique"
       ]
     }
   ]
