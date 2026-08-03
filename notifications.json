@@ -1,6 +1,57 @@
 {
-  "updated": "2026-08-02",
+  "updated": "2026-08-03",
   "items": [
+    {
+      "id": "note-2026-08-03-frappe-aerienne-russe-en-mali-civils-tues-selon-",
+      "date": "2026-08-03",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Al Jazeera English",
+      "source_url": "https://www.aljazeera.com/news/2026/7/31/russias-africa-corps-killed-mali-civilians-in-air-strike-hrw?traffic_source=rss",
+      "image": "https://www.aljazeera.com/wp-content/uploads/2025/06/AP22112753713926-1749748426_5e9f06-1749749139.jpg?resize=1200%2C630&amp;quality=80",
+      "titre": "Frappe aérienne russe en Mali : civils tués selon HRW",
+      "resume": "Human Rights Watch accuse les forces paramilitaires russes du Africa Corps d'avoir tué des civils lors d'une frappe aérienne au Mali.",
+      "detail": "Cette accusation, si confirmée, marque une escalade dans les violences contre les populations civiles dans la région de Mopti. Les opérations conjointes russo-maliennes ciblent souvent des groupes armés, mais les erreurs de ciblage alimentent les tensions locales et ternissent l'image de la coopération militaire entre Bamako et Moscou.",
+      "lieu": "Mopti",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-03-fla-diffuse-une-video-de-200-militaires-captures",
+      "date": "2026-08-03",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "FLA diffuse une vidéo de 200 militaires capturés",
+      "resume": "Le Front de Libération de l'Azawad (FLA) a diffusé une vidéo montrant plus de 200 militaires capturés, sans précision sur leur affiliation.",
+      "detail": "Cette diffusion intervient dans un contexte de tensions accrues entre les groupes indépendantistes et les forces maliennes. Le nombre élevé de captifs suggère une opération d'envergure, possiblement liée à des affrontements récents dans le nord du Mali. L'absence de revendication claire complique l'évaluation de la situation.",
+      "lieu": "",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-03-operation-militaire-en-cours-au-sahel",
+      "date": "2026-08-03",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Opération militaire en cours au Sahel",
+      "resume": "Une vidéo en direct montre une opération militaire en cours, sans précision sur le contexte ou les acteurs impliqués. Information non confirmée à ce stade.",
+      "detail": "Les images suggèrent une intervention de grande ampleur, mais l'absence de détails sur les forces engagées ou les objectifs rend difficile toute analyse précise. Ce type d'opération pourrait être lié à des dynamiques locales de contre-insurrection ou à des rivalités entre groupes armés.",
+      "lieu": "",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
     {
       "id": "note-2026-08-02-frappe-aerienne-russe-tue-des-civils-au-mali",
       "date": "2026-08-02",
@@ -2200,81 +2251,6 @@
         "Évaluer impact réformes sur sécurité",
         "Analyser perception internationale",
         "Surveiller développement infrastructures"
-      ]
-    },
-    {
-      "id": "u-mali24-info-justice-le-journaliste-chahana-takiou-nobtient-pas-la-libe",
-      "date": "2026-07-07",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "MALI 24 INFO",
-      "source_url": "https://mali24.info/justice-le-journaliste-chahana-takiou-nobtient-pas-la-liberte-provisoire/",
-      "image": "https://mali24.info/wp-content/uploads/2026/06/FB_IMG_1780925808211-1.jpg",
-      "titre": "Journaliste malien maintenu en détention",
-      "resume": "Le directeur de publication du journal 22 Septembre, Chahana Takiou, reste incarcéré malgré sa demande de liberté provisoire.",
-      "detail": "Incarcéré depuis le 8 juin 2026, Chahana Takiou est poursuivi pour des motifs non précisés, dans un contexte de restrictions croissantes de la liberté de la presse au Mali. Son maintien en détention s'inscrit dans une tendance de répression des voix critiques, notamment celles relayant des informations sur les violations des droits humains ou la corruption. Cette affaire illustre les tensions entre le régime et les médias indépendants, avec des implications sur la transparence et la démocratie.",
-      "lieu": "Bamako, Mali",
-      "lat": 12.6132656,
-      "lon": -7.9847391,
-      "implications": [
-        "Restriction liberté de la presse",
-        "Risque dégradation droits humains",
-        "Impact perception internationale"
-      ],
-      "recommandations": [
-        "Surveiller traitement médias indépendants",
-        "Analyser impact sur société civile",
-        "Évaluer risques pour espace démocratique"
-      ]
-    },
-    {
-      "id": "u-instagram-com-p-daezjxcjgrj",
-      "date": "2026-07-07",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Gambiaj.com",
-      "source_url": "https://www.instagram.com/p/DaezJxCjgRJ/",
-      "image": "",
-      "titre": "Camp d'Anefis cible d'offensives rebelles et jihadistes",
-      "resume": "Le camp militaire d'Anefis, considéré comme stratégique, fait l'objet d'attaques répétées par des groupes armés au Mali.",
-      "detail": "Les affrontements impliquent des forces maliennes, l'Africa Corps, ainsi que des rebelles du FLA et des djihadistes du JNIM. Bien que l'armée malienne affirme avoir repoussé les offensives, les groupes armés maintiennent une pression significative. La localisation d'Anefis en fait un point clé pour le contrôle du nord du Mali.",
-      "lieu": "Anefis, Mali",
-      "lat": 18.04589,
-      "lon": 0.602897,
-      "implications": [
-        "Affaiblissement de la position gouvernementale dans le nord",
-        "Risque de fragmentation des alliances militaires locales",
-        "Possible intervention accrue des partenaires internationaux"
-      ],
-      "recommandations": [
-        "Évaluer la vulnérabilité des camps militaires dans la région",
-        "Renforcer les capacités de renseignement pour anticiper les attaques",
-        "Prévoir des mécanismes de réponse rapide aux crises"
-      ]
-    },
-    {
-      "id": "u-trthaber-com-haber-turkiye-burdurda-saganak-sonrasi-kopru-yolunda-cokm",
-      "date": "2026-07-06",
-      "theatre": "moyen-orient",
-      "severite": "alerte",
-      "source": "TRT Haber",
-      "source_url": "https://www.trthaber.com/haber/turkiye/burdurda-saganak-sonrasi-kopru-yolunda-cokme-950333.html",
-      "image": "https://trthaberstatic.cdn.wp.trt.com.tr/resimler/2474000/kopru-cokme-iha-2474054.jpg",
-      "titre": "Effondrement d'un pont en Turquie après intempéries",
-      "resume": "Un pont routier s'est effondré à Burdur après des pluies intenses, entraînant sa fermeture immédiate.",
-      "detail": "Les fortes précipitations en Turquie ont causé l'effondrement d'un pont dans la province de Burdur, perturbant la circulation et nécessitant des mesures de sécurité. Bien que l'incident soit localisé, il souligne les vulnérabilités des infrastructures en cas d'événements climatiques extrêmes. La Turquie, en tant que corridor logistique régional, pourrait subir des retards dans les mouvements de troupes ou de marchandises.",
-      "lieu": "Burdur, Turquie",
-      "lat": 37.5183407,
-      "lon": 30.1691254,
-      "implications": [
-        "Retards logistiques possibles",
-        "Risques pour les corridors d'approvisionnement",
-        "Vulnérabilité des infrastructures critiques"
-      ],
-      "recommandations": [
-        "Vérifier l'état des routes clés en Turquie",
-        "Anticiper des perturbations dans les chaînes logistiques",
-        "Renforcer la surveillance des infrastructures"
       ]
     }
   ]
