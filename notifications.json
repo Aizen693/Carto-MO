@@ -1,6 +1,108 @@
 {
-  "updated": "2026-08-04",
+  "updated": "2026-08-05",
   "items": [
+    {
+      "id": "note-2026-08-05-frappe-aerienne-russe-tue-des-civils-au-mali",
+      "date": "2026-08-05",
+      "theatre": "sahel",
+      "severite": "critique",
+      "source": "Al Jazeera English",
+      "source_url": "https://www.aljazeera.com/news/2026/7/31/russias-africa-corps-killed-mali-civilians-in-air-strike-hrw?traffic_source=rss",
+      "image": "https://www.aljazeera.com/wp-content/uploads/2025/06/AP22112753713926-1749748426_5e9f06-1749749139.jpg?resize=1200%2C630&amp;quality=80",
+      "titre": "Frappe aérienne russe tue des civils au Mali",
+      "resume": "Human Rights Watch confirme qu’une frappe aérienne menée par l’Africa Corps russe au Mali a causé la mort de civils fin juillet 2026.",
+      "detail": "Cette frappe s’inscrit dans une série d’opérations conjointes entre les Forces armées maliennes (FAMa) et l’Africa Corps, visant des groupes armés dans le centre du pays. Les victimes civiles soulèvent des questions sur la précision des frappes et le respect du droit international humanitaire. L’incident pourrait exacerber les tensions locales et alimenter les critiques contre la présence russe au Mali.",
+      "lieu": "Mali",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-05-fama-neutralise-un-groupe-arme-a-mopti",
+      "date": "2026-08-05",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Bamada",
+      "source_url": "https://bamada.net/lutte-contre-le-terrorisme-les-fama-neutralisent-un-groupe-arme-dissimule-a-megou-mopti",
+      "image": "",
+      "titre": "FAMa neutralise un groupe armé à Mopti",
+      "resume": "Les Forces armées maliennes (FAMa) ont neutralisé un groupe armé dissimulé dans la localité de Mégou, dans la région de Mopti, le 1er août 2026.",
+      "detail": "Cette opération s’inscrit dans le cadre de la lutte contre les groupes terroristes actifs dans le centre du Mali. La neutralisation de ce groupe pourrait affaiblir temporairement les capacités opérationnelles des insurgés dans la région, mais la menace persiste en raison de la fragmentation des groupes armés et de leur capacité à se reconstituer.",
+      "lieu": "Mégou, Mopti",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-05-bilan-conteste-des-operations-fama-contre-le-gsi",
+      "date": "2026-08-05",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Bilan contesté des opérations FAMa contre le GSIM et le FLA",
+      "resume": "Un bilan des opérations des Forces armées maliennes (FAMa) contre le GSIM et le FLA du 26 juillet au 1er août 2026 circule, mais reste non confirmé à ce stade. Information non confirmée à ce stade.",
+      "detail": "Ce bilan, s’il était confirmé, pourrait révéler une intensification des affrontements entre les FAMa et les groupes armés dans le nord et le centre du Mali. Les divergences entre les bilans officiels et les témoignages locaux soulignent les difficultés à obtenir une information fiable dans un contexte de guerre asymétrique et de restrictions médiatiques.",
+      "lieu": "Mali",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-05-enlevement-d-un-citoyen-allemand-pres-de-tahoua",
+      "date": "2026-08-05",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Enlèvement d’un citoyen allemand près de Tahoua",
+      "resume": "Sinan Ulumaskan, un citoyen allemand d’origine turque, a été enlevé près de Tahoua au Niger le 4 août 2026.",
+      "detail": "Cet enlèvement pourrait être lié à des dynamiques criminelles ou terroristes dans la région, avec des risques de revente à des groupes comme l’État islamique du Sahel (EIS). La zone de Tahoua, proche des frontières malienne et burkinabè, est connue pour être un corridor de trafics et d’activités insurgées, ce qui en fait un terrain propice aux kidnappings.",
+      "lieu": "Tahoua, Niger",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-05-exactions-contre-les-arabes-mahamid-au-niger",
+      "date": "2026-08-05",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Exactions contre les Arabes Mahamid au Niger",
+      "resume": "Les Front patriotique de libération (FPL) et Forces de l’armée libre (FAL) expriment leurs préoccupations concernant des exactions contre les Arabes Mahamid dans la région de Diffa. Information non confirmée à ce stade.",
+      "detail": "Ces exactions, si confirmées, pourraient s’inscrire dans un cycle de violences intercommunautaires exacerbées par l’instabilité sécuritaire dans la région. La communauté arabe Mahamid, souvent ciblée en raison de ses liens supposés avec des groupes armés, fait face à des risques accrus de représailles et de déplacements forcés.",
+      "lieu": "Diffa, Niger",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-05-activites-du-gsim-au-burkina-faso",
+      "date": "2026-08-05",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Activités du GSIM au Burkina Faso",
+      "resume": "Le Groupe de soutien à l’islam et aux musulmans (GSIM) a mené des attaques dans les régions du Djôrô, Yaadga, Nando et Bam au Burkina Faso. Information non confirmée à ce stade.",
+      "detail": "Ces attaques, si elles sont confirmées, illustrent la capacité du GSIM à étendre ses opérations au-delà du Mali, profitant de l’instabilité régionale et des faiblesses des forces de sécurité burkinabè. La multiplication des fronts pourrait affaiblir davantage la réponse sécuritaire et aggraver la crise humanitaire dans le pays.",
+      "lieu": "Djôrô, Yaadga, Nando, Bam",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
     {
       "id": "note-2026-08-04-frappes-aeriennes-russes-font-des-victimes-civil",
       "date": "2026-08-04",
@@ -2045,156 +2147,6 @@
         "Analyser les priorités stratégiques annoncées",
         "Évaluer les implications régionales",
         "Adapter les plans de coopération"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-aes-redessine-geopolitique-sahel",
-      "date": "2026-07-09",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/aes-redessine-geopolitique-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22655.jpg",
-      "titre": "AES : redéfinition des équilibres géopolitiques au Sahel",
-      "resume": "L'Alliance des États du Sahel bouleverse les équilibres régionaux selon une analyse géopolitique.",
-      "detail": "L'Alliance des États du Sahel (AES), regroupant des pays comme le Mali, le Burkina Faso et le Niger, cherche à redéfinir les dynamiques régionales. Ce mouvement pourrait entraîner des changements majeurs dans les alliances traditionnelles et les politiques de sécurité. Les implications pour les partenaires internationaux, notamment la France et la Russie, restent à évaluer.",
-      "lieu": "Sahel",
-      "lat": 14.0279165,
-      "lon": -0.7717776,
-      "implications": [
-        "Changement des alliances régionales",
-        "Impact sur les partenariats internationaux",
-        "Risque de fragmentation régionale"
-      ],
-      "recommandations": [
-        "Analyser les dynamiques de l'AES",
-        "Évaluer les implications pour les partenaires",
-        "Adapter les stratégies de coopération"
-      ]
-    },
-    {
-      "id": "u-instagram-com-reel-dalelrqetey",
-      "date": "2026-07-09",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Alerte Google : site:instagram.com \"Mali\"",
-      "source_url": "https://www.instagram.com/reel/DalELrQETeY/",
-      "image": "",
-      "titre": "Armée malienne et Russian Africa Corps reprennent Anéfis",
-      "resume": "L'armée malienne et la Russian Africa Corps ont repris le contrôle de la ville d'Anéfis aux mains de groupes armés.",
-      "detail": "Des sources locales rapportent que les forces maliennes appuyées par des mercenaires russes ont mené une opération réussie pour reprendre la ville d'Anéfis, située dans la région de Gao. Cette ville est un point stratégique pour le contrôle des routes commerciales et militaires dans le nord du Mali. La présence de la Russian Africa Corps pourrait renforcer la position du gouvernement malien face aux groupes insurgés, mais suscite également des tensions géopolitiques avec la France et d'autres partenaires internationaux.",
-      "lieu": "Anéfis, Mali",
-      "lat": 18.04589,
-      "lon": 0.602897,
-      "implications": [
-        "Renforcement des capacités militaires maliennes",
-        "Risque de tensions avec les partenaires traditionnels",
-        "Changement potentiel dans la dynamique des conflits locaux"
-      ],
-      "recommandations": [
-        "Analyser l'impact de la collaboration avec la Russian Africa Corps sur la stabilité régionale",
-        "Évaluer les réactions des partenaires internationaux du Mali",
-        "Cartographier les nouvelles zones de contrôle et les déplacements de populations"
-      ]
-    },
-    {
-      "id": "u-bamada-net-tombouctou-des-femmes-journalistes-outillees-contre-la-desi",
-      "date": "2026-07-09",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/tombouctou-des-femmes-journalistes-outillees-contre-la-desinformation",
-      "image": "http://bamada.net/wp-content/uploads/2025/06/tombouctou-ville-no.jpg",
-      "titre": "Formation de femmes journalistes à Tombouctou contre la désinformation",
-      "resume": "Vingt femmes journalistes à Tombouctou reçoivent une formation sur le journalisme sensible aux conflits et la lutte contre la désinformation.",
-      "detail": "Une initiative soutenue par l'UNESCO forme des femmes journalistes et communicatrices à Tombouctou pour renforcer leur capacité à couvrir les conflits et lutter contre la désinformation. Cette formation est cruciale dans une région où la désinformation alimente les tensions intercommunautaires. Cependant, le succès de ce projet dépendra de la sécurité des participantes et de leur capacité à diffuser l'information dans des zones reculées.",
-      "lieu": "Tombouctou, Mali",
-      "lat": 16.7719091,
-      "lon": -3.0087272,
-      "implications": [
-        "Renforcement de la résilience médiatique locale",
-        "Réduction des risques de désinformation dans les conflits",
-        "Autonomisation des femmes dans les zones sensibles"
-      ],
-      "recommandations": [
-        "Soutenir la diffusion des contenus produits par les participantes",
-        "Assurer la sécurité des journalistes formées après la formation",
-        "Étudier l'impact de cette formation sur la cohésion sociale"
-      ]
-    },
-    {
-      "id": "u-youtube-com-watch-v-isibuq2oxis",
-      "date": "2026-07-08",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Reuters",
-      "source_url": "https://www.youtube.com/watch?v=isibuq2Oxis",
-      "image": "",
-      "titre": "Ouganda déploie des équipes médicales pour l'épidémie d'Ebola en RDC",
-      "resume": "L'Ouganda envoie des experts médicaux et ouvre de nouveaux centres de traitement pour aider la RDC à contenir une épidémie d'Ebola.",
-      "detail": "Cette coopération transfrontalière intervient alors que l'épidémie d'Ebola s'étend dans l'est de la RDC, une région déjà fragilisée par les conflits. L'Ouganda, voisin direct, renforce ses capacités de réponse pour éviter une propagation régionale. Les autorités sanitaires locales et internationales surveillent la situation de près.",
-      "lieu": "Est de la République Démocratique du Congo",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque accru de propagation de maladies infectieuses",
-        "Impact potentiel sur la stabilité sociale et économique",
-        "Nécessité d'une coordination régionale renforcée"
-      ],
-      "recommandations": [
-        "Surveiller les mouvements transfrontaliers liés à l'épidémie",
-        "Renforcer les capacités locales de détection et de réponse",
-        "Planifier des protocoles d'urgence pour les crises sanitaires"
-      ]
-    },
-    {
-      "id": "u-bamada-net-au-mali-etat-et-partenaires-accelerent-la-recherche-de-solu",
-      "date": "2026-07-08",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/au-mali-etat-et-partenaires-accelerent-la-recherche-de-solutions-durables-pour-les-personnes-deplacees",
-      "image": "http://bamada.net/wp-content/uploads/2026/05/Deplace-faladie.jpg",
-      "titre": "Mali : accélération des solutions pour les déplacés internes",
-      "resume": "Le Mali et ses partenaires renforcent les efforts pour trouver des solutions durables aux centaines de milliers de déplacés internes.",
-      "detail": "La crise sécuritaire au Mali a provoqué des déplacements massifs de population depuis plusieurs années. Les autorités maliennes, en collaboration avec des partenaires internationaux, accélèrent la recherche de solutions durables pour ces populations vulnérables. Cette situation reflète les défis persistants de stabilisation dans le pays, malgré les initiatives en cours.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Risque accru de tensions locales",
-        "Pression sur les ressources des zones d'accueil",
-        "Nécessité d'une coordination renforcée"
-      ],
-      "recommandations": [
-        "Renforcer le suivi des déplacés",
-        "Évaluer les besoins humanitaires urgents",
-        "Coordonner avec les acteurs locaux et internationaux"
-      ]
-    },
-    {
-      "id": "u-askanews-it-2026-07-09-iran-nuovi-raid-usa-trump-se-teheran-continua-a",
-      "date": "2026-07-08",
-      "theatre": "moyen-orient",
-      "severite": "critique",
-      "source": "askanews.it",
-      "source_url": "https://askanews.it/2026/07/09/iran-nuovi-raid-usa-trump-se-teheran-continua-andra-molto-peggio/",
-      "image": "https://askanews.it/wp-content/uploads/2026/07/20260709_005134_96B25FE1.jpg",
-      "titre": "États-Unis lancent de nouveaux raids aériens sur l'Iran",
-      "resume": "Les États-Unis ont mené une nouvelle série de raids aériens contre l'Iran, selon les ordres de Donald Trump.",
-      "detail": "Ces raids, menés pour la deuxième journée consécutive, visent à réduire les capacités militaires de l'Iran. Donald Trump a averti que la situation pourrait empirer si Téhéran poursuit ses actions. Ces frappes s'inscrivent dans une escalade des tensions entre les deux pays, avec des implications potentielles pour la stabilité régionale.",
-      "lieu": "Iran",
-      "lat": 32.6475314,
-      "lon": 54.5643516,
-      "implications": [
-        "Escalade des tensions régionales",
-        "Risque d'instabilité accrue",
-        "Impact sur les relations diplomatiques"
-      ],
-      "recommandations": [
-        "Surveiller les réactions iraniennes",
-        "Analyser les implications régionales",
-        "Évaluer les risques pour les intérêts internationaux"
       ]
     }
   ]
