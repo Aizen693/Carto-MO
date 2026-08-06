@@ -1,6 +1,108 @@
 {
-  "updated": "2026-08-05",
+  "updated": "2026-08-06",
   "items": [
+    {
+      "id": "note-2026-08-06-enlevement-d-un-citoyen-germano-turc-au-niger",
+      "date": "2026-08-06",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Enlèvement d’un citoyen germano-turc au Niger",
+      "resume": "Sinan Ulumaskan, citoyen allemand d’origine turque, a été enlevé près de Tahoua au Niger. Son transfert vers l’État islamique du Sahel (EIS) est évoqué.",
+      "detail": "Cet enlèvement s’inscrit dans une série de prises d’otages ciblant des étrangers dans la région, souvent motivées par des demandes de rançon ou des échanges de prisonniers. La présence de l’EIS dans la zone de Tahoua, proche des frontières malienne et burkinabè, renforce les risques de déstabilisation locale et de fragmentation des groupes armés.",
+      "lieu": "Tahoua",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-06-exactions-contre-les-arabes-mahamid-au-niger",
+      "date": "2026-08-06",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Exactions contre les Arabes Mahamid au Niger",
+      "resume": "Le Front patriotique de libération (FPL) et les Forces de l’armée libre (FAL) dénoncent des confiscations de bétail et des rétentions de documents d’état-civil ciblant les Arabes Mahamid dans la région de Diffa.",
+      "detail": "Ces exactions, si elles sont confirmées, pourraient aggraver les tensions intercommunautaires dans une région déjà fragilisée par les conflits armés. La région de Diffa, frontalière du Nigeria, est un foyer historique de violence liée à Boko Haram et à d’autres groupes jihadistes, ce qui en fait un terrain propice aux représailles et aux cycles de vengeance.",
+      "lieu": "Diffa",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-06-operations-militaires-maliennes-contre-le-gsim-e",
+      "date": "2026-08-06",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Opérations militaires maliennes contre le GSIM et le FLA",
+      "resume": "Les Forces armées maliennes (FAMa) ont mené des opérations du 26 juillet au 1er août 2026 contre le GSIM et le Front de libération de l’Azawad (FLA), neutralisant des combattants et saisissant des armes.",
+      "detail": "Ces opérations reflètent une intensification des efforts militaires maliens pour reprendre le contrôle des zones septentrionales, notamment dans les secteurs d’Abéibara, Kidal et Tessalit. La saisie d’armes et la neutralisation de combattants pourraient affaiblir temporairement les capacités logistiques des groupes armés, mais la résilience de ces derniers reste un défi majeur.",
+      "lieu": "Abéibara, Kidal, Tessalit",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-06-activites-du-gsim-au-burkina-faso",
+      "date": "2026-08-06",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Activités du GSIM au Burkina Faso",
+      "resume": "Le Groupe de soutien à l’islam et aux musulmans (GSIM) a intensifié ses activités dans les régions du Djôrô, Yaadga, Nando et Bam, capturant des positions tenues par les Volontaires pour la défense de la patrie (VDP).",
+      "detail": "Cette expansion du GSIM au Burkina Faso souligne la porosité des frontières entre le Mali et le Burkina, ainsi que la capacité du groupe à exploiter les faiblesses des forces de sécurité locales. La capture de positions des VDP, souvent mal équipés et peu formés, pourrait entraîner une recrudescence des violences contre les civils.",
+      "lieu": "Djôrô, Yaadga, Nando, Bam",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-06-condamnation-des-exactions-contre-l-azawad-par-l",
+      "date": "2026-08-06",
+      "theatre": "sahel",
+      "severite": "info",
+      "source": "Algor Int",
+      "source_url": "",
+      "image": "",
+      "titre": "Condamnation des exactions contre l’Azawad par les Touarègues de Libye",
+      "resume": "Le Conseil social suprême des Touarègues de Libye a condamné les exactions contre les populations de l’Azawad et appelé la Turquie à cesser son soutien aux groupes armés.",
+      "detail": "Cette déclaration illustre les tensions transnationales entre les communautés touarègues et les acteurs régionaux. L’implication de la Turquie, souvent accusée de soutenir des groupes islamistes ou séparatistes, ajoute une dimension géopolitique aux conflits locaux, compliquant les efforts de médiation et de stabilisation.",
+      "lieu": "Azawad",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
+    {
+      "id": "note-2026-08-06-operations-militaires-maliennes-dans-le-nord-du-",
+      "date": "2026-08-06",
+      "theatre": "sahel",
+      "severite": "alerte",
+      "source": "Maliweb",
+      "source_url": "https://www.maliweb.net/insecurite/les-fama-et-lafrica-corps-eliminent-des-terroristes-au-cours-doperations-dans-le-nord-du-pays-3118936.html",
+      "image": "https://www.maliweb.net/uploads/images/202608/image_870x580_6a7366f150eea.jpg",
+      "titre": "Opérations militaires maliennes dans le nord du pays",
+      "resume": "Les Forces armées maliennes (FAMa) et l’Africa Corps ont mené des opérations dans le nord du Mali, éliminant des terroristes et sécurisant des zones stratégiques.",
+      "detail": "Ces opérations s’inscrivent dans une stratégie plus large de reconquête des territoires contrôlés par les groupes armés. La collaboration avec l’Africa Corps, bien que controversée, semble renforcer les capacités opérationnelles des FAMa, mais elle soulève également des questions sur la souveraineté du Mali et les équilibres géopolitiques régionaux.",
+      "lieu": "Nord du Mali",
+      "lat": null,
+      "lon": null,
+      "implications": [],
+      "recommandations": []
+    },
     {
       "id": "note-2026-08-05-frappe-aerienne-russe-tue-des-civils-au-mali",
       "date": "2026-08-05",
@@ -1997,156 +2099,6 @@
         "Cartographie des nouvelles capacités militaires maliennes",
         "Veille sur les collaborations avec les acteurs non traditionnels",
         "Analyse des répercussions sur les missions de maintien de la paix"
-      ]
-    },
-    {
-      "id": "u-maliweb-net-nation-paix-reconciliation-et-cohesion-nationale-cinq-anne",
-      "date": "2026-07-11",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Maliweb.net",
-      "source_url": "https://www.maliweb.net/nation/paix-reconciliation-et-cohesion-nationale-cinq-annees-dengagement-3118303.html",
-      "image": "",
-      "titre": "Cinq ans de réformes de réconciliation nationale au Mali",
-      "resume": "Le gouvernement malien présente le bilan de cinq années de politiques de réconciliation nationale",
-      "detail": "Le bilan quinquennal met en avant des initiatives de cohésion sociale et de réforme judiciaire. Les résultats incluent des programmes de désarmement et de réintégration. Ces efforts pourraient contribuer à stabiliser certaines zones affectées par les conflits. Cependant, leur impact global reste limité dans les régions les plus instables. La pérennité de ces réformes dépendra des ressources allouées et de la volonté politique.",
-      "lieu": "Mali",
-      "lat": 16.3700359,
-      "lon": -2.2900239,
-      "implications": [
-        "Renforcement progressif de la gouvernance locale",
-        "Persistance des défis dans les zones rurales",
-        "Impact limité sur les groupes armés actifs"
-      ],
-      "recommandations": [
-        "Analyse des zones où les réformes ont eu le plus d'impact",
-        "Veille sur les financements dédiés à la réconciliation",
-        "Cartographie des zones encore instables"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-mali-2026-diaspora-economie-defis",
-      "date": "2026-07-11",
-      "theatre": "sahel",
-      "severite": "info",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/mali-2026-diaspora-economie-defis/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22746.jpg",
-      "titre": "Mali mise sur sa diaspora pour relancer son économie",
-      "resume": "Le Mali organise un forum en 2026 pour mobiliser sa diaspora dans la reprise économique",
-      "detail": "Face aux défis sécuritaires et économiques, le gouvernement mise sur les transferts financiers et l'investissement de la diaspora. Ce forum vise à créer des mécanismes de retour des capitaux et d'expertise. Les résultats dépendront de la capacité à sécuriser les investissements. Cette initiative pourrait diversifier les sources de financement mais comporte des risques de fuite des capitaux.",
-      "lieu": "Bamako, Mali",
-      "lat": 12.649319,
-      "lon": -8.000337,
-      "implications": [
-        "Nouveaux flux financiers potentiels vers le Mali",
-        "Risque de détournement des fonds vers des zones instables",
-        "Impact sur les politiques de change et de rapatriement"
-      ],
-      "recommandations": [
-        "Analyse des secteurs cibles pour les investissements de la diaspora",
-        "Cartographie des canaux de transfert sécurisés",
-        "Veille sur les incitations fiscales proposées"
-      ]
-    },
-    {
-      "id": "u-aljazeera-com-video-newsfeed-2026-7-10-iran-says-strikes-hit-southern-",
-      "date": "2026-07-10",
-      "theatre": "moyen-orient",
-      "severite": "critique",
-      "source": "Al Jazeera English",
-      "source_url": "https://www.aljazeera.com/video/newsfeed/2026/7/10/iran-says-strikes-hit-southern-areas-but-us-denies-it-carried-attacks?traffic_source=rss",
-      "image": "https://www.aljazeera.com/wp-content/uploads/2026/07/image-1783652738.jpg?resize=1301%2C1080&amp;quality=80",
-      "titre": "Frappes signalées en Iran, les États-Unis démentissent",
-      "resume": "Des frappes ont été rapportées dans la province de Bushehr et la ville de Konarak en Iran selon les médias d'État. Les États-Unis nient toute implication.",
-      "detail": "Les médias iraniens ont annoncé que des frappes ont ciblé des installations militaires dans le sud de l'Iran, notamment dans la province de Bushehr et la ville de Konarak. Les autorités américaines ont immédiatement démenti toute responsabilité, refusant de confirmer ou d'infirmer ces allégations. Une escalade verbale entre Téhéran et Washington pourrait s'ensuivre si les accusations persistent. La région de Bushehr est stratégique en raison de ses infrastructures énergétiques et militaires.",
-      "lieu": "Bushehr, Konarak, Iran",
-      "lat": null,
-      "lon": null,
-      "implications": [
-        "Risque d'escalade militaire régionale",
-        "Impact potentiel sur la stabilité énergétique",
-        "Possibilité de cyberattaques ou de représailles indirectes"
-      ],
-      "recommandations": [
-        "Surveiller les flux d'informations officiels iraniens et américains",
-        "Évaluer les risques pour les infrastructures stratégiques en Iran",
-        "Préparer des scénarios de crise en cas d'escalade"
-      ]
-    },
-    {
-      "id": "u-bamada-net-kayes-500-jeunes-formes-a-des-metiers-generateurs-de-revenu",
-      "date": "2026-07-10",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Bamada.net",
-      "source_url": "https://bamada.net/kayes-500-jeunes-formes-a-des-metiers-generateurs-de-revenus",
-      "image": "http://bamada.net/wp-content/uploads/2023/03/ville-Kayes-1.jpg",
-      "titre": "500 jeunes formés à des métiers générateurs de revenus à Kayes",
-      "resume": "Un projet de formation pour 500 jeunes à Kayes vise à renforcer leur employabilité dans des secteurs variés.",
-      "detail": "Le projet SIRA-KURA, lancé dans la région de Kayes, a formé 500 jeunes à des métiers comme la pâtisserie, la coupe-couture et la saponification. Cette initiative, soutenue par des acteurs locaux, pourrait réduire les tensions socio-économiques en offrant des alternatives à la radicalisation. Cependant, la durabilité de ces formations dépendra de l'accompagnement post-formation et de l'accès au marché du travail.",
-      "lieu": "Kayes, Mali",
-      "lat": 13.8001844,
-      "lon": -10.2245548,
-      "implications": [
-        "Potentiel de réduction de la radicalisation",
-        "Création d'opportunités économiques locales",
-        "Besoins de suivi des bénéficiaires après formation"
-      ],
-      "recommandations": [
-        "Évaluer l'impact à moyen terme des formations sur l'emploi local",
-        "Identifier les partenariats possibles avec des entreprises locales",
-        "Surveiller les indicateurs de radicalisation dans la région"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-uemoa-budget-2026-dette-sahel",
-      "date": "2026-07-10",
-      "theatre": "sahel",
-      "severite": "alerte",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/uemoa-budget-2026-dette-sahel/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22699.jpg",
-      "titre": "Budget 2026 de l'UEMOA adopté sous tension dette et souveraineté",
-      "resume": "L'UEMOA adopte son budget 2026 dans un contexte de dette publique élevée et de tensions géopolitiques avec l'Alliance des États du Sahel.",
-      "detail": "Le budget de l'UEMOA pour 2026 a été adopté malgré des désaccords persistants sur la gestion de la dette publique et les tensions avec l'Alliance des États du Sahel (AES). Les pays membres doivent concilier leurs besoins de financement avec les exigences des créanciers internationaux, ce qui pourrait limiter leur marge de manœuvre budgétaire. Cette situation aggrave les risques de crise économique et sociale dans la région.",
-      "lieu": "Sahel",
-      "lat": 14.0279165,
-      "lon": -0.7717776,
-      "implications": [
-        "Risque de crise économique régionale",
-        "Tensions accrues entre pays membres de l'UEMOA",
-        "Difficultés à financer des projets de développement"
-      ],
-      "recommandations": [
-        "Analyser les impacts des politiques budgétaires sur les pays les plus endettés",
-        "Évaluer les risques de défaut de paiement ou de restructuration de la dette",
-        "Surveiller les réactions des populations face aux mesures d'austérité"
-      ]
-    },
-    {
-      "id": "u-maliactu-net-captain-traore-7-priorites-strategiques-pour-le-burkina-f",
-      "date": "2026-07-09",
-      "theatre": "sahel",
-      "severite": "critique",
-      "source": "Mali Actu",
-      "source_url": "https://maliactu.net/captain-traore-7-priorites-strategiques-pour-le-burkina-faso-dans-laes/",
-      "image": "https://maliactu.net/wp-content/uploads/2026/07/maliactu-22645.jpg",
-      "titre": "Burkina Faso : 7 priorités stratégiques de Captain Traoré dans l'AES",
-      "resume": "Captain Traoré présente sept priorités stratégiques pour le Burkina Faso au sein de l'Alliance des États du Sahel.",
-      "detail": "L'Alliance des États du Sahel (AES) cherche à redéfinir la gouvernance et la sécurité régionale. Les sept priorités annoncées par Captain Traoré pourraient inclure des mesures de sécurité renforcées, une coopération économique accrue et une autonomie stratégique. Ces orientations visent à renforcer la résilience des États membres face aux défis sécuritaires et économiques.",
-      "lieu": "Burkina Faso",
-      "lat": 12.0753083,
-      "lon": -1.6880314,
-      "implications": [
-        "Renforcement de la coopération régionale",
-        "Impact potentiel sur les relations internationales",
-        "Adaptation des stratégies de sécurité"
-      ],
-      "recommandations": [
-        "Analyser les priorités stratégiques annoncées",
-        "Évaluer les implications régionales",
-        "Adapter les plans de coopération"
       ]
     }
   ]
