@@ -1,0 +1,302 @@
+{
+  "campagne": {
+    "id": "demo-lumiere-2026",
+    "nom": "Campagne anti-Société Lumière",
+    "client": "Société Lumière (fictif — cas démo anonymisé)",
+    "secteur": "Cosmétique / Grande consommation",
+    "date_debut": "2026-02-14",
+    "date_fin": "2026-04-10",
+    "publications_total": 27,
+    "comptes_total": 21,
+    "pays_implique": ["RU", "RO", "HU", "RS", "DE", "FR"],
+    "resume": "Vague de désinformation coordonnée alléguant la nocivité des produits du groupe, propagée par un réseau structuré originaire d'Europe de l'Est. Trois clusters identifiés. Patient zéro tracé à un forum russophone, 14 février 2026 à 03h12 UTC, soit environ 4h avant la première reprise francophone.",
+    "narratifs": [
+      "Allégations sanitaires fabriquées sur les produits (contamination, ingrédient toxique inventé)",
+      "Mise en cause personnelle d'un dirigeant via faux documents",
+      "Lien fabriqué avec une commande publique européenne controversée"
+    ],
+    "methodologie": "Reconstruction de la chaîne de diffusion par recoupement timestamp + analyse de similarité textuelle (n-grams) + traceback des reprises mot-pour-mot. Géolocalisation des comptes par signaux ouverts (fuseau horaire d'activité, langue, mentions, bio, plateformes utilisées). Inspiration méthodologique : rapports publics Viginum 2023-2025, DFRLab, EU DisinfoLab.",
+    "niveau_confiance_attribution": "Élevé (cluster Bucarest), Modéré (cluster Belgrade), Faible (origine RU exacte)"
+  },
+  "publications": [
+    {
+      "id": "p001", "url": "https://forum-anon-redacted.example/thread/49823", "plateforme": "forum",
+      "compte": "@anonyme_pivot", "compte_display": "anonyme_pivot (RU)",
+      "date": "2026-02-14T03:12:00Z", "lang": "ru", "pays": "RU", "ville": "Saint-Pétersbourg",
+      "lat": 59.9311, "lon": 30.3609,
+      "type": "patient_zero", "parent_id": null, "audience_estimee": 1200,
+      "content_excerpt": "Premier post du fil — allégation initiale de contamination. Texte source de toutes les reprises ultérieures (matched n-gram 8/8)."
+    },
+    {
+      "id": "p002", "url": "https://t.me/relai-news-ro-redacted/2391", "plateforme": "telegram",
+      "compte": "@relai_news_ro", "compte_display": "Relais News RO",
+      "date": "2026-02-14T07:48:00Z", "lang": "ro", "pays": "RO", "ville": "Bucarest",
+      "lat": 44.4268, "lon": 26.1025,
+      "type": "relai", "parent_id": "p001", "audience_estimee": 18400,
+      "content_excerpt": "Reprise en roumain ~4h30 après p001. Première occurrence en Europe."
+    },
+    {
+      "id": "p003", "url": "https://t.me/info-ro-24-redacted/8821", "plateforme": "telegram",
+      "compte": "@info_ro_24", "compte_display": "Info RO 24",
+      "date": "2026-02-14T08:21:00Z", "lang": "ro", "pays": "RO", "ville": "Bucarest",
+      "lat": 44.4396, "lon": 26.0963,
+      "type": "relai", "parent_id": "p002", "audience_estimee": 12700,
+      "content_excerpt": "Reprise quasi mot-pour-mot du canal précédent (similarité 94%)."
+    },
+    {
+      "id": "p004", "url": "https://t.me/news-ro-alt-redacted/441", "plateforme": "telegram",
+      "compte": "@news_ro_alt", "compte_display": "News RO Alternatif",
+      "date": "2026-02-14T09:02:00Z", "lang": "ro", "pays": "RO", "ville": "Bucarest",
+      "lat": 44.4501, "lon": 26.0876,
+      "type": "relai", "parent_id": "p002", "audience_estimee": 6800,
+      "content_excerpt": "Troisième relais du cluster Bucarest, même contenu."
+    },
+    {
+      "id": "p005", "url": "https://x.com/redacted-handle-hu/status/...", "plateforme": "x",
+      "compte": "@vesti_hu_x", "compte_display": "Vesti HU",
+      "date": "2026-02-14T11:14:00Z", "lang": "hu", "pays": "HU", "ville": "Budapest",
+      "lat": 47.4979, "lon": 19.0402,
+      "type": "relai", "parent_id": "p002", "audience_estimee": 9300,
+      "content_excerpt": "Traduction hongroise du contenu Bucarest. Premier saut linguistique."
+    },
+    {
+      "id": "p006", "url": "https://x.com/redacted-handle-hu2/status/...", "plateforme": "x",
+      "compte": "@hir_hu_24", "compte_display": "Hír HU 24",
+      "date": "2026-02-14T12:47:00Z", "lang": "hu", "pays": "HU", "ville": "Budapest",
+      "lat": 47.5081, "lon": 19.0563,
+      "type": "relai", "parent_id": "p005", "audience_estimee": 4100,
+      "content_excerpt": "Reprise interne au cluster Budapest."
+    },
+    {
+      "id": "p007", "url": "https://t.me/srpski-info-redacted/1102", "plateforme": "telegram",
+      "compte": "@srpski_info", "compte_display": "Srpski Info",
+      "date": "2026-02-14T15:38:00Z", "lang": "sr", "pays": "RS", "ville": "Belgrade",
+      "lat": 44.7866, "lon": 20.4489,
+      "type": "relai", "parent_id": "p002", "audience_estimee": 22100,
+      "content_excerpt": "Ouverture du cluster Belgrade, traduction serbe."
+    },
+    {
+      "id": "p008", "url": "https://t.me/srbija-news-redacted/779", "plateforme": "telegram",
+      "compte": "@srbija_news", "compte_display": "Srbija News",
+      "date": "2026-02-14T16:02:00Z", "lang": "sr", "pays": "RS", "ville": "Belgrade",
+      "lat": 44.8125, "lon": 20.4612,
+      "type": "relai", "parent_id": "p007", "audience_estimee": 11400,
+      "content_excerpt": "Cluster Belgrade — deuxième compte."
+    },
+    {
+      "id": "p009", "url": "https://x.com/redacted-handle-de/status/...", "plateforme": "x",
+      "compte": "@de_alt_news", "compte_display": "DE Alt News",
+      "date": "2026-02-15T08:30:00Z", "lang": "de", "pays": "DE", "ville": "Berlin",
+      "lat": 52.5200, "lon": 13.4050,
+      "type": "amplificateur", "parent_id": "p005", "audience_estimee": 31200,
+      "content_excerpt": "Premier saut hors Europe de l'Est. Reprise allemande avec adaptation du narratif sanitaire."
+    },
+    {
+      "id": "p010", "url": "https://x.com/redacted-handle-fr/status/...", "plateforme": "x",
+      "compte": "@actu_alternative_fr", "compte_display": "Actu Alternative FR",
+      "date": "2026-02-15T14:22:00Z", "lang": "fr", "pays": "FR", "ville": "Paris",
+      "lat": 48.8566, "lon": 2.3522,
+      "type": "amplificateur", "parent_id": "p009", "audience_estimee": 41700,
+      "content_excerpt": "Première reprise francophone, 35h après p001. Cible directe du client."
+    },
+    {
+      "id": "p011", "url": "https://x.com/redacted-handle-fr2/status/...", "plateforme": "x",
+      "compte": "@info_libre_fr", "compte_display": "Info Libre FR",
+      "date": "2026-02-15T18:11:00Z", "lang": "fr", "pays": "FR", "ville": "Lyon",
+      "lat": 45.7640, "lon": 4.8357,
+      "type": "amplificateur", "parent_id": "p010", "audience_estimee": 19600,
+      "content_excerpt": "Reprise francophone n°2."
+    },
+    {
+      "id": "p012", "url": "https://t.me/canal-fr-libre-redacted/331", "plateforme": "telegram",
+      "compte": "@canal_fr_libre", "compte_display": "Canal FR Libre",
+      "date": "2026-02-16T09:45:00Z", "lang": "fr", "pays": "FR", "ville": "Marseille",
+      "lat": 43.2965, "lon": 5.3698,
+      "type": "amplificateur", "parent_id": "p010", "audience_estimee": 8200,
+      "content_excerpt": "Diffusion Telegram FR."
+    },
+    {
+      "id": "p013", "url": "https://faux-journal-redacted.example/article/sante-22", "plateforme": "site_copie",
+      "compte": "site-copie-lemonde-faux", "compte_display": "Faux site mimant un grand média FR",
+      "date": "2026-02-17T11:00:00Z", "lang": "fr", "pays": "FR", "ville": "Inconnu (hébergement RU)",
+      "lat": 55.7558, "lon": 37.6173,
+      "type": "site_copie", "parent_id": "p010", "audience_estimee": 6500,
+      "content_excerpt": "Site mimant la charte d'un grand média FR. Hébergement Moscou (résolution DNS)."
+    },
+    {
+      "id": "p014", "url": "https://x.com/redacted-amp-fr3/status/...", "plateforme": "x",
+      "compte": "@verite_eu", "compte_display": "Vérité EU",
+      "date": "2026-02-17T15:30:00Z", "lang": "fr", "pays": "FR", "ville": "Toulouse",
+      "lat": 43.6047, "lon": 1.4442,
+      "type": "amplificateur", "parent_id": "p013", "audience_estimee": 12300,
+      "content_excerpt": "Pic de visibilité (40k impressions). Cite le faux site comme source."
+    },
+    {
+      "id": "p015", "url": "https://x.com/redacted-amp-fr4/status/...", "plateforme": "x",
+      "compte": "@reveil_citoyen", "compte_display": "Réveil Citoyen",
+      "date": "2026-02-18T10:14:00Z", "lang": "fr", "pays": "FR", "ville": "Bordeaux",
+      "lat": 44.8378, "lon": -0.5792,
+      "type": "amplificateur", "parent_id": "p014", "audience_estimee": 27400,
+      "content_excerpt": "Amplification en cascade."
+    },
+    {
+      "id": "p016", "url": "https://t.me/news-ro-alt-redacted/452", "plateforme": "telegram",
+      "compte": "@news_ro_alt", "compte_display": "News RO Alternatif",
+      "date": "2026-02-20T07:00:00Z", "lang": "ro", "pays": "RO", "ville": "Bucarest",
+      "lat": 44.4501, "lon": 26.0876,
+      "type": "relai", "parent_id": "p002", "audience_estimee": 5900,
+      "content_excerpt": "Second narratif : mise en cause personnelle du dirigeant. Faux documents joints."
+    },
+    {
+      "id": "p017", "url": "https://x.com/redacted-handle-de2/status/...", "plateforme": "x",
+      "compte": "@de_alt_news", "compte_display": "DE Alt News",
+      "date": "2026-02-21T12:00:00Z", "lang": "de", "pays": "DE", "ville": "Berlin",
+      "lat": 52.5200, "lon": 13.4050,
+      "type": "amplificateur", "parent_id": "p016", "audience_estimee": 18800,
+      "content_excerpt": "Reprise du second narratif en allemand."
+    },
+    {
+      "id": "p018", "url": "https://x.com/redacted-handle-fr5/status/...", "plateforme": "x",
+      "compte": "@actu_alternative_fr", "compte_display": "Actu Alternative FR",
+      "date": "2026-02-22T09:30:00Z", "lang": "fr", "pays": "FR", "ville": "Paris",
+      "lat": 48.8566, "lon": 2.3522,
+      "type": "amplificateur", "parent_id": "p017", "audience_estimee": 33500,
+      "content_excerpt": "Reprise FR du second narratif."
+    },
+    {
+      "id": "p019", "url": "https://faux-journal-redacted.example/article/dirigeant-19", "plateforme": "site_copie",
+      "compte": "site-copie-lemonde-faux", "compte_display": "Faux site mimant un grand média FR",
+      "date": "2026-02-24T14:00:00Z", "lang": "fr", "pays": "FR", "ville": "Inconnu (hébergement RU)",
+      "lat": 55.7558, "lon": 37.6173,
+      "type": "site_copie", "parent_id": "p018", "audience_estimee": 9100,
+      "content_excerpt": "Article fabriqué reprenant le second narratif. Mêmes signatures de template que p013."
+    },
+    {
+      "id": "p020", "url": "https://t.me/srpski-info-redacted/1145", "plateforme": "telegram",
+      "compte": "@srpski_info", "compte_display": "Srpski Info",
+      "date": "2026-03-02T08:00:00Z", "lang": "sr", "pays": "RS", "ville": "Belgrade",
+      "lat": 44.7866, "lon": 20.4489,
+      "type": "relai", "parent_id": "p007", "audience_estimee": 14600,
+      "content_excerpt": "Troisième narratif : prétendu lien avec une commande publique européenne."
+    },
+    {
+      "id": "p021", "url": "https://x.com/redacted-handle-fr6/status/...", "plateforme": "x",
+      "compte": "@info_libre_fr", "compte_display": "Info Libre FR",
+      "date": "2026-03-03T16:42:00Z", "lang": "fr", "pays": "FR", "ville": "Lyon",
+      "lat": 45.7640, "lon": 4.8357,
+      "type": "amplificateur", "parent_id": "p020", "audience_estimee": 22100,
+      "content_excerpt": "Reprise FR du troisième narratif."
+    },
+    {
+      "id": "p022", "url": "https://x.com/redacted-handle-fr7/status/...", "plateforme": "x",
+      "compte": "@verite_eu", "compte_display": "Vérité EU",
+      "date": "2026-03-04T11:18:00Z", "lang": "fr", "pays": "FR", "ville": "Toulouse",
+      "lat": 43.6047, "lon": 1.4442,
+      "type": "amplificateur", "parent_id": "p021", "audience_estimee": 15200,
+      "content_excerpt": "Continuation amplification."
+    },
+    {
+      "id": "p023", "url": "https://x.com/redacted-handle-fr8/status/...", "plateforme": "x",
+      "compte": "@reveil_citoyen", "compte_display": "Réveil Citoyen",
+      "date": "2026-03-08T09:00:00Z", "lang": "fr", "pays": "FR", "ville": "Bordeaux",
+      "lat": 44.8378, "lon": -0.5792,
+      "type": "amplificateur", "parent_id": "p022", "audience_estimee": 19800,
+      "content_excerpt": "Pic d'amplification mi-campagne."
+    },
+    {
+      "id": "p024", "url": "https://t.me/info-ro-24-redacted/8902", "plateforme": "telegram",
+      "compte": "@info_ro_24", "compte_display": "Info RO 24",
+      "date": "2026-03-15T07:30:00Z", "lang": "ro", "pays": "RO", "ville": "Bucarest",
+      "lat": 44.4396, "lon": 26.0963,
+      "type": "relai", "parent_id": "p002", "audience_estimee": 7800,
+      "content_excerpt": "Relance du premier narratif après 3 semaines."
+    },
+    {
+      "id": "p025", "url": "https://x.com/redacted-handle-fr9/status/...", "plateforme": "x",
+      "compte": "@actu_alternative_fr", "compte_display": "Actu Alternative FR",
+      "date": "2026-03-16T14:15:00Z", "lang": "fr", "pays": "FR", "ville": "Paris",
+      "lat": 48.8566, "lon": 2.3522,
+      "type": "amplificateur", "parent_id": "p024", "audience_estimee": 28700,
+      "content_excerpt": "Relance FR coordonnée."
+    },
+    {
+      "id": "p026", "url": "https://faux-journal-redacted.example/article/sante-relance", "plateforme": "site_copie",
+      "compte": "site-copie-lemonde-faux", "compte_display": "Faux site mimant un grand média FR",
+      "date": "2026-03-20T10:00:00Z", "lang": "fr", "pays": "FR", "ville": "Inconnu (hébergement RU)",
+      "lat": 55.7558, "lon": 37.6173,
+      "type": "site_copie", "parent_id": "p025", "audience_estimee": 5400,
+      "content_excerpt": "Troisième article du faux média. Template identique aux deux précédents."
+    },
+    {
+      "id": "p027", "url": "https://x.com/redacted-handle-fr10/status/...", "plateforme": "x",
+      "compte": "@reveil_citoyen", "compte_display": "Réveil Citoyen",
+      "date": "2026-04-08T18:30:00Z", "lang": "fr", "pays": "FR", "ville": "Bordeaux",
+      "lat": 44.8378, "lon": -0.5792,
+      "type": "amplificateur", "parent_id": "p026", "audience_estimee": 12200,
+      "content_excerpt": "Dernier sursaut, faible audience. Fin de campagne."
+    }
+  ],
+  "patient_zero": "p001",
+  "reseaux": [
+    {
+      "id": "cluster-bucarest",
+      "nom": "Cluster Bucarest",
+      "comptes": ["@relai_news_ro", "@info_ro_24", "@news_ro_alt"],
+      "publications": ["p002", "p003", "p004", "p016", "p024"],
+      "pays_estime": "Roumanie",
+      "niveau_confiance": "Élevé",
+      "couleur": "#e0b452",
+      "notes": "Cluster le mieux documenté. 3 comptes coordonnés. Activité quotidienne, fuseau UTC+2/+3. Premiers relais hors RU."
+    },
+    {
+      "id": "cluster-budapest",
+      "nom": "Cluster Budapest",
+      "comptes": ["@vesti_hu_x", "@hir_hu_24"],
+      "publications": ["p005", "p006"],
+      "pays_estime": "Hongrie",
+      "niveau_confiance": "Modéré",
+      "couleur": "#4fb8cc",
+      "notes": "Pont linguistique vers DE."
+    },
+    {
+      "id": "cluster-belgrade",
+      "nom": "Cluster Belgrade",
+      "comptes": ["@srpski_info", "@srbija_news"],
+      "publications": ["p007", "p008", "p020"],
+      "pays_estime": "Serbie",
+      "niveau_confiance": "Modéré",
+      "couleur": "#c94a4a",
+      "notes": "Cluster secondaire. Activé pour le 3ème narratif."
+    },
+    {
+      "id": "amplificateurs-fr",
+      "nom": "Amplificateurs francophones",
+      "comptes": ["@actu_alternative_fr", "@info_libre_fr", "@canal_fr_libre", "@verite_eu", "@reveil_citoyen"],
+      "publications": ["p010", "p011", "p012", "p014", "p015", "p018", "p021", "p022", "p023", "p025", "p027"],
+      "pays_estime": "France (audience cible)",
+      "niveau_confiance": "Faible (origine réelle indéterminée)",
+      "couleur": "#5a9a5f",
+      "notes": "Comptes francophones. Pas de preuve qu'ils sont coordonnés avec les clusters Est ; comportement compatible avec un public relais convaincu."
+    },
+    {
+      "id": "sites-copie",
+      "nom": "Sites copie (faux médias)",
+      "comptes": ["site-copie-lemonde-faux"],
+      "publications": ["p013", "p019", "p026"],
+      "pays_estime": "Hébergement RU",
+      "niveau_confiance": "Élevé (template identique × 3)",
+      "couleur": "#a84040",
+      "notes": "Trois articles, même template, même hébergement, même signature CMS. Inspiré du dispositif documenté sous le nom 'Doppelganger' par les services européens."
+    },
+    {
+      "id": "patient-zero",
+      "nom": "Patient zéro",
+      "comptes": ["@anonyme_pivot"],
+      "publications": ["p001"],
+      "pays_estime": "Russie (forum russophone)",
+      "niveau_confiance": "Élevé (timestamp + textuel)",
+      "couleur": "#e0b452",
+      "notes": "Premier post horodaté. Texte source de toutes les reprises ultérieures. Identité de l'auteur non attribuable individuellement."
+    }
+  ]
+}

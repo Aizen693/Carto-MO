@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · Projet Cartographie</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FFFFFF;--bg2:#F5F3FA;--card:#FFFFFF;--card2:#F1EDF7;
+  --border:rgba(24,20,40,0.12);--accent:#6B3FA0;--accent2:#5A2F8C;
+  --text:#181428;--muted:#6E6982;
+  --success:#2F8A6B;--danger:#B83A4A;--warn:#C97E2A;--info:#2E6FB8;
+  --radius:8px;
+  font-family:'Plus Jakarta Sans','Segoe UI',Arial,sans-serif;font-size:14px;color:var(--text);
+}
+body{background:var(--bg);min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+input,select,textarea{background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:8px 12px;font-size:13px;width:100%;outline:none;transition:border .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+select option{background:var(--card)}
+button{cursor:pointer;font-size:13px;border:none;border-radius:var(--radius);padding:8px 16px;transition:all .15s}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+#header{background:var(--card);border-bottom:2px solid var(--accent);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+#header h1{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase}
+#header .sub{font-size:11px;color:var(--muted);margin-top:2px}
+.header-right{display:flex;align-items:center;gap:10px}
+#badge-sync{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid var(--border);background:var(--bg2);color:var(--muted);transition:all .3s}
+#badge-sync.connected{background:rgba(47,138,107,.12);color:#2F8A6B;border-color:rgba(47,138,107,.35)}
+#badge-sync.connecting{background:rgba(201,126,42,.12);color:var(--warn);border-color:rgba(201,126,42,.35)}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
+.dot-off{background:var(--muted)}.dot-on{background:#2F8A6B;box-shadow:0 0 6px rgba(47,138,107,.6);animation:pulse 2s infinite}.dot-warn{background:var(--warn)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+#btn-settings{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-size:16px}
+#btn-settings:hover{border-color:var(--accent);color:var(--accent)}
+.btn-hdr{background:var(--bg2);border:1px solid var(--border);color:var(--muted);font-size:12px}
+.btn-hdr:hover{border-color:var(--accent);color:var(--accent)}
+#tabs{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;padding:0 24px;gap:2px;position:sticky;top:56px;z-index:90;overflow-x:auto}
+.tab-btn{background:transparent;color:var(--muted);padding:0 18px;height:48px;border-radius:0;border-bottom:3px solid transparent;font-size:13px;font-weight:600;letter-spacing:.3px;white-space:nowrap}
+.tab-btn:hover{color:var(--text);background:rgba(107,63,160,.06)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.panel{display:none;padding:24px;overflow-y:auto;max-height:calc(100vh - 104px)}
+.panel.active{display:block}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-title .count{background:var(--accent);color:#FFFFFF;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700}
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.toolbar select,.toolbar input[type=text]{max-width:220px;width:auto}
+.btn-primary{background:var(--accent);color:#FFFFFF;font-weight:700}.btn-primary:hover{background:var(--accent2)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:transparent;border:1px solid var(--danger);color:var(--danger)}.btn-danger:hover{background:var(--danger);color:#fff}
+.btn-sm{padding:5px 10px;font-size:11px}
+.tbl-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;min-width:900px}
+thead th{background:var(--bg2);padding:10px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);border-bottom:2px solid var(--accent);white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+tbody tr:nth-child(even){background:rgba(107,63,160,.03)}
+tbody tr:hover{background:rgba(107,63,160,.07)}
+tbody td{padding:9px 12px;font-size:12px;vertical-align:middle}
+.cell-wrap{max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap}
+.chip-theme{background:rgba(107,63,160,.10);color:#6B3FA0;border:1px solid rgba(107,63,160,.22)}
+.chip-A,.chip-1{background:rgba(47,138,107,.12);color:#1f7a52;border:1px solid rgba(47,138,107,.30)}
+.chip-B,.chip-2{background:rgba(47,138,107,.10);color:#2F8A6B;border:1px solid rgba(47,138,107,.26)}
+.chip-C,.chip-3{background:rgba(201,126,42,.12);color:#a86a1f;border:1px solid rgba(201,126,42,.30)}
+.chip-D,.chip-4{background:rgba(201,126,42,.16);color:#945a12;border:1px solid rgba(201,126,42,.32)}
+.chip-E,.chip-5{background:rgba(184,58,74,.12);color:#B83A4A;border:1px solid rgba(184,58,74,.30)}
+.chip-F,.chip-6{background:var(--card2);color:var(--muted);border:1px solid var(--border)}
+.chip-pdf{background:rgba(184,58,74,.12);color:#B83A4A;border:1px solid rgba(184,58,74,.30)}
+.chip-status-0{background:rgba(107,63,160,.10);color:var(--accent)}
+.chip-status-1{background:rgba(47,138,107,.12);color:#2F8A6B}
+.chip-status-2{background:rgba(184,58,74,.12);color:#B83A4A}
+.chip-status-3{background:rgba(46,111,184,.12);color:#2E6FB8}
+.chip-status-4{background:var(--card2);color:var(--muted)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(20,14,40,.55);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:12px;width:90%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px -20px rgba(46,24,87,.30)}
+.modal-header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-size:15px;font-weight:700;color:var(--accent)}
+.modal-close{background:transparent;border:none;color:var(--muted);font-size:20px;padding:4px 8px}.modal-close:hover{color:var(--text)}
+.modal-body{padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.modal-body .full{grid-column:1/-1}
+.modal-footer{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:500;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--success);padding:12px 18px;border-radius:var(--radius);font-size:13px;box-shadow:0 8px 24px -8px rgba(24,20,40,.18);animation:slideIn .2s ease}
+.toast.err{border-left-color:var(--danger)}.toast.info{border-left-color:var(--info)}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+.timeline{display:flex;flex-direction:column}
+.tl-item{display:flex;gap:16px}
+.tl-line{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
+.tl-dot{width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);margin-top:4px;flex-shrink:0}
+.tl-bar{width:2px;background:var(--border);flex:1;min-height:20px}
+.tl-item:last-child .tl-bar{display:none}
+.tl-content{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;flex:1;margin-bottom:12px;box-shadow:0 1px 0 rgba(24,20,40,.03),0 6px 18px -12px rgba(24,20,40,.10)}
+.tl-meta{font-size:11px;color:var(--muted);margin-bottom:6px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.tl-text{font-size:13px;line-height:1.5}
+.tl-action{font-size:12px;color:var(--accent);margin-top:6px;font-style:italic}
+.collab-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:900px){.collab-grid{grid-template-columns:1fr}}
+.note-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 0 rgba(24,20,40,.03),0 6px 18px -12px rgba(24,20,40,.10)}
+.note-card .nc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.note-card .nc-title{font-weight:700;font-size:13px;color:var(--accent)}
+.note-card .nc-body{font-size:12px;line-height:1.6}
+.note-card .nc-meta{font-size:11px;color:var(--muted);margin-top:8px;border-top:1px solid var(--border);padding-top:6px}
+.map-link-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;box-shadow:0 1px 0 rgba(24,20,40,.03),0 8px 24px -12px rgba(24,20,40,.12)}
+.theme-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px}
+.ts-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 0 rgba(24,20,40,.03),0 6px 18px -12px rgba(24,20,40,.10)}
+.ts-name{font-size:12px;font-weight:700}.ts-count{font-size:11px;color:var(--muted)}.ts-num{font-size:22px;font-weight:700;color:var(--accent);margin-left:auto}
+.settings-section{margin-bottom:24px}
+.settings-section h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.settings-row{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.fb-status{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--radius);font-size:12px;font-weight:600;margin-bottom:12px;border:1px solid}
+.fb-off{background:var(--card2);color:var(--muted);border-color:var(--border)}
+.fb-on{background:rgba(47,138,107,.10);color:#2F8A6B;border-color:rgba(47,138,107,.30)}
+.setup-steps{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;gap:12px;align-items:flex-start;padding:10px;background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border)}
+.step-num{background:var(--accent);color:#FFFFFF;font-weight:700;font-size:11px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-text{font-size:12px;line-height:1.6}.step-text strong{color:var(--accent)}
+.code{font-family:'JetBrains Mono',monospace;background:var(--bg2);border:1px solid var(--border);padding:2px 6px;border-radius:4px;font-size:11px;color:#1f7a52}
+.empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
+.empty-state .icon{font-size:40px;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <h1>Cloud</h1>
+    <div class="sub">Plateforme collaborative d'analyse &amp; renseignement</div>
+  </div>
+  <div class="header-right">
+    <button class="btn-hdr btn-sm" onclick="location.href='/#console'">← Retour console</button>
+    <span id="badge-sync"><span class="dot dot-off" id="dot-sync"></span><span id="badge-text">Stockage local</span></span>
+    <button class="btn-hdr btn-sm" onclick="exportAll()">⬇ Exporter</button>
+    <button class="btn-hdr btn-sm" onclick="document.getElementById('import-input').click()">⬆ Importer</button>
+    <input type="file" id="import-input" accept=".json" style="display:none" onchange="importAll(event)">
+    <button id="btn-settings" onclick="openModal('modal-settings')">⚙</button>
+  </div>
+</div>
+
+<div id="tabs">
+  <button class="tab-btn active" onclick="switchTab('sources',this)">📚 Base de Sources</button>
+  <button class="tab-btn" onclick="switchTab('docs',this)">📁 Banque Documents</button>
+  <button class="tab-btn" onclick="switchTab('client',this)">📋 Suivi Client</button>
+  <button class="tab-btn" onclick="switchTab('collab',this)">💬 Collaboratif</button>
+  <button class="tab-btn" onclick="switchTab('map',this)">🗺️ Cartographie</button>
+</div>
+
+<div class="panel active" id="panel-sources">
+  <div class="section-title">Base de Sources <span class="count" id="count-sources">0</span></div>
+  <div class="toolbar">
+    <button class="btn-primary" onclick="openAddSource()">+ Ajouter une source</button>
+    <select id="filter-theme-src" onchange="renderSources()">
+      <option value="">Toutes thématiques</option>
+      <option>Ethnies &amp; sous-groupes</option><option>Forces en présence</option>
+      <option>Points d'eau</option><option>Population &amp; mobilités</option>
+      <option>Ressources minières</option><option>Infrastructures &amp; axes</option>
+      <option>Événements sécuritaires</option><option>Flux &amp; trafics</option>
+    </select>
+    <select id="filter-fiab" onchange="renderSources()">
+      <option value="">Toute fiabilité</option>
+      <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+      <option value="D">D</option><option value="E">E</option><option value="F">F</option>
+    </select>
+    <input type="text" id="filter-search-src" placeholder="Rechercher titre, pays, mots-clés…" style="max-width:260px" oninput="renderSources()">
+  </div>
+  <div class="tbl-wrap">
+    <table><thead><tr>
+      <th style="width:36px">N°</th><th>Thématique</th><th>Date surv.</th><th>Date pub.</th>
+      <th>Type source</th><th>Fiab.</th><th>Vér.</th><th>Pays</th>
+      <th>Titre</th><th>URL</th><th>PDF</th><th>Mots-clés</th><th>Par</th><th style="width:70px">Actions</th>
+    </tr></thead><tbody id="tbody-sources"></tbody></table>
+  </div>
+</div>
+
+<div class="panel" id="panel-docs">
+  <div class="section-title">Banque de Documents <span class="count" id="count-docs">0</span></div>
+  <div class="toolbar">
+    <button class="btn-primary" onclick="openAddDoc()">+ Référencer un document</button>
+    <select id="filter-theme-doc" onchange="renderDocs()">
+      <option value="">Toutes thématiques</option>
+      <option>Ethnies &amp; sous-groupes</option><option>Forces en présence</option>
+      <option>Points d'eau</option><option>Population &amp; mobilités</option>
+      <option>Ressources minières</option><option>Infrastructures &amp; axes</option>
+      <option>Événements sécuritaires</option><option>Flux &amp; trafics</option>
+    </select>
+    <select id="filter-format" onchange="renderDocs()">
+      <option value="">Tous formats</option>
+      <option>PDF</option><option>DOCX</option><option>XLSX</option><option>SHP / GeoJSON</option><option>Image</option><option>Autre</option>
+    </select>
+    <input type="text" id="filter-search-doc" placeholder="Rechercher…" style="max-width:220px" oninput="renderDocs()">
+  </div>
+  <div class="tbl-wrap">
+    <table><thead><tr>
+      <th style="width:36px">N°</th><th>Thématique</th><th>Titre</th><th>Date doc</th>
+      <th>Description</th><th>Lien</th><th>Format</th><th>Ajouté par</th><th>Date ajout</th><th style="width:60px">Suppr.</th>
+    </tr></thead><tbody id="tbody-docs"></tbody></table>
+  </div>
+</div>
+
+<div class="panel" id="panel-client">
+  <div class="section-title">Suivi Client <span class="count" id="count-client">0</span></div>
+  <div class="toolbar">
+    <button class="btn-primary" onclick="openAddClient()">+ Ajouter une interaction</button>
+    <select id="filter-type-client" onchange="renderClient()">
+      <option value="">Tous types</option>
+      <option>Prise de contact initiale</option><option>Relance</option><option>Retour client</option>
+      <option>Réunion</option><option>Livraison</option><option>Validation</option><option>Autre</option>
+    </select>
+    <select id="filter-statut-client" onchange="renderClient()">
+      <option value="">Tous statuts</option>
+      <option>En attente</option><option>En cours</option><option>Traité</option><option>Action requise</option><option>Bloqué</option>
+    </select>
+  </div>
+  <div class="timeline" id="timeline-client"></div>
+</div>
+
+<div class="panel" id="panel-collab">
+  <div class="collab-grid">
+    <div>
+      <div class="section-title">Comptes rendus <span class="count" id="count-cr">0</span></div>
+      <button class="btn-primary btn-sm" style="margin-bottom:14px" onclick="openAddCR()">+ Ajouter un CR</button>
+      <div id="list-cr"></div>
+    </div>
+    <div>
+      <div class="section-title">Informations générales <span class="count" id="count-info">0</span></div>
+      <button class="btn-primary btn-sm" style="margin-bottom:14px" onclick="openAddInfo()">+ Publier une info</button>
+      <div id="list-info"></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="panel-map">
+  <div class="section-title">Accès à la carte</div>
+  <div class="map-link-card">
+    <div style="font-size:32px">🗺️</div>
+    <div>
+      <div style="font-weight:700;font-size:14px;color:var(--accent)" id="map-platform-lbl">Aucune carte configurée</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px" id="map-url-lbl">Configurez le lien dans les paramètres ⚙</div>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn-primary btn-sm" id="btn-open-map" style="display:none" onclick="openMap()">Ouvrir ↗</button>
+      <button class="btn-ghost btn-sm" onclick="openModal('modal-settings')">Configurer ⚙</button>
+    </div>
+  </div>
+  <div class="section-title">Sources par thématique</div>
+  <div class="theme-stats" id="theme-stats"></div>
+  <div class="section-title">Synthèses &amp; Analyses <span class="count" id="count-analyses">0</span></div>
+  <div class="toolbar">
+    <button class="btn-primary" onclick="openAddAnalyse()">+ Ajouter une synthèse</button>
+    <select id="filter-theme-analyse" onchange="renderAnalyses()">
+      <option value="">Toutes thématiques</option>
+      <option>Ethnies &amp; sous-groupes</option><option>Forces en présence</option>
+      <option>Points d'eau</option><option>Population &amp; mobilités</option>
+      <option>Ressources minières</option><option>Infrastructures &amp; axes</option>
+      <option>Événements sécuritaires</option><option>Flux &amp; trafics</option>
+    </select>
+  </div>
+  <div id="list-analyses"></div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-source">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="modal-source-title">Nouvelle source</div><button class="modal-close" onclick="closeModal('modal-source')">✕</button></div>
+    <div class="modal-body">
+      <div><label>Thématique *</label><select id="f-src-theme"><option value="">— Sélectionner —</option><option>Ethnies &amp; sous-groupes</option><option>Forces en présence</option><option>Points d'eau</option><option>Population &amp; mobilités</option><option>Ressources minières</option><option>Infrastructures &amp; axes</option><option>Événements sécuritaires</option><option>Flux &amp; trafics</option></select></div>
+      <div><label>Type de source</label><select id="f-src-type"><option value="">— Sélectionner —</option><option>Rapport officiel</option><option>Article de presse</option><option>Document ONG/OING</option><option>Rapport militaire</option><option>Source HUMINT</option><option>Données satellitaires</option><option>Carte / SIG</option><option>Base de données</option><option>Autre</option></select></div>
+      <div><label>Date de survenue</label><input type="date" id="f-src-dsurv"></div>
+      <div><label>Date de publication</label><input type="date" id="f-src-dpub"></div>
+      <div><label>Fiabilité (OTAN A–F)</label><select id="f-src-fiab"><option value="">— Sélectionner —</option><option value="A">A – Totalement fiable</option><option value="B">B – Généralement fiable</option><option value="C">C – Assez fiable</option><option value="D">D – Difficilement crédible</option><option value="E">E – Non fiable</option><option value="F">F – Non évaluable</option></select></div>
+      <div><label>Véracité (OTAN 1–6)</label><select id="f-src-ver"><option value="">— Sélectionner —</option><option value="1">1 – Confirmé</option><option value="2">2 – Probablement vrai</option><option value="3">3 – Peut-être vrai</option><option value="4">4 – Douteux</option><option value="5">5 – Improbable</option><option value="6">6 – Non évaluable</option></select></div>
+      <div><label>Pays concerné(s)</label><input type="text" id="f-src-pays" placeholder="ex: Mali, Niger"></div>
+      <div><label>PDF disponible</label><select id="f-src-pdf"><option value="">Non</option><option value="Oui">Oui</option></select></div>
+      <div class="full"><label>Titre *</label><input type="text" id="f-src-titre"></div>
+      <div class="full"><label>URL source</label><input type="url" id="f-src-url" placeholder="https://"></div>
+      <div class="full"><label>Résumé factuel</label><textarea id="f-src-resume" rows="3"></textarea></div>
+      <div class="full"><label>Mots-clés</label><input type="text" id="f-src-kw" placeholder="mot1, mot2, mot3"></div>
+      <div><label>Ajouté par</label><select id="f-src-by"><option value="">—</option><option>Eva</option><option>Laurent</option><option>Serge</option><option>Gaspar</option><option>Thifaine</option></select></div>
+    </div>
+    <div class="modal-footer"><button class="btn-ghost" onclick="closeModal('modal-source')">Annuler</button><button class="btn-primary" onclick="saveSource()">Enregistrer</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-doc">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Référencer un document</div><button class="modal-close" onclick="closeModal('modal-doc')">✕</button></div>
+    <div class="modal-body">
+      <div><label>Thématique *</label><select id="f-doc-theme"><option value="">—</option><option>Ethnies &amp; sous-groupes</option><option>Forces en présence</option><option>Points d'eau</option><option>Population &amp; mobilités</option><option>Ressources minières</option><option>Infrastructures &amp; axes</option><option>Événements sécuritaires</option><option>Flux &amp; trafics</option></select></div>
+      <div><label>Format</label><select id="f-doc-format"><option value="">—</option><option>PDF</option><option>DOCX</option><option>XLSX</option><option>SHP / GeoJSON</option><option>Image</option><option>Autre</option></select></div>
+      <div class="full"><label>Titre *</label><input type="text" id="f-doc-titre"></div>
+      <div><label>Date du document</label><input type="date" id="f-doc-date"></div>
+      <div><label>Ajouté par</label><select id="f-doc-by"><option value="">—</option><option>Eva</option><option>Laurent</option><option>Serge</option><option>Gaspar</option><option>Thifaine</option></select></div>
+      <div class="full"><label>Description</label><textarea id="f-doc-desc" rows="2"></textarea></div>
+      <div class="full"><label>Lien / Chemin d'accès</label><input type="text" id="f-doc-lien" placeholder="https:// ou chemin réseau"></div>
+    </div>
+    <div class="modal-footer"><button class="btn-ghost" onclick="closeModal('modal-doc')">Annuler</button><button class="btn-primary" onclick="saveDoc()">Enregistrer</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-client">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Nouvelle interaction client</div><button class="modal-close" onclick="closeModal('modal-client')">✕</button></div>
+    <div class="modal-body">
+      <div><label>Date *</label><input type="date" id="f-cl-date"></div>
+      <div><label>Type</label><select id="f-cl-type"><option value="">—</option><option>Prise de contact initiale</option><option>Relance</option><option>Retour client</option><option>Réunion</option><option>Livraison</option><option>Validation</option><option>Autre</option></select></div>
+      <div><label>Interlocuteur client</label><input type="text" id="f-cl-inter" placeholder="Nom / fonction"></div>
+      <div><label>Responsable équipe</label><select id="f-cl-resp"><option value="">—</option><option>Eva</option><option>Laurent</option><option>Serge</option><option>Gaspar</option><option>Thifaine</option></select></div>
+      <div><label>Statut</label><select id="f-cl-statut"><option>En attente</option><option>En cours</option><option>Traité</option><option>Action requise</option><option>Bloqué</option></select></div>
+      <div><label>Deadline</label><input type="date" id="f-cl-dead"></div>
+      <div class="full"><label>Contenu / Résumé *</label><textarea id="f-cl-contenu" rows="3"></textarea></div>
+      <div class="full"><label>Action suivante</label><input type="text" id="f-cl-action"></div>
+    </div>
+    <div class="modal-footer"><button class="btn-ghost" onclick="closeModal('modal-client')">Annuler</button><button class="btn-primary" onclick="saveClient()">Enregistrer</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cr">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Compte rendu de réunion</div><button class="modal-close" onclick="closeModal('modal-cr')">✕</button></div>
+    <div class="modal-body">
+      <div><label>Date *</label><input type="date" id="f-cr-date"></div>
+      <div><label>Participants</label><input type="text" id="f-cr-part"></div>
+      <div class="full"><label>Points clés *</label><textarea id="f-cr-points" rows="3"></textarea></div>
+      <div class="full"><label>Décisions prises</label><textarea id="f-cr-dec" rows="2"></textarea></div>
+      <div class="full"><label>Actions / Responsables</label><textarea id="f-cr-actions" rows="2"></textarea></div>
+      <div><label>Deadline</label><input type="date" id="f-cr-dead"></div>
+      <div><label>Rédigé par</label><select id="f-cr-by"><option value="">—</option><option>Eva</option><option>Laurent</option><option>Serge</option><option>Gaspar</option><option>Thifaine</option></select></div>
+    </div>
+    <div class="modal-footer"><button class="btn-ghost" onclick="closeModal('modal-cr')">Annuler</button><button class="btn-primary" onclick="saveCR()">Enregistrer</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-info">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Nouvelle information</div><button class="modal-close" onclick="closeModal('modal-info')">✕</button></div>
+    <div class="modal-body">
+      <div><label>Date *</label><input type="date" id="f-info-date"></div>
+      <div><label>Posté par</label><select id="f-info-by"><option value="">—</option><option>Eva</option><option>Laurent</option><option>Serge</option><option>Gaspar</option><option>Thifaine</option></select></div>
+      <div class="full"><label>Sujet *</label><input type="text" id="f-info-sujet"></div>
+      <div class="full"><label>Contenu *</label><textarea id="f-info-contenu" rows="4"></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn-ghost" onclick="closeModal('modal-info')">Annuler</button><button class="btn-primary" onclick="saveInfo()">Enregistrer</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-analyse">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Nouvelle synthèse</div><button class="modal-close" onclick="closeModal('modal-analyse')">✕</button></div>
+    <div class="modal-body">
+      <div><label>Thématique</label><select id="f-an-theme"><option value="">—</option><option>Ethnies &amp; sous-groupes</option><option>Forces en présence</option><option>Points d'eau</option><option>Population &amp; mobilités</option><option>Ressources minières</option><option>Infrastructures &amp; axes</option><option>Événements sécuritaires</option><option>Flux &amp; trafics</option></select></div>
+      <div><label>Auteur</label><select id="f-an-by"><option value="">—</option><option>Eva</option><option>Laurent</option><option>Serge</option><option>Gaspar</option><option>Thifaine</option></select></div>
+      <div class="full"><label>Titre *</label><input type="text" id="f-an-titre"></div>
+      <div class="full"><label>Contenu *</label><textarea id="f-an-contenu" rows="5"></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn-ghost" onclick="closeModal('modal-analyse')">Annuler</button><button class="btn-primary" onclick="saveAnalyse()">Enregistrer</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-settings">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header"><div class="modal-title">⚙ Paramètres</div><button class="modal-close" onclick="closeModal('modal-settings')">✕</button></div>
+    <div style="padding:22px">
+      <div class="settings-section">
+        <h3>🔥 Synchronisation Firebase</h3>
+        <div id="fb-status-block" class="fb-status fb-off"><span class="dot dot-off" id="fb-dot"></span><span id="fb-status-text">Non connecté — données stockées localement</span></div>
+        <div class="settings-row">
+          <label>Configuration Firebase (coller le bloc { } depuis Firebase)</label>
+          <textarea id="s-firebase" rows="7" placeholder='{ "apiKey": "...", "authDomain": "...", "databaseURL": "...", "projectId": "..." }'></textarea>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-primary btn-sm" onclick="connectFirebase()">🔥 Connecter Firebase</button>
+          <button class="btn-danger btn-sm" onclick="disconnectFirebase()">Déconnecter</button>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h3>🗺 Accès à la carte</h3>
+        <div class="settings-row"><label>Nom de la plateforme</label><input type="text" id="s-map-platform" placeholder="ex: ArcGIS Online, QGIS Cloud…"></div>
+        <div class="settings-row"><label>URL de la carte</label><input type="url" id="s-map-url" placeholder="https://"></div>
+        <button class="btn-primary btn-sm" onclick="saveMapSettings()">Enregistrer</button>
+      </div>
+      <div class="settings-section">
+        <h3>💾 Données locales</h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-ghost btn-sm" onclick="exportAll()">⬇ Exporter (JSON)</button>
+          <button class="btn-danger btn-sm" onclick="if(confirm('Effacer toutes les données locales ?'))clearAll()">🗑 Réinitialiser</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+const DB={sources:[],docs:[],clients:[],crs:[],infos:[],analyses:[],mapPlatform:'',mapUrl:''};
+let fbApp=null,fbDb=null,fbListeners=[];
+const COLS=['sources','docs','clients','crs','infos','analyses'];
+
+function lsLoad(){try{const r=localStorage.getItem('carto_db');if(r)Object.assign(DB,JSON.parse(r));}catch(e){}}
+function lsSave(){try{localStorage.setItem('carto_db',JSON.stringify(DB));}catch(e){}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+
+function connectFirebase(){
+  const raw=document.getElementById('s-firebase').value.trim();
+  if(!raw){toast('Coller la configuration Firebase d\'abord','err');return;}
+  let cfg;
+  try{
+    let c=raw.replace(/^[\s\S]*?const\s+firebaseConfig\s*=\s*/,'').replace(/;[\s]*$/,'').trim();
+    c=c.replace(/^\s*\/\/[^\n]*/gm,'');
+    c=c.replace(/([{,]\s*)(\w+)\s*:/g,'$1"$2":');
+    cfg=JSON.parse(c);
+  }catch(e){toast('Format invalide — copiez le bloc { } depuis Firebase','err');return;}
+  setFbStatus('connecting');
+  try{
+    if(fbApp){fbApp.delete().catch(()=>{});}
+    fbApp=firebase.initializeApp(cfg,'carto-'+Date.now());
+    fbDb=firebase.database(fbApp);
+    fbDb.ref('_ping').set({t:Date.now()}).then(()=>{
+      localStorage.setItem('carto_firebase_cfg',JSON.stringify(cfg));
+      setupFbListeners();setFbStatus('on');
+      toast('Firebase connecté 🟢');closeModal('modal-settings');
+    }).catch(err=>{setFbStatus('off');toast('Erreur : '+err.message,'err');});
+  }catch(err){setFbStatus('off');toast('Erreur : '+err.message,'err');}
+}
+
+function disconnectFirebase(){
+  fbListeners.forEach(u=>u());fbListeners=[];
+  if(fbApp){fbApp.delete().catch(()=>{});fbApp=null;fbDb=null;}
+  localStorage.removeItem('carto_firebase_cfg');
+  setFbStatus('off');lsLoad();renderAll();toast('Déconnecté — retour stockage local');
+}
+
+function setFbStatus(state){
+  const blk=document.getElementById('fb-status-block'),dot=document.getElementById('fb-dot'),txt=document.getElementById('fb-status-text');
+  const badge=document.getElementById('badge-sync'),bdot=document.getElementById('dot-sync'),btxt=document.getElementById('badge-text');
+  if(state==='on'){blk.className='fb-status fb-on';dot.className='dot dot-on';txt.textContent='Connecté — synchronisation temps réel active';badge.className='connected';bdot.className='dot dot-on';btxt.textContent='Firebase sync';}
+  else if(state==='connecting'){blk.className='fb-status';blk.style.color='var(--warn)';txt.textContent='Connexion…';badge.className='connecting';btxt.textContent='Connexion…';}
+  else{blk.className='fb-status fb-off';dot.className='dot dot-off';txt.textContent='Non connecté — données stockées localement';badge.className='';bdot.className='dot dot-off';btxt.textContent='Stockage local';}
+}
+
+function setupFbListeners(){
+  fbListeners.forEach(u=>u());fbListeners=[];
+  COLS.forEach(col=>{
+    const ref=fbDb.ref(col);
+    const h=snap=>{const v=snap.val();DB[col]=v?Object.values(v).sort((a,b)=>(b._ts||0)-(a._ts||0)):[];renderAll();};
+    ref.on('value',h,err=>toast('Erreur sync '+col+': '+err.message,'err'));
+    fbListeners.push(()=>ref.off('value',h));
+  });
+  const sr=fbDb.ref('settings/app');
+  const sh=snap=>{const d=snap.val();if(d){DB.mapPlatform=d.mapPlatform||'';DB.mapUrl=d.mapUrl||'';renderMap();}};
+  sr.on('value',sh);fbListeners.push(()=>sr.off('value',sh));
+}
+
+async function dbAdd(col,data){if(fbDb){data._ts=Date.now();await fbDb.ref(col+'/'+data.id).set(data);}else{DB[col].unshift(data);lsSave();renderAll();}}
+async function dbSet(col,id,data){if(fbDb){data._ts=Date.now();await fbDb.ref(col+'/'+id).set(data);}else{const i=DB[col].findIndex(x=>x.id===id);if(i>-1)DB[col][i]=data;lsSave();renderAll();}}
+async function dbDel(col,id){if(fbDb){await fbDb.ref(col+'/'+id).remove();}else{DB[col]=DB[col].filter(x=>x.id!==id);lsSave();renderAll();}}
+
+function switchTab(name,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('panel-'+name).classList.add('active');btn.classList.add('active');if(name==='map')renderMap();}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+function toast(msg,type='ok'){const c=document.getElementById('toast-container');const t=document.createElement('div');t.className='toast'+(type==='err'?' err':type==='info'?' info':'');t.textContent=(type==='ok'?'✓ ':type==='info'?'ℹ ':'✕ ')+msg;c.appendChild(t);setTimeout(()=>t.remove(),3500);}
+
+function fmtDate(d){if(!d)return'—';const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}
+function chip(cls,label){return`<span class="chip ${cls}">${label}</span>`;}
+function themeChip(t){return t?chip('chip-theme',t):'—';}
+function fiabChip(f){return f?chip('chip-'+f,f):'—';}
+function verChip(v){return v?chip('chip-'+v,v):'—';}
+function pdfChip(p){return p==='Oui'?chip('chip-pdf','PDF ⬇'):'';}
+function statusChip(s){const m={'En attente':0,'En cours':3,'Traité':1,'Action requise':2,'Bloqué':4};return chip('chip-status-'+(m[s]??0),s||'—');}
+function emptyState(msg){return`<div class="empty-state"><div class="icon">📭</div><p>${msg}</p></div>`;}
+function gv(id){return document.getElementById(id)?.value?.trim()||'';}
+function sv(id,v){const el=document.getElementById(id);if(el)el.value=v||'';}
+function today(){return new Date().toISOString().slice(0,10);}
+
+let editSrcId=null;
+function openAddSource(){editSrcId=null;['theme','type','dsurv','dpub','fiab','ver','pays','pdf','titre','url','resume','kw','by'].forEach(f=>sv('f-src-'+f,''));document.getElementById('modal-source-title').textContent='Nouvelle source';openModal('modal-source');}
+async function saveSource(){
+  if(!gv('f-src-theme')||!gv('f-src-titre')){toast('Thématique et titre obligatoires','err');return;}
+  const src={id:editSrcId||uid(),theme:gv('f-src-theme'),type:gv('f-src-type'),dsurv:gv('f-src-dsurv'),dpub:gv('f-src-dpub'),fiab:gv('f-src-fiab'),ver:gv('f-src-ver'),pays:gv('f-src-pays'),pdf:gv('f-src-pdf'),titre:gv('f-src-titre'),url:gv('f-src-url'),resume:gv('f-src-resume'),kw:gv('f-src-kw'),by:gv('f-src-by')};
+  editSrcId?await dbSet('sources',editSrcId,src):await dbAdd('sources',src);
+  closeModal('modal-source');if(!fbDb)renderSources();toast('Source enregistrée');
+}
+function editSource(id){const s=DB.sources.find(x=>x.id===id);if(!s)return;editSrcId=id;document.getElementById('modal-source-title').textContent='Modifier la source';['theme','type','dsurv','dpub','fiab','ver','pays','pdf','titre','url','resume','kw','by'].forEach(f=>sv('f-src-'+f,s[f]));openModal('modal-source');}
+async function deleteSource(id){if(!confirm('Supprimer ?'))return;await dbDel('sources',id);if(!fbDb)renderSources();}
+
+function renderSources(){
+  const th=document.getElementById('filter-theme-src').value,fi=document.getElementById('filter-fiab').value,q=document.getElementById('filter-search-src').value.toLowerCase();
+  let data=DB.sources.filter(s=>{if(th&&s.theme!==th)return false;if(fi&&s.fiab!==fi)return false;if(q&&!((s.titre+s.pays+s.kw+s.resume).toLowerCase().includes(q)))return false;return true;});
+  document.getElementById('count-sources').textContent=DB.sources.length;
+  const tb=document.getElementById('tbody-sources');
+  if(!data.length){tb.innerHTML=`<tr><td colspan="14">${emptyState('Aucune source.')}</td></tr>`;return;}
+  tb.innerHTML=data.map((s,i)=>`<tr><td style="text-align:center;color:var(--muted)">${i+1}</td><td>${themeChip(s.theme)}</td><td style="color:var(--muted);white-space:nowrap">${fmtDate(s.dsurv)}</td><td style="color:var(--muted);white-space:nowrap">${fmtDate(s.dpub)}</td><td style="color:var(--muted)">${s.type||'—'}</td><td>${fiabChip(s.fiab)}</td><td>${verChip(s.ver)}</td><td>${s.pays||'—'}</td><td class="cell-wrap" title="${s.titre}">${s.url?`<a href="${s.url}" target="_blank">${s.titre}</a>`:s.titre}</td><td>${s.url?`<a href="${s.url}" target="_blank">🔗</a>`:'—'}</td><td>${pdfChip(s.pdf)||'—'}</td><td class="cell-wrap" style="color:var(--muted)">${s.kw||'—'}</td><td style="color:var(--muted)">${s.by||'—'}</td><td><button class="btn-ghost btn-sm" onclick="editSource('${s.id}')" style="margin-right:4px">✏</button><button class="btn-danger btn-sm" onclick="deleteSource('${s.id}')">✕</button></td></tr>`).join('');
+}
+
+function openAddDoc(){['theme','format','titre','date','by','desc','lien'].forEach(f=>sv('f-doc-'+f,''));openModal('modal-doc');}
+async function saveDoc(){
+  if(!gv('f-doc-theme')||!gv('f-doc-titre')){toast('Thématique et titre obligatoires','err');return;}
+  const d={id:uid(),theme:gv('f-doc-theme'),format:gv('f-doc-format'),titre:gv('f-doc-titre'),date:gv('f-doc-date'),by:gv('f-doc-by'),desc:gv('f-doc-desc'),lien:gv('f-doc-lien'),added:today()};
+  await dbAdd('docs',d);closeModal('modal-doc');if(!fbDb)renderDocs();toast('Document référencé');
+}
+async function deleteDoc(id){if(!confirm('Supprimer ?'))return;await dbDel('docs',id);if(!fbDb)renderDocs();}
+function renderDocs(){
+  const th=document.getElementById('filter-theme-doc').value,fmt=document.getElementById('filter-format').value,q=document.getElementById('filter-search-doc').value.toLowerCase();
+  let data=DB.docs.filter(d=>{if(th&&d.theme!==th)return false;if(fmt&&d.format!==fmt)return false;if(q&&!((d.titre+d.desc).toLowerCase().includes(q)))return false;return true;});
+  document.getElementById('count-docs').textContent=DB.docs.length;
+  const tb=document.getElementById('tbody-docs');
+  if(!data.length){tb.innerHTML=`<tr><td colspan="10">${emptyState('Aucun document.')}</td></tr>`;return;}
+  tb.innerHTML=data.map((d,i)=>`<tr><td style="text-align:center;color:var(--muted)">${i+1}</td><td>${themeChip(d.theme)}</td><td class="cell-wrap">${d.lien?`<a href="${d.lien}" target="_blank">${d.titre}</a>`:d.titre}</td><td style="color:var(--muted);white-space:nowrap">${fmtDate(d.date)}</td><td class="cell-wrap" style="color:var(--muted)">${d.desc||'—'}</td><td>${d.lien?`<a href="${d.lien}" target="_blank">🔗 Ouvrir</a>`:'—'}</td><td>${d.format?chip('chip-theme',d.format):'—'}</td><td style="color:var(--muted)">${d.by||'—'}</td><td style="color:var(--muted);white-space:nowrap">${fmtDate(d.added)}</td><td><button class="btn-danger btn-sm" onclick="deleteDoc('${d.id}')">✕</button></td></tr>`).join('');
+}
+
+function openAddClient(){['date','type','inter','resp','statut','dead','contenu','action'].forEach(f=>sv('f-cl-'+f,''));sv('f-cl-statut','En attente');openModal('modal-client');}
+async function saveClient(){
+  if(!gv('f-cl-date')||!gv('f-cl-contenu')){toast('Date et contenu obligatoires','err');return;}
+  const c={id:uid(),date:gv('f-cl-date'),type:gv('f-cl-type'),inter:gv('f-cl-inter'),resp:gv('f-cl-resp'),contenu:gv('f-cl-contenu'),statut:gv('f-cl-statut'),action:gv('f-cl-action'),dead:gv('f-cl-dead')};
+  await dbAdd('clients',c);closeModal('modal-client');if(!fbDb)renderClient();toast('Interaction enregistrée');
+}
+async function deleteClient(id){if(!confirm('Supprimer ?'))return;await dbDel('clients',id);if(!fbDb)renderClient();}
+function renderClient(){
+  const ty=document.getElementById('filter-type-client').value,st=document.getElementById('filter-statut-client').value;
+  let data=DB.clients.filter(c=>{if(ty&&c.type!==ty)return false;if(st&&c.statut!==st)return false;return true;}).sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById('count-client').textContent=DB.clients.length;
+  const el=document.getElementById('timeline-client');
+  if(!data.length){el.innerHTML=emptyState('Aucune interaction.');return;}
+  el.innerHTML=data.map(c=>`<div class="tl-item"><div class="tl-line"><div class="tl-dot"></div><div class="tl-bar"></div></div><div class="tl-content"><div class="tl-meta"><strong style="color:var(--accent)">${fmtDate(c.date)}</strong>${c.type?chip('chip-theme',c.type):''}${statusChip(c.statut)}${c.resp?`<span>👤 ${c.resp}</span>`:''}${c.inter?`<span style="color:var(--muted)">Client : ${c.inter}</span>`:''}<button class="btn-danger btn-sm" onclick="deleteClient('${c.id}')" style="margin-left:auto">✕</button></div><div class="tl-text">${c.contenu}</div>${c.action?`<div class="tl-action">→ ${c.action}${c.dead?' — avant le '+fmtDate(c.dead):''}</div>`:''}</div></div>`).join('');
+}
+
+function openAddCR(){['date','part','points','dec','actions','dead','by'].forEach(f=>sv('f-cr-'+f,''));openModal('modal-cr');}
+function openAddInfo(){['date','by','sujet','contenu'].forEach(f=>sv('f-info-'+f,''));openModal('modal-info');}
+async function saveCR(){
+  if(!gv('f-cr-date')||!gv('f-cr-points')){toast('Date et points clés obligatoires','err');return;}
+  const c={id:uid(),date:gv('f-cr-date'),part:gv('f-cr-part'),points:gv('f-cr-points'),dec:gv('f-cr-dec'),actions:gv('f-cr-actions'),dead:gv('f-cr-dead'),by:gv('f-cr-by')};
+  await dbAdd('crs',c);closeModal('modal-cr');if(!fbDb)renderCollab();toast('CR enregistré');
+}
+async function saveInfo(){
+  if(!gv('f-info-sujet')||!gv('f-info-contenu')){toast('Sujet et contenu obligatoires','err');return;}
+  const i={id:uid(),date:gv('f-info-date'),sujet:gv('f-info-sujet'),contenu:gv('f-info-contenu'),by:gv('f-info-by')};
+  await dbAdd('infos',i);closeModal('modal-info');if(!fbDb)renderCollab();toast('Info publiée');
+}
+async function deleteCR(id){if(!confirm('Supprimer ?'))return;await dbDel('crs',id);if(!fbDb)renderCollab();}
+async function deleteInfo(id){if(!confirm('Supprimer ?'))return;await dbDel('infos',id);if(!fbDb)renderCollab();}
+function renderCollab(){
+  document.getElementById('count-cr').textContent=DB.crs.length;
+  document.getElementById('count-info').textContent=DB.infos.length;
+  const lcr=document.getElementById('list-cr');
+  lcr.innerHTML=!DB.crs.length?emptyState('Aucun compte rendu.'):DB.crs.map(c=>`<div class="note-card"><div class="nc-header"><div class="nc-title">📋 Réunion du ${fmtDate(c.date)}</div><button class="btn-danger btn-sm" onclick="deleteCR('${c.id}')">✕</button></div><div class="nc-body"><b>Points :</b> ${c.points}${c.dec?`<br><b>Décisions :</b> ${c.dec}`:''}${c.actions?`<br><b>Actions :</b> ${c.actions}`:''}</div><div class="nc-meta">${c.part?`👥 ${c.part} · `:''}${c.dead?`⏱ ${fmtDate(c.dead)} · `:''}${c.by?`Rédigé par ${c.by}`:''}</div></div>`).join('');
+  const li=document.getElementById('list-info');
+  li.innerHTML=!DB.infos.length?emptyState('Aucune information.'):DB.infos.map(i=>`<div class="note-card"><div class="nc-header"><div class="nc-title">📢 ${i.sujet}</div><button class="btn-danger btn-sm" onclick="deleteInfo('${i.id}')">✕</button></div><div class="nc-body">${i.contenu}</div><div class="nc-meta">${fmtDate(i.date)}${i.by?' · '+i.by:''}</div></div>`).join('');
+}
+
+const THEMES=['Ethnies & sous-groupes','Forces en présence',"Points d'eau",'Population & mobilités','Ressources minières','Infrastructures & axes','Événements sécuritaires','Flux & trafics'];
+const TICONS={'Ethnies & sous-groupes':'👥','Forces en présence':'⚔️',"Points d'eau":'💧','Population & mobilités':'🚶','Ressources minières':'⛏','Infrastructures & axes':'🛣','Événements sécuritaires':'🎯','Flux & trafics':'📦'};
+
+function openAddAnalyse(){['theme','by','titre','contenu'].forEach(f=>sv('f-an-'+f,''));openModal('modal-analyse');}
+async function saveAnalyse(){
+  if(!gv('f-an-titre')||!gv('f-an-contenu')){toast('Titre et contenu obligatoires','err');return;}
+  const a={id:uid(),theme:gv('f-an-theme'),titre:gv('f-an-titre'),contenu:gv('f-an-contenu'),by:gv('f-an-by'),date:today()};
+  await dbAdd('analyses',a);closeModal('modal-analyse');if(!fbDb)renderMap();toast('Synthèse enregistrée');
+}
+async function deleteAnalyse(id){if(!confirm('Supprimer ?'))return;await dbDel('analyses',id);if(!fbDb)renderMap();}
+function saveMapSettings(){
+  DB.mapPlatform=gv('s-map-platform');DB.mapUrl=gv('s-map-url');
+  if(fbDb){fbDb.ref('settings/app').set({mapPlatform:DB.mapPlatform,mapUrl:DB.mapUrl});}else lsSave();
+  closeModal('modal-settings');renderMap();toast('Carte configurée');
+}
+function openMap(){if(DB.mapUrl)window.open(DB.mapUrl,'_blank');}
+function renderMap(){
+  document.getElementById('map-platform-lbl').textContent=DB.mapPlatform||'Aucune carte configurée';
+  document.getElementById('map-url-lbl').textContent=DB.mapUrl||'Configurez le lien dans les paramètres ⚙';
+  document.getElementById('btn-open-map').style.display=DB.mapUrl?'':'none';
+  sv('s-map-platform',DB.mapPlatform);sv('s-map-url',DB.mapUrl);
+  document.getElementById('theme-stats').innerHTML=THEMES.map(t=>{
+    const n=DB.sources.filter(s=>s.theme===t).length,nd=DB.docs.filter(d=>d.theme===t).length;
+    return`<div class="ts-card"><div style="font-size:20px">${TICONS[t]||'📊'}</div><div><div class="ts-name">${t}</div><div class="ts-count">${nd} doc${nd!==1?'s':''}</div></div><div class="ts-num">${n}</div></div>`;
+  }).join('');
+  const fa=document.getElementById('filter-theme-analyse').value;
+  const data=DB.analyses.filter(a=>!fa||a.theme===fa);
+  document.getElementById('count-analyses').textContent=DB.analyses.length;
+  const el=document.getElementById('list-analyses');
+  el.innerHTML=!data.length?emptyState('Aucune synthèse.'):data.map(a=>`<div class="note-card"><div class="nc-header"><div class="nc-title">📝 ${a.titre} ${a.theme?themeChip(a.theme):''}</div><button class="btn-danger btn-sm" onclick="deleteAnalyse('${a.id}')">✕</button></div><div class="nc-body" style="white-space:pre-wrap">${a.contenu}</div><div class="nc-meta">${fmtDate(a.date)}${a.by?' · '+a.by:''}</div></div>`).join('');
+}
+function renderAnalyses(){renderMap();}
+
+function exportAll(){const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='carto_'+today()+'.json';a.click();toast('Données exportées');}
+function importAll(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{Object.assign(DB,JSON.parse(ev.target.result));lsSave();renderAll();toast('Données importées');}catch(ex){toast('Fichier invalide','err');}};r.readAsText(f);e.target.value='';}
+function clearAll(){COLS.forEach(c=>DB[c]=[]);lsSave();renderAll();toast('Données effacées');}
+function renderAll(){renderSources();renderDocs();renderClient();renderCollab();renderMap();}
+
+lsLoad();
+const savedCfg=localStorage.getItem('carto_firebase_cfg');
+if(savedCfg){try{const cfg=JSON.parse(savedCfg);fbApp=firebase.initializeApp(cfg,'carto-auto');fbDb=firebase.database(fbApp);setupFbListeners();setFbStatus('on');}catch(e){setFbStatus('off');lsLoad();}}
+renderAll();
+</script>
+</body>
+</html>

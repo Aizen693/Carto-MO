@@ -1,0 +1,243 @@
+/* ═══════════════════════════════════════════════════════════
+   TOKENS V2 — additions Carto-MO refonte 2026-05
+   Tokens NOUVEAUX uniquement. N'ECRASE rien de tokens.css.
+   A charger APRES tokens.css.
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  /* ── Severite (4 paliers) ────────────────────────────── */
+  /* Encodage cinetique/non-cinetique generique. L'orange/rouge
+     est reserve a la severite : ne JAMAIS utiliser ces hex en chrome. */
+  --sev-1:  #5a8a9a;  /* low      — routine / non-cinetique / impact local */
+  --sev-2:  #c49a3c;  /* moderate — incident notable (= accent or, intentionnel) */
+  --sev-3:  #d97742;  /* high     — escalade regionale */
+  --sev-4:  #c0392b;  /* critical — evenement systemique */
+
+  /* Versions soft (fills, halos) */
+  --sev-1-soft: rgba(90,138,154,0.18);
+  --sev-2-soft: rgba(196,154,60,0.18);
+  --sev-3-soft: rgba(217,119,66,0.20);
+  --sev-4-soft: rgba(192,57,43,0.22);
+
+  /* ── Fiabilite (3 niveaux) ───────────────────────────── */
+  /* Encode via opacite du stroke + style (plein/pointille). */
+  --conf-confirmed: 1.0;   /* A1-B2 OTAN */
+  --conf-plausible: 0.6;   /* C3-D4 OTAN */
+  --conf-rumor:     0.3;   /* E5-F6 OTAN */
+
+  /* ── Motion V2 ───────────────────────────────────────── */
+  --mo-micro:   .15s;
+  --mo-panel:   .25s;
+  --mo-page:    .35s;
+  --ease-base:  cubic-bezier(0.2, 0, 0.2, 1);
+
+  /* ── Tracking labels ─────────────────────────────────── */
+  --tk-label:   0.14em;
+  --tk-data:    0.06em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mo-micro: 0ms;
+    --mo-panel: 0ms;
+    --mo-page:  0ms;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   POPUP COMPACT V2 — briefing 5 lignes orientation decision
+   Prefixe .pv2- pour eviter toute collision avec .popup-* existant.
+   ═══════════════════════════════════════════════════════════ */
+.pv2 {
+  font-family: var(--m);
+  color: var(--tx);
+  min-width: 280px;
+  position: relative;
+}
+.pv2-bar {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 3px;
+}
+.pv2-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px 14px;
+  gap: 12px;
+  border-bottom: 1px solid var(--ln);
+}
+.pv2-sev {
+  font: 600 9px/1 var(--m);
+  letter-spacing: var(--tk-label);
+  text-transform: uppercase;
+  padding: 4px 8px;
+  background: var(--sev-2-soft);
+  color: var(--sev-2);
+  border-left: 2px solid var(--sev-2);
+}
+.pv2-sev[data-sev="1"] { background: var(--sev-1-soft); color: var(--sev-1); border-left-color: var(--sev-1); }
+.pv2-sev[data-sev="2"] { background: var(--sev-2-soft); color: var(--sev-2); border-left-color: var(--sev-2); }
+.pv2-sev[data-sev="3"] { background: var(--sev-3-soft); color: var(--sev-3); border-left-color: var(--sev-3); }
+.pv2-sev[data-sev="4"] { background: var(--sev-4-soft); color: var(--sev-4); border-left-color: var(--sev-4); }
+
+.pv2-meta {
+  font: 400 9px/1 var(--m);
+  color: var(--tx2);
+  letter-spacing: var(--tk-data);
+  text-align: right;
+  white-space: nowrap;
+}
+.pv2-meta-date { color: var(--txh); }
+.pv2-meta-sep { color: var(--tx2); padding: 0 4px; }
+.pv2-meta-conf {
+  color: var(--ach);
+  text-transform: uppercase;
+  letter-spacing: var(--tk-label);
+  font-size: 8px;
+}
+.pv2-meta-conf[data-conf="3"] { color: var(--err); }
+
+.pv2-title {
+  padding: 10px 12px 4px 14px;
+  font: 500 13px/1.35 var(--bc);
+  color: var(--txh);
+  letter-spacing: 0;
+}
+.pv2-loc {
+  padding: 0 12px 10px 14px;
+  font: 400 10px/1.4 var(--m);
+  color: var(--tx1);
+  letter-spacing: var(--tk-data);
+}
+
+.pv2-grid {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 4px 12px;
+  padding: 8px 12px 10px 14px;
+  margin: 0;
+  border-top: 1px solid var(--ln);
+  font-size: 10px;
+}
+.pv2-grid dt {
+  font: 600 8px/1.5 var(--m);
+  color: var(--ach);
+  letter-spacing: var(--tk-label);
+  text-transform: uppercase;
+  padding-top: 2px;
+}
+.pv2-grid dd {
+  font: 400 10px/1.5 var(--m);
+  color: var(--txh);
+  margin: 0;
+}
+.pv2-grid dd em {
+  font-style: normal;
+  color: var(--tx2);
+}
+
+.pv2-actions {
+  display: flex;
+  align-items: stretch;
+  border-top: 1px solid var(--ln);
+}
+.pv2-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--ln);
+  color: var(--tx1);
+  font: 600 8px/1 var(--m);
+  letter-spacing: var(--tk-label);
+  text-transform: uppercase;
+  padding: 10px 8px;
+  cursor: pointer;
+  transition: color var(--mo-micro) var(--ease-base),
+              background var(--mo-micro) var(--ease-base);
+}
+.pv2-btn:last-child { border-right: none; }
+.pv2-btn:hover { color: var(--ach); background: var(--acd); }
+.pv2-btn:focus-visible { outline: 2px solid var(--ac); outline-offset: -2px; }
+
+.pv2-brief-slot {
+  border-top: 1px solid var(--ln);
+}
+.pv2-brief-slot > div {
+  padding: 0 !important;
+  margin: 0 !important;
+  border-top: none !important;
+}
+.pv2-brief-slot button {
+  border: none !important;
+  border-top: none !important;
+  width: 100% !important;
+  padding: 10px 12px !important;
+  text-align: center !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIDE PANEL — Section Visuel (og:image via microlink.io)
+   ═══════════════════════════════════════════════════════════ */
+.sp-photo-section h3 { /* meme h3 que les autres sections */ }
+.sp-photo-loading {
+  display: flex; align-items: center; gap: 10px;
+  font: 400 10px/1 var(--m);
+  color: var(--tx2);
+  letter-spacing: 0.06em;
+  padding: 4px 0;
+}
+.sp-photo-spinner {
+  width: 10px; height: 10px;
+  border: 1px solid var(--ac);
+  border-top-color: transparent;
+  animation: spinPhoto 0.8s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spinPhoto {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-photo-spinner { animation: none; }
+}
+.sp-photo-frame {
+  display: block;
+  position: relative;
+  text-decoration: none;
+  border: 1px solid var(--ln1);
+  background: rgba(0,0,0,0.35);
+  transition: border-color .15s;
+}
+.sp-photo-frame:hover { border-color: var(--ac); }
+.sp-photo-img {
+  display: block;
+  width: 100%;
+  max-height: 210px;
+  object-fit: cover;
+  filter: brightness(0.92) contrast(1.04);
+}
+.sp-photo-cap {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--ln1);
+  background: rgba(0,0,0,0.20);
+}
+.sp-photo-cap-title {
+  font: 500 11px/1.4 var(--m);
+  color: var(--txh);
+}
+.sp-photo-cap-pub {
+  font: 600 8px/1 var(--m);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ach);
+}
+.sp-photo-empty {
+  font: 400 10px/1.5 var(--m);
+  color: var(--tx2);
+  letter-spacing: 0.04em;
+}
+.sp-photo-empty a {
+  color: var(--ach);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

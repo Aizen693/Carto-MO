@@ -1,0 +1,4110 @@
+{
+  "campagne": {
+    "id": "castel-gabon-2026",
+    "nom": "Castel Afrique — désinformation (FIMI) & réputation",
+    "client": "Direction Sûreté — Groupe Castel Afrique",
+    "reel": true,
+    "secteur": "Boissons / Grande consommation · présence Castel Afrique",
+    "date_debut": "2022-05-01",
+    "date_fin": "2026-05-31",
+    "publications_total": 30,
+    "comptes_total": 30,
+    "pays_implique": [
+      "CF",
+      "ML",
+      "BF",
+      "NE",
+      "CM",
+      "CI",
+      "SN",
+      "TD",
+      "GA",
+      "GN",
+      "CG",
+      "TG",
+      "MA",
+      "DZ",
+      "ET",
+      "MG"
+    ],
+    "resume": "Cartographie de l'atteinte au groupe Castel en Afrique : on distingue l'atteinte DIRECTE (filiale instrumentalisee ou incidents informationnels visant nommement Castel) de l'atteinte INDIRECTE (climat de desinformation anti-France qui fragilise le groupe par association). Atteinte directe confirmee : Centrafrique (SUCAF/MOCAF, levier Wagner) et Gabon (incidents SOBRAGA reels). Atteinte sectorielle probable : Maroc (pression anti-alcool). Ailleurs : exposition indirecte au narratif anti-francais. Couleur = niveau d'atteinte ; cliquez un pays pour voir les incidents et les flux informationnels.",
+    "narratifs": [
+      "NAR-001 · Arrêt / cession de l'activité eau minérale (confirmé)",
+      "NAR-002 · Pénurie durable / rupture du produit Andza (confirmé)",
+      "NAR-003 · Faux recrutement / usurpation de la marque employeur (confirmé)",
+      "NAR-004 · Fragilité post-Coca-Cola (probable / interprétatif)",
+      "NAR-005 · « Groupe étranger » vulnérable à la contestation (hypothèse, aucun ciblage prouvé)",
+      "NAR-006 · Prix abusifs / spéculation (probable / signal faible)"
+    ],
+    "methodologie": "Cartographie sur sources publiques ouvertes (OSINT) : rapport de cadrage Direction Sûreté + sources publiques (Wikipédia SOBRAGA, site corporate, presse). Distinction systématique des niveaux de preuve (confirmé / probable / hypothèse / non trouvé). Aucune attribution d'attaque à un acteur nommé sans preuve. Modèle : entités, usines & sites, marques, canaux, incidents, narratifs, vulnérabilités et relations.",
+    "niveau_confiance_attribution": "Périmètre industriel et marques : confirmés (sources publiques). Incidents : confirmés. Acteurs hostiles : catégories fonctionnelles, non nominatives. Concurrents économiques et acteurs politico-informationnels : hypothèse non prouvée."
+  },
+  "legende": [
+    {
+      "type": "entite",
+      "label": "Entité Castel / filiale",
+      "couleur": "#6B3FA0"
+    },
+    {
+      "type": "dirigeant",
+      "label": "Dirigeant identifiable",
+      "couleur": "#8B5FBF"
+    },
+    {
+      "type": "site",
+      "label": "Usine / site industriel",
+      "couleur": "#2E84D4"
+    },
+    {
+      "type": "marque",
+      "label": "Marque / produit",
+      "couleur": "#D4A672"
+    },
+    {
+      "type": "canal",
+      "label": "Canal officiel",
+      "couleur": "#3E9B7A"
+    },
+    {
+      "type": "incident",
+      "label": "Incident informationnel",
+      "couleur": "#C94A4A"
+    },
+    {
+      "type": "acteur",
+      "label": "Acteur hostile (FIMI)",
+      "couleur": "#8E2A2A"
+    }
+  ],
+  "legende_arc": "Relation / appartenance",
+  "legende_relations": [
+    {
+      "label": "Appartenance / structure",
+      "couleur": "#6B3FA0"
+    },
+    {
+      "label": "Dépendance logistique (corridor)",
+      "couleur": "#2E84D4"
+    },
+    {
+      "label": "Cible d'un incident",
+      "couleur": "#C94A4A"
+    },
+    {
+      "label": "Riposte / démenti officiel",
+      "couleur": "#3E9B7A"
+    }
+  ],
+  "phases": [
+    {
+      "n": "1",
+      "nom": "① Amorçage · ≤2021",
+      "couleur": "#6B3FA0",
+      "desc": "Climat anti-France installé en arrière-plan dès 2014 (arrangements sécuritaires SUCAF RCA, rapport The Sentry juil. 2021) et premiers réseaux de faux comptes (Totem, démantelé par Meta en 2021). Aucun actif Castel encore nommé.",
+      "marqueur": "Mise en place du terrain informationnel"
+    },
+    {
+      "n": "2",
+      "nom": "② Montée · 2022",
+      "couleur": "#2F9E8F",
+      "desc": "Premières atteintes nommant directement des actifs Castel : enquête préliminaire du PNAT (fév. 2022) et brasserie Wagner installée au nord de la RCA (fin 2022). Consolidation des relais au Mali, Burkina et en Guinée.",
+      "marqueur": "Castel entre dans la cible"
+    },
+    {
+      "n": "3",
+      "nom": "③ Bascule · 2023",
+      "couleur": "#E0652C",
+      "desc": "Structuration et coordination multi-pays : campagne FIMI à réseau de comptes coordonnés en RCA (jan. 2023), distribution forcée de boissons concurrentes, exploitation des coups d'État au Niger (juil. et oct. 2023).",
+      "marqueur": "Coordination et passage à l'échelle"
+    },
+    {
+      "n": "4",
+      "nom": "④ Pic · 2024+",
+      "couleur": "#C8392B",
+      "desc": "Industrialisation de la diffusion : Africa Corps succède à Wagner, écosystème Portal Kombat (pravda-bf.com, pravda-ne.com) et African Initiative. Récits récurrents et usurpation de marque, du Sahel jusqu'au Sénégal et au Maroc.",
+      "marqueur": "Diffusion généralisée et récurrente"
+    }
+  ],
+  "hero_cells": [
+    {
+      "num": "16",
+      "lbl": "Pays Castel suivis"
+    },
+    {
+      "num": "2",
+      "lbl": "Atteinte directe confirmée"
+    },
+    {
+      "num": "45",
+      "lbl": "Incidents cartographiés"
+    }
+  ],
+  "stats": [
+    {
+      "lbl": "Pays Castel suivis",
+      "val": "16"
+    },
+    {
+      "lbl": "Atteinte directe confirmée",
+      "val": "2"
+    },
+    {
+      "lbl": "Ciblage sectoriel",
+      "val": "1"
+    },
+    {
+      "lbl": "Atteinte indirecte",
+      "val": "13"
+    },
+    {
+      "lbl": "Incidents cartographiés",
+      "val": "45"
+    },
+    {
+      "lbl": "Acteurs hostiles",
+      "val": "18"
+    }
+  ],
+  "publications": [
+    {
+      "id": "e_castel",
+      "compte": "e_castel",
+      "compte_display": "Groupe Castel",
+      "plateforme": "maison mère",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville",
+      "lat": 0.3924,
+      "lon": 9.4536,
+      "audience_estimee": 24000,
+      "content_excerpt": "Maison mère. SOBRAGA fondée en 1966 à l'initiative de Pierre Castel et de l'État gabonais. Périmètre : ~38 marques, ~119 références.",
+      "cc": "gab"
+    },
+    {
+      "id": "e_sobraga",
+      "compte": "e_sobraga",
+      "compte_display": "SOBRAGA",
+      "plateforme": "filiale opérationnelle",
+      "type": "entite",
+      "parent_id": "e_castel",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo",
+      "lat": 0.29,
+      "lon": 9.505,
+      "audience_estimee": 30000,
+      "content_excerpt": "Filiale opérationnelle, centre de gravité. Siège à Owendo. ~4,5 M hL produits en 2024, 16 lignes d'embouteillage. 6e entreprise gabonaise par le CA (2015).",
+      "cc": "gab"
+    },
+    {
+      "id": "e_sovingab",
+      "compte": "e_sovingab",
+      "compte_display": "SOVINGAB",
+      "plateforme": "société Castel Gabon",
+      "type": "entite",
+      "parent_id": "e_castel",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville",
+      "lat": 0.4,
+      "lon": 9.465,
+      "audience_estimee": 9000,
+      "content_excerpt": "Une des trois principales sociétés productrices localement, citée par SOBRAGA.",
+      "cc": "gab"
+    },
+    {
+      "id": "e_soboleco",
+      "compte": "e_soboleco",
+      "compte_display": "SOBOLECO",
+      "plateforme": "société Castel Gabon",
+      "type": "entite",
+      "parent_id": "e_castel",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville",
+      "lat": 0.37,
+      "lon": 9.49,
+      "audience_estimee": 9000,
+      "content_excerpt": "Une des trois principales sociétés productrices localement, citée par SOBRAGA.",
+      "cc": "gab"
+    },
+    {
+      "id": "e_castel_afrique",
+      "compte": "e_castel_afrique",
+      "compte_display": "Castel Afrique",
+      "plateforme": "cadre groupe",
+      "type": "entite",
+      "parent_id": "e_castel",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville",
+      "lat": 0.405,
+      "lon": 9.44,
+      "audience_estimee": 11000,
+      "content_excerpt": "Cadre corporate du groupe au niveau Afrique : contenus RSE, communication, réputation. Lien groupe ↔ filiale.",
+      "cc": "gab"
+    },
+    {
+      "id": "e_jaffret",
+      "compte": "e_jaffret",
+      "compte_display": "Xavier Jaffret",
+      "plateforme": "Directeur Général",
+      "type": "dirigeant",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo",
+      "lat": 0.295,
+      "lon": 9.495,
+      "audience_estimee": 12000,
+      "content_excerpt": "Directeur Général Groupe Castel Gabon / SOBRAGA depuis juillet 2025 (profil public LinkedIn). Parole officielle et gestion de crise.",
+      "cc": "gab"
+    },
+    {
+      "id": "s_owendo_usine",
+      "compte": "s_owendo_usine",
+      "compte_display": "Usine principale — Owendo",
+      "plateforme": "usine (siège)",
+      "type": "site",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo",
+      "lat": 0.29,
+      "lon": 9.507,
+      "audience_estimee": 24000,
+      "content_excerpt": "Usine principale et siège. La première usine de Libreville a été relocalisée à Owendo en 1987 (proximité du port d'Owendo).",
+      "cc": "gab"
+    },
+    {
+      "id": "s_franceville",
+      "compte": "s_franceville",
+      "compte_display": "Usine — Franceville (1971)",
+      "plateforme": "usine + rail",
+      "type": "site",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Franceville (Haut-Ogooué)",
+      "lat": -1.6333,
+      "lon": 13.5833,
+      "audience_estimee": 16000,
+      "content_excerpt": "Usine ouverte en 1971. Nœud du corridor Transgabonais (acheminement de l'eau Andza depuis Léconi vers Owendo).",
+      "cc": "gab"
+    },
+    {
+      "id": "s_portgentil",
+      "compte": "s_portgentil",
+      "compte_display": "Usine — Port-Gentil (1972)",
+      "plateforme": "usine",
+      "type": "site",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Port-Gentil",
+      "lat": -0.7193,
+      "lon": 8.7815,
+      "audience_estimee": 16000,
+      "content_excerpt": "Usine ouverte en 1972, capitale économique et pétrolière du Gabon. Marché majeur.",
+      "cc": "gab"
+    },
+    {
+      "id": "s_oyem",
+      "compte": "s_oyem",
+      "compte_display": "Usine — Oyem (1976)",
+      "plateforme": "usine",
+      "type": "site",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Oyem (Woleu-Ntem)",
+      "lat": 1.5993,
+      "lon": 11.5793,
+      "audience_estimee": 13000,
+      "content_excerpt": "Usine ouverte en 1976, nord du Gabon. Couverture de la zone septentrionale.",
+      "cc": "gab"
+    },
+    {
+      "id": "s_mouila",
+      "compte": "s_mouila",
+      "compte_display": "Usine — Mouila (1983)",
+      "plateforme": "usine",
+      "type": "site",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Mouila (Ngounié)",
+      "lat": -1.865,
+      "lon": 11.0556,
+      "audience_estimee": 13000,
+      "content_excerpt": "Usine ouverte en 1983, sud du Gabon. Couverture de la zone méridionale.",
+      "cc": "gab"
+    },
+    {
+      "id": "s_andza",
+      "compte": "s_andza",
+      "compte_display": "Source d'eau Andza — Léconi",
+      "plateforme": "captage eau",
+      "type": "site",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Léconi (Haut-Ogooué)",
+      "lat": -1.5797,
+      "lon": 14.23,
+      "audience_estimee": 26000,
+      "content_excerpt": "Captage et production d'eau Andza à Léconi. Actif TRÈS sensible : dépendance au corridor ferroviaire Transgabonais, historique de pénurie.",
+      "cc": "gab"
+    },
+    {
+      "id": "m_regab",
+      "compte": "m_regab",
+      "compte_display": "Régab",
+      "plateforme": "bière (phare)",
+      "type": "marque",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo",
+      "lat": 0.293,
+      "lon": 9.503,
+      "audience_estimee": 22000,
+      "content_excerpt": "Bière phare et marque emblématique de SOBRAGA au Gabon. Forte charge identitaire — marque la plus exposée aux rumeurs de masse.",
+      "cc": "gab"
+    },
+    {
+      "id": "m_castelbeer",
+      "compte": "m_castelbeer",
+      "compte_display": "Castel Beer",
+      "plateforme": "bière (licence 1970)",
+      "type": "marque",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo",
+      "lat": 0.296,
+      "lon": 9.498,
+      "audience_estimee": 15000,
+      "content_excerpt": "Produite sous licence depuis 1970. Marque internationale du groupe.",
+      "cc": "gab"
+    },
+    {
+      "id": "m_33export",
+      "compte": "m_33export",
+      "compte_display": "33 Export",
+      "plateforme": "bière",
+      "type": "marque",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo",
+      "lat": 0.294,
+      "lon": 9.508,
+      "audience_estimee": 13000,
+      "content_excerpt": "Bière du portefeuille (héritage BGI). Présence ancienne sur le marché gabonais.",
+      "cc": "gab"
+    },
+    {
+      "id": "m_guinness",
+      "compte": "m_guinness",
+      "compte_display": "Guinness",
+      "plateforme": "bière (licence)",
+      "type": "marque",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo",
+      "lat": 0.298,
+      "lon": 9.496,
+      "audience_estimee": 11000,
+      "content_excerpt": "Produite / distribuée sous licence au Gabon par SOBRAGA.",
+      "cc": "gab"
+    },
+    {
+      "id": "m_andza",
+      "compte": "m_andza",
+      "compte_display": "Andza (eau)",
+      "plateforme": "eau minérale",
+      "type": "marque",
+      "parent_id": "s_andza",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo / Léconi",
+      "lat": 0.292,
+      "lon": 9.509,
+      "audience_estimee": 20000,
+      "content_excerpt": "Eau minérale Andza (source de Léconi). Cible directe des narratifs « arrêt de l'eau » (NAR-001) et « pénurie » (NAR-002).",
+      "cc": "gab"
+    },
+    {
+      "id": "m_akewa",
+      "compte": "m_akewa",
+      "compte_display": "Akewa (eau)",
+      "plateforme": "eau",
+      "type": "marque",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo",
+      "lat": 0.375,
+      "lon": 9.465,
+      "audience_estimee": 12000,
+      "content_excerpt": "Marque d'eau du portefeuille SOBRAGA.",
+      "cc": "gab"
+    },
+    {
+      "id": "m_vitale",
+      "compte": "m_vitale",
+      "compte_display": "Vitale (eau)",
+      "plateforme": "eau",
+      "type": "marque",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo",
+      "lat": 0.325,
+      "lon": 9.495,
+      "audience_estimee": 10000,
+      "content_excerpt": "Marque d'eau du portefeuille (citée parmi les eaux SOBRAGA).",
+      "cc": "gab"
+    },
+    {
+      "id": "m_aningeau",
+      "compte": "m_aningeau",
+      "compte_display": "Aning'Eau",
+      "plateforme": "eau",
+      "type": "marque",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Owendo",
+      "lat": 0.35,
+      "lon": 9.51,
+      "audience_estimee": 10000,
+      "content_excerpt": "Marque d'eau du portefeuille (citée parmi les eaux SOBRAGA).",
+      "cc": "gab"
+    },
+    {
+      "id": "c_facebook",
+      "compte": "c_facebook",
+      "compte_display": "Facebook SOBRAGA",
+      "plateforme": "Facebook",
+      "type": "canal",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville",
+      "lat": 0.41,
+      "lon": 9.455,
+      "audience_estimee": 15000,
+      "content_excerpt": "Node social principal : suivi des rumeurs et alertes, contre-message. Canal d'exposition très élevée.",
+      "cc": "gab"
+    },
+    {
+      "id": "c_instagram",
+      "compte": "c_instagram",
+      "compte_display": "Instagram SOBRAGA",
+      "plateforme": "Instagram",
+      "type": "canal",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville",
+      "lat": 0.42,
+      "lon": 9.465,
+      "audience_estimee": 9000,
+      "content_excerpt": "Suivi des alertes, faux recrutements, contenus visuels de marque.",
+      "cc": "gab"
+    },
+    {
+      "id": "c_linkedin",
+      "compte": "c_linkedin",
+      "compte_display": "LinkedIn (SOBRAGA / DG)",
+      "plateforme": "LinkedIn",
+      "type": "canal",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville",
+      "lat": 0.415,
+      "lon": 9.44,
+      "audience_estimee": 8000,
+      "content_excerpt": "Signal corporate : dirigeants, nominations, alertes recrutement, posts officiels.",
+      "cc": "gab"
+    },
+    {
+      "id": "c_site",
+      "compte": "c_site",
+      "compte_display": "Site officiel SOBRAGA",
+      "plateforme": "site corporate",
+      "type": "canal",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville",
+      "lat": 0.4,
+      "lon": 9.47,
+      "audience_estimee": 8000,
+      "content_excerpt": "Nœud de validation officielle des informations et des démentis (sobraga.net).",
+      "cc": "gab"
+    },
+    {
+      "id": "c_presse",
+      "compte": "c_presse",
+      "compte_display": "Presse en ligne gabonaise",
+      "plateforme": "presse",
+      "type": "canal",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville",
+      "lat": 0.43,
+      "lon": 9.45,
+      "audience_estimee": 12000,
+      "content_excerpt": "Amplification, légitimation ou correction. Maillon clé du graphe média ↔ incident ↔ narratif.",
+      "cc": "gab"
+    },
+    {
+      "id": "i_coca",
+      "compte": "i_coca",
+      "compte_display": "Fin du partenariat Coca-Cola",
+      "plateforme": "incident corporate",
+      "type": "incident",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-06-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville",
+      "lat": 0.385,
+      "lon": 9.5,
+      "audience_estimee": 13000,
+      "content_excerpt": "INC-004 — Fin du partenariat historique Castel/SOBRAGA – The Coca-Cola Company (mai-juin 2022). Contexte de fragilisation narrative (NAR-004, probable).",
+      "cc": "gab"
+    },
+    {
+      "id": "i_eau",
+      "compte": "i_eau",
+      "compte_display": "Fake news arrêt / cession eau",
+      "plateforme": "désinformation",
+      "type": "incident",
+      "parent_id": "s_andza",
+      "niveau_preuve": "Confirmé",
+      "date": "2022-06-20T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville / national",
+      "lat": 0.415,
+      "lon": 9.472,
+      "audience_estimee": 17000,
+      "content_excerpt": "INC-001 — Rumeur (réseaux sociaux + certains médias) d'arrêt/cession de l'activité eau minérale. Démenti officiel SOBRAGA (NAR-001, confirmé).",
+      "cc": "gab"
+    },
+    {
+      "id": "i_penurie",
+      "compte": "i_penurie",
+      "compte_display": "Risque de pénurie Andza",
+      "plateforme": "logistique → informationnel",
+      "type": "incident",
+      "parent_id": "s_owendo_usine",
+      "niveau_preuve": "Confirmé",
+      "date": "2023-01-15T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville / Owendo",
+      "lat": 0.295,
+      "lon": 9.505,
+      "audience_estimee": 15000,
+      "content_excerpt": "INC-002 — Interruption ferroviaire (Transgabonais) → risque de rupture de stock Andza à Libreville. Forte sensibilité narrative (NAR-002, confirmé).",
+      "cc": "gab"
+    },
+    {
+      "id": "i_rh",
+      "compte": "i_rh",
+      "compte_display": "Fausses offres d'emploi SOBRAGA",
+      "plateforme": "usurpation d'identité",
+      "type": "incident",
+      "parent_id": "c_site",
+      "niveau_preuve": "Confirmé",
+      "date": "2024-09-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville / en ligne",
+      "lat": 0.425,
+      "lon": 9.48,
+      "audience_estimee": 14000,
+      "content_excerpt": "INC-003 — Offres d'emploi frauduleuses au nom de SOBRAGA (2024-2025). Alertes publiques de la société (NAR-003, confirmé).",
+      "cc": "gab"
+    },
+    {
+      "id": "i_suspension",
+      "compte": "i_suspension",
+      "compte_display": "Suspension réseaux sociaux Gabon",
+      "plateforme": "contexte national",
+      "type": "incident",
+      "parent_id": "e_sobraga",
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-15T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Libreville (national)",
+      "lat": 0.44,
+      "lon": 9.43,
+      "audience_estimee": 12000,
+      "content_excerpt": "INC-005 — Mesure des autorités gabonaises (fév. 2026), motivée notamment par la lutte contre les fake news. Impact sur la contre-communication corporate.",
+      "cc": "gab"
+    },
+    {
+      "id": "gab_act_diffuseurs",
+      "compte": "gab_act_diffuseurs",
+      "compte_display": "Diffuseurs anonymes (réseaux sociaux)",
+      "plateforme": "comptes anonymes / réseaux sociaux",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé comme catégorie",
+      "date": "2022-06-10T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Gabon (en ligne)",
+      "lat": 0.52,
+      "lon": 9.38,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Catégorie d'acteur — sans attribution nominative. Propagation initiale de la rumeur d'arrêt / cession de l'activité eau minérale (NAR-001). Statut : confirmé comme catégorie (démentis publics et reprises médiatiques).",
+      "cc": "gab"
+    },
+    {
+      "id": "gab_act_medias",
+      "compte": "gab_act_medias",
+      "compte_display": "Médias en ligne mal informés",
+      "plateforme": "presse en ligne",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé comme catégorie",
+      "date": "2022-06-18T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Gabon (en ligne)",
+      "lat": 0.5,
+      "lon": 9.56,
+      "audience_estimee": 0,
+      "r": 4,
+      "content_excerpt": "Catégorie d'acteur — relais, non hostile prouvé. Reprise et amplification de contenus inexacts sur l'eau minérale avant les démentis (NAR-001). Statut : confirmé comme catégorie.",
+      "cc": "gab"
+    },
+    {
+      "id": "gab_act_rh",
+      "compte": "gab_act_rh",
+      "compte_display": "Usurpateurs d'identité RH",
+      "plateforme": "faux comptes / usurpation",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé comme catégorie",
+      "date": "2024-09-01T00:00:00Z",
+      "lang": "fr",
+      "pays": "GA",
+      "ville": "Gabon (en ligne)",
+      "lat": 0.55,
+      "lon": 9.46,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Catégorie d'acteur — sans attribution nominative. Diffusion de fausses offres d'emploi au nom de SOBRAGA (NAR-003). Statut : confirmé comme catégorie (alertes publiques SOBRAGA 2024-2025).",
+      "cc": "gab"
+    },
+    {
+      "id": "rca_filiale",
+      "cc": "rca",
+      "compte_display": "SUCAF RCA / MOCAF",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.3947,
+      "lon": 18.5582,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "La RCA est le seul cas où l'instrumentalisation de Castel par une puissance étrangère est intégralement documentée et confirmée par des sources primaires indépendantes, des décisions judiciaires et des investigations de renseignement occidental."
+    },
+    {
+      "id": "rca_act_RU",
+      "cc": "rca",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.442,
+      "lon": 18.5064,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Wagner/Africa Corps — campagne \"Castel finance la guerre\" (jan 2023), incendie MOCAF (mars 2023), brasserie Africa Ti L'Or (Dmitri Sytyi), flyers, manifestations orchestrées, portail pravda-cf.com (ma"
+    },
+    {
+      "id": "rca_inc_0",
+      "cc": "rca",
+      "compte_display": "2014–2021 — SUCAF RCA maintient des arrangements séc…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.2901,
+      "lon": 18.5674,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "SUCAF RCA maintient des arrangements sécuritaires avec l'UPC (milice). The Sentry documente des paiements indirects pour la protection des installations sucrières."
+    },
+    {
+      "id": "rca_inc_1",
+      "cc": "rca",
+      "compte_display": "Juil. 2021 — The Sentry publie \"Cultivating Atrocitie…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Nord de Bangui",
+      "lat": 4.62,
+      "lon": 18.62,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "The Sentry publie \"Cultivating Atrocities\" — rapport accusant Castel/SUCAF de financement indirect de l'UPC. Ce rapport deviendra le socle narratif de la campagne Wagner."
+    },
+    {
+      "id": "rca_inc_2",
+      "cc": "rca",
+      "compte_display": "Fév. 2022 — PNAT ouvre une enquête préliminaire pour…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bria",
+      "lat": 6.5423,
+      "lon": 21.9914,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "PNAT ouvre une enquête préliminaire pour complicité de crimes contre l'humanité contre la filiale centrafricaine de Castel."
+    },
+    {
+      "id": "rca_inc_3",
+      "cc": "rca",
+      "compte_display": "Fin 2022 — Wagner inaugure sa brasserie au nord de …",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.5058,
+      "lon": 18.6436,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Wagner inaugure sa brasserie au nord de Bangui (~$25–35M d'investissement). Marque : Africa Ti L'Or / \"Bière Russe\". Propriétaire de façade : Dmitri Sytyi, attaché culturel russe et opérateur Wagner."
+    },
+    {
+      "id": "rca_inc_4",
+      "cc": "rca",
+      "compte_display": "Jan. 2023 — Campagne FIMI : réseau de comptes coordo…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Nord de Bangui",
+      "lat": 4.6673,
+      "lon": 18.5682,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Campagne FIMI : réseau de comptes coordonnés diffuse simultanément \"Castel soutient le terrorisme\". Flyers avec Kalachnikov chargée de bouteilles MOCAF : \"Chaque bouteille achetée est une balle dans le fusil des bandits.\""
+    },
+    {
+      "id": "rca_inc_5",
+      "cc": "rca",
+      "compte_display": "Jan.–Fév. 2023 — Distribution forcée d'Africa Ti L'Or dan…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.3642,
+      "lon": 18.3854,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Distribution forcée d'Africa Ti L'Or dans les bars de Bangui par des livreurs à tricycle motorisé armés. Pression physique sur les commerçants."
+    },
+    {
+      "id": "rca_inc_6",
+      "cc": "rca",
+      "compte_display": "Mars 2023 — Incendie de la brasserie MOCAF (cocktails Molotov)",
+      "plateforme": "incident physique",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2023-03-06",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.351,
+      "lon": 18.601,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Incendie de la brasserie MOCAF (nuit du 5-6 mars 2023) : hommes en tenue type Wagner lançant des cocktails Molotov. Escalade physique de la campagne anti-Castel."
+    },
+    {
+      "id": "rca_inc_7",
+      "cc": "rca",
+      "compte_display": "Avr. 2023 — Manifestations orchestrées « Castel = terrorisme »",
+      "plateforme": "mobilisation orchestrée",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2023-04-15",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.402,
+      "lon": 18.558,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Manifestations orchestrées : protestataires déversant des bouteilles MOCAF, slogans « Castel = terrorisme ». Mobilisation coordonnée avec les tracts."
+    },
+    {
+      "id": "rca_inc_8",
+      "cc": "rca",
+      "compte_display": "Mars 2024 — VIGINUM : portail pravda-cf.com (Portal Kombat)",
+      "plateforme": "infrastructure FIMI",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2024-03-15",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.328,
+      "lon": 18.512,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "VIGINUM/SGDSN documente pravda-cf.com (réseau Portal Kombat) ciblant la RCA. Infrastructure de désinformation pérenne."
+    },
+    {
+      "id": "rca_inc_9",
+      "cc": "rca",
+      "compte_display": "Avr. 2026 — PNAT classe sans suite l'enquête visant Castel",
+      "plateforme": "décision judiciaire",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-04-22",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.373,
+      "lon": 18.563,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "PNAT classe sans suite l'enquête contre Castel — infractions « insuffisamment caractérisées ». Les avocats relèvent une « cible idéale » pour Wagner (Le Monde, 22.04.2026)."
+    },
+    {
+      "id": "rca_inc_10",
+      "cc": "rca",
+      "compte_display": "Fév. 2026 — Fuite « Africa Politology » : méthodologie FIMI",
+      "plateforme": "fuite documentaire",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-02-21",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Bangui",
+      "lat": 4.418,
+      "lon": 18.534,
+      "audience_estimee": 0,
+      "r": 3.8,
+      "content_excerpt": "Fuite « Africa Politology » (~1 500 pages, authentifiées par Forbidden Stories / All Eyes On Wagner / iStories) : méthodologie FIMI de l'appareil ayant porté la campagne anti-Castel (Africanews, 21.02.2026)."
+    },
+    {
+      "id": "rca_inc_11",
+      "cc": "rca",
+      "compte_display": "Mai 2026 — Humanitaire J. Figueira instrumentalisé par Wagner",
+      "plateforme": "instrumentalisation",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2026-05-26",
+      "lang": "fr",
+      "pays": "CF",
+      "ville": "Zemio",
+      "lat": 5.0289,
+      "lon": 25.1361,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Instrumentalisation de l'humanitaire J. Figueira (FHI 360), enlevé à Zemio en mai 2024, libéré vers Lisbonne le 8 avr. 2026 — présenté en « espion » par le même appareil Wagner que celui visant Castel (AllAfrica, 26.05.2026)."
+    },
+    {
+      "id": "mali_filiale",
+      "cc": "mali",
+      "compte_display": "Bramali (Brasseries du Mali)",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "ML",
+      "ville": "Bamako",
+      "lat": 12.6392,
+      "lon": -8.0029,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Présence Wagner/Africa Corps la plus ancienne et la plus dense. Castel/Bramali opère dans un environnement saturé de narratifs anti-français mais n'a pas été ciblé directement à ce jour."
+    },
+    {
+      "id": "mali_act_RU",
+      "cc": "mali",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "ML",
+      "ville": "Bamako",
+      "lat": 12.6865,
+      "lon": -8.0558,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Expulsion MINUSMA & forces françaises (2023). Portal Kombat implantation Bamako. African Initiative bureau local. Wagner → Africa Corps présence permanente aéroport Bamako. Opération Totem (Meta 2021)"
+    },
+    {
+      "id": "mali_inc_0",
+      "cc": "mali",
+      "compte_display": "2021 — Meta supprime le réseau Totem — 500+ fau…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "ML",
+      "ville": "Bamako",
+      "lat": 12.5346,
+      "lon": -7.9935,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Meta supprime le réseau Totem — 500+ faux comptes Facebook coordonnés liés à Wagner ciblant le Mali."
+    },
+    {
+      "id": "mali_inc_1",
+      "cc": "mali",
+      "compte_display": "2022–2023 — Wagner consolide sa présence à Bamako. V…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "ML",
+      "ville": "Bamako",
+      "lat": 12.7503,
+      "lon": -7.9156,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Wagner consolide sa présence à Bamako. Victoire de Kidal (fin 2023) exploitée comme argument de légitimité."
+    },
+    {
+      "id": "mali_inc_2",
+      "cc": "mali",
+      "compte_display": "2023 — Expulsion forces françaises et MINUSMA. …",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "ML",
+      "ville": "Kidal",
+      "lat": 18.4411,
+      "lon": 1.4078,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Expulsion forces françaises et MINUSMA. Narratifs FIMI en soutien aux décisions de la junte."
+    },
+    {
+      "id": "mali_inc_3",
+      "cc": "mali",
+      "compte_display": "2024 — Africa Corps remplace Wagner formellemen…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "ML",
+      "ville": "Bamako",
+      "lat": 12.6087,
+      "lon": -8.1795,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Africa Corps remplace Wagner formellement. Base élargie aéroport international Bamako."
+    },
+    {
+      "id": "bfa_filiale",
+      "cc": "bfa",
+      "compte_display": "Brakina (Brasseries du Burkina)",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "BF",
+      "ville": "Ouagadougou",
+      "lat": 12.3714,
+      "lon": -1.5197,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Pays du triumvirat AES (Alliance des États du Sahel) avec Mali et Niger. Environnement FIMI le plus structuré hors RCA grâce à l'infrastructure African Initiative."
+    },
+    {
+      "id": "bfa_act_RU",
+      "cc": "bfa",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "BF",
+      "ville": "Ouagadougou",
+      "lat": 12.4187,
+      "lon": -1.5725,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. African Initiative bureau Ouagadougou actif (EEAS 2025). Portal Kombat : pravda-bf.com (mars 2024). Africa Corps déployé depuis jan. 2024 (100 soldats). Manifestations anti-France organisées 2022–2023"
+    },
+    {
+      "id": "bfa_inc_0",
+      "cc": "bfa",
+      "compte_display": "2022 — Coup d'État du capitaine Traoré. Narrati…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "BF",
+      "ville": "Ouagadougou",
+      "lat": 12.2668,
+      "lon": -1.5103,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Coup d'État du capitaine Traoré. Narratifs FIMI amplifient : \"La France a soutenu l'ancien régime.\""
+    },
+    {
+      "id": "bfa_inc_1",
+      "cc": "bfa",
+      "compte_display": "Jan. 2024 — 100 soldats Africa Corps arrivent à Ouag…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "BF",
+      "ville": "Ouagadougou",
+      "lat": 12.4825,
+      "lon": -1.4325,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "100 soldats Africa Corps arrivent à Ouagadougou + unité BEARS (81e brigade spetsnaz)."
+    },
+    {
+      "id": "bfa_inc_2",
+      "cc": "bfa",
+      "compte_display": "Mars 2024 — pravda-bf.com créé (Portal Kombat) — Tel…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "BF",
+      "ville": "Djibo",
+      "lat": 14.1028,
+      "lon": -1.6296,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "pravda-bf.com créé (Portal Kombat) — Telegram + VK associés, IP russe."
+    },
+    {
+      "id": "bfa_inc_3",
+      "cc": "bfa",
+      "compte_display": "2024–2026 — African Initiative maintient un bureau a…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "BF",
+      "ville": "Ouagadougou",
+      "lat": 12.3409,
+      "lon": -1.6961,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "African Initiative maintient un bureau actif et forme des journalistes locaux (EEAS 2025)."
+    },
+    {
+      "id": "niger_filiale",
+      "cc": "niger",
+      "compte_display": "BRANIGER",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "NE",
+      "ville": "Niamey",
+      "lat": 13.5128,
+      "lon": 2.1128,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Coup d'État de juillet 2023 suivi de l'expulsion des forces françaises — contexte d'explosion du sentiment anti-France. BRANIGER opère dans cet environnement mais sans ciblage Castel documenté."
+    },
+    {
+      "id": "niger_act_RU",
+      "cc": "niger",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "NE",
+      "ville": "Niamey",
+      "lat": 13.5601,
+      "lon": 2.0597,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. pravda-ne.com (Portal Kombat, mars 2024). Africa Corps avril 2024 (missions formation). Correspondant African Initiative à Niamey. Expulsion ambassadeur français 2023."
+    },
+    {
+      "id": "niger_inc_0",
+      "cc": "niger",
+      "compte_display": "Juil. 2023 — Coup d'État général Tchiani. Infographie…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "NE",
+      "ville": "Niamey",
+      "lat": 13.4082,
+      "lon": 2.1222,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Coup d'État général Tchiani. Infographies FIMI : \"Le Niger reprend son uranium à la France.\""
+    },
+    {
+      "id": "niger_inc_1",
+      "cc": "niger",
+      "compte_display": "Oct. 2023 — Expulsion forces françaises. Amplificati…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "NE",
+      "ville": "Agadez",
+      "lat": 16.9737,
+      "lon": 7.9904,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Expulsion forces françaises. Amplification massive sur TG/FB."
+    },
+    {
+      "id": "niger_inc_2",
+      "cc": "niger",
+      "compte_display": "Avr. 2024 — Africa Corps arrive officiellement à Nia…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "NE",
+      "ville": "Niamey",
+      "lat": 13.6239,
+      "lon": 2.2004,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Africa Corps arrive officiellement à Niamey (missions formation et équipement)."
+    },
+    {
+      "id": "niger_inc_3",
+      "cc": "niger",
+      "compte_display": "Mars 2024 — pravda-ne.com (Portal Kombat) créé avec …",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "NE",
+      "ville": "Niamey",
+      "lat": 13.4823,
+      "lon": 1.9356,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "pravda-ne.com (Portal Kombat) créé avec Telegram associé."
+    },
+    {
+      "id": "cam_filiale",
+      "cc": "cam",
+      "compte_display": "SABC (Soc. Anonyme des Brasseries du Cameroun)",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CM",
+      "ville": "Douala",
+      "lat": 4.0511,
+      "lon": 9.7679,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Marché brassicole SABC (Castel) dominant. Intensité FIMI modérée, orientée crise politique plutôt que marques françaises."
+    },
+    {
+      "id": "cam_act_RU",
+      "cc": "cam",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CM",
+      "ville": "Douala",
+      "lat": 4.0984,
+      "lon": 9.7162,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Présence CGTN Afrique (Yaoundé). Narratifs crise anglophone amplifiés. Sputnik Afrique relais régional. Absence d'opération anti-Castel documentée."
+    },
+    {
+      "id": "cam_act_CN",
+      "cc": "cam",
+      "compte_display": "Chine",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CM",
+      "ville": "Douala",
+      "lat": 3.9465,
+      "lon": 9.7771,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Présence CGTN Afrique (Yaoundé). Narratifs crise anglophone amplifiés. Sputnik Afrique relais régional. Absence d'opération anti-Castel documentée."
+    },
+    {
+      "id": "cam_inc_0",
+      "cc": "cam",
+      "compte_display": "2019–2026 — Crise anglophone amplifiée par canaux ru…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CM",
+      "ville": "Yaoundé",
+      "lat": 3.848,
+      "lon": 11.5021,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Crise anglophone amplifiée par canaux russes pour fragiliser l'axe Paris-Yaoundé."
+    },
+    {
+      "id": "cam_inc_1",
+      "cc": "cam",
+      "compte_display": "2023–2024 — CGTN intensifie sa présence éditoriale a…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CM",
+      "ville": "Yaoundé",
+      "lat": 3.8953,
+      "lon": 11.4504,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "CGTN intensifie sa présence éditoriale au Cameroun, narratif investissement chinois."
+    },
+    {
+      "id": "civ_filiale",
+      "cc": "civ",
+      "compte_display": "SOLIBRA + Groupe Castel distrib.",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CI",
+      "ville": "Abidjan",
+      "lat": 5.36,
+      "lon": -4.0083,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Pays économiquement le plus stable de la sous-région. Castel/SOLIBRA = opérateur dominant. Exposition FIMI réelle mais sans ciblage sectoriel."
+    },
+    {
+      "id": "civ_act_RU",
+      "cc": "civ",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CI",
+      "ville": "Abidjan",
+      "lat": 5.4073,
+      "lon": -4.0601,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Réseaux Doppelgänger (faux médias ivoiriens). Narratifs élection présidentielle 2020 amplifiés. Tension CEDEAO/AES instrumentalisée contre Paris."
+    },
+    {
+      "id": "civ_inc_0",
+      "cc": "civ",
+      "compte_display": "2020 — Présidentielle 2020 : faux articles attr…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CI",
+      "ville": "Abidjan",
+      "lat": 5.2554,
+      "lon": -3.9991,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Présidentielle 2020 : faux articles attribuant à des médias ivoiriens des contenus pro-Kremlin."
+    },
+    {
+      "id": "civ_inc_1",
+      "cc": "civ",
+      "compte_display": "2023 — Tension CEDEAO/AES exploitée pour amplif…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CI",
+      "ville": "Yamoussoukro",
+      "lat": 6.8276,
+      "lon": -5.2767,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Tension CEDEAO/AES exploitée pour amplifier sentiment anti-France en Côte d'Ivoire."
+    },
+    {
+      "id": "sen_filiale",
+      "cc": "sen",
+      "compte_display": "Filiale distribution / SENICO",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "SN",
+      "ville": "Dakar",
+      "lat": 14.7167,
+      "lon": -17.4677,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Transition politique 2024 (Sonko/Faye). Castel présent mais non dominant. Sentiment anti-France en hausse mais sans ciblage de marques."
+    },
+    {
+      "id": "sen_act_RU",
+      "cc": "sen",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "SN",
+      "ville": "Dakar",
+      "lat": 14.764,
+      "lon": -17.5211,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Opérations ciblant Faye/Sonko (2023–2024). Amplification mouvements anti-France. Narratifs uranium/francophonie. Sputnik Afrique actif."
+    },
+    {
+      "id": "sen_inc_0",
+      "cc": "sen",
+      "compte_display": "2023–2024 — Crise Sonko/Faye : canaux pro-Kremlin am…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "SN",
+      "ville": "Dakar",
+      "lat": 14.6121,
+      "lon": -17.4582,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Crise Sonko/Faye : canaux pro-Kremlin amplifient les narratifs \"France manipule la justice sénégalaise.\""
+    },
+    {
+      "id": "sen_inc_1",
+      "cc": "sen",
+      "compte_display": "2024 — Retrait France de la base militaire de D…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "SN",
+      "ville": "Dakar",
+      "lat": 14.8278,
+      "lon": -17.3796,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Retrait France de la base militaire de Dakar. FIMI dans la couverture."
+    },
+    {
+      "id": "tcad_filiale",
+      "cc": "tcad",
+      "compte_display": "Brasseries du Tchad (GALA)",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "TD",
+      "ville": "N'Djaména",
+      "lat": 12.1348,
+      "lon": 15.0557,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Présence militaire française résiduelle. Castel/Brasseries du Tchad = acteur économique visible mais pas ciblé."
+    },
+    {
+      "id": "tcad_act_RU",
+      "cc": "tcad",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "TD",
+      "ville": "N'Djaména",
+      "lat": 12.1821,
+      "lon": 15.0029,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Opérations FIMI liées à l'après-Déby (2021). Triangulation avec narrative AES. Sputnik présent."
+    },
+    {
+      "id": "tcad_inc_0",
+      "cc": "tcad",
+      "compte_display": "2021 — Mort d'Idriss Déby : narratifs russes : …",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "TD",
+      "ville": "N'Djaména",
+      "lat": 12.0302,
+      "lon": 15.0651,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Mort d'Idriss Déby : narratifs russes : \"La France savait et n'a pas prévenu.\" Amplifiés sur FB/TG."
+    },
+    {
+      "id": "tcad_inc_1",
+      "cc": "tcad",
+      "compte_display": "2023–2024 — Pression pour rapprochement avec AES. FI…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "TD",
+      "ville": "Moundou",
+      "lat": 8.5704,
+      "lon": 16.0876,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Pression pour rapprochement avec AES. FIMI amplifie dissidents anti-Déby fils."
+    },
+    {
+      "id": "guin_filiale",
+      "cc": "guin",
+      "compte_display": "SOBRAGUI",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "GN",
+      "ville": "Conakry",
+      "lat": 9.6412,
+      "lon": -13.5784,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "SOBRAGUI (Castel) = monopole brassicole. Intensité FIMI en hausse depuis coup 2021."
+    },
+    {
+      "id": "guin_act_RU",
+      "cc": "guin",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "GN",
+      "ville": "Conakry",
+      "lat": 9.6885,
+      "lon": -13.6308,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Narratifs post-coup Mamadi Doumbouya (2021). Amplification sentiment anti-France. Sputnik présent."
+    },
+    {
+      "id": "guin_inc_0",
+      "cc": "guin",
+      "compte_display": "2021 — Coup Doumbouya : canaux pro-Kremlin ence…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "GN",
+      "ville": "Conakry",
+      "lat": 9.5366,
+      "lon": -13.5691,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Coup Doumbouya : canaux pro-Kremlin encensent la junte comme \"patriote contre la francophonie.\""
+    },
+    {
+      "id": "guin_inc_1",
+      "cc": "guin",
+      "compte_display": "2022–2024 — Consolidation narrative anti-France sur …",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "GN",
+      "ville": "Conakry",
+      "lat": 9.7523,
+      "lon": -13.492,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Consolidation narrative anti-France sur FB/TG en Conakry."
+    },
+    {
+      "id": "cog_filiale",
+      "cc": "cog",
+      "compte_display": "BRALICO (Brasseries et Limonades du Congo)",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CG",
+      "ville": "Brazzaville",
+      "lat": -4.2634,
+      "lon": 15.2429,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Environnement FIMI présent mais modéré. Alliance Sassou-Paris joue un rôle tampon."
+    },
+    {
+      "id": "cog_act_RU",
+      "cc": "cog",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CG",
+      "ville": "Brazzaville",
+      "lat": -4.2161,
+      "lon": 15.1911,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Présence chinoise via CGTN. Influence russe modérée. Sassou-Nguesso = partenaire traditionnel Paris, frein relatif aux narratifs anti-France."
+    },
+    {
+      "id": "cog_act_CN",
+      "cc": "cog",
+      "compte_display": "Chine",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CG",
+      "ville": "Brazzaville",
+      "lat": -4.368,
+      "lon": 15.2521,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Présence chinoise via CGTN. Influence russe modérée. Sassou-Nguesso = partenaire traditionnel Paris, frein relatif aux narratifs anti-France."
+    },
+    {
+      "id": "cog_inc_0",
+      "cc": "cog",
+      "compte_display": "2023–2024 — CGTN développe couverture positive proje…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "CG",
+      "ville": "Brazzaville",
+      "lat": -4.1523,
+      "lon": 15.3283,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "CGTN développe couverture positive projets infrastructure chinois au Congo."
+    },
+    {
+      "id": "tgo_filiale",
+      "cc": "tgo",
+      "compte_display": "BB Lomé / CTEM",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "TG",
+      "ville": "Lomé",
+      "lat": 6.1375,
+      "lon": 1.2123,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Intensité FIMI basse. Régime Gnassingbé entretient des relations ambiguës avec Paris et Moscou."
+    },
+    {
+      "id": "tgo_act_RU",
+      "cc": "tgo",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "TG",
+      "ville": "Lomé",
+      "lat": 6.1848,
+      "lon": 1.1604,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Narratifs amplifiés lors tensions frontalières AES. Présence modérée Sputnik."
+    },
+    {
+      "id": "mar_filiale",
+      "cc": "mar",
+      "compte_display": "Brasseries du Maroc (Casablanca Beer)",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "MA",
+      "ville": "Casablanca",
+      "lat": 33.5731,
+      "lon": -7.5898,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Acteur Gulf plus actif que Russie au Maroc. Brasseries du Maroc (Castel) est une cible potentielle des campagnes anti-alcool religieuses."
+    },
+    {
+      "id": "mar_act_GCC",
+      "cc": "mar",
+      "compte_display": "États du Golfe",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "MA",
+      "ville": "Casablanca",
+      "lat": 33.6204,
+      "lon": -7.6518,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Opérations du Golfe (UAE/Qatar) ciblant la relation Maroc-France post-Sahara. Narratifs islamiques anti-alcool. Pressions sur marchés halal."
+    },
+    {
+      "id": "mar_inc_0",
+      "cc": "mar",
+      "compte_display": "2023 — Tensions diplomatiques France-Maroc (Mar…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "MA",
+      "ville": "Marrakech",
+      "lat": 31.6295,
+      "lon": -7.9811,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Tensions diplomatiques France-Maroc (Marrakech séisme, visas). Canaux du Golfe amplifient narratifs anti-France."
+    },
+    {
+      "id": "mar_inc_1",
+      "cc": "mar",
+      "compte_display": "2024 — Campagnes sur YT/FB islamiques ciblant p…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "MA",
+      "ville": "Rabat",
+      "lat": 34.0209,
+      "lon": -6.8416,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Campagnes sur YT/FB islamiques ciblant production d'alcool au Maroc."
+    },
+    {
+      "id": "dza_filiale",
+      "cc": "dza",
+      "compte_display": "ALGAD (Castel distrib.)",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "DZ",
+      "ville": "Alger",
+      "lat": 36.7538,
+      "lon": 3.0588,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Relations France-Algérie structurellement conflictuelles. ALGAD opère dans un contexte de sentiment anti-français nativement élevé."
+    },
+    {
+      "id": "dza_act_RU",
+      "cc": "dza",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "DZ",
+      "ville": "Alger",
+      "lat": 36.8011,
+      "lon": 2.9944,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Narratifs anti-France liés à histoire coloniale. Russie = partenaire historique Algérie. Médias saoudiens et qataris présents."
+    },
+    {
+      "id": "dza_act_GCC",
+      "cc": "dza",
+      "compte_display": "États du Golfe",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "DZ",
+      "ville": "Alger",
+      "lat": 36.6492,
+      "lon": 3.0703,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Narratifs anti-France liés à histoire coloniale. Russie = partenaire historique Algérie. Médias saoudiens et qataris présents."
+    },
+    {
+      "id": "dza_inc_0",
+      "cc": "dza",
+      "compte_display": "2021–2026 — Crises récurrentes France-Algérie (mémoi…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "DZ",
+      "ville": "Alger",
+      "lat": 36.8649,
+      "lon": 3.1651,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Crises récurrentes France-Algérie (mémoire coloniale, visas) systématiquement amplifiées par canaux russes et du Golfe."
+    },
+    {
+      "id": "eth_filiale",
+      "cc": "eth",
+      "compte_display": "BGI Ethiopia / Brasseries Raya",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "ET",
+      "ville": "Addis-Abeba",
+      "lat": 9.025,
+      "lon": 38.7469,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Acteur principal : Chine. France n'est pas une cible directe. BGI/Raya (Castel) = important employeur éthiopien."
+    },
+    {
+      "id": "eth_act_CN",
+      "cc": "eth",
+      "compte_display": "Chine",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "ET",
+      "ville": "Addis-Abeba",
+      "lat": 9.0723,
+      "lon": 38.6946,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Chine = investisseur dominant BRI. CGTN bureau Addis. Conflit Tigré amplifié par Beijing pour contrer narratif occidental. Sentiment anti-France inexistant (pas de relation coloniale)."
+    },
+    {
+      "id": "eth_inc_0",
+      "cc": "eth",
+      "compte_display": "2020–2022 — Conflit Tigré : CGTN/Xinhua diffuse la p…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "ET",
+      "ville": "Addis-Abeba",
+      "lat": 8.9204,
+      "lon": 38.7562,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Conflit Tigré : CGTN/Xinhua diffuse la position d'Addis, contrant les narratifs occidentaux de \"crimes de guerre.\""
+    },
+    {
+      "id": "mad_filiale",
+      "cc": "mad",
+      "compte_display": "Brasseries Star Madagascar",
+      "plateforme": "filiale Castel",
+      "type": "entite",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "MG",
+      "ville": "Antananarivo",
+      "lat": -18.8792,
+      "lon": 47.5079,
+      "audience_estimee": 0,
+      "r": 5,
+      "content_excerpt": "Brasseries Star = opérateur Castel majeur. Intensité FIMI faible, exposition géographique éloignée des foyers Sahel."
+    },
+    {
+      "id": "mad_act_RU",
+      "cc": "mad",
+      "compte_display": "Russie",
+      "plateforme": "acteur étatique étranger",
+      "type": "acteur",
+      "parent_id": null,
+      "niveau_preuve": "Probable",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "MG",
+      "ville": "Antananarivo",
+      "lat": -18.8319,
+      "lon": 47.4533,
+      "audience_estimee": 0,
+      "r": 4.5,
+      "content_excerpt": "Acteur FIMI actif sur ce marché. Narratifs anti-France présents depuis élection Rajoelina 2019. Sputnik relais modéré. Aucune opération Castel identifiée."
+    },
+    {
+      "id": "mad_inc_0",
+      "cc": "mad",
+      "compte_display": "2019–2024 — Sputnik Afrique amplifie tensions Paris-…",
+      "plateforme": "incident informationnel",
+      "type": "incident",
+      "parent_id": null,
+      "niveau_preuve": "Confirmé",
+      "date": "2022-05-01",
+      "lang": "fr",
+      "pays": "MG",
+      "ville": "Antananarivo",
+      "lat": -18.9838,
+      "lon": 47.5176,
+      "audience_estimee": 0,
+      "r": 3.4,
+      "content_excerpt": "Sputnik Afrique amplifie tensions Paris-Antananarivo lors des cycles électoraux."
+    }
+  ],
+  "patient_zero": "e_sobraga",
+  "relations": [
+    {
+      "from": "e_sobraga",
+      "to": "e_castel",
+      "type": "appartenance",
+      "label": "Filiale du groupe Castel"
+    },
+    {
+      "from": "e_sovingab",
+      "to": "e_castel",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "e_soboleco",
+      "to": "e_castel",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "e_castel_afrique",
+      "to": "e_castel",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "e_jaffret",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": "Dirige SOBRAGA"
+    },
+    {
+      "from": "s_owendo_usine",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "s_franceville",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "s_portgentil",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "s_oyem",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "s_mouila",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "m_regab",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "m_castelbeer",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "m_33export",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "m_guinness",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "m_akewa",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "m_vitale",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "m_aningeau",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "c_facebook",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "c_instagram",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "c_linkedin",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "c_site",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "c_presse",
+      "to": "e_sobraga",
+      "type": "appartenance",
+      "label": ""
+    },
+    {
+      "from": "s_andza",
+      "to": "s_franceville",
+      "type": "dependance",
+      "label": "Rail Léconi → Franceville"
+    },
+    {
+      "from": "s_franceville",
+      "to": "s_owendo_usine",
+      "type": "dependance",
+      "label": "Transgabonais → Owendo"
+    },
+    {
+      "from": "m_andza",
+      "to": "s_andza",
+      "type": "dependance",
+      "label": "Eau Andza issue de Léconi"
+    },
+    {
+      "from": "i_eau",
+      "to": "m_andza",
+      "type": "cible",
+      "label": "Rumeur « arrêt de l'eau »",
+      "phase": null
+    },
+    {
+      "from": "i_eau",
+      "to": "s_andza",
+      "type": "cible",
+      "label": "Vise la production de Léconi",
+      "phase": null
+    },
+    {
+      "from": "i_penurie",
+      "to": "m_andza",
+      "type": "cible",
+      "label": "Rumeur de pénurie",
+      "phase": null
+    },
+    {
+      "from": "i_penurie",
+      "to": "s_andza",
+      "type": "cible",
+      "label": "Sensibilité logistique",
+      "phase": null
+    },
+    {
+      "from": "i_rh",
+      "to": "e_sobraga",
+      "type": "cible",
+      "label": "Usurpation marque employeur",
+      "phase": null
+    },
+    {
+      "from": "i_coca",
+      "to": "e_sobraga",
+      "type": "cible",
+      "label": "Fragilisation post-Coca-Cola (NAR-004)",
+      "phase": null
+    },
+    {
+      "from": "i_suspension",
+      "to": "e_sobraga",
+      "type": "cible",
+      "label": "Réseaux sociaux suspendus — contre-com. entravée",
+      "phase": null
+    },
+    {
+      "from": "gab_act_diffuseurs",
+      "to": "i_eau",
+      "type": "cible",
+      "label": "Juin 2022 — propagation initiale",
+      "phase": "2"
+    },
+    {
+      "from": "gab_act_medias",
+      "to": "i_eau",
+      "type": "cible",
+      "label": "Juin 2022 — reprise / amplification",
+      "phase": "2"
+    },
+    {
+      "from": "gab_act_rh",
+      "to": "i_rh",
+      "type": "cible",
+      "label": "2024–2025 — usurpation RH",
+      "phase": "4"
+    },
+    {
+      "from": "i_eau",
+      "to": "c_site",
+      "type": "riposte",
+      "label": "Démenti officiel"
+    },
+    {
+      "from": "i_eau",
+      "to": "c_facebook",
+      "type": "riposte",
+      "label": "Démenti réseaux"
+    },
+    {
+      "from": "i_eau",
+      "to": "c_presse",
+      "type": "riposte",
+      "label": "Correction presse"
+    },
+    {
+      "from": "i_rh",
+      "to": "c_linkedin",
+      "type": "riposte",
+      "label": "Alerte officielle"
+    },
+    {
+      "from": "i_rh",
+      "to": "c_facebook",
+      "type": "riposte",
+      "label": "Alerte publique"
+    },
+    {
+      "from": "i_penurie",
+      "to": "c_facebook",
+      "type": "riposte",
+      "label": "Communication d'approvisionnement"
+    },
+    {
+      "from": "i_suspension",
+      "to": "c_facebook",
+      "type": "riposte",
+      "label": "Canal entravé"
+    },
+    {
+      "from": "i_suspension",
+      "to": "c_instagram",
+      "type": "riposte",
+      "label": "Canal entravé"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_0",
+      "type": "cible",
+      "label": "2014–2021",
+      "phase": "1"
+    },
+    {
+      "from": "rca_inc_0",
+      "to": "rca_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_1",
+      "type": "cible",
+      "label": "Juil. 2021",
+      "phase": "1"
+    },
+    {
+      "from": "rca_inc_1",
+      "to": "rca_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_2",
+      "type": "cible",
+      "label": "Fév. 2022",
+      "phase": "2"
+    },
+    {
+      "from": "rca_inc_2",
+      "to": "rca_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_3",
+      "type": "cible",
+      "label": "Fin 2022",
+      "phase": "2"
+    },
+    {
+      "from": "rca_inc_3",
+      "to": "rca_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_4",
+      "type": "cible",
+      "label": "Jan. 2023",
+      "phase": "3"
+    },
+    {
+      "from": "rca_inc_4",
+      "to": "rca_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_5",
+      "type": "cible",
+      "label": "Jan.–Fév. 2023",
+      "phase": "3"
+    },
+    {
+      "from": "rca_inc_5",
+      "to": "rca_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_6",
+      "type": "cible",
+      "label": "Mars 2023",
+      "phase": "3"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_7",
+      "type": "cible",
+      "label": "Avr. 2023",
+      "phase": "3"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_8",
+      "type": "cible",
+      "label": "Mars 2024",
+      "phase": "4"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_10",
+      "type": "cible",
+      "label": "Fév. 2026",
+      "phase": "4"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_9",
+      "type": "cible",
+      "label": "Avr. 2026",
+      "phase": "4"
+    },
+    {
+      "from": "rca_act_RU",
+      "to": "rca_inc_11",
+      "type": "cible",
+      "label": "Mai 2026",
+      "phase": "4"
+    },
+    {
+      "from": "mali_act_RU",
+      "to": "mali_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "mali_act_RU",
+      "to": "mali_inc_0",
+      "type": "cible",
+      "label": "2021",
+      "phase": "1"
+    },
+    {
+      "from": "mali_inc_0",
+      "to": "mali_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "mali_act_RU",
+      "to": "mali_inc_1",
+      "type": "cible",
+      "label": "2022–2023",
+      "phase": "2"
+    },
+    {
+      "from": "mali_inc_1",
+      "to": "mali_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "mali_act_RU",
+      "to": "mali_inc_2",
+      "type": "cible",
+      "label": "2023",
+      "phase": "3"
+    },
+    {
+      "from": "mali_inc_2",
+      "to": "mali_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "mali_act_RU",
+      "to": "mali_inc_3",
+      "type": "cible",
+      "label": "2024",
+      "phase": "4"
+    },
+    {
+      "from": "mali_inc_3",
+      "to": "mali_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "bfa_act_RU",
+      "to": "bfa_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "bfa_act_RU",
+      "to": "bfa_inc_0",
+      "type": "cible",
+      "label": "2022",
+      "phase": "2"
+    },
+    {
+      "from": "bfa_inc_0",
+      "to": "bfa_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "bfa_act_RU",
+      "to": "bfa_inc_1",
+      "type": "cible",
+      "label": "Jan. 2024",
+      "phase": "4"
+    },
+    {
+      "from": "bfa_inc_1",
+      "to": "bfa_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "bfa_act_RU",
+      "to": "bfa_inc_2",
+      "type": "cible",
+      "label": "Mars 2024",
+      "phase": "4"
+    },
+    {
+      "from": "bfa_inc_2",
+      "to": "bfa_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "bfa_act_RU",
+      "to": "bfa_inc_3",
+      "type": "cible",
+      "label": "2024–2026",
+      "phase": "4"
+    },
+    {
+      "from": "bfa_inc_3",
+      "to": "bfa_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "niger_act_RU",
+      "to": "niger_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "niger_act_RU",
+      "to": "niger_inc_0",
+      "type": "cible",
+      "label": "Juil. 2023",
+      "phase": "3"
+    },
+    {
+      "from": "niger_inc_0",
+      "to": "niger_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "niger_act_RU",
+      "to": "niger_inc_1",
+      "type": "cible",
+      "label": "Oct. 2023",
+      "phase": "3"
+    },
+    {
+      "from": "niger_inc_1",
+      "to": "niger_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "niger_act_RU",
+      "to": "niger_inc_2",
+      "type": "cible",
+      "label": "Avr. 2024",
+      "phase": "4"
+    },
+    {
+      "from": "niger_inc_2",
+      "to": "niger_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "niger_act_RU",
+      "to": "niger_inc_3",
+      "type": "cible",
+      "label": "Mars 2024",
+      "phase": "4"
+    },
+    {
+      "from": "niger_inc_3",
+      "to": "niger_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "cam_act_RU",
+      "to": "cam_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "cam_act_CN",
+      "to": "cam_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "cam_act_RU",
+      "to": "cam_inc_0",
+      "type": "cible",
+      "label": "2019–2026",
+      "phase": "1"
+    },
+    {
+      "from": "cam_inc_0",
+      "to": "cam_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "cam_act_RU",
+      "to": "cam_inc_1",
+      "type": "cible",
+      "label": "2023–2024",
+      "phase": "3"
+    },
+    {
+      "from": "cam_inc_1",
+      "to": "cam_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "civ_act_RU",
+      "to": "civ_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "civ_act_RU",
+      "to": "civ_inc_0",
+      "type": "cible",
+      "label": "2020",
+      "phase": "1"
+    },
+    {
+      "from": "civ_inc_0",
+      "to": "civ_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "civ_act_RU",
+      "to": "civ_inc_1",
+      "type": "cible",
+      "label": "2023",
+      "phase": "3"
+    },
+    {
+      "from": "civ_inc_1",
+      "to": "civ_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "sen_act_RU",
+      "to": "sen_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "sen_act_RU",
+      "to": "sen_inc_0",
+      "type": "cible",
+      "label": "2023–2024",
+      "phase": "3"
+    },
+    {
+      "from": "sen_inc_0",
+      "to": "sen_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "sen_act_RU",
+      "to": "sen_inc_1",
+      "type": "cible",
+      "label": "2024",
+      "phase": "4"
+    },
+    {
+      "from": "sen_inc_1",
+      "to": "sen_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "tcad_act_RU",
+      "to": "tcad_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "tcad_act_RU",
+      "to": "tcad_inc_0",
+      "type": "cible",
+      "label": "2021",
+      "phase": "1"
+    },
+    {
+      "from": "tcad_inc_0",
+      "to": "tcad_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "tcad_act_RU",
+      "to": "tcad_inc_1",
+      "type": "cible",
+      "label": "2023–2024",
+      "phase": "3"
+    },
+    {
+      "from": "tcad_inc_1",
+      "to": "tcad_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "guin_act_RU",
+      "to": "guin_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "guin_act_RU",
+      "to": "guin_inc_0",
+      "type": "cible",
+      "label": "2021",
+      "phase": "1"
+    },
+    {
+      "from": "guin_inc_0",
+      "to": "guin_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "guin_act_RU",
+      "to": "guin_inc_1",
+      "type": "cible",
+      "label": "2022–2024",
+      "phase": "2"
+    },
+    {
+      "from": "guin_inc_1",
+      "to": "guin_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "cog_act_RU",
+      "to": "cog_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "cog_act_CN",
+      "to": "cog_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "cog_act_RU",
+      "to": "cog_inc_0",
+      "type": "cible",
+      "label": "2023–2024",
+      "phase": "3"
+    },
+    {
+      "from": "cog_inc_0",
+      "to": "cog_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "tgo_act_RU",
+      "to": "tgo_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "mar_act_GCC",
+      "to": "mar_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "mar_act_GCC",
+      "to": "mar_inc_0",
+      "type": "cible",
+      "label": "2023",
+      "phase": "3"
+    },
+    {
+      "from": "mar_inc_0",
+      "to": "mar_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "mar_act_GCC",
+      "to": "mar_inc_1",
+      "type": "cible",
+      "label": "2024",
+      "phase": "4"
+    },
+    {
+      "from": "mar_inc_1",
+      "to": "mar_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "dza_act_RU",
+      "to": "dza_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "dza_act_GCC",
+      "to": "dza_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "dza_act_RU",
+      "to": "dza_inc_0",
+      "type": "cible",
+      "label": "2021–2026",
+      "phase": "1"
+    },
+    {
+      "from": "dza_inc_0",
+      "to": "dza_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "eth_act_CN",
+      "to": "eth_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "eth_act_CN",
+      "to": "eth_inc_0",
+      "type": "cible",
+      "label": "2020–2022",
+      "phase": "1"
+    },
+    {
+      "from": "eth_inc_0",
+      "to": "eth_filiale",
+      "type": "contexte",
+      "label": ""
+    },
+    {
+      "from": "mad_act_RU",
+      "to": "mad_filiale",
+      "type": "cible",
+      "label": "pression informationnelle",
+      "phase": null
+    },
+    {
+      "from": "mad_act_RU",
+      "to": "mad_inc_0",
+      "type": "cible",
+      "label": "2019–2024",
+      "phase": "1"
+    },
+    {
+      "from": "mad_inc_0",
+      "to": "mad_filiale",
+      "type": "contexte",
+      "label": ""
+    }
+  ],
+  "reseaux": [
+    {
+      "id": "perimetre-corporate",
+      "nom": "Périmètre corporate",
+      "comptes": [
+        "e_castel",
+        "e_sobraga",
+        "e_sovingab",
+        "e_soboleco",
+        "e_castel_afrique",
+        "e_jaffret"
+      ],
+      "publications": [
+        "e_castel",
+        "e_sobraga",
+        "e_sovingab",
+        "e_soboleco",
+        "e_castel_afrique",
+        "e_jaffret"
+      ],
+      "pays_estime": "Gabon — Libreville / Owendo",
+      "niveau_confiance": "Confirmé",
+      "couleur": "#6B3FA0",
+      "notes": "Maison mère, filiales (SOVINGAB, SOBOLECO), cadre groupe (Castel Afrique) et dirigeant public (X. Jaffret, DG depuis 2025)."
+    },
+    {
+      "id": "reseau-industriel",
+      "nom": "Réseau industriel & eau",
+      "comptes": [
+        "s_owendo_usine",
+        "s_franceville",
+        "s_portgentil",
+        "s_oyem",
+        "s_mouila",
+        "s_andza"
+      ],
+      "publications": [
+        "s_owendo_usine",
+        "s_franceville",
+        "s_portgentil",
+        "s_oyem",
+        "s_mouila",
+        "s_andza"
+      ],
+      "pays_estime": "Gabon — Owendo, Franceville, Port-Gentil, Oyem, Mouila, Léconi",
+      "niveau_confiance": "Confirmé",
+      "couleur": "#2E84D4",
+      "notes": "Usine principale d'Owendo + usines de Franceville (1971), Port-Gentil (1972), Oyem (1976), Mouila (1983). Source d'eau Andza à Léconi + corridor Transgabonais."
+    },
+    {
+      "id": "portefeuille-marques",
+      "nom": "Portefeuille de marques",
+      "comptes": [
+        "m_regab",
+        "m_castelbeer",
+        "m_33export",
+        "m_guinness",
+        "m_andza",
+        "m_akewa",
+        "m_vitale",
+        "m_aningeau"
+      ],
+      "publications": [
+        "m_regab",
+        "m_castelbeer",
+        "m_33export",
+        "m_guinness",
+        "m_andza",
+        "m_akewa",
+        "m_vitale",
+        "m_aningeau"
+      ],
+      "pays_estime": "Gabon (national)",
+      "niveau_confiance": "Confirmé",
+      "couleur": "#D4A672",
+      "notes": "Bières (Régab phare, Castel Beer, 33 Export, Guinness) et eaux (Andza, Akewa, Vitale, Aning'Eau). Marques grand public très exposées aux rumeurs."
+    },
+    {
+      "id": "canaux-officiels",
+      "nom": "Canaux officiels & médias",
+      "comptes": [
+        "c_facebook",
+        "c_instagram",
+        "c_linkedin",
+        "c_site",
+        "c_presse"
+      ],
+      "publications": [
+        "c_facebook",
+        "c_instagram",
+        "c_linkedin",
+        "c_site",
+        "c_presse"
+      ],
+      "pays_estime": "Gabon",
+      "niveau_confiance": "Confirmé",
+      "couleur": "#3E9B7A",
+      "notes": "Facebook, Instagram, LinkedIn, site officiel SOBRAGA et presse en ligne gabonaise : correction, vigilance, alertes, démentis."
+    },
+    {
+      "id": "incidents",
+      "nom": "Incidents informationnels",
+      "comptes": [
+        "i_coca",
+        "i_eau",
+        "i_penurie",
+        "i_rh",
+        "i_suspension"
+      ],
+      "publications": [
+        "i_coca",
+        "i_eau",
+        "i_penurie",
+        "i_rh",
+        "i_suspension"
+      ],
+      "pays_estime": "Gabon (2022-2026)",
+      "niveau_confiance": "Confirmé",
+      "couleur": "#C94A4A",
+      "notes": "Cinq incidents confirmés : fin Coca-Cola, fake news eau, pénurie Andza, faux recrutements, suspension nationale des réseaux sociaux."
+    }
+  ],
+  "vulnerabilites": [
+    {
+      "code": "VUL-001",
+      "label": "Dépendance à la continuité d'approvisionnement",
+      "statut": "Confirmé"
+    },
+    {
+      "code": "VUL-002",
+      "label": "Dépendance logistique Léconi–Libreville (ferroviaire)",
+      "statut": "Confirmé"
+    },
+    {
+      "code": "VUL-003",
+      "label": "Usurpabilité de la marque employeur",
+      "statut": "Confirmé"
+    },
+    {
+      "code": "VUL-004",
+      "label": "Visibilité forte des marques grand public (Régab)",
+      "statut": "Confirmé"
+    },
+    {
+      "code": "VUL-005",
+      "label": "Sensibilité au contexte informationnel national",
+      "statut": "Confirmé"
+    },
+    {
+      "code": "VUL-006",
+      "label": "Image de « groupe français »",
+      "statut": "Probable / structurel"
+    },
+    {
+      "code": "VUL-007",
+      "label": "Sensibilité prix / pouvoir d'achat",
+      "statut": "Probable / structurel"
+    }
+  ],
+  "acteurs": [
+    {
+      "display": "Direction générale SOBRAGA",
+      "orientation": "interne",
+      "role": "Gouvernance, parole officielle, gestion de crise",
+      "preuve": "Confirmé"
+    },
+    {
+      "display": "Xavier Jaffret (DG)",
+      "orientation": "interne",
+      "role": "Dirigeant public identifiable depuis 2025",
+      "preuve": "Confirmé"
+    },
+    {
+      "display": "Comptes officiels SOBRAGA",
+      "orientation": "interne",
+      "role": "Correction, vigilance, diffusion des alertes",
+      "preuve": "Confirmé"
+    },
+    {
+      "display": "Castel Afrique",
+      "orientation": "allié",
+      "role": "Cadre corporate, contenus RSE, réputation groupe",
+      "preuve": "Confirmé"
+    },
+    {
+      "display": "Médias relayant les démentis",
+      "orientation": "média",
+      "role": "Clarification et contextualisation des incidents",
+      "preuve": "Confirmé"
+    },
+    {
+      "display": "Diffuseurs anonymes (réseaux sociaux)",
+      "orientation": "hostile",
+      "role": "Propagation initiale de fake news (eau)",
+      "preuve": "Confirmé comme catégorie"
+    },
+    {
+      "display": "Médias en ligne mal informés",
+      "orientation": "média",
+      "role": "Reprise / amplification de contenus inexacts",
+      "preuve": "Confirmé comme catégorie"
+    },
+    {
+      "display": "Usurpateurs d'identité RH",
+      "orientation": "hostile",
+      "role": "Fausses offres d'emploi au nom de SOBRAGA",
+      "preuve": "Confirmé comme catégorie"
+    },
+    {
+      "display": "Concurrents économiques",
+      "orientation": "indéterminé",
+      "role": "Non attribué dans les sources publiques",
+      "preuve": "Hypothèse non prouvée"
+    },
+    {
+      "display": "Acteurs politico-informationnels",
+      "orientation": "indéterminé",
+      "role": "Contexte général de désinfo au Gabon, sans ciblage prouvé",
+      "preuve": "Hypothèse non prouvée"
+    }
+  ],
+  "victimes": [
+    {
+      "type": "marque",
+      "nom": "SOBRAGA / Régab",
+      "subtitle": "Cible primaire — marque phare",
+      "narratifs": "NAR-001 · NAR-002 · NAR-004",
+      "impact": "Fausses allégations sur l'eau, rumeurs de pénurie, fragilité post-Coca-Cola sur les marques les plus visibles.",
+      "icon": "building"
+    },
+    {
+      "type": "dirigeant",
+      "nom": "Xavier Jaffret (DG)",
+      "subtitle": "Dirigeant public identifiable",
+      "narratifs": "NAR-004",
+      "impact": "Exposition personnelle, parole officielle sollicitée en gestion de crise.",
+      "icon": "user"
+    },
+    {
+      "type": "employes",
+      "nom": "Marque employeur SOBRAGA",
+      "subtitle": "Usurpée pour fraudes RH",
+      "narratifs": "NAR-003",
+      "impact": "Faux recrutements au nom de SOBRAGA, escroqueries aux candidats.",
+      "icon": "users"
+    },
+    {
+      "type": "partenaires",
+      "nom": "Approvisionnement & distribution",
+      "subtitle": "Corridor Léconi–Libreville + réseau d'usines",
+      "narratifs": "NAR-002",
+      "impact": "Dépendance logistique ferroviaire, risque de rupture amplifié par la rumeur.",
+      "icon": "link"
+    },
+    {
+      "type": "indirect",
+      "nom": "Marques eau grand public",
+      "subtitle": "Andza · Akewa · Vitale · Aning'Eau",
+      "narratifs": "NAR-001 · NAR-006",
+      "impact": "Désinformation sur la sécurité, la disponibilité et le prix de l'eau et des boissons.",
+      "icon": "eye"
+    }
+  ],
+  "pays": [
+    {
+      "id": "rca",
+      "name": "Rép. Centrafricaine",
+      "flag": "🇨🇫",
+      "region": "Afrique Centrale",
+      "iso": "CF",
+      "subsidiary": "SUCAF RCA / MOCAF",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 5,
+      "sentiment": 5,
+      "lever": true,
+      "platforms": [
+        "fb",
+        "tg",
+        "wa",
+        "sm"
+      ],
+      "langs": [
+        "Français",
+        "Sango",
+        "Peul"
+      ],
+      "operations": "Wagner/Africa Corps — campagne \"Castel finance la guerre\" (jan 2023), incendie MOCAF (mars 2023), brasserie Africa Ti L'Or (Dmitri Sytyi), flyers, manifestations orchestrées, portail pravda-cf.com (mars 2024)",
+      "narratives": [
+        "Néocolonialisme français",
+        "Castel = financement milices",
+        "Russie comme alternative",
+        "France = exploitation économique"
+      ],
+      "incidents": [
+        {
+          "date": "2014–2021",
+          "txt": "<strong>SUCAF RCA</strong> maintient des arrangements sécuritaires avec l'UPC (milice). The Sentry documente des paiements indirects pour la protection des installations sucrières."
+        },
+        {
+          "date": "Juil. 2021",
+          "txt": "<strong>The Sentry</strong> publie \"Cultivating Atrocities\" — rapport accusant Castel/SUCAF de financement indirect de l'UPC. Ce rapport deviendra le socle narratif de la campagne Wagner."
+        },
+        {
+          "date": "Fév. 2022",
+          "txt": "<strong>PNAT</strong> ouvre une enquête préliminaire pour complicité de crimes contre l'humanité contre la filiale centrafricaine de Castel."
+        },
+        {
+          "date": "Fin 2022",
+          "txt": "<strong>Wagner</strong> inaugure sa brasserie au nord de Bangui (~$25–35M d'investissement). Marque : Africa Ti L'Or / \"Bière Russe\". Propriétaire de façade : Dmitri Sytyi, attaché culturel russe et opérateur Wagner."
+        },
+        {
+          "date": "Jan. 2023",
+          "txt": "<strong>Campagne FIMI</strong> : réseau de comptes coordonnés diffuse simultanément \"Castel soutient le terrorisme\". Flyers avec Kalachnikov chargée de bouteilles MOCAF : <em>\"Chaque bouteille achetée est une balle dans le fusil des bandits.\"</em>"
+        },
+        {
+          "date": "Jan.–Fév. 2023",
+          "txt": "<strong>Distribution forcée</strong> d'Africa Ti L'Or dans les bars de Bangui par des livreurs à tricycle motorisé armés. Pression physique sur les commerçants."
+        },
+        {
+          "date": "Mars 2023",
+          "txt": "<strong>Incendie MOCAF</strong> : hommes en tenue Wagner avec Kalachnikov lancent des cocktails Molotov sur l'enceinte de la brasserie. 50 000 bouteilles détruites. Dommages : $200 000 USD. Caméras de sécurité : Western intelligence confirm Wagner responsibility (WSJ)."
+        },
+        {
+          "date": "Avr. 2023",
+          "txt": "<strong>Manifestations orchestrées</strong> : protestataires versent des bouteilles MOCAF devant caméras, avec pancartes Wagner-branded. Amplifiées par les comptes FIMI et Africa Initiative News Agency."
+        },
+        {
+          "date": "Mars 2024",
+          "txt": "<strong>VIGINUM/SGDSN</strong> : création de <code style=\"font-size:11px;font-family:'JetBrains Mono',monospace\">pravda-cf.com</code>, portail Portal Kombat ciblant la RCA. Telegram + VK associés. IP serveur russe 178.21.15.85."
+        },
+        {
+          "date": "Fév. 2026",
+          "txt": "<strong>Fuite « Africa Politology »</strong> : ~1 500 pages de documents internes russes (fuite oct. 2025) authentifiées par Forbidden Stories, All Eyes On Wagner, Dossier Center, openDemocracy et iStories. Elles détaillent la méthodologie FIMI déployée en RCA — contenus fabriqués, articles commandés, mobilisations rémunérées : l'appareil même qui a porté la campagne anti-Castel (<a href=\"https://www.africanews.com/2026/02/21/investigation-russian-spy-agency-takes-over-wagner-operations-in-africa/\" target=\"_blank\">Africanews, 21.02.2026</a>)."
+        },
+        {
+          "date": "Avr. 2026",
+          "txt": "<strong>PNAT classe sans suite</strong> l'enquête — infractions \"insuffisamment caractérisées\". Les avocats de la défense confirment publiquement que Castel était \"cible idéale pour la campagne de dénigrement de Wagner\" (<a href=\"https://www.lemonde.fr/afrique/article/2026/04/22/centrafrique-l-enquete-visant-le-groupe-castel-pour-complicite-de-crimes-contre-l-humanite-classee_6682418_3212.html\" target=\"_blank\">Le Monde, 22.04.2026</a>)."
+        },
+        {
+          "date": "Mai 2026",
+          "txt": "<strong>Instrumentalisation de Joseph Figueira</strong> : l'humanitaire belgo-portugais (ONG FHI 360), enlevé le 26 mai 2024 à Zemio et libéré vers Lisbonne le 8 avr. 2026 après 22 mois, a été présenté par les réseaux pro-russes comme « espion américain » lié aux rébellions — même appareil de désinformation Wagner que celui visant Castel (<a href=\"https://fr.allafrica.com/stories/202605260355.html\" target=\"_blank\">AllAfrica, 26.05.2026</a>)."
+        }
+      ],
+      "context": "La RCA est le seul cas où l'instrumentalisation de Castel par une puissance étrangère est intégralement documentée et confirmée par des sources primaires indépendantes, des décisions judiciaires et des investigations de renseignement occidental.",
+      "sources": [
+        "The Sentry 2021",
+        "Le Monde avr. 2026",
+        "ADF Magazine avr. 2023",
+        "WSJ sept. 2023",
+        "Brauwelt juil. 2023",
+        "VIGINUM avr. 2024",
+        "PNAT fév. 2026",
+        "Africanews fév. 2026",
+        "AllAfrica mai 2026"
+      ],
+      "lon": 18.5582,
+      "lat": 4.3947,
+      "castel_harm": 5,
+      "castel_status": "levier_confirme",
+      "castel_status_label": "Levier confirmé",
+      "proof": "Confirmé",
+      "atteinte_type": "directe"
+    },
+    {
+      "id": "mali",
+      "name": "Mali",
+      "flag": "🇲🇱",
+      "region": "Sahel",
+      "iso": "ML",
+      "subsidiary": "Bramali (Brasseries du Mali)",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 5,
+      "sentiment": 5,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "tg",
+        "wa",
+        "sm"
+      ],
+      "langs": [
+        "Français",
+        "Bambara",
+        "Peul"
+      ],
+      "operations": "Expulsion MINUSMA & forces françaises (2023). Portal Kombat implantation Bamako. African Initiative bureau local. Wagner → Africa Corps présence permanente aéroport Bamako. Opération Totem (Meta 2021). Narratives : \"France soutient les terroristes touaregs\".",
+      "narratives": [
+        "France soutient terroristes touaregs",
+        "MINUSMA espionnage",
+        "Wagner = sécurité réelle",
+        "Barkhane = échec colonial"
+      ],
+      "incidents": [
+        {
+          "date": "2021",
+          "txt": "<strong>Meta</strong> supprime le réseau Totem — 500+ faux comptes Facebook coordonnés liés à Wagner ciblant le Mali."
+        },
+        {
+          "date": "2022–2023",
+          "txt": "<strong>Wagner</strong> consolide sa présence à Bamako. Victoire de Kidal (fin 2023) exploitée comme argument de légitimité."
+        },
+        {
+          "date": "2023",
+          "txt": "<strong>Expulsion forces françaises et MINUSMA</strong>. Narratifs FIMI en soutien aux décisions de la junte."
+        },
+        {
+          "date": "2024",
+          "txt": "<strong>Africa Corps</strong> remplace Wagner formellement. Base élargie aéroport international Bamako."
+        }
+      ],
+      "context": "Présence Wagner/Africa Corps la plus ancienne et la plus dense. Castel/Bramali opère dans un environnement saturé de narratifs anti-français mais n'a pas été ciblé directement à ce jour.",
+      "sources": [
+        "CTC West Point déc. 2024",
+        "EEAS FIMI 2025",
+        "Africa Center 2024",
+        "Meta CIB reports"
+      ],
+      "lon": -8.0029,
+      "lat": 12.6392,
+      "castel_harm": 2,
+      "castel_status": "atteinte_indirecte_forte",
+      "castel_status_label": "Atteinte indirecte forte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "bfa",
+      "name": "Burkina Faso",
+      "flag": "🇧🇫",
+      "region": "Sahel",
+      "iso": "BF",
+      "subsidiary": "Brakina (Brasseries du Burkina)",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 5,
+      "sentiment": 5,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "tg",
+        "wa"
+      ],
+      "langs": [
+        "Français",
+        "Mooré",
+        "Dioula"
+      ],
+      "operations": "African Initiative bureau Ouagadougou actif (EEAS 2025). Portal Kombat : pravda-bf.com (mars 2024). Africa Corps déployé depuis jan. 2024 (100 soldats). Manifestations anti-France organisées 2022–2023. Association African Initiative Burkina Faso.",
+      "narratives": [
+        "France = ennemi du peuple burkinabé",
+        "AES comme modèle souverain",
+        "Barkhane = occupation",
+        "Wagner = libération"
+      ],
+      "incidents": [
+        {
+          "date": "2022",
+          "txt": "<strong>Coup d'État</strong> du capitaine Traoré. Narratifs FIMI amplifient : \"La France a soutenu l'ancien régime.\""
+        },
+        {
+          "date": "Jan. 2024",
+          "txt": "<strong>100 soldats Africa Corps</strong> arrivent à Ouagadougou + unité BEARS (81e brigade spetsnaz)."
+        },
+        {
+          "date": "Mars 2024",
+          "txt": "<strong>pravda-bf.com</strong> créé (Portal Kombat) — Telegram + VK associés, IP russe."
+        },
+        {
+          "date": "2024–2026",
+          "txt": "<strong>African Initiative</strong> maintient un bureau actif et forme des journalistes locaux (EEAS 2025)."
+        }
+      ],
+      "context": "Pays du triumvirat AES (Alliance des États du Sahel) avec Mali et Niger. Environnement FIMI le plus structuré hors RCA grâce à l'infrastructure African Initiative.",
+      "sources": [
+        "EEAS FIMI 2025",
+        "VIGINUM avr. 2024",
+        "CTC West Point 2024",
+        "Africa Center 2024"
+      ],
+      "lon": -1.5197,
+      "lat": 12.3714,
+      "castel_harm": 2,
+      "castel_status": "atteinte_indirecte_forte",
+      "castel_status_label": "Atteinte indirecte forte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "niger",
+      "name": "Niger",
+      "flag": "🇳🇪",
+      "region": "Sahel",
+      "iso": "NE",
+      "subsidiary": "BRANIGER",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 4,
+      "sentiment": 4,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "tg",
+        "wa"
+      ],
+      "langs": [
+        "Français",
+        "Haoussa",
+        "Peul"
+      ],
+      "operations": "pravda-ne.com (Portal Kombat, mars 2024). Africa Corps avril 2024 (missions formation). Correspondant African Initiative à Niamey. Expulsion ambassadeur français 2023.",
+      "narratives": [
+        "France = néocolonialisme uranium",
+        "ECOWAS = outil français",
+        "AES = souveraineté"
+      ],
+      "incidents": [
+        {
+          "date": "Juil. 2023",
+          "txt": "<strong>Coup d'État</strong> général Tchiani. Infographies FIMI : \"Le Niger reprend son uranium à la France.\""
+        },
+        {
+          "date": "Oct. 2023",
+          "txt": "<strong>Expulsion forces françaises</strong>. Amplification massive sur TG/FB."
+        },
+        {
+          "date": "Avr. 2024",
+          "txt": "<strong>Africa Corps</strong> arrive officiellement à Niamey (missions formation et équipement)."
+        },
+        {
+          "date": "Mars 2024",
+          "txt": "<strong>pravda-ne.com</strong> (Portal Kombat) créé avec Telegram associé."
+        }
+      ],
+      "context": "Coup d'État de juillet 2023 suivi de l'expulsion des forces françaises — contexte d'explosion du sentiment anti-France. BRANIGER opère dans cet environnement mais sans ciblage Castel documenté.",
+      "sources": [
+        "VIGINUM 2024",
+        "EEAS 2025",
+        "Africa Center 2024",
+        "défensa.gob.es 2025"
+      ],
+      "lon": 2.1128,
+      "lat": 13.5128,
+      "castel_harm": 2,
+      "castel_status": "atteinte_indirecte_forte",
+      "castel_status_label": "Atteinte indirecte forte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "cam",
+      "name": "Cameroun",
+      "flag": "🇨🇲",
+      "region": "Afrique Centrale",
+      "iso": "CM",
+      "subsidiary": "SABC (Soc. Anonyme des Brasseries du Cameroun)",
+      "actors": [
+        "RU",
+        "CN"
+      ],
+      "disinfo": 3,
+      "sentiment": 3,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "wa",
+        "yt"
+      ],
+      "langs": [
+        "Français",
+        "Anglais"
+      ],
+      "operations": "Présence CGTN Afrique (Yaoundé). Narratifs crise anglophone amplifiés. Sputnik Afrique relais régional. Absence d'opération anti-Castel documentée.",
+      "narratives": [
+        "France maintient crise anglophone",
+        "CFA = exploitation",
+        "Biya = allié France contre anglophone"
+      ],
+      "incidents": [
+        {
+          "date": "2019–2026",
+          "txt": "<strong>Crise anglophone</strong> amplifiée par canaux russes pour fragiliser l'axe Paris-Yaoundé."
+        },
+        {
+          "date": "2023–2024",
+          "txt": "<strong>CGTN</strong> intensifie sa présence éditoriale au Cameroun, narratif investissement chinois."
+        }
+      ],
+      "context": "Marché brassicole SABC (Castel) dominant. Intensité FIMI modérée, orientée crise politique plutôt que marques françaises.",
+      "sources": [
+        "Africa Center 2024",
+        "EEAS 2025"
+      ],
+      "lon": 9.7679,
+      "lat": 4.0511,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "civ",
+      "name": "Côte d'Ivoire",
+      "flag": "🇨🇮",
+      "region": "Afrique de l'Ouest",
+      "iso": "CI",
+      "subsidiary": "SOLIBRA + Groupe Castel distrib.",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 3,
+      "sentiment": 3,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "wa",
+        "tg"
+      ],
+      "langs": [
+        "Français",
+        "Dioula"
+      ],
+      "operations": "Réseaux Doppelgänger (faux médias ivoiriens). Narratifs élection présidentielle 2020 amplifiés. Tension CEDEAO/AES instrumentalisée contre Paris.",
+      "narratives": [
+        "France soutient Ouattara contre le peuple",
+        "CFA = domination française",
+        "CEDEAO = outil néocolonial"
+      ],
+      "incidents": [
+        {
+          "date": "2020",
+          "txt": "<strong>Présidentielle 2020</strong> : faux articles attribuant à des médias ivoiriens des contenus pro-Kremlin."
+        },
+        {
+          "date": "2023",
+          "txt": "<strong>Tension CEDEAO/AES</strong> exploitée pour amplifier sentiment anti-France en Côte d'Ivoire."
+        }
+      ],
+      "context": "Pays économiquement le plus stable de la sous-région. Castel/SOLIBRA = opérateur dominant. Exposition FIMI réelle mais sans ciblage sectoriel.",
+      "sources": [
+        "Africa Center 2024",
+        "EEAS 2025"
+      ],
+      "lon": -4.0083,
+      "lat": 5.36,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "sen",
+      "name": "Sénégal",
+      "flag": "🇸🇳",
+      "region": "Afrique de l'Ouest",
+      "iso": "SN",
+      "subsidiary": "Filiale distribution / SENICO",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 2,
+      "sentiment": 3,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "wa",
+        "yt"
+      ],
+      "langs": [
+        "Français",
+        "Wolof"
+      ],
+      "operations": "Opérations ciblant Faye/Sonko (2023–2024). Amplification mouvements anti-France. Narratifs uranium/francophonie. Sputnik Afrique actif.",
+      "narratives": [
+        "Souveraineté monétaire contre le CFA",
+        "France = ingérence judiciaire (Sonko)",
+        "Panafricanisme anti-France"
+      ],
+      "incidents": [
+        {
+          "date": "2023–2024",
+          "txt": "<strong>Crise Sonko/Faye</strong> : canaux pro-Kremlin amplifient les narratifs \"France manipule la justice sénégalaise.\""
+        },
+        {
+          "date": "2024",
+          "txt": "<strong>Retrait France</strong> de la base militaire de Dakar. FIMI dans la couverture."
+        }
+      ],
+      "context": "Transition politique 2024 (Sonko/Faye). Castel présent mais non dominant. Sentiment anti-France en hausse mais sans ciblage de marques.",
+      "sources": [
+        "Africa Center 2024",
+        "EEAS 2025"
+      ],
+      "lon": -17.4677,
+      "lat": 14.7167,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "tcad",
+      "name": "Tchad",
+      "flag": "🇹🇩",
+      "region": "Afrique Centrale",
+      "iso": "TD",
+      "subsidiary": "Brasseries du Tchad (GALA)",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 3,
+      "sentiment": 3,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "tg",
+        "wa"
+      ],
+      "langs": [
+        "Français",
+        "Arabe tchadien"
+      ],
+      "operations": "Opérations FIMI liées à l'après-Déby (2021). Triangulation avec narrative AES. Sputnik présent.",
+      "narratives": [
+        "France a couvert assassinat Déby",
+        "N'Djaména = base opérations françaises",
+        "Tchad doit rejoindre AES"
+      ],
+      "incidents": [
+        {
+          "date": "2021",
+          "txt": "<strong>Mort d'Idriss Déby</strong> : narratifs russes : \"La France savait et n'a pas prévenu.\" Amplifiés sur FB/TG."
+        },
+        {
+          "date": "2023–2024",
+          "txt": "Pression pour rapprochement avec AES. FIMI amplifie dissidents anti-Déby fils."
+        }
+      ],
+      "context": "Présence militaire française résiduelle. Castel/Brasseries du Tchad = acteur économique visible mais pas ciblé.",
+      "sources": [
+        "Africa Center 2024"
+      ],
+      "lon": 15.0557,
+      "lat": 12.1348,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "gab",
+      "name": "Gabon",
+      "flag": "🇬🇦",
+      "region": "Afrique Centrale",
+      "iso": "GA",
+      "subsidiary": "SOBRAGA (Brasseries du Gabon)",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 3,
+      "sentiment": 3,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "wa"
+      ],
+      "langs": [
+        "Français",
+        "Fang"
+      ],
+      "operations": "Coup d'État Brice Nguema (août 2023). Amplification FIMI immédiate. Narratifs famille Bongo/France. Tentative de récupération \"Wagner\" du coup.",
+      "narratives": [
+        "Bongo = intérêts français contre peuple",
+        "France = exploitation pétrolière",
+        "Coup = libération nationale"
+      ],
+      "incidents": [
+        {
+          "date": "Mai-juin 2022",
+          "txt": "INC-004 — Fin du partenariat historique Castel/SOBRAGA – The Coca-Cola Company (mai-juin 2022). Contexte de fragilisation narrative (NAR-004, probable)."
+        },
+        {
+          "date": "Juin 2022",
+          "txt": "INC-001 — Rumeur (réseaux sociaux + certains médias) d'arrêt/cession de l'activité eau minérale. Démenti officiel SOBRAGA (NAR-001, confirmé)."
+        },
+        {
+          "date": "Jan. 2023",
+          "txt": "INC-002 — Interruption ferroviaire (Transgabonais) → risque de rupture de stock Andza à Libreville. Forte sensibilité narrative (NAR-002, confirmé)."
+        },
+        {
+          "date": "2024-2025",
+          "txt": "INC-003 — Offres d'emploi frauduleuses au nom de SOBRAGA (2024-2025). Alertes publiques de la société (NAR-003, confirmé)."
+        },
+        {
+          "date": "Fev. 2026",
+          "txt": "INC-005 — Mesure des autorités gabonaises (fév. 2026), motivée notamment par la lutte contre les fake news. Impact sur la contre-communication corporate."
+        }
+      ],
+      "context": "Post-coup, Gabon reste dans une zone grise. SOBRAGA = marque Castel dominant. Risque de ciblage si rapprochement Gabon–AES.",
+      "sources": [
+        "Africa Center 2024"
+      ],
+      "lon": 9.4673,
+      "lat": 0.4162,
+      "castel_harm": 4,
+      "castel_status": "incidents_reels",
+      "castel_status_label": "Incidents réels",
+      "proof": "Confirmé",
+      "atteinte_type": "directe"
+    },
+    {
+      "id": "guin",
+      "name": "Guinée",
+      "flag": "🇬🇳",
+      "region": "Afrique de l'Ouest",
+      "iso": "GN",
+      "subsidiary": "SOBRAGUI",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 3,
+      "sentiment": 3,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "wa",
+        "tg"
+      ],
+      "langs": [
+        "Français",
+        "Peul",
+        "Soussou"
+      ],
+      "operations": "Narratifs post-coup Mamadi Doumbouya (2021). Amplification sentiment anti-France. Sputnik présent.",
+      "narratives": [
+        "France = soutien Alpha Condé",
+        "Russie = partenaire juste",
+        "CFA = chaîne économique"
+      ],
+      "incidents": [
+        {
+          "date": "2021",
+          "txt": "<strong>Coup Doumbouya</strong> : canaux pro-Kremlin encensent la junte comme \"patriote contre la francophonie.\""
+        },
+        {
+          "date": "2022–2024",
+          "txt": "Consolidation narrative anti-France sur FB/TG en Conakry."
+        }
+      ],
+      "context": "SOBRAGUI (Castel) = monopole brassicole. Intensité FIMI en hausse depuis coup 2021.",
+      "sources": [
+        "Africa Center 2024"
+      ],
+      "lon": -13.5784,
+      "lat": 9.6412,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "cog",
+      "name": "Congo-Brazzaville",
+      "flag": "🇨🇬",
+      "region": "Afrique Centrale",
+      "iso": "CG",
+      "subsidiary": "BRALICO (Brasseries et Limonades du Congo)",
+      "actors": [
+        "RU",
+        "CN"
+      ],
+      "disinfo": 2,
+      "sentiment": 2,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "wa"
+      ],
+      "langs": [
+        "Français",
+        "Lingala"
+      ],
+      "operations": "Présence chinoise via CGTN. Influence russe modérée. Sassou-Nguesso = partenaire traditionnel Paris, frein relatif aux narratifs anti-France.",
+      "narratives": [
+        "Ressources naturelles = exploitation française",
+        "Chine = partenaire équitable"
+      ],
+      "incidents": [
+        {
+          "date": "2023–2024",
+          "txt": "CGTN développe couverture positive projets infrastructure chinois au Congo."
+        }
+      ],
+      "context": "Environnement FIMI présent mais modéré. Alliance Sassou-Paris joue un rôle tampon.",
+      "sources": [
+        "Africa Center 2024",
+        "EEAS 2025"
+      ],
+      "lon": 15.2429,
+      "lat": -4.2634,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "tgo",
+      "name": "Togo",
+      "flag": "🇹🇬",
+      "region": "Afrique de l'Ouest",
+      "iso": "TG",
+      "subsidiary": "BB Lomé / CTEM",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 2,
+      "sentiment": 2,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "wa"
+      ],
+      "langs": [
+        "Français",
+        "Ewe"
+      ],
+      "operations": "Narratifs amplifiés lors tensions frontalières AES. Présence modérée Sputnik.",
+      "narratives": [
+        "Togo = tampon France entre AES",
+        "CFA = domination"
+      ],
+      "incidents": [],
+      "context": "Intensité FIMI basse. Régime Gnassingbé entretient des relations ambiguës avec Paris et Moscou.",
+      "sources": [
+        "Africa Center 2024"
+      ],
+      "lon": 1.2123,
+      "lat": 6.1375,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "mar",
+      "name": "Maroc",
+      "flag": "🇲🇦",
+      "region": "Afrique du Nord",
+      "iso": "MA",
+      "subsidiary": "Brasseries du Maroc (Casablanca Beer)",
+      "actors": [
+        "GCC"
+      ],
+      "disinfo": 2,
+      "sentiment": 2,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "wa",
+        "yt"
+      ],
+      "langs": [
+        "Arabe",
+        "Tamazight (berbère)",
+        "Français"
+      ],
+      "operations": "Opérations du Golfe (UAE/Qatar) ciblant la relation Maroc-France post-Sahara. Narratifs islamiques anti-alcool. Pressions sur marchés halal.",
+      "narratives": [
+        "France = complicité Algérie contre Sahara marocain",
+        "Alcool = hégémonie culturelle occidentale",
+        "Maroc doit regarder vers les pays arabes"
+      ],
+      "incidents": [
+        {
+          "date": "2023",
+          "txt": "Tensions diplomatiques France-Maroc (Marrakech séisme, visas). Canaux du Golfe amplifient narratifs anti-France."
+        },
+        {
+          "date": "2024",
+          "txt": "Campagnes sur YT/FB islamiques ciblant production d'alcool au Maroc."
+        }
+      ],
+      "context": "Acteur Gulf plus actif que Russie au Maroc. Brasseries du Maroc (Castel) est une cible potentielle des campagnes anti-alcool religieuses.",
+      "sources": [
+        "ECFR mars 2025",
+        "Africa Center 2024"
+      ],
+      "lon": -7.5898,
+      "lat": 33.5731,
+      "castel_harm": 3,
+      "castel_status": "ciblage_sectoriel",
+      "castel_status_label": "Ciblage sectoriel",
+      "proof": "Probable",
+      "atteinte_type": "sectorielle"
+    },
+    {
+      "id": "dza",
+      "name": "Algérie",
+      "flag": "🇩🇿",
+      "region": "Afrique du Nord",
+      "iso": "DZ",
+      "subsidiary": "ALGAD (Castel distrib.)",
+      "actors": [
+        "RU",
+        "GCC"
+      ],
+      "disinfo": 2,
+      "sentiment": 3,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "wa",
+        "yt"
+      ],
+      "langs": [
+        "Arabe",
+        "Tamazight",
+        "Français"
+      ],
+      "operations": "Narratifs anti-France liés à histoire coloniale. Russie = partenaire historique Algérie. Médias saoudiens et qataris présents.",
+      "narratives": [
+        "Colonisation française = crime contre l'humanité",
+        "France refuse réparations",
+        "Alger = souveraineté contre Paris"
+      ],
+      "incidents": [
+        {
+          "date": "2021–2026",
+          "txt": "Crises récurrentes France-Algérie (mémoire coloniale, visas) systématiquement amplifiées par canaux russes et du Golfe."
+        }
+      ],
+      "context": "Relations France-Algérie structurellement conflictuelles. ALGAD opère dans un contexte de sentiment anti-français nativement élevé.",
+      "sources": [
+        "EEAS 2025",
+        "Africa Center 2024"
+      ],
+      "lon": 3.0588,
+      "lat": 36.7538,
+      "castel_harm": 2,
+      "castel_status": "atteinte_indirecte_forte",
+      "castel_status_label": "Atteinte indirecte forte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "eth",
+      "name": "Éthiopie",
+      "flag": "🇪🇹",
+      "region": "Afrique de l'Est",
+      "iso": "ET",
+      "subsidiary": "BGI Ethiopia / Brasseries Raya",
+      "actors": [
+        "CN"
+      ],
+      "disinfo": 2,
+      "sentiment": 1,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "tg"
+      ],
+      "langs": [
+        "Amharique",
+        "Anglais",
+        "Tigrigna"
+      ],
+      "operations": "Chine = investisseur dominant BRI. CGTN bureau Addis. Conflit Tigré amplifié par Beijing pour contrer narratif occidental. Sentiment anti-France inexistant (pas de relation coloniale).",
+      "narratives": [
+        "Occident instrumentalise crise Tigré",
+        "Chine = partenaire de développement juste",
+        "USA ingérence = double standard"
+      ],
+      "incidents": [
+        {
+          "date": "2020–2022",
+          "txt": "Conflit Tigré : CGTN/Xinhua diffuse la position d'Addis, contrant les narratifs occidentaux de \"crimes de guerre.\""
+        }
+      ],
+      "context": "Acteur principal : Chine. France n'est pas une cible directe. BGI/Raya (Castel) = important employeur éthiopien.",
+      "sources": [
+        "EEAS 2025",
+        "Senate SFRC juil. 2025"
+      ],
+      "lon": 38.7469,
+      "lat": 9.025,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    },
+    {
+      "id": "mad",
+      "name": "Madagascar",
+      "flag": "🇲🇬",
+      "region": "Afrique Australe",
+      "iso": "MG",
+      "subsidiary": "Brasseries Star Madagascar",
+      "actors": [
+        "RU"
+      ],
+      "disinfo": 2,
+      "sentiment": 2,
+      "lever": false,
+      "platforms": [
+        "fb",
+        "wa"
+      ],
+      "langs": [
+        "Français",
+        "Malgache"
+      ],
+      "operations": "Narratifs anti-France présents depuis élection Rajoelina 2019. Sputnik relais modéré. Aucune opération Castel identifiée.",
+      "narratives": [
+        "France = ingérence électorale",
+        "Madagascar = victime néocolonialisme"
+      ],
+      "incidents": [
+        {
+          "date": "2019–2024",
+          "txt": "Sputnik Afrique amplifie tensions Paris-Antananarivo lors des cycles électoraux."
+        }
+      ],
+      "context": "Brasseries Star = opérateur Castel majeur. Intensité FIMI faible, exposition géographique éloignée des foyers Sahel.",
+      "sources": [
+        "Africa Center 2024"
+      ],
+      "lon": 47.5079,
+      "lat": -18.8792,
+      "castel_harm": 1,
+      "castel_status": "atteinte_indirecte",
+      "castel_status_label": "Atteinte indirecte",
+      "proof": "Indirect",
+      "atteinte_type": "indirecte"
+    }
+  ]
+}

@@ -128,6 +128,7 @@
   }
 
   function init(opts) {
+    if (window.ZONE_CONFIG && window.ZONE_CONFIG.DISABLE_LAYERS_AND_POINTS) return;
     opts = opts || {};
     var sources = opts.sources || [];
     var autoEnableDefault = opts.autoEnable === true;

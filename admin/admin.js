@@ -6,8 +6,8 @@
  */
 
 import { initAuth, login, logout, getCurrentUser, requireRole } from './modules/auth.js?v=20260420a';
-import { getPoints } from './modules/firestore.js?v=20260513a';
-import { logActivity } from './modules/firestore.js?v=20260513a';
+import { getPoints } from './modules/firestore.js?v=20260521a';
+import { logActivity } from './modules/firestore.js?v=20260521a';
 import {
   initEditorMap, whenReady, renderAdminPoints, renderStaticPoints, onMapClick, onPointClick,
   flyToPoint, selectPoint, switchZone, destroy as destroyMap
@@ -15,9 +15,9 @@ import {
 import { init as initForm, openCreateForm, openEditForm, updateZone as updateFormZone } from './modules/point-form.js?v=20260420a';
 import { init as initActors, renderActorList, updateZone as updateActorZone } from './modules/actor-manager.js?v=20260420a';
 import { importGeoJSON, importStaticFiles, exportGeoJSON, exportCSV } from './modules/import-export.js?v=20260420a';
-import { purgeEmptyPoints, bulkSoftDeletePoints, restorePoints, pushToGitHub } from './modules/firestore.js?v=20260513a';
+import { purgeEmptyPoints, bulkSoftDeletePoints, restorePoints, pushToGitHub } from './modules/firestore.js?v=20260521a';
 import { renderActivityLog } from './modules/activity-log.js?v=20260420a';
-import { renderUserList } from './modules/user-manager.js?v=20260420a';
+import { renderUserList } from './modules/user-manager.js?v=20260521a';
 
 // Purge tout ancien token GitHub stocke cote client (migre vers Edge Function 2026-05-13)
 try { localStorage.removeItem('carto_gh_token'); } catch (_) {}
@@ -193,6 +193,33 @@ document.getElementById('login-btn').addEventListener('click', doLogin);
 document.getElementById('login-password').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') doLogin();
 });
+
+// Login : toggle visibilite du mot de passe + tilt 3D de la carte
+(() => {
+  const eye = document.getElementById('login-eye');
+  const pwd = document.getElementById('login-password');
+  if (eye && pwd) {
+    eye.addEventListener('click', () => {
+      const reveal = pwd.type === 'password';
+      pwd.type = reveal ? 'text' : 'password';
+      eye.classList.toggle('is-open', reveal);
+      eye.setAttribute('aria-label', reveal ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+    });
+  }
+  const tilt = document.getElementById('login-tilt');
+  const wrap = tilt && tilt.closest('.sa-card-wrap');
+  if (tilt && wrap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    wrap.addEventListener('mousemove', (e) => {
+      const r = tilt.getBoundingClientRect();
+      const ry = ((e.clientX - r.left) / r.width - 0.5) * 16;
+      const rx = (0.5 - (e.clientY - r.top) / r.height) * 16;
+      tilt.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+    });
+    wrap.addEventListener('mouseleave', () => {
+      tilt.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  }
+})();
 
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
