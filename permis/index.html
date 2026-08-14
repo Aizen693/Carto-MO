@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Qui passe en premier ?</title>
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --fond:#EDF0F4; --carte:#FFFFFF; --encre:#1C242E; --encre2:#5A6675;
+  --ligne:#D8DEE6;
+  --bleu:#0B5BB5; --bleu-enc:#094B92; --sur-bleu:#FFFFFF;
+  --jaune:#F2C200; --jaune-enc:#8A6D00;
+  --vert:#1D8A4C; --vert-fond:#E1F2E8;
+  --rouge:#C93A2C; --rouge-fond:#FAE6E2;
+  --terrain:#D8E1D2; --trottoir:#C6D0C0;
+  --bitume:#39414B; --marquage:#F4F6F8; --marquage2:#B9C1CB;
+  --carA:#1565C4; --carB:#D9762F; --carC:#9C6BD0; --carX:#78838F;
+  --sortie:#F2C200; --sur-sortie:#2A2200;
+  --ombre:0 1px 2px rgba(15,23,32,.05),0 10px 28px rgba(15,23,32,.09);
+  --t-display:'Avenir Next Condensed','Arial Narrow','Helvetica Neue',sans-serif-condensed,sans-serif;
+  --t-body:system-ui,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --fond:#12161C; --carte:#1B222B; --encre:#E8ECF2; --encre2:#96A2B1;
+    --ligne:#2A333E;
+    --bleu:#5E9BE0; --bleu-enc:#3D7EC9; --sur-bleu:#0C1826;
+    --jaune:#E8BE12; --jaune-enc:#F2D45C;
+    --vert:#41A96E; --vert-fond:#152A1E;
+    --rouge:#E05A49; --rouge-fond:#33201D;
+    --terrain:#20281F; --trottoir:#2B342A;
+    --bitume:#2B323B; --marquage:#DCE2EA; --marquage2:#5B6673;
+    --carA:#4E8FDB; --carB:#D9762F; --carC:#A57BD6; --carX:#8792A0;
+    --sortie:#E8BE12; --sur-sortie:#2A2200;
+    --ombre:0 1px 2px rgba(0,0,0,.45),0 12px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --fond:#12161C; --carte:#1B222B; --encre:#E8ECF2; --encre2:#96A2B1;
+  --ligne:#2A333E;
+  --bleu:#5E9BE0; --bleu-enc:#3D7EC9; --sur-bleu:#0C1826;
+  --jaune:#E8BE12; --jaune-enc:#F2D45C;
+  --vert:#41A96E; --vert-fond:#152A1E;
+  --rouge:#E05A49; --rouge-fond:#33201D;
+  --terrain:#20281F; --trottoir:#2B342A;
+  --bitume:#2B323B; --marquage:#DCE2EA; --marquage2:#5B6673;
+  --carA:#4E8FDB; --carB:#D9762F; --carC:#A57BD6; --carX:#8792A0;
+  --sortie:#E8BE12; --sur-sortie:#2A2200;
+  --ombre:0 1px 2px rgba(0,0,0,.45),0 12px 30px rgba(0,0,0,.35);
+}
+
+/* ============ BASE ============ */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--fond); color:var(--encre);
+  font-family:var(--t-body); font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.app{max-width:640px;margin:0 auto;padding:16px 16px 56px}
+button{font-family:inherit;color:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#erreur-boot{
+  position:fixed;left:12px;right:12px;bottom:12px;z-index:99;display:none;
+  background:var(--rouge-fond);border:1.5px solid var(--rouge);color:var(--encre);
+  border-radius:12px;padding:12px 14px;font-size:13px;word-break:break-word;
+}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--bleu);outline-offset:2px;border-radius:8px}
+h1,h2,h3{font-family:var(--t-display);text-transform:uppercase;letter-spacing:.02em;text-wrap:balance;margin:0}
+.screen{display:none}
+.screen.on{display:block;animation:apparait .3s ease both}
+@keyframes apparait{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ============ MENU ============ */
+.hero{text-align:center;padding:18px 0 6px}
+.hero-art{width:168px;margin:0 auto 10px}
+.hero-art svg{display:block;width:100%;height:auto}
+.hero h1{font-size:44px;line-height:1.02;font-weight:700;color:var(--encre)}
+.hero .tagline{color:var(--encre2);margin:10px auto 0;max-width:42ch}
+.hero .badge-j{
+  display:inline-block;margin-top:14px;padding:4px 12px;border-radius:999px;
+  background:var(--jaune);color:#2A2200;font-family:var(--t-display);
+  font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:14px;
+}
+.modes{display:flex;flex-direction:column;gap:12px;margin-top:22px}
+.mode-card{
+  display:flex;align-items:center;gap:14px;text-align:left;width:100%;
+  background:var(--carte);border:1px solid var(--ligne);border-radius:16px;
+  padding:16px;cursor:pointer;box-shadow:var(--ombre);
+  transition:transform .12s ease,border-color .12s ease;
+}
+@media (hover:hover){.mode-card:hover{transform:translateY(-2px);border-color:var(--bleu)}}
+.mode-ico{flex:0 0 64px;width:64px;height:64px;border-radius:12px;overflow:hidden;background:var(--bitume)}
+.mode-ico svg{display:block;width:100%;height:100%}
+.mode-tx b{display:block;font-family:var(--t-display);text-transform:uppercase;font-size:19px;letter-spacing:.02em;line-height:1.15}
+.mode-tx span{display:block;color:var(--encre2);font-size:14px;margin-top:3px}
+.mode-tx .best{color:var(--vert);font-weight:600}
+.lien-fiche{
+  display:block;width:100%;margin-top:12px;padding:13px 16px;text-align:center;
+  background:none;border:1px dashed var(--ligne);border-radius:14px;cursor:pointer;
+  color:var(--encre2);font-size:15px;
+}
+.lien-fiche:hover{border-color:var(--bleu);color:var(--bleu)}
+.note-bas{margin-top:26px;text-align:center;color:var(--encre2);font-size:13px}
+
+/* ============ QUIZ ============ */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.btn-retour{background:none;border:none;cursor:pointer;color:var(--encre2);font-size:15px;padding:8px 10px 8px 0}
+.btn-retour:hover{color:var(--bleu)}
+.chips{display:flex;gap:8px}
+.chip{
+  background:var(--carte);border:1px solid var(--ligne);border-radius:999px;
+  padding:4px 12px;font-size:13px;color:var(--encre2);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.chip b{color:var(--encre);font-weight:650}
+.chip.feu{background:var(--jaune);border-color:var(--jaune);color:#2A2200}
+.chip.feu b{color:#2A2200}
+
+.route-prog{position:relative;height:26px;margin:2px 0 14px;border-radius:8px;background:var(--bitume);overflow:hidden}
+.route-prog .ligne{
+  position:absolute;left:10px;right:10px;top:50%;height:3px;transform:translateY(-50%);
+  background:repeating-linear-gradient(90deg,var(--marquage2) 0 12px,transparent 12px 22px);
+  border-radius:2px;
+}
+.route-prog .auto{position:absolute;top:50%;transform:translate(-50%,-50%);transition:left .45s ease;left:4%}
+.route-prog .auto svg{display:block}
+
+.scene-card{background:var(--carte);border:1px solid var(--ligne);border-radius:16px;overflow:hidden;box-shadow:var(--ombre)}
+.scene-card svg{display:block;width:100%;height:auto}
+.q-tx{font-size:17.5px;font-weight:600;margin:16px 2px 12px;text-wrap:balance}
+.reponses{display:flex;flex-direction:column;gap:9px}
+.rep{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:left;
+  background:var(--carte);border:1.5px solid var(--ligne);border-radius:13px;
+  padding:13px 14px;font-size:15.5px;cursor:pointer;line-height:1.35;
+  transition:border-color .12s ease,background .12s ease;
+}
+.rep:hover:not(:disabled){border-color:var(--bleu)}
+.rep:disabled{cursor:default}
+.rep .num{
+  flex:0 0 24px;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;
+  background:var(--fond);border:1px solid var(--ligne);color:var(--encre2);
+  font-size:12.5px;font-weight:650;font-variant-numeric:tabular-nums;
+}
+.rep .pastille{flex:0 0 12px;width:12px;height:12px;border-radius:50%}
+.rep.ok{border-color:var(--vert);background:var(--vert-fond)}
+.rep.ok .num{background:var(--vert);border-color:var(--vert);color:#fff}
+.rep.ko{border-color:var(--rouge);background:var(--rouge-fond)}
+.rep.ko .num{background:var(--rouge);border-color:var(--rouge);color:#fff}
+.aide-voie{color:var(--encre2);font-size:14px;margin:4px 2px}
+
+.retour-info{margin-top:14px;border-radius:14px;padding:14px 16px;border:1.5px solid var(--ligne);background:var(--carte)}
+.retour-info.ok{border-color:var(--vert);background:var(--vert-fond)}
+.retour-info.ko{border-color:var(--rouge);background:var(--rouge-fond)}
+.retour-info .verdict{font-family:var(--t-display);text-transform:uppercase;font-size:19px;font-weight:700;letter-spacing:.03em}
+.retour-info.ok .verdict{color:var(--vert)}
+.retour-info.ko .verdict{color:var(--rouge)}
+.retour-info .explic{margin:7px 0 12px;font-size:15px;color:var(--encre)}
+.btn-principal{
+  display:inline-block;background:var(--bleu);color:var(--sur-bleu);border:none;border-radius:11px;
+  padding:11px 22px;font-size:15.5px;font-weight:650;cursor:pointer;
+}
+.btn-principal:hover{background:var(--bleu-enc)}
+.btn-secondaire{
+  display:inline-block;background:none;border:1.5px solid var(--ligne);border-radius:11px;
+  padding:10px 18px;font-size:15px;cursor:pointer;color:var(--encre);
+}
+.btn-secondaire:hover{border-color:var(--bleu);color:var(--bleu)}
+.cache{display:none !important}
+
+/* ============ SVG SCENE ============ */
+.sc-terrain{fill:var(--terrain)}
+.sc-pad{fill:var(--trottoir)}
+.sc-road{fill:var(--bitume)}
+.sc-dash{stroke:var(--marquage2);stroke-width:3;stroke-dasharray:13 11;fill:none}
+.sc-mark{stroke:var(--marquage);fill:none}
+.sc-txt{font-family:var(--t-body);font-weight:700;fill:var(--marquage);opacity:.9}
+.sc-sortie{fill:var(--sortie)}
+.sc-sortie-tx{font-family:var(--t-display);font-weight:700;fill:var(--sur-sortie);letter-spacing:.04em}
+.voie-clic{fill:transparent;cursor:pointer;transition:fill .12s ease}
+.voie-clic:hover,.voie-clic:focus-visible{fill:rgba(255,255,255,.14)}
+.voie-clic.ok{fill:rgba(80,200,120,.35)}
+.voie-clic.ko{fill:rgba(220,80,60,.4)}
+.pulse-cercle{fill:none;stroke:var(--vert);stroke-width:4;transform-origin:center;transform-box:fill-box}
+.anim .pulse-cercle{animation:pulser 1.4s ease-out infinite}
+@keyframes pulser{0%{transform:scale(.55);opacity:1}80%{transform:scale(1.25);opacity:0}100%{opacity:0}}
+.anim .feu-clignote{animation:clignote 1s steps(2,jump-none) infinite}
+@keyframes clignote{from{opacity:1}to{opacity:.15}}
+.traj-trace{fill:none;stroke-width:4;stroke-linecap:round;opacity:.95}
+
+/* ============ FIN ============ */
+.fin-carte{background:var(--carte);border:1px solid var(--ligne);border-radius:18px;box-shadow:var(--ombre);padding:28px 22px;text-align:center;margin-top:8px}
+.fin-carte .gros-score{font-family:var(--t-display);font-weight:700;font-size:64px;line-height:1;font-variant-numeric:tabular-nums}
+.fin-carte .sur{color:var(--encre2);font-size:15px}
+.fin-msg{margin:14px auto 4px;max-width:44ch;font-size:16px}
+.fin-stats{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap}
+.fin-actions{display:flex;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap}
+.astuce{margin-top:18px;padding:13px 16px;border-radius:13px;background:var(--fond);border:1px dashed var(--ligne);color:var(--encre2);font-size:14px;text-align:left}
+.astuce b{color:var(--encre)}
+
+/* ============ FICHE ============ */
+.fiche-cartes{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.fiche-c{background:var(--carte);border:1px solid var(--ligne);border-radius:16px;box-shadow:var(--ombre);padding:18px}
+.fiche-c h3{font-size:20px;margin-bottom:10px;color:var(--bleu)}
+.fiche-c ol,.fiche-c ul{margin:8px 0 0;padding-left:20px}
+.fiche-c li{margin:7px 0;font-size:15px}
+.fiche-c li b{font-weight:650}
+.piege{margin-top:12px;padding:10px 13px;border-radius:11px;background:var(--rouge-fond);border:1px solid var(--rouge);font-size:14px}
+.piege b{color:var(--rouge)}
+.panneaux-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:6px}
+.panneau-item{display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:1.3}
+.panneau-item svg{flex:0 0 46px;display:block}
+.mini-giro{border-radius:12px;overflow:hidden;margin:10px 0 8px}
+.mini-giro svg{display:block;width:100%;height:auto}
+.legende{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;color:var(--encre2);margin-bottom:6px}
+.legende span{display:inline-flex;align-items:center;gap:6px}
+.legende i{width:18px;height:4px;border-radius:2px;display:inline-block}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important}
+}
+@media (max-width:420px){
+  .hero h1{font-size:36px}
+  .chips{flex-wrap:wrap;justify-content:flex-end}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ======== MENU ======== -->
+  <section class="screen on" id="scr-menu">
+    <header class="hero">
+      <div class="hero-art" id="hero-art"></div>
+      <h1>Qui passe<br>en premier&nbsp;?</h1>
+      <p class="tagline">Ton entraînement express avant le permis&nbsp;: priorités à droite, intersections et placement en giratoire.</p>
+      <span class="badge-j">Objectif&nbsp;: le jour J</span>
+    </header>
+    <div class="modes">
+      <button class="mode-card" data-mode="inter">
+        <span class="mode-ico" id="ico-inter"></span>
+        <span class="mode-tx">
+          <b>Intersections &amp; priorité à droite</b>
+          <span>15 situations — croix, T, Y : qui cède, qui passe</span>
+          <span class="best" id="best-inter"></span>
+        </span>
+      </button>
+      <button class="mode-card" data-mode="giro">
+        <span class="mode-ico" id="ico-giro"></span>
+        <span class="mode-tx">
+          <b>Giratoires&nbsp;: le placement</b>
+          <span>9 situations — voie, clignotant, sortie</span>
+          <span class="best" id="best-giro"></span>
+        </span>
+      </button>
+    </div>
+    <button class="lien-fiche" id="btn-fiche">Fiche rappel — l’essentiel en 2 minutes</button>
+    <p class="note-bas">Révision informelle — en cas de doute, la parole de ton moniteur fait foi.</p>
+  </section>
+
+  <!-- ======== QUIZ ======== -->
+  <section class="screen" id="scr-quiz">
+    <div class="topbar">
+      <button class="btn-retour" id="btn-menu1">← Menu</button>
+      <div class="chips">
+        <span class="chip">Question <b id="chip-num">1/12</b></span>
+        <span class="chip">Points <b id="chip-pts">0</b></span>
+        <span class="chip" id="chip-serie">Série <b id="chip-serie-n">0</b></span>
+      </div>
+    </div>
+    <div class="route-prog" aria-hidden="true">
+      <div class="ligne"></div>
+      <div class="auto" id="prog-auto"></div>
+    </div>
+    <div class="scene-card"><div id="scene"></div></div>
+    <p class="q-tx" id="q-tx"></p>
+    <p class="aide-voie cache" id="aide-voie">Touche la voie directement sur le dessin (ou tape 1 = gauche, 2 = droite).</p>
+    <div class="reponses" id="reponses"></div>
+    <div class="retour-info cache" id="retour">
+      <div class="verdict" id="verdict"></div>
+      <p class="explic" id="explic"></p>
+      <button class="btn-principal" id="btn-continuer">Continuer</button>
+    </div>
+  </section>
+
+  <!-- ======== FIN ======== -->
+  <section class="screen" id="scr-fin">
+    <div class="topbar">
+      <button class="btn-retour" id="btn-menu2">← Menu</button>
+    </div>
+    <div class="fin-carte">
+      <div class="gros-score" id="fin-score">0/12</div>
+      <div class="sur" id="fin-titre-mode"></div>
+      <p class="fin-msg" id="fin-msg"></p>
+      <div class="fin-stats">
+        <span class="chip">Meilleure série <b id="fin-serie">0</b></span>
+        <span class="chip">Record <b id="fin-record">—</b></span>
+      </div>
+      <div class="fin-actions">
+        <button class="btn-principal" id="btn-rejouer">Rejouer</button>
+        <button class="btn-secondaire cache" id="btn-erreurs">Revoir mes erreurs</button>
+        <button class="btn-secondaire" id="btn-fiche2">Fiche rappel</button>
+      </div>
+      <div class="astuce"><b>Le jour J&nbsp;:</b> à chaque intersection, marque un vrai regard à droite (tête tournée) — l’inspecteur doit le <b>voir</b>. Une priorité à droite grillée est éliminatoire.</div>
+    </div>
+  </section>
+
+  <!-- ======== FICHE ======== -->
+  <section class="screen" id="scr-fiche">
+    <div class="topbar">
+      <button class="btn-retour" id="btn-menu3">← Menu</button>
+    </div>
+    <h2 style="font-size:28px;margin:4px 2px 12px">Fiche rappel</h2>
+    <div class="fiche-cartes">
+
+      <div class="fiche-c">
+        <h3>Le réflexe priorité — 3 questions, dans l’ordre</h3>
+        <ol>
+          <li><b>Il y a un feu&nbsp;?</b> Il commande. Vert = je passe. Jaune clignotant = le feu ne compte plus, je passe à la question 2.</li>
+          <li><b>Il y a un panneau&nbsp;?</b> Il commande (stop, cédez-le-passage, losange jaune…). Un panneau prime toujours sur la priorité à droite.</li>
+          <li><b>Rien du tout&nbsp;?</b> Priorité à droite — quelle que soit la forme du carrefour&nbsp;: croix, T ou Y. Une route qui «&nbsp;continue&nbsp;» ou qui «&nbsp;se termine&nbsp;» ne donne aucun droit&nbsp;: seul compte qui arrive à droite de qui.</li>
+        </ol>
+        <div class="piege"><b>Pièges classiques&nbsp;:</b> tourner à gauche = céder d’abord aux véhicules d’en face • la croix de Saint-André annonce une priorité à droite • au stop, l’arrêt doit être total (roues immobiles), même si c’est désert.</div>
+      </div>
+
+      <div class="fiche-c">
+        <h3>Les panneaux qui décident</h3>
+        <div class="panneaux-grille" id="panneaux-grille"></div>
+      </div>
+
+      <div class="fiche-c">
+        <h3>Giratoire — le placement en 5 secondes</h3>
+        <div class="legende">
+          <span><i style="background:#F2C200"></i>À droite</span>
+          <span><i style="background:#6ECF9C"></i>Tout droit</span>
+          <span><i style="background:#8FB8F2"></i>À gauche / demi-tour</span>
+        </div>
+        <div class="mini-giro" id="mini-giro"></div>
+        <ul>
+          <li><b>À droite (1<sup>re</sup> sortie)&nbsp;:</b> voie de droite, clignotant droit dès l’approche.</li>
+          <li><b>Tout droit&nbsp;:</b> voie de droite, pas de clignotant à l’entrée. Clignotant droit dès que je dépasse la sortie qui précède la mienne.</li>
+          <li><b>À gauche / demi-tour&nbsp;:</b> clignotant gauche à l’entrée, voie de gauche (intérieure). Avant ma sortie&nbsp;: clignotant droit, rétro + angle mort droit, je rejoins la voie extérieure, je sors.</li>
+          <li><b>À l’entrée&nbsp;:</b> je cède aux véhicules déjà sur l’anneau (ils viennent de ma gauche). Exception&nbsp;: le vrai «&nbsp;rond-point&nbsp;» sans panneau (Étoile…) où celui qui <b>entre</b> a priorité.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<div id="erreur-boot"></div>
+<script>
+/* Filet de sécurité : si le script du jeu plante sur cet appareil, on l'affiche
+   au lieu de laisser des boutons muets. */
+window.addEventListener('error',function(e){
+  var b=document.getElementById('erreur-boot');
+  if(!b)return;
+  b.style.display='block';
+  b.textContent='Oups, une erreur technique empêche le jeu de démarrer sur cet appareil : « '
+    +(e.message||'inconnue')+' » (ligne '+(e.lineno||'?')+'). Envoie-moi ce message tel quel pour que je corrige.';
+});
+</script>
+<script>
+'use strict';
+/* ================= OUTILS ================= */
+const $=s=>document.querySelector(s);
+const MOUV=(function(){try{return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return true;}})();
+function bascule(el,cls,on){if(on)el.classList.add(cls);else el.classList.remove(cls);}
+function lisser(pts){ /* Catmull-Rom -> beziers, trace fluide passant par tous les points */
+  let d='M'+pts[0][0]+','+pts[0][1];
+  for(let i=0;i<pts.length-1;i++){
+    const p0=pts[Math.max(0,i-1)],p1=pts[i],p2=pts[i+1],p3=pts[Math.min(pts.length-1,i+2)];
+    d+='C'+(p1[0]+(p2[0]-p0[0])/6).toFixed(1)+','+(p1[1]+(p2[1]-p0[1])/6).toFixed(1)+' '
+        +(p2[0]-(p3[0]-p1[0])/6).toFixed(1)+','+(p2[1]-(p3[1]-p1[1])/6).toFixed(1)+' '
+        +p2[0].toFixed(1)+','+p2[1].toFixed(1);
+  }
+  return d;
+}
+function fleche(pts,couleur){ /* pointe au bout d'une trace */
+  const [ax,ay]=pts[pts.length-2],[bx,by]=pts[pts.length-1];
+  const ang=Math.atan2(by-ay,bx-ax);
+  const p=(a,r)=>((bx+Math.cos(a)*r).toFixed(1)+','+(by+Math.sin(a)*r).toFixed(1));
+  return `<polygon points="${p(ang,11)} ${p(ang+2.5,8)} ${p(ang-2.5,8)}" fill="${couleur}"/>`;
+}
+
+/* ================= VOITURES & PANNEAUX ================= */
+function voiture(x,y,rot,couleur,etiquette){
+  return `<g transform="translate(${x},${y}) rotate(${rot})">
+    <rect x="-11" y="-20" width="22" height="40" rx="6" fill="${couleur}"/>
+    <rect x="-8" y="-13" width="16" height="7" rx="2" fill="rgba(255,255,255,.4)"/>
+    <rect x="-8" y="10" width="16" height="5" rx="2" fill="rgba(0,0,0,.18)"/>
+    ${etiquette?`<circle cx="0" cy="1" r="8.5" fill="#fff"/><text x="0" y="1" text-anchor="middle" dominant-baseline="central" transform="rotate(${-rot})" style="font:700 11px var(--t-body)" fill="#1C242E">${etiquette}</text>`:''}
+  </g>`;
+}
+function flecheIntention(x,y,rot,couleur,virage){
+  let trace,pointe;
+  if(virage==='g'){trace='M0,-26 C0,-46 -6,-52 -24,-52';pointe='<polygon points="-22,-58 -22,-46 -36,-52"/>';}
+  else if(virage==='d'){trace='M0,-26 C0,-46 6,-52 24,-52';pointe='<polygon points="22,-58 22,-46 36,-52"/>';}
+  else{trace='M0,-26 L0,-58';pointe='<polygon points="-6,-56 6,-56 0,-70"/>';}
+  return `<g transform="translate(${x},${y}) rotate(${rot})" fill="${couleur}" opacity=".92">
+    <path d="${trace}" stroke="${couleur}" stroke-width="3.5" fill="none" stroke-linecap="round"/>${pointe}</g>`;
+}
+function panneau(type,x,y,ech){
+  ech=ech||1;
+  let c='';
+  if(type==='cedez') c=`<polygon points="0,-16 19,-16 9.5,1" fill="#D23B2E"/><polygon points="3.4,-13.8 15.6,-13.8 9.5,-3" fill="#fff"/>`;
+  else if(type==='stop') c=`<polygon points="4,-17 15,-17 20,-12 20,-1 15,4 4,4 -1,-1 -1,-12" fill="#D23B2E" stroke="#fff" stroke-width="1.6"/><text x="9.5" y="-5.5" text-anchor="middle" dominant-baseline="central" style="font:800 6.5px var(--t-body)" fill="#fff">STOP</text>`;
+  else if(type==='prio') c=`<rect x="1" y="-15" width="17" height="17" transform="rotate(45 9.5 -6.5)" fill="#fff" stroke="#8b8f94" stroke-width=".8"/><rect x="4.2" y="-11.8" width="10.6" height="10.6" transform="rotate(45 9.5 -6.5)" fill="#F2C200"/>`;
+  else if(type==='finprio') c=`<rect x="1" y="-15" width="17" height="17" transform="rotate(45 9.5 -6.5)" fill="#fff" stroke="#8b8f94" stroke-width=".8"/><rect x="4.2" y="-11.8" width="10.6" height="10.6" transform="rotate(45 9.5 -6.5)" fill="#F2C200"/><line x1="2" y1="1" x2="17" y2="-14" stroke="#3a3f45" stroke-width="2.6"/>`;
+  else if(type==='croix') c=`<polygon points="9.5,-18 21,1 -2,1" fill="#D23B2E"/><polygon points="9.5,-14.2 17.8,-.8 1.2,-.8" fill="#fff"/><g stroke="#1C242E" stroke-width="1.9" stroke-linecap="round"><line x1="6" y1="-9.5" x2="13" y2="-2.5"/><line x1="13" y1="-9.5" x2="6" y2="-2.5"/></g>`;
+  else if(type==='feu') c=`<rect x="3" y="-24" width="13" height="28" rx="3" fill="#23282e"/><circle cx="9.5" cy="-18" r="3.2" fill="#5a4040"/><circle cx="9.5" cy="-10" r="3.2" fill="#FFB300" class="feu-clignote"/><circle cx="9.5" cy="-2" r="3.2" fill="#3d5747"/>`;
+  else if(type==='giratoire') c=`<circle cx="9.5" cy="-8" r="12" fill="#0B5BB5" stroke="#fff" stroke-width="1.8"/><g stroke="#fff" stroke-width="2" fill="none"><path d="M4,-11 A6.5,6.5 0 0 0 12,-2.2"/><path d="M15,-5 A6.5,6.5 0 0 0 7,-13.8"/></g><polygon points="12,-1 16.4,-2.2 13.4,-5.6" fill="#fff"/><polygon points="7,-15 2.6,-13.8 5.6,-10.4" fill="#fff"/>`;
+  return `<g transform="translate(${x},${y}) scale(${ech})"><line x1="9.5" y1="1" x2="9.5" y2="14" stroke="#8b8f94" stroke-width="2.5"/>${c}</g>`;
+}
+
+/* ================= SCÈNE INTERSECTION ================= */
+/* Repère : croisement centré (240,180), routes larges de 110. A = toi, arrive du bas.
+   Formes : croix (défaut), T (sc.tee) et Y (sc.forme==='y', branches YL/YR qui convergent). */
+const POS={S:{x:267,y:300,rot:0},N:{x:213,y:60,rot:180},E:{x:360,y:153,rot:270},W:{x:120,y:207,rot:90},
+           YL:{x:129,y:94,rot:145},YR:{x:307,y:63,rot:215}};
+const COUL={A:'var(--carA)',B:'var(--carB)',C:'var(--carC)',X:'var(--carX)'};
+function sceneInter(sc){
+  let s=`<svg viewBox="0 0 480 360" role="img" aria-label="Schéma d'intersection vue de dessus">`;
+  s+=`<rect width="480" height="360" class="sc-terrain"/>`;
+  if(sc.forme==='y'){
+    s+=`<g transform="translate(240,205) rotate(-35)"><rect x="-65" y="-310" width="130" height="310" class="sc-pad"/></g>`;
+    s+=`<g transform="translate(240,205) rotate(35)"><rect x="-65" y="-310" width="130" height="310" class="sc-pad"/></g>`;
+    s+=`<rect x="175" y="195" width="130" height="165" class="sc-pad"/>`;
+    s+=`<g transform="translate(240,205) rotate(-35)"><rect x="-55" y="-310" width="110" height="310" class="sc-road"/></g>`;
+    s+=`<g transform="translate(240,205) rotate(35)"><rect x="-55" y="-310" width="110" height="310" class="sc-road"/></g>`;
+    s+=`<rect x="185" y="200" width="110" height="160" class="sc-road"/>`;
+    s+=`<g transform="translate(240,205) rotate(-35)"><line x1="0" y1="-310" x2="0" y2="-100" class="sc-dash"/></g>`;
+    s+=`<g transform="translate(240,205) rotate(35)"><line x1="0" y1="-310" x2="0" y2="-100" class="sc-dash"/></g>`;
+    s+=`<line x1="240" y1="272" x2="240" y2="360" class="sc-dash"/>`;
+    s+=`<polygon points="240,122 214,180 266,180" fill="var(--marquage)" opacity=".16" stroke="var(--marquage)" stroke-width="3" stroke-linejoin="round"/>`;
+  }else{
+    s+=`<rect x="175" y="0" width="130" height="360" class="sc-pad" ${sc.tee?'transform="translate(0,120)"':''}/>`;
+    s+=`<rect x="0" y="115" width="480" height="130" class="sc-pad"/>`;
+    s+=sc.tee?`<rect x="185" y="125" width="110" height="235" class="sc-road"/>`
+             :`<rect x="185" y="0" width="110" height="360" class="sc-road"/>`;
+    s+=`<rect x="0" y="125" width="480" height="110" class="sc-road"/>`;
+    if(!sc.tee) s+=`<line x1="240" y1="0" x2="240" y2="117" class="sc-dash"/>`;
+    s+=`<line x1="240" y1="243" x2="240" y2="360" class="sc-dash"/>`;
+    if(sc.tee) s+=`<line x1="0" y1="180" x2="480" y2="180" class="sc-dash"/>`;
+    else s+=`<line x1="0" y1="180" x2="177" y2="180" class="sc-dash"/><line x1="303" y1="180" x2="480" y2="180" class="sc-dash"/>`;
+  }
+  if(sc.marque==='cedez') s+=`<line x1="243" y1="241" x2="293" y2="241" class="sc-mark" stroke-width="7" stroke-dasharray="9 7"/>`;
+  if(sc.marque==='stop')  s+=`<line x1="243" y1="241" x2="293" y2="241" class="sc-mark" stroke-width="7"/>`;
+  if(sc.marqueE==='stop') s+=`<line x1="303" y1="128" x2="303" y2="178" class="sc-mark" stroke-width="7"/>`;
+  if(sc.marqueE==='cedez')s+=`<line x1="303" y1="128" x2="303" y2="178" class="sc-mark" stroke-width="7" stroke-dasharray="9 7"/>`;
+  if(sc.panneau) s+=panneau(sc.panneau,306,262,1.15);
+  if(sc.panneauE) s+=panneau(sc.panneauE,312,102,1.05);
+  (sc.autos||[]).forEach(a=>{
+    const p=POS[a.pos];
+    s+=flecheIntention(p.x,p.y,p.rot,COUL[a.et],a.vir||'t');
+    s+=voiture(p.x,p.y,p.rot,COUL[a.et],a.et);
+  });
+  if(sc.premier){
+    const p=POS[(sc.autos.find(a=>a.et===sc.premier)||{}).pos||'S'];
+    s+=`<circle class="pulse-cercle cache" id="pulse" cx="${p.x}" cy="${p.y}" r="30"/>`;
+  }
+  return s+'</svg>';
+}
+
+/* ================= SCÈNE GIRATOIRE ================= */
+/* Anneau centré (240,170). Circulation en sens inverse des aiguilles d'une montre. */
+const GC={cx:240,cy:170,R:118,ri:50,div:84,vExt:101,vInt:67};
+function ptA(a,r){const rad=a*Math.PI/180;return [GC.cx+r*Math.cos(rad),GC.cy-r*Math.sin(rad)];}
+function rotA(a){const rad=a*Math.PI/180;return Math.atan2(-Math.sin(rad),Math.cos(rad))*180/Math.PI;}
+function arcPts(a1,a2,r,pas){const pts=[];for(let a=a1;a<=a2;a+=(pas||8))pts.push(ptA(a,r));pts.push(ptA(a2,r));return pts;}
+function trajPts(genre,voies){
+  const xG=258,xD=296,e=[[0,392],[0,344],[0,306]];
+  const dep=x=>e.map(p=>[x,p[1]]);
+  if(genre==='droite')  return dep(xD).concat(arcPts(304,352,GC.vExt),[[382,201],[438,198]]);
+  if(genre==='tdroit')  return dep(xD).concat(arcPts(304,58,GC.vExt),[[276,52],[268,12]]);
+  if(genre==='gauche'){
+    if(voies===1) return dep(277).concat(arcPts(296,152,GC.div),[[128,148],[52,144]]);
+    return dep(xG).concat(arcPts(286,150,GC.vInt),[[160,138],[128,146],[52,144]]);
+  }
+  if(genre==='demitour')return dep(xG).concat(arcPts(286,258+360,GC.vInt,10),[[216,288],[213,392]]);
+  if(genre==='sortirInt')return arcPts(288,330,GC.vInt,6).concat([ptA(345,GC.vExt)],[[382,201],[438,198]]);
+  return [];
+}
+function trace(genre,voies,couleur,anime){
+  const pts=trajPts(genre,voies),d=lisser(pts);
+  let s=`<path d="${d}" class="traj-trace" stroke="${couleur}"/>`+fleche(pts,couleur);
+  if(anime&&MOUV) s+=`<g><rect x="-10" y="-6" width="20" height="12" rx="4" fill="${couleur}" stroke="rgba(0,0,0,.35)" stroke-width="1.5"/>
+    <animateMotion dur="4s" repeatCount="indefinite" rotate="auto" path="${d}"/></g>`;
+  return s;
+}
+function sceneGiro(cfg){
+  const {cx,cy,R,ri,div}=GC;
+  let s=`<svg viewBox="0 0 480 400" role="img" aria-label="Schéma de giratoire vue de dessus">`;
+  s+=`<rect width="480" height="400" class="sc-terrain"/>`;
+  s+=`<rect x="175" y="0" width="130" height="400" class="sc-pad"/><rect x="0" y="105" width="480" height="130" class="sc-pad"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R+8}" class="sc-pad"/>`;
+  s+=`<rect x="185" y="0" width="110" height="${cy}" class="sc-road"/>`;                 /* branche N */
+  s+=`<rect x="0" y="115" width="480" height="110" class="sc-road"/>`;                   /* branches E-O */
+  s+=`<rect x="165" y="${cy}" width="150" height="${400-cy}" class="sc-road"/>`;         /* branche S (approche, 2 voies d'entrée) */
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R}" class="sc-road"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${ri}" class="sc-pad"/><circle cx="${cx}" cy="${cy}" r="${ri-7}" class="sc-terrain"/><circle cx="${cx}" cy="${cy}" r="12" class="sc-pad"/>`;
+  s+=`<line x1="240" y1="0" x2="240" y2="58" class="sc-dash"/>`;
+  s+=`<line x1="0" y1="170" x2="118" y2="170" class="sc-dash"/><line x1="362" y1="170" x2="480" y2="170" class="sc-dash"/>`;
+  s+=`<line x1="240" y1="300" x2="240" y2="400" class="sc-mark" stroke-width="3"/>`;     /* séparation entrée / sortie branche S */
+  if(cfg.voies===2){
+    s+=`<circle cx="${cx}" cy="${cy}" r="${div}" class="sc-dash" fill="none"/>`;
+    s+=`<line x1="277" y1="310" x2="277" y2="400" class="sc-dash"/>`;                    /* séparation voies G / D */
+    s+=`<text x="258" y="382" text-anchor="middle" class="sc-txt" font-size="15">G</text>`;
+    s+=`<text x="297" y="382" text-anchor="middle" class="sc-txt" font-size="15">D</text>`;
+  }
+  [45,135,225,315].forEach(a=>{ /* chevrons de sens de circulation (anti-horaire) */
+    const r=cfg.voies===2?div:84;
+    const [x1,y1]=ptA(a-6,r),[x2,y2]=ptA(a+6,r);
+    const ang=Math.atan2(y2-y1,x2-x1);
+    const p=(o,d2)=>((x2+Math.cos(o)*d2).toFixed(1)+','+(y2+Math.sin(o)*d2).toFixed(1));
+    s+=`<polygon points="${x2.toFixed(1)},${y2.toFixed(1)} ${p(ang+2.6,10)} ${p(ang-2.6,10)}" fill="var(--marquage2)" opacity=".8"/>`;
+  });
+  if(cfg.signal!==false){
+    s+=`<line x1="242" y1="290" x2="313" y2="288" class="sc-mark" stroke-width="6" stroke-dasharray="8 7"/>`;
+    s+=panneau('giratoire',322,318,1.1);
+    s+=panneau('cedez',322,352,1);
+  }
+  if(cfg.sortieCible){
+    const pos={E:{x:392,y:132,r:0},N:{x:262,y:26,r:0},W:{x:12,y:196,r:0},S:{x:116,y:340,r:0}}[cfg.sortieCible];
+    s+=`<g transform="translate(${pos.x},${pos.y})"><rect x="-4" y="-14" width="86" height="22" rx="6" class="sc-sortie"/><text x="39" y="-2.5" text-anchor="middle" dominant-baseline="central" class="sc-sortie-tx" font-size="12.5">TA SORTIE</text></g>`;
+  }
+  if(cfg.autoAnneau){ const a=205, [x,y]=ptA(a,GC.vExt); s+=voiture(x,y,rotA(a),COUL.X,'');}
+  if(cfg.autoMoi==='entree'){ const x=cfg.voies===2?296:277; s+=voiture(x,332,0,COUL.A,'A'); }
+  if(cfg.autoMoi==='anneauInt'){ const a=290,[x,y]=ptA(a,GC.vInt); s+=voiture(x,y,rotA(a),COUL.A,'A'); }
+  if(cfg.autoMoi==='anneauExt'){ const a=318,[x,y]=ptA(a,GC.vExt); s+=voiture(x,y,rotA(a),COUL.A,'A'); }
+  if(cfg.cliquable){
+    s+=`<rect class="voie-clic" data-voie="G" role="button" tabindex="0" aria-label="Voie de gauche" x="242" y="302" width="34" height="96" rx="4"/>`;
+    s+=`<rect class="voie-clic" data-voie="D" role="button" tabindex="0" aria-label="Voie de droite" x="279" y="302" width="34" height="96" rx="4"/>`;
+  }
+  if(cfg.pulse){
+    let px,py;
+    if(cfg.pulse==='anneau'){const [x,y]=ptA(205,GC.vExt);px=x;py=y;}
+    else {px=cfg.voies===2?296:277;py=332;}
+    s+=`<circle class="pulse-cercle cache" id="pulse" cx="${px}" cy="${py}" r="30"/>`;
+  }
+  s+=`<g id="traj-calque"></g>`;
+  return s+'</svg>';
+}
+
+/* ================= DONNÉES : INTERSECTIONS ================= */
+const Q_INTER=[
+ {q:'Aucun panneau, aucun feu. B arrive sur ma droite, chacun va tout droit. Qui passe en premier ?',
+  autos:[{pos:'S',et:'A'},{pos:'E',et:'B'}],premier:'B',
+  reps:[{t:'Moi (voiture A)',car:'A'},{t:'La voiture B',car:'B'}],ok:1,
+  ex:'Sans signalisation, c’est la priorité à droite : B vient de ta droite, tu lui cèdes le passage. Le bon réflexe : pied levé et regard à droite à chaque carrefour non signalé.'},
+ {q:'Aucun panneau. Cette fois B arrive sur ma gauche. Qui passe en premier ?',
+  autos:[{pos:'S',et:'A'},{pos:'W',et:'B'}],premier:'A',
+  reps:[{t:'Moi (voiture A)',car:'A'},{t:'La voiture B',car:'B'}],ok:0,
+  ex:'B vient de ta gauche : c’est lui qui te cède le passage, car tu es à SA droite. Tu passes sans t’arrêter… mais tu restes prêt à freiner : une priorité, ça se prend seulement si l’autre la respecte.'},
+ {q:'Carrefour non signalé, trois voitures : B à ma droite, C à ma gauche. Qui passe en premier ?',
+  autos:[{pos:'S',et:'A'},{pos:'E',et:'B'},{pos:'W',et:'C'}],premier:'B',
+  reps:[{t:'Moi (voiture A)',car:'A'},{t:'La voiture B',car:'B'},{t:'La voiture C',car:'C'}],ok:1,
+  ex:'Chacun cède à sa droite : toi tu cèdes à B, C te cède. B n’a personne à sa droite : il passe en premier. Ensuite toi, puis C. Ordre : B → A → C.'},
+ {q:'Je tourne à gauche. B arrive en face et va tout droit. Aucun panneau. Qui passe en premier ?',
+  autos:[{pos:'S',et:'A',vir:'g'},{pos:'N',et:'B'}],premier:'B',
+  reps:[{t:'Moi : il n’y a personne à ma droite',car:'A'},{t:'La voiture B, qui vient en face',car:'B'}],ok:1,
+  ex:'En tournant à gauche, tu coupes la trajectoire de B : tu dois laisser passer les véhicules qui viennent en face, même sans aucun panneau. La priorité à droite ne protège jamais un tourne-à-gauche.'},
+ {q:'Je suis au cédez-le-passage. B arrive de ma gauche. Qui passe en premier ?',
+  panneau:'cedez',marque:'cedez',autos:[{pos:'S',et:'A'},{pos:'W',et:'B'}],premier:'B',
+  reps:[{t:'Moi : B vient de ma gauche',car:'A'},{t:'La voiture B',car:'B'}],ok:1,
+  ex:'Le panneau remplace la règle de droite : au cédez-le-passage tu cèdes à GAUCHE et à droite. Pas d’arrêt obligatoire si c’est libre — mais ici, B passe d’abord.'},
+ {q:'Je suis au stop et… personne à l’horizon. Qu’est-ce que je fais ?',
+  panneau:'stop',marque:'stop',autos:[{pos:'S',et:'A'}],premier:'A',
+  reps:[{t:'Je passe, la voie est libre'},{t:'Arrêt complet (roues immobiles), puis je repars'},{t:'Je ralentis très fort et je franchis doucement'}],ok:1,
+  ex:'Au stop, l’arrêt complet est obligatoire même si c’est désert : roues arrêtées, à hauteur de la ligne. Le « stop glissé » est une faute éliminatoire à l’examen.'},
+ {q:'Je roule sur une route prioritaire (losange jaune). B débouche de ma droite, où il a un cédez-le-passage. Qui passe ?',
+  panneau:'prio',panneauE:'cedez',marqueE:'cedez',autos:[{pos:'S',et:'A'},{pos:'E',et:'B'}],premier:'A',
+  reps:[{t:'Moi : je suis sur la route prioritaire',car:'A'},{t:'B : il vient de ma droite',car:'B'}],ok:0,
+  ex:'Le losange jaune = route prioritaire jusqu’à son annulation. Les routes qui débouchent te cèdent le passage, MÊME celles qui arrivent de droite. Le panneau gagne toujours contre la règle de droite.'},
+ {q:'Je viens de passer le panneau « fin de route prioritaire ». Au carrefour suivant, B arrive de ma droite. Qui passe ?',
+  panneau:'finprio',autos:[{pos:'S',et:'A'},{pos:'E',et:'B'}],premier:'B',
+  reps:[{t:'Moi : la route reste prioritaire',car:'A'},{t:'La voiture B',car:'B'}],ok:1,
+  ex:'Losange barré = retour au régime général : priorité à droite dès la prochaine intersection. B passe en premier.'},
+ {q:'Ce panneau triangulaire avec une croix (croix de Saint-André) annonce le prochain carrefour. B arrivera de ma droite. Qui passera ?',
+  panneau:'croix',autos:[{pos:'S',et:'A'},{pos:'E',et:'B'}],premier:'B',
+  reps:[{t:'Moi : ce panneau me donne la priorité',car:'A'},{t:'La voiture B',car:'B'}],ok:1,
+  ex:'La croix de Saint-André ANNONCE une intersection où la priorité à droite s’applique. Elle ne te donne rien : elle te prévient de céder à droite. Beaucoup la confondent avec un panneau de priorité — pas toi.'},
+ {q:'Le feu est en panne : jaune clignotant. B arrive de ma droite. Qui passe en premier ?',
+  panneau:'feu',autos:[{pos:'S',et:'A'},{pos:'E',et:'B'}],premier:'B',
+  reps:[{t:'Moi : le feu ne compte plus, je passe',car:'A'},{t:'La voiture B',car:'B'}],ok:1,
+  ex:'Feu jaune clignotant = le feu ne commande plus. On revient aux panneaux, et s’il n’y en a pas : priorité à droite. B passe en premier.'},
+ {q:'Intersection en T, aucun panneau. Je suis sur la route qui continue, B débouche de la route à ma droite. Qui passe ?',
+  tee:true,autos:[{pos:'W',et:'A'},{pos:'S',et:'B',vir:'d'}],premier:'B',
+  reps:[{t:'Moi : je suis sur la route principale',car:'A'},{t:'La voiture B',car:'B'}],ok:1,
+  ex:'Piège classique ! « Route qui continue » ne veut pas dire « route prioritaire ». Sans signalisation, la priorité à droite s’applique aussi en T : B passe en premier.'},
+ {q:'Intersection en T, rôles inversés : MA route se termine, je tourne à droite. B arrive de ma gauche sur la route qui continue. Aucun panneau. Qui passe ?',
+  tee:true,autos:[{pos:'S',et:'A',vir:'d'},{pos:'W',et:'B'}],premier:'A',
+  reps:[{t:'Moi (voiture A)',car:'A'},{t:'B : il est sur la route qui continue',car:'B'}],ok:0,
+  ex:'Même logique dans l’autre sens : ta route « se termine », et pourtant c’est toi qui as la priorité, car tu arrives de la droite de B. Sans panneau, la forme de la route ne donne aucun droit. Engage-toi, mais sans jamais forcer le passage.'},
+ {q:'Intersection en Y, aucun panneau : les deux branches se rejoignent. Je descends la branche de droite, B celle de gauche. Qui passe en premier ?',
+  forme:'y',autos:[{pos:'YR',et:'A'},{pos:'YL',et:'B'}],premier:'B',
+  reps:[{t:'Moi (voiture A)',car:'A'},{t:'La voiture B',car:'B'}],ok:1,
+  ex:'Un Y est une intersection comme une autre : sans panneau, priorité à droite. Au point de jonction, B arrive de ta droite : tu lui cèdes le passage. Le réflexe : à l’approche de la jonction, cherche qui débouche côté droit.'},
+ {q:'Même Y, rôles inversés : je descends la branche de gauche, B celle de droite. Qui passe en premier ?',
+  forme:'y',autos:[{pos:'YL',et:'A'},{pos:'YR',et:'B'}],premier:'A',
+  reps:[{t:'Moi (voiture A)',car:'A'},{t:'La voiture B',car:'B'}],ok:0,
+  ex:'Cette fois c’est toi qui arrives de la droite de B : il te cède le passage. Tu passes… en couvrant ton frein : une priorité ne se prend que si l’autre l’a vue et la respecte.'},
+ {q:'B arrive de ma droite… mais lui a un stop. Qui passe en premier ?',
+  panneauE:'stop',marqueE:'stop',autos:[{pos:'S',et:'A'},{pos:'E',et:'B'}],premier:'A',
+  reps:[{t:'Moi (voiture A)',car:'A'},{t:'B : il vient de ma droite',car:'B'}],ok:0,
+  ex:'Un panneau prime toujours sur la priorité à droite : B est au stop, il doit s’arrêter et te céder le passage. Vérifie quand même qu’il s’arrête vraiment avant de t’engager.'}
+];
+
+/* ================= DONNÉES : GIRATOIRES ================= */
+const Q_GIRO=[
+ {q:'Panneau bleu « sens giratoire » + cédez-le-passage à l’entrée. Un véhicule est déjà sur l’anneau. Qui a la priorité ?',
+  scene:{voies:2,autoMoi:'entree',autoAnneau:true,pulse:'anneau'},type:'qcm',
+  reps:[{t:'Moi qui entre : je viens de sa droite',car:'A'},{t:'Le véhicule déjà engagé sur l’anneau'}],ok:1,
+  ex:'Au carrefour à sens giratoire, le cédez-le-passage à l’entrée inverse la règle : tu cèdes aux véhicules déjà sur l’anneau, qui arrivent de ta GAUCHE. C’est le cas de la quasi-totalité des giratoires en France.'},
+ {q:'Je prends la 1ʳᵉ sortie, à droite. Sur quelle voie j’aborde le giratoire ?',
+  scene:{voies:2,cliquable:true,sortieCible:'E'},type:'voie',okVoie:'D',traj:'droite',
+  ex:'Sortie immédiate à droite : voie de DROITE, clignotant droit dès l’approche. Tu restes sur la voie extérieure de l’anneau et tu sors sans couper personne.'},
+ {q:'Je vais tout droit (2ᵉ sortie). Sur quelle voie j’aborde le giratoire ?',
+  scene:{voies:2,cliquable:true,sortieCible:'N'},type:'voie',okVoie:'D',traj:'tdroit',
+  ex:'Tout droit = voie de DROITE, voie extérieure de l’anneau. Pas de clignotant à l’entrée ; clignotant droit dès que tu dépasses la sortie qui précède la tienne.'},
+ {q:'Je tourne à gauche (3ᵉ sortie). Sur quelle voie j’aborde le giratoire ?',
+  scene:{voies:2,cliquable:true,sortieCible:'W'},type:'voie',okVoie:'G',traj:'gauche',
+  ex:'À gauche = clignotant GAUCHE à l’entrée, voie de gauche, puis voie intérieure de l’anneau. Avant ta sortie : clignotant droit, contrôles, retour sur la voie extérieure.'},
+ {q:'Je fais demi-tour. Sur quelle voie j’aborde le giratoire ?',
+  scene:{voies:2,cliquable:true,sortieCible:'S'},type:'voie',okVoie:'G',traj:'demitour',
+  ex:'Demi-tour = même technique que tourner à gauche : clignotant gauche à l’entrée, voie intérieure, tour complet de l’anneau, sortie après contrôles à droite.'},
+ {q:'Je suis sur la voie intérieure et ma sortie est la prochaine. Comment je sors ?',
+  scene:{voies:2,autoMoi:'anneauInt',sortieCible:'E'},type:'qcm',traj:'sortirInt',
+  reps:[{t:'Clignotant droit → rétro + angle mort droit → je rejoins la voie extérieure → je sors'},{t:'Je sors directement depuis la voie intérieure, j’ai la priorité'},{t:'Je m’arrête sur l’anneau pour laisser passer'}],ok:0,
+  ex:'La voie extérieure peut être occupée : clignotant droit dès la sortie précédente, contrôle rétro + angle mort droit, rabattement, sortie. On ne coupe jamais et on ne s’arrête jamais sur l’anneau.'},
+ {q:'À quel moment je mets le clignotant droit pour sortir du giratoire ?',
+  scene:{voies:2,autoMoi:'anneauExt',sortieCible:'E'},type:'qcm',
+  reps:[{t:'Dès l’entrée sur l’anneau'},{t:'Dès que je dépasse la sortie qui précède la mienne'},{t:'Une fois engagé dans ma sortie'}],ok:1,
+  ex:'Le clignotant droit informe ceux qui attendent pour entrer. Trop tôt : ils croient que tu prends la sortie d’avant. Trop tard : personne ne peut anticiper. Le bon repère : au droit de la sortie qui précède la tienne.'},
+ {q:'Vrai « rond-point » SANS panneau ni marquage à l’entrée (ex. place de l’Étoile). Qui a la priorité ?',
+  scene:{voies:2,signal:false,autoMoi:'entree',autoAnneau:true,pulse:'entree'},type:'qcm',
+  reps:[{t:'Les véhicules déjà sur l’anneau'},{t:'Moi qui entre : priorité à droite classique',car:'A'}],ok:1,
+  ex:'Sans cédez-le-passage à l’entrée, la règle générale reprend ses droits : priorité à droite, donc à ceux qui ENTRENT. Rarissime (Étoile, Nation…) mais grand classique de l’examen du code.'},
+ {q:'Giratoire à UNE seule voie, je prends la 3ᵉ sortie (à gauche). Comment je procède ?',
+  scene:{voies:1,autoMoi:'entree',sortieCible:'W'},type:'qcm',traj:'gauche',
+  reps:[{t:'Clignotant gauche à l’entrée, je fais le tour sur la voie unique'},{t:'Je serre au plus près de l’îlot central pour aller plus vite'},{t:'Clignotant droit à l’entrée, pour prévenir que je sortirai'}],ok:0,
+  ex:'Une seule voie : pas de placement à choisir, on suit la voie. Mais le clignotant gauche à l’entrée renseigne les autres sur ton intention. Clignotant droit ensuite, après la sortie qui précède la tienne.'}
+];
+
+/* ================= MOTEUR DE JEU ================= */
+const etat={mode:null,file:[],i:0,pts:0,serie:0,serieMax:0,repondu:false,fautes:[]};
+const TITRES={inter:'Intersections & priorité à droite',giro:'Giratoires : le placement'};
+function banque(m){return m==='inter'?Q_INTER:Q_GIRO;}
+function lireBests(){try{return JSON.parse(localStorage.getItem('qppBests')||'{}');}catch(e){return {};}}
+function ecrireBest(m,sc,tot){try{const b=lireBests();if(!b[m]||sc>b[m].sc)b[m]={sc,tot};localStorage.setItem('qppBests',JSON.stringify(b));}catch(e){}}
+function montrerEcran(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$('#'+id).classList.add('on');window.scrollTo(0,0);}
+
+function majMenu(){
+  const b=lireBests();
+  $('#best-inter').textContent=b.inter?`Record : ${b.inter.sc}/${b.inter.tot}`:'';
+  $('#best-giro').textContent=b.giro?`Record : ${b.giro.sc}/${b.giro.tot}`:'';
+}
+function demarrer(mode,sousEnsemble){
+  etat.mode=mode;
+  etat.file=(sousEnsemble&&sousEnsemble.length?sousEnsemble:banque(mode).map((_,i)=>i));
+  etat.i=0;etat.pts=0;etat.serie=0;etat.serieMax=0;etat.fautes=[];
+  montrerEcran('scr-quiz');
+  rendreQuestion();
+}
+function scEnCours(){return banque(etat.mode)[etat.file[etat.i]];}
+
+function rendreQuestion(){
+  const sc=scEnCours(),n=etat.file.length;
+  etat.repondu=false;
+  $('#chip-num').textContent=(etat.i+1)+'/'+n;
+  $('#chip-pts').textContent=etat.pts;
+  $('#chip-serie-n').textContent=etat.serie;
+  bascule($('#chip-serie'),'feu',etat.serie>=3);
+  $('#prog-auto').style.left=(6+88*(etat.i/Math.max(1,n-1)))+'%';
+  $('#q-tx').textContent=sc.q;
+  $('#retour').classList.add('cache');
+  const conteneur=$('#scene');
+  conteneur.innerHTML=(etat.mode==='inter')?sceneInter(sc):sceneGiro(sc.scene);
+  conteneur.className=MOUV?'anim':'';
+  const estVoie=(sc.type==='voie');
+  bascule($('#aide-voie'),'cache',!estVoie);
+  const zone=$('#reponses');zone.innerHTML='';
+  if(estVoie){
+    conteneur.querySelectorAll('.voie-clic').forEach(r=>{
+      r.addEventListener('click',()=>repondreVoie(r.dataset.voie));
+      r.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();repondreVoie(r.dataset.voie);}});
+    });
+  }else{
+    sc.reps.forEach((rep,idx)=>{
+      const b=document.createElement('button');
+      b.className='rep';
+      b.innerHTML=`<span class="num">${idx+1}</span>${rep.car?`<span class="pastille" style="background:${COUL[rep.car]}"></span>`:''}<span>${rep.t}</span>`;
+      b.addEventListener('click',()=>repondreQcm(idx));
+      zone.appendChild(b);
+    });
+  }
+}
+function repondreQcm(idx){
+  if(etat.repondu)return;
+  const sc=scEnCours(),bon=(idx===sc.ok);
+  document.querySelectorAll('.rep').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===sc.ok)b.classList.add('ok');
+    else if(i===idx&&!bon)b.classList.add('ko');
+  });
+  concluRe(bon);
+}
+function repondreVoie(v){
+  if(etat.repondu)return;
+  const sc=scEnCours(),bon=(v===sc.okVoie);
+  document.querySelectorAll('.voie-clic').forEach(r=>{
+    if(r.dataset.voie===sc.okVoie)r.classList.add('ok');
+    else if(r.dataset.voie===v&&!bon)r.classList.add('ko');
+    r.style.pointerEvents='none';
+  });
+  concluRe(bon);
+}
+function concluRe(bon){
+  etat.repondu=true;
+  const sc=scEnCours();
+  if(bon){etat.pts++;etat.serie++;etat.serieMax=Math.max(etat.serieMax,etat.serie);}
+  else{etat.serie=0;etat.fautes.push(etat.file[etat.i]);}
+  $('#chip-pts').textContent=etat.pts;
+  $('#chip-serie-n').textContent=etat.serie;
+  bascule($('#chip-serie'),'feu',etat.serie>=3);
+  const r=$('#retour');
+  r.classList.remove('cache','ok','ko');
+  r.classList.add(bon?'ok':'ko');
+  $('#verdict').textContent=bon?'✓ Exact':'✕ Raté — retiens le réflexe';
+  $('#explic').textContent=sc.ex;
+  $('#btn-continuer').textContent=(etat.i+1<etat.file.length)?'Continuer':'Voir mon résultat';
+  const pulse=document.getElementById('pulse');
+  if(pulse)pulse.classList.remove('cache');
+  if(etat.mode==='giro'&&sc.traj){
+    const calque=document.getElementById('traj-calque');
+    if(calque)calque.innerHTML=trace(sc.traj,sc.scene.voies,'var(--jaune)',true);
+  }
+  r.scrollIntoView({behavior:MOUV?'smooth':'auto',block:'nearest'});
+}
+function suivant(){
+  if(etat.i+1<etat.file.length){etat.i++;rendreQuestion();}
+  else finPartie();
+}
+function finPartie(){
+  const n=etat.file.length,p=etat.pts/n;
+  ecrireBest(etat.mode,etat.pts,n);
+  $('#fin-score').textContent=etat.pts+'/'+n;
+  $('#fin-score').style.color=p>=0.8?'var(--vert)':(p>=0.5?'var(--jaune-enc)':'var(--rouge)');
+  $('#fin-titre-mode').textContent=TITRES[etat.mode];
+  $('#fin-serie').textContent=etat.serieMax;
+  const b=lireBests()[etat.mode];
+  $('#fin-record').textContent=b?b.sc+'/'+b.tot:'—';
+  let msg;
+  if(p===1)msg='Sans faute. Ces situations sont acquises — garde juste le réflexe du regard à droite, à chaque carrefour.';
+  else if(p>=0.8)msg='Très solide. Rejoue tes erreurs une fois pour verrouiller, et c’est bon.';
+  else if(p>=0.5)msg='Bonne base, mais à l’examen une seule priorité ratée peut coûter le permis. Revois la fiche, puis rejoue tes erreurs.';
+  else msg='On respire : c’est exactement pour ça qu’on s’entraîne. Lis la fiche rappel, puis rejoue — tu vas la maîtriser bien avant le jour J.';
+  $('#fin-msg').textContent=msg;
+  bascule($('#btn-erreurs'),'cache',etat.fautes.length===0);
+  $('#btn-erreurs').textContent='Revoir mes erreurs ('+etat.fautes.length+')';
+  montrerEcran('scr-fin');
+}
+
+/* ================= ICÔNES & DÉCO ================= */
+function heroSVG(){
+  const anim=MOUV?`<animateTransform attributeName="transform" type="rotate" from="360 60 60" to="0 60 60" dur="9s" repeatCount="indefinite"/>`:'';
+  return `<svg viewBox="0 0 120 120" aria-hidden="true">
+    <circle cx="60" cy="60" r="56" class="sc-road"/>
+    <circle cx="60" cy="60" r="24" class="sc-terrain"/>
+    <circle cx="60" cy="60" r="40" fill="none" class="sc-dash" stroke-width="2.5" stroke-dasharray="9 8"/>
+    <g>${anim}<g transform="translate(60,20)"><rect x="-8" y="-5" width="16" height="12" rx="4" fill="var(--jaune)"/><rect x="-5" y="-4" width="4" height="10" rx="1.5" fill="rgba(0,0,0,.25)"/></g></g>
+    <circle cx="60" cy="60" r="7" class="sc-pad"/>
+  </svg>`;
+}
+function icoInter(){
+  return `<svg viewBox="0 0 64 64" aria-hidden="true">
+    <rect width="64" height="64" class="sc-terrain"/>
+    <rect x="24" y="0" width="16" height="64" class="sc-road"/><rect x="0" y="24" width="64" height="16" class="sc-road"/>
+    <line x1="32" y1="2" x2="32" y2="20" class="sc-dash" stroke-width="2" stroke-dasharray="4 4"/>
+    <line x1="32" y1="44" x2="32" y2="62" class="sc-dash" stroke-width="2" stroke-dasharray="4 4"/>
+    <line x1="2" y1="32" x2="20" y2="32" class="sc-dash" stroke-width="2" stroke-dasharray="4 4"/>
+    <line x1="44" y1="32" x2="62" y2="32" class="sc-dash" stroke-width="2" stroke-dasharray="4 4"/>
+    <rect x="33.5" y="46" width="7" height="13" rx="2.5" fill="var(--carA)"/>
+    <rect x="46" y="24.5" width="13" height="7" rx="2.5" fill="var(--carB)"/>
+  </svg>`;
+}
+function icoGiro(){
+  return `<svg viewBox="0 0 64 64" aria-hidden="true">
+    <rect width="64" height="64" class="sc-terrain"/>
+    <rect x="25" y="0" width="14" height="64" class="sc-road"/><rect x="0" y="25" width="64" height="14" class="sc-road"/>
+    <circle cx="32" cy="32" r="21" class="sc-road"/>
+    <circle cx="32" cy="32" r="8" class="sc-terrain"/>
+    <circle cx="32" cy="32" r="14.5" fill="none" class="sc-dash" stroke-width="2" stroke-dasharray="4.5 4"/>
+    <rect x="33.5" y="48" width="7" height="12" rx="2.5" fill="var(--carA)"/>
+  </svg>`;
+}
+function grillePanneaux(){
+  const donnees=[
+    ['cedez','Cédez le passage — je cède à gauche et à droite, arrêt seulement si nécessaire.'],
+    ['stop','Stop — arrêt complet obligatoire, roues immobiles, puis je cède.'],
+    ['prio','Route prioritaire — les routes qui débouchent me cèdent, même à droite.'],
+    ['finprio','Fin de route prioritaire — la priorité à droite reprend au prochain carrefour.'],
+    ['croix','Croix de Saint-André — priorité à droite au prochain carrefour.'],
+    ['giratoire','Sens giratoire — je cède à l’entrée aux véhicules sur l’anneau.']
+  ];
+  $('#panneaux-grille').innerHTML=donnees.map(([t,txt])=>
+    `<div class="panneau-item"><svg viewBox="-6 -30 32 50">${panneau(t,-3,10,1.15)}</svg><span>${txt}</span></div>`).join('');
+}
+function miniGiro(){
+  let s=`<svg viewBox="0 0 480 400" role="img" aria-label="Les trois trajectoires dans un giratoire">`;
+  s+=sceneGiro({voies:2}).replace(/^<svg[^>]*>/,'').replace('</svg>','');
+  s+=`</svg>`;
+  const conteneur=$('#mini-giro');
+  conteneur.innerHTML=s;
+  const calque=conteneur.querySelector('#traj-calque');
+  calque.removeAttribute('id');
+  calque.innerHTML=trace('gauche',2,'#8FB8F2',false)+trace('tdroit',2,'#6ECF9C',false)+trace('droite',2,'#F2C200',false);
+}
+
+/* ================= BRANCHEMENTS ================= */
+$('#hero-art').innerHTML=heroSVG();
+$('#ico-inter').innerHTML=icoInter();
+$('#ico-giro').innerHTML=icoGiro();
+$('#prog-auto').innerHTML=`<svg width="30" height="16" viewBox="0 0 30 16"><rect x="1" y="2" width="28" height="12" rx="5" fill="var(--jaune)"/><rect x="17" y="4" width="5" height="8" rx="2" fill="rgba(0,0,0,.3)"/></svg>`;
+grillePanneaux();
+miniGiro();
+majMenu();
+document.addEventListener('click',e=>{ /* délégation : robuste même si le lieur direct échoue */
+  const c=e.target&&e.target.closest?e.target.closest('.mode-card'):null;
+  if(c)demarrer(c.dataset.mode);
+});
+$('#btn-fiche').addEventListener('click',()=>montrerEcran('scr-fiche'));
+$('#btn-fiche2').addEventListener('click',()=>montrerEcran('scr-fiche'));
+[['#btn-menu1'],['#btn-menu2'],['#btn-menu3']].forEach(([s])=>$(s).addEventListener('click',()=>{majMenu();montrerEcran('scr-menu');}));
+$('#btn-continuer').addEventListener('click',suivant);
+$('#btn-rejouer').addEventListener('click',()=>demarrer(etat.mode));
+$('#btn-erreurs').addEventListener('click',()=>demarrer(etat.mode,etat.fautes.slice()));
+document.addEventListener('keydown',e=>{
+  if(!$('#scr-quiz').classList.contains('on'))return;
+  if(etat.repondu){if(e.key==='Enter'){e.preventDefault();suivant();}return;}
+  const sc=scEnCours();
+  if(sc.type==='voie'){
+    if(e.key==='1')repondreVoie('G');
+    if(e.key==='2')repondreVoie('D');
+  }else{
+    const n=parseInt(e.key,10);
+    if(n>=1&&n<=sc.reps.length)repondreQcm(n-1);
+  }
+});
+</script>
+</body>
+</html>
