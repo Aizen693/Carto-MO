@@ -60,7 +60,12 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 .app{max-width:640px;margin:0 auto;padding:16px 16px 56px}
-button{font-family:inherit;color:inherit}
+button{font-family:inherit;color:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#erreur-boot{
+  position:fixed;left:12px;right:12px;bottom:12px;z-index:99;display:none;
+  background:var(--rouge-fond);border:1.5px solid var(--rouge);color:var(--encre);
+  border-radius:12px;padding:12px 14px;font-size:13px;word-break:break-word;
+}
 button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--bleu);outline-offset:2px;border-radius:8px}
 h1,h2,h3{font-family:var(--t-display);text-transform:uppercase;letter-spacing:.02em;text-wrap:balance;margin:0}
 .screen{display:none}
@@ -85,7 +90,7 @@ h1,h2,h3{font-family:var(--t-display);text-transform:uppercase;letter-spacing:.0
   padding:16px;cursor:pointer;box-shadow:var(--ombre);
   transition:transform .12s ease,border-color .12s ease;
 }
-.mode-card:hover{transform:translateY(-2px);border-color:var(--bleu)}
+@media (hover:hover){.mode-card:hover{transform:translateY(-2px);border-color:var(--bleu)}}
 .mode-ico{flex:0 0 64px;width:64px;height:64px;border-radius:12px;overflow:hidden;background:var(--bitume)}
 .mode-ico svg{display:block;width:100%;height:100%}
 .mode-tx b{display:block;font-family:var(--t-display);text-transform:uppercase;font-size:19px;letter-spacing:.02em;line-height:1.15}
@@ -347,11 +352,24 @@ h1,h2,h3{font-family:var(--t-display);text-transform:uppercase;letter-spacing:.0
 
 </div>
 
+<div id="erreur-boot"></div>
+<script>
+/* Filet de sécurité : si le script du jeu plante sur cet appareil, on l'affiche
+   au lieu de laisser des boutons muets. */
+window.addEventListener('error',function(e){
+  var b=document.getElementById('erreur-boot');
+  if(!b)return;
+  b.style.display='block';
+  b.textContent='Oups, une erreur technique empêche le jeu de démarrer sur cet appareil : « '
+    +(e.message||'inconnue')+' » (ligne '+(e.lineno||'?')+'). Envoie-moi ce message tel quel pour que je corrige.';
+});
+</script>
 <script>
 'use strict';
 /* ================= OUTILS ================= */
 const $=s=>document.querySelector(s);
-const MOUV=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOUV=(function(){try{return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return true;}})();
+function bascule(el,cls,on){if(on)el.classList.add(cls);else el.classList.remove(cls);}
 function lisser(pts){ /* Catmull-Rom -> beziers, trace fluide passant par tous les points */
   let d='M'+pts[0][0]+','+pts[0][1];
   for(let i=0;i<pts.length-1;i++){
@@ -629,7 +647,7 @@ function rendreQuestion(){
   $('#chip-num').textContent=(etat.i+1)+'/'+n;
   $('#chip-pts').textContent=etat.pts;
   $('#chip-serie-n').textContent=etat.serie;
-  $('#chip-serie').classList.toggle('feu',etat.serie>=3);
+  bascule($('#chip-serie'),'feu',etat.serie>=3);
   $('#prog-auto').style.left=(6+88*(etat.i/Math.max(1,n-1)))+'%';
   $('#q-tx').textContent=sc.q;
   $('#retour').classList.add('cache');
@@ -637,7 +655,7 @@ function rendreQuestion(){
   conteneur.innerHTML=(etat.mode==='inter')?sceneInter(sc):sceneGiro(sc.scene);
   conteneur.className=MOUV?'anim':'';
   const estVoie=(sc.type==='voie');
-  $('#aide-voie').classList.toggle('cache',!estVoie);
+  bascule($('#aide-voie'),'cache',!estVoie);
   const zone=$('#reponses');zone.innerHTML='';
   if(estVoie){
     conteneur.querySelectorAll('.voie-clic').forEach(r=>{
@@ -681,7 +699,7 @@ function concluRe(bon){
   else{etat.serie=0;etat.fautes.push(etat.file[etat.i]);}
   $('#chip-pts').textContent=etat.pts;
   $('#chip-serie-n').textContent=etat.serie;
-  $('#chip-serie').classList.toggle('feu',etat.serie>=3);
+  bascule($('#chip-serie'),'feu',etat.serie>=3);
   const r=$('#retour');
   r.classList.remove('cache','ok','ko');
   r.classList.add(bon?'ok':'ko');
@@ -715,7 +733,7 @@ function finPartie(){
   else if(p>=0.5)msg='Bonne base, mais à l’examen une seule priorité ratée peut coûter le permis. Revois la fiche, puis rejoue tes erreurs.';
   else msg='On respire : c’est exactement pour ça qu’on s’entraîne. Lis la fiche rappel, puis rejoue — tu vas la maîtriser bien avant le jour J.';
   $('#fin-msg').textContent=msg;
-  $('#btn-erreurs').classList.toggle('cache',etat.fautes.length===0);
+  bascule($('#btn-erreurs'),'cache',etat.fautes.length===0);
   $('#btn-erreurs').textContent='Revoir mes erreurs ('+etat.fautes.length+')';
   montrerEcran('scr-fin');
 }
@@ -784,7 +802,10 @@ $('#prog-auto').innerHTML=`<svg width="30" height="16" viewBox="0 0 30 16"><rect
 grillePanneaux();
 miniGiro();
 majMenu();
-document.querySelectorAll('.mode-card').forEach(c=>c.addEventListener('click',()=>demarrer(c.dataset.mode)));
+document.addEventListener('click',e=>{ /* délégation : robuste même si le lieur direct échoue */
+  const c=e.target&&e.target.closest?e.target.closest('.mode-card'):null;
+  if(c)demarrer(c.dataset.mode);
+});
 $('#btn-fiche').addEventListener('click',()=>montrerEcran('scr-fiche'));
 $('#btn-fiche2').addEventListener('click',()=>montrerEcran('scr-fiche'));
 [['#btn-menu1'],['#btn-menu2'],['#btn-menu3']].forEach(([s])=>$(s).addEventListener('click',()=>{majMenu();montrerEcran('scr-menu');}));
