@@ -244,7 +244,7 @@ h1,h2,h3{font-family:var(--t-display);text-transform:uppercase;letter-spacing:.0
         <span class="mode-ico" id="ico-inter"></span>
         <span class="mode-tx">
           <b>Intersections &amp; priorité à droite</b>
-          <span>12 situations — qui cède, qui passe</span>
+          <span>15 situations — croix, T, Y : qui cède, qui passe</span>
           <span class="best" id="best-inter"></span>
         </span>
       </button>
@@ -321,7 +321,7 @@ h1,h2,h3{font-family:var(--t-display);text-transform:uppercase;letter-spacing:.0
         <ol>
           <li><b>Il y a un feu&nbsp;?</b> Il commande. Vert = je passe. Jaune clignotant = le feu ne compte plus, je passe à la question 2.</li>
           <li><b>Il y a un panneau&nbsp;?</b> Il commande (stop, cédez-le-passage, losange jaune…). Un panneau prime toujours sur la priorité à droite.</li>
-          <li><b>Rien du tout&nbsp;?</b> Priorité à droite — même aux intersections en T, même si la route d’en face «&nbsp;se termine&nbsp;».</li>
+          <li><b>Rien du tout&nbsp;?</b> Priorité à droite — quelle que soit la forme du carrefour&nbsp;: croix, T ou Y. Une route qui «&nbsp;continue&nbsp;» ou qui «&nbsp;se termine&nbsp;» ne donne aucun droit&nbsp;: seul compte qui arrive à droite de qui.</li>
         </ol>
         <div class="piege"><b>Pièges classiques&nbsp;:</b> tourner à gauche = céder d’abord aux véhicules d’en face • la croix de Saint-André annonce une priorité à droite • au stop, l’arrêt doit être total (roues immobiles), même si c’est désert.</div>
       </div>
@@ -418,21 +418,36 @@ function panneau(type,x,y,ech){
 }
 
 /* ================= SCÈNE INTERSECTION ================= */
-/* Repère : croisement centré (240,180), routes larges de 110. A = toi, arrive du bas. */
-const POS={S:{x:267,y:300,rot:0},N:{x:213,y:60,rot:180},E:{x:360,y:153,rot:270},W:{x:120,y:207,rot:90}};
+/* Repère : croisement centré (240,180), routes larges de 110. A = toi, arrive du bas.
+   Formes : croix (défaut), T (sc.tee) et Y (sc.forme==='y', branches YL/YR qui convergent). */
+const POS={S:{x:267,y:300,rot:0},N:{x:213,y:60,rot:180},E:{x:360,y:153,rot:270},W:{x:120,y:207,rot:90},
+           YL:{x:129,y:94,rot:145},YR:{x:307,y:63,rot:215}};
 const COUL={A:'var(--carA)',B:'var(--carB)',C:'var(--carC)',X:'var(--carX)'};
 function sceneInter(sc){
   let s=`<svg viewBox="0 0 480 360" role="img" aria-label="Schéma d'intersection vue de dessus">`;
   s+=`<rect width="480" height="360" class="sc-terrain"/>`;
-  s+=`<rect x="175" y="0" width="130" height="360" class="sc-pad" ${sc.tee?'transform="translate(0,120)"':''}/>`;
-  s+=`<rect x="0" y="115" width="480" height="130" class="sc-pad"/>`;
-  s+=sc.tee?`<rect x="185" y="125" width="110" height="235" class="sc-road"/>`
-           :`<rect x="185" y="0" width="110" height="360" class="sc-road"/>`;
-  s+=`<rect x="0" y="125" width="480" height="110" class="sc-road"/>`;
-  if(!sc.tee) s+=`<line x1="240" y1="0" x2="240" y2="117" class="sc-dash"/>`;
-  s+=`<line x1="240" y1="243" x2="240" y2="360" class="sc-dash"/>`;
-  if(sc.tee) s+=`<line x1="0" y1="180" x2="480" y2="180" class="sc-dash"/>`;
-  else s+=`<line x1="0" y1="180" x2="177" y2="180" class="sc-dash"/><line x1="303" y1="180" x2="480" y2="180" class="sc-dash"/>`;
+  if(sc.forme==='y'){
+    s+=`<g transform="translate(240,205) rotate(-35)"><rect x="-65" y="-310" width="130" height="310" class="sc-pad"/></g>`;
+    s+=`<g transform="translate(240,205) rotate(35)"><rect x="-65" y="-310" width="130" height="310" class="sc-pad"/></g>`;
+    s+=`<rect x="175" y="195" width="130" height="165" class="sc-pad"/>`;
+    s+=`<g transform="translate(240,205) rotate(-35)"><rect x="-55" y="-310" width="110" height="310" class="sc-road"/></g>`;
+    s+=`<g transform="translate(240,205) rotate(35)"><rect x="-55" y="-310" width="110" height="310" class="sc-road"/></g>`;
+    s+=`<rect x="185" y="200" width="110" height="160" class="sc-road"/>`;
+    s+=`<g transform="translate(240,205) rotate(-35)"><line x1="0" y1="-310" x2="0" y2="-100" class="sc-dash"/></g>`;
+    s+=`<g transform="translate(240,205) rotate(35)"><line x1="0" y1="-310" x2="0" y2="-100" class="sc-dash"/></g>`;
+    s+=`<line x1="240" y1="272" x2="240" y2="360" class="sc-dash"/>`;
+    s+=`<polygon points="240,122 214,180 266,180" fill="var(--marquage)" opacity=".16" stroke="var(--marquage)" stroke-width="3" stroke-linejoin="round"/>`;
+  }else{
+    s+=`<rect x="175" y="0" width="130" height="360" class="sc-pad" ${sc.tee?'transform="translate(0,120)"':''}/>`;
+    s+=`<rect x="0" y="115" width="480" height="130" class="sc-pad"/>`;
+    s+=sc.tee?`<rect x="185" y="125" width="110" height="235" class="sc-road"/>`
+             :`<rect x="185" y="0" width="110" height="360" class="sc-road"/>`;
+    s+=`<rect x="0" y="125" width="480" height="110" class="sc-road"/>`;
+    if(!sc.tee) s+=`<line x1="240" y1="0" x2="240" y2="117" class="sc-dash"/>`;
+    s+=`<line x1="240" y1="243" x2="240" y2="360" class="sc-dash"/>`;
+    if(sc.tee) s+=`<line x1="0" y1="180" x2="480" y2="180" class="sc-dash"/>`;
+    else s+=`<line x1="0" y1="180" x2="177" y2="180" class="sc-dash"/><line x1="303" y1="180" x2="480" y2="180" class="sc-dash"/>`;
+  }
   if(sc.marque==='cedez') s+=`<line x1="243" y1="241" x2="293" y2="241" class="sc-mark" stroke-width="7" stroke-dasharray="9 7"/>`;
   if(sc.marque==='stop')  s+=`<line x1="243" y1="241" x2="293" y2="241" class="sc-mark" stroke-width="7"/>`;
   if(sc.marqueE==='stop') s+=`<line x1="303" y1="128" x2="303" y2="178" class="sc-mark" stroke-width="7"/>`;
@@ -577,6 +592,18 @@ const Q_INTER=[
   tee:true,autos:[{pos:'W',et:'A'},{pos:'S',et:'B',vir:'d'}],premier:'B',
   reps:[{t:'Moi : je suis sur la route principale',car:'A'},{t:'La voiture B',car:'B'}],ok:1,
   ex:'Piège classique ! « Route qui continue » ne veut pas dire « route prioritaire ». Sans signalisation, la priorité à droite s’applique aussi en T : B passe en premier.'},
+ {q:'Intersection en T, rôles inversés : MA route se termine, je tourne à droite. B arrive de ma gauche sur la route qui continue. Aucun panneau. Qui passe ?',
+  tee:true,autos:[{pos:'S',et:'A',vir:'d'},{pos:'W',et:'B'}],premier:'A',
+  reps:[{t:'Moi (voiture A)',car:'A'},{t:'B : il est sur la route qui continue',car:'B'}],ok:0,
+  ex:'Même logique dans l’autre sens : ta route « se termine », et pourtant c’est toi qui as la priorité, car tu arrives de la droite de B. Sans panneau, la forme de la route ne donne aucun droit. Engage-toi, mais sans jamais forcer le passage.'},
+ {q:'Intersection en Y, aucun panneau : les deux branches se rejoignent. Je descends la branche de droite, B celle de gauche. Qui passe en premier ?',
+  forme:'y',autos:[{pos:'YR',et:'A'},{pos:'YL',et:'B'}],premier:'B',
+  reps:[{t:'Moi (voiture A)',car:'A'},{t:'La voiture B',car:'B'}],ok:1,
+  ex:'Un Y est une intersection comme une autre : sans panneau, priorité à droite. Au point de jonction, B arrive de ta droite : tu lui cèdes le passage. Le réflexe : à l’approche de la jonction, cherche qui débouche côté droit.'},
+ {q:'Même Y, rôles inversés : je descends la branche de gauche, B celle de droite. Qui passe en premier ?',
+  forme:'y',autos:[{pos:'YL',et:'A'},{pos:'YR',et:'B'}],premier:'A',
+  reps:[{t:'Moi (voiture A)',car:'A'},{t:'La voiture B',car:'B'}],ok:0,
+  ex:'Cette fois c’est toi qui arrives de la droite de B : il te cède le passage. Tu passes… en couvrant ton frein : une priorité ne se prend que si l’autre l’a vue et la respecte.'},
  {q:'B arrive de ma droite… mais lui a un stop. Qui passe en premier ?',
   panneauE:'stop',marqueE:'stop',autos:[{pos:'S',et:'A'},{pos:'E',et:'B'}],premier:'A',
   reps:[{t:'Moi (voiture A)',car:'A'},{t:'B : il vient de ma droite',car:'B'}],ok:0,
