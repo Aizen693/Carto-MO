@@ -483,8 +483,17 @@ const PAYS_EXAMPLES = ['Mali', 'Niger', 'Burkina Faso', 'Nigeria', 'RDC', 'Béni
 // Valeurs verrouillées dans la barre : exactement le style du mot qui défile
 // (texte dégradé violet animé), épuré, inline. Clic discret pour corriger.
 const GS_BUILDER_CSS = `
-.globe-search--builder{ width:min(640px,94%); flex-wrap:wrap; gap:7px; }
-.gsb-val{ flex:0 0 auto; border:none; padding:0; cursor:pointer; white-space:nowrap;
+.globe-search--builder{ width:min(720px,94%); flex-wrap:wrap; gap:7px; row-gap:8px; }
+/* Champ + Passer + loupe forment un bloc : s'il ne rentre plus derrière les
+   puces (pays · période · typologie), le bloc entier passe proprement sur une
+   2e ligne, pleine largeur, au lieu d'être écrasé ou coupé. */
+.gsb-line{ display:flex; align-items:center; flex:1 1 auto; min-width:0; gap:8px; }
+.globe-search--builder .gsb-line{ flex:1 1 300px; gap:7px; }
+/* Faux placeholder trop long : fondu en fin de champ, jamais de coupure nette. */
+.globe-search--builder .globe-search__ph{
+  -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent);
+  mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent); }
+.gsb-val{ flex:0 1 auto; min-width:0; max-width:100%; overflow:hidden; text-overflow:ellipsis; border:none; padding:0; cursor:pointer; white-space:nowrap;
   font-family:'Plus Jakarta Sans',system-ui,sans-serif; font-weight:700; font-size:13px; line-height:1;
   background:linear-gradient(120deg,#C8B0EA 0%,#9C9BF0 38%,#5BB0F2 62%,#9C9BF0 86%,#C8B0EA 100%); background-size:220% auto;
   -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;
@@ -709,7 +718,7 @@ function Globe() {
   const PH = {
     pays: 'Indiquez un pays, comme',
     date: 'Indiquez une date, comme',
-    event: "Indiquez une typologie d'événement, comme",
+    event: 'Indiquez une typologie, comme',
     actor: 'Indiquez un acteur, comme'
   };
   const STAGE_EX = {
@@ -1481,6 +1490,8 @@ function Globe() {
     title: "Modifier",
     role: "button"
   }, sel.event || 'Toutes les typologies')), /*#__PURE__*/React.createElement("span", {
+    className: "gsb-line"
+  }, /*#__PURE__*/React.createElement("span", {
     className: "globe-search__field"
   }, logged && curStage === 'date' ? /*#__PURE__*/React.createElement("span", {
     className: "gsb-dateprompt",
@@ -1531,7 +1542,7 @@ function Globe() {
     y1: "21",
     x2: "16.65",
     y2: "16.65"
-  }))), logged && curStage === 'date' && showCal && sel.entry && /*#__PURE__*/React.createElement(DateRangePopup, {
+  })))), logged && curStage === 'date' && showCal && sel.entry && /*#__PURE__*/React.createElement(DateRangePopup, {
     entry: sel.entry,
     onApply: applyDate,
     onClose: () => setShowCal(false)
