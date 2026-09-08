@@ -489,6 +489,10 @@ const GS_BUILDER_CSS = `
    2e ligne, pleine largeur, au lieu d'être écrasé ou coupé. */
 .gsb-line{ display:flex; align-items:center; flex:1 1 auto; min-width:0; gap:8px; }
 .globe-search--builder .gsb-line{ flex:1 1 300px; gap:7px; }
+/* Dès qu'un pays est posé : les puces sur leur ligne, le champ TOUJOURS sur la
+   sienne, pleine largeur. Le texte n'a plus jamais à se battre pour la place. */
+.globe-search--chips{ padding-top:11px; }
+.globe-search--chips .gsb-line{ flex:1 1 100%; }
 /* Faux placeholder trop long : fondu en fin de champ, jamais de coupure nette. */
 .globe-search--builder .globe-search__ph{
   -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent);
@@ -1460,7 +1464,7 @@ function Globe() {
     role: "img",
     "aria-label": "Globe interactif \u2014 six theatres OSINT"
   }), /*#__PURE__*/React.createElement("form", {
-    className: 'globe-search' + (logged ? ' globe-search--builder' : ''),
+    className: 'globe-search' + (logged ? ' globe-search--builder' : '') + (logged && stage > 0 && sel.entry ? ' globe-search--chips' : ''),
     onSubmit: onSubmit,
     autoComplete: "off",
     style: {
