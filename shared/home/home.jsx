@@ -927,6 +927,13 @@ function ConsoleView({ onBack, onArchives, onVeille, onComptes, onRapports }) {
             icon={<><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" /></>}
           />
           <ConsoleTab
+            href="/veille-cyber/"
+            label="Veille cyber"
+            popTitle="Veille cyber"
+            popText="Menaces cyber agrégées par notre plateforme OpenCTI : acteurs actifs, codes malveillants, secteurs et pays ciblés, vulnérabilités critiques, rapports OTX. Instantané horaire, accessible aux abonnés premium."
+            icon={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></>}
+          />
+          <ConsoleTab
             href="/cloud/"
             label="Cloud"
             popTitle="Cloud"

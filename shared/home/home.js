@@ -1530,6 +1530,16 @@ function ConsoleView({
       r: "3"
     }))
   }), /*#__PURE__*/React.createElement(ConsoleTab, {
+    href: "/veille-cyber/",
+    label: "Veille cyber",
+    popTitle: "Veille cyber",
+    popText: "Menaces cyber agr\xE9g\xE9es par notre plateforme OpenCTI : acteurs actifs, codes malveillants, secteurs et pays cibl\xE9s, vuln\xE9rabilit\xE9s critiques, rapports OTX. Instantan\xE9 horaire, accessible aux abonn\xE9s premium.",
+    icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+      d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M9 12l2 2 4-4"
+    }))
+  }), /*#__PURE__*/React.createElement(ConsoleTab, {
     href: "/cloud/",
     label: "Cloud",
     popTitle: "Cloud",
