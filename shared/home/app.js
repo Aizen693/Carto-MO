@@ -336,7 +336,10 @@ function App() {
     "aria-label": "Rubriques"
   }, /*#__PURE__*/React.createElement("a", {
     href: "/plateforme/"
-  }, "Plateforme"), /*#__PURE__*/React.createElement("a", {
+  }, "Plateforme"), premium && /*#__PURE__*/React.createElement("a", {
+    href: "/veille/",
+    className: "site-nav__premium"
+  }, "Veille"), /*#__PURE__*/React.createElement("a", {
     href: "/debunkage/"
   }, "D\xE9bunkage"), /*#__PURE__*/React.createElement("a", {
     href: "/methodologie/"
@@ -344,10 +347,7 @@ function App() {
     href: "/offres/"
   }, "Offres"), /*#__PURE__*/React.createElement("a", {
     href: "/theatres/"
-  }, "Th\xE9\xE2tres"), premium && /*#__PURE__*/React.createElement("a", {
-    href: "/veille/",
-    className: "site-nav__premium"
-  }, "Veille"), /*#__PURE__*/React.createElement("a", {
+  }, "Th\xE9\xE2tres"), /*#__PURE__*/React.createElement("a", {
     href: "/a-propos/"
   }, "\xC0 propos"), /*#__PURE__*/React.createElement("a", {
     href: "/contact/"

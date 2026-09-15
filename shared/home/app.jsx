@@ -225,11 +225,11 @@ function App() {
 
           <nav className="site-nav" aria-label="Rubriques">
             <a href="/plateforme/">Plateforme</a>
+            {premium && <a href="/veille/" className="site-nav__premium">Veille</a>}
             <a href="/debunkage/">Débunkage</a>
             <a href="/methodologie/">Méthodologie</a>
             <a href="/offres/">Offres</a>
             <a href="/theatres/">Théâtres</a>
-            {premium && <a href="/veille/" className="site-nav__premium">Veille</a>}
             <a href="/a-propos/">À propos</a>
             <a href="/contact/">Contact</a>
           </nav>
