@@ -17,8 +17,9 @@
 
 
 <link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
 
-<link rel="stylesheet" href="../shared/home/styles.css?v=20260729b" />
+<link rel="stylesheet" href="../shared/home/styles.css?v=20260914b" />
 </head>
 <body style="background-color:#FFFFFF">
 
@@ -27,7 +28,7 @@
   <div class="site-header__inner">
     <a class="site-brand" href="/">
       <span class="site-brand__mark"></span>
-      <span class="site-brand__name">ALGOR INT</span>
+      <span class="site-brand__name">Algor Access</span>
     </a>
     <nav class="site-nav" aria-label="Rubriques">
       <a href="/">Plateforme</a>
@@ -62,9 +63,10 @@
         </div>
       </div>
       <div class="page-hero__visual">
-        <div class="media-frame media-frame--cubes" role="img" aria-label="Cluster de cubes : du chaos à la structure">
-          <canvas class="cubes-canvas" aria-hidden="true"></canvas>
-        </div>
+        <div class="media-frame media-frame--map"><div class="map-extract">
+          <img src="/shared/home/assets/get-carte.jpg?v=20260630a" alt="Capture réelle de la carte Algor Access : Bénin, 46 événements analysés par région, typologie et acteur" />
+          <div class="map-extract__cap"><span>Carte Algor Access · Bénin · capture réelle</span><span>algoracces.fr/carte</span></div>
+        </div></div>
       </div>
     </div>
   </section>
@@ -149,9 +151,10 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame media-frame--plates" role="img" aria-label="Tour de plaques empilées : du désordre à la structure">
-              <canvas class="plates-canvas" aria-hidden="true"></canvas>
-            </div>
+            <div class="media-frame media-frame--map"><div class="map-extract">
+              <img src="/shared/home/assets/get-analyse.jpg?v=20260630a" alt="Capture réelle de la carte Algor Access : Mali, 168 événements analysés" loading="lazy" />
+              <div class="map-extract__cap"><span>Carte Algor Access · Mali · capture réelle</span><span>algoracces.fr/carte</span></div>
+            </div></div>
           </div>
         </article>
       </div>
@@ -243,9 +246,9 @@
   </div>
 </footer>
 
+<script src="../shared/home/skyfield.js?v=20260914b"></script>
 <script src="../shared/home/sitenav.js?v=20260622a"></script>
-<script src="./cubes.js?v=20260526a"></script>
-<script src="./plates.js?v=20260526n"></script>
+
 <script type="module" src="../shared/site-auth.js?v=20260707a"></script>
 </body>
 </html>

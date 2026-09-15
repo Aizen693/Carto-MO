@@ -17,8 +17,9 @@
 
 
 <link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
 
-<link rel="stylesheet" href="../shared/home/styles.css?v=20260729b" />
+<link rel="stylesheet" href="../shared/home/styles.css?v=20260914b" />
 </head>
 <body style="background-color:#FFFFFF">
 
@@ -27,7 +28,7 @@
   <div class="site-header__inner">
     <a class="site-brand" href="/">
       <span class="site-brand__mark"></span>
-      <span class="site-brand__name">ALGOR INT</span>
+      <span class="site-brand__name">Algor Access</span>
     </a>
     <nav class="site-nav" aria-label="Rubriques">
       <a href="/">Plateforme</a>
@@ -79,19 +80,12 @@
           Ces six zones concentrent une part majeure des conflits armés actuels. Ce sont aussi des terrains où l'information ouverte est abondante, mais difficile à recouper sans méthode.
         </p>
       </div>
-      <div class="stat-band">
-        <div class="stat">
-          <div class="stat__num">6</div>
-          <div class="stat__label">Théâtres couverts en continu, du Sahel à l'Asie du Sud.</div>
-        </div>
-        <div class="stat">
-          <div class="stat__num">3</div>
-          <div class="stat__label">Continents : Afrique, Proche et Moyen-Orient, Asie du Sud.</div>
-        </div>
-        <div class="stat">
-          <div class="stat__num">2005</div>
-          <div class="stat__label">L'historique le plus ancien remonte jusqu'à cette année.</div>
-        </div>
+      <div class="facts" aria-label="Couverture des théâtres">
+        <div class="facts__row"><div class="facts__k">Théâtres suivis</div><div class="facts__v"><b>6</b>, sur trois continents : Afrique, Proche et Moyen-Orient, Asie du Sud.</div></div>
+        <div class="facts__row"><div class="facts__k">Dernière note de veille</div><div class="facts__v"><b data-veille-latest>…</b> <span class="mono" data-veille-count></span></div></div>
+        <div class="facts__row"><div class="facts__k">Historique le plus ancien</div><div class="facts__v">Moyen-Orient, <b>dix périodes</b> depuis 2005.</div></div>
+        <div class="facts__row"><div class="facts__k">Pas de temps</div><div class="facts__v">Chronologie par quinzaine sur le Sahel en 2026, rejouable sur la carte.</div></div>
+        <div class="facts__row"><div class="facts__k">Calques</div><div class="facts__v">Forces en présence, ethnies, mines, infrastructures, flux et zones d'influence selon le théâtre.</div></div>
       </div>
     </div>
   </section>
@@ -115,9 +109,7 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame">
-              <img src="./assets/moyen-orient.jpg" alt="Théâtre Moyen-Orient : puits de pétrole en feu, désert irakien" loading="lazy" />
-            </div>
+            <div class="media-frame"><img src="./assets/moyen-orient.jpg" alt="Théâtre Moyen-Orient : puits de pétrole en feu, désert irakien" loading="lazy" /></div></div>
           </div>
         </article>
 
@@ -131,9 +123,7 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame">
-              <img src="./assets/sahel.png" alt="Théâtre Sahel : combattants armés dans le désert malien" loading="lazy" />
-            </div>
+            <div class="media-frame"><img src="./assets/sahel.png" alt="Théâtre Sahel : combattants armés dans le désert malien" loading="lazy" /></div></div>
           </div>
         </article>
 
@@ -147,9 +137,7 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame">
-              <img src="./assets/rdc.avif" alt="Théâtre RDC : Oicha, Nord-Kivu" loading="lazy" />
-            </div>
+            <div class="media-frame"><img src="./assets/rdc.avif" alt="Théâtre RDC : Oicha, Nord-Kivu" loading="lazy" /></div></div>
           </div>
         </article>
 
@@ -163,9 +151,7 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame">
-              <img src="./assets/madagascar.webp" alt="Théâtre Madagascar : manifestation à Antananarivo" loading="lazy" />
-            </div>
+            <div class="media-frame"><img src="./assets/madagascar.webp" alt="Théâtre Madagascar : manifestation à Antananarivo" loading="lazy" /></div></div>
           </div>
         </article>
 
@@ -179,9 +165,7 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame">
-              <img src="./assets/afrique-maritime.avif" alt="Théâtre Afrique Maritime : détroits stratégiques" loading="lazy" />
-            </div>
+            <div class="media-frame"><img src="./assets/afrique-maritime.avif" alt="Théâtre Afrique Maritime : détroits stratégiques" loading="lazy" /></div></div>
           </div>
         </article>
 
@@ -195,9 +179,7 @@
             </ul>
           </div>
           <div class="feature-row__visual">
-            <div class="media-frame">
-              <img src="./assets/asie-sud.jpg" alt="Théâtre Asie du Sud : combattants armés afghans" loading="lazy" />
-            </div>
+            <div class="media-frame"><img src="./assets/asie-sud.jpg" alt="Théâtre Asie du Sud : combattants armés afghans" loading="lazy" /></div></div>
           </div>
         </article>
 
@@ -293,6 +275,18 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="./planisphere.js?v=20260525d"></script>
+<script>
+  // Dernière note de veille : lue dans le flux public (même source que l'accueil).
+  (function(){ var el=document.querySelector('[data-veille-latest]'), n=document.querySelector('[data-veille-count]'); if(!el) return;
+    fetch('https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){
+      var a=Array.isArray(d)?d:(d&&d.items)||[]; if(!a.length) return;
+      var latest=a.reduce(function(m,i){return i.date>m?i.date:m},''); var srcs={}; a.forEach(function(i){ if(i.source) srcs[i.source]=1; });
+      el.textContent=new Date(latest).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+      if(n) n.textContent='· '+a.length+' notes · '+Object.keys(srcs).length+' sources citées';
+    }).catch(function(){});
+  })();
+</script>
+<script src="../shared/home/skyfield.js?v=20260914b"></script>
 <script src="../shared/home/sitenav.js?v=20260622a"></script>
 <script type="module" src="../shared/site-auth.js?v=20260707a"></script>
 </body>

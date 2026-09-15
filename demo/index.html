@@ -723,12 +723,12 @@
   function clearNar(){ narTimers.forEach(clearTimeout); narTimers = []; }
   function buildDots(){ var c=document.getElementById('nar-dots'); if(!c) return; c.innerHTML=''; NSTEPS.forEach(function(_,i){ var d=document.createElement('span'); d.className='narration__dot'; d.addEventListener('click',function(){ playNarration(i); }); c.appendChild(d); }); }
   function updateDots(){ var c=document.getElementById('nar-dots'); if(!c) return; [].forEach.call(c.children,function(d,i){ d.classList.toggle('on', i===narI); }); }
-  function typeBody(text){ var el=document.getElementById('nar-body'); if(!el) return; var i=0; (function tick(){ el.innerHTML=text.slice(0,i)+'<span class="narration__caret">▍</span>'; if(i++<text.length) narTimers.push(setTimeout(tick,19)); else el.textContent=text; })(); }
+  function typeBody(text){ var el=document.getElementById('nar-body'); if(!el) return; el.textContent=text; }
   function setHint(on){ var b=document.getElementById('btn-sidebar'); if(b) b.classList.toggle('nar-hint', !!on); }
   function playNarration(idx){ clearNar(); narI=idx; var s=NSTEPS[idx];
     var st=document.getElementById('nar-step'), ti=document.getElementById('nar-title');
     if(st) st.textContent=s.step; if(ti) ti.textContent=s.title; typeBody(s.body); updateDots(); setHint(s.hint);
-    var dur = s.body.length*19 + 3000 + s.body.length*33;
+    var dur = 4500 + s.body.length*33;
     narTimers.push(setTimeout(function(){ if(narI<NSTEPS.length-1) playNarration(narI+1); }, dur));
   }
   function startNarration(){ var box=document.getElementById('narration'); if(!box) return; box.classList.add('show'); buildDots(); playNarration(0);

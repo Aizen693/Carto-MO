@@ -15,7 +15,7 @@ npm install --silent @babel/standalone@7.29.0 >/dev/null 2>&1
 node -e '
   const Babel = require("@babel/standalone"), fs = require("fs"), p = require("path");
   const dir = process.argv[1];
-  for (const n of ["data","starfield","globe","home","panel","platform","app"]) {
+  for (const n of ["data","starfield","globe","home","sections","panel","platform","app"]) {
     const src = fs.readFileSync(p.join(dir, n + ".jsx"), "utf8");
     const out = Babel.transform(src, { presets: ["react"], sourceType: "script" }).code;
     // IIFE wrap : evite la collision des `const` top-level entre fichiers.

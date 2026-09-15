@@ -17,8 +17,9 @@
 
 
 <link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
 
-<link rel="stylesheet" href="../shared/home/styles.css?v=20260729b" />
+<link rel="stylesheet" href="../shared/home/styles.css?v=20260914b" />
 </head>
 <body style="background-color:#FFFFFF">
 
@@ -27,7 +28,7 @@
   <div class="site-header__inner">
     <a class="site-brand" href="/">
       <span class="site-brand__mark"></span>
-      <span class="site-brand__name">ALGOR INT</span>
+      <span class="site-brand__name">Algor Access</span>
     </a>
     <nav class="site-nav" aria-label="Rubriques">
       <a href="/">Plateforme</a>
@@ -62,10 +63,21 @@
         </div>
       </div>
       <div class="page-hero__visual">
-        <div class="media-frame media-frame--swarm">
-          <img class="swarm-img" src="./assets/reseau-sources.svg?v=20260622a" alt="Illustration : réseau de sources collectées, croisées et cotées sur le dégradé Algor Int" />
-          <canvas class="swarm-fx" aria-hidden="true"></canvas>
-          <div class="swarm-img__overlay"></div>
+        <div class="fiche" aria-label="Fiche événement : un incident réel traversant les six temps de la chaîne">
+          <div class="fiche__head"><span>Fiche événement · <b>Sahel</b> · Niger, Tillabéri</span><span class="cote-chip">Cote B1</span></div>
+          <div class="fiche__map">
+            <img src="./assets/carte-yatakala.png?v=20260910b" alt="Extrait de carte : Yatakala, commune du Goroual, région de Tillabéri, Niger" /><span class="gpin gpin--center" aria-hidden="true"></span>
+            <div class="fiche__map-cap">Yatakala-Bosiye · 14,79 N · 0,38 E · 18 janv. 2026</div>
+          </div>
+          <div class="fiche__rows">
+            <div class="fiche__row"><span class="fiche__n">01</span><span class="fiche__k">Collecte</span><span class="fiche__v">Presse nigérienne le 20 janv., puis rapport d'enquête de Human Rights Watch le 12 févr.</span></div>
+            <div class="fiche__row"><span class="fiche__n">02</span><span class="fiche__k">Datation</span><span class="fiche__v">Événement le <b>18 janvier 2026</b> · première collecte le 20 janvier. Les deux dates sont conservées.</span></div>
+            <div class="fiche__row"><span class="fiche__n">03</span><span class="fiche__k">Sourçage</span><span class="fiche__v"><a href="https://www.hrw.org/news/2026/02/12/niger-islamist-armed-group-massacres-villagers-in-west" target="_blank" rel="noopener">hrw.org</a> · <a href="https://www.actuniger.com/societe/21694-insecurite-une-trentaine-de-civils-encore-massacres-a-yatakala-bosiye-dans-le-goroual-tillaberi.html" target="_blank" rel="noopener">actuniger.com</a> · <a href="https://lesechosduniger.com/2026/01/20/tillaberi-31-civils-encore-massacres-dans-une-attaque-terroriste-a-yatakala-dans-le-goroual-zone-des-3-frontieres/" target="_blank" rel="noopener">lesechosduniger.com</a></span></div>
+            <div class="fiche__row"><span class="fiche__n">04</span><span class="fiche__k">Croisement</span><span class="fiche__v"><span class="ok">3 sources sur 3 concordantes</span> sur la date, le lieu, l'acteur (État islamique au Sahel) et le bilan (31 tués, 5 blessés).</span></div>
+            <div class="fiche__row"><span class="fiche__n">05</span><span class="fiche__k">Cotation</span><span class="fiche__v">Source <b>B</b>, habituellement fiable · information <b>1</b>, confirmée par d'autres sources.</span></div>
+            <div class="fiche__row"><span class="fiche__n">06</span><span class="fiche__k">Restitution</span><span class="fiche__v">Point intégré à la carte Sahel, quinzaine du 16 au 31 janvier, fiche reliée aux trois sources.</span></div>
+          </div>
+          <div class="fiche__foot">Exemple réel, sources publiques citées · fond de carte Mapbox</div>
         </div>
       </div>
     </div>
@@ -88,19 +100,12 @@
           <p>Traité avec rigueur, le renseignement ouvert n'a <strong>rien à envier au renseignement classifié</strong>.</p>
         </div>
       </div>
-      <div class="stat-band">
-        <div class="stat">
-          <div class="stat__num">6</div>
-          <div class="stat__label">Théâtres géopolitiques suivis en continu, du Sahel à l'Asie du Sud.</div>
-        </div>
-        <div class="stat">
-          <div class="stat__num">6 temps</div>
-          <div class="stat__label">Une chaîne de traitement unique, appliquée à chaque événement.</div>
-        </div>
-        <div class="stat">
-          <div class="stat__num">2 échelles</div>
-          <div class="stat__label">Fiabilité et crédibilité, cotées séparément sur chaque information.</div>
-        </div>
+      <div class="facts" aria-label="Règles de la chaîne de traitement">
+        <div class="facts__row"><div class="facts__k">Dernière note de veille</div><div class="facts__v"><b data-veille-latest>…</b> <span class="mono" data-veille-count></span></div></div>
+        <div class="facts__row"><div class="facts__k">Dates conservées</div><div class="facts__v">Date de l'événement <b>et</b> date de collecte, toujours distinctes.</div></div>
+        <div class="facts__row"><div class="facts__k">Recoupement</div><div class="facts__v">Confirmation et contradiction recherchées avant publication ; une seule source reste une hypothèse.</div></div>
+        <div class="facts__row"><div class="facts__k">Cotation</div><div class="facts__v">Fiabilité de la source <span class="mono">A à F</span> · crédibilité de l'information <span class="mono">1 à 6</span>, notées séparément.</div></div>
+        <div class="facts__row"><div class="facts__k">Traçabilité</div><div class="facts__v">Chaque point de carte ouvre une fiche reliée à ses sources ; les sources non nommables restent tracées en interne.</div></div>
       </div>
     </div>
   </section>
@@ -418,7 +423,18 @@
   </div>
 </footer>
 
-<script src="./swarm-fx.js?v=20260610a"></script>
+<script>
+  // Dernière note de veille : lue dans le flux public (même source que l'accueil).
+  (function(){ var el=document.querySelector('[data-veille-latest]'), n=document.querySelector('[data-veille-count]'); if(!el) return;
+    fetch('https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){
+      var a=Array.isArray(d)?d:(d&&d.items)||[]; if(!a.length) return;
+      var latest=a.reduce(function(m,i){return i.date>m?i.date:m},''); var srcs={}; a.forEach(function(i){ if(i.source) srcs[i.source]=1; });
+      el.textContent=new Date(latest).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+      if(n) n.textContent='· '+a.length+' notes · '+Object.keys(srcs).length+' sources citées';
+    }).catch(function(){});
+  })();
+</script>
+<script src="../shared/home/skyfield.js?v=20260914b"></script>
 <script src="../shared/home/sitenav.js?v=20260622a"></script>
 <script type="module" src="../shared/site-auth.js?v=20260707a"></script>
 </body>

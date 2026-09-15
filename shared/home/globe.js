@@ -691,13 +691,154 @@ function DateRangePopup({
     })
   }, "Valider"))));
 }
+
+// Theatre du globe -> page de sa carte. Sert aussi a retrouver sa fiche
+// (extrait de carte + epingles) dans window.ALGOR_THEATRES (sections.jsx).
+const THEATRE_HREF = {
+  'MO-01': '/moyen-orient/',
+  'SAHEL-02': '/sahel/',
+  'LACS-03': '/rdc/',
+  'MDG-04': '/madagascar/',
+  'AFR-05': '/afrique/',
+  'ASIE-06': '/asie-sud/'
+};
+// Photos de terrain des theatres : les memes que la page Theatres en ligne.
+const THEATRE_PHOTO = {
+  '/moyen-orient/': {
+    src: '/theatres/assets/moyen-orient.jpg',
+    alt: 'Théâtre Moyen-Orient : puits de pétrole en feu, désert irakien'
+  },
+  '/sahel/': {
+    src: '/theatres/assets/sahel.png',
+    alt: 'Théâtre Sahel : combattants armés dans le désert malien'
+  },
+  '/rdc/': {
+    src: '/theatres/assets/rdc.avif',
+    alt: 'Théâtre RDC : Oicha, Nord-Kivu'
+  },
+  '/madagascar/': {
+    src: '/theatres/assets/madagascar.webp',
+    alt: 'Théâtre Madagascar : manifestation à Antananarivo'
+  },
+  '/afrique/': {
+    src: '/theatres/assets/afrique-maritime.avif',
+    alt: 'Théâtre Afrique Maritime : détroits stratégiques'
+  },
+  '/asie-sud/': {
+    src: '/theatres/assets/asie-sud.jpg',
+    alt: 'Théâtre Asie du Sud : combattants armés afghans'
+  }
+};
+
+// Fiche sans jargon : « 12.2025 → 05.2026 » devient « Suivi depuis décembre 2025 »,
+// « 8 calques » devient « 8 couches d'analyse : ethnies, forces, mines… ».
+const MOIS_LONGS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+function fmtSuivi(periode) {
+  const p = String(periode || '');
+  if (/temps r/i.test(p)) return 'Suivi en temps réel (positions AIS des navires)';
+  const m = p.match(/^(\d{2})\.(\d{4})/);
+  if (m) return 'Suivi depuis ' + MOIS_LONGS[parseInt(m[1], 10) - 1] + ' ' + m[2];
+  const y = p.match(/^(\d{4})/);
+  if (y) return 'Suivi depuis ' + y[1];
+  return p;
+}
+function fmtCouches(t) {
+  const n = t.calques,
+    all = String(t.calquesLbl || '').split(',').map(x => x.trim()).filter(Boolean);
+  const head = all.slice(0, 3).join(', ') + (all.length > 3 ? '…' : '');
+  return n + " couche" + (n > 1 ? 's' : '') + " d'analyse" + (head ? ' : ' + head : '');
+}
 function Globe() {
   const canvasRef = useRefGlobe(null);
+  // Canvas WebGL de la Terre reelle (earth.js), sous le canvas D3.
+  const earthRef = useRefGlobe(null);
+  // Theatre survole : sa fiche (memes extraits de carte que la page Theatres)
+  // surgit sur le globe, qui reste zoome dessus tant qu'elle est affichee.
+  // Elle reste tant que le pointeur est sur le globe ou sur la fiche ; le
+  // survol d'un autre theatre la remplace. Au doigt : 1er tap = fiche, 2e = carte.
+  const [openTh, setOpenTh] = useStateGlobe(null);
+  const shownRef = useRefGlobe(null);
+  const overCardRef = useRefGlobe(false);
+  const hideTimerRef = useRefGlobe(0);
+  // Indice « Survolez un theatre » : apparait apres l'entree du hero, s'efface
+  // a la premiere fiche ouverte, et ne revient plus dans la session.
+  const [hint, setHint] = useStateGlobe(() => {
+    try {
+      return sessionStorage.getItem('algor-globe-hint') !== '1';
+    } catch (_) {
+      return true;
+    }
+  });
+  const [hintShown, setHintShown] = useStateGlobe(false);
+  useEffectGlobe(() => {
+    if (!hint) return;
+    const t = setTimeout(() => setHintShown(true), 2200);
+    return () => clearTimeout(t);
+  }, [hint]);
+  const dismissHint = () => {
+    if (!hint) return;
+    setHint(false);
+    try {
+      sessionStorage.setItem('algor-globe-hint', '1');
+    } catch (_) {}
+  };
+  const TOUCH_UI = !!(window.matchMedia && window.matchMedia('(hover: none)').matches);
+  const showTh = id => {
+    clearTimeout(hideTimerRef.current);
+    dismissHint();
+    if (shownRef.current !== id) {
+      shownRef.current = id;
+      setOpenTh(id);
+    }
+  };
+  const hideTh = () => {
+    clearTimeout(hideTimerRef.current);
+    shownRef.current = null;
+    overCardRef.current = false;
+    setOpenTh(null);
+  };
+  const scheduleHideTh = () => {
+    clearTimeout(hideTimerRef.current);
+    hideTimerRef.current = setTimeout(() => {
+      if (!overCardRef.current) hideTh();
+    }, 320);
+  };
+  useEffectGlobe(() => {
+    if (!openTh) return;
+    const onKey = e => {
+      if (e.key === 'Escape') hideTh();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [openTh]);
+  // Photos prechauffees des que le pointeur arrive sur le globe (pas au
+  // chargement de la page) : la fiche surgit deja illustree au 1er survol.
+  const photosWarmRef = useRefGlobe(false);
+  const warmPhotos = () => {
+    if (photosWarmRef.current) return;
+    photosWarmRef.current = true;
+    Object.values(THEATRE_PHOTO).forEach(p => {
+      const im = new Image();
+      im.decoding = 'async';
+      im.src = p.src;
+    });
+  };
+  useEffectGlobe(() => () => clearTimeout(hideTimerRef.current), []);
+  const thCard = openTh ? (window.ALGOR_THEATRES || []).find(t => t.href === THEATRE_HREF[openTh]) : null;
+  const thPhoto = thCard ? THEATRE_PHOTO[thCard.href] : null;
   const [query, setQuery] = useStateGlobe('');
   const [notFound, setNotFound] = useStateGlobe(false);
   const [phEx, setPhEx] = useStateGlobe(0);
   const [manifest, setManifest] = useStateGlobe([]);
   const [logged, setLogged] = useStateGlobe(false);
+  // Etat de connexion lisible depuis les ecouteurs du canvas (effet monte une fois).
+  const loggedRef = useRefGlobe(false);
+  useEffectGlobe(() => {
+    loggedRef.current = logged;
+  }, [logged]);
+  // Visiteur : la carte est reservee aux abonnes, on l'envoie vers les offres
+  // (jamais vers le mur de connexion de /carte/). Abonne : la carte.
+  const thTarget = thCard ? logged ? thCard.href : '/offres/' : null;
   // `resolved` = l'état de connexion est connu. Tant qu'il ne l'est pas, on garde
   // la barre invisible (sinon flash de la version démo avant la version connectée).
   const [resolved, setResolved] = useStateGlobe(false);
@@ -935,6 +1076,12 @@ function Globe() {
       H = 560,
       baseScale = 260;
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    // Canvas de la Terre reelle : deborde du globe (halo), decale par rapport a ce canvas.
+    const earthCanvas = earthRef.current;
+    let EW = 0,
+      EH = 0,
+      EOX = 0,
+      EOY = 0;
     function resize() {
       const r = canvas.getBoundingClientRect();
       W = Math.max(120, r.width || canvas.clientWidth || 560);
@@ -944,6 +1091,12 @@ function Globe() {
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       baseScale = Math.max(40, Math.min(W, H) / 2 - 6);
       proj.translate([W / 2, H / 2]).scale(baseScale);
+      if (earthCanvas) {
+        EW = earthCanvas.clientWidth || W;
+        EH = earthCanvas.clientHeight || H;
+        EOX = canvas.offsetLeft - earthCanvas.offsetLeft;
+        EOY = canvas.offsetTop - earthCanvas.offsetTop;
+      }
     }
     resize();
     let ro = null;
@@ -1035,12 +1188,24 @@ function Globe() {
     const arcs = [/* ───────────── TERRESTRES ───────────── */
     T([36.30, 33.50], [35.50, 33.90]), T([36.30, 33.50], [37.16, 36.20]), T([44.40, 33.30], [36.30, 33.50]), T([44.40, 33.30], [43.13, 36.34]), T([44.20, 15.40], [45.03, 12.78]), T([44.40, 33.30], [51.42, 35.70]), T([51.42, 35.70], [59.61, 36.30]), T([44.00, 36.20], [43.13, 36.34]), T([35.50, 33.90], [35.20, 33.27]), T([51.42, 35.70], [46.30, 38.08]), T([59.61, 36.30], [62.20, 34.34]), T([45.03, 12.78], [49.13, 14.55]), T([-8.00, 12.65], [-0.04, 16.27]), T([-8.00, 12.65], [-1.52, 12.37]), T([-1.52, 12.37], [2.11, 13.51]), T([2.11, 13.51], [7.99, 16.97]), T([7.99, 16.97], [15.05, 12.13]), T([-2.99, 16.77], [-0.04, 16.27]), T([-4.18, 14.50], [-8.00, 12.65]), T([12.61, 13.31], [13.16, 11.85]), T([2.11, 13.51], [12.61, 13.31]), T([-1.52, 12.37], [-4.30, 11.18]), T([-8.00, 12.65], [-4.18, 14.50]), T([1.41, 18.44], [1.05, 20.20]), T([15.31, -4.32], [29.22, -1.68]), T([29.22, -1.68], [28.86, -2.50]), T([29.22, -1.68], [29.47, 0.49]), T([29.47, 0.49], [30.25, 1.56]), T([30.06, -1.94], [29.22, -1.68]), T([29.36, -3.38], [28.86, -2.50]), T([32.58, 0.32], [30.25, 1.56]), T([28.86, -2.50], [29.13, -3.40]), T([29.47, 0.49], [29.28, 0.13]), T([15.31, -4.32], [27.49, -11.66]), T([47.51, -18.91], [49.40, -18.15]), T([47.51, -18.91], [46.32, -15.72]), T([47.51, -18.91], [43.68, -23.35]), T([47.51, -18.91], [47.08, -21.45]), T([43.68, -23.35], [46.99, -25.03]), T([46.32, -15.72], [49.29, -12.32]), T([49.40, -18.15], [50.17, -14.27]), T([43.68, -23.35], [47.08, -21.45]), T([67.00, 24.86], [74.36, 31.55]), T([74.36, 31.55], [73.05, 33.69]), T([73.05, 33.69], [69.18, 34.53]), T([69.18, 34.53], [65.71, 31.62]), T([74.79, 34.08], [77.21, 28.61]), T([77.21, 28.61], [72.83, 18.98]), T([65.71, 31.62], [66.99, 30.18]), T([66.99, 30.18], [67.00, 24.86]), /* ───────────── MARITIMES ───────────── */
     M([56.27, 27.18], [58.00, 24.00]), M([45.03, 12.78], [43.15, 11.60]), M([35.78, 35.52], [35.50, 33.90]), M([39.17, 21.49], [37.22, 19.62]), M([45.03, 12.78], [49.13, 14.55]), M([35.50, 33.90], [35.00, 32.83]), M([3.40, 6.50], [-4.00, 5.30]), M([-4.00, 5.30], [-17.40, 14.70]), M([-17.00, 20.90], [-15.40, 28.00]), M([-17.40, 14.70], [-7.59, 33.60]), M([-17.40, 14.70], [-23.51, 14.93]), M([29.20, -5.95], [29.13, -3.40]), M([29.22, -1.68], [28.86, -2.50]), M([29.63, -4.88], [31.10, -8.77]), M([18.42, -33.92], [39.28, -6.82]), M([3.40, 6.50], [11.85, -4.78]), M([32.55, 29.97], [33.04, 34.71]), M([39.66, -4.04], [43.15, 11.60]), M([31.04, -29.86], [57.50, -20.16]), M([18.42, -33.92], [14.51, -22.95]), M([3.40, 6.50], [13.23, -8.84]), M([45.32, 2.04], [39.66, -4.04]), M([49.40, -18.15], [49.29, -12.32]), M([46.32, -15.72], [43.27, -11.70]), M([49.40, -18.15], [57.50, -20.16]), M([49.40, -18.15], [55.45, -20.88]), M([43.68, -23.35], [32.57, -25.97]), M([67.00, 24.86], [72.83, 18.98]), M([72.83, 18.98], [79.85, 6.93]), M([67.00, 24.86], [62.32, 25.12]), M([62.32, 25.12], [56.27, 27.18]), M([72.83, 18.98], [73.51, 4.18]), M([79.85, 6.93], [91.81, 22.34]), M([72.83, 18.98], [55.27, 25.20]), M([67.00, 24.86], [55.27, 25.20])];
+    const RAD = Math.PI / 180;
     arcs.forEach((arc, i) => {
       arc.interp = d3.geoInterpolate(arc.a, arc.b);
       arc.dur = (arc.kind === 'sea' ? 7200 : 5200) + i % 5 * 380;
       arc.offset = i * 730 % arc.dur;
       arc.np = arc.kind === 'sea' ? 2 : 4;
       arc.trail = arc.kind === 'sea' ? 0.06 : 0.10;
+      // Arc en altitude : decolle de la surface, hauteur selon la distance
+      // (en rayons terrestres), passe correctement derriere l'horizon.
+      const dist = d3.geoDistance(arc.a, arc.b);
+      arc.h = Math.min(0.22, Math.max(0.03, dist * 0.55));
+      const n = Math.max(12, Math.min(40, Math.round(dist * 70)));
+      arc.pts = [];
+      for (let k = 0; k <= n; k++) {
+        const t = k / n,
+          p = arc.interp(t);
+        arc.pts.push([p[0] * RAD, p[1] * RAD, arc.h * Math.sin(Math.PI * t)]);
+      }
     });
 
     // — visibility test against current rotation (orthographic back-face cull)
@@ -1053,8 +1218,79 @@ function Globe() {
       return Math.cos(la) * Math.cos(cp) * Math.cos(lo - cl) + Math.sin(la) * Math.sin(cp) > 0.02;
     }
 
+    // — projection d'un point EN ALTITUDE (h en rayons terrestres) : memes
+    //   maths que d3.geoOrthographic (rotation lambda puis phi), sans clip.
+    //   Ecrit dans P3 = [x ecran, y ecran, profondeur vers le spectateur, visible].
+    //   Un point derriere le plan median reste visible s'il depasse du disque.
+    let RL = 0,
+      RCP = 1,
+      RSP = 0,
+      SC = 260,
+      CX = 280,
+      CY = 280;
+    function syncProj() {
+      const r = proj.rotate(),
+        ph = r[1] * RAD,
+        tr = proj.translate();
+      RL = r[0] * RAD;
+      RCP = Math.cos(ph);
+      RSP = Math.sin(ph);
+      SC = proj.scale();
+      CX = tr[0];
+      CY = tr[1];
+    }
+    const P3 = [0, 0, 0, 0];
+    function proj3(lon, lat, h) {
+      const cl = Math.cos(lat),
+        l = lon + RL;
+      const x = Math.cos(l) * cl,
+        y = Math.sin(l) * cl,
+        z = Math.sin(lat);
+      const xd = x * RCP - z * RSP,
+        zs = z * RCP + x * RSP;
+      const k = 1 + h;
+      P3[0] = CX + SC * y * k;
+      P3[1] = CY - SC * zs * k;
+      P3[2] = xd * k;
+      P3[3] = xd >= 0 || (y * y + zs * zs) * k * k > 1 ? 1 : 0;
+      return P3;
+    }
+    // Attenuation vers le limbe (profondeur), pour la ligne comme pour les particules.
+    function depthFade(d) {
+      const u = Math.max(0, Math.min(1, (d + 0.22) / 0.7));
+      return 0.30 + 0.70 * u * u * (3 - 2 * u);
+    }
+
     // — palette : terres SABLE, mers BLEU CIEL doux (non agressif).
-    const C = {
+    //   Variante NUIT (hero sombre cinematique, .hero--night) : globe encre,
+    //   terres graphite, flux violet lumineux, labels clairs.
+    const NIGHT = !!(canvas.closest && canvas.closest('.hero--night'));
+    //   Variante CIEL (page blanche etoilee, .hero--sky sans .globe-nuit) :
+    //   globe clair lavande, flux violet/bleu de marque, labels encre.
+    const SKY = !!(canvas.closest && canvas.closest('.hero--sky') && !canvas.closest('.globe-nuit'));
+    const C = SKY ? {
+      ocean: '#F4F2FA',
+      land: '#D9D3E9',
+      border: 'rgba(107,63,160,0.32)',
+      grat: 'rgba(107,63,160,0.10)',
+      rim: 'rgba(107,63,160,0.55)',
+      fluxLand: '107,63,160',
+      fluxSea: '30,111,190',
+      label: '#2E1857',
+      labelHover: '#181428',
+      labelHalo: 'rgba(255,255,255,0.96)'
+    } : NIGHT ? {
+      ocean: '#0A0913',
+      land: '#1C1929',
+      border: 'rgba(200,180,255,0.14)',
+      grat: 'rgba(255,255,255,0.05)',
+      rim: 'rgba(181,150,224,0.35)',
+      fluxLand: '196,160,255',
+      fluxSea: '96,206,232',
+      label: '#E9E2F6',
+      labelHover: '#FFFFFF',
+      labelHalo: 'rgba(6,5,12,0.95)'
+    } : {
       ocean: '#AEC9D7',
       // mer — bleu ciel desature
       land: '#D9C9A3',
@@ -1067,7 +1303,11 @@ function Globe() {
       // bord du globe
       fluxLand: '246,162,84',
       // flux terrestres — orange clair (glow holo)
-      fluxSea: '39,174,192' // flux maritimes — cyan (glow holo)
+      fluxSea: '39,174,192',
+      // flux maritimes — cyan (glow holo)
+      label: '#4a4660',
+      labelHover: '#2c2840',
+      labelHalo: 'rgba(255,255,255,0.95)'
     };
 
     // — sprites de glow pre-rendus : avant, chaque particule recreait son
@@ -1090,8 +1330,36 @@ function Globe() {
       sea: glowSprite(C.fluxSea, [[0, 0.55], [0.4, 0.24], [1, 0]]),
       anchor: glowSprite(C.fluxLand, [[0, 1], [0.45, 0.333], [1, 0]])
     };
+
+    // — Terre nocturne reelle (earth.js) : hero sombre uniquement. Rendu WebGL
+    //   dans le canvas du dessous, meme rotation et meme echelle que ce globe ;
+    //   ici on garde les couches vectorielles (frontieres, theatres, flux).
+    //   Sans WebGL ou sans textures : globe plat inchange.
+    let earth = null;
+    // ?terre=0 : coupe la Terre reelle (controle du repli, ou secours en production).
+    if (NIGHT && !SKY && earthCanvas && window.AlgorEarth && !/[?&]terre=0/.test(location.search)) {
+      earth = window.AlgorEarth.create(earthCanvas, {
+        hi: DPR > 1.25 || Math.min(W, H) > 520,
+        version: '20260914c'
+      });
+      if (earth) {
+        canvas.parentNode.classList.add('is-earth');
+        // Controle visuel : ?soleil=2026-09-14T22:00Z fige le soleil a cette date.
+        const sunParam = (location.search.match(/[?&]soleil=([^&]+)/) || [])[1];
+        if (sunParam) earth.setSunDate(decodeURIComponent(sunParam));
+      }
+    }
+    // Sur la Terre reelle : frontieres lavande lisibles sur la photo, pas de graticule appuye.
+    const E = {
+      border: 'rgba(214,200,255,0.34)',
+      grat: 'rgba(255,255,255,0.045)'
+    };
+    // Famille des etiquettes = police de texte du site (--sans, posee par le systeme typo).
+    const LABEL_FAMILY = (getComputedStyle(document.documentElement).getPropertyValue('--sans') || '').trim() || '"Plus Jakarta Sans", system-ui, sans-serif';
     function draw(t) {
       ctx.clearRect(0, 0, W, H);
+      syncProj();
+      const er = earth ? earth.ready() : 0; // 0 = globe plat, 1 = Terre reelle prete
 
       // Clip circulaire — le globe reste TOUJOURS rond, meme zoome (jamais un carre).
       ctx.save();
@@ -1099,64 +1367,90 @@ function Globe() {
       ctx.arc(W / 2, H / 2, Math.min(W, H) / 2, 0, Math.PI * 2);
       ctx.clip();
 
-      // sphere fill (ocean)
-      ctx.beginPath();
-      path(sphere);
-      ctx.fillStyle = C.ocean;
-      ctx.fill();
+      // sphere fill (ocean) — s'efface quand la Terre reelle apparait dessous
+      if (er < 1) {
+        ctx.globalAlpha = 1 - er;
+        ctx.beginPath();
+        path(sphere);
+        ctx.fillStyle = C.ocean;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
 
       // graticule
       ctx.beginPath();
       path(graticule);
-      ctx.strokeStyle = C.grat;
+      ctx.strokeStyle = er > 0.5 ? E.grat : C.grat;
       ctx.lineWidth = 0.55;
       ctx.stroke();
 
       // land — fill + borders
       if (land) {
-        ctx.beginPath();
-        path(land);
-        ctx.fillStyle = C.land;
-        ctx.fill();
+        if (er < 1) {
+          ctx.globalAlpha = 1 - er;
+          ctx.beginPath();
+          path(land);
+          ctx.fillStyle = C.land;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
         ctx.beginPath();
         path(borders);
-        ctx.strokeStyle = C.border;
-        ctx.lineWidth = 0.45;
+        ctx.strokeStyle = er > 0.5 ? E.border : C.border;
+        ctx.lineWidth = er > 0.5 ? 0.55 : 0.45;
         ctx.stroke();
       }
 
       // lacs et plans d'eau — meme teinte que la mer, par-dessus les
       //   frontieres pour que celles-ci ne traversent pas les lacs.
-      if (lakes) {
+      //   (la photo NASA les contient deja : inutiles sur la Terre reelle)
+      if (lakes && er < 1) {
+        ctx.globalAlpha = 1 - er;
         ctx.beginPath();
         path(lakes);
         ctx.fillStyle = C.ocean;
         ctx.fill();
-        ctx.globalAlpha = 0.6;
+        ctx.globalAlpha = 0.6 * (1 - er);
         ctx.strokeStyle = C.border;
         ctx.lineWidth = 0.3;
         ctx.stroke();
         ctx.globalAlpha = 1;
       }
 
-      // sphere rim
-      ctx.beginPath();
-      path(sphere);
-      ctx.strokeStyle = C.rim;
-      ctx.lineWidth = 0.75;
-      ctx.stroke();
-
-      // arc traces (back drop, very fine)
-      arcs.forEach(arc => {
-        if (!visible(arc.a) && !visible(arc.b)) return;
-        const isSea = arc.kind === 'sea';
+      // sphere rim (l'atmosphere du shader le remplace sur la Terre reelle)
+      if (er < 1) {
+        ctx.globalAlpha = 1 - er;
         ctx.beginPath();
-        path({
-          type: 'LineString',
-          coordinates: [arc.a, arc.b]
-        });
+        path(sphere);
+        ctx.strokeStyle = C.rim;
+        ctx.lineWidth = 0.75;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      // arc traces — arcs en altitude, segments visibles seulement,
+      //   attenues vers le limbe (profondeur du sommet de l'arc)
+      arcs.forEach(arc => {
+        const isSea = arc.kind === 'sea';
+        const mid = arc.pts[arc.pts.length >> 1];
+        const pm = proj3(mid[0], mid[1], mid[2]);
+        const fa = depthFade(pm[2]);
+        ctx.beginPath();
+        let open = false;
+        for (let k = 0; k < arc.pts.length; k++) {
+          const q = arc.pts[k],
+            p = proj3(q[0], q[1], q[2]);
+          if (!p[3]) {
+            open = false;
+            continue;
+          }
+          if (open) ctx.lineTo(p[0], p[1]);else {
+            ctx.moveTo(p[0], p[1]);
+            open = true;
+          }
+        }
         ctx.setLineDash(isSea ? [1.4, 2.6] : []);
-        ctx.strokeStyle = isSea ? `rgba(${C.fluxSea},0.42)` : `rgba(${C.fluxLand},0.42)`;
+        ctx.strokeStyle = isSea ? `rgba(${C.fluxSea},${(0.42 * fa).toFixed(3)})` : `rgba(${C.fluxLand},${(0.42 * fa).toFixed(3)})`;
         ctx.lineWidth = isSea ? 0.6 : 0.7;
         ctx.stroke();
         ctx.setLineDash([]);
@@ -1189,12 +1483,12 @@ function Globe() {
             if (phase < 0) continue;
             if (phase > 1) continue;
             const p = arc.interp(phase);
-            if (!visible(p)) continue;
-            const xy = proj(p);
-            if (!xy) continue;
+            // position sur l'arc en altitude (meme profil que la trace)
+            const xy = proj3(p[0] * RAD, p[1] * RAD, arc.h * Math.sin(Math.PI * phase));
+            if (!xy[3]) continue;
             const fade = Math.sin(phase * Math.PI);
             const decay = Math.pow(1 - i / arc.np, 1.8);
-            const baseOp = (isSea ? 0.85 : 0.98) * fade * decay;
+            const baseOp = (isSea ? 0.85 : 0.98) * fade * decay * depthFade(xy[2]);
             const baseR = (isSea ? 1.0 : 1.6) * (i === 0 ? 1 : 1 - i * 0.18);
             const isHead = i === 0;
 
@@ -1234,11 +1528,19 @@ function Globe() {
 
       // anchors (zones disponibles) — points orange, meme style que les flux.
       //   Titre affiche UNIQUEMENT au survol (hoverAnchor).
-      anchors.forEach((a, i) => {
+      const Rc = Math.min(W, H) / 2;
+      const labelRects = []; // etiquettes deja posees cette frame (anti-chevauchement)
+      const insideDisc = (x, y) => Math.hypot(x - W / 2, y - H / 2) <= Rc - 4;
+      // Le theatre survole est place en premier : son etiquette a la priorite.
+      const ordered = hoverAnchor ? [hoverAnchor].concat(anchors.filter(x => x !== hoverAnchor)) : anchors;
+      ordered.forEach(a => {
+        const i = anchors.indexOf(a);
         if (!visible([a.lon, a.lat])) return;
         const xy = proj([a.lon, a.lat]);
         if (!xy) return;
-        const hovered = hoverAnchor && hoverAnchor.id === a.id;
+        // Hors du disque visible (zoom au survol) : rien a dessiner, ce serait coupe.
+        if (!insideDisc(xy[0], xy[1])) return;
+        const hovered = hoverAnchor && hoverAnchor.id === a.id || shownRef.current === a.id;
         const pulse = (Math.sin(t / 1100 + i * 1.7) + 1) / 2;
         const k = hovered ? 1.5 : 1;
 
@@ -1263,13 +1565,44 @@ function Globe() {
         // label — toujours visible : annotation cartographique sobre,
         //   halo blanc doux pour la lisibilite, aucun cadre.
         ctx.save();
-        ctx.font = (hovered ? '500 ' : '400 ') + '11px "JetBrains Mono", ui-monospace, Menlo, monospace';
-        ctx.letterSpacing = '0.03em';
+        // Meme voix que les autres labels du site (Host Grotesk 500 petit), pas de mono.
+        ctx.font = (hovered ? '600 ' : '500 ') + '11.5px ' + LABEL_FAMILY;
+        ctx.letterSpacing = '0.02em';
         ctx.textBaseline = 'middle';
-        const tx = xy[0] + 12,
-          ty = xy[1] + 0.5;
-        ctx.fillStyle = hovered ? '#2c2840' : '#4a4660';
-        ctx.shadowColor = 'rgba(255,255,255,0.95)';
+        // Placement : a droite du point ; sinon a gauche, dessous, dessus.
+        //   Une etiquette ne sort jamais du disque (elle serait coupee par le
+        //   clip) et ne recouvre jamais une etiquette deja posee ; si aucune
+        //   position ne convient (globe petit, zone dense), le point reste seul.
+        const tw = ctx.measureText(a.label).width,
+          th = 14,
+          ty0 = xy[1] + 0.5;
+        const cands = [[xy[0] + 12, ty0], [xy[0] - 12 - tw, ty0], [xy[0] - tw / 2, ty0 + 17], [xy[0] - tw / 2, ty0 - 17]];
+        let tx = 0,
+          ty = 0,
+          placed = false;
+        for (const c of cands) {
+          const r = {
+            x: c[0] - 3,
+            y: c[1] - th / 2,
+            w: tw + 6,
+            h: th
+          };
+          const fits = insideDisc(r.x, r.y) && insideDisc(r.x + r.w, r.y) && insideDisc(r.x, r.y + r.h) && insideDisc(r.x + r.w, r.y + r.h);
+          const free = !labelRects.some(o => r.x < o.x + o.w && r.x + r.w > o.x && r.y < o.y + o.h && r.y + r.h > o.y);
+          if (fits && free) {
+            tx = c[0];
+            ty = c[1];
+            labelRects.push(r);
+            placed = true;
+            break;
+          }
+        }
+        if (!placed) {
+          ctx.restore();
+          return;
+        }
+        ctx.fillStyle = hovered ? C.labelHover : C.label;
+        ctx.shadowColor = C.labelHalo;
         ctx.shadowBlur = 5;
         ctx.fillText(a.label, tx, ty); // passes empilees -> halo blanc
         ctx.fillText(a.label, tx, ty);
@@ -1285,9 +1618,53 @@ function Globe() {
     const period = 30000;
     let zoomTarget = null;
     let hoverAnchor = null;
+    // Inclinaison pilotee par le defilement (motion.js) : cible de latitude.
+    let tiltLat = 0;
+    window.__algorGlobe = {
+      setTilt: deg => {
+        tiltLat = Number(deg) || 0;
+      },
+      getScale: () => proj.scale(),
+      getRadius: () => Math.min(W, H) / 2,
+      hasEarth: !!earth,
+      earth: earth,
+      stats: () => ({
+        drawMs: Math.round(drawEma * 100) / 100,
+        hi: hiActive,
+        locked: hiLocked
+      }),
+      // Controle visuel (captures) : position ecran d'un theatre, null s'il est cache.
+      anchorAt: id => {
+        const a = anchors.find(x => x.id === id);
+        if (!a || !visible([a.lon, a.lat])) return null;
+        const xy = proj([a.lon, a.lat]),
+          r = canvas.getBoundingClientRect();
+        return xy ? [xy[0] + r.left, xy[1] + r.top] : null;
+      }
+    };
+
+    // Hors ecran (hero defile) : on ne dessine plus rien, ni D3 ni WebGL.
+    let inView = true,
+      io = null;
+    if ('IntersectionObserver' in window) {
+      try {
+        io = new IntersectionObserver(es => {
+          inView = es[0].isIntersecting;
+        }, {
+          threshold: 0
+        });
+        io.observe(canvas);
+      } catch (_) {}
+    }
     function step(now) {
       const dt = Math.min(now - last, 80);
       last = now;
+      if (!inView) return;
+      // Hors survol : le globe reste zoome sur le theatre dont la fiche est ouverte.
+      if (!hoverAnchor) {
+        const pid = shownRef.current;
+        zoomTarget = pid && ANCHOR_META[pid] ? ANCHOR_META[pid].target : null;
+      }
       const r = proj.rotate();
       if (zoomTarget) {
         const ease = 0.06;
@@ -1299,12 +1676,23 @@ function Globe() {
         const cs = proj.scale();
         proj.scale(cs + (targetScale - cs) * ease);
       } else {
-        proj.rotate([r[0] + (REDUCED ? 0 : dt / period * 360), r[1] + (0 - r[1]) * 0.04, 0]);
+        proj.rotate([r[0] + (REDUCED ? 0 : dt / period * 360), r[1] + (tiltLat - r[1]) * 0.04, 0]);
         const cs = proj.scale();
         if (Math.abs(cs - baseScale) > 0.4) {
           proj.scale(cs + (baseScale - cs) * 0.06);
         }
       }
+      if (earth) earth.render({
+        w: EW,
+        h: EH,
+        dpr: DPR,
+        cx: EOX + W / 2,
+        cy: EOY + H / 2,
+        scale: proj.scale(),
+        clip: Math.min(W, H) / 2,
+        rotate: proj.rotate(),
+        t: now
+      });
       draw(REDUCED ? 0 : now);
     }
     let rafId = 0;
@@ -1362,27 +1750,27 @@ function Globe() {
     };
     const ANCHOR_META = {
       'MO-01': {
-        href: '/moyen-orient/',
+        href: THEATRE_HREF['MO-01'],
         target: ZONE_TARGETS['moyen-orient']
       },
       'SAHEL-02': {
-        href: '/sahel/',
+        href: THEATRE_HREF['SAHEL-02'],
         target: ZONE_TARGETS['sahel']
       },
       'LACS-03': {
-        href: '/rdc/',
+        href: THEATRE_HREF['LACS-03'],
         target: ZONE_TARGETS['rdc']
       },
       'MDG-04': {
-        href: '/madagascar/',
+        href: THEATRE_HREF['MDG-04'],
         target: ZONE_TARGETS['madagascar']
       },
       'AFR-05': {
-        href: '/afrique/',
+        href: THEATRE_HREF['AFR-05'],
         target: ZONE_TARGETS['afrique']
       },
       'ASIE-06': {
-        href: '/asie-sud/',
+        href: THEATRE_HREF['ASIE-06'],
         target: ZONE_TARGETS['asie-sud']
       }
     };
@@ -1399,32 +1787,62 @@ function Globe() {
       return null;
     }
     canvas.style.cursor = 'default';
+    // Fiche disponible pour ce theatre ? (sections.js expose ALGOR_THEATRES)
+    const hasCard = id => !!ANCHOR_META[id] && !!THEATRE_PHOTO[ANCHOR_META[id].href] && (window.ALGOR_THEATRES || []).some(t => t.href === ANCHOR_META[id].href);
+    let lastPointer = 'mouse';
+    function onDown(e) {
+      lastPointer = e.pointerType || 'mouse';
+      warmPhotos();
+    }
     function onMove(e) {
+      // Le survol n'existe qu'a la souris ; au doigt, tout passe par le tap.
+      if (e.pointerType && e.pointerType !== 'mouse') return;
+      warmPhotos();
       const rect = canvas.getBoundingClientRect();
       const hit = findAnchorAt(e.clientX - rect.left, e.clientY - rect.top);
+      // Pointeur sur le globe : la fiche en cours reste affichee.
+      clearTimeout(hideTimerRef.current);
       if (hit) {
         canvas.style.cursor = 'pointer';
         hoverAnchor = hit;
         const meta = ANCHOR_META[hit.id];
         if (meta) zoomTarget = meta.target;
+        // Survol d'un theatre : sa fiche surgit (ou remplace la precedente).
+        if (hasCard(hit.id)) showTh(hit.id);
       } else {
         canvas.style.cursor = 'default';
         hoverAnchor = null;
         zoomTarget = null;
       }
     }
-    function onLeave() {
+    function onLeave(e) {
+      if (e && e.pointerType && e.pointerType !== 'mouse') return;
       canvas.style.cursor = 'default';
       hoverAnchor = null;
       zoomTarget = null;
+      // Sortie du globe : la fiche se retire, sauf si le pointeur passe dessus.
+      if (shownRef.current) scheduleHideTh();
     }
     function onClick(e) {
       const rect = canvas.getBoundingClientRect();
       const hit = findAnchorAt(e.clientX - rect.left, e.clientY - rect.top);
-      if (hit && ANCHOR_META[hit.id]) window.location.href = ANCHOR_META[hit.id].href;
+      const touch = lastPointer !== 'mouse';
+      if (hit && ANCHOR_META[hit.id]) {
+        // Souris : la fiche est deja la depuis le survol, le clic ouvre la carte.
+        // Doigt : 1er tap = fiche, 2e tap sur le meme theatre = carte.
+        if (!touch || !hasCard(hit.id) || shownRef.current === hit.id) {
+          // Visiteur : vers les offres, pas vers le mur de connexion de la carte.
+          window.location.href = loggedRef.current ? ANCHOR_META[hit.id].href : '/offres/';
+          return;
+        }
+        showTh(hit.id);
+      } else if (touch && shownRef.current) {
+        hideTh();
+      }
     }
-    canvas.addEventListener('mousemove', onMove);
-    canvas.addEventListener('mouseleave', onLeave);
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointermove', onMove);
+    canvas.addEventListener('pointerleave', onLeave);
     canvas.addEventListener('click', onClick);
 
     // First paint synchronously
@@ -1442,13 +1860,20 @@ function Globe() {
       if (document.hidden) step(performance.now());
     }, 1000 / 24);
     return () => {
+      if (window.__algorGlobe && window.__algorGlobe.setTilt) delete window.__algorGlobe;
       cancelAnimationFrame(rafId);
       clearInterval(hiddenTick);
       clearTimeout(topoPoll);
       window.removeEventListener('resize', resize);
       if (ro) ro.disconnect();
-      canvas.removeEventListener('mousemove', onMove);
-      canvas.removeEventListener('mouseleave', onLeave);
+      if (io) io.disconnect();
+      if (earth) {
+        earth.destroy();
+        canvas.parentNode.classList.remove('is-earth');
+      }
+      canvas.removeEventListener('pointerdown', onDown);
+      canvas.removeEventListener('pointermove', onMove);
+      canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('click', onClick);
     };
   }, []);
@@ -1459,11 +1884,124 @@ function Globe() {
       __html: GS_BUILDER_CSS
     }
   }), /*#__PURE__*/React.createElement("canvas", {
+    ref: earthRef,
+    className: "globe-earth",
+    "aria-hidden": "true"
+  }), /*#__PURE__*/React.createElement("canvas", {
     ref: canvasRef,
     className: "globe-canvas",
     role: "img",
     "aria-label": "Globe interactif \u2014 six theatres OSINT"
-  }), /*#__PURE__*/React.createElement("form", {
+  }), thCard && thPhoto && /*#__PURE__*/React.createElement("aside", {
+    className: "globe-th",
+    key: thCard.id,
+    "aria-label": 'Théâtre ' + thCard.name,
+    "aria-live": "polite",
+    onPointerEnter: () => {
+      overCardRef.current = true;
+      clearTimeout(hideTimerRef.current);
+    },
+    onPointerLeave: e => {
+      overCardRef.current = false;
+      if (e.pointerType === 'mouse') scheduleHideTh();
+    }
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "globe-th__frame",
+    href: thTarget,
+    "aria-label": (logged ? 'Ouvrir la carte du théâtre ' : 'Voir les offres, théâtre ') + thCard.name
+  }, /*#__PURE__*/React.createElement("img", {
+    className: "globe-th__photo",
+    src: thPhoto.src,
+    alt: thPhoto.alt
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "globe-th__body"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "globe-th__name"
+  }, thCard.name), /*#__PURE__*/React.createElement("p", {
+    className: "globe-th__pays"
+  }, thCard.pays), /*#__PURE__*/React.createElement("p", {
+    className: "globe-th__meta"
+  }, fmtSuivi(thCard.periode)), /*#__PURE__*/React.createElement("p", {
+    className: "globe-th__meta"
+  }, fmtCouches(thCard)), logged ? /*#__PURE__*/React.createElement("a", {
+    className: "globe-th__go",
+    href: thCard.href
+  }, "Ouvrir la carte", /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M5 12h14M13 6l6 6-6 6"
+  }))) : /*#__PURE__*/React.createElement("div", {
+    className: "globe-th__gate"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "globe-th__lock"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "13",
+    height: "13",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "4",
+    y: "11",
+    width: "16",
+    height: "10",
+    rx: "2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M8 11V7a4 4 0 0 1 8 0v4"
+  })), "Carte r\xE9serv\xE9e aux abonn\xE9s"), /*#__PURE__*/React.createElement("a", {
+    className: "globe-th__go",
+    href: "/offres/"
+  }, "Voir les offres", /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M5 12h14M13 6l6 6-6 6"
+  }))), /*#__PURE__*/React.createElement("a", {
+    className: "globe-th__login",
+    href: "#",
+    "data-algor-login": true
+  }, "D\xE9j\xE0 abonn\xE9 ? Se connecter"))), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "globe-th__close",
+    "aria-label": "Fermer la fiche",
+    onClick: hideTh
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.2",
+    strokeLinecap: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M6 6l12 12M18 6L6 18"
+  })))), hint && /*#__PURE__*/React.createElement("p", {
+    className: 'globe-hint' + (hintShown ? ' is-on' : ''),
+    "aria-hidden": !hintShown
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "globe-hint__dot",
+    "aria-hidden": "true"
+  }), TOUCH_UI ? 'Touchez un théâtre pour voir sa fiche' : 'Survolez un théâtre pour voir sa fiche'), /*#__PURE__*/React.createElement("form", {
     className: 'globe-search' + (logged ? ' globe-search--builder' : '') + (logged && stage > 0 && sel.entry ? ' globe-search--chips' : ''),
     onSubmit: onSubmit,
     autoComplete: "off",
@@ -1550,7 +2088,9 @@ function Globe() {
     entry: sel.entry,
     onApply: applyDate,
     onClose: () => setShowCal(false)
-  })), notFound && /*#__PURE__*/React.createElement("div", {
+  })), !logged && resolved && /*#__PURE__*/React.createElement("p", {
+    className: "globe-search__note"
+  }, "D\xE9mo sur n'importe quelle zone du monde \xB7 ", /*#__PURE__*/React.createElement("strong", null, "donn\xE9es fictives")), notFound && /*#__PURE__*/React.createElement("div", {
     className: "globe-search__hint"
   }, logged ? 'Choisissez un pays suivi, puis affinez par date, typologie et acteur.' : 'Saisissez une ville, une région ou un pays, partout dans le monde.'));
 }

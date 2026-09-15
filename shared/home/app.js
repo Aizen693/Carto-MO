@@ -1,11 +1,15 @@
 (function () {
-/* global React, ReactDOM, HomeView, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, RapportsView, PlatformView, Starfield */
+/* global React, ReactDOM, HomeView, ConsoleView, ConsoleGate, ComptesView, ArchivesView, VeilleView, RapportsView, PlatformView */
 
 const {
   useState,
   useEffect,
   useRef
 } = React;
+
+// Portee du CSS de l'accueil v4 (DA 09-2026, mouvement) : attribut pose sur <html>
+// par l'app de l'accueil uniquement, les rubriques statiques ne sont pas concernees.
+document.documentElement.setAttribute('data-home-v4', '');
 
 // Statut « equipe » : true (admin/editor), false (client/anon), null (en cours).
 // Sert a verrouiller la Console interne et ses sous-vues. La vraie protection
@@ -281,6 +285,30 @@ function App() {
     return () => window.removeEventListener('algorAuthStateChanged', h);
   }, []);
 
+  // Header transparent et clair tant que l'on est au-dessus du hero sombre
+  // de l'accueil (puis retour au header blanc habituel en defilant).
+  useEffect(() => {
+    const root = document.documentElement;
+    function sync() {
+      // Ciel étoilé clair (14/09) : le hero n'est plus sombre, le header reste blanc.
+      const hero = view === 'home' ? document.querySelector('.hero--night:not(.hero--sky)') : null;
+      const over = root.hasAttribute('data-sky-dark') || !!hero && window.scrollY < hero.offsetHeight - 72;
+      if (over) root.setAttribute('data-hero-dark', '');else root.removeAttribute('data-hero-dark');
+    }
+    sync();
+    const id = setTimeout(sync, 50);
+    window.addEventListener('scroll', sync, {
+      passive: true
+    });
+    window.addEventListener('resize', sync);
+    return () => {
+      clearTimeout(id);
+      window.removeEventListener('scroll', sync);
+      window.removeEventListener('resize', sync);
+      root.removeAttribute('data-hero-dark');
+    };
+  }, [view]);
+
   // Lock theme + accent (no Tweaks panel in production).
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', 'light');
@@ -306,10 +334,7 @@ function App() {
     const id = setInterval(fmt, 30 * 1000);
     return () => clearInterval(id);
   }, []);
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    className: "bg-stage",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement(Starfield, null)), /*#__PURE__*/React.createElement("header", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("header", {
     className: 'app-header' + (menuOpen ? ' is-open' : '')
   }, /*#__PURE__*/React.createElement("div", {
     className: "app-header__inner"
@@ -336,7 +361,10 @@ function App() {
     "aria-label": "Rubriques"
   }, /*#__PURE__*/React.createElement("a", {
     href: "/plateforme/"
-  }, "Plateforme"), /*#__PURE__*/React.createElement("a", {
+  }, "Plateforme"), premium && /*#__PURE__*/React.createElement("a", {
+    href: "/veille/",
+    className: "site-nav__premium"
+  }, "Veille"), /*#__PURE__*/React.createElement("a", {
     href: "/debunkage/"
   }, "D\xE9bunkage"), /*#__PURE__*/React.createElement("a", {
     href: "/methodologie/"

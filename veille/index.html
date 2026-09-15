@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veilles — Algor Access</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#05040B">
+<!-- Gate premium : overlay bloquant tant que session + plan premium absents (même mécanisme que /veille-carte/).
+     Le chemin /veille/ est listé dans GATED_PREFIXES de site-auth.js, sinon algorAuthReady n'est jamais émis. -->
+<script>window.addEventListener('algorAuthReady', function () { window.__algorAuthGranted = true; });</script>
+<script type="module" src="../shared/site-auth.js?v=20260915c"></script>
+<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
+<style>
+  /* Charte sombre du site (14/09) : ciel étoilé skyfield.js derrière, encre
+     et lavande, Host Grotesk pour le texte et les labels, Plex Mono réservée
+     aux chiffres (dates, scores, compteurs, identifiants CVE). */
+  :root{
+    --violet:#6B3FA0; --violet-mid:#5650C6; --blue:#2E84D4;
+    --grad:linear-gradient(95deg,#6B3FA0,#5650C6 55%,#2E84D4);
+    --accent:#C8B0EA; --accent-2:#5BB0F2;
+    --ink:#F3EFFB; --tx:#A9A1C4; --muted:#8F87AA;
+    --bg:#05040B; --panel:rgba(255,255,255,0.04); --panel-2:rgba(10,9,20,0.88);
+    --ln:rgba(255,255,255,0.10); --ln-soft:rgba(255,255,255,0.07);
+    --alert:#B83A4A; --warn:#C97E2A; --ok:#2F8A6B;
+    --sans:'Host Grotesk','Plus Jakarta Sans',system-ui,sans-serif; --mono:'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace;
+    --shadow:0 18px 44px -24px rgba(0,0,0,.7);
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg)}
+  html,body{margin:0;font-family:var(--sans);color:var(--ink);background:transparent}
+  .skyfield{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:-1;pointer-events:none}
+  a{color:inherit}
+  button{font-family:inherit}
+  ::selection{background:rgba(200,176,234,.35);color:#fff}
+  .wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:26px 20px 64px}
+
+  /* En-tête */
+  .head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:20px}
+  .eyebrow{font:500 11px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:#34b27b;box-shadow:0 0 0 4px rgba(52,178,123,.18)}
+  .eyebrow .dot.is-off{background:var(--muted);box-shadow:none}
+  h1{font:500 34px/1.08 var(--sans);margin:12px 0 8px;letter-spacing:-.03em;color:var(--ink)}
+  h1 em{font-style:normal;background:linear-gradient(120deg,#C8B0EA 0%,#9C9BF0 45%,#5BB0F2 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .lede{font:400 14px/1.55 var(--sans);color:var(--tx);max-width:640px;margin:0}
+  .head-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+  .back{background:var(--grad);border:none;border-radius:999px;padding:10px 16px;font:600 12px var(--sans);color:#fff;text-decoration:none;
+    box-shadow:0 10px 30px -14px rgba(46,24,87,.8);transition:filter .15s ease}
+  .back:hover{filter:brightness(1.1)}
+  .maj{font:500 11px var(--mono);color:var(--muted)}
+
+  /* Onglets */
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;background:var(--panel-2);border:1px solid var(--ln);border-radius:14px;padding:5px;width:max-content;max-width:100%;margin:0 0 20px;box-shadow:var(--shadow);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .tab{border:none;background:none;border-radius:10px;padding:9px 16px;font:600 12.5px var(--sans);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .15s ease,color .15s ease}
+  .tab svg{width:15px;height:15px}
+  .tab:hover{color:var(--ink)}
+  .tab.is-active{background:var(--grad);color:#fff;box-shadow:0 8px 22px -12px rgba(46,24,87,.9)}
+  .tab b{font:500 10.5px var(--mono);background:rgba(255,255,255,.22);border-radius:99px;padding:2px 7px;font-variant-numeric:tabular-nums}
+  .tab:not(.is-active) b{background:rgba(200,176,234,.12);color:var(--accent)}
+  .tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .pane[hidden]{display:none}
+
+  /* Compteurs / cartes génériques */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+  .kpi{background:var(--panel);border:1px solid var(--ln);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow)}
+  .kpi__label{font:500 11px var(--sans);color:var(--tx);text-transform:uppercase;letter-spacing:.06em}
+  .kpi__value{font:500 30px/1.1 var(--sans);margin-top:6px;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .kpi__value small{font:500 12px var(--sans);color:var(--muted);margin-left:5px;letter-spacing:0}
+  .grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:14px}
+  .col{display:flex;flex-direction:column;gap:14px;min-width:0}
+  .card{background:var(--panel);border:1px solid var(--ln);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow);min-width:0}
+  .card--sticky{position:sticky;top:16px;display:flex;flex-direction:column;max-height:calc(100vh - 32px);background:var(--panel-2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .card__head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .card__title{font:600 15px var(--sans);margin:0;color:var(--ink)}
+  .card__hint{font:500 11px var(--sans);color:var(--muted)}
+  .empty{font:400 12.5px var(--sans);color:var(--muted);padding:14px 0}
+  .err{background:var(--panel);border:1px solid var(--ln);border-radius:16px;padding:22px;font:400 13px var(--sans);color:var(--tx)}
+
+  /* ── Géopolitique ── */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px;min-width:0}
+  .filters .sep{width:1px;height:20px;background:var(--ln);margin:0 4px}
+  .fchip{border:1px solid var(--ln);background:transparent;border-radius:99px;padding:7px 12px;font:500 12px var(--sans);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s ease}
+  .fchip b{font-weight:500;font-variant-numeric:tabular-nums;color:var(--muted)}
+  .fchip:hover{border-color:var(--accent);color:var(--ink)}
+  .fchip.is-on{background:var(--violet);border-color:var(--violet);color:#fff}
+  .fchip.is-on b{color:rgba(255,255,255,.8)}
+  .fchip i{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .fchip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .search{flex:1 1 220px;min-width:180px;border:1px solid var(--ln);border-radius:11px;padding:9px 13px;font:400 13px var(--sans);background:rgba(255,255,255,.05);color:var(--ink);outline:none;caret-color:var(--accent)}
+  .search::placeholder,.csearch::placeholder{color:var(--muted)}
+  .search:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,176,234,.18)}
+  .geo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .vcard{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--ln);border-radius:16px;overflow:hidden;cursor:pointer;text-align:left;color:var(--ink);
+    transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s,border-color .22s;outline:none;padding:0}
+  .vcard:hover,.vcard:focus-visible{transform:translateY(-4px);box-shadow:0 22px 50px rgba(0,0,0,.5);border-color:rgba(200,176,234,.45)}
+  .vcard__media{position:relative;aspect-ratio:16/8.4;background:linear-gradient(135deg,#1F1437 0%,#3B2A6E 52%,#1E6FBE 100%);overflow:hidden}
+  .vcard__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .vcard__gridpat{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.22) 1px,transparent 1.4px);background-size:14px 14px;opacity:.5;mix-blend-mode:overlay}
+  .vcard__logo{position:absolute;right:11px;bottom:11px;width:28px;height:28px;border-radius:8px;background:#fff;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.45)}
+  .vcard__sev{position:absolute;top:11px;left:11px;font:600 9.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:5px;border:1px solid;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+  .vcard__body{padding:16px 17px 18px;display:flex;flex-direction:column;flex:1}
+  .vcard__meta{display:flex;align-items:center;gap:9px;font:500 10.5px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
+  .vcard__zone{color:var(--accent)}
+  .vcard__date::before{content:'· ';color:#4A4462}
+  .vcard__title{font:600 16px/1.32 var(--sans);letter-spacing:-.01em;color:var(--ink);margin:0 0 9px}
+  .vcard__resume{font:400 13px/1.55 var(--sans);color:#B4ACCC;margin:0 0 14px;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .vcard__more{display:inline-flex;align-items:center;gap:6px;font:600 12px/1 var(--sans);color:var(--accent)}
+  .geo-foot{display:flex;justify-content:center;margin-top:22px}
+  .more-btn{border:1px solid var(--ln);background:transparent;border-radius:999px;padding:11px 18px;font:600 12px var(--sans);color:var(--accent);cursor:pointer}
+  .more-btn:hover{border-color:var(--accent);color:#fff}
+
+  /* Modale note */
+  .vmodal-scrim{position:fixed;inset:0;background:rgba(5,4,11,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;animation:fade .18s ease}
+  @keyframes fade{from{opacity:0}}
+  .vmodal{position:relative;width:min(720px,100%);max-height:92vh;overflow-y:auto;background:#0F0D1A;border:1px solid var(--ln);border-radius:20px;box-shadow:0 40px 90px -30px rgba(0,0,0,.9);color:var(--ink)}
+  .vmodal__x{position:absolute;top:12px;right:12px;z-index:2;width:34px;height:34px;border-radius:50%;border:1px solid var(--ln);background:rgba(10,9,20,.85);color:var(--ink);font:600 14px var(--sans);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+  .vmodal__media{position:relative;aspect-ratio:16/7;background:linear-gradient(135deg,#1F1437 0%,#3B2A6E 52%,#1E6FBE 100%);overflow:hidden;border-radius:20px 20px 0 0}
+  .vmodal__media img.vcard__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .vmodal__body{padding:22px 26px 26px}
+  .vmodal__title{font:500 23px/1.25 var(--sans);letter-spacing:-.02em;margin:0 0 8px;color:var(--ink)}
+  .vmodal__resume{font:400 14px/1.6 var(--sans);color:var(--tx);margin:0 0 18px}
+  .vreport{border-top:1px solid var(--ln-soft);padding-top:16px}
+  .vreport__class{font:500 11px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  .vreport__sec{margin-bottom:16px}
+  .vreport__lbl{font:500 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .vreport__sec p{font:400 13.5px/1.65 var(--sans);color:#CFC8E2;margin:0}
+  .vreport__ul{margin:0;padding:0;list-style:none}
+  .vreport__ul li{font:400 13.5px/1.6 var(--sans);color:#CFC8E2;padding:4px 0 4px 16px;position:relative;border-bottom:1px solid var(--ln-soft)}
+  .vreport__ul li:last-child{border-bottom:none}
+  .vreport__ul li::before{content:'';position:absolute;left:2px;top:12px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .vreport__muted{color:var(--muted)!important}
+  .vreport__srcrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font:500 12.5px var(--sans)}
+  .vreport__srcrow a{color:var(--accent);text-decoration:none}
+  .vreport__srcrow a:hover{color:#fff}
+  .vreport__rel{font:500 11px var(--sans);color:var(--tx);background:rgba(255,255,255,.06);border-radius:99px;padding:3px 9px}
+  .vreport__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+  .vreport__cta,.vreport__map{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:10px 15px;font:600 12px var(--sans);text-decoration:none}
+  .vreport__cta{background:var(--grad);color:#fff}
+  .vreport__map{border:1px solid var(--ln);color:var(--accent);background:transparent}
+  .vreport__map:hover{border-color:var(--accent);color:#fff}
+
+  /* ── Cyber ── */
+  .bars{display:flex;flex-direction:column;gap:7px}
+  .bar{display:grid;grid-template-columns:150px 1fr 40px;align-items:center;gap:10px;font:500 12px var(--sans)}
+  .bar__name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+  .bar__track{height:9px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+  .bar__fill{height:100%;border-radius:99px;background:var(--grad);transform-origin:left;animation:grow .6s cubic-bezier(.2,.7,.2,1) both}
+  .bar__fill.is-alert{background:linear-gradient(95deg,#B83A4A,#C97E2A)}
+  .bar__val{text-align:right;font:500 11px var(--mono);color:var(--tx)}
+  @keyframes grow{from{transform:scaleX(0)}}
+  .spark{width:100%;height:110px;display:block}
+  .spark path.area{fill:url(#sparkFill)}
+  .spark path.line{fill:none;stroke:var(--accent);stroke-width:2.2;stroke-linejoin:round}
+  .spark text{font:500 9.5px var(--mono);fill:var(--muted)}
+  .spark circle{fill:#05040B;stroke:var(--accent);stroke-width:2}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--ln);border-radius:99px;padding:6px 11px;font:500 12px var(--sans);background:rgba(255,255,255,.04);color:var(--tx)}
+  .chip b{font:500 12px var(--mono);color:var(--accent)}
+  .csearch{width:100%;border:1px solid var(--ln);border-radius:11px;padding:10px 13px;font:400 13px var(--sans);background:rgba(255,255,255,.05);color:var(--ink);outline:none;margin-bottom:12px;caret-color:var(--accent)}
+  .csearch:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,176,234,.18)}
+  .reports{display:flex;flex-direction:column;gap:8px;overflow-y:auto;padding-right:4px;min-height:0;scrollbar-width:thin;scrollbar-color:rgba(200,176,234,.35) transparent}
+  .rep{border:1px solid var(--ln-soft);border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.03);transition:border-color .15s ease,background .15s ease}
+  .rep:hover{border-color:var(--ln);background:rgba(255,255,255,.05)}
+  .rep__meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:500 11px var(--sans);color:var(--muted);font-variant-numeric:tabular-nums}
+  .rep__src{color:var(--accent)}
+  .rep__title{font:600 13.5px/1.35 var(--sans);margin:5px 0 4px;color:var(--ink)}
+  .rep__title a{text-decoration:none}
+  .rep__title a:hover{color:var(--accent)}
+  .rep__sum{font:400 12px/1.5 var(--sans);color:var(--tx);margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .rep.is-open .rep__sum{display:block}
+  .rep__tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+  .tag{font:500 10.5px var(--sans);color:var(--accent);background:rgba(200,176,234,.10);border-radius:99px;padding:3px 8px}
+  .cves{display:flex;flex-direction:column;gap:6px}
+  .cve{display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;padding:9px 10px;border-radius:12px;border:1px solid var(--ln-soft)}
+  .cve__score{font:600 13px var(--mono);color:#fff;background:var(--alert);border-radius:8px;padding:5px 7px;min-width:44px;text-align:center}
+  .cve__id{font:500 12.5px var(--mono);color:var(--ink)}
+  .cve__id a{text-decoration:none}
+  .cve__id a:hover{color:var(--accent)}
+  .cve__sum{font:400 11.5px/1.45 var(--sans);color:var(--tx);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .cve__date{font:500 10.5px var(--mono);color:var(--muted);white-space:nowrap}
+  .kev{display:inline-block;font:600 9px var(--sans);letter-spacing:.06em;color:#fff;background:var(--warn);border-radius:99px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+  .foot{margin-top:18px;font:400 11.5px/1.5 var(--sans);color:var(--muted)}
+
+  @media (max-width:1000px){.geo-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}.card--sticky{position:static;max-height:none}.bar{grid-template-columns:110px 1fr 36px}}
+  @media (max-width:620px){.geo-grid{grid-template-columns:1fr}h1{font-size:26px}.head-right{align-items:flex-start}.tab{padding:9px 11px}}
+  @media (prefers-reduced-motion:reduce){.bar__fill{animation:none}.vcard,.vcard:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div>
+      <div class="eyebrow"><span class="dot" id="dot"></span> Veilles · accès abonné</div>
+      <h1>Nos deux <em>veilles</em></h1>
+      <p class="lede" id="lede">Géopolitique : notes d'analyse sourcées sur nos six théâtres. Cyber : menaces agrégées par notre plateforme OpenCTI. Les deux en intégralité.</p>
+    </div>
+    <div class="head-right">
+      <a class="back" href="/">&larr; Accueil</a>
+      <div class="maj" id="maj"></div>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab is-active" role="tab" data-tab="geo" id="tab-geo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+      Géopolitique <b id="n-geo">…</b>
+    </button>
+    <button class="tab" role="tab" data-tab="cyber" id="tab-cyber">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      Cyber <b id="n-cyber">…</b>
+    </button>
+  </div>
+
+  <section class="pane" id="pane-geo" role="tabpanel"><div class="empty">Chargement du fil géopolitique…</div></section>
+  <section class="pane" id="pane-cyber" role="tabpanel" hidden><div class="empty">Chargement de l'instantané cyber…</div></section>
+
+  <p class="foot" id="foot">Veille géopolitique : flux OSINT sélectionné, sourcé et daté par nos analystes. Veille cyber : flux publics (OTX, abuse.ch, CVEList, MITRE) agrégés par OpenCTI, sans vérification par Algor Int ; les indicateurs bruts restent dans la plateforme.</p>
+</div>
+
+<!-- Ciel étoilé sombre commun au site (canvas fixe derrière le contenu) -->
+<script src="../shared/home/skyfield.js?v=20260914b"></script>
+
+<script type="module">
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmtN = (n) => new Intl.NumberFormat('fr-FR').format(n || 0);
+  const fmtD = (iso, y) => iso ? new Date(iso + (iso.length === 10 ? 'T00:00:00Z' : '')).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', ...(y ? { year: 'numeric' } : {}) }) : '';
+  const safeUrl = (u) => /^https?:\/\//i.test(String(u || '').trim()) ? String(u).trim() : null;
+  const favicon = (u) => { try { return 'https://www.google.com/s2/favicons?domain=' + new URL(u).hostname + '&sz=128'; } catch { return null; } };
+
+  /* ── Onglets ── */
+  const params = new URLSearchParams(location.search);
+  function showTab(name) {
+    for (const t of document.querySelectorAll('.tab')) t.classList.toggle('is-active', t.dataset.tab === name);
+    document.getElementById('pane-geo').hidden = name !== 'geo';
+    document.getElementById('pane-cyber').hidden = name !== 'cyber';
+    const u = new URL(location.href); u.searchParams.set('onglet', name); history.replaceState(null, '', u);
+  }
+  for (const t of document.querySelectorAll('.tab')) t.addEventListener('click', () => showTab(t.dataset.tab));
+  showTab(params.get('onglet') === 'cyber' ? 'cyber' : 'geo');
+
+  /* ══════════ Géopolitique ══════════ */
+  const VEILLE_REMOTE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
+  const ZONES = { 'sahel': 'Sahel', 'moyen-orient': 'Moyen-Orient', 'rdc': 'RDC', 'madagascar': 'Madagascar', 'afrique': 'Afrique Maritime', 'asie-sud': 'Asie du Sud' };
+  const SEV = { info: { lbl: 'Signal', c: '#C8B0EA' }, alerte: { lbl: 'Alerte', c: '#E0A050' }, critique: { lbl: 'Critique', c: '#E06A78' } };
+  const reliability = (s) => { s = (s || '').toLowerCase();
+    if (/acled|isw|bellingcat|kivu|reuters|afp|crisis|hrw|amnesty|\bonu\b|\bun\b|imb|janes/.test(s)) return 'Élevée';
+    if (/rfi|guardian|\bbbc\b|france 24|le monde|trt|jazeera|figaro|ap\b/.test(s)) return 'Établie';
+    return 'À recouper'; };
+  const asList = (v) => { if (Array.isArray(v)) return v; if (typeof v === 'string') { try { const p = JSON.parse(v); if (Array.isArray(p)) return p; } catch {} return v.trim() && v.trim() !== '[]' ? [v] : []; } return []; };
+
+  let geoItems = [], geoState = { zone: 'all', sev: 'all', q: '', limit: 24 };
+
+  function geoCard(it) {
+    const sev = SEV[it.severite] || SEV.info, logo = favicon(it.source_url);
+    return `<button class="vcard" data-id="${esc(it.id)}">
+      <span class="vcard__media">
+        ${it.image ? `<img class="vcard__img" src="${esc(it.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : ''}
+        <span class="vcard__gridpat" aria-hidden="true"></span>
+        ${logo ? `<img class="vcard__logo" src="${esc(logo)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
+        <span class="vcard__sev" style="color:${sev.c};border-color:${sev.c}59;background:${sev.c}14">${sev.lbl}</span>
+      </span>
+      <span class="vcard__body">
+        <span class="vcard__meta"><span class="vcard__zone">${esc(ZONES[it.theatre] || it.theatre || '')}</span><span class="vcard__date">${esc(fmtD(it.date))}</span>${it.source ? `<span>· ${esc(it.source)}</span>` : ''}</span>
+        <span class="vcard__title">${esc(it.titre)}</span>
+        <span class="vcard__resume">${esc(it.resume || '')}</span>
+        <span class="vcard__more">Lire la note →</span>
+      </span>
+    </button>`;
+  }
+
+  function renderGeo() {
+    const p = document.getElementById('pane-geo');
+    const q = geoState.q.toLowerCase();
+    const list = geoItems.filter((it) => (geoState.zone === 'all' || it.theatre === geoState.zone)
+      && (geoState.sev === 'all' || (it.severite || 'info') === geoState.sev)
+      && (!q || `${it.titre} ${it.resume} ${it.lieu} ${it.source}`.toLowerCase().includes(q)));
+    const zonesPresent = Object.keys(ZONES).filter((z) => geoItems.some((it) => it.theatre === z));
+    const counts = Object.fromEntries(zonesPresent.map((z) => [z, geoItems.filter((it) => it.theatre === z).length]));
+    p.innerHTML = `
+      <div class="filters">
+        <button class="fchip ${geoState.zone === 'all' ? 'is-on' : ''}" data-zone="all">Tous les théâtres</button>
+        ${zonesPresent.map((z) => `<button class="fchip ${geoState.zone === z ? 'is-on' : ''}" data-zone="${z}">${ZONES[z]} <b>${counts[z]}</b></button>`).join('')}
+        <span class="sep"></span>
+        ${Object.entries(SEV).map(([k, s]) => `<button class="fchip ${geoState.sev === k ? 'is-on' : ''}" data-sev="${k}"><i style="background:${s.c}"></i>${s.lbl}</button>`).join('')}
+        <input class="search" id="geo-q" type="search" placeholder="Filtrer : lieu, acteur, source…" value="${esc(geoState.q)}" autocomplete="off">
+      </div>
+      <div class="geo-grid">${list.slice(0, geoState.limit).map(geoCard).join('') || '<div class="empty">Aucune note ne correspond à ces filtres.</div>'}</div>
+      ${list.length > geoState.limit ? `<div class="geo-foot"><button class="more-btn" id="geo-more">Afficher plus (${list.length - geoState.limit} restantes)</button></div>` : ''}`;
+    p.querySelectorAll('[data-zone]').forEach((b) => b.addEventListener('click', () => { geoState.zone = b.dataset.zone; renderGeo(); }));
+    p.querySelectorAll('[data-sev]').forEach((b) => b.addEventListener('click', () => { geoState.sev = geoState.sev === b.dataset.sev ? 'all' : b.dataset.sev; renderGeo(); }));
+    const qi = p.querySelector('#geo-q');
+    qi.addEventListener('input', () => { geoState.q = qi.value.trim(); const pos = qi.selectionStart; renderGeo(); const n = p.querySelector('#geo-q'); n.focus(); n.setSelectionRange(pos, pos); });
+    p.querySelector('#geo-more')?.addEventListener('click', () => { geoState.limit += 24; renderGeo(); });
+    p.querySelectorAll('.vcard').forEach((c) => c.addEventListener('click', () => openNote(geoItems.find((it) => it.id === c.dataset.id))));
+    document.getElementById('n-geo').textContent = fmtN(geoItems.length);
+  }
+
+  function openNote(it) {
+    if (!it) return;
+    const sev = SEV[it.severite] || SEV.info, logo = favicon(it.source_url), src = safeUrl(it.source_url);
+    const impl = asList(it.implications), reco = asList(it.recommandations);
+    const el = document.createElement('div'); el.className = 'vmodal-scrim';
+    el.innerHTML = `<div class="vmodal" role="dialog" aria-modal="true">
+      <button class="vmodal__x" aria-label="Fermer">✕</button>
+      <div class="vmodal__media">
+        ${it.image ? `<img class="vcard__img" src="${esc(it.image)}" alt="" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : ''}
+        <span class="vcard__gridpat" aria-hidden="true"></span>
+        ${logo ? `<img class="vcard__logo" src="${esc(logo)}" alt="" onerror="this.style.display='none'">` : ''}
+      </div>
+      <div class="vmodal__body">
+        <div class="vcard__meta"><span class="vcard__zone">${esc(ZONES[it.theatre] || it.theatre || '')}</span><span class="vcard__date">${esc(fmtD(it.date, true))}</span>${it.lieu ? `<span>· ${esc(it.lieu)}</span>` : ''}<span class="vcard__sev" style="position:static;color:${sev.c};border-color:${sev.c}59;background:${sev.c}14">${sev.lbl}</span></div>
+        <h3 class="vmodal__title">${esc(it.titre)}</h3>
+        <p class="vmodal__resume">${esc(it.resume || '')}</p>
+        <div class="vreport">
+          <div class="vreport__class">Note d'analyse · Accès abonné</div>
+          <div class="vreport__sec"><div class="vreport__lbl">Analyse</div><p>${esc(it.detail || it.resume || '')}</p></div>
+          ${impl.length ? `<div class="vreport__sec"><div class="vreport__lbl">Implications opérationnelles</div><ul class="vreport__ul">${impl.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+          <div class="vreport__sec"><div class="vreport__lbl">Recommandations · que faire de cette information</div>
+            ${reco.length ? `<ul class="vreport__ul">${reco.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : `<p class="vreport__muted">À partir de ce signal, nos analystes produisent sur demande une note d'impact dédiée à votre organisation : exposition, scénarios probables et mesures à prendre.</p>`}
+          </div>
+          <div class="vreport__sec"><div class="vreport__lbl">Sources et fiabilité</div>
+            <div class="vreport__srcrow">${src ? `<a href="${esc(src)}" target="_blank" rel="noopener noreferrer">${esc(it.source || 'Source')} ↗</a>` : `<span>${esc(it.source || '')}</span>`}<span class="vreport__rel">Fiabilité · ${reliability(it.source)}</span></div>
+          </div>
+          <div class="vreport__actions">
+            <a class="vreport__cta" href="/contact/">Demander un brief approfondi sur ce sujet</a>
+            <a class="vreport__map" href="/veille-carte/?focus=${encodeURIComponent(it.id)}">Voir ce signal sur la carte de veille</a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    const close = () => { el.remove(); window.removeEventListener('keydown', onKey); };
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    el.addEventListener('click', (e) => { if (e.target === el) close(); });
+    el.querySelector('.vmodal__x').addEventListener('click', close);
+    window.addEventListener('keydown', onKey);
+    document.body.appendChild(el);
+  }
+
+  async function loadGeo() {
+    try {
+      const r = await fetch(VEILLE_REMOTE, { cache: 'no-store' });
+      const d = await r.json();
+      geoItems = (Array.isArray(d) ? d : d.items || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+      if (d.updated) document.getElementById('maj').textContent = 'Fil géopolitique du ' + fmtD(String(d.updated).slice(0, 10), true);
+      renderGeo();
+    } catch (e) {
+      console.warn('[veille] géo', e);
+      document.getElementById('pane-geo').innerHTML = '<div class="err">Le fil géopolitique n’est pas disponible pour le moment.</div>';
+      document.getElementById('n-geo').textContent = '0';
+    }
+  }
+
+  /* ══════════ Cyber (OpenCTI) ══════════ */
+  const TYPE_FR = { 'Domain-Name': 'Domaines', 'Ipv4-Addr': 'Adresses IPv4', 'Ipv6-Addr': 'Adresses IPv6', Stixfile: 'Fichiers', Url: 'URL', Hostname: 'Hôtes', 'Email-Addr': 'E-mails' };
+
+  function bars(items, cls = '') {
+    if (!items?.length) return '<div class="empty">Aucune donnée sur la période.</div>';
+    const max = Math.max(...items.map((x) => x.valeur), 1);
+    return '<div class="bars">' + items.map((x, i) => `
+      <div class="bar" title="${esc(x.nom)} : ${fmtN(x.valeur)}">
+        <span class="bar__name">${esc(x.nom)}</span>
+        <span class="bar__track"><span class="bar__fill ${cls}" style="width:${(100 * x.valeur / max).toFixed(1)}%;animation-delay:${i * 40}ms"></span></span>
+        <span class="bar__val">${fmtN(x.valeur)}</span>
+      </div>`).join('') + '</div>';
+  }
+  function spark(serie) {
+    if (!serie?.length) return '<div class="empty">Aucune donnée.</div>';
+    const W = 600, H = 110, px = 8, pt = 12, pb = 22;
+    const max = Math.max(...serie.map((s) => s.valeur), 1), n = serie.length;
+    const X = (i) => px + (i * (W - 2 * px)) / Math.max(n - 1, 1), Y = (v) => pt + (H - pt - pb) * (1 - v / max);
+    const pts = serie.map((s, i) => [X(i), Y(s.valeur)]);
+    const line = pts.map(([x, y], i) => (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1)).join(' ');
+    const area = line + ` L${pts[pts.length - 1][0].toFixed(1)} ${H - pb} L${pts[0][0].toFixed(1)} ${H - pb} Z`;
+    const step = Math.ceil(n / 5);
+    const labels = serie.map((s, i) => (i % step === 0 && i <= n - 1 - step / 2) || i === n - 1
+      ? `<text x="${X(i).toFixed(1)}" y="${H - 6}" text-anchor="${i === n - 1 ? 'end' : i === 0 ? 'start' : 'middle'}">${esc(fmtD(s.date))}</text>` : '').join('');
+    const last = pts[pts.length - 1];
+    return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Rapports publiés par semaine">
+      <defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C8B0EA" stop-opacity=".32"/><stop offset="1" stop-color="#C8B0EA" stop-opacity="0"/></linearGradient></defs>
+      <path class="area" d="${area}"/><path class="line" d="${line}"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3.5"/>${labels}</svg>`;
+  }
+  function report(r) {
+    const title = safeUrl(r.url) ? `<a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${esc(r.titre)}</a>` : esc(r.titre);
+    return `<article class="rep" data-q="${esc((r.titre + ' ' + (r.etiquettes || []).join(' ') + ' ' + r.resume).toLowerCase())}">
+      <div class="rep__meta"><span>${esc(fmtD(r.date, true))}</span><span class="rep__src">${esc(r.source)}</span><span>${fmtN(r.objets)} objets liés</span></div>
+      <h3 class="rep__title">${title}</h3>
+      ${r.resume ? `<p class="rep__sum">${esc(r.resume)}</p>` : ''}
+      ${r.etiquettes?.length ? `<div class="rep__tags">${r.etiquettes.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>` : ''}
+    </article>`;
+  }
+  function cve(v) {
+    const id = /^CVE-\d{4}-\d+$/.test(v.cve) ? `<a href="https://www.cve.org/CVERecord?id=${esc(v.cve)}" target="_blank" rel="noopener noreferrer">${esc(v.cve)}</a>` : esc(v.cve);
+    return `<div class="cve"><span class="cve__score" title="Score CVSS">${(v.score ?? '').toString().replace('.', ',')}</span>
+      <div><div class="cve__id">${id}${v.kev ? '<span class="kev">Exploitée (CISA)</span>' : ''}</div><div class="cve__sum">${esc(v.resume)}</div></div>
+      <span class="cve__date">${esc(fmtD(v.date, true))}</span></div>`;
+  }
+  function renderCyber(d) {
+    const c = d.compteurs || {};
+    document.getElementById('pane-cyber').innerHTML = `
+      <section class="kpis">
+        <div class="kpi"><div class="kpi__label">Rapports</div><div class="kpi__value">${fmtN(c.rapports_90j)}<small>${d.periode_jours} j</small></div></div>
+        <div class="kpi"><div class="kpi__label">Indicateurs</div><div class="kpi__value">${fmtN(c.indicateurs)}</div></div>
+        <div class="kpi"><div class="kpi__label">Vulnérabilités</div><div class="kpi__value">${fmtN(c.vulnerabilites)}</div></div>
+        <div class="kpi"><div class="kpi__label">Acteurs</div><div class="kpi__value">${fmtN(c.acteurs)}</div></div>
+        <div class="kpi"><div class="kpi__label">Codes malveillants</div><div class="kpi__value">${fmtN(c.malwares)}</div></div>
+      </section>
+      <div class="grid">
+        <div class="col">
+          <section class="card card--sticky">
+            <div class="card__head"><h2 class="card__title">Rapports récents</h2><span class="card__hint">${fmtN((d.rapports || []).length)} derniers · OTX</span></div>
+            <input class="csearch" id="cq" type="search" placeholder="Filtrer : acteur, pays, logiciel, CVE…" autocomplete="off" value="${esc(params.get('q') || '')}">
+            <div class="reports" id="reports">${(d.rapports || []).map(report).join('') || '<div class="empty">Aucun rapport importé pour l’instant.</div>'}</div>
+          </section>
+        </div>
+        <div class="col">
+          <section class="card"><div class="card__head"><h2 class="card__title">Rapports publiés par semaine</h2><span class="card__hint">${d.periode_jours} jours</span></div>${spark(d.rapports_par_semaine)}</section>
+          <section class="card"><div class="card__head"><h2 class="card__title">Acteurs les plus actifs</h2><span class="card__hint">relations, ${d.periode_jours} j</span></div>${bars(d.acteurs_actifs)}</section>
+          <section class="card"><div class="card__head"><h2 class="card__title">Vulnérabilités critiques</h2><span class="card__hint">CVSS ≥ 9, plus récentes</span></div><div class="cves">${(d.vulnerabilites_critiques || []).slice(0, 10).map(cve).join('') || '<div class="empty">Aucune vulnérabilité critique importée.</div>'}</div></section>
+          <section class="card"><div class="card__head"><h2 class="card__title">Secteurs ciblés</h2></div>${bars(d.secteurs_cibles, 'is-alert')}</section>
+          <section class="card"><div class="card__head"><h2 class="card__title">Pays ciblés</h2></div>${bars(d.pays_cibles, 'is-alert')}</section>
+          <section class="card"><div class="card__head"><h2 class="card__title">Codes malveillants actifs</h2><span class="card__hint">${d.periode_jours} j</span></div>${bars(d.malwares_actifs)}</section>
+          <section class="card"><div class="card__head"><h2 class="card__title">Indicateurs par type</h2></div><div class="chips">${(d.indicateurs_par_type || []).map((t) => `<span class="chip">${esc(TYPE_FR[t.nom] || t.nom)} <b>${fmtN(t.valeur)}</b></span>`).join('') || '<div class="empty">Aucun indicateur.</div>'}</div></section>
+        </div>
+      </div>`;
+    const q = document.getElementById('cq');
+    const applyQ = () => { const s = q.value.trim().toLowerCase(); for (const el of document.querySelectorAll('#reports .rep')) el.hidden = !!s && !el.dataset.q.includes(s); };
+    q.addEventListener('input', applyQ); applyQ();
+    document.getElementById('reports').addEventListener('click', (e) => { const rep = e.target.closest('.rep'); if (rep && !e.target.closest('a')) rep.classList.toggle('is-open'); });
+    document.getElementById('n-cyber').textContent = fmtN(c.rapports_90j);
+    const gen = new Date(d.genere_le);
+    document.getElementById('dot').classList.toggle('is-off', (Date.now() - gen) / 36e5 > 26);
+    const maj = document.getElementById('maj');
+    maj.textContent = (maj.textContent ? maj.textContent + ' · ' : '') + 'Cyber : instantané du ' + gen.toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+  async function loadCyber() {
+    try { renderCyber(await window.algorAuth.loadZoneFile('veille-cyber/snapshot.json')); }
+    catch (e) {
+      console.warn('[veille] cyber', e);
+      document.getElementById('pane-cyber').innerHTML = '<div class="err">L’instantané cyber n’est pas disponible pour le moment. Réessayez dans quelques minutes.</div>';
+      document.getElementById('n-cyber').textContent = '0';
+    }
+  }
+
+  loadGeo();
+  loadCyber();
+</script>
+</body>
+</html>

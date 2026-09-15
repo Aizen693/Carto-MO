@@ -16,7 +16,8 @@ const ZONE_LABELS = {
   'rdc': 'RDC',
   'madagascar': 'Madagascar',
   'afrique': 'Afrique Maritime',
-  'asie-sud': 'Asie du Sud'
+  'asie-sud': 'Asie du Sud',
+  'cyber': 'Cyber'
 };
 
 // ════════════════════════════════════════════════════════════════════════
@@ -123,6 +124,156 @@ const VEILLE_SEED = [{
 function veilleZone(k) {
   return ZONE_LABELS[k] || k;
 }
+function veilleDateLong(d) {
+  try {
+    return new Date(d).toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  } catch (e) {
+    return d;
+  }
+}
+// ── Vignette carte réelle (Mapbox Static) pour les notes sans image ──
+// Le lieu de la note est géocodé côté client (cache localStorage), puis on
+// affiche un extrait de carte centré dessus. Sans lieu résolu : vue du théâtre.
+const MB_TOKEN = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+const THEATRE_GEO = {
+  'sahel': {
+    c: [1.5, 15.5],
+    z: 3.6,
+    cc: 'ML,BF,NE,TD,MR'
+  },
+  'rdc': {
+    c: [29.2, -1.9],
+    z: 5.0,
+    cc: 'CD'
+  },
+  'moyen-orient': {
+    c: [40, 31],
+    z: 3.6,
+    cc: 'IQ,SY,LB,YE'
+  },
+  'madagascar': {
+    c: [47, -19.5],
+    z: 4.2,
+    cc: 'MG'
+  },
+  'afrique': {
+    c: [30, 10],
+    z: 2.4,
+    cc: ''
+  },
+  'asie-sud': {
+    c: [70, 32],
+    z: 4.0,
+    cc: 'PK,AF,IN'
+  }
+};
+const geoMem = {};
+function geoKey(lieu, th) {
+  return 'algor-geo:' + th + ':' + lieu.toLowerCase();
+}
+function useGeo(it) {
+  const lieu = String(it.lieu || '').split(',')[0].trim();
+  const th = it.theatre;
+  const g = THEATRE_GEO[th] || THEATRE_GEO.sahel;
+  const [st, setSt] = useState(() => {
+    const la = Number(it.lat),
+      lo = Number(it.lon);
+    if (isFinite(la) && isFinite(lo) && la !== 0) return {
+      pt: [lo, la],
+      done: true
+    };
+    if (!lieu) return {
+      pt: null,
+      done: true
+    };
+    const k = geoKey(lieu, th);
+    if (geoMem[k] !== undefined) return {
+      pt: geoMem[k],
+      done: true
+    };
+    try {
+      const c = localStorage.getItem(k);
+      if (c) return {
+        pt: JSON.parse(c),
+        done: true
+      };
+    } catch (e) {}
+    return {
+      pt: null,
+      done: false
+    };
+  });
+  useEffect(() => {
+    if (st.done) return;
+    let on = true;
+    const k = geoKey(lieu, th);
+    const u = 'https://api.mapbox.com/search/geocode/v6/forward?q=' + encodeURIComponent(lieu) + (g.cc ? '&country=' + g.cc : '') + '&limit=1&access_token=' + MB_TOKEN;
+    fetch(u).then(r => r.ok ? r.json() : null).then(d => {
+      const f = d && d.features && d.features[0];
+      let c = f ? f.geometry.coordinates.slice(0, 2) : null;
+      if (c && f.properties && f.properties.feature_type === 'country') c = [c[0], c[1], 'pays'];
+      geoMem[k] = c;
+      if (c) {
+        try {
+          localStorage.setItem(k, JSON.stringify(c));
+        } catch (e) {}
+      }
+      if (on) setSt({
+        pt: c,
+        done: true
+      });
+    }).catch(() => {
+      geoMem[k] = null;
+      if (on) setSt({
+        pt: null,
+        done: true
+      });
+    });
+    return () => {
+      on = false;
+    };
+  }, [lieu, th]);
+  return {
+    pt: st.pt,
+    done: st.done,
+    g
+  };
+}
+function staticMapUrl(pt, g, w, h) {
+  const pays = pt && pt[2] === 'pays';
+  const z = pays ? 4.3 : pt ? 6.2 : g.z,
+    c = pt || g.c;
+  return 'https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/' + c[0].toFixed(4) + ',' + c[1].toFixed(4) + ',' + z + ',0/' + w + 'x' + h + '@2x?access_token=' + MB_TOKEN;
+}
+function VeilleMap({
+  it,
+  w,
+  h
+}) {
+  const {
+    pt,
+    done,
+    g
+  } = useGeo(it);
+  if (!done) return null;
+  const pays = pt && pt[2] === 'pays';
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("img", {
+    className: "vcard__map",
+    src: staticMapUrl(pt, g, w, h),
+    alt: "",
+    loading: "lazy",
+    onError: e => {
+      e.target.style.display = 'none';
+    }
+  }), pt && !pays ? /*#__PURE__*/React.createElement("span", {
+    className: "gpin gpin--center",
+    "aria-hidden": "true"
+  }) : null);
+}
 function veilleDateFR(d) {
   try {
     return new Date(d).toLocaleDateString('fr-FR', {
@@ -151,6 +302,25 @@ function reliabilityOf(s) {
   if (/rfi|guardian|\bbbc\b|france 24|le monde|trt|jazeera|figaro|ap\b/.test(s)) return 'Établie';
   return 'À recouper';
 }
+function sourceNature(it) {
+  const s = ((it.source || '') + ' ' + (it.source_url || '')).toLowerCase();
+  if (/bamada|maliweb|mali24|maliactu|malijet|studiotamani|lefaso|burkina24|sidwaya|wakatsera|actuniger|tamtaminfo|airinfo|alwihda|tchadinfos|sahara medias|radio okapi|actualite\.cd|7sur7|kivu/.test(s)) return {
+    label: 'Presse locale',
+    cls: 'local'
+  };
+  if (/\bminist|\bgouv|\bprésidence|\bpresidence|\barmée|\barmee|\bmonusco|\bonu\b|\bun\b/.test(s)) return {
+    label: 'Institutionnelle',
+    cls: 'institution'
+  };
+  if (/algor int/.test(s)) return {
+    label: 'Note d’analyste',
+    cls: 'analyst'
+  };
+  return {
+    label: 'Source ouverte',
+    cls: 'open'
+  };
+}
 function VBlock({
   v
 }) {
@@ -170,6 +340,36 @@ function useVeille() {
     }).then(r => r.ok ? r.json() : Promise.reject()).then(d => {
       const a = Array.isArray(d) ? d : d.items || [];
       if (on && a.length) setItems(a.slice().sort((x, y) => String(y.date).localeCompare(String(x.date))));
+    }).catch(() => {});
+    return () => {
+      on = false;
+    };
+  }, []);
+  return items;
+}
+// Aperçu public de la veille cyber (OpenCTI) : titres + compteurs seulement,
+// déposé toutes les heures par veille-snapshot.mjs dans le bucket public
+// veille-public. L'instantané complet (résumés, CVE, acteurs) est premium : /veille/.
+const CYBER_TEASER = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/teaser.json';
+function useVeilleCyber() {
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    let on = true;
+    fetch(CYBER_TEASER, {
+      cache: 'no-store'
+    }).then(r => r.ok ? r.json() : Promise.reject()).then(d => {
+      if (!on) return;
+      setItems((d.rapports || []).map(r => ({
+        id: 'cyber-' + r.id,
+        date: r.date,
+        theatre: 'cyber',
+        severite: 'info',
+        source: r.source || 'OTX',
+        source_url: r.url || '',
+        titre: r.titre,
+        resume: (r.etiquettes || []).join(' · '),
+        cyber: true
+      })));
     }).catch(() => {});
     return () => {
       on = false;
@@ -214,11 +414,20 @@ function useSubscriber() {
 }
 function VeilleCard({
   it,
-  onOpen
+  onOpen,
+  featured,
+  index
 }) {
   const sev = SEV[it.severite] || SEV.info;
+  // Rapport cyber (OpenCTI) : pas de carte, un bouclier sur fond nuit.
+  const nature = it.cyber ? {
+    label: 'Flux OpenCTI',
+    cls: 'cyber'
+  } : sourceNature(it);
+  // Image de la source bloquée (hotlink refusé, CORB...) : on retombe sur l'extrait de carte.
+  const [imgKo, setImgKo] = useState(false);
   return /*#__PURE__*/React.createElement("article", {
-    className: "vcard",
+    className: 'vcard' + (featured ? ' vcard--featured' : ''),
     onClick: onOpen,
     tabIndex: "0",
     onKeyDown: e => {
@@ -227,18 +436,35 @@ function VeilleCard({
   }, /*#__PURE__*/React.createElement("div", {
     className: "vcard__media",
     "data-zone": it.theatre
-  }, it.image ? /*#__PURE__*/React.createElement("img", {
+  }, it.cyber ? /*#__PURE__*/React.createElement("span", {
+    className: "vcard__cyber",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.6",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M9 12l2 2 4-4"
+  }))) : it.image && !imgKo ? /*#__PURE__*/React.createElement("img", {
     className: "vcard__img",
     src: it.image,
     alt: "",
     loading: "lazy",
-    onError: e => {
-      e.target.style.display = 'none';
-    }
-  }) : null, /*#__PURE__*/React.createElement("span", {
-    className: "vcard__grid",
-    "aria-hidden": "true"
-  }), srcLogo(it.source_url) ? /*#__PURE__*/React.createElement("img", {
+    onError: () => setImgKo(true)
+  }) : /*#__PURE__*/React.createElement(VeilleMap, {
+    it: it,
+    w: 600,
+    h: 315
+  }), featured ? /*#__PURE__*/React.createElement("span", {
+    className: "vcard__priority"
+  }, "Note prioritaire") : /*#__PURE__*/React.createElement("span", {
+    className: "vcard__no"
+  }, String(index + 1).padStart(2, '0')), srcLogo(it.source_url) ? /*#__PURE__*/React.createElement("img", {
     className: "vcard__logo",
     src: srcLogo(it.source_url),
     alt: it.source,
@@ -253,7 +479,7 @@ function VeilleCard({
       borderColor: sev.c + '59',
       background: sev.c + '14'
     }
-  }, sev.lbl)), /*#__PURE__*/React.createElement("div", {
+  }, it.cyber ? 'Cyber · OTX' : sev.lbl)), /*#__PURE__*/React.createElement("div", {
     className: "vcard__body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "vcard__meta"
@@ -261,13 +487,23 @@ function VeilleCard({
     className: "vcard__zone"
   }, veilleZone(it.theatre)), /*#__PURE__*/React.createElement("span", {
     className: "vcard__date"
-  }, veilleDateFR(it.date))), /*#__PURE__*/React.createElement("h3", {
+  }, veilleDateFR(it.date)), it.lieu ? /*#__PURE__*/React.createElement("span", {
+    className: "vcard__lieu"
+  }, it.lieu) : null, it.source ? /*#__PURE__*/React.createElement("span", {
+    className: "vcard__srcname"
+  }, it.source) : null), /*#__PURE__*/React.createElement("h3", {
     className: "vcard__title"
   }, it.titre), /*#__PURE__*/React.createElement("p", {
     className: "vcard__resume"
-  }, it.resume), /*#__PURE__*/React.createElement("span", {
+  }, it.resume), /*#__PURE__*/React.createElement("div", {
+    className: "vcard__foot"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: 'vcard__proof vcard__proof--' + nature.cls
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vcard__proof-dot"
+  }), nature.label), /*#__PURE__*/React.createElement("span", {
     className: "vcard__more"
-  }, "Lire ", /*#__PURE__*/React.createElement(Arrow, null))));
+  }, "Ouvrir la note ", /*#__PURE__*/React.createElement(Arrow, null)))));
 }
 function VeilleRow({
   it,
@@ -279,7 +515,7 @@ function VeilleRow({
     onClick: onOpen
   }, /*#__PURE__*/React.createElement("span", {
     className: "vrow__thumb"
-  }, it.image && /*#__PURE__*/React.createElement("img", {
+  }, it.image ? /*#__PURE__*/React.createElement("img", {
     src: it.image,
     alt: "",
     loading: "lazy",
@@ -287,6 +523,10 @@ function VeilleRow({
     onError: e => {
       e.target.style.display = 'none';
     }
+  }) : /*#__PURE__*/React.createElement(VeilleMap, {
+    it: it,
+    w: 172,
+    h: 128
   })), /*#__PURE__*/React.createElement("span", {
     className: "vrow__body"
   }, /*#__PURE__*/React.createElement("span", {
@@ -315,6 +555,15 @@ function VeilleModal({
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
   }, []);
+  // Le defilement inertiel (Lenis) est suspendu tant que la note est ouverte :
+  // la note defile nativement dans son cadre, la page derriere reste fixe.
+  useEffect(() => {
+    const l = window.__algorLenis;
+    if (l && l.stop) l.stop();
+    return () => {
+      if (l && l.start) l.start();
+    };
+  }, []);
   return /*#__PURE__*/React.createElement("div", {
     className: "vmodal-scrim",
     onClick: onClose
@@ -334,9 +583,10 @@ function VeilleModal({
     onError: e => {
       e.target.style.display = 'none';
     }
-  }) : null, /*#__PURE__*/React.createElement("span", {
-    className: "vcard__grid",
-    "aria-hidden": "true"
+  }) : /*#__PURE__*/React.createElement(VeilleMap, {
+    it: it,
+    w: 560,
+    h: 168
   }), srcLogo(it.source_url) ? /*#__PURE__*/React.createElement("img", {
     className: "vcard__logo",
     src: srcLogo(it.source_url),
@@ -345,14 +595,17 @@ function VeilleModal({
       e.target.style.display = 'none';
     }
   }) : null), /*#__PURE__*/React.createElement("div", {
-    className: "vmodal__body"
+    className: "vmodal__body",
+    "data-lenis-prevent": true
   }, /*#__PURE__*/React.createElement("div", {
     className: "vcard__meta"
   }, /*#__PURE__*/React.createElement("span", {
     className: "vcard__zone"
   }, veilleZone(it.theatre)), /*#__PURE__*/React.createElement("span", {
     className: "vcard__date"
-  }, veilleDateFR(it.date)), /*#__PURE__*/React.createElement("span", {
+  }, veilleDateFR(it.date)), it.lieu ? /*#__PURE__*/React.createElement("span", {
+    className: "vcard__lieu"
+  }, it.lieu) : null, /*#__PURE__*/React.createElement("span", {
     className: "vcard__sev",
     style: {
       color: sev.c,
@@ -462,6 +715,7 @@ function VeilleModal({
 }
 function VeilleSystem() {
   const items = useVeille();
+  const cyber = useVeilleCyber();
   const sub = useSubscriber();
   const [open, setOpen] = useState(false);
   const [sel, setSel] = useState(null);
@@ -474,6 +728,13 @@ function VeilleSystem() {
   });
   const latest = items.reduce((m, it) => it.date > m ? it.date : m, '');
   const unread = items.filter(it => (it.date || '') > seen).length;
+  // Aperçu mixte : 3 notes géopolitiques + 3 rapports cyber (les deux veilles en entier sur /veille/).
+  const shown = cyber.length ? [...items.slice(0, 3), ...cyber.slice(0, 3)] : items.slice(0, 6);
+  const openMix = it => {
+    if (it.cyber) window.location.href = '/veille/?onglet=cyber';else setSel(it);
+  };
+  const sources = new Set(shown.map(it => it.source).filter(Boolean)).size;
+  const theatres = new Set(shown.filter(it => !it.cyber).map(it => it.theatre).filter(Boolean)).size;
   useEffect(() => {
     if (open) {
       try {
@@ -490,26 +751,40 @@ function VeilleSystem() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "veille-sec__head"
   }, /*#__PURE__*/React.createElement(SectionHead, {
-    eyebrow: "Veille \xB7 mise \xE0 jour hebdomadaire",
-    title: "Ce que notre veille a",
-    em: "relev\xE9 cette semaine",
-    intro: "Nous consolidons en continu un flux OSINT sur nos six th\xE9\xE2tres, s\xE9lectionn\xE9, sourc\xE9 et dat\xE9. L'analyse compl\xE8te et l'archive sont r\xE9serv\xE9es aux abonn\xE9s."
+    eyebrow: 'Veille géopolitique et cyber · dernière note le ' + (latest ? veilleDateLong(latest) : '…'),
+    title: "Ce que nos veilles ont",
+    em: "relev\xE9",
+    intro: "Deux flux : l'OSINT g\xE9opolitique sur nos six th\xE9\xE2tres, s\xE9lectionn\xE9, sourc\xE9 et dat\xE9 par nos analystes, et les menaces cyber agr\xE9g\xE9es par notre plateforme OpenCTI. Les deux veilles en int\xE9gralit\xE9 sont r\xE9serv\xE9es aux abonn\xE9s."
   }), /*#__PURE__*/React.createElement("span", {
     className: "veille-live"
   }, /*#__PURE__*/React.createElement("span", {
     className: "veille-live__dot"
   }), "Veille active")), /*#__PURE__*/React.createElement("div", {
+    className: "veille-ledger",
+    "aria-label": "Synth\xE8se du fil de veille"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "veille-ledger__label"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "veille-ledger__rule"
+  }), "Derni\xE8re s\xE9lection publi\xE9e"), /*#__PURE__*/React.createElement("div", {
+    className: "veille-ledger__stats"
+  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("b", null, shown.length), " signaux"), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("b", null, sources), " sources distinctes"), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("b", null, theatres), " th\xE9\xE2tre", theatres > 1 ? 's' : ''))), /*#__PURE__*/React.createElement("div", {
     className: "veille-grid"
-  }, items.slice(0, 6).map(it => /*#__PURE__*/React.createElement(VeilleCard, {
+  }, shown.map((it, i) => /*#__PURE__*/React.createElement(VeilleCard, {
     key: it.id,
     it: it,
-    onOpen: () => setSel(it)
+    index: i,
+    featured: i === 0,
+    onOpen: () => openMix(it)
   }))), /*#__PURE__*/React.createElement("div", {
     className: "veille-sec__foot"
-  }, /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "btn--ghost-link",
+    href: "/veille/"
+  }, "Les deux veilles en int\xE9gralit\xE9 ", /*#__PURE__*/React.createElement(ArrowDiag, null)), /*#__PURE__*/React.createElement("button", {
     className: "btn--ghost-link",
     onClick: () => setOpen(true)
-  }, "Tout le fil de veille ", /*#__PURE__*/React.createElement(ArrowDiag, null))))), ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+  }, "Fil g\xE9opolitique ", /*#__PURE__*/React.createElement(ArrowDiag, null))))), ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     className: "veille-bell",
     "aria-label": "Fil de veille",
     onClick: () => setOpen(true)
@@ -545,7 +820,8 @@ function VeilleSystem() {
     onClick: () => setOpen(false),
     "aria-label": "Fermer"
   }, "\u2715")), /*#__PURE__*/React.createElement("div", {
-    className: "veille-panel__list"
+    className: "veille-panel__list",
+    "data-lenis-prevent": true
   }, items.map(it => /*#__PURE__*/React.createElement(VeilleRow, {
     key: it.id,
     it: it,
@@ -558,6 +834,15 @@ function VeilleSystem() {
     onClose: () => setSel(null)
   })), document.body));
 }
+function HeroMeta() {
+  const items = useVeille();
+  const latest = items.reduce((m, it) => it.date > m ? it.date : m, '');
+  const srcs = new Set(items.map(i => i.source).filter(Boolean)).size;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "hero__meta",
+    "aria-label": "\xC9tat de la veille"
+  }, /*#__PURE__*/React.createElement("span", null, "Derni\xE8re note ", /*#__PURE__*/React.createElement("b", null, latest ? veilleDateLong(latest) : '…')), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("b", null, items.length), " notes publi\xE9es"), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("b", null, srcs), " sources cit\xE9es"), /*#__PURE__*/React.createElement("span", null, "Cotation ", /*#__PURE__*/React.createElement("b", null, "A \xE0 F \xB7 1 \xE0 6")));
+}
 function HomeView({
   onEnter,
   onConsole,
@@ -566,31 +851,41 @@ function HomeView({
 }) {
   // Abonné connecté OU aperçu forcé (?apercu=1) → vue outil (pas la démo).
   const sub = useSubscriber() || /[?&]apercu=1/.test(window.location.search);
+  // Ciel étoilé « galaxie » (14/09) : hero noir fidèle à la référence Astra par défaut
+  // (globe encre, header transparent, galaxie blanche) ; ?ciel=clair = hero blanc.
+  const cielNuit = !/[?&]ciel=clair/.test(window.location.search);
+  // Mouvement (Lenis + GSAP ScrollTrigger, WebGL) : monte apres le rendu, demonte avec la vue.
+  useEffect(() => {
+    let m = null;
+    const id = requestAnimationFrame(() => {
+      m = window.AlgorMotion ? window.AlgorMotion.mount() : null;
+    });
+    return () => {
+      cancelAnimationFrame(id);
+      if (m) m.revert();
+    };
+  }, []);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("main", {
     className: "view-enter view-enter-active"
   }, /*#__PURE__*/React.createElement("section", {
-    className: "hero"
+    className: 'hero hero--night' + (cielNuit ? '' : ' hero--sky')
   }, /*#__PURE__*/React.createElement("div", {
+    className: "hero__night-bg",
+    "aria-hidden": "true"
+  }), /*#__PURE__*/React.createElement("div", {
     className: "hero__copy"
-  }, /*#__PURE__*/React.createElement("h1", {
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "hero__kicker"
+  }, "Cartographie s\xE9curitaire"), /*#__PURE__*/React.createElement("h1", {
     className: "hero__title"
   }, "Anticiper les risques", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("em", null, "op\xE9rationnels")), /*#__PURE__*/React.createElement("p", {
     className: "hero__lede"
   }, "Th\xE9\xE2tres g\xE9opolitiques suivis en continu pour les directions s\xFBret\xE9, cabinets d'analyse et r\xE9dactions sp\xE9cialis\xE9es. Solution souveraine fran\xE7aise, vos donn\xE9es h\xE9berg\xE9es en Europe : chaque \xE9v\xE9nement sourc\xE9, dat\xE9 et auditable."), /*#__PURE__*/React.createElement("div", {
     className: "hero__cta-row"
   }, /*#__PURE__*/React.createElement("a", {
-    className: "btn btn--primary btn--lg btn--neon",
+    className: "btn btn--night btn--lg",
     href: "/theatres/"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "btn-neon btn-neon--top",
-    "aria-hidden": "true"
-  }), "D\xE9couvrir les th\xE9\xE2tres", /*#__PURE__*/React.createElement(Arrow, null), /*#__PURE__*/React.createElement("span", {
-    className: "btn-neon btn-neon--bottom",
-    "aria-hidden": "true"
-  })), /*#__PURE__*/React.createElement("a", {
-    className: "btn--ghost-link",
-    href: "/offres/"
-  }, "Voir les offres", /*#__PURE__*/React.createElement(ArrowDiag, null))), /*#__PURE__*/React.createElement("div", {
+  }, "D\xE9couvrir les th\xE9\xE2tres", /*#__PURE__*/React.createElement(Arrow, null))), /*#__PURE__*/React.createElement("div", {
     className: "hero__demo"
   }, /*#__PURE__*/React.createElement("svg", {
     width: "16",
@@ -610,11 +905,26 @@ function HomeView({
     y1: "21",
     x2: "16.65",
     y2: "16.65"
-  })), sub ? /*#__PURE__*/React.createElement("span", null, "Indiquez ", /*#__PURE__*/React.createElement("strong", null, "un pays suivi"), " dans la barre sous le globe pour ouvrir sa carte de renseignement : \xE9v\xE9nements, acteurs et dates, filtrables.") : /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : indiquez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, sous le globe.", /*#__PURE__*/React.createElement("em", {
-    className: "hero__demo-warn"
-  }, "Donn\xE9es fictives, \xE0 titre d'illustration du rendu de nos cartes.")))), /*#__PURE__*/React.createElement("div", {
+  })), sub ? /*#__PURE__*/React.createElement("span", null, "Indiquez ", /*#__PURE__*/React.createElement("strong", null, "un pays suivi"), " dans la barre sous le globe pour ouvrir sa carte de renseignement : \xE9v\xE9nements, acteurs et dates, filtrables.") : /*#__PURE__*/React.createElement("span", null, "Essayez la d\xE9mo : indiquez ", /*#__PURE__*/React.createElement("strong", null, "n'importe quelle ville, r\xE9gion ou pays du monde"), " dans la barre de recherche, sous le globe. Vous verrez le rendu de nos cartes sur des donn\xE9es fictives."))), /*#__PURE__*/React.createElement("div", {
     className: "hero__visual"
-  }, /*#__PURE__*/React.createElement(Globe, null))), /*#__PURE__*/React.createElement(VeilleSystem, null), /*#__PURE__*/React.createElement(GetSection, null), /*#__PURE__*/React.createElement(DiffSection, null), /*#__PURE__*/React.createElement(AudienceSection, null), /*#__PURE__*/React.createElement(CompareSection, null)), /*#__PURE__*/React.createElement(SiteFooter, null));
+  }, /*#__PURE__*/React.createElement(Globe, null)), /*#__PURE__*/React.createElement("a", {
+    className: "hero__scroll",
+    href: "#veille",
+    "data-scroll": true,
+    "aria-label": "D\xE9filer vers la veille"
+  }, /*#__PURE__*/React.createElement("span", null, "D\xE9filer pour explorer"), /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 5v14M5 12l7 7 7-7"
+  })))), /*#__PURE__*/React.createElement(VeilleSystem, null), /*#__PURE__*/React.createElement(TheatresSection, null), /*#__PURE__*/React.createElement(MethodeSection, null), /*#__PURE__*/React.createElement(ExtraitSection, null), /*#__PURE__*/React.createElement(FinalCta, null)), /*#__PURE__*/React.createElement(SiteFooter, null));
 }
 
 // ─── Pied de page — sobre, dans la DA client (violet/blanc/Jakarta).
@@ -637,7 +947,7 @@ function SiteFooter() {
     className: "site-footer__brand"
   }, /*#__PURE__*/React.createElement("div", {
     className: "brand__name"
-  }, "ALGOR INT"), /*#__PURE__*/React.createElement("p", {
+  }, "Algor Access"), /*#__PURE__*/React.createElement("p", {
     className: "site-footer__tag"
   }, "Renseignement g\xE9opolitique. Six th\xE9\xE2tres \xE0 risque suivis en continu, chaque \xE9v\xE9nement sourc\xE9, dat\xE9 et auditable.")), /*#__PURE__*/React.createElement("nav", {
     className: "site-footer__cols",
@@ -1528,6 +1838,16 @@ function ConsoleView({
       cx: "12",
       cy: "12",
       r: "3"
+    }))
+  }), /*#__PURE__*/React.createElement(ConsoleTab, {
+    href: "/veille/",
+    label: "Veilles",
+    popTitle: "Veilles abonn\xE9s",
+    popText: "Les deux veilles en int\xE9gralit\xE9 : g\xE9opolitique (notes d'analyse sur les six th\xE9\xE2tres) et cyber (OpenCTI : acteurs, codes malveillants, vuln\xE9rabilit\xE9s, rapports OTX). Page r\xE9serv\xE9e aux abonn\xE9s premium.",
+    icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+      d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M9 12l2 2 4-4"
     }))
   }), /*#__PURE__*/React.createElement(ConsoleTab, {
     href: "/cloud/",

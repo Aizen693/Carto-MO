@@ -12,6 +12,7 @@ const ZONE_LABELS = {
   'madagascar': 'Madagascar',
   'afrique': 'Afrique Maritime',
   'asie-sud': 'Asie du Sud',
+  'cyber': 'Cyber',
 };
 
 // ════════════════════════════════════════════════════════════════════════
@@ -61,6 +62,58 @@ const VEILLE_SEED = [
 ];
 
 function veilleZone(k){ return ZONE_LABELS[k] || k; }
+function veilleDateLong(d){ try { return new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}); } catch(e){ return d; } }
+// ── Vignette carte réelle (Mapbox Static) pour les notes sans image ──
+// Le lieu de la note est géocodé côté client (cache localStorage), puis on
+// affiche un extrait de carte centré dessus. Sans lieu résolu : vue du théâtre.
+const MB_TOKEN = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+const THEATRE_GEO = {
+  'sahel':        { c:[1.5,15.5],  z:3.6, cc:'ML,BF,NE,TD,MR' },
+  'rdc':          { c:[29.2,-1.9], z:5.0, cc:'CD' },
+  'moyen-orient': { c:[40,31],     z:3.6, cc:'IQ,SY,LB,YE' },
+  'madagascar':   { c:[47,-19.5],  z:4.2, cc:'MG' },
+  'afrique':      { c:[30,10],     z:2.4, cc:'' },
+  'asie-sud':     { c:[70,32],     z:4.0, cc:'PK,AF,IN' },
+};
+const geoMem = {};
+function geoKey(lieu, th){ return 'algor-geo:' + th + ':' + lieu.toLowerCase(); }
+function useGeo(it){
+  const lieu = String(it.lieu || '').split(',')[0].trim();
+  const th = it.theatre; const g = THEATRE_GEO[th] || THEATRE_GEO.sahel;
+  const [st, setSt] = useState(() => {
+    const la = Number(it.lat), lo = Number(it.lon);
+    if (isFinite(la) && isFinite(lo) && la !== 0) return { pt:[lo,la], done:true };
+    if (!lieu) return { pt:null, done:true };
+    const k = geoKey(lieu, th);
+    if (geoMem[k] !== undefined) return { pt:geoMem[k], done:true };
+    try { const c = localStorage.getItem(k); if (c) return { pt:JSON.parse(c), done:true }; } catch(e){}
+    return { pt:null, done:false };
+  });
+  useEffect(() => { if (st.done) return; let on = true; const k = geoKey(lieu, th);
+    const u = 'https://api.mapbox.com/search/geocode/v6/forward?q=' + encodeURIComponent(lieu) + (g.cc ? '&country=' + g.cc : '') + '&limit=1&access_token=' + MB_TOKEN;
+    fetch(u).then(r => r.ok ? r.json() : null).then(d => {
+      const f = d && d.features && d.features[0]; let c = f ? f.geometry.coordinates.slice(0,2) : null;
+      if (c && f.properties && f.properties.feature_type === 'country') c = [c[0], c[1], 'pays'];
+      geoMem[k] = c; if (c) { try { localStorage.setItem(k, JSON.stringify(c)); } catch(e){} }
+      if (on) setSt({ pt:c, done:true });
+    }).catch(() => { geoMem[k] = null; if (on) setSt({ pt:null, done:true }); });
+    return () => { on = false; }; }, [lieu, th]);
+  return { pt: st.pt, done: st.done, g };
+}
+function staticMapUrl(pt, g, w, h){
+  const pays = pt && pt[2] === 'pays';
+  const z = pays ? 4.3 : (pt ? 6.2 : g.z), c = pt || g.c;
+  return 'https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/' + c[0].toFixed(4) + ',' + c[1].toFixed(4) + ',' + z + ',0/' + w + 'x' + h + '@2x?access_token=' + MB_TOKEN;
+}
+function VeilleMap({ it, w, h }){
+  const { pt, done, g } = useGeo(it);
+  if (!done) return null;
+  const pays = pt && pt[2] === 'pays';
+  return (<>
+    <img className="vcard__map" src={staticMapUrl(pt, g, w, h)} alt="" loading="lazy" onError={(e)=>{ e.target.style.display='none'; }} />
+    {pt && !pays ? <span className="gpin gpin--center" aria-hidden="true" /> : null}
+  </>);
+}
 function veilleDateFR(d){ try { return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}); } catch(e){ return d; } }
 function srcLogo(url){ try { return 'https://www.google.com/s2/favicons?domain=' + new URL(url).hostname + '&sz=128'; } catch(e){ return null; } }
 // Securite : n'autorise que les URL http(s) dans un href (bloque javascript:/data: venant du flux veille)
@@ -69,6 +122,13 @@ function reliabilityOf(s){ s = (s||'').toLowerCase();
   if (/acled|isw|bellingcat|kivu|reuters|afp|crisis|hrw|amnesty|\bonu\b|\bun\b|imb|janes/.test(s)) return 'Élevée';
   if (/rfi|guardian|\bbbc\b|france 24|le monde|trt|jazeera|figaro|ap\b/.test(s)) return 'Établie';
   return 'À recouper'; }
+function sourceNature(it){
+  const s = ((it.source || '') + ' ' + (it.source_url || '')).toLowerCase();
+  if (/bamada|maliweb|mali24|maliactu|malijet|studiotamani|lefaso|burkina24|sidwaya|wakatsera|actuniger|tamtaminfo|airinfo|alwihda|tchadinfos|sahara medias|radio okapi|actualite\.cd|7sur7|kivu/.test(s)) return { label:'Presse locale', cls:'local' };
+  if (/\bminist|\bgouv|\bprésidence|\bpresidence|\barmée|\barmee|\bmonusco|\bonu\b|\bun\b/.test(s)) return { label:'Institutionnelle', cls:'institution' };
+  if (/algor int/.test(s)) return { label:'Note d’analyste', cls:'analyst' };
+  return { label:'Source ouverte', cls:'open' };
+}
 function VBlock({ v }){
   if (Array.isArray(v) && v.length) return (<ul className="vreport__ul">{v.map((x,i)=>(<li key={i}>{x}</li>))}</ul>);
   return <p>{Array.isArray(v) ? v.join(' ') : v}</p>;
@@ -79,6 +139,21 @@ function useVeille(){
   useEffect(()=>{ let on=true;
     fetch(VEILLE_REMOTE,{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject())
       .then(d=>{ const a=Array.isArray(d)?d:(d.items||[]); if(on&&a.length) setItems(a.slice().sort((x,y)=>String(y.date).localeCompare(String(x.date)))); })
+      .catch(()=>{});
+    return ()=>{on=false;};
+  },[]);
+  return items;
+}
+// Aperçu public de la veille cyber (OpenCTI) : titres + compteurs seulement,
+// déposé toutes les heures par veille-snapshot.mjs dans le bucket public
+// veille-public. L'instantané complet (résumés, CVE, acteurs) est premium : /veille/.
+const CYBER_TEASER = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/teaser.json';
+function useVeilleCyber(){
+  const [items,setItems]=useState([]);
+  useEffect(()=>{ let on=true;
+    fetch(CYBER_TEASER,{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject())
+      .then(d=>{ if(!on) return; setItems((d.rapports||[]).map(r=>({ id:'cyber-'+r.id, date:r.date, theatre:'cyber', severite:'info',
+        source:r.source||'OTX', source_url:r.url||'', titre:r.titre, resume:(r.etiquettes||[]).join(' · '), cyber:true }))); })
       .catch(()=>{});
     return ()=>{on=false;};
   },[]);
@@ -103,21 +178,30 @@ function useSubscriber(){
   return sub;
 }
 
-function VeilleCard({ it, onOpen }){
+function VeilleCard({ it, onOpen, featured, index }){
   const sev = SEV[it.severite] || SEV.info;
+  // Rapport cyber (OpenCTI) : pas de carte, un bouclier sur fond nuit.
+  const nature = it.cyber ? { label:'Flux OpenCTI', cls:'cyber' } : sourceNature(it);
+  // Image de la source bloquée (hotlink refusé, CORB...) : on retombe sur l'extrait de carte.
+  const [imgKo, setImgKo] = useState(false);
   return (
-    <article className="vcard" onClick={onOpen} tabIndex="0" onKeyDown={(e)=>{ if(e.key==='Enter') onOpen(); }}>
+    <article className={'vcard' + (featured ? ' vcard--featured' : '')} onClick={onOpen} tabIndex="0" onKeyDown={(e)=>{ if(e.key==='Enter') onOpen(); }}>
       <div className="vcard__media" data-zone={it.theatre}>
-        {it.image ? <img className="vcard__img" src={it.image} alt="" loading="lazy" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
-        <span className="vcard__grid" aria-hidden="true" />
+        {it.cyber
+          ? <span className="vcard__cyber" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg></span>
+          : (it.image && !imgKo ? <img className="vcard__img" src={it.image} alt="" loading="lazy" onError={()=>setImgKo(true)} /> : <VeilleMap it={it} w={600} h={315} />)}
+        {featured ? <span className="vcard__priority">Note prioritaire</span> : <span className="vcard__no">{String(index + 1).padStart(2,'0')}</span>}
         {srcLogo(it.source_url) ? <img className="vcard__logo" src={srcLogo(it.source_url)} alt={it.source} loading="lazy" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
-        <span className="vcard__sev" style={{ color: sev.c, borderColor: sev.c+'59', background: sev.c+'14' }}>{sev.lbl}</span>
+        <span className="vcard__sev" style={{ color: sev.c, borderColor: sev.c+'59', background: sev.c+'14' }}>{it.cyber ? 'Cyber · OTX' : sev.lbl}</span>
       </div>
       <div className="vcard__body">
-        <div className="vcard__meta"><span className="vcard__zone">{veilleZone(it.theatre)}</span><span className="vcard__date">{veilleDateFR(it.date)}</span></div>
+        <div className="vcard__meta"><span className="vcard__zone">{veilleZone(it.theatre)}</span><span className="vcard__date">{veilleDateFR(it.date)}</span>{it.lieu ? <span className="vcard__lieu">{it.lieu}</span> : null}{it.source ? <span className="vcard__srcname">{it.source}</span> : null}</div>
         <h3 className="vcard__title">{it.titre}</h3>
         <p className="vcard__resume">{it.resume}</p>
-        <span className="vcard__more">Lire <Arrow /></span>
+        <div className="vcard__foot">
+          <span className={'vcard__proof vcard__proof--' + nature.cls}><span className="vcard__proof-dot" />{nature.label}</span>
+          <span className="vcard__more">Ouvrir la note <Arrow /></span>
+        </div>
       </div>
     </article>
   );
@@ -127,8 +211,8 @@ function VeilleRow({ it, onOpen }){
   return (
     <button className="vrow" onClick={onOpen}>
       <span className="vrow__thumb">
-        {it.image && <img src={it.image} alt="" loading="lazy" referrerPolicy="no-referrer"
-          onError={(e)=>{ e.target.style.display='none'; }} />}
+        {it.image ? <img src={it.image} alt="" loading="lazy" referrerPolicy="no-referrer"
+          onError={(e)=>{ e.target.style.display='none'; }} /> : <VeilleMap it={it} w={172} h={128} />}
       </span>
       <span className="vrow__body">
         <span className="vrow__meta"><span className="vrow__dot" style={{ background: sev.c }} />{veilleZone(it.theatre)} · {veilleDateFR(it.date)} · {it.source}</span>
@@ -141,19 +225,22 @@ function VeilleRow({ it, onOpen }){
 function VeilleModal({ it, sub, onClose }){
   const sev = SEV[it.severite] || SEV.info;
   useEffect(()=>{ const h=(e)=>{ if(e.key==='Escape') onClose(); }; window.addEventListener('keydown',h); return ()=>window.removeEventListener('keydown',h); },[]);
+  // Le defilement inertiel (Lenis) est suspendu tant que la note est ouverte :
+  // la note defile nativement dans son cadre, la page derriere reste fixe.
+  useEffect(()=>{ const l = window.__algorLenis; if (l && l.stop) l.stop(); return ()=>{ if (l && l.start) l.start(); }; },[]);
   return (
     <div className="vmodal-scrim" onClick={onClose}>
       <div className="vmodal" onClick={(e)=>e.stopPropagation()}>
         <button className="vmodal__x" onClick={onClose} aria-label="Fermer">✕</button>
         <div className="vmodal__media" data-zone={it.theatre}>
-          {it.image ? <img src={it.image} alt="" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
-          <span className="vcard__grid" aria-hidden="true" />
+          {it.image ? <img src={it.image} alt="" onError={(e)=>{ e.target.style.display='none'; }} /> : <VeilleMap it={it} w={560} h={168} />}
           {srcLogo(it.source_url) ? <img className="vcard__logo" src={srcLogo(it.source_url)} alt={it.source} onError={(e)=>{ e.target.style.display='none'; }} /> : null}
         </div>
-        <div className="vmodal__body">
+        <div className="vmodal__body" data-lenis-prevent>
           <div className="vcard__meta">
             <span className="vcard__zone">{veilleZone(it.theatre)}</span>
             <span className="vcard__date">{veilleDateFR(it.date)}</span>
+            {it.lieu ? <span className="vcard__lieu">{it.lieu}</span> : null}
             <span className="vcard__sev" style={{ color: sev.c, borderColor: sev.c+'59', background: sev.c+'14' }}>{sev.lbl}</span>
           </div>
           <h3 className="vmodal__title">{it.titre}</h3>
@@ -218,12 +305,18 @@ function VeilleModal({ it, sub, onClose }){
 
 function VeilleSystem(){
   const items = useVeille();
+  const cyber = useVeilleCyber();
   const sub = useSubscriber();
   const [open, setOpen] = useState(false);
   const [sel, setSel] = useState(null);
   const [seen, setSeen] = useState(()=>{ try { return localStorage.getItem('algor-veille-seen') || ''; } catch(e){ return ''; } });
   const latest = items.reduce((m,it)=> (it.date > m ? it.date : m), '');
   const unread = items.filter(it => (it.date||'') > seen).length;
+  // Aperçu mixte : 3 notes géopolitiques + 3 rapports cyber (les deux veilles en entier sur /veille/).
+  const shown = cyber.length ? [...items.slice(0,3), ...cyber.slice(0,3)] : items.slice(0,6);
+  const openMix = (it) => { if (it.cyber) window.location.href = '/veille/?onglet=cyber'; else setSel(it); };
+  const sources = new Set(shown.map((it)=>it.source).filter(Boolean)).size;
+  const theatres = new Set(shown.filter((it)=>!it.cyber).map((it)=>it.theatre).filter(Boolean)).size;
   useEffect(()=>{ if(open){ try{ localStorage.setItem('algor-veille-seen', latest); }catch(e){} setSeen(latest); } },[open, latest]);
 
   return (
@@ -231,16 +324,25 @@ function VeilleSystem(){
       <section className="home-sec veille-sec" id="veille">
         <div className="home-sec__wrap">
           <div className="veille-sec__head">
-            <SectionHead eyebrow="Veille · mise à jour hebdomadaire"
-              title="Ce que notre veille a" em="relevé cette semaine"
-              intro="Nous consolidons en continu un flux OSINT sur nos six théâtres, sélectionné, sourcé et daté. L'analyse complète et l'archive sont réservées aux abonnés." />
+            <SectionHead eyebrow={'Veille géopolitique et cyber · dernière note le ' + (latest ? veilleDateLong(latest) : '…')}
+              title="Ce que nos veilles ont" em="relevé"
+              intro="Deux flux : l'OSINT géopolitique sur nos six théâtres, sélectionné, sourcé et daté par nos analystes, et les menaces cyber agrégées par notre plateforme OpenCTI. Les deux veilles en intégralité sont réservées aux abonnés." />
             <span className="veille-live"><span className="veille-live__dot" />Veille active</span>
           </div>
+          <div className="veille-ledger" aria-label="Synthèse du fil de veille">
+            <div className="veille-ledger__label"><span className="veille-ledger__rule" />Dernière sélection publiée</div>
+            <div className="veille-ledger__stats">
+              <span><b>{shown.length}</b> signaux</span>
+              <span><b>{sources}</b> sources distinctes</span>
+              <span><b>{theatres}</b> théâtre{theatres > 1 ? 's' : ''}</span>
+            </div>
+          </div>
           <div className="veille-grid">
-            {items.slice(0,6).map(it => <VeilleCard key={it.id} it={it} onOpen={()=>setSel(it)} />)}
+            {shown.map((it,i) => <VeilleCard key={it.id} it={it} index={i} featured={i===0} onOpen={()=>openMix(it)} />)}
           </div>
           <div className="veille-sec__foot">
-            <button className="btn--ghost-link" onClick={()=>setOpen(true)}>Tout le fil de veille <ArrowDiag /></button>
+            <a className="btn--ghost-link" href="/veille/">Les deux veilles en intégralité <ArrowDiag /></a>
+            <button className="btn--ghost-link" onClick={()=>setOpen(true)}>Fil géopolitique <ArrowDiag /></button>
           </div>
         </div>
       </section>
@@ -258,7 +360,7 @@ function VeilleSystem(){
           <div><div className="veille-panel__t">Fil de veille</div><div className="veille-panel__s">OSINT · six théâtres</div></div>
           <button className="veille-panel__x" onClick={()=>setOpen(false)} aria-label="Fermer">✕</button>
         </div>
-        <div className="veille-panel__list">
+        <div className="veille-panel__list" data-lenis-prevent>
           {items.map(it => <VeilleRow key={it.id} it={it} onOpen={()=>setSel(it)} />)}
         </div>
         <div className="veille-panel__foot">Veille alimentée en continu. Analyse complète réservée aux abonnés.</div>
@@ -272,14 +374,38 @@ function VeilleSystem(){
   );
 }
 
+function HeroMeta(){
+  const items = useVeille();
+  const latest = items.reduce((m,it)=> (it.date > m ? it.date : m), '');
+  const srcs = new Set(items.map(i => i.source).filter(Boolean)).size;
+  return (
+    <div className="hero__meta" aria-label="État de la veille">
+      <span>Dernière note <b>{latest ? veilleDateLong(latest) : '…'}</b></span>
+      <span><b>{items.length}</b> notes publiées</span>
+      <span><b>{srcs}</b> sources citées</span>
+      <span>Cotation <b>A à F · 1 à 6</b></span>
+    </div>
+  );
+}
 function HomeView({ onEnter, onConsole, clock, videoStyle }) {
   // Abonné connecté OU aperçu forcé (?apercu=1) → vue outil (pas la démo).
   const sub = useSubscriber() || /[?&]apercu=1/.test(window.location.search);
+  // Ciel étoilé « galaxie » (14/09) : hero noir fidèle à la référence Astra par défaut
+  // (globe encre, header transparent, galaxie blanche) ; ?ciel=clair = hero blanc.
+  const cielNuit = !/[?&]ciel=clair/.test(window.location.search);
+  // Mouvement (Lenis + GSAP ScrollTrigger, WebGL) : monte apres le rendu, demonte avec la vue.
+  useEffect(() => {
+    let m = null;
+    const id = requestAnimationFrame(() => { m = window.AlgorMotion ? window.AlgorMotion.mount() : null; });
+    return () => { cancelAnimationFrame(id); if (m) m.revert(); };
+  }, []);
   return (
     <>
     <main className="view-enter view-enter-active">
-      <section className="hero">
+      <section className={'hero hero--night' + (cielNuit ? '' : ' hero--sky')}>
+        <div className="hero__night-bg" aria-hidden="true" />
         <div className="hero__copy">
+          <p className="hero__kicker">Cartographie sécuritaire</p>
           <h1 className="hero__title">
             Anticiper les risques<br />
             <em>opérationnels</em>
@@ -290,15 +416,9 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
           </p>
 
           <div className="hero__cta-row">
-            <a className="btn btn--primary btn--lg btn--neon" href="/theatres/">
-              <span className="btn-neon btn-neon--top" aria-hidden="true" />
+            <a className="btn btn--night btn--lg" href="/theatres/">
               Découvrir les théâtres
               <Arrow />
-              <span className="btn-neon btn-neon--bottom" aria-hidden="true" />
-            </a>
-            <a className="btn--ghost-link" href="/offres/">
-              Voir les offres
-              <ArrowDiag />
             </a>
           </div>
 
@@ -310,9 +430,7 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
             {sub ? (
               <span>Indiquez <strong>un pays suivi</strong> dans la barre sous le globe pour ouvrir sa carte de renseignement : événements, acteurs et dates, filtrables.</span>
             ) : (
-              <span>Essayez la démo : indiquez <strong>n'importe quelle ville, région ou pays du monde</strong> dans la barre de recherche, sous le globe.
-                <em className="hero__demo-warn">Données fictives, à titre d'illustration du rendu de nos cartes.</em>
-              </span>
+              <span>Essayez la démo : indiquez <strong>n'importe quelle ville, région ou pays du monde</strong> dans la barre de recherche, sous le globe. Vous verrez le rendu de nos cartes sur des données fictives.</span>
             )}
           </div>
         </div>
@@ -320,13 +438,17 @@ function HomeView({ onEnter, onConsole, clock, videoStyle }) {
         <div className="hero__visual">
           <Globe />
         </div>
+        <a className="hero__scroll" href="#veille" data-scroll aria-label="Défiler vers la veille">
+          <span>Défiler pour explorer</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </a>
       </section>
 
       <VeilleSystem />
-      <GetSection />
-      <DiffSection />
-      <AudienceSection />
-      <CompareSection />
+      <TheatresSection />
+      <MethodeSection />
+      <ExtraitSection />
+      <FinalCta />
     </main>
     <SiteFooter />
     </>
@@ -361,7 +483,7 @@ function SiteFooter() {
     <footer className="site-footer">
       <div className="site-footer__wrap">
         <div className="site-footer__brand">
-          <div className="brand__name">ALGOR INT</div>
+          <div className="brand__name">Algor Access</div>
           <p className="site-footer__tag">
             Renseignement géopolitique. Six théâtres à risque suivis en continu, chaque événement sourcé, daté et auditable.
           </p>
@@ -925,6 +1047,13 @@ function ConsoleView({ onBack, onArchives, onVeille, onComptes, onRapports }) {
             popTitle="Veille"
             popText="Agregateur d'articles OSINT : chargement, filtres, scoring et exports. Outil de veille interne."
             icon={<><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" /></>}
+          />
+          <ConsoleTab
+            href="/veille/"
+            label="Veilles"
+            popTitle="Veilles abonnés"
+            popText="Les deux veilles en intégralité : géopolitique (notes d'analyse sur les six théâtres) et cyber (OpenCTI : acteurs, codes malveillants, vulnérabilités, rapports OTX). Page réservée aux abonnés premium."
+            icon={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></>}
           />
           <ConsoleTab
             href="/cloud/"
