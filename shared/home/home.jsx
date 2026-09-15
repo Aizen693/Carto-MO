@@ -12,6 +12,7 @@ const ZONE_LABELS = {
   'madagascar': 'Madagascar',
   'afrique': 'Afrique Maritime',
   'asie-sud': 'Asie du Sud',
+  'cyber': 'Cyber',
 };
 
 // ════════════════════════════════════════════════════════════════════════
@@ -84,6 +85,21 @@ function useVeille(){
   },[]);
   return items;
 }
+// Aperçu public de la veille cyber (OpenCTI) : titres + compteurs seulement,
+// déposé toutes les heures par veille-snapshot.mjs dans le bucket public
+// veille-public. L'instantané complet (résumés, CVE, acteurs) est premium : /veille/.
+const CYBER_TEASER = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/teaser.json';
+function useVeilleCyber(){
+  const [items,setItems]=useState([]);
+  useEffect(()=>{ let on=true;
+    fetch(CYBER_TEASER,{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject())
+      .then(d=>{ if(!on) return; setItems((d.rapports||[]).map(r=>({ id:'cyber-'+r.id, date:r.date, theatre:'cyber', severite:'info',
+        source:r.source||'OTX', source_url:r.url||'', titre:r.titre, resume:(r.etiquettes||[]).join(' · '), cyber:true }))); })
+      .catch(()=>{});
+    return ()=>{on=false;};
+  },[]);
+  return items;
+}
 function useSubscriber(){
   // Connecte = acces complet aux notes d'analyse. La detection s'aligne sur
   // site-auth.js : etat initial (window.algorAuthState) + evenement de session
@@ -110,8 +126,9 @@ function VeilleCard({ it, onOpen }){
       <div className="vcard__media" data-zone={it.theatre}>
         {it.image ? <img className="vcard__img" src={it.image} alt="" loading="lazy" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
         <span className="vcard__grid" aria-hidden="true" />
+        {it.cyber && <span className="vcard__cyber" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg></span>}
         {srcLogo(it.source_url) ? <img className="vcard__logo" src={srcLogo(it.source_url)} alt={it.source} loading="lazy" onError={(e)=>{ e.target.style.display='none'; }} /> : null}
-        <span className="vcard__sev" style={{ color: sev.c, borderColor: sev.c+'59', background: sev.c+'14' }}>{sev.lbl}</span>
+        <span className="vcard__sev" style={{ color: sev.c, borderColor: sev.c+'59', background: sev.c+'14' }}>{it.cyber ? 'Cyber · OTX' : sev.lbl}</span>
       </div>
       <div className="vcard__body">
         <div className="vcard__meta"><span className="vcard__zone">{veilleZone(it.theatre)}</span><span className="vcard__date">{veilleDateFR(it.date)}</span></div>
@@ -218,7 +235,11 @@ function VeilleModal({ it, sub, onClose }){
 
 function VeilleSystem(){
   const items = useVeille();
+  const cyber = useVeilleCyber();
   const sub = useSubscriber();
+  // Aperçu mixte : 3 notes géopolitiques + 3 rapports cyber (les deux veilles en entier sur /veille/).
+  const mix = cyber.length ? [...items.slice(0,3), ...cyber.slice(0,3)] : items.slice(0,6);
+  const openMix = (it) => { if (it.cyber) window.location.href = '/veille/?onglet=cyber'; else setSel(it); };
   const [open, setOpen] = useState(false);
   const [sel, setSel] = useState(null);
   const [seen, setSeen] = useState(()=>{ try { return localStorage.getItem('algor-veille-seen') || ''; } catch(e){ return ''; } });
@@ -231,16 +252,17 @@ function VeilleSystem(){
       <section className="home-sec veille-sec" id="veille">
         <div className="home-sec__wrap">
           <div className="veille-sec__head">
-            <SectionHead eyebrow="Veille · mise à jour hebdomadaire"
-              title="Ce que notre veille a" em="relevé cette semaine"
-              intro="Nous consolidons en continu un flux OSINT sur nos six théâtres, sélectionné, sourcé et daté. L'analyse complète et l'archive sont réservées aux abonnés." />
+            <SectionHead eyebrow="Veille géopolitique et cyber · mise à jour continue"
+              title="Ce que nos veilles ont" em="relevé cette semaine"
+              intro="Deux flux : l'OSINT géopolitique sur nos six théâtres, sélectionné, sourcé et daté par nos analystes, et les menaces cyber agrégées par notre plateforme OpenCTI. Les deux veilles en intégralité sont réservées aux abonnés." />
             <span className="veille-live"><span className="veille-live__dot" />Veille active</span>
           </div>
           <div className="veille-grid">
-            {items.slice(0,6).map(it => <VeilleCard key={it.id} it={it} onOpen={()=>setSel(it)} />)}
+            {mix.map(it => <VeilleCard key={it.id} it={it} onOpen={()=>openMix(it)} />)}
           </div>
           <div className="veille-sec__foot">
-            <button className="btn--ghost-link" onClick={()=>setOpen(true)}>Tout le fil de veille <ArrowDiag /></button>
+            <a className="btn--ghost-link" href="/veille/">Les deux veilles en intégralité <ArrowDiag /></a>
+            <button className="btn--ghost-link" onClick={()=>setOpen(true)}>Fil géopolitique <ArrowDiag /></button>
           </div>
         </div>
       </section>
@@ -927,10 +949,10 @@ function ConsoleView({ onBack, onArchives, onVeille, onComptes, onRapports }) {
             icon={<><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" /></>}
           />
           <ConsoleTab
-            href="/veille-cyber/"
-            label="Veille cyber"
-            popTitle="Veille cyber"
-            popText="Menaces cyber agrégées par notre plateforme OpenCTI : acteurs actifs, codes malveillants, secteurs et pays ciblés, vulnérabilités critiques, rapports OTX. Instantané horaire, accessible aux abonnés premium."
+            href="/veille/"
+            label="Veilles"
+            popTitle="Veilles abonnés"
+            popText="Les deux veilles en intégralité : géopolitique (notes d'analyse sur les six théâtres) et cyber (OpenCTI : acteurs, codes malveillants, vulnérabilités, rapports OTX). Page réservée aux abonnés premium."
             icon={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></>}
           />
           <ConsoleTab

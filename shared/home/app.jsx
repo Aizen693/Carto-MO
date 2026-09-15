@@ -229,7 +229,7 @@ function App() {
             <a href="/methodologie/">Méthodologie</a>
             <a href="/offres/">Offres</a>
             <a href="/theatres/">Théâtres</a>
-            {premium && <a href="/veille-cyber/" className="site-nav__premium">Veille</a>}
+            {premium && <a href="/veille/" className="site-nav__premium">Veille</a>}
             <a href="/a-propos/">À propos</a>
             <a href="/contact/">Contact</a>
           </nav>

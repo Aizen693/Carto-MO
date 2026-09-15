@@ -16,7 +16,8 @@ const ZONE_LABELS = {
   'rdc': 'RDC',
   'madagascar': 'Madagascar',
   'afrique': 'Afrique Maritime',
-  'asie-sud': 'Asie du Sud'
+  'asie-sud': 'Asie du Sud',
+  'cyber': 'Cyber'
 };
 
 // ════════════════════════════════════════════════════════════════════════
@@ -177,6 +178,36 @@ function useVeille() {
   }, []);
   return items;
 }
+// Aperçu public de la veille cyber (OpenCTI) : titres + compteurs seulement,
+// déposé toutes les heures par veille-snapshot.mjs dans le bucket public
+// veille-public. L'instantané complet (résumés, CVE, acteurs) est premium : /veille/.
+const CYBER_TEASER = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/teaser.json';
+function useVeilleCyber() {
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    let on = true;
+    fetch(CYBER_TEASER, {
+      cache: 'no-store'
+    }).then(r => r.ok ? r.json() : Promise.reject()).then(d => {
+      if (!on) return;
+      setItems((d.rapports || []).map(r => ({
+        id: 'cyber-' + r.id,
+        date: r.date,
+        theatre: 'cyber',
+        severite: 'info',
+        source: r.source || 'OTX',
+        source_url: r.url || '',
+        titre: r.titre,
+        resume: (r.etiquettes || []).join(' · '),
+        cyber: true
+      })));
+    }).catch(() => {});
+    return () => {
+      on = false;
+    };
+  }, []);
+  return items;
+}
 function useSubscriber() {
   // Connecte = acces complet aux notes d'analyse. La detection s'aligne sur
   // site-auth.js : etat initial (window.algorAuthState) + evenement de session
@@ -238,7 +269,21 @@ function VeilleCard({
   }) : null, /*#__PURE__*/React.createElement("span", {
     className: "vcard__grid",
     "aria-hidden": "true"
-  }), srcLogo(it.source_url) ? /*#__PURE__*/React.createElement("img", {
+  }), it.cyber && /*#__PURE__*/React.createElement("span", {
+    className: "vcard__cyber",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.6",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M9 12l2 2 4-4"
+  }))), srcLogo(it.source_url) ? /*#__PURE__*/React.createElement("img", {
     className: "vcard__logo",
     src: srcLogo(it.source_url),
     alt: it.source,
@@ -253,7 +298,7 @@ function VeilleCard({
       borderColor: sev.c + '59',
       background: sev.c + '14'
     }
-  }, sev.lbl)), /*#__PURE__*/React.createElement("div", {
+  }, it.cyber ? 'Cyber · OTX' : sev.lbl)), /*#__PURE__*/React.createElement("div", {
     className: "vcard__body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "vcard__meta"
@@ -462,7 +507,13 @@ function VeilleModal({
 }
 function VeilleSystem() {
   const items = useVeille();
+  const cyber = useVeilleCyber();
   const sub = useSubscriber();
+  // Aperçu mixte : 3 notes géopolitiques + 3 rapports cyber (les deux veilles en entier sur /veille/).
+  const mix = cyber.length ? [...items.slice(0, 3), ...cyber.slice(0, 3)] : items.slice(0, 6);
+  const openMix = it => {
+    if (it.cyber) window.location.href = '/veille/?onglet=cyber';else setSel(it);
+  };
   const [open, setOpen] = useState(false);
   const [sel, setSel] = useState(null);
   const [seen, setSeen] = useState(() => {
@@ -490,26 +541,29 @@ function VeilleSystem() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "veille-sec__head"
   }, /*#__PURE__*/React.createElement(SectionHead, {
-    eyebrow: "Veille \xB7 mise \xE0 jour hebdomadaire",
-    title: "Ce que notre veille a",
+    eyebrow: "Veille g\xE9opolitique et cyber \xB7 mise \xE0 jour continue",
+    title: "Ce que nos veilles ont",
     em: "relev\xE9 cette semaine",
-    intro: "Nous consolidons en continu un flux OSINT sur nos six th\xE9\xE2tres, s\xE9lectionn\xE9, sourc\xE9 et dat\xE9. L'analyse compl\xE8te et l'archive sont r\xE9serv\xE9es aux abonn\xE9s."
+    intro: "Deux flux : l'OSINT g\xE9opolitique sur nos six th\xE9\xE2tres, s\xE9lectionn\xE9, sourc\xE9 et dat\xE9 par nos analystes, et les menaces cyber agr\xE9g\xE9es par notre plateforme OpenCTI. Les deux veilles en int\xE9gralit\xE9 sont r\xE9serv\xE9es aux abonn\xE9s."
   }), /*#__PURE__*/React.createElement("span", {
     className: "veille-live"
   }, /*#__PURE__*/React.createElement("span", {
     className: "veille-live__dot"
   }), "Veille active")), /*#__PURE__*/React.createElement("div", {
     className: "veille-grid"
-  }, items.slice(0, 6).map(it => /*#__PURE__*/React.createElement(VeilleCard, {
+  }, mix.map(it => /*#__PURE__*/React.createElement(VeilleCard, {
     key: it.id,
     it: it,
-    onOpen: () => setSel(it)
+    onOpen: () => openMix(it)
   }))), /*#__PURE__*/React.createElement("div", {
     className: "veille-sec__foot"
-  }, /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("a", {
+    className: "btn--ghost-link",
+    href: "/veille/"
+  }, "Les deux veilles en int\xE9gralit\xE9 ", /*#__PURE__*/React.createElement(ArrowDiag, null)), /*#__PURE__*/React.createElement("button", {
     className: "btn--ghost-link",
     onClick: () => setOpen(true)
-  }, "Tout le fil de veille ", /*#__PURE__*/React.createElement(ArrowDiag, null))))), ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+  }, "Fil g\xE9opolitique ", /*#__PURE__*/React.createElement(ArrowDiag, null))))), ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     className: "veille-bell",
     "aria-label": "Fil de veille",
     onClick: () => setOpen(true)
@@ -1530,10 +1584,10 @@ function ConsoleView({
       r: "3"
     }))
   }), /*#__PURE__*/React.createElement(ConsoleTab, {
-    href: "/veille-cyber/",
-    label: "Veille cyber",
-    popTitle: "Veille cyber",
-    popText: "Menaces cyber agr\xE9g\xE9es par notre plateforme OpenCTI : acteurs actifs, codes malveillants, secteurs et pays cibl\xE9s, vuln\xE9rabilit\xE9s critiques, rapports OTX. Instantan\xE9 horaire, accessible aux abonn\xE9s premium.",
+    href: "/veille/",
+    label: "Veilles",
+    popTitle: "Veilles abonn\xE9s",
+    popText: "Les deux veilles en int\xE9gralit\xE9 : g\xE9opolitique (notes d'analyse sur les six th\xE9\xE2tres) et cyber (OpenCTI : acteurs, codes malveillants, vuln\xE9rabilit\xE9s, rapports OTX). Page r\xE9serv\xE9e aux abonn\xE9s premium.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
     }), /*#__PURE__*/React.createElement("path", {

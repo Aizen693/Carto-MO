@@ -345,7 +345,7 @@ function App() {
   }, "Offres"), /*#__PURE__*/React.createElement("a", {
     href: "/theatres/"
   }, "Th\xE9\xE2tres"), premium && /*#__PURE__*/React.createElement("a", {
-    href: "/veille-cyber/",
+    href: "/veille/",
     className: "site-nav__premium"
   }, "Veille"), /*#__PURE__*/React.createElement("a", {
     href: "/a-propos/"
