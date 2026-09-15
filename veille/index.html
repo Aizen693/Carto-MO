@@ -21,7 +21,7 @@
     --grad:linear-gradient(95deg,#6B3FA0,#5650C6 55%,#2E84D4);
     --accent:#C8B0EA; --accent-2:#5BB0F2;
     --ink:#F3EFFB; --tx:#A9A1C4; --muted:#8F87AA;
-    --bg:#05040B; --panel:rgba(255,255,255,0.04); --panel-2:rgba(10,9,20,0.88);
+    --bg:#05040B; --panel:rgba(255,255,255,0.04); --panel-2:rgba(10,9,20,0.96);
     --ln:rgba(255,255,255,0.10); --ln-soft:rgba(255,255,255,0.07);
     --alert:#B83A4A; --warn:#C97E2A; --ok:#2F8A6B;
     --sans:'Host Grotesk','Plus Jakarta Sans',system-ui,sans-serif; --mono:'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace;
@@ -51,7 +51,7 @@
   .maj{font:500 11px var(--mono);color:var(--muted)}
 
   /* Onglets */
-  .tabs{display:flex;flex-wrap:wrap;gap:6px;background:var(--panel-2);border:1px solid var(--ln);border-radius:14px;padding:5px;width:max-content;max-width:100%;margin:0 0 20px;box-shadow:var(--shadow);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;background:var(--panel-2);border:1px solid var(--ln);border-radius:14px;padding:5px;width:max-content;max-width:100%;margin:0 0 20px;box-shadow:var(--shadow)}
   .tab{border:none;background:none;border-radius:10px;padding:9px 16px;font:600 12.5px var(--sans);color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .15s ease,color .15s ease}
   .tab svg{width:15px;height:15px}
   .tab:hover{color:var(--ink)}
@@ -70,7 +70,7 @@
   .grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:14px}
   .col{display:flex;flex-direction:column;gap:14px;min-width:0}
   .card{background:var(--panel);border:1px solid var(--ln);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow);min-width:0}
-  .card--sticky{position:sticky;top:16px;display:flex;flex-direction:column;max-height:calc(100vh - 32px);background:var(--panel-2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .card--sticky{position:sticky;top:16px;display:flex;flex-direction:column;max-height:calc(100vh - 32px);background:rgba(10,9,20,.96)}
   .card__head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
   .card__title{font:600 15px var(--sans);margin:0;color:var(--ink)}
   .card__hint{font:500 11px var(--sans);color:var(--muted)}
@@ -98,7 +98,7 @@
   .vcard__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .vcard__gridpat{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.22) 1px,transparent 1.4px);background-size:14px 14px;opacity:.5;mix-blend-mode:overlay}
   .vcard__logo{position:absolute;right:11px;bottom:11px;width:28px;height:28px;border-radius:8px;background:#fff;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.45)}
-  .vcard__sev{position:absolute;top:11px;left:11px;font:600 9.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:5px;border:1px solid;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+  .vcard__sev{position:absolute;top:11px;left:11px;font:600 9.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:5px;border:1px solid;background-color:rgba(10,9,20,.72)}
   .vcard__body{padding:16px 17px 18px;display:flex;flex-direction:column;flex:1}
   .vcard__meta{display:flex;align-items:center;gap:9px;font:500 10.5px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
   .vcard__zone{color:var(--accent)}
@@ -194,7 +194,7 @@
     <div>
       <div class="eyebrow"><span class="dot" id="dot"></span> Veilles · accès abonné</div>
       <h1>Nos deux <em>veilles</em></h1>
-      <p class="lede" id="lede">Géopolitique : notes d'analyse sourcées sur nos six théâtres. Cyber : menaces agrégées par notre plateforme OpenCTI. Les deux en intégralité.</p>
+      <p class="lede" id="lede">Géopolitique : notes d'analyse sourcées sur nos six théâtres. Cyber : menaces tirées des flux publics AlienVault OTX, abuse.ch, NVD et MITRE, mises à jour toutes les heures. Les deux en intégralité.</p>
     </div>
     <div class="head-right">
       <a class="back" href="/">&larr; Accueil</a>
@@ -216,11 +216,11 @@
   <section class="pane" id="pane-geo" role="tabpanel"><div class="empty">Chargement du fil géopolitique…</div></section>
   <section class="pane" id="pane-cyber" role="tabpanel" hidden><div class="empty">Chargement de l'instantané cyber…</div></section>
 
-  <p class="foot" id="foot">Veille géopolitique : flux OSINT sélectionné, sourcé et daté par nos analystes. Veille cyber : flux publics (OTX, abuse.ch, CVEList, MITRE) agrégés par OpenCTI, sans vérification par Algor Int ; les indicateurs bruts restent dans la plateforme.</p>
+  <p class="foot" id="foot">Veille géopolitique : flux OSINT sélectionné, sourcé et daté par nos analystes. Veille cyber : flux publics (AlienVault OTX, ThreatFox d'abuse.ch, NVD et catalogue KEV de la CISA, MITRE ATT&amp;CK) agrégés automatiquement toutes les heures, sans vérification par Algor Int ; les indicateurs bruts restent dans la plateforme.</p>
 </div>
 
 <!-- Ciel étoilé sombre commun au site (canvas fixe derrière le contenu) -->
-<script src="../shared/home/skyfield.js?v=20260914b"></script>
+<script src="../shared/home/skyfield.js?v=20260915q"></script>
 
 <script type="module">
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -352,7 +352,7 @@
     }
   }
 
-  /* ══════════ Cyber (OpenCTI) ══════════ */
+  /* ══════════ Cyber (flux publics, collecteur VPS) ══════════ */
   const TYPE_FR = { 'Domain-Name': 'Domaines', 'Ipv4-Addr': 'Adresses IPv4', 'Ipv6-Addr': 'Adresses IPv6', Stixfile: 'Fichiers', Url: 'URL', Hostname: 'Hôtes', 'Email-Addr': 'E-mails' };
 
   function bars(items, cls = '') {
@@ -402,9 +402,9 @@
       <section class="kpis">
         <div class="kpi"><div class="kpi__label">Rapports</div><div class="kpi__value">${fmtN(c.rapports_90j)}<small>${d.periode_jours} j</small></div></div>
         <div class="kpi"><div class="kpi__label">Indicateurs</div><div class="kpi__value">${fmtN(c.indicateurs)}</div></div>
-        <div class="kpi"><div class="kpi__label">Vulnérabilités</div><div class="kpi__value">${fmtN(c.vulnerabilites)}</div></div>
-        <div class="kpi"><div class="kpi__label">Acteurs</div><div class="kpi__value">${fmtN(c.acteurs)}</div></div>
-        <div class="kpi"><div class="kpi__label">Codes malveillants</div><div class="kpi__value">${fmtN(c.malwares)}</div></div>
+        <div class="kpi"><div class="kpi__label">CVE critiques</div><div class="kpi__value">${fmtN(c.vulnerabilites)}</div></div>
+        <div class="kpi"><div class="kpi__label">Groupes MITRE</div><div class="kpi__value">${fmtN(c.acteurs)}</div></div>
+        <div class="kpi"><div class="kpi__label">Logiciels MITRE</div><div class="kpi__value">${fmtN(c.malwares)}</div></div>
       </section>
       <div class="grid">
         <div class="col">
@@ -416,8 +416,8 @@
         </div>
         <div class="col">
           <section class="card"><div class="card__head"><h2 class="card__title">Rapports publiés par semaine</h2><span class="card__hint">${d.periode_jours} jours</span></div>${spark(d.rapports_par_semaine)}</section>
-          <section class="card"><div class="card__head"><h2 class="card__title">Acteurs les plus actifs</h2><span class="card__hint">relations, ${d.periode_jours} j</span></div>${bars(d.acteurs_actifs)}</section>
-          <section class="card"><div class="card__head"><h2 class="card__title">Vulnérabilités critiques</h2><span class="card__hint">CVSS ≥ 9, plus récentes</span></div><div class="cves">${(d.vulnerabilites_critiques || []).slice(0, 10).map(cve).join('') || '<div class="empty">Aucune vulnérabilité critique importée.</div>'}</div></section>
+          <section class="card"><div class="card__head"><h2 class="card__title">Acteurs les plus actifs</h2><span class="card__hint">rapports, ${d.periode_jours} j</span></div>${bars(d.acteurs_actifs)}</section>
+          <section class="card"><div class="card__head"><h2 class="card__title">Vulnérabilités critiques</h2><span class="card__hint">CVSS ≥ 9, publiées sur ${d.periode_jours} j</span></div><div class="cves">${(d.vulnerabilites_critiques || []).slice(0, 10).map(cve).join('') || '<div class="empty">Aucune vulnérabilité critique importée.</div>'}</div></section>
           <section class="card"><div class="card__head"><h2 class="card__title">Secteurs ciblés</h2></div>${bars(d.secteurs_cibles, 'is-alert')}</section>
           <section class="card"><div class="card__head"><h2 class="card__title">Pays ciblés</h2></div>${bars(d.pays_cibles, 'is-alert')}</section>
           <section class="card"><div class="card__head"><h2 class="card__title">Codes malveillants actifs</h2><span class="card__hint">${d.periode_jours} j</span></div>${bars(d.malwares_actifs)}</section>

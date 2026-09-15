@@ -18,7 +18,8 @@
   function initLenis() {
     if (lenisReady || REDUCED || !window.Lenis || !hasGsap()) return;
     lenisReady = true;
-    lenis = new window.Lenis({ lerp: 0.085, smoothWheel: true, wheelMultiplier: 0.95, touchMultiplier: 1.3 });
+    // lerp 0.1 : la page suit la molette/le pave de plus pres (0.085 donnait un defilement « flottant »)
+    lenis = new window.Lenis({ lerp: 0.1, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.3 });
     lenis.on('scroll', window.ScrollTrigger.update);
     window.gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     window.gsap.ticker.lagSmoothing(0);
@@ -315,8 +316,10 @@
       // Apparitions au defilement, une fois
       gsap.utils.toArray('[data-reveal]').forEach(function (el) {
         var kind = el.getAttribute('data-reveal') || 'up';
-        var from = { opacity: 0, y: kind === 'up' ? 26 : 0, filter: kind === 'fade' ? 'blur(0px)' : 'blur(5px)' };
-        gsap.fromTo(el, from, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.0, ease: 'expo.out', clearProps: 'filter',
+        // Sans flou : un filtre blur par bloc en attente coutait un calque GPU
+        // a chaque image du defilement. Opacite + translation suffisent.
+        var from = { opacity: 0, y: kind === 'up' ? 26 : 0 };
+        gsap.fromTo(el, from, { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out',
           scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
       });
 

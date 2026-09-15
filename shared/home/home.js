@@ -347,7 +347,7 @@ function useVeille() {
   }, []);
   return items;
 }
-// Aperçu public de la veille cyber (OpenCTI) : titres + compteurs seulement,
+// Aperçu public de la veille cyber (flux publics, collecteur VPS) : titres + compteurs seulement,
 // déposé toutes les heures par veille-snapshot.mjs dans le bucket public
 // veille-public. L'instantané complet (résumés, CVE, acteurs) est premium : /veille/.
 const CYBER_TEASER = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/teaser.json';
@@ -419,9 +419,9 @@ function VeilleCard({
   index
 }) {
   const sev = SEV[it.severite] || SEV.info;
-  // Rapport cyber (OpenCTI) : pas de carte, un bouclier sur fond nuit.
+  // Rapport cyber : pas de carte, un bouclier sur fond nuit.
   const nature = it.cyber ? {
-    label: 'Flux OpenCTI',
+    label: 'Flux AlienVault OTX',
     cls: 'cyber'
   } : sourceNature(it);
   // Image de la source bloquée (hotlink refusé, CORB...) : on retombe sur l'extrait de carte.
@@ -754,7 +754,7 @@ function VeilleSystem() {
     eyebrow: 'Veille géopolitique et cyber · dernière note le ' + (latest ? veilleDateLong(latest) : '…'),
     title: "Ce que nos veilles ont",
     em: "relev\xE9",
-    intro: "Deux flux : l'OSINT g\xE9opolitique sur nos six th\xE9\xE2tres, s\xE9lectionn\xE9, sourc\xE9 et dat\xE9 par nos analystes, et les menaces cyber agr\xE9g\xE9es par notre plateforme OpenCTI. Les deux veilles en int\xE9gralit\xE9 sont r\xE9serv\xE9es aux abonn\xE9s."
+    intro: "Deux flux : l'OSINT g\xE9opolitique sur nos six th\xE9\xE2tres, s\xE9lectionn\xE9, sourc\xE9 et dat\xE9 par nos analystes, et les menaces cyber tir\xE9es des flux publics AlienVault OTX, abuse.ch, NVD et MITRE. Les deux veilles en int\xE9gralit\xE9 sont r\xE9serv\xE9es aux abonn\xE9s."
   }), /*#__PURE__*/React.createElement("span", {
     className: "veille-live"
   }, /*#__PURE__*/React.createElement("span", {
@@ -1843,7 +1843,7 @@ function ConsoleView({
     href: "/veille/",
     label: "Veilles",
     popTitle: "Veilles abonn\xE9s",
-    popText: "Les deux veilles en int\xE9gralit\xE9 : g\xE9opolitique (notes d'analyse sur les six th\xE9\xE2tres) et cyber (OpenCTI : acteurs, codes malveillants, vuln\xE9rabilit\xE9s, rapports OTX). Page r\xE9serv\xE9e aux abonn\xE9s premium.",
+    popText: "Les deux veilles en int\xE9gralit\xE9 : g\xE9opolitique (notes d'analyse sur les six th\xE9\xE2tres) et cyber (flux publics : rapports AlienVault OTX, indicateurs abuse.ch, CVE critiques NVD, groupes MITRE). Page r\xE9serv\xE9e aux abonn\xE9s premium.",
     icon: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
     }), /*#__PURE__*/React.createElement("path", {

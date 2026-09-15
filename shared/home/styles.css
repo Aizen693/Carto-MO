@@ -4582,3 +4582,30 @@ html[data-home-v4] .globe-search__note strong { font-weight: 600; color: #CFC7E6
 .vcard__cyber svg { width: 100%; height: 100%; }
 .vcard__proof--cyber { color: #5BB0F2; }
 .veille-sec__foot { gap: 22px; flex-wrap: wrap; }
+
+/* ═══════════════════════════════════════════════════════
+   FLUIDITÉ (15/09) · aucun flou d'arrière-plan sur le site sombre.
+   Chaque backdrop-filter posé au-dessus d'un contenu animé (ciel étoilé,
+   globe WebGL) était recalculé à chaque image du défilement. Même rendu
+   visuel avec des fonds plus opaques, sans flou.
+   ═══════════════════════════════════════════════════════ */
+html[data-sky-dark] .app-header,
+html[data-sky-dark] .site-header {
+  background: rgba(5, 4, 11, 0.92) !important;
+  backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+html[data-sky-dark] .hero__demo,
+html[data-sky-dark] .globe-search,
+html[data-sky-dark] .globe-hint,
+html[data-sky-dark] .instr,
+html[data-sky-dark] .vcard__priority,
+html[data-sky-dark] .vcard__sev,
+html[data-sky-dark] .globe-th {
+  backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+html[data-sky-dark] .hero__demo { background: rgba(14, 12, 26, 0.94); }
+html[data-sky-dark] .globe-search { background: rgba(22, 18, 42, 0.96); }
+html[data-sky-dark] .globe-hint { background: rgba(10, 9, 20, 0.92); }
+html[data-sky-dark] .instr { background: rgba(10, 9, 20, 0.94); }
+html[data-sky-dark] .vcard__priority { background: rgba(13, 8, 30, 0.82); }
+html[data-sky-dark] .globe-th { background: rgba(10, 9, 20, 0.97); }

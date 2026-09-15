@@ -144,7 +144,7 @@ function useVeille(){
   },[]);
   return items;
 }
-// Aperçu public de la veille cyber (OpenCTI) : titres + compteurs seulement,
+// Aperçu public de la veille cyber (flux publics, collecteur VPS) : titres + compteurs seulement,
 // déposé toutes les heures par veille-snapshot.mjs dans le bucket public
 // veille-public. L'instantané complet (résumés, CVE, acteurs) est premium : /veille/.
 const CYBER_TEASER = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/teaser.json';
@@ -180,8 +180,8 @@ function useSubscriber(){
 
 function VeilleCard({ it, onOpen, featured, index }){
   const sev = SEV[it.severite] || SEV.info;
-  // Rapport cyber (OpenCTI) : pas de carte, un bouclier sur fond nuit.
-  const nature = it.cyber ? { label:'Flux OpenCTI', cls:'cyber' } : sourceNature(it);
+  // Rapport cyber : pas de carte, un bouclier sur fond nuit.
+  const nature = it.cyber ? { label:'Flux AlienVault OTX', cls:'cyber' } : sourceNature(it);
   // Image de la source bloquée (hotlink refusé, CORB...) : on retombe sur l'extrait de carte.
   const [imgKo, setImgKo] = useState(false);
   return (
@@ -326,7 +326,7 @@ function VeilleSystem(){
           <div className="veille-sec__head">
             <SectionHead eyebrow={'Veille géopolitique et cyber · dernière note le ' + (latest ? veilleDateLong(latest) : '…')}
               title="Ce que nos veilles ont" em="relevé"
-              intro="Deux flux : l'OSINT géopolitique sur nos six théâtres, sélectionné, sourcé et daté par nos analystes, et les menaces cyber agrégées par notre plateforme OpenCTI. Les deux veilles en intégralité sont réservées aux abonnés." />
+              intro="Deux flux : l'OSINT géopolitique sur nos six théâtres, sélectionné, sourcé et daté par nos analystes, et les menaces cyber tirées des flux publics AlienVault OTX, abuse.ch, NVD et MITRE. Les deux veilles en intégralité sont réservées aux abonnés." />
             <span className="veille-live"><span className="veille-live__dot" />Veille active</span>
           </div>
           <div className="veille-ledger" aria-label="Synthèse du fil de veille">
@@ -1052,7 +1052,7 @@ function ConsoleView({ onBack, onArchives, onVeille, onComptes, onRapports }) {
             href="/veille/"
             label="Veilles"
             popTitle="Veilles abonnés"
-            popText="Les deux veilles en intégralité : géopolitique (notes d'analyse sur les six théâtres) et cyber (OpenCTI : acteurs, codes malveillants, vulnérabilités, rapports OTX). Page réservée aux abonnés premium."
+            popText="Les deux veilles en intégralité : géopolitique (notes d'analyse sur les six théâtres) et cyber (flux publics : rapports AlienVault OTX, indicateurs abuse.ch, CVE critiques NVD, groupes MITRE). Page réservée aux abonnés premium."
             icon={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></>}
           />
           <ConsoleTab

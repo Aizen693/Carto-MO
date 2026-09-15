@@ -27,7 +27,8 @@
   function insert() { document.body.insertBefore(cv, document.body.firstChild); }
   if (document.body) insert(); else document.addEventListener('DOMContentLoaded', insert);
 
-  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  // Étoiles = points fins : 1,5 suffit, et divise le coût de chaque image par ~1,8 sur écran Retina.
+  var DPR = Math.min(window.devicePixelRatio || 1, 1.5);
   var W = 0, H = 0, mx = 0, my = 0, tmx = 0, tmy = 0;
   var seed = 20260914;
   function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
@@ -47,6 +48,23 @@
     aStatic: [0.28, 0.72], aBg: [0.14, 0.55], glowK: 0.7, bgFill: null
   };
   function pick(pal) { var u = rnd(), acc = 0; for (var i = 0; i < pal.length; i++) { acc += pal[i][1]; if (u <= acc) return pal[i][0]; } return pal[pal.length - 1][0]; }
+
+  // ── Etoile a quatre branches pre-rendue par couleur (sprite) : l'animation
+  //    ne cree plus un degrade radial par etoile a chaque image. ──
+  var spikeSprites = {};
+  function spikeSprite(col) {
+    var k = col.join(',');
+    if (spikeSprites[k]) return spikeSprites[k];
+    var S = 64, c = document.createElement('canvas'); c.width = S; c.height = S;
+    spike(c.getContext('2d'), S / 2, S / 2, S / 7, 1, col);
+    return (spikeSprites[k] = c);
+  }
+  function spikeFast(c, x, y, s, a, col) {
+    var sp = spikeSprite(col), d = s * 7;
+    c.globalAlpha = Math.max(0, Math.min(1, a));
+    c.drawImage(sp, x - d / 2, y - d / 2, d, d);
+    c.globalAlpha = 1;
+  }
 
   // ── Etoile a quatre branches (diffraction), utilisee pour les brillantes ──
   function spike(c, x, y, s, a, col) {
@@ -147,16 +165,22 @@
     mx += (tmx - mx) * 0.04; my += (tmy - my) * 0.04;
     var an = anchor();
     if (DARK) { ctx.fillStyle = PAL.bgFill; ctx.fillRect(0, 0, W, H); } // accueil entierement noir
-    // etoiles eparses, trois profondeurs
+    // etoiles eparses, trois profondeurs : on ne copie que la bande visible
+    // de chaque calque (avant : deux calques pleine hauteur x 1,6 par image)
     layers.forEach(function (L) {
-      var off = (sy * L.p) % L.span, dx = mx * L.p * 220, dy = my * L.p * 140 - off;
-      ctx.drawImage(L.cv, dx, dy, W, L.span);
-      ctx.drawImage(L.cv, dx, dy + L.span, W, L.span);
-      if (dy > 0) ctx.drawImage(L.cv, dx, dy - L.span, W, L.span);
+      // Plus de parallaxe au defilement : le ciel ne se redessine plus a chaque
+      // image quand on fait defiler (il invalidait tout ce qui est au-dessus).
+      var dx = mx * L.p * 220, dy = my * L.p * 140;
+      [dy - L.span, dy, dy + L.span].forEach(function (y0) {
+        var top = Math.max(0, y0), bot = Math.min(H, y0 + L.span);
+        if (bot <= top) return;
+        var sy0 = Math.min(L.cv.height - 1, Math.round((top - y0) * DPR)), sh = Math.max(1, Math.min(L.cv.height - sy0, Math.round((bot - top) * DPR)));
+        ctx.drawImage(L.cv, 0, sy0, L.cv.width, sh, dx, top, W, bot - top);
+      });
       for (var i = 0; i < L.live.length; i++) {
         var s = L.live[i], y = s.y + dy; if (y < -20 || y > H + 20) { y += (y < 0 ? L.span : -L.span); if (y < -20 || y > H + 20) continue; }
         var tw = REDUCED ? 0.8 : 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t * 0.0013 * s.sp + s.ph));
-        spike(ctx, s.x + dx, y, s.s, s.a * tw, s.c);
+        spikeFast(ctx, s.x + dx, y, s.s, s.a * tw, s.c);
       }
     });
     // Voie lactee calee sur le hero : derive tres lente, parallaxe, fondu ensuite
@@ -177,12 +201,19 @@
     }
   }
 
-  var raf = 0, running = false, last = 0;
+  // Redessin a la demande : en mouvement (defilement, parallaxe souris) jusqu'a
+  // 45 images/s ; au repos, seul le scintillement avance, a 12 images/s.
+  var raf = 0, running = false, last = 0, lastSy = -1, scrollQuietAt = 0;
   function loop(t) {
     if (!running) return;
     raf = requestAnimationFrame(loop);
     if (document.hidden) return;
-    if (t - last < 1000 / 40) return;
+    // Pendant un defilement, le ciel attend : scintillement repris 250 ms apres l'arret.
+    var sy = window.scrollY || 0;
+    if (sy !== lastSy) { lastSy = sy; scrollQuietAt = t + 250; return; }
+    if (t < scrollQuietAt) return;
+    var moving = Math.abs(tmx - mx) > 0.0008 || Math.abs(tmy - my) > 0.0008;
+    if (t - last < 1000 / (moving ? 40 : 12)) return;
     last = t; draw(t);
   }
   window.addEventListener('resize', resize);

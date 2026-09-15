@@ -1125,7 +1125,11 @@ function Globe() {
       topoLo = topo;
       if (!hiActive) applyTopo(topo);
     }).catch(() => {/* sphere-only fallback is acceptable */});
-    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json').then(r => r.json()).then(topo => {
+    // Sur la Terre reelle la photo porte deja les cotes fines : on garde les
+    // frontieres 110m (legeres a projeter a chaque image) et on ne telecharge
+    // ni le 50m ni les lacs.
+    const EARTH_MODE = !!(canvas.closest && canvas.closest('.hero--night') && !(canvas.closest('.hero--sky') && !canvas.closest('.globe-nuit')) && window.AlgorEarth && !/[?&]terre=0/.test(location.search));
+    if (!EARTH_MODE) fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json').then(r => r.json()).then(topo => {
       if (hiLocked) return;
       hiActive = true;
       applyTopo(topo);
@@ -1133,7 +1137,7 @@ function Globe() {
     // — lacs et plans d'eau (Natural Earth 50m, heberge en local) :
     //   remplis dans la teinte exacte de la mer, contour tres discret.
     let lakes = null;
-    fetch('./shared/home/lakes-50m.json?v=20260610a').then(r => r.json()).then(g => {
+    if (!EARTH_MODE) fetch('./shared/home/lakes-50m.json?v=20260610a').then(r => r.json()).then(g => {
       lakes = g;
     }).catch(() => {/* sans lacs, rendu identique a avant */});
     const graticule = d3.geoGraticule10();
@@ -1601,13 +1605,14 @@ function Globe() {
           ctx.restore();
           return;
         }
+        // Halo de lisibilite : un contour trace une fois (avant : trois passes
+        // avec flou d'ombre, le poste le plus couteux du dessin a chaque image).
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = 3.5;
+        ctx.strokeStyle = C.labelHalo;
+        ctx.strokeText(a.label, tx, ty);
         ctx.fillStyle = hovered ? C.labelHover : C.label;
-        ctx.shadowColor = C.labelHalo;
-        ctx.shadowBlur = 5;
-        ctx.fillText(a.label, tx, ty); // passes empilees -> halo blanc
         ctx.fillText(a.label, tx, ty);
-        ctx.shadowBlur = 0;
-        ctx.fillText(a.label, tx, ty); // passe nette finale
         ctx.restore();
       });
       ctx.restore(); // fin du clip circulaire
@@ -1685,7 +1690,7 @@ function Globe() {
       if (earth) earth.render({
         w: EW,
         h: EH,
-        dpr: DPR,
+        dpr: Math.min(DPR, 1.5),
         cx: EOX + W / 2,
         cy: EOY + H / 2,
         scale: proj.scale(),
@@ -1700,7 +1705,17 @@ function Globe() {
     //   retour definitif au 110m (meme rendu qu'avant l'upgrade).
     let drawEma = 0,
       slowRun = 0;
+    let lastFrame = 0;
     function frame(now) {
+      // Cadence : 30 images/s en rotation libre (12 degres/s, largement fluide),
+      // 60 pendant un zoom de theatre ou une inclinaison au defilement.
+      const r0 = proj.rotate();
+      const busy = !!zoomTarget || Math.abs(proj.scale() - baseScale) > 0.5 || Math.abs(r0[1] - tiltLat) > 0.05;
+      if (!busy && now - lastFrame < 1000 / 30 - 1.5) {
+        rafId = requestAnimationFrame(frame);
+        return;
+      }
+      lastFrame = now;
       const t0 = performance.now();
       step(now);
       drawEma = drawEma * 0.9 + (performance.now() - t0) * 0.1;
@@ -1856,9 +1871,8 @@ function Globe() {
       topoPoll = setTimeout(pollTopo, 120);
     })();
     rafId = requestAnimationFrame(frame);
-    const hiddenTick = setInterval(() => {
-      if (document.hidden) step(performance.now());
-    }, 1000 / 24);
+    // Onglet en arriere-plan : rien n'est dessine (le navigateur suspend deja les images).
+    const hiddenTick = 0;
     return () => {
       if (window.__algorGlobe && window.__algorGlobe.setTilt) delete window.__algorGlobe;
       cancelAnimationFrame(rafId);
