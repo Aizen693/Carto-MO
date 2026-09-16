@@ -36,6 +36,9 @@
   #country-title{margin:0;font:800 18px/1 var(--jakarta);letter-spacing:-.01em;color:var(--ink)}
   #header .sub{font:600 8px/1 var(--jakarta);letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-top:5px}
   #header .spacer{flex:1}
+  /* Hauteur libre : si les jetons passent sur deux lignes, l'en-tête grandit au
+     lieu de les faire déborder hors de l'écran (panneaux recalés par carte-layout.js). */
+  #header{height:auto;min-height:56px;padding-block:10px}
   #counter{font:600 10px/1 var(--jakarta);letter-spacing:.08em;color:var(--violet);text-transform:uppercase;pointer-events:none}
 
   /* ── Barre constructeur (jetons + saisie) ── */
@@ -237,8 +240,8 @@
   .tl-btn{width:34px;height:34px;flex:none;border:none;cursor:pointer;border-radius:50%;background:var(--grad);
     color:#fff;font-size:11px;line-height:1;display:inline-flex;align-items:center;justify-content:center}
   .tl-btn:hover{filter:brightness(1.08)}
-  #tl-slider{width:min(440px,44vw);accent-color:var(--violet);cursor:pointer;height:4px}
-  #tl-label{font:700 12px var(--jakarta);color:var(--ink);min-width:130px;white-space:nowrap}
+  #tl-slider{width:min(440px,44vw);flex:0 1 auto;min-width:90px;accent-color:var(--violet);cursor:pointer;height:4px}
+  #tl-label{font:700 12px var(--jakarta);color:var(--ink);min-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   /* ── Panneau d'analyse (graphiques + synthèse IA) ── */
   #analysis{position:absolute;top:64px;left:18px;z-index:7;display:none;flex-direction:column;width:330px;
@@ -313,6 +316,16 @@
   .ana-ev-date{flex:none;font:600 9px/1 var(--jakarta);color:var(--muted);white-space:nowrap}
   .ana-ev-sub{font:600 10px/1.2 var(--jakarta);color:var(--c);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+  /* Fenêtres moyennes (MacBook, fenêtre non plein écran) : jetons compacts pour
+     tenir sur une ligne à côté du logo. */
+  @media(min-width:681px){ #tl-label{flex:none} }
+  @media(min-width:681px) and (max-width:1280px){
+    #chipbar{gap:7px}
+    .chip{padding:7px 12px 9px;gap:8px;border-left-width:3px;border-radius:11px}
+    .chip-key{font-size:8px;letter-spacing:.12em}
+    .chip-val{font-size:13.5px}
+  }
+
   @media(max-width:680px){
     #country-title{font-size:15px}
     #tl-slider{width:44vw}
@@ -355,6 +368,7 @@
 
 <script src="../shared/humint-engine.js?v=20260729g"></script>
 <script src="../shared/basemap-toggle.js?v=20260729c"></script>
+<script src="../shared/carte-layout.js?v=20260916b"></script>
 <!-- Outil « Infras 3D » désactivé (budget + peu efficace pour l'instant). Le code
      reste dans shared/zones-3d.js : réactiver en décommentant la ligne ci-dessous.
 <script src="../shared/zones-3d.js?v=20260708a"></script>
