@@ -118,7 +118,7 @@
     'html[data-sky-dark] .lang-toggle,.lang-toggle--float{background:rgba(10,9,20,.72);border-color:rgba(255,255,255,.16)}' +
     '.lang-toggle button{border:0;background:transparent;color:inherit;opacity:.72;cursor:pointer;padding:5px 8px;border-radius:999px;font:inherit;letter-spacing:inherit}' +
     '.lang-toggle button:hover{opacity:1}' +
-    '.lang-toggle button[aria-pressed="true"]{background:#6B3FA0;color:#fff;opacity:1}' +
+    '.lang-toggle button[aria-pressed="true"]{background:#6B3FA0 linear-gradient(130deg,#6B3FA0 0%,#5650C6 48%,#1E6FBE 100%);color:#fff;opacity:1}' +
     '.lang-toggle button:focus-visible{outline:2px solid #C8B0EA;outline-offset:1px}' +
     '.lang-toggle--float{position:fixed;right:14px;bottom:14px;z-index:2147483000;color:#F3EFFB;box-shadow:0 8px 24px -10px rgba(0,0,0,.6)}' +
     '.lang-slot{display:inline-flex;align-items:center}' +
