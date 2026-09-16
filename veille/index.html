@@ -171,6 +171,7 @@
   .cpop{font-family:var(--sans)}
   .cpop .mapboxgl-popup-content{background:rgba(10,9,20,.96);color:var(--ink);border:1px solid var(--ln);border-radius:12px;padding:10px 12px;box-shadow:0 12px 30px rgba(0,0,0,.5);font:500 12px var(--sans)}
   .cpop .mapboxgl-popup-tip{border-top-color:rgba(10,9,20,.96)!important;border-bottom-color:rgba(10,9,20,.96)!important}
+  .cpop__date{color:var(--accent)!important;font-variant-numeric:tabular-nums}
   .cpop b{font:500 12px var(--mono);color:var(--accent);margin-left:6px}
   .cside{display:flex;flex-direction:column;min-height:0;background:rgba(10,9,20,.96);height:min(600px,72vh);min-height:420px}
   .cside__list{display:flex;flex-direction:column;gap:6px;overflow-y:auto;min-height:0;scrollbar-width:thin;scrollbar-color:rgba(200,176,234,.35) transparent}
@@ -557,9 +558,12 @@
   function agreger(list) {
     const m = new Map();
     for (const r of list) for (const p of r.pays) { const e = m.get(p) || { nom: p, n: 0, liste: [] }; e.n++; e.liste.push(r); m.set(p, e); }
-    for (const e of m.values()) { e.types = compte(e.liste, (r) => [r.types[0]]); e.acteurs = compte(e.liste, (r) => r.acteurs); e.dominant = e.types[0]?.[0] || 'Non classé'; }
+    for (const e of m.values()) { e.types = compte(e.liste, (r) => [r.types[0]]); e.acteurs = compte(e.liste, (r) => r.acteurs); e.dominant = e.types[0]?.[0] || 'Non classé';
+      e.liste.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+      const dates = e.liste.map((r) => String(r.date || '').slice(0, 10)).filter(Boolean).sort(); e.premier = dates[0] || ''; e.dernier = dates.at(-1) || ''; }
     return [...m.values()].sort((a, b) => b.n - a.n);
   }
+  const plage = (a, b) => !b ? '' : a === b ? `le ${fmtD(b, true)}` : `du ${fmtD(a)} au ${fmtD(b, true)}`;
   const badgeType = (t) => `<span class="btype" style="--c:${tcol(t)}">${esc(t)}</span>`;
   const badgeActeur = (a) => `<button class="bact" data-acteur="${esc(a)}" title="Filtrer la carte sur cet attaquant"><span data-i18n-skip>${esc(a)}</span></button>`;
   const ligneRapport = (r) => `<a class="clink" href="${esc(safeUrl(r.url) || '#')}" target="_blank" rel="noopener noreferrer">
@@ -575,7 +579,7 @@
       const p = pays.find((x) => x.nom === cmapSel);
       if (p) {
         el.innerHTML = `<button class="cside__back" id="cside-back">← Tous les pays</button>
-          ${head(esc(p.nom), `${fmtN(p.n)} rapport${p.n > 1 ? 's' : ''} le citent comme cible${filtreTxt ? ' · ' + filtreTxt : ''}`)}
+          ${head(esc(p.nom), `${fmtN(p.n)} rapport${p.n > 1 ? 's' : ''} le citent comme cible, ${esc(plage(p.premier, p.dernier))}${filtreTxt ? ' · ' + filtreTxt : ''}`)}
           <div class="cside__sec"><div class="cside__lbl">Attaquants identifiés</div><div class="cside__chips">${p.acteurs.length ? p.acteurs.slice(0, 8).map(([a, n]) => `${badgeActeur(a).replace('</button>', ` <b>${n}</b></button>`)}`).join('') : '<span class="empty" style="padding:0">Aucun attaquant nommé dans ces rapports.</span>'}</div></div>
           <div class="cside__sec"><div class="cside__lbl">Types d’attaque</div><div class="cside__chips">${p.types.map(([t, n]) => `<button class="btype btype--b" data-type="${esc(t)}" style="--c:${tcol(t)}">${esc(t)} <b>${n}</b></button>`).join('')}</div></div>
           <div class="cside__lbl">Rapports</div>
@@ -592,7 +596,7 @@
     el.innerHTML = `<div class="cside__head"><div class="pills pills--s"><button data-o="pays" class="${cmapOnglet === 'pays' ? 'is-on' : ''}">Pays <b>${pays.length}</b></button><button data-o="acteurs" class="${cmapOnglet === 'acteurs' ? 'is-on' : ''}">Attaquants <b>${acteurs.length}</b></button></div><span class="card__hint">${fmtN(list.length)} rapports</span></div>
       ${filtreTxt ? `<div class="cside__filtre"><span>${filtreTxt}</span> <button id="cside-raz">effacer</button></div>` : ''}
       <div class="cside__list">${cmapOnglet === 'pays'
-        ? (pays.map((p) => `<button class="crow" data-pays="${esc(p.nom)}"><span>${esc(p.nom)}<i class="crow__dot" style="background:${tcol(p.dominant)}" title="${esc(p.dominant)}"></i></span><b>${fmtN(p.n)}</b><span class="crow__bar" style="width:${(100 * p.n / max).toFixed(1)}%;background:${tcol(p.dominant)}"></span></button>`).join('') || '<div class="empty">Aucun pays pour ce filtre.</div>')
+        ? (pays.map((p) => `<button class="crow" data-pays="${esc(p.nom)}"><span>${esc(p.nom)}<i class="crow__dot" style="background:${tcol(p.dominant)}" title="${esc(p.dominant)}"></i>${p.dernier ? `<small> · ${esc(fmtD(p.dernier))}</small>` : ''}</span><b>${fmtN(p.n)}</b><span class="crow__bar" style="width:${(100 * p.n / max).toFixed(1)}%;background:${tcol(p.dominant)}"></span></button>`).join('') || '<div class="empty">Aucun pays pour ce filtre.</div>')
         : (acteurs.map(([a, n]) => { const np = new Set(list.filter((r) => r.acteurs.includes(a)).flatMap((r) => r.pays)).size; return `<button class="crow" data-acteur="${esc(a)}"><span><span data-i18n-skip>${esc(a)}</span><small> · ${np} pays</small></span><b>${fmtN(n)}</b><span class="crow__bar" style="width:${(100 * n / maxA).toFixed(1)}%"></span></button>`; }).join('') || '<div class="empty">Aucun attaquant nommé pour ce filtre.</div>')}</div>`;
     el.querySelectorAll('[data-o]').forEach((b) => b.addEventListener('click', () => { cmapOnglet = b.dataset.o; cmapSide(); }));
     el.querySelectorAll('.crow[data-pays]').forEach((b) => b.addEventListener('click', () => cmapFocus(b.dataset.pays)));
@@ -625,7 +629,7 @@
     if (!cmap || !cmap.getSource('cyber')) return;
     const pays = agreger(rapportsFiltres()), coords = cmapData.coords;
     cmap.getSource('cyber').setData({ type: 'FeatureCollection', features: pays.filter((p) => coords[p.nom]).map((p) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: coords[p.nom] },
-      properties: { nom: p.nom, lib: T(p.nom), n: p.n, couleur: tcol(p.dominant), type: p.dominant, acteur: p.acteurs[0]?.[0] || '' } })) });
+      properties: { nom: p.nom, lib: T(p.nom), n: p.n, couleur: tcol(p.dominant), type: p.dominant, acteur: p.acteurs[0]?.[0] || '', plage: plage(p.premier, p.dernier) } })) });
     const sel = cmapSel;
     cmap.setPaintProperty('cyber-pts', 'circle-opacity', sel ? ['case', ['==', ['get', 'nom'], sel], 0.9, 0.3] : 0.65);
     if (sel && coords[sel]) cmap.flyTo({ center: coords[sel], zoom: Math.max(cmap.getZoom(), 3.2), speed: 1.1, essential: true });
@@ -655,7 +659,7 @@
       cmap.addLayer({ id: 'cyber-lbl', type: 'symbol', source: 'cyber', filter: ['>=', ['get', 'n'], 6], layout: { 'text-field': ['get', 'lib'], 'text-size': 11, 'text-offset': [0, 1.9], 'text-anchor': 'top', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] }, paint: { 'text-color': '#F3EFFB', 'text-halo-color': '#05040B', 'text-halo-width': 1.2 } });
       const pop = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: 12, className: 'cpop' });
       cmap.on('mousemove', 'cyber-pts', (e) => { cmap.getCanvas().style.cursor = 'pointer'; const f = e.features[0].properties;
-        pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t">${esc(f.nom)}<b>${fmtN(f.n)}</b></div><div class="cpop__l"><i style="background:${esc(f.couleur)}"></i>${esc(f.type)}</div>${f.acteur ? `<div class="cpop__l">Attaquant principal : <span data-i18n-skip>${esc(f.acteur)}</span></div>` : ''}`).addTo(cmap); });
+        pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t">${esc(f.nom)}<b>${fmtN(f.n)}</b></div>${f.plage ? `<div class="cpop__l cpop__date">Rapport${f.n > 1 ? 's' : ''} ${esc(f.plage)}</div>` : ''}<div class="cpop__l"><i style="background:${esc(f.couleur)}"></i>${esc(f.type)}</div>${f.acteur ? `<div class="cpop__l">Attaquant principal : <span data-i18n-skip>${esc(f.acteur)}</span></div>` : ''}`).addTo(cmap); });
       cmap.on('mouseleave', 'cyber-pts', () => { cmap.getCanvas().style.cursor = ''; pop.remove(); });
       cmap.on('click', 'cyber-pts', (e) => cmapFocus(e.features[0].properties.nom));
       // Couche temps réel (masquée tant que la couche « rapports » est affichée)
