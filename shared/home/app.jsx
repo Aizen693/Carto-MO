@@ -242,7 +242,7 @@ function App() {
 
           <nav className="site-nav" aria-label="Rubriques">
             <a href="/plateforme/">Plateforme</a>
-            {premium && <a href="/veille/" className="site-nav__premium">Veille</a>}
+            <a href="/veille/" className={premium ? 'site-nav__premium' : undefined}>Veille</a>
             <a href="/debunkage/">Débunkage</a>
             <a href="/methodologie/">Méthodologie</a>
             <a href="/offres/">Offres</a>
@@ -252,6 +252,8 @@ function App() {
           </nav>
 
           <div className="app-header__right">
+            {/* Sélecteur FR | EN monté par shared/i18n.js (élément vide : React ne touche pas à son contenu) */}
+            <span className="lang-slot" />
             {authLoggedIn && (
               <span className="logo-tool">
                 <input ref={logoInputRef} type="file" accept="image/*" onChange={onLogoPick} hidden />

@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script src="/shared/i18n.js?v=20260915a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Veilles — Algor Access</title>
 <meta name="robots" content="noindex">
@@ -9,7 +10,7 @@
 <!-- Gate premium : overlay bloquant tant que session + plan premium absents (même mécanisme que /veille-carte/).
      Le chemin /veille/ est listé dans GATED_PREFIXES de site-auth.js, sinon algorAuthReady n'est jamais émis. -->
 <script>window.addEventListener('algorAuthReady', function () { window.__algorAuthGranted = true; });</script>
-<script type="module" src="../shared/site-auth.js?v=20260915c"></script>
+<script type="module" src="../shared/site-auth.js?v=20260916a"></script>
 <link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
 <link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
 <!-- Carte des attaques (onglet Cyber) : même Mapbox GL que /veille-carte/, chargé mais instancié seulement à l'ouverture de la vue carte -->
@@ -269,6 +270,24 @@
   .kev{display:inline-block;font:600 9px var(--sans);letter-spacing:.06em;color:#fff;background:var(--warn);border-radius:99px;padding:2px 7px;margin-left:6px;vertical-align:middle}
   .foot{margin-top:18px;font:400 11.5px/1.5 var(--sans);color:var(--muted)}
 
+  /* ── Aperçu public (visiteur non abonné) : le vrai fil, en quantité réduite ── */
+  .verif{font:400 13px var(--sans);color:var(--muted);padding:18px 0}
+  .apercu{display:flex;align-items:center;gap:9px;font:400 12.5px/1.55 var(--sans);color:var(--tx);background:rgba(200,176,234,.07);border:1px solid rgba(200,176,234,.2);border-radius:12px;padding:10px 13px;margin-bottom:14px}
+  .apercu svg{width:15px;height:15px;color:var(--accent);flex:none}
+  .apercu b{font-weight:600;color:var(--ink)}
+  .gate{display:flex;flex-wrap:wrap;align-items:center;gap:14px;background:var(--panel-2);border:1px solid var(--ln);border-radius:18px;padding:18px 20px;margin-top:16px;box-shadow:var(--shadow)}
+  .gate__txt{flex:1 1 300px;min-width:0}
+  .gate__txt h3{font:600 15px var(--sans);margin:0 0 5px;color:var(--ink);display:flex;align-items:center;gap:8px}
+  .gate__txt h3 svg{width:15px;height:15px;color:var(--accent)}
+  .gate__txt p{font:400 12.5px/1.55 var(--sans);color:var(--tx);margin:0 0 9px}
+  .gate__pts{display:flex;flex-wrap:wrap;gap:7px}
+  .gate__pt{font:500 11.5px var(--sans);color:var(--accent);background:rgba(200,176,234,.1);border:1px solid rgba(200,176,234,.22);border-radius:99px;padding:4px 10px}
+  .gate__cta{background:var(--grad);border:none;border-radius:999px;padding:11px 18px;font:600 12.5px var(--sans);color:#fff;text-decoration:none;white-space:nowrap}
+  .gate__cta:hover{filter:brightness(1.08)}
+  .gate__cta--ghost{background:transparent;border:1px solid var(--ln);color:var(--accent)}
+  .gate__cta--ghost:hover{border-color:var(--accent);color:#fff}
+  .reps-min{display:flex;flex-direction:column;gap:8px}
+
   @media (max-width:1000px){.geo-grid{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:900px){.grid{grid-template-columns:1fr}.card--sticky{position:static;max-height:none}.bar{grid-template-columns:110px 1fr 36px}
     .cmap-wrap{grid-template-columns:1fr}.cmap{height:60vh;min-height:360px}.cside{height:auto;max-height:360px;min-height:0}}
@@ -285,12 +304,14 @@
       <p class="lede" id="lede">Géopolitique : notes d'analyse sourcées sur nos six théâtres. Cyber : menaces tirées des flux publics AlienVault OTX, abuse.ch, NVD et MITRE, mises à jour toutes les heures. Les deux en intégralité.</p>
     </div>
     <div class="head-right">
+      <span class="lang-slot"></span>
       <a class="back" href="/">&larr; Accueil</a>
       <div class="maj" id="maj"></div>
     </div>
   </header>
 
-  <div class="tabs" role="tablist">
+  <div class="verif" id="verif">Vérification de votre accès…</div>
+  <div class="tabs" role="tablist" id="onglets" hidden>
     <button class="tab is-active" role="tab" data-tab="geo" id="tab-geo">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
       Géopolitique <b id="n-geo">…</b>
@@ -301,10 +322,10 @@
     </button>
   </div>
 
-  <section class="pane" id="pane-geo" role="tabpanel"><div class="empty">Chargement du fil géopolitique…</div></section>
+  <section class="pane" id="pane-geo" role="tabpanel" hidden><div class="empty">Chargement du fil géopolitique…</div></section>
   <section class="pane" id="pane-cyber" role="tabpanel" hidden><div class="empty">Chargement de l'instantané cyber…</div></section>
 
-  <p class="foot" id="foot">Veille géopolitique : flux OSINT sélectionné, sourcé et daté par nos analystes. Veille cyber : flux publics (AlienVault OTX, ThreatFox d'abuse.ch, NVD et catalogue KEV de la CISA, MITRE ATT&amp;CK) agrégés automatiquement toutes les heures, sans vérification par Algor Int ; les indicateurs bruts restent dans la plateforme.</p>
+  <p class="foot" id="foot" hidden>Veille géopolitique : flux OSINT sélectionné, sourcé et daté par nos analystes. Veille cyber : flux publics (AlienVault OTX, ThreatFox d'abuse.ch, NVD et catalogue KEV de la CISA, MITRE ATT&amp;CK) agrégés automatiquement toutes les heures, sans vérification par Algor Int ; les indicateurs bruts restent dans la plateforme.</p>
 </div>
 
 <!-- Ciel étoilé sombre commun au site (canvas fixe derrière le contenu) -->
@@ -315,6 +336,9 @@
   const fmtN = (n) => new Intl.NumberFormat('fr-FR').format(n || 0);
   const fmtD = (iso, y) => iso ? new Date(iso + (iso.length === 10 ? 'T00:00:00Z' : '')).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', ...(y ? { year: 'numeric' } : {}) }) : '';
   const safeUrl = (u) => /^https?:\/\//i.test(String(u || '').trim()) ? String(u).trim() : null;
+  // Langue d'affichage (shared/i18n.js) : en anglais, les rapports cyber reprennent leur texte d'origine
+  const EN = document.documentElement.lang === 'en';
+  const txt = (r, k) => (EN && r[k + '_en']) || r[k] || '';
   const favicon = (u) => { try { return 'https://www.google.com/s2/favicons?domain=' + new URL(u).hostname + '&sz=128'; } catch { return null; } };
 
   /* ── Onglets ── */
@@ -326,7 +350,6 @@
     const u = new URL(location.href); u.searchParams.set('onglet', name); history.replaceState(null, '', u);
   }
   for (const t of document.querySelectorAll('.tab')) t.addEventListener('click', () => showTab(t.dataset.tab));
-  showTab(params.get('onglet') === 'cyber' ? 'cyber' : 'geo');
 
   /* ══════════ Géopolitique ══════════ */
   const VEILLE_REMOTE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
@@ -350,9 +373,9 @@
         <span class="vcard__sev" style="color:${sev.c};border-color:${sev.c}59;background:${sev.c}14">${sev.lbl}</span>
       </span>
       <span class="vcard__body">
-        <span class="vcard__meta"><span class="vcard__zone">${esc(ZONES[it.theatre] || it.theatre || '')}</span><span class="vcard__date">${esc(fmtD(it.date))}</span>${it.source ? `<span>· ${esc(it.source)}</span>` : ''}</span>
-        <span class="vcard__title">${esc(it.titre)}</span>
-        <span class="vcard__resume">${esc(it.resume || '')}</span>
+        <span class="vcard__meta"><span class="vcard__zone">${esc(ZONES[it.theatre] || it.theatre || '')}</span><span class="vcard__date">${esc(fmtD(it.date))}</span>${it.source ? `<span data-i18n-skip>· ${esc(it.source)}</span>` : ''}</span>
+        <span class="vcard__title" data-i18n-skip>${esc(it.titre)}</span>
+        <span class="vcard__resume" data-i18n-skip>${esc(it.resume || '')}</span>
         <span class="vcard__more">Lire la note →</span>
       </span>
     </button>`;
@@ -398,15 +421,15 @@
         ${logo ? `<img class="vcard__logo" src="${esc(logo)}" alt="" onerror="this.style.display='none'">` : ''}
       </div>
       <div class="vmodal__body">
-        <div class="vcard__meta"><span class="vcard__zone">${esc(ZONES[it.theatre] || it.theatre || '')}</span><span class="vcard__date">${esc(fmtD(it.date, true))}</span>${it.lieu ? `<span>· ${esc(it.lieu)}</span>` : ''}<span class="vcard__sev" style="position:static;color:${sev.c};border-color:${sev.c}59;background:${sev.c}14">${sev.lbl}</span></div>
-        <h3 class="vmodal__title">${esc(it.titre)}</h3>
-        <p class="vmodal__resume">${esc(it.resume || '')}</p>
-        <div class="vreport">
+        <div class="vcard__meta"><span class="vcard__zone">${esc(ZONES[it.theatre] || it.theatre || '')}</span><span class="vcard__date">${esc(fmtD(it.date, true))}</span>${it.lieu ? `<span data-i18n-skip>· ${esc(it.lieu)}</span>` : ''}<span class="vcard__sev" style="position:static;color:${sev.c};border-color:${sev.c}59;background:${sev.c}14">${sev.lbl}</span></div>
+        <h3 class="vmodal__title" data-i18n-skip>${esc(it.titre)}</h3>
+        <p class="vmodal__resume" data-i18n-skip>${esc(it.resume || '')}</p>
+        ${ACCES === 'abonne' ? `<div class="vreport">
           <div class="vreport__class">Note d'analyse · Accès abonné</div>
-          <div class="vreport__sec"><div class="vreport__lbl">Analyse</div><p>${esc(it.detail || it.resume || '')}</p></div>
-          ${impl.length ? `<div class="vreport__sec"><div class="vreport__lbl">Implications opérationnelles</div><ul class="vreport__ul">${impl.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+          <div class="vreport__sec"><div class="vreport__lbl">Analyse</div><p data-i18n-skip>${esc(it.detail || it.resume || '')}</p></div>
+          ${impl.length ? `<div class="vreport__sec"><div class="vreport__lbl">Implications opérationnelles</div><ul class="vreport__ul">${impl.map((x) => `<li data-i18n-skip>${esc(x)}</li>`).join('')}</ul></div>` : ''}
           <div class="vreport__sec"><div class="vreport__lbl">Recommandations · que faire de cette information</div>
-            ${reco.length ? `<ul class="vreport__ul">${reco.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : `<p class="vreport__muted">À partir de ce signal, nos analystes produisent sur demande une note d'impact dédiée à votre organisation : exposition, scénarios probables et mesures à prendre.</p>`}
+            ${reco.length ? `<ul class="vreport__ul">${reco.map((x) => `<li data-i18n-skip>${esc(x)}</li>`).join('')}</ul>` : `<p class="vreport__muted">À partir de ce signal, nos analystes produisent sur demande une note d'impact dédiée à votre organisation : exposition, scénarios probables et mesures à prendre.</p>`}
           </div>
           <div class="vreport__sec"><div class="vreport__lbl">Sources et fiabilité</div>
             <div class="vreport__srcrow">${src ? `<a href="${esc(src)}" target="_blank" rel="noopener noreferrer">${esc(it.source || 'Source')} ↗</a>` : `<span>${esc(it.source || '')}</span>`}<span class="vreport__rel">Fiabilité · ${reliability(it.source)}</span></div>
@@ -415,7 +438,7 @@
             <a class="vreport__cta" href="/contact/">Demander un brief approfondi sur ce sujet</a>
             <a class="vreport__map" href="/veille-carte/?focus=${encodeURIComponent(it.id)}">Voir ce signal sur la carte de veille</a>
           </div>
-        </div>
+        </div>` : bloc("Analyse réservée aux abonnés", "Cette note contient une analyse, ses implications opérationnelles et des recommandations, avec ses sources.", ['Analyse complète', 'Implications', 'Recommandations', 'Sources citées'])}
       </div>
     </div>`;
     const close = () => { el.remove(); window.removeEventListener('keydown', onKey); };
@@ -470,13 +493,13 @@
       <path class="area" d="${area}"/><path class="line" d="${line}"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3.5"/>${labels}</svg>`;
   }
   function report(r) {
-    const title = safeUrl(r.url) ? `<a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${esc(r.titre)}</a>` : esc(r.titre);
+    const title = safeUrl(r.url) ? `<a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-i18n-skip>${esc(txt(r, 'titre'))}</a>` : esc(txt(r, 'titre'));
     const pays = (r.pays || []).slice(0, 4), sect = (r.secteurs || []).slice(0, 3);
-    return `<article class="rep" data-q="${esc((r.titre + ' ' + (r.etiquettes || []).join(' ') + ' ' + pays.join(' ') + ' ' + sect.join(' ') + ' ' + r.resume).toLowerCase())}">
-      <div class="rep__meta"><span>${esc(fmtD(r.date, true))}</span><span class="rep__src">${esc(r.source)}</span>${sect.length ? `<span>· ${esc(sect.join(', '))}</span>` : ''}<span class="rep__badges">${(r.types || []).slice(0, 2).map(badgeType).join('')}${(r.acteurs || []).slice(0, 2).map((a) => `<span class="bact bact--s">${esc(a)}</span>`).join('')}</span></div>
+    return `<article class="rep" data-q="${esc((r.titre + ' ' + (r.titre_en || '') + ' ' + (r.etiquettes || []).join(' ') + ' ' + pays.join(' ') + ' ' + sect.join(' ') + ' ' + r.resume + ' ' + (r.resume_en || '')).toLowerCase())}">
+      <div class="rep__meta"><span>${esc(fmtD(r.date, true))}</span><span class="rep__src">${esc(r.source)}</span>${sect.length ? `<span>· ${sect.map((x) => `<span>${esc(x)}</span>`).join(', ')}</span>` : ''}<span class="rep__badges">${(r.types || []).slice(0, 2).map(badgeType).join('')}${(r.acteurs || []).slice(0, 2).map((a) => `<span class="bact bact--s" data-i18n-skip>${esc(a)}</span>`).join('')}</span></div>
       <h3 class="rep__title">${title}</h3>
-      ${r.resume ? `<p class="rep__sum">${esc(r.resume)}</p>` : ''}
-      <div class="rep__tags">${pays.map((p) => `<button class="tag tag--pays" data-pays="${esc(p)}" title="Voir ${esc(p)} sur la carte">📍 ${esc(p)}</button>`).join('')}${(r.etiquettes || []).slice(0, pays.length ? 3 : 5).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+      ${r.resume ? `<p class="rep__sum" data-i18n-skip>${esc(txt(r, 'resume'))}</p>` : ''}
+      <div class="rep__tags">${pays.map((p) => `<button class="tag tag--pays" data-pays="${esc(p)}" title="Voir sur la carte">📍 <span>${esc(p)}</span></button>`).join('')}${(r.etiquettes || []).slice(0, pays.length ? 3 : 5).map((t) => `<span class="tag" data-i18n-skip>${esc(t)}</span>`).join('')}</div>
     </article>`;
   }
 
@@ -486,6 +509,7 @@
   const MAPBOX_TOKEN = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
   const TYPE_COL = { 'Rançongiciel': '#E06A78', 'Espionnage': '#B48CFF', 'Hameçonnage': '#F0A650', 'Logiciel voleur': '#F5D66B', 'Botnet et DDoS': '#5BB0F2', 'Exploitation de faille': '#FF7A59', 'Chaîne d’approvisionnement': '#4ED0B8', 'Fraude et arnaque': '#E58BD0', 'Skimming web': '#9FE07A', 'Mobile': '#7ED8F5', 'Porte dérobée et RAT': '#C8B0EA', 'Non classé': '#8F87AA' };
   const tcol = (t) => TYPE_COL[t] || '#8F87AA';
+  const T = (x) => (window.AlgorI18n ? window.AlgorI18n.t(x) : x);
   let cmap = null, cmapData = null, cmapSel = null, cmapOnglet = 'pays';
   const filtre = { type: null, acteur: null };
   const MONDE = [[-135, -48], [165, 72]]; // emprise de départ : le monde habité, Amériques comprises
@@ -498,21 +522,21 @@
     return [...m.values()].sort((a, b) => b.n - a.n);
   }
   const badgeType = (t) => `<span class="btype" style="--c:${tcol(t)}">${esc(t)}</span>`;
-  const badgeActeur = (a) => `<button class="bact" data-acteur="${esc(a)}" title="Filtrer la carte sur ${esc(a)}">${esc(a)}</button>`;
+  const badgeActeur = (a) => `<button class="bact" data-acteur="${esc(a)}" title="Filtrer la carte sur cet attaquant"><span data-i18n-skip>${esc(a)}</span></button>`;
   const ligneRapport = (r) => `<a class="clink" href="${esc(safeUrl(r.url) || '#')}" target="_blank" rel="noopener noreferrer">
       <div class="clink__meta">${esc(fmtD(r.date, true))} · ${esc(r.source)}${r.pays.length > 1 ? ` · ${r.pays.length} pays` : ''}</div>
-      <div class="clink__title">${esc(r.titre)}</div>
-      <div class="clink__badges">${r.types.slice(0, 2).map(badgeType).join('')}${r.acteurs.length ? r.acteurs.slice(0, 2).map((a) => `<span class="bact bact--s">${esc(a)}</span>`).join('') : '<span class="bact bact--s bact--none">attaquant non attribué</span>'}</div></a>`;
+      <div class="clink__title" data-i18n-skip>${esc(txt(r, 'titre'))}</div>
+      <div class="clink__badges">${r.types.slice(0, 2).map(badgeType).join('')}${r.acteurs.length ? r.acteurs.slice(0, 2).map((a) => `<span class="bact bact--s" data-i18n-skip>${esc(a)}</span>`).join('') : '<span class="bact bact--s bact--none">attaquant non attribué</span>'}</div></a>`;
   function cmapSide() {
     const el = document.getElementById('cside'); if (!el || !cmapData) return;
     const list = rapportsFiltres(), pays = agreger(list);
-    const filtreTxt = [filtre.type && `type ${filtre.type}`, filtre.acteur && `attaquant ${filtre.acteur}`].filter(Boolean).join(' · ');
+    const filtreTxt = [filtre.type && `type <span>${esc(filtre.type)}</span>`, filtre.acteur && `attaquant <span data-i18n-skip>${esc(filtre.acteur)}</span>`].filter(Boolean).join(' · ');
     const head = (titre, sub) => `<div class="cside__head"><div><h3 class="cside__title">${titre}</h3><div class="cside__sub">${sub}</div></div></div>`;
     if (cmapSel) {
       const p = pays.find((x) => x.nom === cmapSel);
       if (p) {
         el.innerHTML = `<button class="cside__back" id="cside-back">← Tous les pays</button>
-          ${head(esc(p.nom), `${fmtN(p.n)} rapport${p.n > 1 ? 's' : ''} le citent comme cible${filtreTxt ? ' · ' + esc(filtreTxt) : ''}`)}
+          ${head(esc(p.nom), `${fmtN(p.n)} rapport${p.n > 1 ? 's' : ''} le citent comme cible${filtreTxt ? ' · ' + filtreTxt : ''}`)}
           <div class="cside__sec"><div class="cside__lbl">Attaquants identifiés</div><div class="cside__chips">${p.acteurs.length ? p.acteurs.slice(0, 8).map(([a, n]) => `${badgeActeur(a).replace('</button>', ` <b>${n}</b></button>`)}`).join('') : '<span class="empty" style="padding:0">Aucun attaquant nommé dans ces rapports.</span>'}</div></div>
           <div class="cside__sec"><div class="cside__lbl">Types d’attaque</div><div class="cside__chips">${p.types.map(([t, n]) => `<button class="btype btype--b" data-type="${esc(t)}" style="--c:${tcol(t)}">${esc(t)} <b>${n}</b></button>`).join('')}</div></div>
           <div class="cside__lbl">Rapports</div>
@@ -527,10 +551,10 @@
     const acteurs = compte(list, (r) => r.acteurs);
     const max = Math.max(...pays.map((x) => x.n), 1), maxA = Math.max(...acteurs.map((x) => x[1]), 1);
     el.innerHTML = `<div class="cside__head"><div class="pills pills--s"><button data-o="pays" class="${cmapOnglet === 'pays' ? 'is-on' : ''}">Pays <b>${pays.length}</b></button><button data-o="acteurs" class="${cmapOnglet === 'acteurs' ? 'is-on' : ''}">Attaquants <b>${acteurs.length}</b></button></div><span class="card__hint">${fmtN(list.length)} rapports</span></div>
-      ${filtreTxt ? `<div class="cside__filtre">${esc(filtreTxt)} <button id="cside-raz">effacer</button></div>` : ''}
+      ${filtreTxt ? `<div class="cside__filtre"><span>${filtreTxt}</span> <button id="cside-raz">effacer</button></div>` : ''}
       <div class="cside__list">${cmapOnglet === 'pays'
         ? (pays.map((p) => `<button class="crow" data-pays="${esc(p.nom)}"><span>${esc(p.nom)}<i class="crow__dot" style="background:${tcol(p.dominant)}" title="${esc(p.dominant)}"></i></span><b>${fmtN(p.n)}</b><span class="crow__bar" style="width:${(100 * p.n / max).toFixed(1)}%;background:${tcol(p.dominant)}"></span></button>`).join('') || '<div class="empty">Aucun pays pour ce filtre.</div>')
-        : (acteurs.map(([a, n]) => { const np = new Set(list.filter((r) => r.acteurs.includes(a)).flatMap((r) => r.pays)).size; return `<button class="crow" data-acteur="${esc(a)}"><span>${esc(a)}<small> · ${np} pays</small></span><b>${fmtN(n)}</b><span class="crow__bar" style="width:${(100 * n / maxA).toFixed(1)}%"></span></button>`; }).join('') || '<div class="empty">Aucun attaquant nommé pour ce filtre.</div>')}</div>`;
+        : (acteurs.map(([a, n]) => { const np = new Set(list.filter((r) => r.acteurs.includes(a)).flatMap((r) => r.pays)).size; return `<button class="crow" data-acteur="${esc(a)}"><span><span data-i18n-skip>${esc(a)}</span><small> · ${np} pays</small></span><b>${fmtN(n)}</b><span class="crow__bar" style="width:${(100 * n / maxA).toFixed(1)}%"></span></button>`; }).join('') || '<div class="empty">Aucun attaquant nommé pour ce filtre.</div>')}</div>`;
     el.querySelectorAll('[data-o]').forEach((b) => b.addEventListener('click', () => { cmapOnglet = b.dataset.o; cmapSide(); }));
     el.querySelectorAll('.crow[data-pays]').forEach((b) => b.addEventListener('click', () => cmapFocus(b.dataset.pays)));
     el.querySelectorAll('.crow[data-acteur]').forEach((b) => b.addEventListener('click', () => setFiltre('acteur', b.dataset.acteur)));
@@ -546,7 +570,7 @@
       ${types.map(([t, n]) => `<button class="fchip ${filtre.type === t ? 'is-on' : ''}" data-type="${esc(t)}"><i style="background:${tcol(t)}"></i>${esc(t)} <b>${n}</b></button>`).join('')}
       <span class="sep"></span>
       <label class="cfilters__lbl" for="cacteur">Attaquant</label>
-      <select class="cselect" id="cacteur"><option value="">Tous (${acteurs.length} nommés)</option>${acteurs.map(([a, n]) => `<option value="${esc(a)}" ${filtre.acteur === a ? 'selected' : ''}>${esc(a)} (${n})</option>`).join('')}</select>`;
+      <select class="cselect" id="cacteur"><option value="">Tous (${acteurs.length} nommés)</option>${acteurs.map(([a, n]) => `<option data-i18n-skip value="${esc(a)}" ${filtre.acteur === a ? 'selected' : ''}>${esc(a)} (${n})</option>`).join('')}</select>`;
     el.querySelectorAll('[data-type]').forEach((b) => b.addEventListener('click', () => setFiltre('type', b.dataset.type || null, true)));
     el.querySelector('#cacteur').addEventListener('change', (e) => setFiltre('acteur', e.target.value || null, true));
   }
@@ -560,7 +584,7 @@
     if (!cmap || !cmap.getSource('cyber')) return;
     const pays = agreger(rapportsFiltres()), coords = cmapData.coords;
     cmap.getSource('cyber').setData({ type: 'FeatureCollection', features: pays.filter((p) => coords[p.nom]).map((p) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: coords[p.nom] },
-      properties: { nom: p.nom, n: p.n, couleur: tcol(p.dominant), type: p.dominant, acteur: p.acteurs[0]?.[0] || '' } })) });
+      properties: { nom: p.nom, lib: T(p.nom), n: p.n, couleur: tcol(p.dominant), type: p.dominant, acteur: p.acteurs[0]?.[0] || '' } })) });
     const sel = cmapSel;
     cmap.setPaintProperty('cyber-pts', 'circle-opacity', sel ? ['case', ['==', ['get', 'nom'], sel], 0.9, 0.3] : 0.65);
     if (sel && coords[sel]) cmap.flyTo({ center: coords[sel], zoom: Math.max(cmap.getZoom(), 3.2), speed: 1.1, essential: true });
@@ -587,10 +611,10 @@
       cmap.addSource('cyber', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       cmap.addLayer({ id: 'cyber-halo', type: 'circle', source: 'cyber', paint: { 'circle-color': ['get', 'couleur'], 'circle-opacity': 0.14, 'circle-blur': 0.6, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 9, 7, 44] } });
       cmap.addLayer({ id: 'cyber-pts', type: 'circle', source: 'cyber', paint: { 'circle-color': ['get', 'couleur'], 'circle-opacity': 0.65, 'circle-stroke-color': ['get', 'couleur'], 'circle-stroke-width': 1.4, 'circle-stroke-opacity': 0.95, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 4, 7, 22] } });
-      cmap.addLayer({ id: 'cyber-lbl', type: 'symbol', source: 'cyber', filter: ['>=', ['get', 'n'], 6], layout: { 'text-field': ['get', 'nom'], 'text-size': 11, 'text-offset': [0, 1.9], 'text-anchor': 'top', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] }, paint: { 'text-color': '#F3EFFB', 'text-halo-color': '#05040B', 'text-halo-width': 1.2 } });
+      cmap.addLayer({ id: 'cyber-lbl', type: 'symbol', source: 'cyber', filter: ['>=', ['get', 'n'], 6], layout: { 'text-field': ['get', 'lib'], 'text-size': 11, 'text-offset': [0, 1.9], 'text-anchor': 'top', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] }, paint: { 'text-color': '#F3EFFB', 'text-halo-color': '#05040B', 'text-halo-width': 1.2 } });
       const pop = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: 12, className: 'cpop' });
       cmap.on('mousemove', 'cyber-pts', (e) => { cmap.getCanvas().style.cursor = 'pointer'; const f = e.features[0].properties;
-        pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t">${esc(f.nom)}<b>${fmtN(f.n)}</b></div><div class="cpop__l"><i style="background:${esc(f.couleur)}"></i>${esc(f.type)}</div>${f.acteur ? `<div class="cpop__l">Attaquant principal : ${esc(f.acteur)}</div>` : ''}`).addTo(cmap); });
+        pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t">${esc(f.nom)}<b>${fmtN(f.n)}</b></div><div class="cpop__l"><i style="background:${esc(f.couleur)}"></i>${esc(f.type)}</div>${f.acteur ? `<div class="cpop__l">Attaquant principal : <span data-i18n-skip>${esc(f.acteur)}</span></div>` : ''}`).addTo(cmap); });
       cmap.on('mouseleave', 'cyber-pts', () => { cmap.getCanvas().style.cursor = ''; pop.remove(); });
       cmap.on('click', 'cyber-pts', (e) => cmapFocus(e.features[0].properties.nom));
       cmapRefresh();
@@ -599,7 +623,7 @@
   function cve(v) {
     const id = /^CVE-\d{4}-\d+$/.test(v.cve) ? `<a href="https://www.cve.org/CVERecord?id=${esc(v.cve)}" target="_blank" rel="noopener noreferrer">${esc(v.cve)}</a>` : esc(v.cve);
     return `<div class="cve"><span class="cve__score" title="Score CVSS">${(v.score ?? '').toString().replace('.', ',')}</span>
-      <div><div class="cve__id">${id}${v.kev ? '<span class="kev">Exploitée (CISA)</span>' : ''}</div><div class="cve__sum">${esc(v.resume)}</div></div>
+      <div><div class="cve__id">${id}${v.kev ? '<span class="kev">Exploitée (CISA)</span>' : ''}</div><div class="cve__sum" data-i18n-skip>${esc(v.resume)}</div></div>
       <span class="cve__date">${esc(fmtD(v.date, true))}</span></div>`;
   }
   const TENDANCES = [['acteurs', 'Acteurs', 'acteurs_actifs', ''], ['codes', 'Codes malveillants', 'malwares_actifs', ''], ['secteurs', 'Secteurs ciblés', 'secteurs_cibles', 'is-alert'], ['pays', 'Pays ciblés', 'pays_cibles', 'is-alert']];
@@ -690,8 +714,112 @@
     }
   }
 
-  loadGeo();
-  loadCyber();
+  /* ══════════ Accès : abonné → les deux veilles en entier, visiteur → présentation publique ══════════ */
+  const TEASER_CYBER = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/teaser.json';
+  const estPremium = (p) => !!p && (p.role === 'admin' || p.role === 'editor' || p.plan === 'premium');
+
+  // La page n'est plus bloquée par un overlay : elle décide elle-même quoi montrer.
+  // Les données complètes restent protégées (bucket privé + RLS premium côté Supabase).
+  async function abonne() {
+    for (let i = 0; i < 24; i++) {
+      const c = window.algorAuth && window.algorAuth.supabase;   // site-auth charge Supabase en différé
+      if (c) {
+        try {
+          const { data } = await c.auth.getSession();
+          const uid = data?.session?.user?.id;
+          if (!uid) return false;
+          const r = await c.from('profiles').select('role, plan').eq('id', uid).single();
+          return estPremium(r.data);
+        } catch (e) { return false; }
+      }
+      await new Promise((ok) => setTimeout(ok, 250));
+    }
+    return false;
+  }
+
+  const CADENAS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+  let ACCES = 'visiteur';
+
+  const bandeau = (txt) => `<div class="apercu">${CADENAS}<span>${txt}</span></div>`;
+  const bloc = (titre, phrase, points) => `<section class="gate">
+      <div class="gate__txt">
+        <h3>${CADENAS} ${esc(titre)}</h3>
+        <p>${esc(phrase)}</p>
+        <div class="gate__pts">${points.map((x) => `<span class="gate__pt">${esc(x)}</span>`).join('')}</div>
+      </div>
+      <a class="gate__cta" href="/offres/">Voir les offres</a>
+      <a class="gate__cta gate__cta--ghost" href="#" data-algor-login>Déjà abonné ? Se connecter</a>
+    </section>`;
+
+  // Aperçu géopolitique : les trois dernières notes, telles qu'elles sont publiées
+  function apercuGeo() {
+    const p = document.getElementById('pane-geo');
+    const vus = geoItems.slice(0, 3);
+    p.innerHTML = bandeau(`Aperçu public : les ${fmtN(vus.length)} dernières notes sur ${fmtN(geoItems.length)}. Le fil complet et les analyses sont réservés aux abonnés.`)
+      + `<div class="geo-grid">${vus.map(geoCard).join('') || '<div class="empty">Fil indisponible pour le moment.</div>'}</div>`
+      + bloc("Le fil géopolitique en entier", "Les notes des six théâtres, avec l'analyse, les implications opérationnelles et les recommandations, plus la carte de veille.",
+             [`${fmtN(geoItems.length)} notes publiées`, 'Filtres théâtre et gravité', 'Carte de veille', 'Sources citées']);
+    p.querySelectorAll('.vcard').forEach((c) => c.addEventListener('click', () => openNote(geoItems.find((it) => it.id === c.dataset.id))));
+    document.getElementById('n-geo').textContent = fmtN(geoItems.length);
+  }
+
+  // Aperçu cyber : les compteurs publics et les derniers titres, sans la carte ni les filtres
+  function apercuCyber(d) {
+    const c = (d && d.compteurs) || {};
+    const rapports = (d && d.rapports) || [];
+    const gen = d && d.genere_le ? new Date(d.genere_le) : null;
+    document.getElementById('pane-cyber').innerHTML = `
+      <section class="kpis">
+        <div class="kpi"><div class="kpi__label">Rapports</div><div class="kpi__value">${fmtN(c.rapports_90j)}<small>90 j</small></div></div>
+        <div class="kpi"><div class="kpi__label">Indicateurs</div><div class="kpi__value">${fmtN(c.indicateurs)}</div></div>
+        <div class="kpi"><div class="kpi__label">CVE critiques</div><div class="kpi__value">${fmtN(c.vulnerabilites)}</div></div>
+        <div class="kpi"><div class="kpi__label">Groupes MITRE</div><div class="kpi__value">${fmtN(c.acteurs)}</div></div>
+        <div class="kpi"><div class="kpi__label">Logiciels MITRE</div><div class="kpi__value">${fmtN(c.malwares)}</div></div>
+      </section>
+      ${bandeau(`Aperçu public : les ${fmtN(rapports.length)} derniers titres sur ${fmtN(c.rapports_90j || 0)}. Les indicateurs, les pays visés et les attaquants sont réservés aux abonnés.`)}
+      <section class="card">
+        <div class="card__head"><h2 class="card__title">Derniers rapports</h2><span class="card__hint">${gen ? 'instantané du ' + esc(gen.toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })) : 'AlienVault OTX'}</span></div>
+        <div class="reps-min">${rapports.map((r) => `<article class="rep">
+          <div class="rep__meta"><span>${esc(fmtD(r.date, true))}</span><span class="rep__src">${esc(r.source || 'AlienVault')}</span></div>
+          <h3 class="rep__title" data-i18n-skip>${esc((document.documentElement.lang === 'en' && r.titre_en) || r.titre || '')}</h3>
+          ${(r.etiquettes || []).length ? `<div class="rep__tags">${r.etiquettes.map((t) => `<span class="tag" data-i18n-skip>${esc(t)}</span>`).join('')}</div>` : ''}
+        </article>`).join('') || '<div class="empty">Instantané indisponible pour le moment.</div>'}</div>
+      </section>
+      ${bloc("La veille cyber en entier", "La carte des attaques pays par pays, les filtres par type et par attaquant, les vulnérabilités critiques et le détail de chaque rapport.",
+             ['Carte des attaques', 'Filtre par attaquant', `${fmtN(c.vulnerabilites || 0)} CVE critiques`, 'Mise à jour toutes les heures'])}`;
+    document.getElementById('n-cyber').textContent = fmtN(c.rapports_90j || 0);
+    if (gen) document.getElementById('dot').classList.toggle('is-off', (Date.now() - gen) / 36e5 > 26);
+    const maj = document.getElementById('maj');
+    if (gen) maj.textContent = (maj.textContent ? maj.textContent + ' · ' : '') + 'Cyber : instantané du ' + gen.toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+
+  async function apercuVisiteur() {
+    document.querySelector('.eyebrow').lastChild.textContent = ' Veilles · aperçu public';
+    document.getElementById('lede').textContent = "Géopolitique : notes d'analyse sourcées sur nos six théâtres. Cyber : menaces tirées des flux publics, mises à jour toutes les heures. Voici un aperçu ; le fil complet est réservé aux abonnés.";
+    document.getElementById('onglets').hidden = false;
+    showTab(params.get('onglet') === 'cyber' ? 'cyber' : 'geo');
+    const [geo, cyber] = await Promise.all([
+      fetch(VEILLE_REMOTE, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+      fetch(TEASER_CYBER, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+    ]);
+    geoItems = ((geo && (Array.isArray(geo) ? geo : geo.items)) || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    if (geo && geo.updated) document.getElementById('maj').textContent = 'Fil géopolitique du ' + fmtD(String(geo.updated).slice(0, 10), true);
+    apercuGeo();
+    apercuCyber(cyber);
+  }
+
+  abonne().then((ok) => {
+    document.getElementById('verif').hidden = true;
+    if (!ok) return apercuVisiteur();
+    // Page non gatée : c'est nous qui signalons l'accès confirmé, pour débloquer algorAuth.loadZoneFile
+    window.dispatchEvent(new CustomEvent('algorAuthReady'));
+    document.getElementById('onglets').hidden = false;
+    ACCES = 'abonne';
+    document.getElementById('foot').hidden = false;
+    showTab(params.get('onglet') === 'cyber' ? 'cyber' : 'geo');
+    loadGeo();
+    loadCyber();
+  });
 </script>
 </body>
 </html>

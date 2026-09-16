@@ -324,12 +324,16 @@ function sourceNature(it) {
 function VBlock({
   v
 }) {
+  // Implications et recommandations rédigées par l'analyste : contenu, jamais traduit par i18n.js
   if (Array.isArray(v) && v.length) return /*#__PURE__*/React.createElement("ul", {
-    className: "vreport__ul"
+    className: "vreport__ul",
+    "data-i18n-skip": ""
   }, v.map((x, i) => /*#__PURE__*/React.createElement("li", {
     key: i
   }, x)));
-  return /*#__PURE__*/React.createElement("p", null, Array.isArray(v) ? v.join(' ') : v);
+  return /*#__PURE__*/React.createElement("p", {
+    "data-i18n-skip": ""
+  }, Array.isArray(v) ? v.join(' ') : v);
 }
 function useVeille() {
   const [items, setItems] = useState(VEILLE_SEED);
@@ -366,7 +370,7 @@ function useVeilleCyber() {
         severite: 'info',
         source: r.source || 'OTX',
         source_url: r.url || '',
-        titre: r.titre,
+        titre: document.documentElement.lang === 'en' && r.titre_en || r.titre,
         resume: (r.etiquettes || []).join(' · '),
         cyber: true
       })));
@@ -488,13 +492,17 @@ function VeilleCard({
   }, veilleZone(it.theatre)), /*#__PURE__*/React.createElement("span", {
     className: "vcard__date"
   }, veilleDateFR(it.date)), it.lieu ? /*#__PURE__*/React.createElement("span", {
-    className: "vcard__lieu"
+    className: "vcard__lieu",
+    "data-i18n-skip": ""
   }, it.lieu) : null, it.source ? /*#__PURE__*/React.createElement("span", {
-    className: "vcard__srcname"
+    className: "vcard__srcname",
+    "data-i18n-skip": ""
   }, it.source) : null), /*#__PURE__*/React.createElement("h3", {
-    className: "vcard__title"
+    className: "vcard__title",
+    "data-i18n-skip": ""
   }, it.titre), /*#__PURE__*/React.createElement("p", {
-    className: "vcard__resume"
+    className: "vcard__resume",
+    "data-i18n-skip": ""
   }, it.resume), /*#__PURE__*/React.createElement("div", {
     className: "vcard__foot"
   }, /*#__PURE__*/React.createElement("span", {
@@ -536,10 +544,14 @@ function VeilleRow({
     style: {
       background: sev.c
     }
-  }), veilleZone(it.theatre), " \xB7 ", veilleDateFR(it.date), " \xB7 ", it.source), /*#__PURE__*/React.createElement("span", {
-    className: "vrow__t"
+  }), veilleZone(it.theatre), " \xB7 ", veilleDateFR(it.date), " \xB7 ", /*#__PURE__*/React.createElement("span", {
+    "data-i18n-skip": ""
+  }, it.source)), /*#__PURE__*/React.createElement("span", {
+    className: "vrow__t",
+    "data-i18n-skip": ""
   }, it.titre), it.resume && /*#__PURE__*/React.createElement("span", {
-    className: "vrow__r"
+    className: "vrow__r",
+    "data-i18n-skip": ""
   }, it.resume)));
 }
 function VeilleModal({
@@ -604,7 +616,8 @@ function VeilleModal({
   }, veilleZone(it.theatre)), /*#__PURE__*/React.createElement("span", {
     className: "vcard__date"
   }, veilleDateFR(it.date)), it.lieu ? /*#__PURE__*/React.createElement("span", {
-    className: "vcard__lieu"
+    className: "vcard__lieu",
+    "data-i18n-skip": ""
   }, it.lieu) : null, /*#__PURE__*/React.createElement("span", {
     className: "vcard__sev",
     style: {
@@ -613,9 +626,11 @@ function VeilleModal({
       background: sev.c + '14'
     }
   }, sev.lbl)), /*#__PURE__*/React.createElement("h3", {
-    className: "vmodal__title"
+    className: "vmodal__title",
+    "data-i18n-skip": ""
   }, it.titre), /*#__PURE__*/React.createElement("p", {
-    className: "vmodal__resume"
+    className: "vmodal__resume",
+    "data-i18n-skip": ""
   }, it.resume), sub ? /*#__PURE__*/React.createElement("div", {
     className: "vreport"
   }, /*#__PURE__*/React.createElement("div", {
@@ -624,7 +639,9 @@ function VeilleModal({
     className: "vreport__sec"
   }, /*#__PURE__*/React.createElement("div", {
     className: "vreport__lbl"
-  }, "Analyse"), /*#__PURE__*/React.createElement("p", null, it.detail || it.resume)), it.implications && (Array.isArray(it.implications) ? it.implications.length : it.implications) ? /*#__PURE__*/React.createElement("div", {
+  }, "Analyse"), /*#__PURE__*/React.createElement("p", {
+    "data-i18n-skip": ""
+  }, it.detail || it.resume)), it.implications && (Array.isArray(it.implications) ? it.implications.length : it.implications) ? /*#__PURE__*/React.createElement("div", {
     className: "vreport__sec"
   }, /*#__PURE__*/React.createElement("div", {
     className: "vreport__lbl"

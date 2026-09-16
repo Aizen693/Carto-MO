@@ -993,7 +993,8 @@ function Globe() {
         //   Une etiquette ne sort jamais du disque (elle serait coupee par le
         //   clip) et ne recouvre jamais une etiquette deja posee ; si aucune
         //   position ne convient (globe petit, zone dense), le point reste seul.
-        const tw = ctx.measureText(a.label).width, th = 14, ty0 = xy[1] + 0.5;
+        const lbl = window.AlgorI18n ? window.AlgorI18n.t(a.label) : a.label; // étiquette traduite en anglais (i18n.js)
+        const tw = ctx.measureText(lbl).width, th = 14, ty0 = xy[1] + 0.5;
         const cands = [[xy[0] + 12, ty0], [xy[0] - 12 - tw, ty0], [xy[0] - tw / 2, ty0 + 17], [xy[0] - tw / 2, ty0 - 17]];
         let tx = 0, ty = 0, placed = false;
         for (const c of cands) {
@@ -1008,9 +1009,9 @@ function Globe() {
         ctx.lineJoin = 'round';
         ctx.lineWidth = 3.5;
         ctx.strokeStyle = C.labelHalo;
-        ctx.strokeText(a.label, tx, ty);
+        ctx.strokeText(lbl, tx, ty);
         ctx.fillStyle = hovered ? C.labelHover : C.label;
-        ctx.fillText(a.label, tx, ty);
+        ctx.fillText(lbl, tx, ty);
         ctx.restore();
       });
 

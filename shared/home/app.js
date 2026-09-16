@@ -361,9 +361,9 @@ function App() {
     "aria-label": "Rubriques"
   }, /*#__PURE__*/React.createElement("a", {
     href: "/plateforme/"
-  }, "Plateforme"), premium && /*#__PURE__*/React.createElement("a", {
+  }, "Plateforme"), /*#__PURE__*/React.createElement("a", {
     href: "/veille/",
-    className: "site-nav__premium"
+    className: premium ? 'site-nav__premium' : undefined
   }, "Veille"), /*#__PURE__*/React.createElement("a", {
     href: "/debunkage/"
   }, "D\xE9bunkage"), /*#__PURE__*/React.createElement("a", {
@@ -378,7 +378,9 @@ function App() {
     href: "/contact/"
   }, "Contact")), /*#__PURE__*/React.createElement("div", {
     className: "app-header__right"
-  }, authLoggedIn && /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lang-slot"
+  }), authLoggedIn && /*#__PURE__*/React.createElement("span", {
     className: "logo-tool"
   }, /*#__PURE__*/React.createElement("input", {
     ref: logoInputRef,

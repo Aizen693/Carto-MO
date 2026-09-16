@@ -416,5 +416,17 @@
     return current;
   }
 
-  window.AlgorMotion = { mount: mount, reduced: REDUCED };
+  // En anglais (shared/i18n.js), les titres doivent être traduits AVANT d'être découpés en mots :
+  // sinon chaque mot français devient un fragment isolé que le dictionnaire ne peut pas remettre en ordre.
+  function mountApresTraduction() {
+    var I = window.AlgorI18n;
+    if (!I || I.lang !== 'en' || I.pret) return mount();
+    var annule = false, reel = null;
+    var lancer = function () { if (!annule && !reel) reel = mount(); };
+    window.addEventListener('algorI18nReady', lancer, { once: true });
+    setTimeout(lancer, 1600); // jamais d'animation bloquée si le dictionnaire tarde
+    return { revert: function () { annule = true; if (reel) reel.revert(); } };
+  }
+
+  window.AlgorMotion = { mount: mountApresTraduction, reduced: REDUCED };
 })();

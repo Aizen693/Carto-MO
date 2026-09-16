@@ -130,8 +130,9 @@ function sourceNature(it){
   return { label:'Source ouverte', cls:'open' };
 }
 function VBlock({ v }){
-  if (Array.isArray(v) && v.length) return (<ul className="vreport__ul">{v.map((x,i)=>(<li key={i}>{x}</li>))}</ul>);
-  return <p>{Array.isArray(v) ? v.join(' ') : v}</p>;
+  // Implications et recommandations rédigées par l'analyste : contenu, jamais traduit par i18n.js
+  if (Array.isArray(v) && v.length) return (<ul className="vreport__ul" data-i18n-skip="">{v.map((x,i)=>(<li key={i}>{x}</li>))}</ul>);
+  return <p data-i18n-skip="">{Array.isArray(v) ? v.join(' ') : v}</p>;
 }
 
 function useVeille(){
@@ -153,7 +154,7 @@ function useVeilleCyber(){
   useEffect(()=>{ let on=true;
     fetch(CYBER_TEASER,{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject())
       .then(d=>{ if(!on) return; setItems((d.rapports||[]).map(r=>({ id:'cyber-'+r.id, date:r.date, theatre:'cyber', severite:'info',
-        source:r.source||'OTX', source_url:r.url||'', titre:r.titre, resume:(r.etiquettes||[]).join(' · '), cyber:true }))); })
+        source:r.source||'OTX', source_url:r.url||'', titre:(document.documentElement.lang==='en'&&r.titre_en)||r.titre, resume:(r.etiquettes||[]).join(' · '), cyber:true }))); })
       .catch(()=>{});
     return ()=>{on=false;};
   },[]);
@@ -195,9 +196,9 @@ function VeilleCard({ it, onOpen, featured, index }){
         <span className="vcard__sev" style={{ color: sev.c, borderColor: sev.c+'59', background: sev.c+'14' }}>{it.cyber ? 'Cyber · OTX' : sev.lbl}</span>
       </div>
       <div className="vcard__body">
-        <div className="vcard__meta"><span className="vcard__zone">{veilleZone(it.theatre)}</span><span className="vcard__date">{veilleDateFR(it.date)}</span>{it.lieu ? <span className="vcard__lieu">{it.lieu}</span> : null}{it.source ? <span className="vcard__srcname">{it.source}</span> : null}</div>
-        <h3 className="vcard__title">{it.titre}</h3>
-        <p className="vcard__resume">{it.resume}</p>
+        <div className="vcard__meta"><span className="vcard__zone">{veilleZone(it.theatre)}</span><span className="vcard__date">{veilleDateFR(it.date)}</span>{it.lieu ? <span className="vcard__lieu" data-i18n-skip="">{it.lieu}</span> : null}{it.source ? <span className="vcard__srcname" data-i18n-skip="">{it.source}</span> : null}</div>
+        <h3 className="vcard__title" data-i18n-skip="">{it.titre}</h3>
+        <p className="vcard__resume" data-i18n-skip="">{it.resume}</p>
         <div className="vcard__foot">
           <span className={'vcard__proof vcard__proof--' + nature.cls}><span className="vcard__proof-dot" />{nature.label}</span>
           <span className="vcard__more">Ouvrir la note <Arrow /></span>
@@ -215,9 +216,9 @@ function VeilleRow({ it, onOpen }){
           onError={(e)=>{ e.target.style.display='none'; }} /> : <VeilleMap it={it} w={172} h={128} />}
       </span>
       <span className="vrow__body">
-        <span className="vrow__meta"><span className="vrow__dot" style={{ background: sev.c }} />{veilleZone(it.theatre)} · {veilleDateFR(it.date)} · {it.source}</span>
-        <span className="vrow__t">{it.titre}</span>
-        {it.resume && <span className="vrow__r">{it.resume}</span>}
+        <span className="vrow__meta"><span className="vrow__dot" style={{ background: sev.c }} />{veilleZone(it.theatre)} · {veilleDateFR(it.date)} · <span data-i18n-skip="">{it.source}</span></span>
+        <span className="vrow__t" data-i18n-skip="">{it.titre}</span>
+        {it.resume && <span className="vrow__r" data-i18n-skip="">{it.resume}</span>}
       </span>
     </button>
   );
@@ -240,17 +241,17 @@ function VeilleModal({ it, sub, onClose }){
           <div className="vcard__meta">
             <span className="vcard__zone">{veilleZone(it.theatre)}</span>
             <span className="vcard__date">{veilleDateFR(it.date)}</span>
-            {it.lieu ? <span className="vcard__lieu">{it.lieu}</span> : null}
+            {it.lieu ? <span className="vcard__lieu" data-i18n-skip="">{it.lieu}</span> : null}
             <span className="vcard__sev" style={{ color: sev.c, borderColor: sev.c+'59', background: sev.c+'14' }}>{sev.lbl}</span>
           </div>
-          <h3 className="vmodal__title">{it.titre}</h3>
-          <p className="vmodal__resume">{it.resume}</p>
+          <h3 className="vmodal__title" data-i18n-skip="">{it.titre}</h3>
+          <p className="vmodal__resume" data-i18n-skip="">{it.resume}</p>
           {sub ? (
             <div className="vreport">
               <div className="vreport__class">Note d'analyse · Accès abonné</div>
               <div className="vreport__sec">
                 <div className="vreport__lbl">Analyse</div>
-                <p>{it.detail || it.resume}</p>
+                <p data-i18n-skip="">{it.detail || it.resume}</p>
               </div>
               {it.implications && (Array.isArray(it.implications) ? it.implications.length : it.implications) ? (
                 <div className="vreport__sec">

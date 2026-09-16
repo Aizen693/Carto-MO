@@ -308,14 +308,15 @@
         ctx.font = (hovered ? '500 ' : '400 ') +
           '11px "JetBrains Mono", ui-monospace, Menlo, monospace';
         ctx.textBaseline = 'middle';
+        const lbl = window.AlgorI18n ? window.AlgorI18n.t(a.label) : a.label; // étiquette traduite en anglais (i18n.js)
         const tx = xy[0] + 12, ty = xy[1] + 0.5;
         ctx.fillStyle = hovered ? '#2c2840' : '#4a4660';
         ctx.shadowColor = 'rgba(255,255,255,0.95)';
         ctx.shadowBlur = 5;
-        ctx.fillText(a.label, tx, ty);
-        ctx.fillText(a.label, tx, ty);
+        ctx.fillText(lbl, tx, ty);
+        ctx.fillText(lbl, tx, ty);
         ctx.shadowBlur = 0;
-        ctx.fillText(a.label, tx, ty);
+        ctx.fillText(lbl, tx, ty);
         ctx.restore();
       });
     }
