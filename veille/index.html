@@ -300,7 +300,9 @@
   @keyframes livepulse{0%{box-shadow:0 0 0 0 rgba(78,208,184,.55)}100%{box-shadow:0 0 0 9px rgba(78,208,184,0)}}
   .couche__maj{font:500 11px var(--sans);color:var(--muted);font-variant-numeric:tabular-nums}
   .cmap__legend.is-hidden{display:none}
-  .cfilters[hidden],.cnote[hidden],.couche__maj[hidden]{display:none!important}
+  .cfilters[hidden],.cnote[hidden],.couche__maj[hidden],.periode[hidden]{display:none!important}
+  .periode{flex:none}
+  .periode button{white-space:nowrap}
   .lrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:9px;padding:7px 9px;border-radius:10px;border:1px solid transparent;cursor:default}
   .lrow[role=button]{cursor:pointer}
   .lrow:hover{background:rgba(255,255,255,.04);border-color:var(--ln-soft)}
@@ -528,7 +530,7 @@
   function report(r) {
     const title = safeUrl(r.url) ? `<a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-i18n-skip>${esc(txt(r, 'titre'))}</a>` : esc(txt(r, 'titre'));
     const pays = (r.pays || []).slice(0, 4), sect = (r.secteurs || []).slice(0, 3);
-    return `<article class="rep" data-q="${esc((r.titre + ' ' + (r.titre_en || '') + ' ' + (r.etiquettes || []).join(' ') + ' ' + pays.join(' ') + ' ' + sect.join(' ') + ' ' + r.resume + ' ' + (r.resume_en || '')).toLowerCase())}">
+    return `<article class="rep" data-date="${esc(String(r.date || '').slice(0, 10))}" data-q="${esc((r.titre + ' ' + (r.titre_en || '') + ' ' + (r.etiquettes || []).join(' ') + ' ' + pays.join(' ') + ' ' + sect.join(' ') + ' ' + r.resume + ' ' + (r.resume_en || '')).toLowerCase())}">
       <div class="rep__meta"><span>${esc(fmtD(r.date, true))}</span><span class="rep__src">${esc(r.source)}</span>${sect.length ? `<span>· ${sect.map((x) => `<span>${esc(x)}</span>`).join(', ')}</span>` : ''}<span class="rep__badges">${(r.types || []).slice(0, 2).map(badgeType).join('')}${(r.acteurs || []).slice(0, 2).map((a) => `<span class="bact bact--s" data-i18n-skip>${esc(a)}</span>`).join('')}</span></div>
       <h3 class="rep__title">${title}</h3>
       ${r.resume ? `<p class="rep__sum" data-i18n-skip>${esc(txt(r, 'resume'))}</p>` : ''}
@@ -547,7 +549,11 @@
   const filtre = { type: null, acteur: null };
   const MONDE = [[-135, -48], [165, 72]]; // emprise de départ : le monde habité, Amériques comprises
   const compte = (arr, key) => { const m = new Map(); for (const x of arr) for (const k of (key(x) || [])) m.set(k, (m.get(k) || 0) + 1); return [...m].sort((a, b) => b[1] - a[1]); };
-  const rapportsFiltres = () => (cmapData?.rapports || []).filter((r) => (!filtre.type || r.types.includes(filtre.type)) && (!filtre.acteur || r.acteurs.includes(filtre.acteur)));
+  // Période d'affichage des rapports (carte + liste) : 7 jours par défaut, 30 ou 90 au choix
+  let periode = ['7', '30', '90'].includes(params.get('periode')) ? Number(params.get('periode')) : 7;
+  const dansPeriode = (r) => !r.date || (Date.now() - Date.parse(String(r.date).slice(0, 10) + 'T00:00:00Z')) / 864e5 < periode + 1;
+  const rapportsPeriode = () => (cmapData?.rapports || []).filter(dansPeriode);
+  const rapportsFiltres = () => rapportsPeriode().filter((r) => (!filtre.type || r.types.includes(filtre.type)) && (!filtre.acteur || r.acteurs.includes(filtre.acteur)));
   function agreger(list) {
     const m = new Map();
     for (const r of list) for (const p of r.pays) { const e = m.get(p) || { nom: p, n: 0, liste: [] }; e.n++; e.liste.push(r); m.set(p, e); }
@@ -596,8 +602,8 @@
   function cmapFiltres() {
     const el = document.getElementById('cfilters'); if (!el || !cmapData) return;
     // Compte sur tous les types reconnus d'un rapport (pas seulement le dominant), comme le filtre lui-même
-    const types = compte(cmapData.rapports.filter((r) => !filtre.acteur || r.acteurs.includes(filtre.acteur)), (r) => r.types);
-    const acteurs = compte(cmapData.rapports.filter((r) => !filtre.type || r.types.includes(filtre.type)), (r) => r.acteurs);
+    const types = compte(rapportsPeriode().filter((r) => !filtre.acteur || r.acteurs.includes(filtre.acteur)), (r) => r.types);
+    const acteurs = compte(rapportsPeriode().filter((r) => !filtre.type || r.types.includes(filtre.type)), (r) => r.acteurs);
     el.innerHTML = `<span class="cfilters__lbl">Type d’attaque</span>
       <button class="fchip ${!filtre.type ? 'is-on' : ''}" data-type="">Tous</button>
       ${types.map(([t, n]) => `<button class="fchip ${filtre.type === t ? 'is-on' : ''}" data-type="${esc(t)}"><i style="background:${tcol(t)}"></i>${esc(t)} <b>${n}</b></button>`).join('')}
@@ -613,6 +619,8 @@
     cmapSel = null; cmapRefresh();
   }
   function cmapRefresh() {
+    const note = document.getElementById('cnote-rapports-n');
+    if (note && cmapData) { const n = rapportsPeriode().length; note.textContent = `${fmtN(n)} rapport${n > 1 ? 's' : ''} localisé${n > 1 ? 's' : ''} sur ${periode === 7 ? 'les 7 derniers jours' : `les ${periode} derniers jours`}`; }
     cmapFiltres(); cmapSide();
     if (!cmap || !cmap.getSource('cyber')) return;
     const pays = agreger(rapportsFiltres()), coords = cmapData.coords;
@@ -819,6 +827,7 @@
     document.querySelectorAll('#couche button').forEach((b) => b.classList.toggle('is-on', b.dataset.c === c));
     document.getElementById('cfilters').hidden = live;
     document.getElementById('cnote-rapports').hidden = live;
+    document.getElementById('periode').hidden = live && cyberVue === 'carte';
     document.getElementById('cnote-direct').hidden = !direct;
     document.getElementById('cnote-attaques').hidden = !atk;
     document.getElementById('couche-maj').hidden = !live;
@@ -842,8 +851,9 @@
         if (couche === 'attaques' && cmap && cmap.getLayer('atk-halo')) {
           cmap.setPaintProperty('atk-halo', 'circle-radius', ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 30, 10 + 12 * ph, 1100, 40 + 26 * ph]);
           cmap.setPaintProperty('atk-halo', 'circle-opacity', 0.42 * (1 - ph));
-          const p2 = (Date.now() % 1800) / 1800, a = Math.max(0.001, p2 - 0.18), b = Math.min(0.999, p2);
-          cmap.setPaintProperty('ddos-arcs', 'line-gradient', ['interpolate', ['linear'], ['line-progress'], 0, 'rgba(255,138,80,0.10)', a, 'rgba(255,138,80,0.10)', b, 'rgba(255,230,160,1)', Math.min(1, b + 0.001), 'rgba(255,138,80,0.10)', 1, 'rgba(255,138,80,0.10)']); }
+          // Comète le long de chaque arc : arrêts strictement croissants 0 < queue < tête < après < 1 (sinon Mapbox rejette le dégradé)
+          const tete = 0.02 + 0.96 * ((Date.now() % 1800) / 1800), queue = Math.max(0.01, tete - 0.18), apres = tete + 0.002;
+          cmap.setPaintProperty('ddos-arcs', 'line-gradient', ['interpolate', ['linear'], ['line-progress'], 0, 'rgba(255,138,80,0.10)', queue, 'rgba(255,138,80,0.10)', tete, 'rgba(255,230,160,1)', apres, 'rgba(255,138,80,0.10)', 1, 'rgba(255,138,80,0.10)']); }
         liveAnim = requestAnimationFrame(anim); };
       anim();
       if (cmap) cmap.fitBounds(MONDE, { padding: 24, speed: 1.1, essential: true });
@@ -861,6 +871,7 @@
     cyberVue = v;
     document.getElementById('vue-liste').hidden = v !== 'liste';
     document.getElementById('vue-carte').hidden = v !== 'carte';
+    const per = document.getElementById('periode'); if (per) per.hidden = v === 'carte' && couche !== 'rapports';
     document.querySelectorAll('.vswitch button').forEach((b) => b.classList.toggle('is-on', b.dataset.vue === v));
     const u = new URL(location.href); if (v === 'carte') u.searchParams.set('vue', 'carte'); else u.searchParams.delete('vue'); history.replaceState(null, '', u);
     if (v === 'carte') { cmapInit(cyberData); cmap?.resize(); }
@@ -882,11 +893,12 @@
           <button data-vue="liste" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Rapports</button>
           <button data-vue="carte" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4z"/><path d="M8 2v16M16 6v16"/></svg>Carte des attaques</button>
         </div>
+        <div class="pills periode" id="periode" title="Période des rapports">${[7, 30, 90].map((p) => `<button data-p="${p}" class="${p === periode ? 'is-on' : ''}">${p === 7 ? '7 jours' : p + ' j'}</button>`).join('')}</div>
         <input class="csearch" id="cq" type="search" placeholder="Filtrer les rapports : acteur, pays, secteur, logiciel, CVE…" autocomplete="off" value="${esc(params.get('q') || '')}">
       </div>
       <div id="vue-carte" hidden>
-        <div class="couche"><div class="pills" id="couche"><button data-c="rapports" class="is-on">Rapports · ${d.periode_jours} j</button><button data-c="attaques"><span class="live-dot live-dot--red"></span>Attaques en cours</button><button data-c="direct"><span class="live-dot"></span>Infrastructure · 24 h</button></div><span class="couche__maj" id="couche-maj" hidden></span></div>
-        <p class="cnote" id="cnote-rapports"><b>${fmtN(d.carte?.rapports_localises || 0)} rapports</b> sur ${fmtN(c.rapports_90j)} déclarent au moins un pays ciblé. Chaque point est placé au centre du pays ; sa taille suit le nombre de rapports, sa couleur le type d’attaque dominant. Cliquez un pays pour voir qui l’attaque et comment, ou filtrez par type et par attaquant.</p>
+        <div class="couche"><div class="pills" id="couche"><button data-c="rapports" class="is-on">Rapports</button><button data-c="attaques"><span class="live-dot live-dot--red"></span>Attaques en cours</button><button data-c="direct"><span class="live-dot"></span>Infrastructure · 24 h</button></div><span class="couche__maj" id="couche-maj" hidden></span></div>
+        <p class="cnote" id="cnote-rapports"><b id="cnote-rapports-n"></b>, c’est-à-dire qui déclarent au moins un pays ciblé. Chaque point est placé au centre du pays ; sa taille suit le nombre de rapports, sa couleur le type d’attaque dominant. Cliquez un pays pour voir qui l’attaque et comment, ou filtrez par type et par attaquant.</p>
         <p class="cnote" id="cnote-attaques" hidden>Attaques réellement reçues aujourd’hui par le réseau de capteurs honeypot du <b>SANS Internet Storm Center</b> (DShield) : balayages, tentatives de connexion et d’exploitation. Chaque point est le pays qui héberge les adresses sources les plus actives (base DB-IP), mis à jour toutes les 5 minutes. Les arcs de DDoS proviennent de Cloudflare Radar lorsqu’ils sont disponibles.</p>
         <p class="cnote" id="cnote-direct" hidden>Infrastructure malveillante signalée dans <b>ThreatFox</b> (abuse.ch) au cours des 24 dernières heures, à quelques minutes près : serveurs de commande, sites de diffusion, charges. Seules les adresses IP sont placées sur la carte, au pays qui les héberge (base DB-IP) ; domaines, URL et fichiers restent dans le flux. Les valeurs des indicateurs ne sont pas publiées.</p>
         <div class="filters cfilters" id="cfilters"></div>
@@ -900,7 +912,7 @@
           <div class="col">
             <section class="card card--sticky">
               <div class="card__head"><h2 class="card__title">Rapports récents</h2><span class="card__hint">${fmtN((d.rapports || []).length)} derniers · AlienVault OTX</span></div>
-              <div class="reports" id="reports">${(d.rapports || []).map(report).join('') || '<div class="empty">Aucun rapport importé pour l’instant.</div>'}</div>
+              <div class="reports" id="reports">${(d.rapports || []).map(report).join('') || '<div class="empty">Aucun rapport importé pour l’instant.</div>'}<div class="empty" id="reports-vide" hidden>Aucun rapport sur cette période. Élargissez à 30 ou 90 jours.</div></div>
             </section>
           </div>
           <div class="col">
@@ -925,7 +937,13 @@
     document.querySelectorAll('#couche button').forEach((b) => b.addEventListener('click', () => setCouche(b.dataset.c)));
     if (couche !== 'rapports') { document.querySelectorAll('#couche button').forEach((b) => b.classList.toggle('is-on', b.dataset.c === couche)); document.getElementById('cfilters').hidden = true; document.getElementById('cnote-rapports').hidden = true; document.getElementById(couche === 'attaques' ? 'cnote-attaques' : 'cnote-direct').hidden = false; }
     const q = document.getElementById('cq');
-    const applyQ = () => { const s = q.value.trim().toLowerCase(); if (s && cyberVue !== 'liste') setVue('liste'); for (const el of document.querySelectorAll('#reports .rep')) el.hidden = !!s && !el.dataset.q.includes(s); };
+    const applyQ = () => { const s = q.value.trim().toLowerCase(); if (s && cyberVue !== 'liste') setVue('liste');
+      let vis = 0; for (const el of document.querySelectorAll('#reports .rep')) { el.hidden = (!!s && !el.dataset.q.includes(s)) || !dansPeriode({ date: el.dataset.date }); if (!el.hidden) vis++; }
+      const vide = document.getElementById('reports-vide'); if (vide) vide.hidden = vis > 0; };
+    const setPeriode = (p) => { periode = p; document.querySelectorAll('#periode button').forEach((b) => b.classList.toggle('is-on', Number(b.dataset.p) === p));
+      const u = new URL(location.href); if (p === 7) u.searchParams.delete('periode'); else u.searchParams.set('periode', String(p)); history.replaceState(null, '', u);
+      applyQ(); cmapSel = null; if (couche === 'rapports') cmapRefresh(); };
+    document.querySelectorAll('#periode button').forEach((b) => b.addEventListener('click', () => setPeriode(Number(b.dataset.p))));
     q.addEventListener('input', applyQ); applyQ();
     document.getElementById('reports').addEventListener('click', (e) => {
       const pays = e.target.closest('.tag--pays');
