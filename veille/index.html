@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<script src="/shared/i18n.js?v=20260915a"></script>
+<script src="/shared/i18n.js?v=20260916a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Veilles — Algor Access</title>
 <meta name="robots" content="noindex">
@@ -293,6 +293,39 @@
     .cmap-wrap{grid-template-columns:1fr}.cmap{height:60vh;min-height:360px}.cside{height:auto;max-height:360px;min-height:0}}
   @media (max-width:620px){.geo-grid{grid-template-columns:1fr}h1{font-size:26px}.head-right{align-items:flex-start}.tab{padding:9px 11px}}
   @media (prefers-reduced-motion:reduce){.bar__fill{animation:none}.vcard,.vcard:hover{transform:none}}
+  /* Couche temps réel (indicateurs ThreatFox 24 h) */
+  .couche{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
+  .couche .pills button{display:inline-flex;align-items:center;gap:7px}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:#4ED0B8;display:inline-block;flex:none;box-shadow:0 0 0 0 rgba(78,208,184,.6);animation:livepulse 1.6s ease-out infinite}
+  @keyframes livepulse{0%{box-shadow:0 0 0 0 rgba(78,208,184,.55)}100%{box-shadow:0 0 0 9px rgba(78,208,184,0)}}
+  .couche__maj{font:500 11px var(--sans);color:var(--muted);font-variant-numeric:tabular-nums}
+  .cmap__legend.is-hidden{display:none}
+  .cfilters[hidden],.cnote[hidden],.couche__maj[hidden]{display:none!important}
+  .lrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:9px;padding:7px 9px;border-radius:10px;border:1px solid transparent;cursor:default}
+  .lrow[role=button]{cursor:pointer}
+  .lrow:hover{background:rgba(255,255,255,.04);border-color:var(--ln-soft)}
+  .lrow.is-new{animation:lnew 1.4s ease-out}
+  @keyframes lnew{from{background:rgba(78,208,184,.22)}}
+  .lrow__t{font:500 10.5px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .lrow__m{font:600 12px var(--sans);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px;min-width:0}
+  .lrow__m small{font:500 10px var(--sans);color:var(--muted);flex:none}
+  .lrow__p{font:500 10.5px var(--sans);color:var(--tx);white-space:nowrap}
+  .lrow__dot{width:7px;height:7px;border-radius:50%;flex:none;display:inline-block}
+  .lbars{display:flex;align-items:flex-end;gap:2px;height:34px;margin:4px 0 10px}
+  .lbars i{flex:1;background:rgba(200,176,234,.35);border-radius:2px 2px 0 0;min-height:2px}
+  .lbars i.is-last{background:#4ED0B8}
+  .lstat{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .lstat span{display:flex;flex-direction:column;font:500 10.5px var(--sans);color:var(--muted)}
+  .lstat b{font:600 16px var(--sans);color:var(--ink);font-variant-numeric:tabular-nums}
+  .live-dot--red{background:#FF5A6E;animation-name:livepulsered}
+  @keyframes livepulsered{0%{box-shadow:0 0 0 0 rgba(255,90,110,.6)}100%{box-shadow:0 0 0 9px rgba(255,90,110,0)}}
+  .atk-count{font:600 26px/1.1 var(--sans);color:#FF8A98;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .atk-rate{font:500 10.5px var(--sans);color:var(--muted);margin:2px 0 12px}
+  .prow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:5px 2px}
+  .prow__n{font:600 12px var(--sans);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prow__n small{font:500 10.5px var(--mono);color:var(--muted);margin-left:6px}
+  .prow b{font:500 11px var(--mono);color:#FF8A98;font-variant-numeric:tabular-nums}
+  .prow__bar{grid-column:1/-1;height:3px;border-radius:99px;background:linear-gradient(95deg,#FF5A6E,#F0A650)}
 </style>
 </head>
 <body>
@@ -617,8 +650,204 @@
         pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t">${esc(f.nom)}<b>${fmtN(f.n)}</b></div><div class="cpop__l"><i style="background:${esc(f.couleur)}"></i>${esc(f.type)}</div>${f.acteur ? `<div class="cpop__l">Attaquant principal : <span data-i18n-skip>${esc(f.acteur)}</span></div>` : ''}`).addTo(cmap); });
       cmap.on('mouseleave', 'cyber-pts', () => { cmap.getCanvas().style.cursor = ''; pop.remove(); });
       cmap.on('click', 'cyber-pts', (e) => cmapFocus(e.features[0].properties.nom));
+      // Couche temps réel (masquée tant que la couche « rapports » est affichée)
+      cmap.addSource('live', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+      cmap.addLayer({ id: 'live-halo', type: 'circle', source: 'live', layout: { visibility: 'none' }, paint: { 'circle-color': ['get', 'couleur'], 'circle-opacity': 0.2, 'circle-blur': 0.7, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 10, 7, 40] } });
+      cmap.addLayer({ id: 'live-pts', type: 'circle', source: 'live', layout: { visibility: 'none' }, paint: { 'circle-color': ['get', 'couleur'], 'circle-opacity': 0.8, 'circle-stroke-color': '#fff', 'circle-stroke-width': ['case', ['>', ['get', 'c2'], 0], 1.8, 0.8], 'circle-stroke-opacity': 0.85, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 4, 7, 16] } });
+      cmap.addLayer({ id: 'live-lbl', type: 'symbol', source: 'live', filter: ['>=', ['get', 'n'], 4], layout: { visibility: 'none', 'text-field': ['get', 'nom'], 'text-size': 11, 'text-offset': [0, 1.6], 'text-anchor': 'top', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] }, paint: { 'text-color': '#F3EFFB', 'text-halo-color': '#05040B', 'text-halo-width': 1.2 } });
+      cmap.on('mousemove', 'live-pts', (e) => { cmap.getCanvas().style.cursor = 'pointer'; const f = e.features[0].properties;
+        pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t" data-i18n-skip>${esc(f.nom)}<b>${fmtN(f.n)}</b></div><div class="cpop__l"><i style="background:${esc(f.couleur)}"></i>${esc(f.type)}</div>${f.famille ? `<div class="cpop__l">Famille principale : <span data-i18n-skip>${esc(f.famille)}</span></div>` : ''}${f.c2 ? `<div class="cpop__l">${f.c2} C2 Feodo en ligne</div>` : ''}`).addTo(cmap); });
+      cmap.on('mouseleave', 'live-pts', () => { cmap.getCanvas().style.cursor = ''; pop.remove(); });
+      cmap.on('click', 'live-pts', (e) => liveFocus(e.features[0].properties.cc));
+      const legendLive = document.createElement('div'); legendLive.className = 'cmap__legend cmap__legend--live is-hidden';
+      legendLive.innerHTML = `<div class="cmap__legend-row">${Object.entries(LIVE_COL).map(([t, c]) => `<span><i style="background:${c}88;border-color:${c}"></i>${esc(t)}</span>`).join('')}</div><div class="cmap__legend-row"><span>Taille = indicateurs sur 24 h · halo = signalé dans l’heure</span></div>`;
+      host.appendChild(legendLive);
+      // Couche « Attaques en cours » : origine par pays (DShield) + arcs DDoS (Cloudflare Radar si disponible)
+      cmap.addSource('ddos', { type: 'geojson', lineMetrics: true, data: { type: 'FeatureCollection', features: [] } });
+      cmap.addLayer({ id: 'ddos-arcs', type: 'line', source: 'ddos', layout: { visibility: 'none', 'line-cap': 'round' }, paint: { 'line-width': ['interpolate', ['linear'], ['get', 'part'], 0, 1, 20, 3.5], 'line-gradient': ['interpolate', ['linear'], ['line-progress'], 0, 'rgba(255,138,80,0.1)', 1, 'rgba(255,138,80,0.6)'] } });
+      cmap.addSource('atk', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+      cmap.addLayer({ id: 'atk-halo', type: 'circle', source: 'atk', layout: { visibility: 'none' }, paint: { 'circle-color': '#FF5A6E', 'circle-opacity': 0.3, 'circle-blur': 0.6, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 30, 12, 1100, 46] } });
+      cmap.addLayer({ id: 'atk-pts', type: 'circle', source: 'atk', layout: { visibility: 'none' }, paint: { 'circle-color': '#FF5A6E', 'circle-opacity': 0.85, 'circle-stroke-color': '#FFD2D8', 'circle-stroke-width': 1, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 30, 3.5, 1100, 17] } });
+      cmap.addLayer({ id: 'atk-lbl', type: 'symbol', source: 'atk', filter: ['>=', ['get', 'n'], 40000], layout: { visibility: 'none', 'text-field': ['get', 'nom'], 'text-size': 11, 'text-offset': [0, 1.7], 'text-anchor': 'top', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] }, paint: { 'text-color': '#FFE3E7', 'text-halo-color': '#05040B', 'text-halo-width': 1.2 } });
+      cmap.on('mousemove', 'atk-pts', (e) => { cmap.getCanvas().style.cursor = 'pointer'; const f = e.features[0].properties;
+        pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t" data-i18n-skip>${esc(f.nom)}<b>${fmtN(f.n)}</b></div><div class="cpop__l"><i style="background:#FF5A6E"></i>événements d’attaque aujourd’hui</div><div class="cpop__l">${fmtN(f.ips)} adresse${f.ips > 1 ? 's' : ''} source${f.ips > 1 ? 's' : ''}</div>`).addTo(cmap); });
+      cmap.on('mouseleave', 'atk-pts', () => { cmap.getCanvas().style.cursor = ''; pop.remove(); });
+      cmap.on('click', 'atk-pts', (e) => atkFocus(e.features[0].properties.cc));
+      cmap.on('mousemove', 'ddos-arcs', (e) => { const f = e.features[0].properties; cmap.getCanvas().style.cursor = 'pointer';
+        pop.setLngLat(e.lngLat).setHTML(`<div class="cpop__t" data-i18n-skip>${esc(f.o)} → ${esc(f.t)}</div><div class="cpop__l">DDoS ${esc(f.couche)} · ${Number(f.part).toFixed(1).replace('.', ',')} % du trafic d’attaque observé</div>`).addTo(cmap); });
+      cmap.on('mouseleave', 'ddos-arcs', () => { cmap.getCanvas().style.cursor = ''; pop.remove(); });
+      const legendAtk = document.createElement('div'); legendAtk.className = 'cmap__legend cmap__legend--atk is-hidden';
+      legendAtk.innerHTML = `<div class="cmap__legend-row"><span><i style="background:#FF5A6E88;border-color:#FF5A6E"></i>Origine des attaques (capteurs SANS ISC)</span><span><i style="background:#FF8A5088;border-color:#FF8A50;border-radius:2px;height:3px;width:14px"></i>DDoS origine → cible</span></div><div class="cmap__legend-row"><span>Taille = événements du jour</span></div>`;
+      host.appendChild(legendAtk);
       cmapRefresh();
+      if (couche !== 'rapports') setCouche(couche);
     });
+  }
+  /* ── Couche temps réel : indicateurs ThreatFox des 24 dernières heures (IP géolocalisées par pays),
+     rafraîchie chaque minute depuis live.json déposé toutes les 5 minutes par le VPS. ── */
+  const LIVE_COL = { 'Serveur de commande': '#5BB0F2', 'Diffusion de charge': '#F0A650', 'Charge malveillante': '#F5D66B' };
+  const lcol = (t) => LIVE_COL[t] || '#8F87AA';
+  let couche = ['direct', 'attaques'].includes(params.get('couche')) ? params.get('couche') : 'rapports', liveData = null, liveTimer = null, liveAnim = null, liveSel = null, atkSel = null, atkTick = null;
+  const liveVus = new Set();
+  const ilYA = (iso) => { const m = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 6e4)); return m < 1 ? 'à l’instant' : m < 60 ? `il y a ${m} min` : m < 1440 ? `il y a ${Math.floor(m / 60)} h${m % 60 ? ' ' + String(m % 60).padStart(2, '0') : ''}` : `il y a ${Math.floor(m / 1440)} j`; };
+  const hhmm = (iso) => new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  const iocLbl = (t) => t === 'ip:port' ? 'IP' : /hash/.test(t) ? 'fichier' : t === 'domain' ? 'domaine' : t;
+  const ligneLive = (x) => { const neuf = liveVus.size && !liveVus.has(x.id); return `<div class="lrow ${neuf ? 'is-new' : ''}" ${x.cc ? `data-cc="${esc(x.cc)}" role="button" tabindex="0"` : ''} title="${esc(x.type)}${x.rapporteur ? ' · signalé par ' + esc(x.rapporteur) : ''}${x.confiance != null ? ' · confiance ' + x.confiance + ' %' : ''}">
+      <span class="lrow__t">${hhmm(x.t)}</span>
+      <span class="lrow__m" data-i18n-skip><i class="lrow__dot" style="background:${lcol(x.type)}"></i><span style="overflow:hidden;text-overflow:ellipsis">${esc(x.famille)}</span><small>${esc(iocLbl(x.ioc))}</small></span>
+      <span class="lrow__p" data-i18n-skip>${x.pays ? esc(x.pays) : '<span style="color:var(--muted)">non localisé</span>'}</span></div>`; };
+  async function chargerLive() {
+    try {
+      const d = await window.algorAuth.loadZoneFile('veille-cyber/live.json');
+      liveData = d;
+      if (couche === 'direct') liveRefresh(); else if (couche === 'attaques') atkRefresh();
+    } catch (e) {
+      console.warn('[veille] live', e);
+      if (couche !== 'rapports' && !liveData) document.getElementById('cside').innerHTML = '<div class="empty">Flux temps réel indisponible pour le moment.</div>';
+    }
+  }
+  function liveFeatures() {
+    if (!liveData) return [];
+    const now = Date.now();
+    return liveData.pays.map((p) => { const types = p.types.slice().sort((a, b) => b.valeur - a.valeur); return { type: 'Feature', geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
+      properties: { cc: p.cc, nom: p.nom, n: p.n, couleur: lcol(types[0]?.nom), type: types[0]?.nom || '', famille: p.familles[0]?.nom || '', c2: p.c2_en_ligne || 0, frais: Math.max(0, 1 - (now - Date.parse(p.dernier)) / 36e5) } }; });
+  }
+  function liveRefresh() {
+    liveSide();
+    const maj = document.getElementById('couche-maj');
+    if (maj && liveData) maj.textContent = `Mis à jour ${ilYA(liveData.genere_le)} · dernier signalement ${ilYA(liveData.dernier)}`;
+    if (!cmap || !cmap.getSource('live')) return;
+    cmap.getSource('live').setData({ type: 'FeatureCollection', features: liveFeatures() });
+    cmap.setPaintProperty('live-pts', 'circle-opacity', liveSel ? ['case', ['==', ['get', 'cc'], liveSel], 0.95, 0.3] : 0.8);
+  }
+  function liveSide() {
+    const el = document.getElementById('cside'); if (!el || !liveData || couche !== 'direct') return;
+    const d = liveData;
+    if (liveSel) {
+      const p = d.pays.find((x) => x.cc === liveSel);
+      if (p) {
+        const flux = d.flux.filter((x) => x.cc === p.cc);
+        el.innerHTML = `<button class="cside__back" id="cside-back">← Tous les pays</button>
+          <div class="cside__head"><div><h3 class="cside__title" data-i18n-skip>${esc(p.nom)}</h3><div class="cside__sub">${fmtN(p.n)} indicateur${p.n > 1 ? 's' : ''} sur ${d.fenetre_h} h${p.c2_en_ligne ? ` · ${p.c2_en_ligne} C2 Feodo en ligne` : ''} · dernier ${ilYA(p.dernier)}</div></div></div>
+          <div class="cside__sec"><div class="cside__lbl">Familles</div><div class="cside__chips">${p.familles.map((f) => `<span class="bact bact--s" data-i18n-skip>${esc(f.nom)} <b>${f.valeur}</b></span>`).join('')}</div></div>
+          <div class="cside__sec"><div class="cside__lbl">Types</div><div class="cside__chips">${p.types.map((t) => `<span class="btype" style="--c:${lcol(t.nom)}">${esc(t.nom)} <b>${t.valeur}</b></span>`).join('')}</div></div>
+          <div class="cside__lbl">Derniers signalements</div>
+          <div class="cside__list">${flux.slice(0, 60).map(ligneLive).join('') || '<div class="empty">Détail non conservé pour ce pays sur cette fenêtre.</div>'}</div>`;
+        el.querySelector('#cside-back').addEventListener('click', () => { liveSel = null; liveRefresh(); if (cmap) cmap.fitBounds(MONDE, { padding: 24, speed: 1.1, essential: true }); });
+        return;
+      }
+      liveSel = null;
+    }
+    const max = Math.max(...d.par_heure.map((h) => h.n), 1);
+    el.innerHTML = `<div class="cside__head"><div><h3 class="cside__title"><span class="live-dot" style="margin-right:8px;vertical-align:middle"></span>Flux en direct</h3><div class="cside__sub">ThreatFox · ${d.fenetre_h} dernières heures · rafraîchi chaque minute</div></div></div>
+      <div class="lstat"><span><b>${fmtN(d.total)}</b>indicateurs</span><span><b>${fmtN(d.localises)}</b>localisés</span><span><b>${fmtN(d.pays.length)}</b>pays</span><span><b>${fmtN((d.c2_en_ligne || []).length)}</b>C2 en ligne</span></div>
+      <div class="lbars" title="Indicateurs par heure">${d.par_heure.map((h, i) => `<i style="height:${Math.max(2, 100 * h.n / max)}%" class="${i === d.par_heure.length - 1 ? 'is-last' : ''}" title="${hhmm(h.h)} · ${h.n}"></i>`).join('')}</div>
+      <div class="cside__sec"><div class="cside__chips">${d.familles.filter((f) => f.nom !== 'Non identifié').slice(0, 6).map((f) => `<span class="bact bact--s" data-i18n-skip>${esc(f.nom)} <b>${f.valeur}</b></span>`).join('')}</div></div>
+      <div class="cside__list">${d.flux.slice(0, 80).map(ligneLive).join('')}</div>`;
+    el.querySelectorAll('.lrow[data-cc]').forEach((b) => b.addEventListener('click', () => liveFocus(b.dataset.cc)));
+    for (const x of d.flux.slice(0, 80)) liveVus.add(x.id);
+  }
+  function liveFocus(cc) { liveSel = cc; liveRefresh(); const p = liveData?.pays.find((x) => x.cc === cc); if (p && cmap) cmap.flyTo({ center: [p.lon, p.lat], zoom: Math.max(cmap.getZoom(), 3.2), speed: 1.1, essential: true }); }
+  /* ── Attaques en cours : capteurs honeypot SANS ISC DShield (origine des attaques par pays, services visés),
+     + DDoS pays → pays de Cloudflare Radar quand le jeton est posé sur le VPS (arcs animés). ── */
+  const arc = (a, b) => { let [x1, y1] = a, [x2, y2] = b; if (x2 - x1 > 180) x2 -= 360; else if (x1 - x2 > 180) x2 += 360;
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1, lift = Math.min(28, len * 0.22);
+    const cx = mx - (dy / len) * lift, cy = my + (dx / len) * lift, pts = [];
+    for (let i = 0; i <= 48; i++) { const t = i / 48, u = 1 - t; pts.push([u * u * x1 + 2 * u * t * cx + t * t * x2, u * u * y1 + 2 * u * t * cy + t * t * y2]); }
+    return pts; };
+  function atkFeatures() {
+    const a = liveData?.attaques; if (!a) return { pts: [], arcs: [] };
+    const pts = a.pays.map((p) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [p.lon, p.lat] }, properties: { cc: p.cc, nom: p.nom, n: p.signalements, ips: p.ips, cibles: p.cibles } }));
+    const paires = [...(a.ddos?.l7 || []).map((x) => ({ ...x, couche: 'L7' })), ...(a.ddos?.l3 || []).map((x) => ({ ...x, couche: 'L3' }))];
+    const arcs = paires.filter((x) => x.o_cc !== x.t_cc).map((x) => ({ type: 'Feature', geometry: { type: 'LineString', coordinates: arc([x.o_lon, x.o_lat], [x.t_lon, x.t_lat]) },
+      properties: { o: x.o_nom, t: x.t_nom, part: x.part, couche: x.couche } }));
+    return { pts, arcs };
+  }
+  function atkRefresh() {
+    atkSide();
+    const maj = document.getElementById('couche-maj');
+    if (maj && liveData?.attaques) maj.textContent = `Capteurs SANS ISC · mis à jour ${ilYA(liveData.genere_le)}`;
+    if (!cmap || !cmap.getSource('atk')) return;
+    const { pts, arcs } = atkFeatures();
+    cmap.getSource('atk').setData({ type: 'FeatureCollection', features: pts });
+    cmap.getSource('ddos').setData({ type: 'FeatureCollection', features: arcs });
+    cmap.setPaintProperty('atk-pts', 'circle-opacity', atkSel ? ['case', ['==', ['get', 'cc'], atkSel], 0.95, 0.3] : 0.85);
+  }
+  function atkSide() {
+    const el = document.getElementById('cside'); if (!el || couche !== 'attaques') return;
+    const a = liveData?.attaques;
+    if (!a) { el.innerHTML = '<div class="empty">Les capteurs SANS ISC ne répondent pas pour le moment. Nouvel essai dans 5 minutes.</div>'; return; }
+    const auj = a.resume.find((r) => r.jour === a.jour) || a.resume.at(-1) || { evenements: 0, sources: 0, capteurs: 0 };
+    const veille = a.resume.find((r) => r.jour !== a.jour);
+    if (atkSel) {
+      const p = a.pays.find((x) => x.cc === atkSel);
+      if (p) {
+        el.innerHTML = `<button class="cside__back" id="cside-back">← Tous les pays</button>
+          <div class="cside__head"><div><h3 class="cside__title" data-i18n-skip>${esc(p.nom)}</h3><div class="cside__sub">Origine d’attaques observées aujourd’hui par les capteurs SANS ISC</div></div></div>
+          <div class="lstat"><span><b>${fmtN(p.signalements)}</b>événements</span><span><b>${fmtN(p.ips)}</b>adresses sources</span><span><b>${fmtN(p.cibles)}</b>capteurs touchés (max)</span></div>
+          <p class="cnote" style="margin-top:10px">Parmi les ${fmtN(a.ips_analysees)} adresses les plus actives du jour. Le pays est celui qui héberge l’adresse (base DB-IP) : un serveur loué ou compromis, pas forcément la nationalité de l’attaquant.</p>`;
+        el.querySelector('#cside-back').addEventListener('click', () => { atkSel = null; atkRefresh(); if (cmap) cmap.fitBounds(MONDE, { padding: 24, speed: 1.1, essential: true }); });
+        return;
+      }
+      atkSel = null;
+    }
+    const maxP = Math.max(...a.pays.map((p) => p.signalements), 1), maxS = Math.max(...a.ports.map((p) => p.records), 1);
+    const ddos = [...(a.ddos?.l7 || []), ...(a.ddos?.l3 || [])].filter((x) => x.o_cc !== x.t_cc).sort((x, y) => y.part - x.part).slice(0, 6);
+    el.innerHTML = `<div class="cside__head"><div><h3 class="cside__title"><span class="live-dot live-dot--red" style="margin-right:8px;vertical-align:middle"></span>Attaques en cours</h3><div class="cside__sub">Capteurs honeypot SANS ISC DShield · aujourd’hui (UTC)</div></div></div>
+      <div class="atk-count" id="atk-count">${fmtN(auj.evenements)}</div>
+      <div class="atk-rate" id="atk-rate">événements d’attaque aujourd’hui</div>
+      <div class="lstat"><span><b>${fmtN(auj.sources)}</b>adresses sources</span><span><b>${fmtN(auj.capteurs)}</b>capteurs</span>${veille ? `<span><b>${fmtN(veille.evenements)}</b>hier</span>` : ''}</div>
+      <div class="cside__list" style="margin-top:6px">
+        <div class="cside__lbl">Services visés</div>
+        ${a.ports.slice(0, 8).map((p) => `<div class="prow"><span class="prow__n">${esc(p.service || 'Port ' + p.port)}<small>${p.port}</small></span><b>${fmtN(p.records)}</b><span class="prow__bar" style="width:${(100 * p.records / maxS).toFixed(1)}%"></span></div>`).join('')}
+        <div class="cside__lbl" style="margin-top:12px">Pays d’origine</div>
+        ${a.pays.slice(0, 15).map((p) => `<button class="crow" data-cc="${esc(p.cc)}"><span data-i18n-skip>${esc(p.nom)}<small> · ${fmtN(p.ips)} IP</small></span><b>${fmtN(p.signalements)}</b><span class="crow__bar" style="width:${(100 * p.signalements / maxP).toFixed(1)}%"></span></button>`).join('')}
+        ${ddos.length ? `<div class="cside__lbl" style="margin-top:12px">DDoS · origine → cible (24 h)</div>${ddos.map((x) => `<div class="prow"><span class="prow__n" data-i18n-skip>${esc(x.o_nom)} → ${esc(x.t_nom)}</span><b>${x.part.toFixed(1).replace('.', ',')} %</b></div>`).join('')}` : ''}
+      </div>`;
+    el.querySelectorAll('.crow[data-cc]').forEach((b) => b.addEventListener('click', () => atkFocus(b.dataset.cc)));
+    // Compteur animé au rythme moyen du jour (estimation entre deux relevés, signalée comme telle)
+    clearInterval(atkTick);
+    const t0 = Date.parse(liveData.genere_le), minuit = Date.parse(a.jour + 'T00:00:00Z'), rythme = auj.evenements / Math.max(60, (t0 - minuit) / 1000);
+    const cpt = document.getElementById('atk-count'), lbl = document.getElementById('atk-rate');
+    lbl.textContent = `événements d’attaque aujourd’hui · ≈ ${fmtN(Math.round(rythme))} par seconde, estimé au rythme du jour`;
+    atkTick = setInterval(() => { if (!document.body.contains(cpt)) return clearInterval(atkTick); cpt.textContent = fmtN(Math.round(auj.evenements + rythme * Math.max(0, (Date.now() - t0) / 1000))); }, 250);
+  }
+  function atkFocus(cc) { atkSel = cc; atkRefresh(); const p = liveData?.attaques?.pays.find((x) => x.cc === cc); if (p && cmap) cmap.flyTo({ center: [p.lon, p.lat], zoom: Math.max(cmap.getZoom(), 3), speed: 1.1, essential: true }); }
+  function setCouche(c) {
+    couche = c;
+    const direct = c === 'direct', atk = c === 'attaques', live = direct || atk;
+    document.querySelectorAll('#couche button').forEach((b) => b.classList.toggle('is-on', b.dataset.c === c));
+    document.getElementById('cfilters').hidden = live;
+    document.getElementById('cnote-rapports').hidden = live;
+    document.getElementById('cnote-direct').hidden = !direct;
+    document.getElementById('cnote-attaques').hidden = !atk;
+    document.getElementById('couche-maj').hidden = !live;
+    if (cmap && cmap.getLayer('atk-pts')) for (const [id, on] of [['cyber-halo', !live], ['cyber-pts', !live], ['cyber-lbl', !live], ['live-halo', direct], ['live-pts', direct], ['live-lbl', direct], ['atk-halo', atk], ['atk-pts', atk], ['atk-lbl', atk], ['ddos-arcs', atk]]) cmap.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
+    const host = document.getElementById('cmap');
+    host?.querySelector('.cmap__legend:not(.cmap__legend--live):not(.cmap__legend--atk)')?.classList.toggle('is-hidden', live);
+    host?.querySelector('.cmap__legend--live')?.classList.toggle('is-hidden', !direct);
+    host?.querySelector('.cmap__legend--atk')?.classList.toggle('is-hidden', !atk);
+    clearInterval(liveTimer); liveTimer = null; cancelAnimationFrame(liveAnim); clearInterval(atkTick);
+    const u = new URL(location.href); if (live) u.searchParams.set('couche', c); else u.searchParams.delete('couche'); history.replaceState(null, '', u);
+    if (live) {
+      liveSel = null; atkSel = null;
+      if (!liveData) document.getElementById('cside').innerHTML = '<div class="empty">Chargement du flux en direct…</div>';
+      else if (atk) atkRefresh(); else liveRefresh();
+      chargerLive(); liveTimer = setInterval(chargerLive, 60_000);
+      const anim = () => { if (couche === 'rapports') return;
+        const ph = (Date.now() % 2400) / 2400;
+        if (couche === 'direct' && cmap && cmap.getLayer('live-halo')) {
+          cmap.setPaintProperty('live-halo', 'circle-radius', ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 9 + 9 * ph, 7, 34 + 20 * ph]);
+          cmap.setPaintProperty('live-halo', 'circle-opacity', ['*', ['+', 0.1, ['*', 0.35, ['get', 'frais']]], 1 - ph]); }
+        if (couche === 'attaques' && cmap && cmap.getLayer('atk-halo')) {
+          cmap.setPaintProperty('atk-halo', 'circle-radius', ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 30, 10 + 12 * ph, 1100, 40 + 26 * ph]);
+          cmap.setPaintProperty('atk-halo', 'circle-opacity', 0.42 * (1 - ph));
+          const p2 = (Date.now() % 1800) / 1800, a = Math.max(0.001, p2 - 0.18), b = Math.min(0.999, p2);
+          cmap.setPaintProperty('ddos-arcs', 'line-gradient', ['interpolate', ['linear'], ['line-progress'], 0, 'rgba(255,138,80,0.10)', a, 'rgba(255,138,80,0.10)', b, 'rgba(255,230,160,1)', Math.min(1, b + 0.001), 'rgba(255,138,80,0.10)', 1, 'rgba(255,138,80,0.10)']); }
+        liveAnim = requestAnimationFrame(anim); };
+      anim();
+      if (cmap) cmap.fitBounds(MONDE, { padding: 24, speed: 1.1, essential: true });
+    } else { cmapSel = null; cmapRefresh(); }
   }
   function cve(v) {
     const id = /^CVE-\d{4}-\d+$/.test(v.cve) ? `<a href="https://www.cve.org/CVERecord?id=${esc(v.cve)}" target="_blank" rel="noopener noreferrer">${esc(v.cve)}</a>` : esc(v.cve);
@@ -656,7 +885,10 @@
         <input class="csearch" id="cq" type="search" placeholder="Filtrer les rapports : acteur, pays, secteur, logiciel, CVE…" autocomplete="off" value="${esc(params.get('q') || '')}">
       </div>
       <div id="vue-carte" hidden>
-        <p class="cnote"><b>${fmtN(d.carte?.rapports_localises || 0)} rapports</b> sur ${fmtN(c.rapports_90j)} déclarent au moins un pays ciblé. Chaque point est placé au centre du pays ; sa taille suit le nombre de rapports, sa couleur le type d’attaque dominant. Cliquez un pays pour voir qui l’attaque et comment, ou filtrez par type et par attaquant.</p>
+        <div class="couche"><div class="pills" id="couche"><button data-c="rapports" class="is-on">Rapports · ${d.periode_jours} j</button><button data-c="attaques"><span class="live-dot live-dot--red"></span>Attaques en cours</button><button data-c="direct"><span class="live-dot"></span>Infrastructure · 24 h</button></div><span class="couche__maj" id="couche-maj" hidden></span></div>
+        <p class="cnote" id="cnote-rapports"><b>${fmtN(d.carte?.rapports_localises || 0)} rapports</b> sur ${fmtN(c.rapports_90j)} déclarent au moins un pays ciblé. Chaque point est placé au centre du pays ; sa taille suit le nombre de rapports, sa couleur le type d’attaque dominant. Cliquez un pays pour voir qui l’attaque et comment, ou filtrez par type et par attaquant.</p>
+        <p class="cnote" id="cnote-attaques" hidden>Attaques réellement reçues aujourd’hui par le réseau de capteurs honeypot du <b>SANS Internet Storm Center</b> (DShield) : balayages, tentatives de connexion et d’exploitation. Chaque point est le pays qui héberge les adresses sources les plus actives (base DB-IP), mis à jour toutes les 5 minutes. Les arcs de DDoS proviennent de Cloudflare Radar lorsqu’ils sont disponibles.</p>
+        <p class="cnote" id="cnote-direct" hidden>Infrastructure malveillante signalée dans <b>ThreatFox</b> (abuse.ch) au cours des 24 dernières heures, à quelques minutes près : serveurs de commande, sites de diffusion, charges. Seules les adresses IP sont placées sur la carte, au pays qui les héberge (base DB-IP) ; domaines, URL et fichiers restent dans le flux. Les valeurs des indicateurs ne sont pas publiées.</p>
         <div class="filters cfilters" id="cfilters"></div>
         <div class="cmap-wrap">
           <div class="cmap" id="cmap"><div class="cmap__loading">Chargement de la carte…</div></div>
@@ -690,6 +922,8 @@
     document.querySelectorAll('#pills button').forEach((b) => b.addEventListener('click', () => { tendance = b.dataset.t; renderTendance(); }));
     renderTendance();
     document.querySelectorAll('.vswitch button').forEach((b) => b.addEventListener('click', () => setVue(b.dataset.vue)));
+    document.querySelectorAll('#couche button').forEach((b) => b.addEventListener('click', () => setCouche(b.dataset.c)));
+    if (couche !== 'rapports') { document.querySelectorAll('#couche button').forEach((b) => b.classList.toggle('is-on', b.dataset.c === couche)); document.getElementById('cfilters').hidden = true; document.getElementById('cnote-rapports').hidden = true; document.getElementById(couche === 'attaques' ? 'cnote-attaques' : 'cnote-direct').hidden = false; }
     const q = document.getElementById('cq');
     const applyQ = () => { const s = q.value.trim().toLowerCase(); if (s && cyberVue !== 'liste') setVue('liste'); for (const el of document.querySelectorAll('#reports .rep')) el.hidden = !!s && !el.dataset.q.includes(s); };
     q.addEventListener('input', applyQ); applyQ();
@@ -716,6 +950,7 @@
 
   /* ══════════ Accès : abonné → les deux veilles en entier, visiteur → présentation publique ══════════ */
   const TEASER_CYBER = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/teaser.json';
+  const LIVE_PUBLIC = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/live-public.json';
   const estPremium = (p) => !!p && (p.role === 'admin' || p.role === 'editor' || p.plan === 'premium');
 
   // La page n'est plus bloquée par un overlay : elle décide elle-même quoi montrer.
@@ -786,7 +1021,13 @@
         </article>`).join('') || '<div class="empty">Instantané indisponible pour le moment.</div>'}</div>
       </section>
       ${bloc("La veille cyber en entier", "La carte des attaques pays par pays, les filtres par type et par attaquant, les vulnérabilités critiques et le détail de chaque rapport.",
-             ['Carte des attaques', 'Filtre par attaquant', `${fmtN(c.vulnerabilites || 0)} CVE critiques`, 'Mise à jour toutes les heures'])}`;
+             ['Carte des attaques', 'Flux temps réel 24 h', 'Filtre par attaquant', `${fmtN(c.vulnerabilites || 0)} CVE critiques`])}`;
+    fetch(LIVE_PUBLIC, { cache: 'no-store' }).then((r) => r.ok ? r.json() : null).then((l) => {
+      if (!l || !l.total) return;
+      const k = document.createElement('div'); k.className = 'kpi';
+      k.innerHTML = `<div class="kpi__label"><span class="live-dot" style="margin-right:7px;vertical-align:middle"></span>Indicateurs 24 h</div><div class="kpi__value">${fmtN(l.total)}<small>${fmtN(l.nb_pays)} pays</small></div>`;
+      document.querySelector('#pane-cyber .kpis')?.appendChild(k);
+    }).catch(() => {});
     document.getElementById('n-cyber').textContent = fmtN(c.rapports_90j || 0);
     if (gen) document.getElementById('dot').classList.toggle('is-off', (Date.now() - gen) / 36e5 > 26);
     const maj = document.getElementById('maj');
