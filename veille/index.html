@@ -678,18 +678,18 @@
       cmap.addSource('ddos', { type: 'geojson', lineMetrics: true, data: { type: 'FeatureCollection', features: [] } });
       cmap.addLayer({ id: 'ddos-arcs', type: 'line', source: 'ddos', layout: { visibility: 'none', 'line-cap': 'round' }, paint: { 'line-width': ['interpolate', ['linear'], ['get', 'part'], 0, 1, 20, 3.5], 'line-gradient': ['interpolate', ['linear'], ['line-progress'], 0, 'rgba(255,138,80,0.1)', 1, 'rgba(255,138,80,0.6)'] } });
       cmap.addSource('atk', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-      cmap.addLayer({ id: 'atk-halo', type: 'circle', source: 'atk', layout: { visibility: 'none' }, paint: { 'circle-color': '#FF5A6E', 'circle-opacity': 0.3, 'circle-blur': 0.6, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 30, 12, 1100, 46] } });
-      cmap.addLayer({ id: 'atk-pts', type: 'circle', source: 'atk', layout: { visibility: 'none' }, paint: { 'circle-color': '#FF5A6E', 'circle-opacity': 0.85, 'circle-stroke-color': '#FFD2D8', 'circle-stroke-width': 1, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 30, 3.5, 1100, 17] } });
-      cmap.addLayer({ id: 'atk-lbl', type: 'symbol', source: 'atk', filter: ['>=', ['get', 'n'], 40000], layout: { visibility: 'none', 'text-field': ['get', 'nom'], 'text-size': 11, 'text-offset': [0, 1.7], 'text-anchor': 'top', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] }, paint: { 'text-color': '#FFE3E7', 'text-halo-color': '#05040B', 'text-halo-width': 1.2 } });
+      cmap.addLayer({ id: 'atk-halo', type: 'circle', source: 'atk', layout: { visibility: 'none' }, paint: { 'circle-color': ['get', 'couleur'], 'circle-opacity': 0.3, 'circle-blur': 0.6, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 6, 110, 42] } });
+      cmap.addLayer({ id: 'atk-pts', type: 'circle', source: 'atk', layout: { visibility: 'none' }, paint: { 'circle-color': ['get', 'couleur'], 'circle-opacity': 0.85, 'circle-stroke-color': '#FFFFFF', 'circle-stroke-opacity': 0.55, 'circle-stroke-width': 0.8, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 2.5, 110, 17] } });
+      cmap.addLayer({ id: 'atk-lbl', type: 'symbol', source: 'atk', filter: ['>=', ['get', 'n'], 900], layout: { visibility: 'none', 'text-field': ['get', 'nom'], 'text-size': 11, 'text-offset': [0, 1.7], 'text-anchor': 'top', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] }, paint: { 'text-color': '#FFE3E7', 'text-halo-color': '#05040B', 'text-halo-width': 1.2 } });
       cmap.on('mousemove', 'atk-pts', (e) => { cmap.getCanvas().style.cursor = 'pointer'; const f = e.features[0].properties;
-        pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t" data-i18n-skip>${esc(f.nom)}<b>${fmtN(f.n)}</b></div><div class="cpop__l"><i style="background:#FF5A6E"></i>événements d’attaque aujourd’hui</div><div class="cpop__l">${fmtN(f.ips)} adresse${f.ips > 1 ? 's' : ''} source${f.ips > 1 ? 's' : ''}</div>`).addTo(cmap); });
+        pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t" data-i18n-skip>${esc(f.nom)}<b>${fmtN(f.n)}</b></div><div class="cpop__l cpop__date">adresses attaquantes · 48 dernières heures</div>${f.type ? `<div class="cpop__l"><i style="background:${esc(f.couleur)}"></i>Surtout : ${esc(f.type)}</div>` : ''}${f.evts ? `<div class="cpop__l">${fmtN(f.evts)} événements sur les capteurs aujourd’hui</div>` : ''}`).addTo(cmap); });
       cmap.on('mouseleave', 'atk-pts', () => { cmap.getCanvas().style.cursor = ''; pop.remove(); });
       cmap.on('click', 'atk-pts', (e) => atkFocus(e.features[0].properties.cc));
       cmap.on('mousemove', 'ddos-arcs', (e) => { const f = e.features[0].properties; cmap.getCanvas().style.cursor = 'pointer';
         pop.setLngLat(e.lngLat).setHTML(`<div class="cpop__t" data-i18n-skip>${esc(f.o)} → ${esc(f.t)}</div><div class="cpop__l">DDoS ${esc(f.couche)} · ${Number(f.part).toFixed(1).replace('.', ',')} % du trafic d’attaque observé</div>`).addTo(cmap); });
       cmap.on('mouseleave', 'ddos-arcs', () => { cmap.getCanvas().style.cursor = ''; pop.remove(); });
       const legendAtk = document.createElement('div'); legendAtk.className = 'cmap__legend cmap__legend--atk is-hidden';
-      legendAtk.innerHTML = `<div class="cmap__legend-row"><span><i style="background:#FF5A6E88;border-color:#FF5A6E"></i>Origine des attaques (capteurs SANS ISC)</span><span><i style="background:#FF8A5088;border-color:#FF8A50;border-radius:2px;height:3px;width:14px"></i>DDoS origine → cible</span></div><div class="cmap__legend-row"><span>Taille = événements du jour</span></div>`;
+      legendAtk.innerHTML = `<div class="cmap__legend-row">${Object.entries(ATK_COL).slice(0, 6).map(([t, c]) => `<span><i style="background:${c}88;border-color:${c}"></i>${esc(t)}</span>`).join('')}<span><i style="background:#FF8A5088;border-color:#FF8A50;border-radius:2px;height:3px;width:14px"></i>DDoS origine → cible</span></div><div class="cmap__legend-row"><span>Taille = adresses attaquantes sur 48 h · couleur = type d’attaque dominant</span></div>`;
       host.appendChild(legendAtk);
       // Couche « Rançongiciels » : victimes revendiquées par pays (ransomware.live)
       cmap.addSource('rw', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
@@ -779,9 +779,15 @@
     const cx = mx - (dy / len) * lift, cy = my + (dx / len) * lift, pts = [];
     for (let i = 0; i <= 48; i++) { const t = i / 48, u = 1 - t; pts.push([u * u * x1 + 2 * u * t * cx + t * t * x2, u * u * y1 + 2 * u * t * cy + t * t * y2]); }
     return pts; };
+  // Couleur par type d'attaque (blocklist.de, 48 h)
+  const ATK_COL = { 'Attaques messagerie (SMTP)': '#F0A650', 'Attaques web': '#FF5A6E', 'Force brute SSH': '#5BB0F2', 'Robots malveillants': '#A99FC4', 'Force brute IMAP/POP3': '#F5D66B', 'Force brute sur connexions de sites': '#E26BD0', 'Attaques téléphonie IP (SIP)': '#4ED0B8', 'Force brute FTP': '#B48CFF' };
+  const acol = (t) => ATK_COL[t] || '#FF5A6E';
   function atkFeatures() {
     const a = liveData?.attaques; if (!a) return { pts: [], arcs: [] };
-    const pts = a.pays.map((p) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [p.lon, p.lat] }, properties: { cc: p.cc, nom: p.nom, n: p.signalements, ips: p.ips, cibles: p.cibles } }));
+    const evts = Object.fromEntries((a.pays || []).map((p) => [p.cc, p]));
+    const base = a.types?.pays?.length ? a.types.pays : (a.pays || []).map((p) => ({ cc: p.cc, nom: p.nom, lon: p.lon, lat: p.lat, n: p.ips, types: [] }));
+    const pts = base.map((p) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
+      properties: { cc: p.cc, nom: p.nom, n: p.n, type: p.types[0]?.nom || '', couleur: acol(p.types[0]?.nom), evts: evts[p.cc]?.signalements || 0 } }));
     const paires = [...(a.ddos?.l7 || []).map((x) => ({ ...x, couche: 'L7' })), ...(a.ddos?.l3 || []).map((x) => ({ ...x, couche: 'L3' }))];
     const arcs = paires.filter((x) => x.o_cc !== x.t_cc).map((x) => ({ type: 'Feature', geometry: { type: 'LineString', coordinates: arc([x.o_lon, x.o_lat], [x.t_lon, x.t_lat]) },
       properties: { o: x.o_nom, t: x.t_nom, part: x.part, couche: x.couche } }));
@@ -790,7 +796,7 @@
   function atkRefresh() {
     atkSide();
     const maj = document.getElementById('couche-maj');
-    if (maj && liveData?.attaques) maj.textContent = `Capteurs SANS ISC · mis à jour ${ilYA(liveData.genere_le)}`;
+    if (maj && liveData?.attaques) maj.textContent = `Capteurs SANS ISC + blocklist.de · mis à jour ${ilYA(liveData.genere_le)}`;
     if (!cmap || !cmap.getSource('atk')) return;
     const { pts, arcs } = atkFeatures();
     cmap.getSource('atk').setData({ type: 'FeatureCollection', features: pts });
@@ -800,43 +806,46 @@
   function atkSide() {
     const el = document.getElementById('cside'); if (!el || couche !== 'attaques') return;
     const a = liveData?.attaques;
-    if (!a) { el.innerHTML = '<div class="empty">Les capteurs SANS ISC ne répondent pas pour le moment. Nouvel essai dans 5 minutes.</div>'; return; }
+    if (!a) { el.innerHTML = '<div class="empty">Les sources d’attaques ne répondent pas pour le moment. Nouvel essai dans 5 minutes.</div>'; return; }
     const auj = a.resume.find((r) => r.jour === a.jour) || a.resume.at(-1) || { evenements: 0, sources: 0, capteurs: 0 };
     const veille = a.resume.find((r) => r.jour !== a.jour);
+    const T = a.types, paysT = T?.pays || [];
     if (atkSel) {
-      const p = a.pays.find((x) => x.cc === atkSel);
-      if (p) {
+      const p = paysT.find((x) => x.cc === atkSel), d = (a.pays || []).find((x) => x.cc === atkSel);
+      if (p || d) {
+        const nom = (p || d).nom, maxT = Math.max(...(p?.types || []).map((t) => t.valeur), 1);
         el.innerHTML = `<button class="cside__back" id="cside-back">← Tous les pays</button>
-          <div class="cside__head"><div><h3 class="cside__title" data-i18n-skip>${esc(p.nom)}</h3><div class="cside__sub">Origine d’attaques observées aujourd’hui par les capteurs SANS ISC</div></div></div>
-          <div class="lstat"><span><b>${fmtN(p.signalements)}</b>événements</span><span><b>${fmtN(p.ips)}</b>adresses sources</span><span><b>${fmtN(p.cibles)}</b>capteurs touchés (max)</span></div>
-          <p class="cnote" style="margin-top:10px">Parmi les ${fmtN(a.ips_analysees)} adresses les plus actives du jour. Le pays est celui qui héberge l’adresse (base DB-IP) : un serveur loué ou compromis, pas forcément la nationalité de l’attaquant.</p>`;
+          <div class="cside__head"><div><h3 class="cside__title" data-i18n-skip>${esc(nom)}</h3><div class="cside__sub">Attaques parties d’adresses hébergées dans ce pays</div></div></div>
+          <div class="lstat">${p ? `<span><b>${fmtN(p.n)}</b>adresses attaquantes (48 h)</span>` : ''}${d ? `<span><b>${fmtN(d.signalements)}</b>événements capteurs aujourd’hui</span>` : ''}</div>
+          ${p?.types?.length ? `<div class="cside__lbl" style="margin-top:10px">Types d’attaque</div>${p.types.map((t) => `<div class="prow"><span class="prow__n"><i class="lrow__dot" style="background:${acol(t.nom)};margin-right:6px"></i>${esc(t.nom)}</span><b>${fmtN(t.valeur)}</b><span class="prow__bar" style="width:${(100 * t.valeur / maxT).toFixed(1)}%;background:${acol(t.nom)}"></span></div>`).join('')}` : ''}
+          <p class="cnote" style="margin-top:12px">Le pays est celui qui héberge l’adresse (base DB-IP) : un serveur loué ou compromis, pas forcément la nationalité de l’attaquant.</p>`;
         el.querySelector('#cside-back').addEventListener('click', () => { atkSel = null; atkRefresh(); if (cmap) cmap.fitBounds(MONDE, { padding: 24, speed: 1.1, essential: true }); });
         return;
       }
       atkSel = null;
     }
-    const maxP = Math.max(...a.pays.map((p) => p.signalements), 1), maxS = Math.max(...a.ports.map((p) => p.records), 1);
+    const maxS = Math.max(...a.ports.map((p) => p.records), 1), maxT = Math.max(...(T?.liste || []).map((t) => t.valeur), 1), maxP = Math.max(...paysT.map((p) => p.n), 1);
     const ddos = [...(a.ddos?.l7 || []), ...(a.ddos?.l3 || [])].filter((x) => x.o_cc !== x.t_cc).sort((x, y) => y.part - x.part).slice(0, 6);
-    el.innerHTML = `<div class="cside__head"><div><h3 class="cside__title"><span class="live-dot live-dot--red" style="margin-right:8px;vertical-align:middle"></span>Attaques en cours</h3><div class="cside__sub">Capteurs honeypot SANS ISC DShield · aujourd’hui (UTC)</div></div></div>
+    el.innerHTML = `<div class="cside__head"><div><h3 class="cside__title"><span class="live-dot live-dot--red" style="margin-right:8px;vertical-align:middle"></span>Attaques en cours</h3><div class="cside__sub">Capteurs SANS ISC (aujourd’hui) · blocklist.de (48 h)</div></div></div>
       <div class="atk-count" id="atk-count">${fmtN(auj.evenements)}</div>
       <div class="atk-rate" id="atk-rate">événements d’attaque aujourd’hui</div>
-      <div class="lstat"><span><b>${fmtN(auj.sources)}</b>adresses sources</span><span><b>${fmtN(auj.capteurs)}</b>capteurs</span>${veille ? `<span><b>${fmtN(veille.evenements)}</b>hier</span>` : ''}</div>
+      <div class="lstat"><span><b>${fmtN(auj.sources)}</b>adresses sources</span>${T ? `<span><b>${fmtN(T.total)}</b>attaquants 48 h</span>` : ''}${veille ? `<span><b>${fmtN(veille.evenements)}</b>événements hier</span>` : ''}</div>
       <div class="cside__list" style="margin-top:6px">
-        <div class="cside__lbl">Services visés</div>
-        ${a.ports.slice(0, 8).map((p) => `<div class="prow"><span class="prow__n">${esc(p.service || 'Port ' + p.port)}<small>${p.port}</small></span><b>${fmtN(p.records)}</b><span class="prow__bar" style="width:${(100 * p.records / maxS).toFixed(1)}%"></span></div>`).join('')}
-        <div class="cside__lbl" style="margin-top:12px">Pays d’origine</div>
-        ${a.pays.slice(0, 15).map((p) => `<button class="crow" data-cc="${esc(p.cc)}"><span data-i18n-skip>${esc(p.nom)}<small> · ${fmtN(p.ips)} IP</small></span><b>${fmtN(p.signalements)}</b><span class="crow__bar" style="width:${(100 * p.signalements / maxP).toFixed(1)}%"></span></button>`).join('')}
+        ${T?.liste?.length ? `<div class="cside__lbl">Types d’attaque · 48 h</div>${T.liste.map((t) => `<div class="prow"><span class="prow__n"><i class="lrow__dot" style="background:${acol(t.nom)};margin-right:6px"></i>${esc(t.nom)}</span><b>${fmtN(t.valeur)}</b><span class="prow__bar" style="width:${(100 * t.valeur / maxT).toFixed(1)}%;background:${acol(t.nom)}"></span></div>`).join('')}` : ''}
+        <div class="cside__lbl" style="margin-top:12px">Services visés · capteurs</div>
+        ${a.ports.slice(0, 6).map((p) => `<div class="prow"><span class="prow__n">${esc(p.service || 'Port ' + p.port)}<small>${p.port}</small></span><b>${fmtN(p.records)}</b><span class="prow__bar" style="width:${(100 * p.records / maxS).toFixed(1)}%"></span></div>`).join('')}
+        ${paysT.length ? `<div class="cside__lbl" style="margin-top:12px">Pays d’origine · adresses attaquantes</div>
+        ${paysT.slice(0, 15).map((p) => `<button class="crow" data-cc="${esc(p.cc)}"><span data-i18n-skip>${esc(p.nom)}<i class="crow__dot" style="background:${acol(p.types[0]?.nom)}" title="${esc(p.types[0]?.nom || '')}"></i></span><b>${fmtN(p.n)}</b><span class="crow__bar" style="width:${(100 * p.n / maxP).toFixed(1)}%;background:${acol(p.types[0]?.nom)}"></span></button>`).join('')}` : ''}
         ${ddos.length ? `<div class="cside__lbl" style="margin-top:12px">DDoS · origine → cible (24 h)</div>${ddos.map((x) => `<div class="prow"><span class="prow__n" data-i18n-skip>${esc(x.o_nom)} → ${esc(x.t_nom)}</span><b>${x.part.toFixed(1).replace('.', ',')} %</b></div>`).join('')}` : ''}
       </div>`;
     el.querySelectorAll('.crow[data-cc]').forEach((b) => b.addEventListener('click', () => atkFocus(b.dataset.cc)));
-    // Compteur animé au rythme moyen du jour (estimation entre deux relevés, signalée comme telle)
     clearInterval(atkTick);
     const t0 = Date.parse(liveData.genere_le), minuit = Date.parse(a.jour + 'T00:00:00Z'), rythme = auj.evenements / Math.max(60, (t0 - minuit) / 1000);
     const cpt = document.getElementById('atk-count'), lbl = document.getElementById('atk-rate');
     lbl.textContent = `événements d’attaque aujourd’hui · ≈ ${fmtN(Math.round(rythme))} par seconde, estimé au rythme du jour`;
     atkTick = setInterval(() => { if (!document.body.contains(cpt)) return clearInterval(atkTick); cpt.textContent = fmtN(Math.round(auj.evenements + rythme * Math.max(0, (Date.now() - t0) / 1000))); }, 250);
   }
-  function atkFocus(cc) { atkSel = cc; atkRefresh(); const p = liveData?.attaques?.pays.find((x) => x.cc === cc); if (p && cmap) cmap.flyTo({ center: [p.lon, p.lat], zoom: Math.max(cmap.getZoom(), 3), speed: 1.1, essential: true }); }
+  function atkFocus(cc) { atkSel = cc; atkRefresh(); const p = liveData?.attaques?.types?.pays?.find((x) => x.cc === cc) || liveData?.attaques?.pays.find((x) => x.cc === cc); if (p && cmap) cmap.flyTo({ center: [p.lon, p.lat], zoom: Math.max(cmap.getZoom(), 3), speed: 1.1, essential: true }); }
   /* ── Rançongiciels : victimes revendiquées par les groupes (ransomware.live), 30 derniers jours au plus,
      filtrées par la période choisie (7 / 30 j). Noms tels que revendiqués par les attaquants, non vérifiés. ── */
   const RW_COL = '#D66BD3';
@@ -928,7 +937,7 @@
           cmap.setPaintProperty('live-halo', 'circle-radius', ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 9 + 9 * ph, 7, 34 + 20 * ph]);
           cmap.setPaintProperty('live-halo', 'circle-opacity', ['*', ['+', 0.1, ['*', 0.35, ['get', 'frais']]], 1 - ph]); }
         if (couche === 'attaques' && cmap && cmap.getLayer('atk-halo')) {
-          cmap.setPaintProperty('atk-halo', 'circle-radius', ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 30, 10 + 12 * ph, 1100, 40 + 26 * ph]);
+          cmap.setPaintProperty('atk-halo', 'circle-radius', ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 4 + 8 * ph, 110, 30 + 26 * ph]);
           cmap.setPaintProperty('atk-halo', 'circle-opacity', 0.42 * (1 - ph));
           // Comète le long de chaque arc : arrêts strictement croissants 0 < queue < tête < après < 1 (sinon Mapbox rejette le dégradé)
           const tete = 0.02 + 0.96 * ((Date.now() % 1800) / 1800), queue = Math.max(0.01, tete - 0.18), apres = tete + 0.002;
@@ -978,7 +987,7 @@
       <div id="vue-carte" hidden>
         <div class="couche"><div class="pills" id="couche"><button data-c="rapports" class="is-on">Rapports</button><button data-c="attaques"><span class="live-dot live-dot--red"></span>Attaques en cours</button><button data-c="rancon"><span class="live-dot" style="background:#D66BD3;animation:none"></span>Rançongiciels</button><button data-c="direct"><span class="live-dot"></span>Infrastructure · 24 h</button></div><span class="couche__maj" id="couche-maj" hidden></span></div>
         <p class="cnote" id="cnote-rapports"><b id="cnote-rapports-n"></b>, c’est-à-dire qui déclarent au moins un pays ciblé. Chaque point est placé au centre du pays ; sa taille suit le nombre de rapports, sa couleur le type d’attaque dominant. Cliquez un pays pour voir qui l’attaque et comment, ou filtrez par type et par attaquant.</p>
-        <p class="cnote" id="cnote-attaques" hidden>Attaques réellement reçues aujourd’hui par le réseau de capteurs honeypot du <b>SANS Internet Storm Center</b> (DShield) : balayages, tentatives de connexion et d’exploitation. Chaque point est le pays qui héberge les adresses sources les plus actives (base DB-IP), mis à jour toutes les 5 minutes. Les arcs de DDoS proviennent de Cloudflare Radar lorsqu’ils sont disponibles.</p>
+        <p class="cnote" id="cnote-attaques" hidden>Adresses qui ont attaqué des serveurs dans les dernières 48 heures, signalées par le réseau <b>blocklist.de</b> et classées par type (messagerie, web, force brute SSH…), plus les attaques reçues aujourd’hui par les capteurs du <b>SANS Internet Storm Center</b>. Chaque point est le pays qui héberge ces adresses (base DB-IP), sa couleur le type d’attaque dominant ; les arcs sont les DDoS de Cloudflare Radar. Mise à jour toutes les 5 à 30 minutes selon la source.</p>
         <p class="cnote" id="cnote-rancon" hidden>Victimes que les groupes de rançongiciels revendiquent sur leurs sites, relevées par <b>ransomware.live</b> et mises à jour toutes les 30 minutes. Chaque point est le pays de la victime ; les noms sont ceux que publient les attaquants, sans vérification, et la date est celle de la revendication. Historique limité aux 30 derniers jours.</p>
         <p class="cnote" id="cnote-direct" hidden>Infrastructure malveillante signalée dans <b>ThreatFox</b> (abuse.ch) au cours des 24 dernières heures, à quelques minutes près : serveurs de commande, sites de diffusion, charges. Seules les adresses IP sont placées sur la carte, au pays qui les héberge (base DB-IP) ; domaines, URL et fichiers restent dans le flux. Les valeurs des indicateurs ne sont pas publiées.</p>
         <div class="filters cfilters" id="cfilters"></div>
