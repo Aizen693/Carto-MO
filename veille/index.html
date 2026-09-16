@@ -691,6 +691,18 @@
       const legendAtk = document.createElement('div'); legendAtk.className = 'cmap__legend cmap__legend--atk is-hidden';
       legendAtk.innerHTML = `<div class="cmap__legend-row"><span><i style="background:#FF5A6E88;border-color:#FF5A6E"></i>Origine des attaques (capteurs SANS ISC)</span><span><i style="background:#FF8A5088;border-color:#FF8A50;border-radius:2px;height:3px;width:14px"></i>DDoS origine → cible</span></div><div class="cmap__legend-row"><span>Taille = événements du jour</span></div>`;
       host.appendChild(legendAtk);
+      // Couche « Rançongiciels » : victimes revendiquées par pays (ransomware.live)
+      cmap.addSource('rw', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+      cmap.addLayer({ id: 'rw-halo', type: 'circle', source: 'rw', layout: { visibility: 'none' }, paint: { 'circle-color': RW_COL, 'circle-opacity': 0.16, 'circle-blur': 0.6, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 9, 8, 42] } });
+      cmap.addLayer({ id: 'rw-pts', type: 'circle', source: 'rw', layout: { visibility: 'none' }, paint: { 'circle-color': RW_COL, 'circle-opacity': 0.8, 'circle-stroke-color': '#F6D6F5', 'circle-stroke-width': 1, 'circle-radius': ['interpolate', ['linear'], ['sqrt', ['get', 'n']], 1, 4, 8, 18] } });
+      cmap.addLayer({ id: 'rw-lbl', type: 'symbol', source: 'rw', filter: ['>=', ['get', 'n'], 3], layout: { visibility: 'none', 'text-field': ['get', 'nom'], 'text-size': 11, 'text-offset': [0, 1.7], 'text-anchor': 'top', 'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'] }, paint: { 'text-color': '#F6D6F5', 'text-halo-color': '#05040B', 'text-halo-width': 1.2 } });
+      cmap.on('mousemove', 'rw-pts', (e) => { cmap.getCanvas().style.cursor = 'pointer'; const f = e.features[0].properties;
+        pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t" data-i18n-skip>${esc(f.nom)}<b>${fmtN(f.n)}</b></div><div class="cpop__l cpop__date">${f.n > 1 ? 'Victimes' : 'Victime'} ${esc(f.plage)}</div><div class="cpop__l"><i style="background:${RW_COL}"></i>victime${f.n > 1 ? 's' : ''} de rançongiciel revendiquée${f.n > 1 ? 's' : ''}</div>${f.groupe ? `<div class="cpop__l">Groupe principal : <span data-i18n-skip>${esc(f.groupe)}</span></div>` : ''}`).addTo(cmap); });
+      cmap.on('mouseleave', 'rw-pts', () => { cmap.getCanvas().style.cursor = ''; pop.remove(); });
+      cmap.on('click', 'rw-pts', (e) => rwFocus(e.features[0].properties.cc));
+      const legendRw = document.createElement('div'); legendRw.className = 'cmap__legend cmap__legend--rw is-hidden';
+      legendRw.innerHTML = `<div class="cmap__legend-row"><span><i style="background:${RW_COL}88;border-color:${RW_COL}"></i>Victimes de rançongiciel revendiquées</span></div><div class="cmap__legend-row"><span>Taille = nombre de victimes sur la période</span></div>`;
+      host.appendChild(legendRw);
       cmapRefresh();
       if (couche !== 'rapports') setCouche(couche);
     });
@@ -699,7 +711,7 @@
      rafraîchie chaque minute depuis live.json déposé toutes les 5 minutes par le VPS. ── */
   const LIVE_COL = { 'Serveur de commande': '#5BB0F2', 'Diffusion de charge': '#F0A650', 'Charge malveillante': '#F5D66B' };
   const lcol = (t) => LIVE_COL[t] || '#8F87AA';
-  let couche = ['direct', 'attaques'].includes(params.get('couche')) ? params.get('couche') : 'rapports', liveData = null, liveTimer = null, liveAnim = null, liveSel = null, atkSel = null, atkTick = null;
+  let couche = ['direct', 'attaques', 'rancon'].includes(params.get('couche')) ? params.get('couche') : 'rapports', liveData = null, liveTimer = null, liveAnim = null, liveSel = null, atkSel = null, atkTick = null;
   const liveVus = new Set();
   const ilYA = (iso) => { const m = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 6e4)); return m < 1 ? 'à l’instant' : m < 60 ? `il y a ${m} min` : m < 1440 ? `il y a ${Math.floor(m / 60)} h${m % 60 ? ' ' + String(m % 60).padStart(2, '0') : ''}` : `il y a ${Math.floor(m / 1440)} j`; };
   const hhmm = (iso) => new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
@@ -712,7 +724,7 @@
     try {
       const d = await window.algorAuth.loadZoneFile('veille-cyber/live.json');
       liveData = d;
-      if (couche === 'direct') liveRefresh(); else if (couche === 'attaques') atkRefresh();
+      if (couche === 'direct') liveRefresh(); else if (couche === 'attaques') atkRefresh(); else if (couche === 'rancon') rwRefresh();
     } catch (e) {
       console.warn('[veille] live', e);
       if (couche !== 'rapports' && !liveData) document.getElementById('cside').innerHTML = '<div class="empty">Flux temps réel indisponible pour le moment.</div>';
@@ -825,27 +837,90 @@
     atkTick = setInterval(() => { if (!document.body.contains(cpt)) return clearInterval(atkTick); cpt.textContent = fmtN(Math.round(auj.evenements + rythme * Math.max(0, (Date.now() - t0) / 1000))); }, 250);
   }
   function atkFocus(cc) { atkSel = cc; atkRefresh(); const p = liveData?.attaques?.pays.find((x) => x.cc === cc); if (p && cmap) cmap.flyTo({ center: [p.lon, p.lat], zoom: Math.max(cmap.getZoom(), 3), speed: 1.1, essential: true }); }
+  /* ── Rançongiciels : victimes revendiquées par les groupes (ransomware.live), 30 derniers jours au plus,
+     filtrées par la période choisie (7 / 30 j). Noms tels que revendiqués par les attaquants, non vérifiés. ── */
+  const RW_COL = '#D66BD3';
+  let rwSel = null;
+  const rwJours = () => Math.min(periode, 30);
+  const rwListe = () => (liveData?.rancon?.victimes || []).filter((x) => (Date.now() - Date.parse(x.d + 'T00:00:00Z')) / 864e5 < rwJours() + 1);
+  const rwGroupe = (g) => `<a class="bact bact--s" href="https://www.ransomware.live/group/${encodeURIComponent(g)}" target="_blank" rel="noopener noreferrer" data-i18n-skip>${esc(g)}</a>`;
+  function rwAgreger(list) {
+    const C = liveData?.rancon?.centres || {}, m = new Map();
+    for (const x of list) { if (!x.cc || !C[x.cc]) continue;
+      const e = m.get(x.cc) || { cc: x.cc, nom: C[x.cc][2], lon: C[x.cc][0], lat: C[x.cc][1], n: 0, liste: [] }; e.n++; e.liste.push(x); m.set(x.cc, e); }
+    for (const e of m.values()) { e.groupes = compte(e.liste, (x) => [x.g]); e.secteurs = compte(e.liste, (x) => x.s ? [x.s] : []); const ds = e.liste.map((x) => x.d).sort(); e.premier = ds[0]; e.dernier = ds.at(-1); }
+    return [...m.values()].sort((a, b) => b.n - a.n);
+  }
+  const ligneVictime = (x, avecPays = true) => `<div class="lrow" ${avecPays && x.cc ? `data-cc="${esc(x.cc)}" role="button" tabindex="0"` : ''} title="${esc(x.s || '')}">
+      <span class="lrow__t">${esc(fmtD(x.d))}</span>
+      <span class="lrow__m" data-i18n-skip><i class="lrow__dot" style="background:${RW_COL}"></i><span style="overflow:hidden;text-overflow:ellipsis">${esc(x.v)}</span><small>${esc(x.g)}</small></span>
+      <span class="lrow__p" data-i18n-skip>${avecPays ? (x.cc && liveData.rancon.centres[x.cc] ? esc(liveData.rancon.centres[x.cc][2]) : '<span style="color:var(--muted)">pays inconnu</span>') : esc(x.s || '')}</span></div>`;
+  function rwRefresh() {
+    rwSide();
+    const maj = document.getElementById('couche-maj');
+    if (maj && liveData?.rancon) maj.textContent = `ransomware.live · ${rwJours()} derniers jours · mis à jour ${ilYA(liveData.rancon.genere_le)}${periode > 30 ? ' · historique limité à 30 jours' : ''}`;
+    if (!cmap || !cmap.getSource('rw')) return;
+    cmap.getSource('rw').setData({ type: 'FeatureCollection', features: rwAgreger(rwListe()).map((p) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
+      properties: { cc: p.cc, nom: p.nom, n: p.n, groupe: p.groupes[0]?.[0] || '', plage: plage(p.premier, p.dernier) } })) });
+    cmap.setPaintProperty('rw-pts', 'circle-opacity', rwSel ? ['case', ['==', ['get', 'cc'], rwSel], 0.95, 0.3] : 0.8);
+  }
+  function rwSide() {
+    const el = document.getElementById('cside'); if (!el || couche !== 'rancon') return;
+    if (!liveData?.rancon) { el.innerHTML = '<div class="empty">Données rançongiciels indisponibles pour le moment.</div>'; return; }
+    const list = rwListe(), pays = rwAgreger(list);
+    if (rwSel) {
+      const p = pays.find((x) => x.cc === rwSel);
+      if (p) {
+        el.innerHTML = `<button class="cside__back" id="cside-back">← Tous les pays</button>
+          <div class="cside__head"><div><h3 class="cside__title" data-i18n-skip>${esc(p.nom)}</h3><div class="cside__sub">${fmtN(p.n)} victime${p.n > 1 ? 's' : ''} revendiquée${p.n > 1 ? 's' : ''}, ${esc(plage(p.premier, p.dernier))}</div></div></div>
+          <div class="cside__sec"><div class="cside__lbl">Groupes</div><div class="cside__chips">${p.groupes.slice(0, 8).map(([g, n]) => rwGroupe(g).replace('</a>', ` <b>${n}</b></a>`)).join('')}</div></div>
+          ${p.secteurs.length ? `<div class="cside__sec"><div class="cside__lbl">Secteurs</div><div class="cside__chips">${p.secteurs.slice(0, 6).map(([t, n]) => `<span class="btype" style="--c:${RW_COL}">${esc(t)} <b>${n}</b></span>`).join('')}</div></div>` : ''}
+          <div class="cside__lbl">Victimes</div>
+          <div class="cside__list">${p.liste.map((x) => ligneVictime(x, false)).join('')}</div>`;
+        el.querySelector('#cside-back').addEventListener('click', () => { rwSel = null; rwRefresh(); if (cmap) cmap.fitBounds(MONDE, { padding: 24, speed: 1.1, essential: true }); });
+        return;
+      }
+      rwSel = null;
+    }
+    const jours = rwJours(), parJour = [];
+    for (let i = jours - 1; i >= 0; i--) { const d = new Date(Date.now() - i * 864e5).toISOString().slice(0, 10); parJour.push({ d, n: list.filter((x) => x.d === d).length }); }
+    const maxJ = Math.max(...parJour.map((x) => x.n), 1), groupes = compte(list, (x) => [x.g]), secteurs = compte(list, (x) => x.s ? [x.s] : []), maxS = Math.max(...secteurs.map((x) => x[1]), 1);
+    el.innerHTML = `<div class="cside__head"><div><h3 class="cside__title"><span class="live-dot" style="background:${RW_COL};margin-right:8px;vertical-align:middle;animation:none"></span>Rançongiciels</h3><div class="cside__sub">Victimes revendiquées · ${jours} derniers jours · ransomware.live</div></div></div>
+      <div class="lstat"><span><b>${fmtN(list.length)}</b>victimes</span><span><b>${fmtN(groupes.length)}</b>groupes</span><span><b>${fmtN(pays.length)}</b>pays</span></div>
+      <div class="lbars" title="Victimes par jour">${parJour.map((x, i) => `<i style="height:${Math.max(2, 100 * x.n / maxJ)}%;${i === parJour.length - 1 ? '' : `background:${RW_COL}66`}" class="${i === parJour.length - 1 ? 'is-last' : ''}" title="${esc(fmtD(x.d))} · ${x.n}"></i>`).join('')}</div>
+      <div class="cside__list">
+        <div class="cside__lbl">Groupes les plus actifs</div>
+        <div class="cside__chips" style="margin-bottom:10px">${groupes.slice(0, 10).map(([g, n]) => rwGroupe(g).replace('</a>', ` <b>${n}</b></a>`)).join('')}</div>
+        ${secteurs.length ? `<div class="cside__lbl">Secteurs touchés</div>${secteurs.slice(0, 6).map(([t, n]) => `<div class="prow"><span class="prow__n">${esc(t)}</span><b>${fmtN(n)}</b><span class="prow__bar" style="width:${(100 * n / maxS).toFixed(1)}%;background:${RW_COL}"></span></div>`).join('')}` : ''}
+        <div class="cside__lbl" style="margin-top:12px">Dernières victimes</div>
+        ${list.slice(0, 120).map((x) => ligneVictime(x)).join('')}
+      </div>`;
+    el.querySelectorAll('.lrow[data-cc]').forEach((b) => b.addEventListener('click', () => rwFocus(b.dataset.cc)));
+  }
+  function rwFocus(cc) { rwSel = cc; rwRefresh(); const C = liveData?.rancon?.centres?.[cc]; if (C && cmap) cmap.flyTo({ center: [C[0], C[1]], zoom: Math.max(cmap.getZoom(), 3), speed: 1.1, essential: true }); }
   function setCouche(c) {
     couche = c;
-    const direct = c === 'direct', atk = c === 'attaques', live = direct || atk;
+    const direct = c === 'direct', atk = c === 'attaques', rw = c === 'rancon', live = direct || atk || rw;
     document.querySelectorAll('#couche button').forEach((b) => b.classList.toggle('is-on', b.dataset.c === c));
     document.getElementById('cfilters').hidden = live;
     document.getElementById('cnote-rapports').hidden = live;
-    document.getElementById('periode').hidden = live && cyberVue === 'carte';
+    document.getElementById('periode').hidden = (direct || atk) && cyberVue === 'carte';
+    document.getElementById('cnote-rancon').hidden = !rw;
     document.getElementById('cnote-direct').hidden = !direct;
     document.getElementById('cnote-attaques').hidden = !atk;
     document.getElementById('couche-maj').hidden = !live;
-    if (cmap && cmap.getLayer('atk-pts')) for (const [id, on] of [['cyber-halo', !live], ['cyber-pts', !live], ['cyber-lbl', !live], ['live-halo', direct], ['live-pts', direct], ['live-lbl', direct], ['atk-halo', atk], ['atk-pts', atk], ['atk-lbl', atk], ['ddos-arcs', atk]]) cmap.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
+    if (cmap && cmap.getLayer('atk-pts')) for (const [id, on] of [['cyber-halo', !live], ['cyber-pts', !live], ['cyber-lbl', !live], ['live-halo', direct], ['live-pts', direct], ['live-lbl', direct], ['atk-halo', atk], ['atk-pts', atk], ['atk-lbl', atk], ['ddos-arcs', atk], ['rw-halo', rw], ['rw-pts', rw], ['rw-lbl', rw]]) cmap.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
     const host = document.getElementById('cmap');
-    host?.querySelector('.cmap__legend:not(.cmap__legend--live):not(.cmap__legend--atk)')?.classList.toggle('is-hidden', live);
+    host?.querySelector('.cmap__legend:not(.cmap__legend--live):not(.cmap__legend--atk):not(.cmap__legend--rw)')?.classList.toggle('is-hidden', live);
+    host?.querySelector('.cmap__legend--rw')?.classList.toggle('is-hidden', !rw);
     host?.querySelector('.cmap__legend--live')?.classList.toggle('is-hidden', !direct);
     host?.querySelector('.cmap__legend--atk')?.classList.toggle('is-hidden', !atk);
     clearInterval(liveTimer); liveTimer = null; cancelAnimationFrame(liveAnim); clearInterval(atkTick);
     const u = new URL(location.href); if (live) u.searchParams.set('couche', c); else u.searchParams.delete('couche'); history.replaceState(null, '', u);
     if (live) {
-      liveSel = null; atkSel = null;
+      liveSel = null; atkSel = null; rwSel = null;
       if (!liveData) document.getElementById('cside').innerHTML = '<div class="empty">Chargement du flux en direct…</div>';
-      else if (atk) atkRefresh(); else liveRefresh();
+      else if (atk) atkRefresh(); else if (rw) rwRefresh(); else liveRefresh();
       chargerLive(); liveTimer = setInterval(chargerLive, 60_000);
       const anim = () => { if (couche === 'rapports') return;
         const ph = (Date.now() % 2400) / 2400;
@@ -875,7 +950,7 @@
     cyberVue = v;
     document.getElementById('vue-liste').hidden = v !== 'liste';
     document.getElementById('vue-carte').hidden = v !== 'carte';
-    const per = document.getElementById('periode'); if (per) per.hidden = v === 'carte' && couche !== 'rapports';
+    const per = document.getElementById('periode'); if (per) per.hidden = v === 'carte' && (couche === 'direct' || couche === 'attaques');
     document.querySelectorAll('.vswitch button').forEach((b) => b.classList.toggle('is-on', b.dataset.vue === v));
     const u = new URL(location.href); if (v === 'carte') u.searchParams.set('vue', 'carte'); else u.searchParams.delete('vue'); history.replaceState(null, '', u);
     if (v === 'carte') { cmapInit(cyberData); cmap?.resize(); }
@@ -901,9 +976,10 @@
         <input class="csearch" id="cq" type="search" placeholder="Filtrer les rapports : acteur, pays, secteur, logiciel, CVE…" autocomplete="off" value="${esc(params.get('q') || '')}">
       </div>
       <div id="vue-carte" hidden>
-        <div class="couche"><div class="pills" id="couche"><button data-c="rapports" class="is-on">Rapports</button><button data-c="attaques"><span class="live-dot live-dot--red"></span>Attaques en cours</button><button data-c="direct"><span class="live-dot"></span>Infrastructure · 24 h</button></div><span class="couche__maj" id="couche-maj" hidden></span></div>
+        <div class="couche"><div class="pills" id="couche"><button data-c="rapports" class="is-on">Rapports</button><button data-c="attaques"><span class="live-dot live-dot--red"></span>Attaques en cours</button><button data-c="rancon"><span class="live-dot" style="background:#D66BD3;animation:none"></span>Rançongiciels</button><button data-c="direct"><span class="live-dot"></span>Infrastructure · 24 h</button></div><span class="couche__maj" id="couche-maj" hidden></span></div>
         <p class="cnote" id="cnote-rapports"><b id="cnote-rapports-n"></b>, c’est-à-dire qui déclarent au moins un pays ciblé. Chaque point est placé au centre du pays ; sa taille suit le nombre de rapports, sa couleur le type d’attaque dominant. Cliquez un pays pour voir qui l’attaque et comment, ou filtrez par type et par attaquant.</p>
         <p class="cnote" id="cnote-attaques" hidden>Attaques réellement reçues aujourd’hui par le réseau de capteurs honeypot du <b>SANS Internet Storm Center</b> (DShield) : balayages, tentatives de connexion et d’exploitation. Chaque point est le pays qui héberge les adresses sources les plus actives (base DB-IP), mis à jour toutes les 5 minutes. Les arcs de DDoS proviennent de Cloudflare Radar lorsqu’ils sont disponibles.</p>
+        <p class="cnote" id="cnote-rancon" hidden>Victimes que les groupes de rançongiciels revendiquent sur leurs sites, relevées par <b>ransomware.live</b> et mises à jour toutes les 30 minutes. Chaque point est le pays de la victime ; les noms sont ceux que publient les attaquants, sans vérification, et la date est celle de la revendication. Historique limité aux 30 derniers jours.</p>
         <p class="cnote" id="cnote-direct" hidden>Infrastructure malveillante signalée dans <b>ThreatFox</b> (abuse.ch) au cours des 24 dernières heures, à quelques minutes près : serveurs de commande, sites de diffusion, charges. Seules les adresses IP sont placées sur la carte, au pays qui les héberge (base DB-IP) ; domaines, URL et fichiers restent dans le flux. Les valeurs des indicateurs ne sont pas publiées.</p>
         <div class="filters cfilters" id="cfilters"></div>
         <div class="cmap-wrap">
@@ -939,14 +1015,14 @@
     renderTendance();
     document.querySelectorAll('.vswitch button').forEach((b) => b.addEventListener('click', () => setVue(b.dataset.vue)));
     document.querySelectorAll('#couche button').forEach((b) => b.addEventListener('click', () => setCouche(b.dataset.c)));
-    if (couche !== 'rapports') { document.querySelectorAll('#couche button').forEach((b) => b.classList.toggle('is-on', b.dataset.c === couche)); document.getElementById('cfilters').hidden = true; document.getElementById('cnote-rapports').hidden = true; document.getElementById(couche === 'attaques' ? 'cnote-attaques' : 'cnote-direct').hidden = false; }
+    if (couche !== 'rapports') { document.querySelectorAll('#couche button').forEach((b) => b.classList.toggle('is-on', b.dataset.c === couche)); document.getElementById('cfilters').hidden = true; document.getElementById('cnote-rapports').hidden = true; document.getElementById(couche === 'attaques' ? 'cnote-attaques' : couche === 'rancon' ? 'cnote-rancon' : 'cnote-direct').hidden = false; if (couche !== 'rancon') document.getElementById('periode').hidden = true; }
     const q = document.getElementById('cq');
     const applyQ = () => { const s = q.value.trim().toLowerCase(); if (s && cyberVue !== 'liste') setVue('liste');
       let vis = 0; for (const el of document.querySelectorAll('#reports .rep')) { el.hidden = (!!s && !el.dataset.q.includes(s)) || !dansPeriode({ date: el.dataset.date }); if (!el.hidden) vis++; }
       const vide = document.getElementById('reports-vide'); if (vide) vide.hidden = vis > 0; };
     const setPeriode = (p) => { periode = p; document.querySelectorAll('#periode button').forEach((b) => b.classList.toggle('is-on', Number(b.dataset.p) === p));
       const u = new URL(location.href); if (p === 7) u.searchParams.delete('periode'); else u.searchParams.set('periode', String(p)); history.replaceState(null, '', u);
-      applyQ(); cmapSel = null; if (couche === 'rapports') cmapRefresh(); };
+      applyQ(); cmapSel = null; rwSel = null; if (couche === 'rapports') cmapRefresh(); else if (couche === 'rancon') rwRefresh(); };
     document.querySelectorAll('#periode button').forEach((b) => b.addEventListener('click', () => setPeriode(Number(b.dataset.p))));
     q.addEventListener('input', applyQ); applyQ();
     document.getElementById('reports').addEventListener('click', (e) => {
