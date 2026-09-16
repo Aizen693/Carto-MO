@@ -259,6 +259,22 @@
   .rep__tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
   .tag{font:500 10.5px var(--sans);color:var(--accent);background:rgba(200,176,234,.10);border-radius:99px;padding:3px 8px}
   .tag--pays{border:1px solid rgba(224,106,120,.35);background:rgba(224,106,120,.10);color:#F0B4BC;cursor:pointer;font-family:inherit}
+  .rep--oct{cursor:pointer}
+  .rep--oct:hover{border-color:var(--ln)}
+  .rep__lire{display:inline-flex;align-items:center;gap:6px;margin-top:9px;font:600 11.5px var(--sans);color:var(--accent)}
+  .rep--oct:hover .rep__lire{color:#fff}
+  .fr-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font:500 11.5px var(--sans);color:var(--muted);margin-bottom:10px;font-variant-numeric:tabular-nums}
+  .fr-meta b{font-weight:600;color:var(--accent)}
+  .fr-chips{display:flex;flex-wrap:wrap;gap:6px}
+  .fr-chip{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--sans);color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--ln);border-radius:99px;padding:4px 10px;text-decoration:none}
+  a.fr-chip:hover{border-color:var(--accent);color:#fff}
+  .fr-chip small{font:500 10.5px var(--mono);color:var(--muted)}
+  .fr-chip--rouge{border-color:rgba(255,90,110,.4);background:rgba(255,90,110,.10);color:#FFC2CA}
+  .fr-chip--rose{border-color:rgba(214,107,211,.4);background:rgba(214,107,211,.10);color:#F2C9F1}
+  .fr-tac{margin-bottom:10px}
+  .fr-tac__t{font:500 11px var(--sans);color:var(--accent);margin-bottom:5px}
+  .fr-txt summary{cursor:pointer;font:600 12px var(--sans);color:var(--accent);margin-top:4px}
+  .fr-txt p{margin-top:8px!important;white-space:pre-line}
   .tag--pays:hover{background:rgba(224,106,120,.22);color:#fff}
   .cves{display:flex;flex-direction:column;gap:6px}
   .cve{display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;padding:9px 10px;border-radius:12px;border:1px solid var(--ln-soft)}
@@ -964,6 +980,63 @@
     const u = new URL(location.href); if (v === 'carte') u.searchParams.set('vue', 'carte'); else u.searchParams.delete('vue'); history.replaceState(null, '', u);
     if (v === 'carte') { cmapInit(cyberData); cmap?.resize(); }
   }
+  /* ── Rapports OpenCTI : fiche complète de chaque rapport (rapports.json exporté chaque heure du VPS) ── */
+  let rapportsOct = null;
+  const TYPES_RAPPORT = { 'threat-report': 'Rapport de menace', 'malware': 'Code malveillant', 'attack-pattern': 'Technique d’attaque', 'vulnerability': 'Vulnérabilité', 'threat-actor': 'Acteur de la menace', 'campaign': 'Campagne', 'internal-report': 'Rapport interne' };
+  const ORDRE_TACTIQUES = ['Reconnaissance', 'Préparation', 'Accès initial', 'Exécution', 'Persistance', 'Élévation de privilèges', 'Contournement des défenses', 'Vol d’identifiants', 'Découverte', 'Déplacement latéral', 'Collecte', 'Commande et contrôle', 'Exfiltration', 'Impact'];
+  const hote = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
+  function repOct(r) {
+    const chips = [...r.attaquants.slice(0, 2).map((a) => `<span class="bact bact--s" data-i18n-skip>${esc(a)}</span>`), ...r.malwares.slice(0, 2).map((m) => `<span class="tag" data-i18n-skip>${esc(m)}</span>`), ...r.pays.slice(0, 3).map((p) => `<span class="tag tag--pays" data-pays="${esc(p)}" title="Voir sur la carte">📍 ${esc(p)}</span>`)];
+    return `<article class="rep rep--oct" data-rid="${esc(r.id)}" data-date="${esc(r.date)}" data-q="${esc([r.titre, r.titre_en, r.resume, ...r.etiquettes, ...r.attaquants, ...r.malwares, ...r.outils, ...r.pays, ...r.secteurs, ...r.cves.map((c) => c.id), ...r.techniques].join(' ').toLowerCase())}">
+      <div class="rep__meta"><span>${esc(fmtD(r.date, true))}</span><span class="rep__src">${esc(r.source)}</span>${r.techniques.length ? `<span>· ${r.techniques.length} techniques</span>` : ''}${r.indicateurs ? `<span>· ${fmtN(r.indicateurs)} indicateurs</span>` : ''}</div>
+      <h3 class="rep__title" data-i18n-skip>${esc(txt(r, 'titre'))}</h3>
+      ${r.resume ? `<p class="rep__sum" data-i18n-skip>${esc(r.resume)}</p>` : ''}
+      ${chips.length ? `<div class="rep__tags">${chips.join('')}</div>` : ''}
+      <span class="rep__lire">Lire le rapport →</span>
+    </article>`;
+  }
+  function ouvrirRapport(id) {
+    const r = rapportsOct?.rapports.find((x) => x.id === id); if (!r) return;
+    document.querySelector('.vmodal-scrim--rapport')?.remove();
+    const T = rapportsOct.techniques || {};
+    const sec = (titre, contenu) => contenu ? `<div class="vreport__sec"><div class="vreport__lbl">${titre}</div>${contenu}</div>` : '';
+    const chips = (arr, cls = '') => arr.length ? `<div class="fr-chips">${arr.map((x) => `<span class="fr-chip ${cls}" data-i18n-skip>${esc(x)}</span>`).join('')}</div>` : '';
+    const parTac = new Map();
+    for (const tid of r.techniques) { const t = T[tid] || {}; const k = t.tactique || 'Autres'; (parTac.get(k) || parTac.set(k, []).get(k)).push({ id: tid, nom: t.nom }); }
+    const tactiques = [...parTac.entries()].sort((a, b) => (ORDRE_TACTIQUES.indexOf(a[0]) + 99) % 99 - (ORDRE_TACTIQUES.indexOf(b[0]) + 99) % 99 || (a[0] === 'Autres') - (b[0] === 'Autres'));
+    const techniquesHtml = tactiques.map(([tac, list]) => `<div class="fr-tac"><div class="fr-tac__t">${esc(tac)} · ${list.length}</div><div class="fr-chips">${list.map((t) => `<a class="fr-chip" href="https://attack.mitre.org/techniques/${esc(t.id.replace('.', '/'))}/" target="_blank" rel="noopener noreferrer" title="${esc(t.nom || t.id)}"><small>${esc(t.id)}</small>${t.nom ? `<span data-i18n-skip>${esc(t.nom)}</span>` : ''}</a>`).join('')}</div></div>`).join('');
+    const cves = r.cves.map((c) => `<a class="fr-chip fr-chip--rouge" href="https://www.cve.org/CVERecord?id=${esc(c.id)}" target="_blank" rel="noopener noreferrer"><small>${esc(c.id)}</small>${c.score != null ? `<span>CVSS ${String(c.score).replace('.', ',')}</span>` : ''}${c.kev ? '<span class="kev">Exploitée (CISA)</span>' : ''}</a>`).join('');
+    const el = document.createElement('div'); el.className = 'vmodal-scrim vmodal-scrim--rapport';
+    el.innerHTML = `<div class="vmodal" role="dialog" aria-modal="true" aria-label="Rapport">
+      <button class="vmodal__x" aria-label="Fermer">✕</button>
+      <div class="vmodal__body">
+        <div class="fr-meta"><b>${esc(fmtD(r.date, true))}</b><span>· ${esc(r.source)}</span>${r.types_rapport.map((t) => `<span>· ${esc(TYPES_RAPPORT[t] || t)}</span>`).join('')}${r.confiance != null ? `<span>· confiance ${r.confiance} %</span>` : ''}</div>
+        <h3 class="vmodal__title" data-i18n-skip>${esc(txt(r, 'titre'))}</h3>
+        <p class="vmodal__resume" data-i18n-skip>${esc(r.resume || '')}</p>
+        <div class="vreport">
+          <div class="vreport__class">Rapport de menace · plateforme OpenCTI Algor Access</div>
+          ${r.texte_en ? sec('Texte d’origine', `<details class="fr-txt"><summary>Afficher le texte complet (anglais)</summary><p data-i18n-skip>${esc(r.texte_en)}</p></details>`) : ''}
+          ${sec('Attaquants', chips([...r.attaquants, ...r.campagnes], 'fr-chip--rouge'))}
+          ${sec('Codes malveillants et outils', chips([...r.malwares, ...r.outils]))}
+          ${sec('Pays visés', chips([...r.pays, ...r.regions], 'fr-chip--rose'))}
+          ${sec('Secteurs visés', chips(r.secteurs))}
+          ${sec('Organisations citées', chips(r.organisations))}
+          ${sec('Vulnérabilités exploitées', cves ? `<div class="fr-chips">${cves}</div>` : '')}
+          ${sec(`Techniques MITRE ATT&CK · ${r.techniques.length}`, techniquesHtml)}
+          ${sec('Indicateurs techniques', r.indicateurs || r.observables ? `<p>${fmtN(r.indicateurs)} indicateur${r.indicateurs > 1 ? 's' : ''} et ${fmtN(r.observables)} observable${r.observables > 1 ? 's' : ''} rattachés à ce rapport. Leurs valeurs (adresses, domaines, empreintes) restent dans la plateforme.</p>` : '')}
+          ${sec('Étiquettes', chips(r.etiquettes))}
+          ${sec('Sources', r.liens.length ? `<div class="fr-chips">${r.liens.map((l) => `<a class="fr-chip" href="${esc(safeUrl(l.url) || '#')}" target="_blank" rel="noopener noreferrer">${esc(hote(l.url))} ↗</a>`).join('')}</div>` : '')}
+        </div>
+      </div>
+    </div>`;
+    const u = new URL(location.href); u.searchParams.set('rapport', id); history.replaceState(null, '', u);
+    const close = () => { el.remove(); window.removeEventListener('keydown', onKey); const v = new URL(location.href); v.searchParams.delete('rapport'); history.replaceState(null, '', v); };
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    el.addEventListener('click', (e) => { if (e.target === el) close(); });
+    el.querySelector('.vmodal__x').addEventListener('click', close);
+    window.addEventListener('keydown', onKey);
+    document.body.appendChild(el);
+  }
   let cyberData = null;
   function renderCyber(d) {
     cyberData = d;
@@ -1000,7 +1073,7 @@
         <div class="grid">
           <div class="col">
             <section class="card card--sticky">
-              <div class="card__head"><h2 class="card__title">Rapports récents</h2><span class="card__hint">${fmtN((d.rapports || []).length)} derniers · AlienVault OTX</span></div>
+              <div class="card__head"><h2 class="card__title">Rapports récents</h2><span class="card__hint" id="reports-hint">${fmtN((d.rapports || []).length)} derniers · AlienVault OTX</span></div>
               <div class="reports" id="reports">${(d.rapports || []).map(report).join('') || '<div class="empty">Aucun rapport importé pour l’instant.</div>'}<div class="empty" id="reports-vide" hidden>Aucun rapport sur cette période. Élargissez à 30 ou 90 jours.</div></div>
             </section>
           </div>
@@ -1037,8 +1110,20 @@
     document.getElementById('reports').addEventListener('click', (e) => {
       const pays = e.target.closest('.tag--pays');
       if (pays) { setVue('carte'); cmapFocus(pays.dataset.pays); document.getElementById('vue-carte').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+      const oct = e.target.closest('.rep--oct'); if (oct && !e.target.closest('a')) { ouvrirRapport(oct.dataset.rid); return; }
       const rep = e.target.closest('.rep'); if (rep && !e.target.closest('a')) rep.classList.toggle('is-open');
     });
+    // Fiches complètes OpenCTI : remplacent la liste dès qu'elles sont chargées (repli : liste OTX de l'instantané)
+    window.algorAuth.loadZoneFile('veille-cyber/rapports.json').then((o) => {
+      if (!o?.rapports?.length) return;
+      rapportsOct = o;
+      const box = document.getElementById('reports'), vide = document.getElementById('reports-vide');
+      box.innerHTML = o.rapports.map(repOct).join('');
+      if (vide) box.appendChild(vide);
+      document.getElementById('reports-hint').textContent = `${fmtN(o.rapports.length)} rapports · OpenCTI · ${o.jours} j`;
+      applyQ();
+      const id = params.get('rapport'); if (id) ouvrirRapport(id);
+    }).catch((e) => console.warn('[veille] rapports OpenCTI', e));
     setVue(cyberVue);
     document.getElementById('n-cyber').textContent = fmtN(c.rapports_90j);
     const gen = new Date(d.genere_le);
