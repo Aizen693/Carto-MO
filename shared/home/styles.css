@@ -3598,8 +3598,8 @@ button:focus-visible,
   background:linear-gradient(135deg,#6B3FA0,#5650C6); color:#fff; display:flex; align-items:center; justify-content:center;
   box-shadow:0 12px 34px rgba(107,63,160,.42); transition:transform .18s, box-shadow .18s; }
 .veille-bell:hover { transform:translateY(-3px) scale(1.04); box-shadow:0 18px 44px rgba(107,63,160,.55); }
-.veille-bell__badge { position:absolute; top:-3px; right:-3px; min-width:21px; height:21px; padding:0 5px; border-radius:11px; background:#B83A4A; color:#fff;
-  font:700 11px/21px 'Plus Jakarta Sans',sans-serif; text-align:center; border:2px solid #fff; box-shadow:0 0 0 0 rgba(184,58,74,.5); animation:veille-pulse2 2.4s infinite; }
+.veille-bell__badge { position:absolute; top:-3px; right:-3px; min-width:22px; height:22px; padding:0 5px 1px; border-radius:11px; background:#B83A4A; color:#fff;
+  display:flex; align-items:center; justify-content:center; font:700 11px/1 'Plus Jakarta Sans',sans-serif; font-variant-numeric:tabular-nums; border:2px solid #fff; box-shadow:0 0 0 0 rgba(184,58,74,.5); animation:veille-pulse2 2.4s infinite; }
 @keyframes veille-pulse2 { 0%{box-shadow:0 0 0 0 rgba(184,58,74,.5);} 70%{box-shadow:0 0 0 8px rgba(184,58,74,0);} 100%{box-shadow:0 0 0 0 rgba(184,58,74,0);} }
 @media (max-width:640px){ .veille-bell{ right:16px; bottom:16px; width:50px; height:50px; } }
 
