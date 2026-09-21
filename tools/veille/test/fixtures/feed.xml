@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+<title>Test Feed</title>
+<item>
+<title><![CDATA[Burkina Faso : attaque contre une position militaire à Djibo]]></title>
+<link>https://example.org/article/1</link>
+<description><![CDATA[Au moins 8 morts selon un bilan provisoire. L'attaque est attribuée au JNIM.]]></description>
+<pubDate>Sun, 20 Sep 2026 07:05:00 GMT</pubDate>
+</item>
+<item>
+<title>Concert et promotion culturelle a Ouagadougou</title>
+<link>https://example.org/article/2</link>
+<description>Un concert gratuit est organise ce week-end.</description>
+<pubDate>Sun, 20 Sep 2026 06:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Syrie : bombardement signale pres de Deir ez-Zor</title>
+<link>https://example.org/article/3</link>
+<description>Des frappes ont vise des positions dans la region.</description>
+<pubDate>Sun, 20 Sep 2026 05:00:00 GMT</pubDate>
+</item>
+</channel></rss>

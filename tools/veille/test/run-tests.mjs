@@ -1,0 +1,95 @@
+#!/usr/bin/env node
+/* Tests hors-ligne du collecteur : parsing Telegram/RSS, classification,
+   geocodage et construction GeoJSON. Aucun acces reseau.
+   Usage : node tools/veille/test/run-tests.mjs */
+
+import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { parseChannelHtml } from '../lib/telegram.mjs';
+import { parseFeed } from '../lib/rss.mjs';
+import { classify, extractToll, normalize } from '../lib/classify.mjs';
+import { geocode, loadGazetteer } from '../lib/geocode.mjs';
+import { buildFeature, mergeCollection, makeRef } from '../lib/geojson.mjs';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const fixture = n => readFileSync(resolve(__dirname, 'fixtures', n), 'utf8');
+
+let pass = 0, fail = 0;
+function ok(cond, label, detail) {
+  if (cond) { pass++; console.log(`  ok   ${label}`); }
+  else { fail++; console.log(`  FAIL ${label}${detail ? ` — ${detail}` : ''}`); }
+}
+function eq(a, b, label) { ok(a === b, label, `attendu ${JSON.stringify(b)}, recu ${JSON.stringify(a)}`); }
+
+console.log('\n# Telegram (apercu web)');
+const tg = parseChannelHtml(fixture('telegram.html'), 'zonewatch');
+eq(tg.length, 3, '3 messages extraits');
+eq(tg[0].source_url, 'https://t.me/zonewatch/1234', 'URL du post');
+eq(tg[0].author, '@zonewatch', 'canal');
+eq(tg[0].published_at, '2026-09-20T08:14:03.000Z', 'horodatage ISO');
+ok(tg[0].text.includes('Nampala'), 'texte decode et nettoye');
+ok(tg[0].text.includes('tués'), 'entites HTML decodees');
+eq(tg[0].media.length, 1, 'media detecte');
+eq(tg[0].audience, '12.4K', 'compteur de vues');
+
+console.log('\n# RSS');
+const rss = parseFeed(fixture('feed.xml'), 'Test Feed');
+eq(rss.length, 3, '3 items extraits');
+eq(rss[0].source_url, 'https://example.org/article/1', 'lien item');
+eq(rss[0].published_at, '2026-09-20T07:05:00.000Z', 'pubDate convertie');
+ok(rss[0].text.includes('Djibo') && rss[0].text.includes('8 morts'), 'titre + description concatenes');
+
+console.log('\n# Classification');
+eq(classify(tg[0]).type, 'Attaque', 'attaque sur poste militaire');
+eq(classify(tg[1]), null, 'bruit sportif rejete');
+eq(classify(tg[2]).type, 'Embuscades', 'embuscade sur convoi');
+ok(classify(tg[0]).actors.includes('jnim'), 'acteur JNIM identifie');
+eq(classify(tg[0]).confidence, 'elevee', 'confiance elevee (acteur + bilan)');
+eq(classify(rss[1]), null, 'annonce de concert rejetee');
+eq(extractToll('au moins 12 soldats tues'), '12 (annonce, non verifie)', 'bilan FR');
+eq(extractToll('at least 9 killed in the raid'), '9 (annonce, non verifie)', 'bilan EN');
+eq(classify({ text: 'court' }), null, 'texte trop court rejete');
+eq(normalize('Ménaka'), 'menaka', 'normalisation des accents');
+
+console.log('\n# Geocodage (gazetteer local)');
+const gaz = loadGazetteer();
+ok(gaz.entries.length > 150, `gazetteer charge (${gaz.entries.length} entrees)`);
+eq(geocode(tg[0].text, 'sahel', gaz).name, 'Nampala', 'Nampala (Mali)');
+eq(geocode(tg[0].text, 'sahel', gaz).country, 'Mali', 'pays resolu');
+eq(geocode(tg[2].text, 'rdc', gaz).name, 'Beni', 'Beni (RDC) : premier toponyme cite');
+ok(geocode(tg[2].text, 'rdc', gaz).others.includes('Oicha'), 'Oicha conserve en lieu secondaire');
+eq(geocode(rss[2].text, 'moyen-orient', gaz).name, 'Deir ez-Zor', 'alias Deir ez-Zor');
+eq(geocode('Aucun toponyme connu ici', 'sahel', gaz), null, 'texte non localisable');
+eq(geocode(tg[0].text, 'rdc', gaz), null, 'cloisonnement par zone');
+eq(geocode('violences a Gorom-Gorom cette nuit', 'sahel', gaz).name, 'Gorom-Gorom', 'toponyme compose');
+
+console.log('\n# GeoJSON');
+const cls = classify(tg[0]);
+const geo = geocode(tg[0].text, 'sahel', gaz);
+const f = buildFeature(tg[0], cls, geo, { zone: 'sahel' });
+eq(f.type, 'Feature', 'type Feature');
+eq(f.geometry.type, 'Point', 'geometrie Point');
+eq(f.geometry.coordinates.length, 2, '[lon, lat]');
+ok(f.geometry.coordinates[0] === geo.lon && f.geometry.coordinates[1] === geo.lat, 'ordre lon/lat respecte');
+eq(f.properties.type, 'Attaque', 'type compatible colorExpr');
+eq(f.properties.Lieu, 'Nampala', 'lieu en propriete');
+eq(f.properties.Statut, 'a valider', 'statut de validation');
+ok(/^Telegram\|https:\/\/t\.me\//.test(f.properties.sources), 'format sources "Label|url"');
+ok(f.properties.Resume.length <= 281, 'resume tronque');
+eq(makeRef(tg[0], geo.name), f.properties.Ref, 'Ref reproductible');
+
+const merged1 = mergeCollection({ type: 'FeatureCollection', features: [] }, [f], { days: 30 });
+eq(merged1.added, 1, 'ajout initial');
+const merged2 = mergeCollection(merged1.collection, [f], { days: 30 });
+eq(merged2.added, 0, 'dedoublonnage sur Ref');
+eq(merged2.total, 1, 'total stable');
+
+const vieux = JSON.parse(JSON.stringify(f));
+vieux.properties.Ref = 'vieuxref01';
+vieux.properties.Date = '2020-01-01 00:00 UTC';
+const merged3 = mergeCollection({ type: 'FeatureCollection', features: [vieux] }, [f], { days: 30 });
+eq(merged3.total, 1, 'retention : point hors fenetre purge');
+
+console.log(`\n${pass} ok, ${fail} echec(s)\n`);
+process.exit(fail === 0 ? 0 : 1);

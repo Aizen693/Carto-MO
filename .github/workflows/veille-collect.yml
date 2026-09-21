@@ -1,0 +1,101 @@
+name: Collecte veille (sans API)
+
+on:
+  schedule:
+    - cron: "15 */3 * * *"   # toutes les 3 heures
+  workflow_dispatch:
+    inputs:
+      zones:
+        description: "Zones a collecter (sahel moyen-orient rdc)"
+        default: "sahel moyen-orient rdc"
+      max_age:
+        description: "Age max des items collectes, en jours"
+        default: "3"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: veille-collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (outils)
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Tests hors-ligne du collecteur
+        run: node tools/veille/test/run-tests.mjs
+
+      - name: Prepare la branche veille-data
+        run: |
+          set -euo pipefail
+          git config user.name "veille-bot"
+          git config user.email "veille-bot@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin veille-data >/dev/null 2>&1; then
+            git fetch --depth=1 origin +refs/heads/veille-data:refs/remotes/origin/veille-data
+            git worktree add -B veille-data ../veille-data origin/veille-data
+          else
+            git worktree add --detach ../veille-data
+            git -C ../veille-data checkout --orphan veille-data
+            git -C ../veille-data rm -rf . >/dev/null 2>&1 || true
+            printf '# Branche de donnees de veille\n\nGeneree par .github/workflows/veille-collect.yml. Ne pas editer a la main.\n' > ../veille-data/README.md
+            git -C ../veille-data add README.md
+            git -C ../veille-data commit -m "chore(veille): initialise la branche de donnees"
+          fi
+
+      - name: Collecte
+        env:
+          ZONES: ${{ github.event.inputs.zones || 'sahel moyen-orient rdc' }}
+          MAX_AGE: ${{ github.event.inputs.max_age || '3' }}
+        run: |
+          set -uo pipefail
+          rc=0
+          for zone in $ZONES; do
+            node tools/veille/collect.mjs \
+              --zone "$zone" \
+              --max-age "$MAX_AGE" \
+              --days 30 \
+              --out "../veille-data/$zone/veille.geojson" || rc=1
+          done
+          # Un echec de source ne doit pas faire echouer le job : les autres
+          # zones ont pu aboutir. On signale simplement dans le resume.
+          if [ "$rc" -ne 0 ]; then
+            echo "::warning::au moins une zone n'a produit aucun point (sources injoignables)"
+          fi
+
+      - name: Publie sur veille-data
+        working-directory: ../veille-data
+        run: |
+          set -euo pipefail
+          git add -A
+          if git diff --cached --quiet; then
+            echo "aucun nouveau point"
+            exit 0
+          fi
+          git -c user.name="veille-bot" -c user.email="veille-bot@users.noreply.github.com" \
+            commit -m "data(veille): collecte $(date -u '+%Y-%m-%d %H:%M UTC')"
+          for i in 1 2 3 4; do
+            git push origin veille-data && break
+            echo "push echoue, nouvelle tentative dans $((2**i))s"
+            sleep $((2**i))
+          done
+
+      - name: Resume
+        if: always()
+        working-directory: ../veille-data
+        run: |
+          {
+            echo "### Veille — points par zone"
+            for f in */veille.geojson; do
+              [ -f "$f" ] || continue
+              n=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$f','utf8')).features.length)")
+              echo "- \`$f\` : $n points"
+            done
+          } >> "$GITHUB_STEP_SUMMARY"

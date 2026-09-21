@@ -12,6 +12,10 @@ sources sociales  ->  collecteur (scraper / API)  ->  n8n (filtrage, géocodage,
 
 ---
 
+> **Mise en œuvre** : la chaîne de collecte sans clé (Telegram public + RSS)
+> décrite au §10 est implémentée dans `tools/veille/` — voir
+> [`veille-collecte-sans-api.md`](veille-collecte-sans-api.md).
+
 ## 0. Cadre juridique et opérationnel — à lire avant de coder
 
 | Point | Conséquence pratique |
