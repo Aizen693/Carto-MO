@@ -45,11 +45,13 @@ tools/veille/
   lib/telegram.mjs       # lecture de t.me/s/<canal>
   lib/rss.mjs            # lecture RSS 2.0 / Atom
   lib/tiktok.mjs         # TikTok via API TikNeuron (optionnel, cle requise)
+  lib/instagram.mjs      # Instagram via Instaloader (optionnel, session requise)
+  instagram_fetch.py     # pont Python vers Instaloader
   lib/classify.mjs       # lexique conflit FR/EN/AR -> type + confiance
   lib/geocode.mjs        # geocodage hors-ligne par gazetteer
   lib/geojson.mjs        # Feature, dedoublonnage, retention
   lib/prune.mjs          # purge des sources mortes (--prune)
-  test/run-tests.mjs     # 83 tests hors-ligne (aucun acces reseau)
+  test/run-tests.mjs     # 91 tests hors-ligne (aucun acces reseau)
 .github/workflows/veille-collect.yml
 ```
 
@@ -284,6 +286,58 @@ cd tiktok-mcp && npm install && npm run build
 
 Les deux usages sont complementaires : le MCP pour explorer et qualifier a
 la main, `lib/tiktok.mjs` pour la collecte automatisee.
+
+---
+
+## Instagram via Instaloader : source optionnelle, **avec compte**
+
+[Instaloader](https://github.com/instaloader/instaloader) (Python, MIT) lit
+les posts des comptes publics et des hashtags. **Instagram refuse tout acces
+anonyme** : teste le 21/09/2026, erreur 401 « Please wait a few minutes » des
+la premiere requete, quel que soit le compte vise. Il faut donc une session.
+
+Atout pour la carte : un post geotague donne des **coordonnees exactes**. Le
+collecteur les utilise a la place du gazetteer, apres avoir verifie que le
+point tombe dans la zone (lieu du gazetteer a moins de 150 km, sinon rejete).
+La precision affichee est alors `geotag (instagram)`.
+
+### Mise en route (une fois, a la main)
+
+```bash
+pip install instaloader
+instaloader --login <compte_veille>   # demande le mot de passe, enregistre la session
+export IG_SESSION_USER=<compte_veille>
+```
+
+- **Compte dedie a la veille**, jamais un compte personnel : Instagram bloque
+  ou suspend les comptes qui lisent en volume.
+- Le collecteur ne voit jamais le mot de passe : il recharge seulement la
+  session enregistree par Instaloader.
+- `IG_PYTHON` permet de viser un Python precis (virtualenv) ; `python3` par defaut.
+
+### Configuration
+
+Dans `sources.json`, par zone :
+
+```json
+"instagram": { "profiles": ["compte_public"], "hashtags": ["motcle"], "per_source": 12 }
+```
+
+Listes vides par defaut : elles viennent de la liste de suivi de l'analyste.
+`--check` teste chaque source ; `--prune` ne retire **jamais** une source
+Instagram (un 401 vient le plus souvent d'un blocage du compte de veille, pas
+du compte suivi).
+
+### Limites
+
+- **Local ou VPS uniquement.** La session est un identifiant : elle ne doit
+  pas partir dans les secrets GitHub Actions. Dans le workflow, la source est
+  simplement ignoree faute de session.
+- Rythme volontairement lent (2 s entre sources, 12 posts par source) :
+  au-dela, le compte de veille se fait bloquer.
+- Les CGU d'Instagram interdisent la collecte automatisee : risque de
+  suspension du compte, a traiter comme dans la note de cadrage (section
+  cadre juridique). Donnees publiques seulement, pas de profil prive.
 
 ---
 

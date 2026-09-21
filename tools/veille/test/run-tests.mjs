@@ -9,7 +9,8 @@ import { fileURLToPath } from 'node:url';
 import { parseChannelHtml } from '../lib/telegram.mjs';
 import { parseFeed } from '../lib/rss.mjs';
 import { classify, extractToll, normalize } from '../lib/classify.mjs';
-import { geocode, loadGazetteer } from '../lib/geocode.mjs';
+import { geocode, fromGeotag, loadGazetteer } from '../lib/geocode.mjs';
+import { parseOutput as parseIg } from '../lib/instagram.mjs';
 import { buildFeature, mergeCollection, makeRef } from '../lib/geojson.mjs';
 import { parseSearch, mapVideo, toIso, hasKey } from '../lib/tiktok.mjs';
 import { decide, applyPrune, summarize } from '../lib/prune.mjs';
@@ -97,6 +98,19 @@ eq(geocode('camp de Dioura attaque', 'sahel', mini), null, 'homonyme sans ancre 
 const dio = geocode('attaque a Dioura puis a Sevare', 'sahel', mini);
 eq(dio && dio.lon, -5.2547, 'homonyme tranche par le lieu voisin (Sevare)');
 eq(geocode('camp de Dioura attaque', 'sahel', mini)?.lon, -5.2547, 'homonyme resolu reutilise dans le meme passage');
+
+console.log('\n# Instagram (sortie Instaloader)');
+const igItems = parseIg(fixture('instagram-output.jsonl'));
+eq(igItems.length, 2, 'deux items lus, journal et ligne tronquee ignores');
+eq(igItems[0].source_url, 'https://www.instagram.com/p/ABC123/', 'URL du post');
+const igGeo = fromGeotag(igItems[0].geotag, 'sahel', mini);
+eq(igGeo && igGeo.lat, 15.29, 'geotag garde ses coordonnees exactes');
+eq(igGeo && igGeo.country, 'Mali', 'pays deduit du lieu voisin');
+eq(igGeo && igGeo.precision, 'geotag', 'precision geotag');
+eq(fromGeotag(igItems[1].geotag, 'sahel', mini), null, 'geotag hors zone (Paris) rejete');
+const igF = buildFeature(igItems[0], classify(igItems[0]), igGeo, { zone: 'sahel' });
+eq(igF.properties.Canal, 'Instagram @veille_test', 'canal Instagram');
+eq(igF.geometry.coordinates[1], 15.29, 'point place au geotag');
 
 console.log('\n# Purge des sources mortes');
 const probes = [

@@ -4,6 +4,7 @@
     "  telegram : nom de canal PUBLIC, lu via l'apercu web https://t.me/s/<canal>",
     "  rss      : flux RSS/Atom (presse, ReliefWeb, instance RSSHub auto-hebergee, pont Nitter)",
     "  tiktok   : requetes de recherche via l'API TikNeuron — NECESSITE TIKNEURON_MCP_API_KEY (service payant)",
+    "  instagram : comptes publics / hashtags via Instaloader, NECESSITE une session (IG_SESSION_USER, compte de veille dedie) ; local ou VPS seulement",
     "Verifier l'etat des sources avec : node tools/veille/collect.mjs --zone <zone> --check",
     "Canaux Telegram : liste de suivi de l'analyste (fiches OSINT), verifiee le 21/09/2026.",
     "AuroraIntel (muet depuis 06/2025) et comptes d'influenceurs ecartes."
@@ -42,6 +43,11 @@
           "JNIM Sahel"
         ],
         "pages": 2
+      },
+      "instagram": {
+        "profiles": [],
+        "hashtags": [],
+        "per_source": 12
       }
     },
     "moyen-orient": {
@@ -72,6 +78,11 @@
           "Deir ez-Zor bombardement"
         ],
         "pages": 2
+      },
+      "instagram": {
+        "profiles": [],
+        "hashtags": [],
+        "per_source": 12
       }
     },
     "rdc": {
@@ -104,6 +115,11 @@
           "Goma affrontements"
         ],
         "pages": 2
+      },
+      "instagram": {
+        "profiles": [],
+        "hashtags": [],
+        "per_source": 12
       }
     }
   }

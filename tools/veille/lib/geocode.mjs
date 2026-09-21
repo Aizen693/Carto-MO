@@ -149,3 +149,28 @@ function findAnyZone(gaz, norm) {
   for (const e of gaz.entries) if (e.norm === norm) return e.place;
   return null;
 }
+
+/* Geotag precis (Instagram) : on garde les coordonnees du post, mais on
+   verifie qu'il tombe dans la zone en cherchant le lieu du gazetteer le plus
+   proche (a moins de maxKm). Hors zone -> null. Le pays vient de ce voisin. */
+export function fromGeotag(geotag, zone, gaz = loadGazetteer(), maxKm = 150) {
+  const lat = Number(geotag?.lat), lon = Number(geotag?.lon);
+  if (!isFinite(lat) || !isFinite(lon)) return null;
+  let near = null, nearD = Infinity;
+  for (const e of gaz.entries) {
+    const p = e.place;
+    if (zone && p.zone !== zone) continue;
+    if (p.amb) continue;
+    const d = km({ lat, lon }, p);
+    if (d < nearD) { nearD = d; near = p; }
+  }
+  if (!near || nearD > maxKm) return null;
+  return {
+    name: geotag.name || near.name,
+    country: near.country,
+    lon, lat,
+    precision: 'geotag',
+    source: 'instagram',
+    others: near.name !== geotag.name ? [`${near.name} (${Math.round(nearD)} km)`] : []
+  };
+}

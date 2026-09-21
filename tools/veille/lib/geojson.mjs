@@ -6,7 +6,7 @@
 import { createHash } from 'node:crypto';
 import { normalize } from './classify.mjs';
 
-const SOURCE_LABEL = { telegram: 'Telegram', rss: 'RSS', tiktok: 'TikTok' };
+const SOURCE_LABEL = { telegram: 'Telegram', rss: 'RSS', tiktok: 'TikTok', instagram: 'Instagram' };
 
 export function makeRef(item, place) {
   // Empreinte stable : texte normalise tronque + lieu + jour.

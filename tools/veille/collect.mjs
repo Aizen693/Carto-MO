@@ -18,8 +18,9 @@ import { fileURLToPath } from 'node:url';
 import { fetchChannel } from './lib/telegram.mjs';
 import { fetchFeed } from './lib/rss.mjs';
 import { search as tiktokSearch, hasKey as tiktokHasKey } from './lib/tiktok.mjs';
+import { fetchInstagram, checkInstagram, hasSession as igHasSession } from './lib/instagram.mjs';
 import { classify } from './lib/classify.mjs';
-import { geocode, loadGazetteer } from './lib/geocode.mjs';
+import { geocode, fromGeotag, loadGazetteer } from './lib/geocode.mjs';
 import { buildFeature, mergeCollection } from './lib/geojson.mjs';
 import { decide, applyPrune, summarize } from './lib/prune.mjs';
 
@@ -81,6 +82,20 @@ async function checkZone(zone, conf) {
       results.push(await probe('tiktok', q, `tiktok "${q}"`,
         o => tiktokSearch(q, { pages: 1, opts: o })));
     }
+  }
+
+  // Instagram : affiche seulement, jamais purge automatiquement (un 401 vient
+  // souvent d'un blocage temporaire du compte de veille, pas du compte suivi).
+  const ig = conf.instagram || {};
+  const igCount = (ig.profiles || []).length + (ig.hashtags || []).length;
+  if (igCount && !igHasSession()) {
+    console.log(`  --   instagram (${igCount} sources) — ignore : session Instaloader absente (IG_SESSION_USER)`);
+  } else if (igCount) {
+    try {
+      for (const r of await checkInstagram(ig)) {
+        console.log(r.ok ? `  OK   instagram ${r.check} — ${r.items} posts < 30 j (${r.ms} ms)` : `  KO   instagram ${r.check} — ${r.error}`);
+      }
+    } catch (e) { console.log(`  KO   instagram — ${e.message}`); }
   }
 
   if (!PRUNE) return;
@@ -170,6 +185,13 @@ async function runZone(zone, conf) {
   // un village homonyme ("Dioura") a pu etre tranche entre-temps par un
   // autre texte qui cite un lieu voisin.
   const retry = [];
+  // Instagram : optionnel, exige une session Instaloader (compte de veille).
+  const ig = conf.instagram || {};
+  const igCount = (ig.profiles || []).length + (ig.hashtags || []).length;
+  const igActive = igCount > 0 && igHasSession();
+  if (igCount > 0 && !igActive) console.log(`  [i] instagram ignore (session Instaloader absente)`);
+  if (igActive) batches.push(await pull('instagram', () => fetchInstagram(ig, { maxAge: MAX_AGE, perSource: ig.per_source || 12 })));
+
   for (const item of batches.flat()) {
     if (features.length >= LIMIT) break;
     const ts = item.published_at ? Date.parse(item.published_at) : NaN;
@@ -180,7 +202,8 @@ async function runZone(zone, conf) {
     if (!cls) continue;
     stats.classified++;
 
-    const geo = geocode(item.text, zone, gaz);
+    // Un geotag precis prime sur le texte, s'il tombe dans la zone.
+    const geo = (item.geotag && fromGeotag(item.geotag, zone, gaz)) || geocode(item.text, zone, gaz);
     if (geo) keep(item, cls, geo);
     else retry.push([item, cls]);
   }
@@ -201,7 +224,7 @@ async function runZone(zone, conf) {
   // Filet de securite : si toutes les sources ont echoue et qu'aucun point
   // n'a ete produit, on ne reecrit pas le fichier (evite de purger la
   // retention sur un simple incident reseau).
-  const sourceCount = (conf.telegram || []).length + (conf.rss || []).length + (tkActive ? tkQueries.length : 0);
+  const sourceCount = (conf.telegram || []).length + (conf.rss || []).length + (tkActive ? tkQueries.length : 0) + (igActive ? 1 : 0);
   if (features.length === 0 && stats.errors > 0 && stats.errors === sourceCount) {
     console.warn(`[veille:${zone}] toutes les sources en echec : ${outPath} laisse intact`);
     process.exitCode = 1;
