@@ -158,7 +158,20 @@ async function runZone(zone, conf) {
     }
   }
 
+  const keep = (item, cls, geo) => {
+    stats.located++;
+    const f = buildFeature(item, cls, geo, { zone });
+    if (seen.has(f.properties.Ref)) return;
+    seen.add(f.properties.Ref);
+    features.push(f);
+  };
+
+  // Les incidents non localises au premier passage sont retentes a la fin :
+  // un village homonyme ("Dioura") a pu etre tranche entre-temps par un
+  // autre texte qui cite un lieu voisin.
+  const retry = [];
   for (const item of batches.flat()) {
+    if (features.length >= LIMIT) break;
     const ts = item.published_at ? Date.parse(item.published_at) : NaN;
     if (!isNaN(ts) && ts < since) continue;
     stats.recent++;
@@ -168,14 +181,13 @@ async function runZone(zone, conf) {
     stats.classified++;
 
     const geo = geocode(item.text, zone, gaz);
-    if (!geo) continue;
-    stats.located++;
-
-    const f = buildFeature(item, cls, geo, { zone });
-    if (seen.has(f.properties.Ref)) continue;
-    seen.add(f.properties.Ref);
-    features.push(f);
+    if (geo) keep(item, cls, geo);
+    else retry.push([item, cls]);
+  }
+  for (const [item, cls] of retry) {
     if (features.length >= LIMIT) break;
+    const geo = geocode(item.text, zone, gaz);
+    if (geo) keep(item, cls, geo);
   }
 
   const outPath = resolve(ROOT, OUT || `${zone}/veille.geojson`);

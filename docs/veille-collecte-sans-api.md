@@ -38,7 +38,8 @@ peuvent alimenter la meme chaine en produisant le meme format d'item.
 tools/veille/
   collect.mjs            # CLI de collecte (point d'entree)
   sources.json           # canaux Telegram et flux RSS, par zone
-  gazetteer.json         # toponymes -> coordonnees (seed manuel livre)
+  gazetteer.json         # toponymes -> coordonnees (GeoNames + seed)
+  gazetteer-seed.json    # lieux cures a la main, prioritaires
   build-gazetteer.mjs    # regenere le gazetteer depuis GeoNames
   lib/http.mjs           # fetch avec UA, timeout, retry
   lib/telegram.mjs       # lecture de t.me/s/<canal>
@@ -48,7 +49,7 @@ tools/veille/
   lib/geocode.mjs        # geocodage hors-ligne par gazetteer
   lib/geojson.mjs        # Feature, dedoublonnage, retention
   lib/prune.mjs          # purge des sources mortes (--prune)
-  test/run-tests.mjs     # 75 tests hors-ligne (aucun acces reseau)
+  test/run-tests.mjs     # 83 tests hors-ligne (aucun acces reseau)
 .github/workflows/veille-collect.yml
 ```
 
@@ -106,7 +107,16 @@ node tools/veille/test/run-tests.mjs
    toponyme cite l'emporte ; a position egale, le plus long gagne
    (« Gorom-Gorom » plutot que « Gorom »). La recherche est cloisonnee par
    zone : un item Sahel ne peut pas tomber sur une ville syrienne. Un item
-   non localisable est ecarte — le calque a besoin de coordonnees.
+   non localisable est ecarte, le calque a besoin de coordonnees. Regles
+   supplementaires pour les lieux GeoNames :
+   - un lieu ne compte que s'il est ecrit avec une majuscule dans le texte ;
+   - si le premier lieu cite est une region (« Kwilu : incendies a Bulungu »),
+     la localite plus precise citee ensuite l'emporte ;
+   - un village homonyme (deux « Dioura » au Mali, a 500 km) est tranche par
+     les autres lieux du texte (a moins de 150 km), sinon par une resolution
+     faite sur un autre texte du meme passage, sinon ignore ;
+   - « la junte de Bamako », « les autorites de Kinshasa » : la capitale
+     designe le pouvoir, elle n'est pas retenue comme lieu.
 5. **Construction GeoJSON** (`lib/geojson.mjs`). Empreinte `Ref` (SHA-1 du
    texte normalise + lieu + jour) pour le dedoublonnage, fusion avec le
    fichier existant, purge glissante a `--days`.
@@ -279,23 +289,35 @@ la main, `lib/tiktok.mjs` pour la collecte automatisee.
 
 ## Gazetteer
 
-Le fichier livre est un **seed manuel de 178 lieux** (Sahel, Moyen-Orient,
-RDC), coordonnees arrondies au centieme de degre, soit environ 1 km. Suffisant
-pour un calque consulte entre les zooms 4 et 8, et chaque point porte le lien
-vers sa source pour verification.
+Le fichier livre est genere depuis GeoNames (donnees libres CC BY 4.0,
+`download.geonames.org/export/dump/<CC>.zip`, **sans cle**) : environ
+73 600 lieux, 11 Mo, une ligne par lieu.
 
-Pour des coordonnees exactes et une couverture complete :
+| Couche | Contenu | Zones |
+|---|---|---|
+| Seed manuel | 178 lieux cures a la main (`gazetteer-seed.json`), prioritaires a nom egal | toutes |
+| Villes | population >= seuil (5 000 par defaut), chefs-lieux PPLA/PPLC | toutes |
+| Regions | ADM1 et ADM2 (provinces, territoires, cercles), sauf noms generiques d'un mot (« Centre », « Nord ») | toutes |
+| Villages | toutes les localites, population 0 comprise, 5 lettres mini, hors mots courants | Sahel, RDC |
+
+Garde-fous contre les faux positifs :
+- les alias GeoNames ne sont gardes que pour les regions ADM1, les chefs-lieux
+  et les villes de plus de 100 000 habitants (sur les petites villes, « Bank »
+  pour Banak placait « West Bank » en Iran) ;
+- les villages homonymes eloignes de plus de 40 km gardent leurs candidats
+  (`amb`) pour etre tranches au geocodage ; au-dela de 4 homonymes, le nom est
+  ecarte.
+
+Pour regenerer :
 
 ```bash
 node tools/veille/build-gazetteer.mjs            # toutes les zones
 node tools/veille/build-gazetteer.mjs --min-pop 2000
 ```
 
-Le script telecharge les jeux GeoNames par pays
-(`download.geonames.org/export/dump/<CC>.zip`, donnees libres CC BY 4.0,
-**sans cle**), les decompresse sans dependance et remplace `gazetteer.json`.
-Il retient les localites au-dessus du seuil de population et les chefs-lieux
-ADM1. Le fichier produit doit etre commite.
+Pour corriger un lieu a la main, l'ajouter dans `gazetteer-seed.json` puis
+regenerer : le seed survit aux reconstructions. Le fichier produit doit etre
+commite.
 
 ---
 

@@ -86,6 +86,18 @@ eq(geocode('Aucun toponyme connu ici', 'sahel', gaz), null, 'texte non localisab
 eq(geocode(tg[0].text, 'rdc', gaz), null, 'cloisonnement par zone');
 eq(geocode('violences a Gorom-Gorom cette nuit', 'sahel', gaz).name, 'Gorom-Gorom', 'toponyme compose');
 
+console.log('\n# Geocodage GeoNames (regles fines)');
+const mini = loadGazetteer(resolve(__dirname, 'fixtures', 'gazetteer-mini.json'));
+eq(geocode('Kwilu : incendies a Bulungu', 'rdc', mini).name, 'Bulungu', 'localite preferee a la region citee avant');
+eq(geocode('attaque pres de hombori hier', 'sahel', mini), null, 'village GeoNames sans majuscule ignore');
+eq(geocode('attaque pres de Hombori hier', 'sahel', mini).name, 'Hombori', 'village GeoNames avec majuscule');
+eq(geocode('la junte de Bamako accuse le GSIM', 'sahel', mini), null, 'metonymie "junte de Bamako" ignoree');
+eq(geocode('explosion a Bamako', 'sahel', mini).name, 'Bamako', 'capitale comme lieu reel');
+eq(geocode('camp de Dioura attaque', 'sahel', mini), null, 'homonyme sans ancre ignore');
+const dio = geocode('attaque a Dioura puis a Sevare', 'sahel', mini);
+eq(dio && dio.lon, -5.2547, 'homonyme tranche par le lieu voisin (Sevare)');
+eq(geocode('camp de Dioura attaque', 'sahel', mini)?.lon, -5.2547, 'homonyme resolu reutilise dans le meme passage');
+
 console.log('\n# Purge des sources mortes');
 const probes = [
   { kind: 'rss', key: 'https://a.example/rss', label: 'rss A', status: 'ok', count: 12 },

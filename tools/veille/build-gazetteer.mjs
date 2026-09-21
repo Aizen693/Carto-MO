@@ -31,6 +31,24 @@ const argv = process.argv.slice(2);
 const opt = (n, d) => { const i = argv.indexOf(`--${n}`); return i >= 0 && argv[i + 1] ? argv[i + 1] : d; };
 const MIN_POP = Number(opt('min-pop', 5000));
 const ONLY = opt('zone', null);
+/* Zones ou l'on descend jusqu'au village (population 0 comprise) : les
+   theatres HUMINT, ou les incidents tombent dans des localites minuscules.
+   Le Moyen-Orient reste aux villes (Iran/Arabie = des centaines de milliers
+   de lieux, pour peu de gain). */
+const VILLAGE_ZONES = new Set(['sahel', 'rdc']);
+/* Homonymes au-dela de cette distance : le nom est ambigu, on l'ecarte
+   plutot que de placer un point au mauvais endroit. */
+const AMBIG_KM = 40;
+/* Noms de villages qui sont aussi des mots courants ou des pays. */
+const STOP = new Set(['mali', 'niger', 'congo', 'tchad', 'chad', 'burkina', 'faso', 'guinee', 'nigeria',
+  'afrique', 'africa', 'centre', 'nord', 'sud', 'ouest', 'police', 'armee', 'route', 'marche', 'village',
+  'mission', 'camp', 'ville', 'plage', 'station', 'france', 'paris', 'russie', 'wagner', 'premier',
+  'general', 'nouveau', 'nouvelle', 'grand', 'petit', 'saint', 'sainte', 'bonne', 'liberte', 'kilometre',
+  'president', 'ministre', 'douane', 'jeudi', 'lundi', 'mardi', 'mercredi', 'vendredi', 'samedi', 'dimanche',
+  'islam', 'allah', 'amina', 'fatima', 'moussa', 'ibrahim', 'hamadoun', 'amadou', 'mamadou', 'boubacar',
+  'kasai', 'kivu', 'katanga', 'forces', 'soldats', 'attaque', 'bataille']);
+const GENERIC = new Set(['centre', 'nord', 'sud', 'est', 'ouest', 'sahel', 'central', 'region', 'province', 'district']);
+const SEED = resolve(__dirname, 'gazetteer-seed.json');
 
 const places = [];
 
@@ -55,25 +73,52 @@ if (places.length === 0) {
   process.exit(1);
 }
 
-// Dedoublonnage sur nom normalise + zone, la population la plus forte gagne.
-const byKey = new Map();
+// Dedoublonnage sur nom normalise + zone.
+// - un lieu de rang 1 (ville >= seuil, chef-lieu, region) l'emporte sur les villages ;
+// - entre villages homonymes : on garde si tous sont a moins de AMBIG_KM, sinon on ecarte.
+const groups = new Map();
 for (const p of places) {
-  const k = `${p.zone}|${p.name.toLowerCase()}`;
-  const prev = byKey.get(k);
-  if (!prev || (p._pop || 0) > (prev._pop || 0)) byKey.set(k, p);
+  const k = `${p.zone}|${norm(p.name)}`;
+  if (!groups.has(k)) groups.set(k, []);
+  groups.get(k).push(p);
 }
+const byKey = new Map();
+let ambiguous = 0;
+const MAX_HOMONYMS = 4;
+for (const [k, list] of groups) {
+  const top = list.filter(p => p.tier === 1).sort((a, b) => (b._pop || 0) - (a._pop || 0));
+  if (top.length) { byKey.set(k, top[0]); continue; }
+  const far = list.some(a => list.some(b => km(a, b) > AMBIG_KM));
+  if (!far) { byKey.set(k, list[0]); continue; }
+  // Homonymes eloignes : on garde les candidats, geocode.mjs tranchera avec
+  // les autres lieux cites dans le texte. Au-dela de MAX_HOMONYMS, nom trop
+  // courant pour etre exploitable.
+  if (list.length > MAX_HOMONYMS) { ambiguous++; continue; }
+  byKey.set(k, { ...list[0], amb: list.map(p => [p.lat, p.lon, p.country]) });
+}
+// Le seed manuel (cure a la main) prime sur GeoNames a nom egal.
+let seedCount = 0;
+try {
+  for (const p of JSON.parse(readFileSync(SEED, 'utf8')).places) {
+    if (ONLY && p.zone !== ONLY) continue;
+    byKey.set(`${p.zone}|${norm(p.name)}`, { ...p, tier: 1 });
+    seedCount++;
+  }
+} catch { console.warn('[gazetteer] seed manuel absent, GeoNames seul'); }
 const final = [...byKey.values()].map(({ _pop, ...rest }) => rest);
+console.log(`[gazetteer] ${ambiguous} noms de villages trop courants ecartes, ${seedCount} lieux du seed conserves`);
 
 const doc = {
   meta: {
     version: 2,
     generated: new Date().toISOString().slice(0, 10),
-    source: `GeoNames (CC BY 4.0), population >= ${MIN_POP} + chefs-lieux ADM1`,
+    source: `GeoNames (CC BY 4.0) : villes >= ${MIN_POP} hab., chefs-lieux, regions ADM1/ADM2, villages (${[...VILLAGE_ZONES].join(', ')}) ; seed manuel prioritaire`,
     count: final.length
   },
   places: final
 };
-writeFileSync(OUT, JSON.stringify(doc, null, 1) + '\n', 'utf8');
+// Une ligne par lieu : fichier compact mais lisible en diff.
+writeFileSync(OUT, `{"meta":${JSON.stringify(doc.meta)},"places":[\n${final.map(p => JSON.stringify(p)).join(',\n')}\n]}\n`, 'utf8');
 console.log(`[gazetteer] ${final.length} lieux ecrits dans ${OUT}`);
 
 async function downloadCountry(cc) {
@@ -127,26 +172,51 @@ function parseGeonames(txt, zone, country, out) {
     if (c.length < 15) continue;
     const fclass = c[6], fcode = c[7];
     const pop = Number(c[14]) || 0;
-    const isTown = fclass === 'P' && pop >= MIN_POP;
-    const isAdm1 = fclass === 'A' && fcode === 'ADM1';
-    if (!isTown && !isAdm1) continue;
+    const isTown = fclass === 'P' && (pop >= MIN_POP || /^PPL(A|C)/.test(fcode));
+    const isAdm = fclass === 'A' && (fcode === 'ADM1' || fcode === 'ADM2');
+    const isVillage = !isTown && fclass === 'P' && /^PPL/.test(fcode) && VILLAGE_ZONES.has(zone);
+    if (!isTown && !isAdm && !isVillage) continue;
 
     const name = (c[2] || c[1] || '').trim();
     if (name.length < 3) continue;
+    // Villages : 5 lettres mini et pas de mot courant, sinon trop de faux positifs.
+    if (isVillage && (name.length < 5 || STOP.has(norm(name)))) continue;
+    if (STOP.has(norm(name)) && !isAdm) continue;
+    // Regions au nom d'un seul mot generique (Burkina : Centre, Nord, Est, Sahel) : elles
+    // accrochent n'importe quelle phrase, on les ecarte.
+    if (isAdm && GENERIC.has(norm(name))) continue;
 
     const alias = (c[3] || '').split(',')
       .map(s => s.trim())
-      .filter(s => s.length >= 3 && s.toLowerCase() !== name.toLowerCase() && /^[\p{Script=Latin}\p{Script=Arabic}\s'\-.]+$/u.test(s))
+      .filter(s => s.length >= 4 && s.toLowerCase() !== name.toLowerCase() && /^[\p{Script=Latin}\p{Script=Arabic}\s'\-.]+$/u.test(s))
+      // alias latins : majuscule initiale et pas un code en capitales (BZU, bwta...)
+      .filter(s => /\p{Script=Arabic}/u.test(s) || (/^\p{Lu}/u.test(s) && s !== s.toUpperCase() && !STOP.has(norm(s))))
       .slice(0, 4);
 
     out.push({
       zone, country, name,
       lat: Math.round(Number(c[4]) * 1e5) / 1e5,
       lon: Math.round(Number(c[5]) * 1e5) / 1e5,
-      alias,
-      precision: isAdm1 ? 'region' : 'ville',
+      // Alias reserves aux lieux connus : sur les petites villes, GeoNames
+      // porte des variantes qui sont des mots courants ("Bank" pour Banak,
+      // "Salman" pour Salami) et placent West Bank en Iran.
+      alias: (fcode === 'ADM1' || fcode === 'PPLA' || fcode === 'PPLC' || pop >= 100000) ? alias : [],
+      precision: isAdm ? 'region' : isVillage ? 'localite' : 'ville',
+      tier: isVillage ? 2 : 1,
       src: 'geonames',
       _pop: pop
     });
   }
+}
+
+function norm(s) {
+  return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+}
+
+function km(a, b) {
+  const r = Math.PI / 180;
+  const x = (b.lon - a.lon) * r * Math.cos(((a.lat + b.lat) / 2) * r);
+  const y = (b.lat - a.lat) * r;
+  return Math.sqrt(x * x + y * y) * 6371;
 }
