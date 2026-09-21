@@ -64,6 +64,7 @@ export function geocode(text, zone, gaz = loadGazetteer()) {
       const place = zone ? gaz.index.get(`${zone}|${norm}`) : findAnyZone(gaz, norm);
       if (!place) continue;
       if (place.src !== 'seed' && !/^\p{Lu}/u.test(words[i].raw)) continue;
+      if (NOT_PLACE.has(norm)) break;
       if (isMetonymy(words, i)) break;
       if (splitsCompound(words, i, n)) continue;
       if (isMediaName(words, i + n)) break;
@@ -74,6 +75,14 @@ export function geocode(text, zone, gaz = loadGazetteer()) {
     }
   }
   resolveHomonyms(found, gaz, zone);
+  // Coherence pays : si le texte nomme des pays, un village d'un autre pays
+  // est un homonyme ("Mali : ... a Kassala" ne peut pas etre Kassala au Niger).
+  // Limite au Sahel et a la RDC : au Moyen-Orient, "Israel" cote un village
+  // de Cisjordanie dans presque chaque depeche.
+  const named = zone === 'moyen-orient' ? new Set() : countriesIn(words);
+  if (named.size) for (const f of found) {
+    if (f.place && f.place.precision === 'localite' && !named.has(normalize(f.place.country))) f.place = null;
+  }
   const kept = found.filter(f => f.place);
   if (kept.length === 0) return null;
   kept.sort((a, b) => (a.at - b.at) || (b.len - a.len));
@@ -142,6 +151,23 @@ const MEDIA_NEXT = new Set(['news', 'agency', 'agence', 'post', 'times', 'daily'
 
 function isMediaName(words, j) {
   return MEDIA_NEXT.has(words[j]?.norm) && /^\p{Lu}/u.test(words[j]?.raw || '') || words[j]?.norm === 'news';
+}
+
+/* Noms de pays : ils designent le pays, jamais un village homonyme ("Kenya"
+   au Mali). Plus quelques mots courants qui sont aussi des localites. */
+const COUNTRY_NAMES = {
+  mali: 'mali', malien: 'mali', malienne: 'mali', burkina: 'burkina faso', burkinabe: 'burkina faso',
+  niger: 'niger', nigerien: 'niger', nigerienne: 'niger', tchad: 'tchad', tchadien: 'tchad', chad: 'tchad',
+  mauritanie: 'mauritanie', mauritanien: 'mauritanie', rdc: 'rdc', congo: 'rdc', congolais: 'rdc', congolaise: 'rdc',
+};
+const NOT_PLACE = new Set(['kenya', 'nigeria', 'cameroun', 'senegal', 'guinee', 'ghana', 'togo', 'benin', 'soudan',
+  'sudan', 'libye', 'libya', 'algerie', 'maroc', 'ouganda', 'uganda', 'rwanda', 'burundi', 'angola', 'zambie',
+  'tanzanie', 'france', 'russie', 'ukraine', 'chine', 'turquie', 'egypte', 'savane', 'brousse', 'afrique']);
+
+function countriesIn(words) {
+  const out = new Set();
+  for (const w of words) if (COUNTRY_NAMES[w.norm] && /^\p{Lu}/u.test(w.raw)) out.add(COUNTRY_NAMES[w.norm]);
+  return out;
 }
 
 function isMetonymy(words, i) {

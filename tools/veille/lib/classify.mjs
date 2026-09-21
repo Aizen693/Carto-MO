@@ -21,6 +21,10 @@ const RULES = [
     'attaque', 'attentat', 'assaut', 'offensive', 'ied', 'engin explosif', 'mine artisanale', 'kamikaze',
     'drone', 'frappe', 'bombardement', 'obus', 'roquette', 'missile', 'tirs', 'fusillade', 'enlevement',
     'kidnapping', 'massacre', 'tues', 'morts', 'victimes', 'affrontements', 'combats',
+    // vocabulaire courant de la presse et des communiques sahelien et congolais
+    'ciblee', 'ciblees', 'neutralise', 'neutralises', 'neutralisation', 'terroristes',
+    'hommes armes', 'individus armes', 'assaillants', 'jihadistes', 'djihadistes', 'rebelles',
+    'explose', 'explosent', 'detonation', 'incendie criminel', 'enleves', 'otages', 'pris en otage',
     'attack', 'strike', 'shelling', 'airstrike', 'gunmen', 'killed', 'clashes', 'explosion', 'blast', 'suicide bomber',
     'هجوم', 'انفجار', 'اشتباكات', 'قتلى', 'غارة'
   ] }

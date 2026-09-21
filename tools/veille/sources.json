@@ -8,7 +8,8 @@
     "Verifier l'etat des sources avec : node tools/veille/collect.mjs --zone <zone> --check",
     "Telegram et Instagram verifies le 21/09/2026 (actifs, texte exploitable). Comptes Instagram releves sur les sites officiels des medias.",
     "Orientation a garder en tete (croiser, ne jamais prendre seul) : AESinfos = communication des juntes AES ; idfofficial = armee israelienne ; almayadeenenglish = proche du Hezbollah ; Kurdistan24 = proche PDK ; TelevisionSyria = ex-opposition syrienne ; ajanews = Al Jazeera (Qatar).",
-    "Ecartes : AuroraIntel (muet depuis 06/2025), iranintltv (persan, non lu par le classifieur), comptes d'influenceurs."
+    "Ecartes : AuroraIntel (muet depuis 06/2025), iranintltv (persan, non lu par le classifieur), comptes d'influenceurs.",
+    "Relais gratuits de pages Facebook (21/09/2026) : RSS de site ou chaine YouTube des memes emetteurs. Agences officielles AIB, ANP, Presidence du Mali = communication des juntes, a croiser."
   ],
   "zones": {
     "sahel": {
@@ -35,6 +36,58 @@
         {
           "url": "https://reliefweb.int/updates/rss.xml?view=headlines",
           "label": "ReliefWeb"
+        },
+        {
+          "url": "https://www.studiotamani.org/feed/",
+          "label": "Studio Tamani (Mali)"
+        },
+        {
+          "url": "https://malijet.com/rss",
+          "label": "Malijet (Mali)"
+        },
+        {
+          "url": "https://koulouba.ml/feed/",
+          "label": "Presidence du Mali"
+        },
+        {
+          "url": "https://www.aib.media/feed/",
+          "label": "AIB (agence officielle Burkina)"
+        },
+        {
+          "url": "https://burkina24.com/feed/",
+          "label": "Burkina24"
+        },
+        {
+          "url": "https://www.sidwaya.info/feed/",
+          "label": "Sidwaya (Burkina)"
+        },
+        {
+          "url": "https://www.wakatsera.com/feed/",
+          "label": "Wakat Sera (Burkina)"
+        },
+        {
+          "url": "https://anp.ne/feed/",
+          "label": "ANP (agence officielle Niger)"
+        },
+        {
+          "url": "https://www.lesahel.org/feed/",
+          "label": "Le Sahel (Niger)"
+        },
+        {
+          "url": "https://sahelien.com/feed/",
+          "label": "Sahelien"
+        },
+        {
+          "url": "https://www.alwihdainfo.com/rss/",
+          "label": "Alwihda (Tchad)"
+        },
+        {
+          "url": "https://tchadinfos.com/feed/",
+          "label": "Tchadinfos"
+        },
+        {
+          "url": "https://www.bbc.com/afrique/index.xml",
+          "label": "BBC Afrique"
         }
       ],
       "tiktok": {
@@ -122,7 +175,7 @@
       ],
       "rss": [
         {
-          "url": "https://www.radiookapi.net/rss.xml",
+          "url": "https://www.radiookapi.net/feed/",
           "label": "Radio Okapi"
         },
         {
@@ -136,6 +189,22 @@
         {
           "url": "https://reliefweb.int/updates/rss.xml?view=headlines",
           "label": "ReliefWeb"
+        },
+        {
+          "url": "https://kivumorningpost.com/feed/",
+          "label": "Kivu Morning Post (Goma)"
+        },
+        {
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCqYLowgloaK5BjaWwe7nk3Q",
+          "label": "Kivu Morning Post (YouTube)"
+        },
+        {
+          "url": "https://www.politico.cd/feed/",
+          "label": "Politico.cd"
+        },
+        {
+          "url": "https://www.bbc.com/afrique/index.xml",
+          "label": "BBC Afrique"
         }
       ],
       "tiktok": {
