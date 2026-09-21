@@ -54,6 +54,9 @@ jobs:
         env:
           ZONES: ${{ github.event.inputs.zones || 'sahel moyen-orient rdc' }}
           MAX_AGE: ${{ github.event.inputs.max_age || '3' }}
+          # Source TikTok optionnelle (API TikNeuron, payante). Si le secret
+          # n'est pas defini, la source est simplement ignoree.
+          TIKNEURON_MCP_API_KEY: ${{ secrets.TIKNEURON_MCP_API_KEY }}
         run: |
           set -uo pipefail
           rc=0

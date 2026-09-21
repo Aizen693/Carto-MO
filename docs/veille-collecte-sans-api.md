@@ -1,8 +1,10 @@
 # Collecte de veille — sans API ni cle
 
 Implementation de la chaine de collecte decrite dans
-[`veille-scrapers-osint.md`](veille-scrapers-osint.md), **sans aucune cle
-d'API, aucun compte, aucun abonnement**.
+[`veille-scrapers-osint.md`](veille-scrapers-osint.md). Le socle fonctionne
+**sans aucune cle d'API, aucun compte, aucun abonnement**. Une seule source
+fait exception et reste optionnelle, desactivee par defaut : TikTok via
+TikNeuron, qui exige une cle payante (voir la section dediee).
 
 ```
 Telegram public (t.me/s)  ┐
@@ -21,6 +23,7 @@ Flux RSS / Atom           ┘ ->  classification  ->  geocodage local
 |---|---|---|
 | **Apercu web Telegram** (`https://t.me/s/<canal>`) | aucune | C'est la page que Telegram sert aux moteurs de recherche pour tout canal public. Pas de compte, pas de `api_id`, pas de MTProto, rien a faire tourner. |
 | **RSS / Atom** | aucune | Presse, ReliefWeb, et **toute instance RSSHub auto-hebergee** — ce qui ouvre X, Instagram, TikTok et YouTube sans cle, via un seul service a maintenir. |
+| **TikTok via TikNeuron** | **cle requise** | Source optionnelle, branchee mais desactivee par defaut. Voir la section dediee plus bas. |
 
 Les scrapers a compte (twscrape, instaloader, scrapers TikTok) ne sont pas
 branches ici : ils exigent des comptes jetables et des proxies, donc une
@@ -40,10 +43,11 @@ tools/veille/
   lib/http.mjs           # fetch avec UA, timeout, retry
   lib/telegram.mjs       # lecture de t.me/s/<canal>
   lib/rss.mjs            # lecture RSS 2.0 / Atom
+  lib/tiktok.mjs         # TikTok via API TikNeuron (optionnel, cle requise)
   lib/classify.mjs       # lexique conflit FR/EN/AR -> type + confiance
   lib/geocode.mjs        # geocodage hors-ligne par gazetteer
   lib/geojson.mjs        # Feature, dedoublonnage, retention
-  test/run-tests.mjs     # 45 tests hors-ligne (aucun acces reseau)
+  test/run-tests.mjs     # 64 tests hors-ligne (aucun acces reseau)
 .github/workflows/veille-collect.yml
 ```
 
@@ -172,6 +176,84 @@ ses routes comme flux :
 ```
 
 Rien d'autre a changer : le collecteur les traite comme n'importe quel flux.
+
+---
+
+## TikTok via TikNeuron — source optionnelle, **avec cle**
+
+Branchee a la demande, a partir de
+[`seym0n/tiktok-mcp`](https://github.com/seym0n/tiktok-mcp).
+
+> **Ce MCP n'est pas une voie sans API.** Son `index.ts` sort immediatement
+> si `TIKNEURON_MCP_API_KEY` est absente, et ses trois outils appellent
+> l'API hebergee `tikneuron.com/api/mcp/*`. C'est un service tiers payant
+> avec une couche MCP, pas un scraper autonome. A la difference des autres
+> sources de ce collecteur, celle-ci a un cout et une dependance externe.
+
+### Dans le collecteur
+
+`lib/tiktok.mjs` appelle directement les memes endpoints que le MCP, ce qui
+evite de faire tourner un serveur MCP dans un cron :
+
+| Endpoint | Usage ici |
+|---|---|
+| `GET /api/mcp/search` | Collecte : une requete par entree de `sources.json`, pagination suivie |
+| `GET /api/mcp/post-detail` | `postDetails()`, pour l'enrichissement ponctuel |
+| `GET /api/mcp/get-subtitles` | `subtitles()`, transcription ASR d'une video |
+
+Les requetes se declarent par zone :
+
+```json
+"tiktok": {
+  "queries": ["attaque Mali armee", "Burkina Faso attaque Djibo"],
+  "pages": 2
+}
+```
+
+Chaque video devient un item normalise : `description` + hashtags forment le
+texte soumis au lexique et au geocodage, `created_at` est accepte en ISO
+comme en epoch (secondes ou millisecondes), et l'URL est reconstruite en
+`https://www.tiktok.com/@<createur>/video/<id>`. La suite du traitement est
+identique aux autres sources.
+
+**Sans la variable d'environnement `TIKNEURON_MCP_API_KEY`, la source est
+ignoree** avec un message, et la collecte continue :
+
+```bash
+export TIKNEURON_MCP_API_KEY=xxxxxxxx
+node tools/veille/collect.mjs --zone sahel --check    # teste aussi TikTok
+node tools/veille/collect.mjs --zone sahel
+```
+
+En CI, definir le secret de depot `TIKNEURON_MCP_API_KEY` : le workflow le
+passe a la collecte, et son absence ne casse rien. La cle n'est jamais
+journalisee — le corps des reponses en erreur n'est pas remonte, seul le
+code HTTP l'est.
+
+### En analyse interactive (serveur MCP)
+
+Pour interroger TikTok depuis Claude plutot que depuis le cron, utiliser le
+MCP tel quel :
+
+```bash
+git clone https://github.com/Seym0n/tiktok-mcp.git
+cd tiktok-mcp && npm install && npm run build
+```
+
+```json
+{
+  "mcpServers": {
+    "tiktok-mcp": {
+      "command": "node",
+      "args": ["/chemin/vers/tiktok-mcp/build/index.js"],
+      "env": { "TIKNEURON_MCP_API_KEY": "votre_cle" }
+    }
+  }
+}
+```
+
+Les deux usages sont complementaires : le MCP pour explorer et qualifier a
+la main, `lib/tiktok.mjs` pour la collecte automatisee.
 
 ---
 

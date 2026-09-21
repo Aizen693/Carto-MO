@@ -1,0 +1,34 @@
+{
+  "success": true,
+  "videos": [
+    {
+      "description": "Attaque signalee contre un convoi militaire pres de Djibo cette nuit",
+      "video_id": "7409731702890827041",
+      "creator": "@veille_sahel",
+      "hashtags": ["burkina", "securite"],
+      "likes": "1200", "shares": "40", "comments": "88", "views": "45000", "bookmarks": "12",
+      "created_at": "2026-09-20T06:30:00Z",
+      "duration": 42,
+      "available_subtitles": [{ "language": "fr", "source": "asr" }]
+    },
+    {
+      "description": "Recette de riz gras facile",
+      "video_id": "7409731702890827042",
+      "creator": "cuisine_ouaga",
+      "hashtags": ["cuisine"],
+      "likes": "10", "views": "900",
+      "created_at": 1758348600,
+      "duration": 60,
+      "available_subtitles": []
+    },
+    {
+      "description": "",
+      "video_id": "7409731702890827043",
+      "creator": "vide",
+      "hashtags": [],
+      "created_at": "",
+      "duration": 5
+    }
+  ],
+  "metadata": { "cursor": "20", "has_more": true, "search_uid": "abc123" }
+}

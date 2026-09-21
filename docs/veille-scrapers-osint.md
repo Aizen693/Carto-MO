@@ -47,6 +47,7 @@ sources sociales  ->  collecteur (scraper / API)  ->  n8n (filtrage, géocodage,
 | [bellingcat/tiktok-hashtag-analysis](https://github.com/bellingcat/tiktok-hashtag-analysis) | ~375 | Python | Analyse d'occurrences de hashtags sur posts collectés. Orienté investigation. | Actif |
 | [zerodytrash/TikTok-Live-Connector](https://github.com/zerodytrash/TikTok-Live-Connector) | ~2 200 | TypeScript | Événements de live en temps réel (commentaires, cadeaux). Utile pour suivre une diffusion en direct. | Actif |
 | [Russell-Newton/TikTokPy](https://github.com/Russell-Newton/TikTokPy) | ~240 | Python | Extraction via Playwright, sans clé ni login. | Modéré |
+| [seym0n/tiktok-mcp](https://github.com/seym0n/tiktok-mcp) | — | TypeScript | Serveur MCP : recherche, détails de post, sous-titres ASR. **Pas un scraper** — client de l'API hébergée TikNeuron, `TIKNEURON_MCP_API_KEY` obligatoire. Branché dans le collecteur (`tools/veille/lib/tiktok.mjs`), désactivé sans clé. | Actif |
 
 **Recommandation** : `Douyin_TikTok_Download_API` en service Docker (API REST → appelable directement depuis n8n via nœud HTTP), avec `TikTok-Api` en secours.
 
@@ -177,7 +178,7 @@ Par ordre de mise en œuvre, du meilleur rapport valeur/risque au moins bon :
 4. **bellingcat/auto-archiver** pour la chaîne de preuve des points versés dans `veille.geojson`.
 5. **twscrape** si X doit être couvert plus finement que ce que permet RSSHub.
 6. **instaloader** si Instagram devient une source prioritaire (géotags exploitables en cartographie).
-7. **TikTok** (`Douyin_TikTok_Download_API` en Docker) seulement si la zone suivie l'exige — coût de maintenance élevé.
+7. **TikTok** — deux voies : `Douyin_TikTok_Download_API` en Docker (auto-hébergé, sans clé, maintenance élevée) ou l'API TikNeuron via `seym0n/tiktok-mcp` (clé payante, zéro maintenance). La seconde est déjà branchée dans le collecteur et s'active en posant `TIKNEURON_MCP_API_KEY`.
 8. **Facebook et LinkedIn** : ne pas industrialiser. Collecte manuelle ponctuelle + archivage.
 
 ### Point d'intégration

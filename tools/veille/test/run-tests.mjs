@@ -11,6 +11,7 @@ import { parseFeed } from '../lib/rss.mjs';
 import { classify, extractToll, normalize } from '../lib/classify.mjs';
 import { geocode, loadGazetteer } from '../lib/geocode.mjs';
 import { buildFeature, mergeCollection, makeRef } from '../lib/geojson.mjs';
+import { parseSearch, mapVideo, toIso, hasKey } from '../lib/tiktok.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixture = n => readFileSync(resolve(__dirname, 'fixtures', n), 'utf8');
@@ -52,6 +53,26 @@ eq(extractToll('at least 9 killed in the raid'), '9 (annonce, non verifie)', 'bi
 eq(classify({ text: 'court' }), null, 'texte trop court rejete');
 eq(normalize('Ménaka'), 'menaka', 'normalisation des accents');
 
+console.log('\n# TikTok (API TikNeuron)');
+const tkRaw = JSON.parse(fixture('tiktok-search.json'));
+const tk = parseSearch(tkRaw, 'Burkina Faso attaque Djibo');
+eq(tk.items.length, 2, 'videos sans texte ecartees');
+eq(tk.items[0].source, 'tiktok', 'source marquee tiktok');
+eq(tk.items[0].source_url, 'https://www.tiktok.com/@veille_sahel/video/7409731702890827041', 'URL reconstruite (arobase nettoyee)');
+eq(tk.items[0].author, '@veille_sahel', 'auteur normalise');
+eq(tk.items[0].published_at, '2026-09-20T06:30:00.000Z', 'created_at ISO');
+ok(tk.items[0].text.includes('#burkina'), 'hashtags ajoutes au texte');
+eq(tk.items[1].published_at, toIso(1758348600), 'created_at epoch secondes');
+eq(toIso(1758348600), '2025-09-20T06:10:00.000Z', 'conversion epoch secondes');
+eq(toIso(1758348600000), '2025-09-20T06:10:00.000Z', 'conversion epoch millisecondes');
+eq(toIso(''), null, 'date vide');
+eq(tk.cursor, '20', 'curseur de pagination');
+eq(tk.hasMore, true, 'indicateur has_more');
+eq(tk.searchUid, 'abc123', 'search_uid conserve');
+eq(classify(tk.items[0]).type, 'Attaque', 'item TikTok classe');
+eq(classify(tk.items[1]), null, 'recette de cuisine rejetee');
+eq(hasKey(), Boolean(process.env.TIKNEURON_MCP_API_KEY), 'detection de la cle');
+
 console.log('\n# Geocodage (gazetteer local)');
 const gaz = loadGazetteer();
 ok(gaz.entries.length > 150, `gazetteer charge (${gaz.entries.length} entrees)`);
@@ -78,6 +99,11 @@ eq(f.properties.Statut, 'a valider', 'statut de validation');
 ok(/^Telegram\|https:\/\/t\.me\//.test(f.properties.sources), 'format sources "Label|url"');
 ok(f.properties.Resume.length <= 281, 'resume tronque');
 eq(makeRef(tg[0], geo.name), f.properties.Ref, 'Ref reproductible');
+
+const tkFeature = buildFeature(tk.items[0], classify(tk.items[0]), geocode(tk.items[0].text, 'sahel', gaz), { zone: 'sahel' });
+eq(tkFeature.properties.Lieu, 'Djibo', 'point TikTok localise a Djibo');
+ok(tkFeature.properties.sources.startsWith('TikTok|https://www.tiktok.com/'), 'libelle de source TikTok');
+eq(tkFeature.properties.Canal, 'TikTok @veille_sahel', 'canal TikTok');
 
 const merged1 = mergeCollection({ type: 'FeatureCollection', features: [] }, [f], { days: 30 });
 eq(merged1.added, 1, 'ajout initial');

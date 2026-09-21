@@ -16,6 +16,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { fetchChannel } from './lib/telegram.mjs';
 import { fetchFeed } from './lib/rss.mjs';
+import { search as tiktokSearch, hasKey as tiktokHasKey } from './lib/tiktok.mjs';
 import { classify } from './lib/classify.mjs';
 import { geocode, loadGazetteer } from './lib/geocode.mjs';
 import { buildFeature, mergeCollection } from './lib/geojson.mjs';
@@ -62,6 +63,14 @@ async function checkZone(zone, conf) {
   for (const feed of conf.rss || []) {
     await probe(`rss ${feed.label}`, () => fetchFeed(feed.url, feed.label, { retries: 0, timeout: 15000 }));
   }
+  const tkQueries = conf.tiktok?.queries || [];
+  if (tkQueries.length && !tiktokHasKey()) {
+    console.log(`  --   tiktok (${tkQueries.length} requetes) — ignore : TIKNEURON_MCP_API_KEY absente`);
+  } else {
+    for (const q of tkQueries) {
+      await probe(`tiktok "${q}"`, () => tiktokSearch(q, { pages: 1, opts: { timeout: 20000 } }));
+    }
+  }
 }
 
 async function probe(label, fn) {
@@ -101,6 +110,18 @@ async function runZone(zone, conf) {
   for (const feed of conf.rss || []) {
     batches.push(await pull(`rss ${feed.label}`, () => fetchFeed(feed.url, feed.label)));
   }
+  // TikTok : source optionnelle, payante (API TikNeuron). Sans cle, on saute
+  // sans faire echouer la collecte.
+  const tkQueries = conf.tiktok?.queries || [];
+  const tkActive = tkQueries.length > 0 && tiktokHasKey();
+  if (tkQueries.length > 0 && !tkActive) {
+    console.log(`  [i] tiktok ignore (TIKNEURON_MCP_API_KEY absente)`);
+  }
+  if (tkActive) {
+    for (const q of tkQueries) {
+      batches.push(await pull(`tiktok "${q}"`, () => tiktokSearch(q, { pages: conf.tiktok.pages || 2 })));
+    }
+  }
 
   for (const item of batches.flat()) {
     const ts = item.published_at ? Date.parse(item.published_at) : NaN;
@@ -133,7 +154,7 @@ async function runZone(zone, conf) {
   // Filet de securite : si toutes les sources ont echoue et qu'aucun point
   // n'a ete produit, on ne reecrit pas le fichier (evite de purger la
   // retention sur un simple incident reseau).
-  const sourceCount = (conf.telegram || []).length + (conf.rss || []).length;
+  const sourceCount = (conf.telegram || []).length + (conf.rss || []).length + (tkActive ? tkQueries.length : 0);
   if (features.length === 0 && stats.errors > 0 && stats.errors === sourceCount) {
     console.warn(`[veille:${zone}] toutes les sources en echec : ${outPath} laisse intact`);
     process.exitCode = 1;

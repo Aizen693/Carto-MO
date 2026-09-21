@@ -3,6 +3,7 @@
     "Sources de collecte sans API ni cle. Deux types :",
     "  telegram : nom de canal PUBLIC, lu via l'apercu web https://t.me/s/<canal>",
     "  rss      : flux RSS/Atom (presse, ReliefWeb, instance RSSHub auto-hebergee, pont Nitter)",
+    "  tiktok   : requetes de recherche via l'API TikNeuron — NECESSITE TIKNEURON_MCP_API_KEY (service payant)",
     "Verifier l'etat des sources avec : node tools/veille/collect.mjs --zone <zone> --check",
     "La liste de canaux Telegram est volontairement vide : elle doit etre constituee par",
     "l'analyste a partir de sa propre liste de suivi, pas devinee."
@@ -12,31 +13,92 @@
       "label": "Sahel",
       "telegram": [],
       "rss": [
-        { "url": "https://www.rfi.fr/fr/afrique/rss", "label": "RFI Afrique" },
-        { "url": "https://www.france24.com/fr/afrique/rss", "label": "France 24 Afrique" },
-        { "url": "https://www.lemonde.fr/afrique/rss_full.xml", "label": "Le Monde Afrique" },
-        { "url": "https://reliefweb.int/updates/rss.xml?view=headlines", "label": "ReliefWeb" }
-      ]
+        {
+          "url": "https://www.rfi.fr/fr/afrique/rss",
+          "label": "RFI Afrique"
+        },
+        {
+          "url": "https://www.france24.com/fr/afrique/rss",
+          "label": "France 24 Afrique"
+        },
+        {
+          "url": "https://www.lemonde.fr/afrique/rss_full.xml",
+          "label": "Le Monde Afrique"
+        },
+        {
+          "url": "https://reliefweb.int/updates/rss.xml?view=headlines",
+          "label": "ReliefWeb"
+        }
+      ],
+      "tiktok": {
+        "queries": [
+          "attaque Mali armee",
+          "Burkina Faso attaque Djibo",
+          "Niger Tillaberi attaque",
+          "JNIM Sahel"
+        ],
+        "pages": 2
+      }
     },
     "moyen-orient": {
       "label": "Moyen-Orient",
       "telegram": [],
       "rss": [
-        { "url": "https://www.aljazeera.com/xml/rss/all.xml", "label": "Al Jazeera" },
-        { "url": "https://www.middleeasteye.net/rss", "label": "Middle East Eye" },
-        { "url": "https://www.france24.com/fr/moyen-orient/rss", "label": "France 24 Moyen-Orient" },
-        { "url": "https://reliefweb.int/updates/rss.xml?view=headlines", "label": "ReliefWeb" }
-      ]
+        {
+          "url": "https://www.aljazeera.com/xml/rss/all.xml",
+          "label": "Al Jazeera"
+        },
+        {
+          "url": "https://www.middleeasteye.net/rss",
+          "label": "Middle East Eye"
+        },
+        {
+          "url": "https://www.france24.com/fr/moyen-orient/rss",
+          "label": "France 24 Moyen-Orient"
+        },
+        {
+          "url": "https://reliefweb.int/updates/rss.xml?view=headlines",
+          "label": "ReliefWeb"
+        }
+      ],
+      "tiktok": {
+        "queries": [
+          "frappe Syrie",
+          "attaque Irak",
+          "Deir ez-Zor bombardement"
+        ],
+        "pages": 2
+      }
     },
     "rdc": {
       "label": "RDC",
       "telegram": [],
       "rss": [
-        { "url": "https://www.radiookapi.net/rss.xml", "label": "Radio Okapi" },
-        { "url": "https://actualite.cd/feed", "label": "Actualite.cd" },
-        { "url": "https://www.rfi.fr/fr/afrique/rss", "label": "RFI Afrique" },
-        { "url": "https://reliefweb.int/updates/rss.xml?view=headlines", "label": "ReliefWeb" }
-      ]
+        {
+          "url": "https://www.radiookapi.net/rss.xml",
+          "label": "Radio Okapi"
+        },
+        {
+          "url": "https://actualite.cd/feed",
+          "label": "Actualite.cd"
+        },
+        {
+          "url": "https://www.rfi.fr/fr/afrique/rss",
+          "label": "RFI Afrique"
+        },
+        {
+          "url": "https://reliefweb.int/updates/rss.xml?view=headlines",
+          "label": "ReliefWeb"
+        }
+      ],
+      "tiktok": {
+        "queries": [
+          "M23 Nord-Kivu",
+          "attaque ADF Beni",
+          "Goma affrontements"
+        ],
+        "pages": 2
+      }
     }
   }
 }
