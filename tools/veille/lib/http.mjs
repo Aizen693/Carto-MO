@@ -5,6 +5,7 @@ export const UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, li
 
 export async function fetchText(url, { timeout = 20000, retries = 2, headers = {} } = {}) {
   let lastErr;
+  let lang = { 'Accept-Language': 'fr,en;q=0.8,ar;q=0.6' };
   for (let attempt = 0; attempt <= retries; attempt++) {
     if (attempt > 0) await sleep(1000 * Math.pow(2, attempt - 1));
     const ctrl = new AbortController();
@@ -13,8 +14,11 @@ export async function fetchText(url, { timeout = 20000, retries = 2, headers = {
       const res = await fetch(url, {
         signal: ctrl.signal,
         redirect: 'follow',
-        headers: { 'User-Agent': UA, 'Accept-Language': 'fr,en;q=0.8,ar;q=0.6', ...headers }
+        headers: { 'User-Agent': UA, ...lang, ...headers }
       });
+      /* Certains serveurs (ReliefWeb) repondent 406 quand aucune langue demandee
+         n'existe : on relance sans Accept-Language. */
+      if (res.status === 406 && Object.keys(lang).length) { lang = {}; attempt--; continue; }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.text();
     } catch (e) {
