@@ -47,7 +47,8 @@ tools/veille/
   lib/classify.mjs       # lexique conflit FR/EN/AR -> type + confiance
   lib/geocode.mjs        # geocodage hors-ligne par gazetteer
   lib/geojson.mjs        # Feature, dedoublonnage, retention
-  test/run-tests.mjs     # 64 tests hors-ligne (aucun acces reseau)
+  lib/prune.mjs          # purge des sources mortes (--prune)
+  test/run-tests.mjs     # 75 tests hors-ligne (aucun acces reseau)
 .github/workflows/veille-collect.yml
 ```
 
@@ -60,6 +61,9 @@ Node >= 20, **aucune dependance npm**.
 ```bash
 # Verifier que les sources repondent (a faire en premier)
 node tools/veille/collect.mjs --zone sahel --check
+
+# Verifier ET retirer automatiquement les sources mortes de sources.json
+node tools/veille/collect.mjs --all --prune
 
 # Collecter sans rien ecrire
 node tools/veille/collect.mjs --zone sahel --dry-run
@@ -79,6 +83,7 @@ node tools/veille/test/run-tests.mjs
 | `--limit <n>` | 60 | Points maximum retenus par passage |
 | `--out <chemin>` | `<zone>/veille.geojson` | Fichier de sortie |
 | `--check` | — | Teste chaque source et sort |
+| `--prune` | — | Comme `--check`, puis **retire de `sources.json`** les sources mortes (sauvegarde dans `sources.json.bak`) |
 | `--dry-run` | — | N'ecrit pas le fichier |
 
 ---
@@ -162,7 +167,22 @@ valider avec `--check`.
 
 Les flux RSS livres sont des flux de presse generalistes, non verifies
 depuis l'environnement de developpement (sortie reseau filtree). **Lancer
-`--check` avant le premier passage** et retirer ce qui ne repond pas.
+`--prune` avant le premier passage** : chaque source est sondee et celles
+qui ne repondent pas, ou qui ne renvoient rien d'exploitable, sont retirees
+du fichier automatiquement.
+
+```
+[check] zone sahel
+  OK   rss RFI Afrique — 25 items (312 ms)
+  KO   rss Le Monde Afrique — HTTP 404
+  → 1 source(s) retiree(s) de sources.json :
+      - rss Le Monde Afrique — HTTP 404
+  → 1 conservee(s). Sauvegarde : sources.json.bak
+```
+
+Une source qui echoue est **retentee une fois** avant d'etre declaree morte :
+un hoquet reseau ne supprime pas un bon flux. La source TikTok n'est jamais
+purgee quand la cle est absente, puisqu'elle n'est alors pas testable.
 
 ### Brancher X, Instagram et TikTok sans cle
 

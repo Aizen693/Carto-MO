@@ -12,6 +12,7 @@ import { classify, extractToll, normalize } from '../lib/classify.mjs';
 import { geocode, loadGazetteer } from '../lib/geocode.mjs';
 import { buildFeature, mergeCollection, makeRef } from '../lib/geojson.mjs';
 import { parseSearch, mapVideo, toIso, hasKey } from '../lib/tiktok.mjs';
+import { decide, applyPrune, summarize } from '../lib/prune.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixture = n => readFileSync(resolve(__dirname, 'fixtures', n), 'utf8');
@@ -84,6 +85,39 @@ eq(geocode(rss[2].text, 'moyen-orient', gaz).name, 'Deir ez-Zor', 'alias Deir ez
 eq(geocode('Aucun toponyme connu ici', 'sahel', gaz), null, 'texte non localisable');
 eq(geocode(tg[0].text, 'rdc', gaz), null, 'cloisonnement par zone');
 eq(geocode('violences a Gorom-Gorom cette nuit', 'sahel', gaz).name, 'Gorom-Gorom', 'toponyme compose');
+
+console.log('\n# Purge des sources mortes');
+const probes = [
+  { kind: 'rss', key: 'https://a.example/rss', label: 'rss A', status: 'ok', count: 12 },
+  { kind: 'rss', key: 'https://b.example/rss', label: 'rss B', status: 'error', count: 0, error: 'HTTP 404' },
+  { kind: 'rss', key: 'https://c.example/rss', label: 'rss C', status: 'empty', count: 0 },
+  { kind: 'telegram', key: 'canal_mort', label: 'telegram @canal_mort', status: 'error', count: 0, error: 'HTTP 404' },
+  { kind: 'telegram', key: 'canal_vivant', label: 'telegram @canal_vivant', status: 'ok', count: 20 },
+  { kind: 'tiktok', key: 'requete morte', label: 'tiktok "requete morte"', status: 'empty', count: 0 }
+];
+const { kept, removed } = decide(probes);
+eq(kept.length, 2, 'seules les sources qui renvoient des items sont gardees');
+eq(removed.length, 4, 'erreurs et sources vides retirees');
+
+const confAvant = {
+  telegram: ['canal_mort', 'canal_vivant'],
+  rss: [
+    { url: 'https://a.example/rss', label: 'rss A' },
+    { url: 'https://b.example/rss', label: 'rss B' },
+    { url: 'https://c.example/rss', label: 'rss C' }
+  ],
+  tiktok: { queries: ['requete morte', 'requete vivante'], pages: 2 }
+};
+const confApres = applyPrune(confAvant, removed);
+eq(confApres.telegram.join(','), 'canal_vivant', 'canal mort retire');
+eq(confApres.rss.length, 1, 'un seul flux conserve');
+eq(confApres.rss[0].url, 'https://a.example/rss', 'le bon flux conserve');
+eq(confApres.tiktok.queries.join(','), 'requete vivante', 'requete tiktok morte retiree');
+eq(confApres.tiktok.pages, 2, 'reste de la config tiktok preserve');
+eq(confAvant.telegram.length, 2, 'config d entree non mutee');
+eq(applyPrune(confAvant, []).rss.length, 3, 'aucune suppression sans source morte');
+ok(summarize(removed)[0].includes('HTTP 404'), 'motif de suppression explicite');
+eq(decide([]).removed.length, 0, 'liste vide toleree');
 
 console.log('\n# GeoJSON');
 const cls = classify(tg[0]);

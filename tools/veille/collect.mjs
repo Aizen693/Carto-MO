@@ -7,11 +7,12 @@
      node tools/veille/collect.mjs --zone sahel
      node tools/veille/collect.mjs --all --days 30
      node tools/veille/collect.mjs --zone rdc --check      # teste les sources
+     node tools/veille/collect.mjs --all --prune           # teste ET retire les mortes
      node tools/veille/collect.mjs --zone sahel --dry-run  # n'ecrit rien
 
    Node >= 20 (fetch natif). Aucune dependance npm. */
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { fetchChannel } from './lib/telegram.mjs';
@@ -20,10 +21,12 @@ import { search as tiktokSearch, hasKey as tiktokHasKey } from './lib/tiktok.mjs
 import { classify } from './lib/classify.mjs';
 import { geocode, loadGazetteer } from './lib/geocode.mjs';
 import { buildFeature, mergeCollection } from './lib/geojson.mjs';
+import { decide, applyPrune, summarize } from './lib/prune.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..', '..');
-const SOURCES = JSON.parse(readFileSync(resolve(__dirname, 'sources.json'), 'utf8'));
+const SOURCES_PATH = resolve(__dirname, 'sources.json');
+const SOURCES = JSON.parse(readFileSync(SOURCES_PATH, 'utf8'));
 
 const argv = process.argv.slice(2);
 const flag = n => argv.includes(`--${n}`);
@@ -36,7 +39,8 @@ const DAYS = Number(opt('days', 30));         // retention du fichier de sortie
 const MAX_AGE = Number(opt('max-age', 3));    // age max d'un item collecte
 const LIMIT = Number(opt('limit', 60));       // items max retenus par zone et par passage
 const DRY = flag('dry-run');
-const CHECK = flag('check');
+const CHECK = flag('check') || flag('prune');
+const PRUNE = flag('prune');   // --prune : retire du fichier les sources mortes
 const OUT = opt('out', null);
 
 const zones = flag('all')
@@ -57,30 +61,61 @@ for (const zone of zones) {
 
 async function checkZone(zone, conf) {
   console.log(`\n[check] zone ${zone}`);
+  const results = [];
+
   for (const chan of conf.telegram || []) {
-    await probe(`telegram @${chan}`, () => fetchChannel(chan, { retries: 0, timeout: 15000 }));
+    results.push(await probe('telegram', chan, `telegram @${chan}`,
+      o => fetchChannel(chan, o)));
   }
   for (const feed of conf.rss || []) {
-    await probe(`rss ${feed.label}`, () => fetchFeed(feed.url, feed.label, { retries: 0, timeout: 15000 }));
+    results.push(await probe('rss', feed.url, `rss ${feed.label}`,
+      o => fetchFeed(feed.url, feed.label, o)));
   }
+
   const tkQueries = conf.tiktok?.queries || [];
   if (tkQueries.length && !tiktokHasKey()) {
+    // Sans cle, la source n'est pas testable : on ne la purge donc jamais.
     console.log(`  --   tiktok (${tkQueries.length} requetes) — ignore : TIKNEURON_MCP_API_KEY absente`);
   } else {
     for (const q of tkQueries) {
-      await probe(`tiktok "${q}"`, () => tiktokSearch(q, { pages: 1, opts: { timeout: 20000 } }));
+      results.push(await probe('tiktok', q, `tiktok "${q}"`,
+        o => tiktokSearch(q, { pages: 1, opts: o })));
     }
   }
+
+  if (!PRUNE) return;
+
+  const { kept, removed } = decide(results);
+  if (removed.length === 0) {
+    console.log(`  → rien a retirer, les ${kept.length} sources repondent`);
+    return;
+  }
+
+  SOURCES.zones[zone] = applyPrune(conf, removed);
+  copyFileSync(SOURCES_PATH, `${SOURCES_PATH}.bak`);
+  writeFileSync(SOURCES_PATH, JSON.stringify(SOURCES, null, 2) + '\n', 'utf8');
+
+  console.log(`  → ${removed.length} source(s) retiree(s) de sources.json :`);
+  for (const line of summarize(removed)) console.log(`      - ${line}`);
+  console.log(`  → ${kept.length} conservee(s). Sauvegarde : sources.json.bak`);
 }
 
-async function probe(label, fn) {
-  const t0 = Date.now();
-  try {
-    const items = await fn();
-    const ms = Date.now() - t0;
-    console.log(`  ${items.length > 0 ? 'OK  ' : 'VIDE'} ${label} — ${items.length} items (${ms} ms)`);
-  } catch (e) {
-    console.log(`  KO   ${label} — ${e.message}`);
+/* Sonde une source. Une source qui echoue est retentee une fois avant d'etre
+   declaree morte : un hoquet reseau ne doit pas supprimer un bon flux. */
+async function probe(kind, key, label, fn) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const t0 = Date.now();
+    try {
+      const items = await fn({ retries: 0, timeout: 15000 });
+      const ms = Date.now() - t0;
+      const status = items.length > 0 ? 'ok' : 'empty';
+      console.log(`  ${status === 'ok' ? 'OK  ' : 'VIDE'} ${label} — ${items.length} items (${ms} ms)`);
+      return { kind, key, label, status, count: items.length };
+    } catch (e) {
+      if (attempt === 0) { await new Promise(r => setTimeout(r, 1500)); continue; }
+      console.log(`  KO   ${label} — ${e.message}`);
+      return { kind, key, label, status: 'error', count: 0, error: e.message };
+    }
   }
 }
 
