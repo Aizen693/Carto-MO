@@ -5,13 +5,17 @@
     "  rss      : flux RSS/Atom (presse, ReliefWeb, instance RSSHub auto-hebergee, pont Nitter)",
     "  tiktok   : requetes de recherche via l'API TikNeuron — NECESSITE TIKNEURON_MCP_API_KEY (service payant)",
     "Verifier l'etat des sources avec : node tools/veille/collect.mjs --zone <zone> --check",
-    "La liste de canaux Telegram est volontairement vide : elle doit etre constituee par",
-    "l'analyste a partir de sa propre liste de suivi, pas devinee."
+    "Canaux Telegram : liste de suivi de l'analyste (fiches OSINT), verifiee le 21/09/2026.",
+    "AuroraIntel (muet depuis 06/2025) et comptes d'influenceurs ecartes."
   ],
   "zones": {
     "sahel": {
       "label": "Sahel",
-      "telegram": [],
+      "telegram": [
+        "veillesah",
+        "africaintel",
+        "AESinfos"
+      ],
       "rss": [
         {
           "url": "https://www.rfi.fr/fr/afrique/rss",
@@ -72,7 +76,9 @@
     },
     "rdc": {
       "label": "RDC",
-      "telegram": [],
+      "telegram": [
+        "africaintel"
+      ],
       "rss": [
         {
           "url": "https://www.radiookapi.net/rss.xml",
