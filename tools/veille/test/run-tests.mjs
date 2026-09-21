@@ -98,6 +98,8 @@ eq(geocode('camp de Dioura attaque', 'sahel', mini), null, 'homonyme sans ancre 
 const dio = geocode('attaque a Dioura puis a Sevare', 'sahel', mini);
 eq(dio && dio.lon, -5.2547, 'homonyme tranche par le lieu voisin (Sevare)');
 eq(geocode('camp de Dioura attaque', 'sahel', mini)?.lon, -5.2547, 'homonyme resolu reutilise dans le meme passage');
+eq(geocode('Bamako-Senou visite du ministre', 'sahel', mini), null, 'toponyme morceau de mot compose ignore');
+eq(geocode('selon Bamako News, explosion a Mopti', 'sahel', mini).name, 'Mopti', 'toponyme dans un nom de media ignore');
 
 console.log('\n# Instagram (sortie Instaloader)');
 const igItems = parseIg(fixture('instagram-output.jsonl'));

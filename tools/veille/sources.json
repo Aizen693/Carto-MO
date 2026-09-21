@@ -6,8 +6,9 @@
     "  tiktok   : requetes de recherche via l'API TikNeuron — NECESSITE TIKNEURON_MCP_API_KEY (service payant)",
     "  instagram : comptes publics / hashtags via Instaloader, NECESSITE une session (IG_SESSION_USER, compte de veille dedie) ; local ou VPS seulement",
     "Verifier l'etat des sources avec : node tools/veille/collect.mjs --zone <zone> --check",
-    "Canaux Telegram : liste de suivi de l'analyste (fiches OSINT), verifiee le 21/09/2026.",
-    "AuroraIntel (muet depuis 06/2025) et comptes d'influenceurs ecartes."
+    "Telegram et Instagram verifies le 21/09/2026 (actifs, texte exploitable). Comptes Instagram releves sur les sites officiels des medias.",
+    "Orientation a garder en tete (croiser, ne jamais prendre seul) : AESinfos = communication des juntes AES ; idfofficial = armee israelienne ; almayadeenenglish = proche du Hezbollah ; Kurdistan24 = proche PDK ; TelevisionSyria = ex-opposition syrienne ; ajanews = Al Jazeera (Qatar).",
+    "Ecartes : AuroraIntel (muet depuis 06/2025), iranintltv (persan, non lu par le classifieur), comptes d'influenceurs."
   ],
   "zones": {
     "sahel": {
@@ -15,7 +16,8 @@
       "telegram": [
         "veillesah",
         "africaintel",
-        "AESinfos"
+        "AESinfos",
+        "lefaso_net"
       ],
       "rss": [
         {
@@ -45,14 +47,30 @@
         "pages": 2
       },
       "instagram": {
-        "profiles": [],
+        "profiles": [
+          "lefasonet",
+          "burkina24",
+          "aiburkina",
+          "crisisgroup"
+        ],
         "hashtags": [],
         "per_source": 12
       }
     },
     "moyen-orient": {
       "label": "Moyen-Orient",
-      "telegram": [],
+      "telegram": [
+        "Enabbaladi_en",
+        "TelevisionSyria",
+        "rudawdigital",
+        "Kurdistan24news",
+        "LBCI_News",
+        "ajanews",
+        "ynetnewslatest",
+        "The_Jerusalem_Post",
+        "idfofficial",
+        "almayadeenenglish"
+      ],
       "rss": [
         {
           "url": "https://www.aljazeera.com/xml/rss/all.xml",
@@ -80,7 +98,19 @@
         "pages": 2
       },
       "instagram": {
-        "profiles": [],
+        "profiles": [
+          "enabbaladi",
+          "syr_television",
+          "rudaw",
+          "kurdistan24tv.official",
+          "lorientlejour_olj",
+          "middleeasteye",
+          "aljazeeraenglish",
+          "ynetglobal",
+          "thejerusalem_post",
+          "anadoluagency",
+          "thestudyofwar"
+        ],
         "hashtags": [],
         "per_source": 12
       }
@@ -117,7 +147,9 @@
         "pages": 2
       },
       "instagram": {
-        "profiles": [],
+        "profiles": [
+          "kivumorningpostofficial"
+        ],
         "hashtags": [],
         "per_source": 12
       }

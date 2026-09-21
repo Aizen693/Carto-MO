@@ -65,6 +65,8 @@ export function geocode(text, zone, gaz = loadGazetteer()) {
       if (!place) continue;
       if (place.src !== 'seed' && !/^\p{Lu}/u.test(words[i].raw)) continue;
       if (isMetonymy(words, i)) break;
+      if (splitsCompound(words, i, n)) continue;
+      if (isMediaName(words, i + n)) break;
       if (seen.has(place.name)) break;
       seen.add(place.name);
       found.push({ at: i, len: norm.length, place });
@@ -93,12 +95,12 @@ export function geocode(text, zone, gaz = loadGazetteer()) {
    et la forme normalisee (pour la recherche). */
 function tokenize(text) {
   const out = [];
+  let r = 0;
   for (const raw of String(text || '').split(/[\s’'`]+/)) {
-    for (const part of normalize(raw).split(' ')) {
-      if (!part) continue;
-      const clean = raw.replace(/^[^\p{L}\p{N}]+/u, '');
-      out.push({ raw: clean, norm: part });
-    }
+    const parts = normalize(raw).split(' ').filter(Boolean);
+    const clean = raw.replace(/^[^\p{L}\p{N}]+/u, '');
+    parts.forEach((part, k) => out.push({ raw: clean, norm: part, r, k, of: parts.length }));
+    if (parts.length) r++;
   }
   return out;
 }
@@ -125,6 +127,22 @@ function resolveHomonyms(found, gaz, zone) {
 }
 
 const POWER = new Set(['junte', 'autorites', 'autorite', 'pouvoir', 'regime', 'gouvernement', 'dirigeants', 'transition', 'presidence']);
+
+/* "Ben-Gvir" : le lieu "Ben" n'est qu'un morceau d'un mot compose, on
+   l'ignore. Le match doit couvrir le mot compose en entier ("Gorom-Gorom"). */
+function splitsCompound(words, i, n) {
+  const first = words[i], last = words[i + n - 1];
+  return first.k !== 0 || last.k !== last.of - 1;
+}
+
+/* "Fars news", "Jerusalem Post", "Shin Bet" : le toponyme fait partie d'un
+   nom de media ou d'organisation, ce n'est pas le lieu de l'evenement. */
+const MEDIA_NEXT = new Set(['news', 'agency', 'agence', 'post', 'times', 'daily', 'tv', 'television',
+  'international', 'intl', 'press', 'herald', 'tribune', 'radio', 'bet', 'channel', 'today', 'observer']);
+
+function isMediaName(words, j) {
+  return MEDIA_NEXT.has(words[j]?.norm) && /^\p{Lu}/u.test(words[j]?.raw || '') || words[j]?.norm === 'news';
+}
 
 function isMetonymy(words, i) {
   const w1 = words[i - 1]?.norm, w2 = words[i - 2]?.norm;
