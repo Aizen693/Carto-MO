@@ -50,6 +50,7 @@ def nav(rub, annonce=True):
       <button class="btn-login site-login" type="button">Connexion</button>
       <a class="btn-rect" href="/offres/">Demander un accès</a>
       <div class="sq">
+        <button type="button" class="sq__compte site-login" data-auth-icone aria-label="Connexion"><svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c1.2-3.8 4-5.6 7.5-5.6s6.3 1.8 7.5 5.6"/></svg><svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="8.5" r="3.8" fill="currentColor"/><path d="M3 20.5c1.2-3.8 3.8-5.6 7-5.6 1.3 0 2.5.3 3.5.9" fill="none"/><path d="M15.5 18l2.2 2.2 4-4.4"/></svg></button>
         <button type="button" id="ouvrir-recherche" aria-label="Rechercher une zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
         <button type="button" id="ouvrir-menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
       </div>
@@ -65,7 +66,7 @@ def nav(rub, annonce=True):
   <nav class="veil__body">
     <div class="veil__main">{menu_main}</div>
     <div class="veil__col"><h3>Théâtres</h3>{th}</div>
-    <div class="veil__col"><h3>Algor Access</h3><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+    <div class="veil__col"><h3>Algor Access</h3><button class="veil__compte site-login" type="button">Connexion</button><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
   </nav>
 </div>
 

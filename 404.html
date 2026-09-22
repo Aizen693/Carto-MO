@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0F1013" />
 <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
 <link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
-<link rel="stylesheet" href="/shared/v5/v5.css?v=20260922l" />
+<link rel="stylesheet" href="/shared/v5/v5.css?v=20260922m" />
 <style>
   .np { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
   .np__code { margin: 0 0 18px; font-size: 17px; color: var(--on-night-2); }
@@ -33,6 +33,7 @@
       <button class="btn-login site-login" type="button">Connexion</button>
       <a class="btn-rect" href="/offres/">Demander un accès</a>
       <div class="sq">
+        <button type="button" class="sq__compte site-login" data-auth-icone aria-label="Connexion"><svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c1.2-3.8 4-5.6 7.5-5.6s6.3 1.8 7.5 5.6"/></svg><svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="8.5" r="3.8" fill="currentColor"/><path d="M3 20.5c1.2-3.8 3.8-5.6 7-5.6 1.3 0 2.5.3 3.5.9" fill="none"/><path d="M15.5 18l2.2 2.2 4-4.4"/></svg></button>
         <button type="button" id="ouvrir-recherche" aria-label="Rechercher une zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
         <button type="button" id="ouvrir-menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
       </div>
@@ -48,7 +49,7 @@
   <nav class="veil__body">
     <div class="veil__main"><a href="/">Plateforme</a><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
     <div class="veil__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
-    <div class="veil__col"><h3>Algor Access</h3><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+    <div class="veil__col"><h3>Algor Access</h3><button class="veil__compte site-login" type="button">Connexion</button><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
   </nav>
 </div>
 
@@ -99,7 +100,7 @@
 </footer>
 <!-- /v5:foot -->
 
-<script type="module" src="/shared/site-auth.js?v=20260922a"></script>
+<script type="module" src="/shared/site-auth.js?v=20260922b"></script>
 <script src="/shared/v5/chrome.js?v=20260922e"></script>
 </body>
 </html>

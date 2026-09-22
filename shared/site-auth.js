@@ -798,6 +798,13 @@ async function notifyAuthState(session) {
     window.algorAuthState = { loggedIn, email };
     document.querySelectorAll('.site-login, [data-algor-login]').forEach((el) => {
       if (el.closest('#root')) return; // géré par React via l'event
+      if (el.hasAttribute('data-auth-icone')) {
+        // Case icône (nav mobile v5) : on garde les SVG, on change l'étiquette.
+        el.setAttribute('aria-label', loggedIn ? 'Connecté' + (email ? ' : ' + email : '') : 'Connexion');
+        el.title = el.getAttribute('aria-label');
+        el.classList.toggle('is-logged', loggedIn);
+        return;
+      }
       el.textContent = loggedIn ? 'Connecté' : 'Connexion';
       el.classList.toggle('is-logged', loggedIn);
     });

@@ -80,6 +80,16 @@ img, video, canvas { display: block; max-width: 100%; }
 .nav.is-light .sq button + button { border-left-color: var(--line); }
 .sq svg { width: 17px; height: 17px; }
 .sq button:hover { background: var(--band); }
+/* Case compte : seulement quand « Connexion » disparaît de la barre (mobile). Connecté = case inversée + coche */
+.sq .sq__compte { display: none; }
+.sq__compte .ico-on, .sq__compte.is-logged .ico-off { display: none; }
+.sq__compte.is-logged .ico-on { display: block; }
+.sq button.sq__compte.is-logged { background: var(--ink); color: var(--paper); }
+.nav.is-light .sq button.sq__compte.is-logged { background: var(--ink); color: var(--paper); }
+@media (max-width: 820px) { .sq .sq__compte { display: grid; } }
+.veil__compte { display: block; padding: 0; background: none; border: 0; font: inherit; font-size: 17px; line-height: 1.9; color: #FFF; cursor: pointer; text-align: left; }
+.veil__compte::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 10px; border: 1px solid currentColor; border-radius: 50%; vertical-align: 2px; }
+.veil__compte.is-logged::before { background: currentColor; }
 @media (max-width: 1180px) { .nav__links { display: none; } }
 @media (max-width: 820px) { .nav .lang-slot, .btn-login { display: none; } }
 @media (max-width: 520px) { .brand span { display: none; } .nav__bar { padding-left: 14px; } .nav .btn-rect { padding: 0 14px; font-size: 14px; } }
