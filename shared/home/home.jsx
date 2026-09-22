@@ -17,10 +17,11 @@ const ZONE_LABELS = {
 
 // ════════════════════════════════════════════════════════════════════════
 // VEILLE HEBDOMADAIRE — flux OSINT (cloche + section editoriale)
-// Donnees : notifications.json sur la branche veille-data (alimente par n8n).
-// Teaser public ; analyse complete + archive reservees aux abonnes.
+// Donnees : fil public reduit (sans analyse) pour tous ; fil complet servi par
+// veille-feed aux seuls abonnes premium (controle serveur, is_premium()).
 // ════════════════════════════════════════════════════════════════════════
 const VEILLE_REMOTE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
+const VEILLE_COMPLET = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications-complet.json';
 const SEV = {
   info:     { lbl: 'Signal',   c: '#6B3FA0' },
   alerte:   { lbl: 'Alerte',   c: '#C77A12' },
@@ -135,15 +136,33 @@ function VBlock({ v }){
   return <p data-i18n-skip="">{Array.isArray(v) ? v.join(' ') : v}</p>;
 }
 
+// Fil public d'abord (affichage immediat), puis, si une session existe, tentative du fil
+// complet : le serveur ne le rend qu'aux abonnes premium. « complet » = l'analyse a ete
+// effectivement recue ; c'est ce drapeau, et non la simple connexion, qui ouvre la note.
 function useVeille(){
   const [items,setItems]=useState(VEILLE_SEED);
-  useEffect(()=>{ let on=true;
-    fetch(VEILLE_REMOTE,{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject())
-      .then(d=>{ const a=Array.isArray(d)?d:(d.items||[]); if(on&&a.length) setItems(a.slice().sort((x,y)=>String(y.date).localeCompare(String(x.date)))); })
-      .catch(()=>{});
-    return ()=>{on=false;};
+  const [complet,setComplet]=useState(false);
+  useEffect(()=>{ let on=true, recu=false;
+    const poser=(d)=>{ const a=Array.isArray(d)?d:(d.items||[]); if(on&&a.length) setItems(a.slice().sort((x,y)=>String(y.date).localeCompare(String(x.date)))); };
+    // le fil public ne remplace jamais un fil complet deja recu
+    fetch(VEILLE_REMOTE,{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject()).then(d=>{ if(!recu) poser(d); }).catch(()=>{});
+    const tenterComplet=()=>{ try{
+      const c=window.algorAuth&&window.algorAuth.supabase; if(!c||!c.auth) return;
+      c.auth.getSession().then(({data})=>{
+        const jwt=data&&data.session&&data.session.access_token; if(!jwt){ if(on) setComplet(false); return; }
+        const lang=document.documentElement.lang==='en'?'?lang=en':'';
+        return fetch(VEILLE_COMPLET+lang,{cache:'no-store',headers:{Authorization:'Bearer '+jwt}})
+          .then(r=>r.ok?r.json():Promise.reject(r.status))
+          .then(d=>{ recu=true; poser(d); if(on) setComplet(true); });
+      }).catch(()=>{ if(on) setComplet(false); });
+    }catch(e){} };
+    const onState=(e)=>{ if(e&&e.detail&&e.detail.loggedIn) tenterComplet(); else if(on) setComplet(false); };
+    window.addEventListener('algorAuthStateChanged', onState);
+    window.addEventListener('algorAuthReady', tenterComplet);
+    tenterComplet();
+    return ()=>{ on=false; window.removeEventListener('algorAuthStateChanged', onState); window.removeEventListener('algorAuthReady', tenterComplet); };
   },[]);
-  return items;
+  return { items, complet };
 }
 // Aperçu public de la veille cyber (flux publics, collecteur VPS) : titres + compteurs seulement,
 // déposé toutes les heures par veille-snapshot.mjs dans le bucket public
@@ -305,9 +324,10 @@ function VeilleModal({ it, sub, onClose }){
 }
 
 function VeilleSystem(){
-  const items = useVeille();
+  const { items, complet } = useVeille();
   const cyber = useVeilleCyber();
-  const sub = useSubscriber();
+  // Note complete ouverte seulement si le serveur a rendu l'analyse (premium), pas sur simple connexion
+  const sub = complet;
   const [open, setOpen] = useState(false);
   const [sel, setSel] = useState(null);
   const [seen, setSeen] = useState(()=>{ try { return localStorage.getItem('algor-veille-seen') || ''; } catch(e){ return ''; } });

@@ -405,6 +405,17 @@
 
   /* ══════════ Géopolitique ══════════ */
   const VEILLE_REMOTE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
+  // Fil complet (analyse) : servi par veille-feed aux seuls abonnés premium, jeton de session requis
+  const VEILLE_COMPLET = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications-complet.json';
+  async function filComplet() {
+    const c = window.algorAuth && window.algorAuth.supabase;
+    const { data } = await c.auth.getSession();
+    const jwt = data?.session?.access_token;
+    if (!jwt) throw new Error('session absente');
+    const r = await fetch(VEILLE_COMPLET + (document.documentElement.lang === 'en' ? '?lang=en' : ''), { cache: 'no-store', headers: { Authorization: 'Bearer ' + jwt } });
+    if (!r.ok) throw new Error('fil complet refusé (' + r.status + ')');
+    return r.json();
+  }
   const ZONES = { 'sahel': 'Sahel', 'moyen-orient': 'Moyen-Orient', 'rdc': 'RDC', 'madagascar': 'Madagascar', 'afrique': 'Afrique Maritime', 'asie-sud': 'Asie du Sud' };
   const SEV = { info: { lbl: 'Signal', c: '#C8B0EA' }, alerte: { lbl: 'Alerte', c: '#E0A050' }, critique: { lbl: 'Critique', c: '#E06A78' } };
   const reliability = (s) => { s = (s || '').toLowerCase();
@@ -503,8 +514,7 @@
 
   async function loadGeo() {
     try {
-      const r = await fetch(VEILLE_REMOTE, { cache: 'no-store' });
-      const d = await r.json();
+      const d = await filComplet();
       geoItems = (Array.isArray(d) ? d : d.items || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
       if (d.updated) document.getElementById('maj').textContent = 'Fil géopolitique du ' + fmtD(String(d.updated).slice(0, 10), true);
       renderGeo();

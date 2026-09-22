@@ -111,7 +111,9 @@
 (function () {
   mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
 
-  var REMOTE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
+  // Fil complet (analyse) : réservé aux abonnés premium, contrôlé côté serveur par veille-feed.
+  // Rien n'est téléchargé avant que site-auth ait confirmé l'accès (événement algorAuthReady).
+  var REMOTE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications-complet.json';
   var SEV = {
     info:     { lbl: 'Signal',   c: '#6B3FA0' },
     alerte:   { lbl: 'Alerte',   c: '#C77A12' },
@@ -264,15 +266,22 @@
   }
 
   function load(){
-    fetch(REMOTE, { cache: 'no-store' })
+    window.algorAuth.supabase.auth.getSession()
+      .then(function (res){
+        var jwt = res && res.data && res.data.session && res.data.session.access_token;
+        if (!jwt) return Promise.reject();
+        return fetch(REMOTE + (document.documentElement.lang === 'en' ? '?lang=en' : ''), { cache: 'no-store', headers: { Authorization: 'Bearer ' + jwt } });
+      })
       .then(function (r){ return r.ok ? r.json() : Promise.reject(); })
       .then(function (d){ var a = Array.isArray(d) ? d : (d.items || []);
         a.sort(function (x, y){ return String(y.date).localeCompare(String(x.date)); });
         plot(a); })
       .catch(function (){ var l = document.getElementById('loading'); if (l) l.textContent = 'Flux de veille indisponible.'; });
   }
-  var _started = false;
-  function start(){ if (_started) return; _started = true; load(); }
+  var _started = false, _carte = false;
+  function lancer(){ if (_started || !_carte || !window.__algorAuthGranted) return; _started = true; load(); }
+  window.addEventListener('algorAuthReady', lancer);
+  function start(){ _carte = true; lancer(); }
   map.on('load', start);
   map.on('idle', start);
   setTimeout(start, 3000); // filet : afficher les signaux meme si l'evenement load tarde
