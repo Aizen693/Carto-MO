@@ -21,10 +21,13 @@
      node tools/veille/radio/radio.mjs --since 5       # remonte 5 jours
      node tools/veille/radio/radio.mjs --no-ai         # transcription seule
      node tools/veille/radio/radio.mjs --digest-only   # refait la synthese du jour
+     node tools/veille/radio/radio.mjs --publier       # + depot dans le bucket prive (premium)
 
    Prerequis : ffmpeg, whisper-cli (brew install whisper-cpp) et un modele
    ggml (WHISPER_MODEL, defaut ~/.cache/whisper/ggml-large-v3-turbo.bin) ;
-   MISTRAL_API_KEY pour les etapes 3 et 4. */
+   MISTRAL_API_KEY pour les etapes 3 et 4 ; SUPABASE_URL + SUPABASE_SERVICE_ROLE
+   pour --publier (depot zones/sahel/radio.json, lisible des seuls abonnes
+   premium par la RLS du bucket). WHISPER_THREADS : coeurs utilises (defaut 8). */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
@@ -54,9 +57,12 @@ const MAX = Number(opt('max', 6));            // fichiers audio max par studio e
 const KEEP_DAYS = Number(opt('keep', 14));     // retention des bulletins dans la sortie
 const NO_AI = flag('no-ai');
 const DIGEST_ONLY = flag('digest-only');
+const PUBLISH = flag('publier');
+const BUCKET_PATH = 'zones/sahel/radio.json';
 
 const WHISPER_BIN = process.env.WHISPER_BIN || 'whisper-cli';
 const WHISPER_MODEL = process.env.WHISPER_MODEL || join(homedir(), '.cache', 'whisper', 'ggml-large-v3-turbo.bin');
+const WHISPER_THREADS = String(process.env.WHISPER_THREADS || 8);
 const MISTRAL_MODEL = process.env.RADIO_MISTRAL_MODEL || 'mistral-small-latest';
 
 /* ---------- 1. Flux RSS des studios ---------- */
@@ -108,7 +114,7 @@ async function transcribe(url, id) {
     const { stdout: dur } = await run('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', mp3]);
     await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', mp3, '-ac', '1', '-ar', '16000', wav]);
     const t0 = Date.now();
-    const { stdout } = await run(WHISPER_BIN, ['-m', WHISPER_MODEL, '-l', 'fr', '-t', '8', '-nt', '-f', wav], { maxBuffer: 64 * 1024 * 1024 });
+    const { stdout } = await run(WHISPER_BIN, ['-m', WHISPER_MODEL, '-l', 'fr', '-t', WHISPER_THREADS, '-nt', '-f', wav], { maxBuffer: 64 * 1024 * 1024 });
     const res = { text: stdout.replace(/\s+/g, ' ').trim(), duration_s: Math.round(Number(dur) || 0), transcribe_s: Math.round((Date.now() - t0) / 1000) };
     mkdirSync(TRANS_DIR, { recursive: true });
     writeFileSync(cached, JSON.stringify(res));
@@ -276,9 +282,26 @@ async function main() {
     try { synth = await digest(bulletins.filter(b => b.faits)) || synth; }
     catch (e) { console.warn(`[!] synthese du jour : ${e.message}`); }
   }
+  const body = JSON.stringify({ generated: new Date().toISOString(), synthese: synth, bulletins }, null, 1) + '\n';
   mkdirSync(OUT_DIR, { recursive: true });
-  writeFileSync(OUT, JSON.stringify({ generated: new Date().toISOString(), synthese: synth, bulletins }, null, 1) + '\n');
+  writeFileSync(OUT, body);
   console.log(`[radio] ${bulletins.length} bulletins, synthese : ${synth ? synth.points.length + ' points' : 'aucune'} -> ${OUT}`);
+  if (PUBLISH) await publish(body);
+}
+
+/* Depot dans le bucket prive : la page premium le lit via algorAuth.loadZoneFile.
+   cache-control court : par defaut Supabase sert 1 h de cache et l'abonne
+   verrait l'ancienne synthese. */
+async function publish(body) {
+  const url = String(process.env.SUPABASE_URL || '').replace(/\/+$/, '');
+  const key = process.env.SUPABASE_SERVICE_ROLE || process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error('SUPABASE_URL / SUPABASE_SERVICE_ROLE absents');
+  const r = await fetch(`${url}/storage/v1/object/${BUCKET_PATH}`, {
+    method: 'POST', body, signal: AbortSignal.timeout(60000),
+    headers: { Authorization: `Bearer ${key}`, apikey: key, 'Content-Type': 'application/json', 'x-upsert': 'true', 'cache-control': 'max-age=120' }
+  });
+  if (!r.ok) throw new Error(`depot ${BUCKET_PATH} : HTTP ${r.status}`);
+  console.log(`[radio] publie dans ${BUCKET_PATH}`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
