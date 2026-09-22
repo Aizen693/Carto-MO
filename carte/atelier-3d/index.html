@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier 3D · Bâti réel Overture · Algor Access</title>
+<!-- Gate premium : identique aux autres pages /carte/. -->
+<script>window.addEventListener('algorAuthReady', function () { window.__algorAuthGranted = true; });</script>
+<script type="module" src="../../shared/site-auth.js?v=20260702a"></script>
+
+<link rel="stylesheet" href="/shared/home/fonts.css?v=20260625a" />
+<link href="https://unpkg.com/maplibre-gl@5.9.0/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://unpkg.com/maplibre-gl@5.9.0/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/pmtiles@4.3.0/dist/pmtiles.js"></script>
+<style>
+  :root{
+    --violet:#6B3FA0; --violet-mid:#5650C6; --blue:#2E84D4;
+    --grad:linear-gradient(95deg,#6B3FA0,#5650C6 55%,#2E84D4);
+    --ink:#1F1437; --tx:#4A4460; --muted:#9089AA;
+    --dmg:#C45A3C; --destroyed:#B22828;
+    --panel:#fff; --ln:rgba(123,90,189,0.18); --ln-soft:rgba(123,90,189,0.10);
+    --shadow:0 8px 26px -8px rgba(46,24,87,0.20);
+    --jakarta:'Plus Jakarta Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#eef0f4;color:var(--tx);font-family:var(--jakarta);overflow:hidden}
+  #map{position:absolute;inset:0}
+  .maplibregl-ctrl-attrib{font:500 10px/1.4 var(--jakarta)}
+
+  #header{position:absolute;top:0;left:0;right:0;height:60px;z-index:8;display:flex;align-items:center;gap:14px;padding:0 18px;pointer-events:none}
+  #header .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex:none;pointer-events:auto}
+  #header .brand img{height:30px;border-radius:7px}
+  #page-title{margin:0;font:800 18px/1 var(--jakarta);letter-spacing:-.01em;color:var(--ink)}
+  #header .sub{font:600 8px/1 var(--jakarta);letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-top:5px}
+  #header .spacer{flex:1}
+  .hbtn{pointer-events:auto;background:#fff;border:1px solid var(--ln);color:var(--violet);cursor:pointer;
+    font:700 9.5px/1 var(--jakarta);letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;border-radius:11px;box-shadow:var(--shadow);transition:background .15s,color .15s}
+  .hbtn:hover{background:rgba(107,63,160,.07)}
+  .hbtn.on{background:var(--grad);border:none;color:#fff;box-shadow:0 8px 22px -7px rgba(86,80,198,.6)}
+
+  #panel{position:absolute;top:70px;left:18px;bottom:18px;width:312px;z-index:7;display:flex;flex-direction:column;gap:12px;pointer-events:none}
+  .card{background:var(--panel);border:1px solid var(--ln);border-radius:15px;box-shadow:var(--shadow);pointer-events:auto}
+  .card h3{margin:0;padding:13px 15px 10px;font:700 9px/1 var(--jakarta);letter-spacing:.15em;text-transform:uppercase;color:var(--violet);border-bottom:1px solid var(--ln-soft)}
+  #sites{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+  #site-list{flex:1;overflow-y:auto;padding:6px;scrollbar-width:thin}
+  .grp{padding:9px 10px 3px;font:700 8.5px/1 var(--jakarta);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .site{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:9px 10px;border-radius:11px;transition:background .13s;font-family:var(--jakarta)}
+  .site:hover{background:rgba(107,63,160,.07)}
+  .site.on{background:rgba(107,63,160,.10)}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .site-name{flex:1;font:600 12.5px/1.3 var(--jakarta);color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .site-st{font:700 8px/1 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+  /* Réglages */
+  #tools{flex:none;padding-bottom:12px}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 15px}
+  .row label{font:600 11.5px/1.3 var(--jakarta);color:var(--tx)}
+  .sw{position:relative;width:38px;height:21px;flex:none;border-radius:11px;background:#DDD8E6;border:none;cursor:pointer;transition:background .18s}
+  .sw.on{background:var(--grad)}
+  .sw i{position:absolute;top:3px;left:3px;width:15px;height:15px;border-radius:50%;background:#fff;transition:transform .18s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+  .sw.on i{transform:translateX(17px)}
+  input[type=range]{width:112px;accent-color:var(--violet)}
+  .val{font:700 10px/1 var(--jakarta);color:var(--violet);min-width:40px;text-align:right}
+  input[type=date]{font:600 11px/1 var(--jakarta);color:var(--ink);border:1px solid var(--ln);border-radius:8px;padding:5px 7px;background:#fff}
+  .sunread{margin:2px 15px 4px;padding:6px 9px;border-radius:8px;background:rgba(107,63,160,.06);
+    font:700 9.5px/1.4 var(--jakarta);letter-spacing:.06em;text-transform:uppercase;color:var(--violet);text-align:center}
+  .legend{padding:4px 15px 13px;display:flex;flex-direction:column;gap:5px;border-top:1px solid var(--ln-soft);margin-top:6px;padding-top:11px}
+  .lg{display:flex;align-items:center;gap:8px;font:600 10.5px/1.4 var(--jakarta);color:var(--tx)}
+  .chip{width:13px;height:13px;border-radius:3px;flex:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.10)}
+  .chip.mes{background:linear-gradient(160deg,#A995C9,#5650C6)}
+  .chip.est{background:linear-gradient(160deg,#D8C7A6,#BCB0A0)}
+
+  /* Compteur bâti */
+  #stat{padding:11px 15px 13px;border-top:1px solid var(--ln-soft)}
+  #stat .big{font:800 21px/1 var(--jakarta);color:var(--ink)}
+  #stat .lb{font:600 9px/1.5 var(--jakarta);letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  #stat .qual{font:600 10.5px/1.5 var(--jakarta);color:var(--tx);margin-top:6px}
+  #stat .qual b{color:var(--violet);font-weight:800}
+  #stat .warn{font:600 10.5px/1.5 var(--jakarta);color:var(--dmg);margin-top:7px;display:none}
+  #stat .src{font:600 9px/1.5 var(--jakarta);letter-spacing:.04em;color:var(--muted);margin-top:6px;
+    border-top:1px solid var(--ln-soft);padding-top:6px}
+
+  /* Fiche bâtiment */
+  #binfo{position:absolute;right:18px;top:70px;width:260px;z-index:7;display:none}
+  #binfo .b{padding:12px 15px 14px}
+  #binfo .bn{font:700 13px/1.3 var(--jakarta);color:var(--ink)}
+  #binfo .bl{display:flex;justify-content:space-between;gap:10px;font:600 11px/1.9 var(--jakarta);color:var(--tx)}
+  #binfo .bl b{color:var(--ink);font-weight:700}
+  #binfo .src{font:500 9.5px/1.5 var(--jakarta);color:var(--muted);margin-top:8px;border-top:1px solid var(--ln-soft);padding-top:7px}
+
+  #loader{position:absolute;inset:0;z-index:12;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;background:#F4F2F8;transition:opacity .6s}
+  #loader.off{opacity:0;pointer-events:none}
+  #loader span{font:600 11px/1 var(--jakarta);letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+  .spin{width:26px;height:26px;border:2.5px solid var(--ln);border-top-color:var(--violet);border-radius:50%;animation:sp .8s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  @media (max-width:820px){
+    #panel{width:auto;left:10px;right:10px;bottom:10px;top:auto;max-height:46vh}
+    #binfo{display:none!important}
+  }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="header">
+  <a class="brand" href="/">
+    <img src="/shared/home/logo.png" alt="" onerror="this.style.display='none'">
+    <span>
+      <h1 id="page-title">Atelier 3D</h1>
+      <div class="sub">Bâti réel · Overture</div>
+    </span>
+  </a>
+  <div class="spacer"></div>
+  <button class="hbtn" id="t-reel">Hauteurs 3D-GloBFP</button>
+  <button class="hbtn on" id="t-bati">Bâti Overture</button>
+  <button class="hbtn on" id="t-sat">Satellite</button>
+  <button class="hbtn" id="t-relief">Relief</button>
+</div>
+
+<div id="panel">
+  <div class="card" id="sites">
+    <h3>Sites visés</h3>
+    <div id="site-list"></div>
+    <div id="stat">
+      <div class="big" id="stat-n">—</div>
+      <div class="lb">bâtiments chargés ici</div>
+      <div class="qual" id="stat-q">—</div>
+      <div class="src" id="stat-src">Overture Maps · emprises sans hauteur</div>
+      <div class="warn" id="stat-warn">Aucun bâti à cet endroit. Overture ne couvre pas cette emprise.</div>
+    </div>
+  </div>
+  <div class="card" id="tools">
+    <h3>Rendu</h3>
+    <div class="row">
+      <label for="r-sun">Heure (UTC)</label>
+      <input type="range" id="r-sun" min="4" max="20" step="0.25" value="16.5">
+      <span class="val" id="v-sun">16h30</span>
+    </div>
+    <div class="row">
+      <label for="d-date">Date</label>
+      <input type="date" id="d-date" value="2026-07-26">
+    </div>
+    <div class="sunread" id="sun-read">—</div>
+    <div class="row">
+      <label for="sw-ombre">Ombres portées</label>
+      <button class="sw on" id="sw-ombre" aria-label="Ombres portées"><i></i></button>
+    </div>
+    <div class="row">
+      <label for="r-exag">Exagération relief</label>
+      <input type="range" id="r-exag" min="0" max="4" step="0.1" value="1.4">
+      <span class="val" id="v-exag">1.4</span>
+    </div>
+    <div class="row">
+      <label for="sw-real">Volumes plausibles</label>
+      <button class="sw on" id="sw-real" aria-label="Volumes plausibles"><i></i></button>
+    </div>
+    <div class="legend">
+      <div class="lg"><span class="chip mes"></span>Hauteur issue d'une donnée (3D-GloBFP)</div>
+      <div class="lg"><span class="chip est"></span>Volume plausible, aucune donnée</div>
+    </div>
+  </div>
+</div>
+
+<div id="binfo" class="card"><div class="b">
+  <div class="bn" id="b-name">Bâtiment</div>
+  <div class="bl"><span>Hauteur</span><b id="b-h">—</b></div>
+  <div class="bl"><span>Niveaux</span><b id="b-f">—</b></div>
+  <div class="bl"><span>Classe</span><b id="b-c">—</b></div>
+  <div class="src" id="b-src">—</div>
+</div></div>
+
+<div id="loader"><div class="spin"></div><span>Chargement</span></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* Overture Maps — tuiles publiques, mises à jour mensuellement.
+     Release vérifiée le 2026-07-26. Si elle disparaît, lister les releases sur
+     https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/?list-type=2&prefix=tiles/ */
+  var OVERTURE = 'https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/tiles/2026-07-22.0/buildings.pmtiles';
+
+  var STATUS_COLOR = { detruit: '#B22828', endommage: '#C45A3C' };
+  var SITES = [], current = null;
+  var dateInput = document.getElementById('d-date');
+  var heureUTC = Number(document.getElementById('r-sun').value);
+
+  /* --- protocole PMTiles (une seule fois dans le cycle de vie) --- */
+  var protocol = new pmtiles.Protocol();
+  maplibregl.addProtocol('pmtiles', protocol.tile);
+
+  var map = new maplibregl.Map({
+    container: 'map',
+    center: [2.17, 13.48], zoom: 4.6, pitch: 0, bearing: 0,
+    maxPitch: 85,
+    attributionControl: { compact: true },
+    style: {
+      version: 8,
+      glyphs: 'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+      sources: {
+        sat: {
+          type: 'raster',
+          tiles: ['https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+          tileSize: 256, maxzoom: 19,
+          attribution: 'Imagerie Esri, Maxar, Earthstar Geographics'
+        },
+        /* `dem` non plus n'est pas déclaré ici : son hôte peut être injoignable
+           et bloquerait `load`. Ajouté au premier clic sur Relief. */
+        /* NI Overture NI 3D-GloBFP ne sont déclarés ici, volontairement.
+           MapLibre n'émet `load` qu'une fois TOUTES les sources du style prêtes :
+           une source distante lente ou injoignable fige donc la page entière au
+           chargement (constaté avec le S3 d'Overture inaccessible). Les deux sont
+           ajoutées APRÈS `load`, ce qui rend chaque panne indépendante. */
+      },
+      layers: [
+        { id: 'bg', type: 'background', paint: { 'background-color': '#E8E4EE' } },
+        { id: 'sat', type: 'raster', source: 'sat', paint: { 'raster-opacity': 1 } }
+      ]
+    }
+  });
+  /* Page d'atelier : carte exposée dès la construction pour l'inspection. */
+  window.__map = map;
+  map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'bottom-right');
+  map.addControl(new maplibregl.ScaleControl({ maxWidth: 110, unit: 'metric' }), 'bottom-left');
+
+  /* ---------- Hauteurs ----------
+     `height` (mètres) et `num_floors` sont les seules valeurs MESURÉES. Sur le
+     Sahel et la RDC elles sont quasi absentes : la géométrie vient de Google Open
+     Buildings / Microsoft ML (dérivée du satellite), qui ne donnent pas d'élévation.
+
+     D'où deux rendus, jamais confondus :
+       - MESURÉ  : la hauteur réelle, teintée en violet gradué.
+       - ESTIMÉ  : un volume de contexte. En mode réaliste il varie dans une bande
+                   basse typique du bâti sahélien au lieu d'une dalle uniforme, et
+                   reste en tons naturels (jamais violet) pour qu'un volume estimé
+                   ne puisse jamais se lire comme du renseignement mesuré.
+     La variation est DÉTERMINISTE (1er caractère de l'UUID Overture) : la même
+     ville rend toujours pareil d'une session à l'autre. Les identifiants
+     numériques de tuile dépassent la précision JS et sont inutilisables. */
+  var MESUREE = ['>', ['coalesce', ['get', 'height'], 0], 0];
+  var NIVEAUX = ['>', ['coalesce', ['get', 'num_floors'], 0], 0];
+  var HASH = ['slice', ['coalesce', ['get', 'id'], 'x'], 0, 1];
+
+  /* Bande basse : ~50% de plain-pied, un quart à étage, quelques bâtiments hauts. */
+  var VOL_PLAUSIBLE = ['match', HASH,
+    ['0', '1', '2', '3', '4', '5', '6', '7'], 3.2,
+    ['8', '9', 'a', 'b'], 4.6,
+    ['c', 'd'], 6.2,
+    ['e'], 8.0,
+    ['f'], 10.5,
+    3.6
+  ];
+
+  function heightExpr(realiste) {
+    return ['case',
+      MESUREE, ['get', 'height'],
+      NIVEAUX, ['*', ['get', 'num_floors'], 3],
+      realiste ? VOL_PLAUSIBLE : 4.5
+    ];
+  }
+
+  /* Violet gradué = mesuré. Tons naturels (sable, béton, tôle) = estimé. */
+  var VIOLET_PAR_HAUTEUR = ['interpolate', ['linear'], ['get', 'height'],
+    0, '#CFC6DE', 8, '#A995C9', 20, '#7B5ABD', 45, '#5650C6', 90, '#2E84D4'];
+
+  function colorExpr(realiste) {
+    if (!realiste) return ['case', MESUREE, VIOLET_PAR_HAUTEUR, '#B9B3C4'];
+    return ['case', MESUREE, VIOLET_PAR_HAUTEUR,
+      ['match', HASH,
+        ['0', '1', '2'], '#D8C7A6',
+        ['3', '4', '5'], '#CBBA9C',
+        ['6', '7', '8'], '#C3B7A8',
+        ['9', 'a', 'b'], '#D2C3AB',
+        ['c', 'd'], '#BCB0A0',
+        ['e', 'f'], '#C7B9A2',
+        '#C9BBA6'
+      ]];
+  }
+
+  /* ---------- Position solaire réelle ----------
+     Algorithme NOAA basse précision (~0,01°, largement suffisant ici). On calcule
+     l'azimut et la hauteur VRAIS du soleil pour la latitude, la longitude, la date
+     et l'heure demandées. Ce n'est pas un effet : la direction des ombres à une
+     date donnée est une donnée exploitable en analyse d'imagerie. */
+  function solarPosition(dateUTC, lat, lon) {
+    var rad = Math.PI / 180;
+    var n = dateUTC.getTime() / 86400000 + 2440587.5 - 2451545.0;  /* jours depuis J2000 */
+    var L = (280.460 + 0.9856474 * n) % 360;                        /* longitude moyenne */
+    var g = ((357.528 + 0.9856003 * n) % 360) * rad;                /* anomalie moyenne */
+    var lambda = (L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * rad;
+    var eps = (23.439 - 0.0000004 * n) * rad;                       /* obliquité */
+    var alpha = Math.atan2(Math.cos(eps) * Math.sin(lambda), Math.cos(lambda));
+    var delta = Math.asin(Math.sin(eps) * Math.sin(lambda));        /* déclinaison */
+    var gmst = (18.697374558 + 24.06570982441908 * n) % 24;
+    var lmst = (((gmst * 15 + lon) % 360) + 360) % 360 * rad;
+    var H = lmst - alpha;                                           /* angle horaire */
+    var latR = lat * rad;
+    var alt = Math.asin(Math.sin(latR) * Math.sin(delta) + Math.cos(latR) * Math.cos(delta) * Math.cos(H));
+    var az = Math.atan2(-Math.sin(H), Math.tan(delta) * Math.cos(latR) - Math.sin(latR) * Math.cos(H));
+    return { hauteur: alt / rad, azimut: ((az / rad) % 360 + 360) % 360 };
+  }
+
+  var SUN = { azimut: 250, hauteur: 25 };
+
+  /* ---------- Lumière, ciel et ombres ----------
+     Le relief des façades vient de la lumière : sans direction franche, une
+     extrusion reste une dalle. MapLibre 5.9 n'a PAS d'ombres portées natives
+     (`setLights` de Mapbox v3 n'existe pas ici), donc les ombres sont projetées
+     à la main dans la couche `ombre`, décalée selon l'azimut solaire réel. */
+  function applySun() {
+    if (!map.style || !map.isStyleLoaded()) return;
+    var c = map.getCenter();
+    var d = new Date(dateInput.value + 'T00:00:00Z');
+    if (isNaN(d.getTime())) d = new Date();
+    d.setUTCHours(Math.floor(heureUTC), Math.round((heureUTC % 1) * 60), 0, 0);
+
+    var s = solarPosition(d, c.lat, c.lng);
+    SUN = s;
+    var nuit = s.hauteur <= 0.5;
+    var bas = s.hauteur < 16;                       /* lumière rasante et chaude */
+
+    var couleur = nuit ? '#9FB4D0' : (bas ? '#FFD3A0' : (s.hauteur < 38 ? '#FFEBCC' : '#FFFDF6'));
+    map.setLight({
+      anchor: 'map',
+      position: [1.5, s.azimut, Math.max(2, 90 - s.hauteur)],
+      color: couleur,
+      intensity: nuit ? 0.16 : 0.24 + Math.min(s.hauteur, 60) / 60 * 0.32
+    });
+
+    map.setSky({
+      'sky-color': nuit ? '#2C3E5C' : (bas ? '#7FA6C4' : '#8FC0DE'),
+      'horizon-color': nuit ? '#4A4664' : (bas ? '#E8B888' : '#E4D8C2'),
+      'fog-color': nuit ? '#5C5A72' : '#E9DFCB',
+      'sky-horizon-blend': 0.72,
+      'horizon-fog-blend': 0.55,
+      'fog-ground-blend': 0.62,
+      'atmosphere-blend': ['interpolate', ['linear'], ['zoom'], 0, 0.9, 12, 0.5, 16, 0.15]
+    });
+
+    updateShadow();
+    document.getElementById('sun-read').textContent = nuit
+      ? 'soleil sous l\'horizon'
+      : 'azimut ' + Math.round(s.azimut) + '° · hauteur ' + Math.round(s.hauteur) + '°';
+  }
+
+  /* Ombre projetée : direction = azimut solaire + 180°, longueur = h / tan(hauteur).
+     `fill-translate` est un décalage global, donc la longueur correspond à une
+     hauteur de référence (le bâti sahélien est homogène) : la DIRECTION est
+     physiquement juste, la longueur est représentative et non mesurée. */
+  var H_REF = 4.2;
+
+  /* Overture, ajouté après `load` : sa source est distante et peut être lente ou
+     injoignable, ce qui figerait la carte si elle était dans le style initial. */
+  function ajouterOverture() {
+    if (map.getSource('overture')) return;
+    map.addSource('overture', {
+      type: 'vector', url: 'pmtiles://' + OVERTURE, maxzoom: 14,
+      attribution: '<a href="https://overturemaps.org">Overture Maps</a>'
+    });
+    map.addLayer(ombreLayer(false));
+    map.addLayer({
+      id: 'bati', type: 'fill-extrusion', source: 'overture', 'source-layer': 'building',
+      minzoom: 13,
+      paint: {
+        'fill-extrusion-color': colorExpr(true),
+        'fill-extrusion-height': heightExpr(true),
+        'fill-extrusion-base': ['coalesce', ['get', 'min_height'], 0],
+        'fill-extrusion-opacity': 0.94,
+        'fill-extrusion-vertical-gradient': true
+      }
+    });
+    map.on('click', 'bati', showBuilding);
+    map.on('mouseenter', 'bati', function () { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'bati', function () { map.getCanvas().style.cursor = ''; });
+  }
+
+  /* Ombre portée : même géométrie que le bâti affiché, aplatie et décalée. */
+  function ombreLayer(surGlobfp) {
+    var l = {
+      id: 'ombre', type: 'fill',
+      source: surGlobfp ? 'globfp' : 'overture',
+      minzoom: surGlobfp ? 12 : 13,
+      layout: { visibility: 'none' },
+      paint: {
+        'fill-color': '#3A2B1C',
+        'fill-opacity': 0.26,
+        'fill-translate': [0, 0],
+        'fill-translate-anchor': 'map'
+      }
+    };
+    if (!surGlobfp) l['source-layer'] = 'building';
+    return l;
+  }
+
+  function updateShadow() {
+    if (!map.getLayer('ombre')) return;
+    var visible = SUN.hauteur > 3 && document.getElementById('sw-ombre').classList.contains('on');
+    map.setLayoutProperty('ombre', 'visibility', visible ? 'visible' : 'none');
+    if (!visible) return;
+
+    var longM = Math.min(H_REF / Math.tan(SUN.hauteur * Math.PI / 180), 90);
+    var lat = map.getCenter().lat;
+    var mpp = 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, map.getZoom());
+    var px = longM / mpp;
+    var a = (SUN.azimut + 180) * Math.PI / 180;      /* direction vers laquelle l'ombre tombe */
+    map.setPaintProperty('ombre', 'fill-translate', [px * Math.sin(a), -px * Math.cos(a)]);
+    map.setPaintProperty('ombre', 'fill-opacity', Math.max(0.10, Math.min(0.34, 0.34 - SUN.hauteur / 260)));
+  }
+
+  map.on('load', function () {
+    map.addSource('site', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+
+    ajouterOverture();
+
+    /* Emprise du site : contour seul, la 3D reste au bâti réel */
+    map.addLayer({
+      id: 'site-line', type: 'line', source: 'site',
+      paint: { 'line-color': '#B22828', 'line-width': 2, 'line-dasharray': [2, 1.6], 'line-opacity': 0.95 }
+    });
+    map.addLayer({
+      id: 'site-fill', type: 'fill', source: 'site',
+      paint: { 'fill-color': '#B22828', 'fill-opacity': 0.07 }
+    }, 'site-line');
+
+    /* Page d'atelier : la carte est exposée pour l'inspection en console. */
+    window.__map = map;
+
+    map.on('idle', countBuildings);
+
+    applySun();                 /* après les couches : `ombre` doit exister */
+    ready.map = true; boot();
+  });
+
+  map.on('error', function (e) {
+    /* Une tuile absente est normale (Overture ne couvre pas tout). On ne casse pas la page. */
+    if (e && e.error && /404|Failed to fetch/i.test(String(e.error.message || ''))) return;
+    console.warn('maplibre:', e && e.error);
+  });
+
+  /* --- fiche bâtiment --- */
+  function showBuilding(e) {
+    var f = e.features && e.features[0]; if (!f) return;
+    var p = f.properties || {};
+    var box = document.getElementById('binfo');
+    document.getElementById('b-name').textContent = p['@name'] || p.names || 'Bâtiment sans nom';
+    var h = Number(p.height) > 0 ? Number(p.height).toFixed(1) + ' m'
+          : (Number(p.num_floors) > 0 ? '~' + (Number(p.num_floors) * 3) + ' m (estimé)' : 'inconnue');
+    document.getElementById('b-h').textContent = h;
+    document.getElementById('b-f').textContent = p.num_floors || '—';
+    document.getElementById('b-c').textContent = p.class || '—';
+    document.getElementById('b-src').textContent = 'Source hauteur : ' + (p['@height_source'] || 'non précisée') +
+      ' · géométrie : ' + (p['@geometry_source'] || 'non précisée');
+    box.style.display = 'block';
+  }
+
+  /* --- compteur + QUALITÉ de la donnée dans la vue ---
+     Distinction essentielle pour l'analyste : une hauteur mesurée n'a pas le même
+     statut qu'un volume déduit du nombre de niveaux ou posé par défaut. On l'affiche
+     au lieu de laisser croire que tout le relief bâti est mesuré. */
+  function countBuildings() {
+    if (!map.getLayer('bati')) return;
+    var reel = document.getElementById('t-reel').classList.contains('on');
+
+    /* querySourceFeatures et non queryRenderedFeatures : au delà de ~70° de pitch
+       la requête sur le rendu ne renvoie plus qu'une poignée de features alors que
+       la ville entière est affichée (vérifié : 2 contre 32036). On compte donc ce
+       qui est chargé depuis les tuiles, ce que le libellé annonce. */
+    var fs = [];
+    try {
+      fs = reel ? map.querySourceFeatures('globfp')
+                : map.querySourceFeatures('overture', { sourceLayer: 'building' });
+    } catch (err) { return; }
+    var z = map.getZoom(), n = fs.length;
+    document.getElementById('stat-n').textContent = (!reel && z < 13) ? '—' : n;
+    var q = document.getElementById('stat-q');
+
+    if (reel) {
+      /* Statistiques calculées sur la donnée chargée, pas sur une requête de vue :
+         toutes les emprises 3D-GloBFP portent une hauteur, on montre donc la
+         distribution réelle du jeu extrait. */
+      var g = globfpStat;
+      document.getElementById('stat-n').textContent = g ? g.n : '—';
+      q.innerHTML = g
+        ? 'hauteur médiane <b>' + g.mediane.toFixed(1) + ' m</b> · max ' + g.max.toFixed(1) + ' m'
+        : '';
+      document.getElementById('stat-warn').style.display = 'none';
+      return;
+    }
+
+    var mesures = 0;
+    for (var i = 0; i < n; i++) {
+      if (Number((fs[i].properties || {}).height) > 0) mesures++;
+    }
+    if (z < 13 || !n) {
+      q.textContent = z < 13 ? 'Zoomez sur un site pour charger le bâti.' : '';
+    } else {
+      var pct = Math.round(mesures / n * 100);
+      q.innerHTML = '<b>' + mesures + '</b> avec hauteur mesurée (' + pct + '%) · ' +
+        (n - mesures) + ' en volume estimé';
+    }
+    var warn = document.getElementById('stat-warn');
+    warn.style.display = (z >= 14 && n === 0 && document.getElementById('t-bati').classList.contains('on')) ? 'block' : 'none';
+  }
+
+  /* --- liste des sites (mêmes données que /carte/sites-3d/, lecture seule) --- */
+  var ready = { map: false, data: false };
+
+  fetch('/carte/zones-3d.json')
+    .then(function (r) { return r.json(); })
+    .then(function (j) { SITES = j.zones || []; buildList(); ready.data = true; boot(); })
+    .catch(function () {
+      document.querySelector('#loader span').textContent = 'Données sites indisponibles';
+      ready.data = true; boot();
+    });
+
+  function boot() {
+    if (!ready.map || !ready.data) return;
+    document.getElementById('loader').classList.add('off');
+  }
+
+  function buildList() {
+    var host = document.getElementById('site-list'), byPays = {};
+    SITES.forEach(function (s) { (byPays[s.pays] = byPays[s.pays] || []).push(s); });
+    Object.keys(byPays).sort().forEach(function (pays) {
+      var g = document.createElement('div'); g.className = 'grp'; g.textContent = pays; host.appendChild(g);
+      byPays[pays].forEach(function (s) {
+        var b = document.createElement('button'); b.className = 'site';
+        b.innerHTML = '<span class="dot" style="background:' + (STATUS_COLOR[s.status] || '#9089AA') + '"></span>' +
+          '<span class="site-name"></span><span class="site-st"></span>';
+        b.querySelector('.site-name').textContent = s.name;
+        b.querySelector('.site-st').textContent = s.status === 'detruit' ? 'détruit' : (s.status || '');
+        b.onclick = function () { goTo(s, b); };
+        host.appendChild(b);
+      });
+    });
+  }
+
+  function goTo(s, btn) {
+    current = s;
+    [].forEach.call(document.querySelectorAll('.site'), function (x) { x.classList.remove('on'); });
+    if (btn) btn.classList.add('on');
+    document.getElementById('binfo').style.display = 'none';
+
+    /* emprise du site si elle existe dans la donnée */
+    var feats = [];
+    if (s.perimeter && s.perimeter.length) {
+      feats.push({ type: 'Feature', geometry: { type: 'Polygon', coordinates: [s.perimeter] }, properties: {} });
+    }
+    var src = map.getSource('site');
+    if (src) src.setData({ type: 'FeatureCollection', features: feats });
+
+    map.flyTo({
+      center: s.center,
+      zoom: Math.max(Number(s.zoom) || 16, 15.6),
+      pitch: Number(s.pitch) || 62,
+      bearing: Number(s.bearing) || 0,
+      duration: 1900, essential: true
+    });
+  }
+
+  /* --- bascules --- */
+  function toggle(id, fn) {
+    var b = document.getElementById(id);
+    b.onclick = function () { b.classList.toggle('on'); fn(b.classList.contains('on')); };
+  }
+  toggle('t-bati', function (on) {
+    if (map.getLayer('bati')) map.setLayoutProperty('bati', 'visibility', on ? 'visible' : 'none');
+    countBuildings();
+  });
+
+  /* Chargement à la demande de 3D-GloBFP (6 Mo). Déclaré dans le style, il
+     bloquerait `load` et la carte resterait au chargement : vérifié. */
+  var globfpPret = false, globfpStat = null;
+  function chargerGlobfp(cb) {
+    if (globfpPret) { cb(); return; }
+    var src = document.getElementById('stat-src');
+    src.textContent = 'Chargement de 3D-GloBFP…';
+    /* On récupère la donnée nous mêmes plutôt que de passer une URL à MapLibre :
+       ça permet de connaître le nombre exact de bâtiments et la distribution des
+       hauteurs. `querySourceFeatures` n'est pas fiable pour ça (il renvoie 0 dans
+       des vues où le bâti s'affiche pourtant, comme queryRenderedFeatures). */
+    fetch('gao-heights.geojson').then(function (r) { return r.json(); }).then(function (j) {
+      var hs = j.features.map(function (f) { return Number(f.properties.h); })
+                         .sort(function (a, b) { return a - b; });
+      globfpStat = { n: hs.length, mediane: hs[Math.floor(hs.length / 2)] || 0, max: hs[hs.length - 1] || 0 };
+      poserGlobfp(j, cb);
+    }).catch(function () {
+      src.textContent = '3D-GloBFP indisponible';
+      document.getElementById('t-reel').classList.remove('on');
+    });
+  }
+
+  function poserGlobfp(data, cb) {
+    map.addSource('globfp', {
+      type: 'geojson', data: data,
+      attribution: '<a href="https://zenodo.org/records/15487037">3D-GloBFP</a>'
+    });
+    map.addLayer({
+      id: 'bati-h', type: 'fill-extrusion', source: 'globfp',
+      minzoom: 12,
+      layout: { visibility: 'none' },
+      paint: {
+        'fill-extrusion-color': ['interpolate', ['linear'], ['get', 'h'],
+          2.5, '#CFC6DE', 4, '#A995C9', 6, '#7B5ABD', 10, '#5650C6', 18, '#2E84D4'],
+        'fill-extrusion-height': ['get', 'h'],
+        'fill-extrusion-base': 0,
+        'fill-extrusion-opacity': 0.94,
+        'fill-extrusion-vertical-gradient': true
+      }
+    }, 'bati');
+    globfpPret = true;
+    cb();
+  }
+
+  /* Bascule Overture (sans hauteur) <-> 3D-GloBFP (hauteur par bâtiment).
+     Les deux se superposeraient géométriquement, donc on n'en montre qu'un. */
+  toggle('t-reel', function (on) {
+    if (on && !globfpPret) { chargerGlobfp(function () { appliquerReel(true); }); return; }
+    appliquerReel(on);
+  });
+
+  function appliquerReel(on) {
+    if (!map.getLayer('bati-h')) return;
+    map.setLayoutProperty('bati-h', 'visibility', on ? 'visible' : 'none');
+    var bt = document.getElementById('t-bati');
+    if (on && bt.classList.contains('on')) bt.click();       /* évite le z-fighting */
+    if (!on && !bt.classList.contains('on')) bt.click();
+    /* L'ombre suit la source affichée, et sa longueur la hauteur de référence. */
+    if (map.getLayer('ombre')) {
+      map.removeLayer('ombre');
+      map.addLayer(ombreLayer(on), 'bati-h');
+    }
+    H_REF = on ? 3.8 : 4.2;
+    document.getElementById('stat-src').textContent = on
+      ? '3D-GloBFP · hauteur modélisée, millésime 2020 (RMSE 3,86 m)'
+      : 'Overture Maps · emprises sans hauteur';
+    updateShadow(); countBuildings();
+  }
+  toggle('t-sat', function (on) {
+    if (map.getLayer('sat')) map.setLayoutProperty('sat', 'visibility', on ? 'visible' : 'none');
+  });
+  toggle('t-relief', function (on) {
+    if (on && !map.getSource('dem')) {
+      map.addSource('dem', {
+        type: 'raster-dem',
+        tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
+        tileSize: 256, maxzoom: 15, encoding: 'terrarium',
+        attribution: 'Relief Mapzen / AWS Terrain Tiles'
+      });
+    }
+    map.setTerrain(on ? { source: 'dem', exaggeration: Number(document.getElementById('r-exag').value) } : null);
+  });
+
+  document.getElementById('r-exag').oninput = function () {
+    document.getElementById('v-exag').textContent = this.value;
+    if (document.getElementById('t-relief').classList.contains('on')) {
+      map.setTerrain({ source: 'dem', exaggeration: Number(this.value) });
+    }
+  };
+
+  /* Soleil : l'inclinaison change complètement la lecture du volume bâti. */
+  var sun = document.getElementById('r-sun');
+  function labelSun(h) {
+    var hh = Math.floor(h), mm = Math.round((h - hh) * 60);
+    document.getElementById('v-sun').textContent = hh + 'h' + (mm ? String(mm).padStart(2, '0') : '00');
+  }
+  sun.oninput = function () { heureUTC = Number(this.value); labelSun(heureUTC); applySun(); };
+  labelSun(heureUTC);
+  dateInput.onchange = applySun;
+
+  document.getElementById('sw-ombre').onclick = function () {
+    this.classList.toggle('on'); updateShadow();
+  };
+  /* La longueur d'ombre est en pixels : elle doit suivre le zoom, et l'azimut
+     solaire dépend de la position, donc on recalcule après chaque déplacement. */
+  map.on('moveend', function () { applySun(); });
+  map.on('zoom', updateShadow);
+
+  /* Volumes plausibles : rendu de contexte, jamais présenté comme mesuré. */
+  var swReal = document.getElementById('sw-real');
+  swReal.onclick = function () {
+    swReal.classList.toggle('on');
+    var on = swReal.classList.contains('on');
+    if (!map.getLayer('bati')) return;
+    map.setPaintProperty('bati', 'fill-extrusion-height', heightExpr(on));
+    map.setPaintProperty('bati', 'fill-extrusion-color', colorExpr(on));
+  };
+})();
+</script>
+</body>
+</html>

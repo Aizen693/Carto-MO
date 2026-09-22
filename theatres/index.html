@@ -1,296 +1,422 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light" data-accent="violet">
+<html lang="fr">
 <head>
 <meta charset="UTF-8" />
 <script src="/shared/i18n.js?v=20260916a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Théâtres : Algor Access</title>
-
-<link rel="icon" type="image/jpeg" href="../favicon.jpg" />
-
 <meta name="description" content="Les six théâtres couverts par Algor Access : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Zones de conflit suivies en continu." />
 <meta property="og:title" content="Théâtres : Algor Access" />
 <meta property="og:description" content="Six théâtres géopolitiques couverts en continu, sur trois continents." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://algoracces.fr/theatres/" />
-<meta name="theme-color" content="#FFFFFF" />
-
-
-
-<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<meta name="theme-color" content="#0F1013" />
+<link rel="icon" type="image/jpeg" href="/favicon.jpg" />
 <link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
+<link rel="stylesheet" href="/shared/v5/v5.css?v=20260922l" />
+<style>
 
-<link rel="stylesheet" href="../shared/home/styles.css?v=20260915q" />
+  .th-list { border-top: 1px solid var(--line); }
+  .th-item { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 64px); padding: clamp(28px, 3vw, 44px) 0; border-bottom: 1px solid var(--line); align-items: start; }
+  .th-item__img { display: block; overflow: hidden; border-radius: 4px; aspect-ratio: 4 / 3; background: var(--band); }
+  .th-item__img img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.78) contrast(1.03); transition: transform 1.2s var(--ease); }
+  .th-item:hover .th-item__img img { transform: scale(1.03); }
+  .th-item h3 { margin: 0; font-weight: 400; font-size: clamp(36px, 4.4vw, 64px); line-height: 1; letter-spacing: -0.035em; }
+  .th-item__pays { margin: 14px 0 0; font-size: 15px; color: var(--muted); }
+  .th-item__t { margin: 22px 0 28px; max-width: 58ch; font-size: 18px; line-height: 1.55; color: var(--ink-2); }
+  .v5-sec + .appels { padding-top: 0; }
+  @media (max-width: 820px) { .th-item { grid-template-columns: 1fr; } }
+</style>
+<style>
+  .hors-ecran { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  /* sans titre visible, le texte d'intro et la démo se placent au milieu de l'écran */
+  @media (min-width: 821px) { .v5-phero--carte { justify-content: flex-start; padding-top: clamp(190px, 26vh, 300px); } }
+  /* Abonné : le champ devient l'outil pays de la carte de renseignement (pays, période, typologie, acteur) */
+  .phero-demo[data-etat="attente"] { visibility: hidden; }
+  .phero-demo:has(.outil__jetons:not(:empty)) { width: min(620px, 100%); }
+  .outil__jetons { display: flex; flex-wrap: wrap; gap: 6px; }
+  .outil__jetons:not(:empty) { margin-right: 10px; }
+  .outil__jeton { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 8px 0 11px; border: 1px solid rgba(255,255,255,.28); border-radius: 2px; font-size: 14px; color: var(--on-night); white-space: nowrap; }
+  .outil__jeton:hover { border-color: var(--on-night); }
+  .outil__jeton span { color: #8C8D93; font-size: 15px; line-height: 1; }
+  .outil__choix { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .outil__choix[hidden] { display: none; }
+  .outil__opt { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border: 1px solid var(--line-night); border-radius: 2px; font-size: 14px; color: #C9CACE; transition: border-color .2s ease, color .2s ease; }
+  .outil__opt b { font: 400 12px var(--mono); color: #6F7076; font-variant-numeric: tabular-nums; }
+  .outil__opt:hover, .outil__opt:focus-visible { border-color: var(--on-night); color: var(--on-night); }
+  .outil__opt--suite { border-color: var(--on-night); background: var(--on-night); color: var(--ink); }
+  .outil__opt--suite:hover { background: transparent; color: var(--on-night); }
+  .outil__opt--passer { border-style: dashed; }
+  .phero-demo { position: relative; width: min(460px, 100%); margin: clamp(32px, 5vh, 52px) 0 0; }
+  .phero-demo label { display: block; margin-bottom: 10px; font-size: 14px; color: #8C8D93; }
+  .phero-demo__champ { display: flex; align-items: center; border-bottom: 1px solid #3A3B42; transition: border-color .25s ease; }
+  .phero-demo__champ:focus-within, .phero-demo__champ:hover { border-bottom-color: var(--on-night); }
+  .phero-demo__champ input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--on-night); font: 400 22px/1.3 var(--sans); letter-spacing: -0.015em; padding: 8px 0 12px; border-radius: 0; }
+  .phero-demo__champ input::placeholder { color: #55565D; }
+  .phero-demo__champ input::-webkit-search-cancel-button { display: none; }
+  .phero-demo__champ > button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--on-night); transition: transform .45s var(--ease); }
+  .phero-demo__champ > button:hover { transform: translateX(4px); }
+  .phero-demo__champ > button svg { width: 20px; height: 20px; }
+</style>
 </head>
-<body style="background-color:#FFFFFF">
+<body data-rubrique="theatres">
 
-<!-- ─────────────────────────────────────── Header -->
-<header class="site-header">
-  <div class="site-header__inner">
-    <a class="site-brand" href="/">
-      <span class="site-brand__mark"></span>
-      <span class="site-brand__name">Algor Access</span>
-    </a>
-    <nav class="site-nav" aria-label="Rubriques">
-      <a href="/">Plateforme</a>
-      <a href="/veille/">Veille</a>
-      <a href="/debunkage/">Débunkage</a>
-      <a href="/methodologie/">Méthodologie</a>
-      <a href="/offres/">Offres</a>
-      <a href="/theatres/" class="is-active" aria-current="page">Théâtres</a>
-      <a href="/a-propos/">À propos</a>
-      <a href="/contact/">Contact</a>
-    </nav>
-    <div class="site-header__right">
+<!-- v5:nav -->
+<div class="annonce" id="annonce" hidden>
+  <div class="annonce__in">
+    <p>Dernière note de veille : <a id="annonce-lien" href="/veille/"></a></p>
+    <button class="annonce__x" id="annonce-x" aria-label="Fermer le bandeau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+</div>
+<header class="nav" id="nav">
+  <div class="nav__bar">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <nav class="nav__links" aria-label="Rubriques"><a href="/theatres/" aria-current="page">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a></nav>
+    <div class="nav__right">
       <span class="lang-slot"></span>
-      <a class="site-login" href="/">Connexion</a>
-      <a class="site-cta" href="/offres/">Voir les offres</a>
+      <button class="btn-login site-login" type="button">Connexion</button>
+      <a class="btn-rect" href="/offres/">Demander un accès</a>
+      <div class="sq">
+        <button type="button" id="ouvrir-recherche" aria-label="Rechercher une zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
+        <button type="button" id="ouvrir-menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+      </div>
     </div>
   </div>
 </header>
 
+<div class="veil" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <nav class="veil__body">
+    <div class="veil__main"><a href="/">Plateforme</a><a href="/theatres/" aria-current="page">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+    <div class="veil__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+    <div class="veil__col"><h3>Algor Access</h3><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+  </nav>
+</div>
+
+<div class="veil veil--search" id="recherche" role="dialog" aria-modal="true" aria-label="Recherche">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <div class="veil__body">
+    <form class="search-form" action="/demo/">
+      <label for="q">Essayez la démo sur n'importe quelle zone du monde</label>
+      <input id="q" name="q" type="search" placeholder="Bogotá" autocomplete="off" required>
+      <p>Indiquez une ville, une région ou un pays : vous verrez le rendu de nos cartes sur des données fictives.</p>
+    </form>
+  </div>
+</div>
+<!-- /v5:nav -->
+
 <main>
+  <section class="v5-phero v5-phero--plein v5-phero--carte" data-nav="dark">
+    <canvas class="planisphere-canvas v5-carte-fond" role="img" aria-label="Carte des six théâtres suivis et des flux qui les relient. Cliquez un théâtre pour l'ouvrir."></canvas>
+    <p class="v5-lecture" aria-hidden="true"><span>Curseur</span> <b id="lecture-lat">16,00 N</b> <b id="lecture-lon">000,00 E</b></p>
+    <h1 class="hors-ecran">Les six théâtres suivis par Algor Access</h1>
+    <p class="v5-phero__lede">Du Sahel à l'Asie du Sud, Algor Access couvre six théâtres choisis pour leur intensité et leur complexité. Chacun dispose de sa carte, de ses calques et de sa chronologie.</p>
+    <form class="phero-demo" id="outil" action="/demo/" data-etat="attente">
+      <label for="tq" id="tq-lbl">Essayez la démo sur n'importe quelle zone du monde</label>
+      <div class="phero-demo__champ"><span class="outil__jetons" id="tq-jetons"></span><input id="tq" name="q" type="search" placeholder="Bogotá" autocomplete="off" required><button type="submit" aria-label="Lancer la démo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></button></div>
+      <div class="outil__choix" id="tq-choix" hidden></div>
+    </form>
+  <a class="v5-defiler" href="#suite" aria-label="Défiler vers la suite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 4v16M6 14l6 6 6-6"/></svg></a>
+  </section>
 
-  <!-- ─────────────────────────────────────── Hero -->
-  <section class="page-hero">
-    <div class="page-hero__wrap">
-      <div class="page-hero__copy">
-        <span class="page-hero__eyebrow">Théâtres</span>
-        <h1 class="page-hero__title">Six zones, là où le <em>risque se concentre</em></h1>
-        <p class="page-hero__lede">
-          Du Sahel à l'Asie du Sud, Algor Access couvre six théâtres choisis pour leur intensité et leur complexité. Chacun dispose de sa carte, de ses calques et de sa chronologie.
-        </p>
-        <div class="page-hero__cta">
-          <a class="btn btn--primary btn--lg" href="/offres/">Voir les offres</a>
-          <a class="btn btn--ghost btn--lg" href="/">La plateforme</a>
+
+  <section class="v5-sec" data-nav="light" aria-labelledby="couv-t">
+    <div class="sec-head">
+      <h2 id="couv-t">Six théâtres, sur trois continents</h2>
+      <p>Ces six zones concentrent une part majeure des conflits armés actuels. Ce sont aussi des terrains où l'information ouverte est abondante, mais difficile à recouper sans méthode.</p>
+    </div>
+    <dl class="v5-dl v5-dl--big" aria-label="Couverture des théâtres">
+      <div><dt>Théâtres suivis</dt><dd>6, sur trois continents : Afrique, Proche et Moyen-Orient, Asie du Sud.</dd></div>
+      <div><dt>Dernière note de veille</dt><dd><span data-veille-latest>…</span><small data-veille-count></small></dd></div>
+      <div><dt>Historique le plus ancien</dt><dd>Moyen-Orient, dix périodes depuis 2005.</dd></div>
+      <div><dt>Pas de temps</dt><dd>Chronologie par quinzaine sur le Sahel en 2026, rejouable sur la carte.</dd></div>
+      <div><dt>Calques</dt><dd>Forces en présence, mines, infrastructures, flux et zones d'influence selon le théâtre.</dd></div>
+    </dl>
+  </section>
+
+  <section class="v5-sec v5-sec--night" data-nav="dark" aria-labelledby="detail-t" id="detail">
+    <div class="sec-head">
+      <h2 id="detail-t">Chaque zone, en détail</h2>
+    </div>
+    <div class="v5-epingle v5-epingle--inverse" data-v5-scene="remplace">
+      <div>
+        <div class="v5-epingle__sticky">
+          <div class="v5-epingle__cadre">
+            <a class="v5-couche is-on" data-couche="0" href="/moyen-orient/" aria-label="Ouvrir le théâtre Moyen-Orient" tabindex="-1">
+              <img src="/theatres/assets/carte-moyen-orient.png?v=20260910b" alt="Extrait de carte du théâtre Moyen-Orient : Iraq · Syrie · Liban · Yémen" loading="eager">
+              <span class="v5-pin" style="left:60.04%;top:18.48%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:41.75%;top:17.69%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:39.96%;top:16.18%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:59.7%;top:83.82%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span>
+              <span class="v5-epingle__cap"><b>Iraq · Syrie · Liban · Yémen</b><span>Extrait de carte</span></span>
+            </a>
+            <a class="v5-couche" data-couche="1" href="/sahel/" aria-label="Ouvrir le théâtre Sahel" tabindex="-1">
+              <img src="/theatres/assets/carte-sahel.png?v=20260910b" alt="Extrait de carte du théâtre Sahel : Mali · Burkina Faso · Niger · Tchad · Mauritanie" loading="eager">
+              <span class="v5-pin" style="left:51.06%;top:46.35%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:43.61%;top:44.44%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:54.7%;top:38.03%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:54.8%;top:54.16%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:51.08%;top:54.83%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:88.99%;top:61.97%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:11.01%;top:39.42%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span>
+              <span class="v5-epingle__cap"><b>Mali · Burkina Faso · Niger · Tchad · Mauritanie</b><span>Extrait de carte</span></span>
+            </a>
+            <a class="v5-couche" data-couche="2" href="/rdc/" aria-label="Ouvrir le théâtre RDC, Grands Lacs" tabindex="-1">
+              <img src="/theatres/assets/carte-rdc.png?v=20260910b" alt="Extrait de carte du théâtre RDC, Grands Lacs : Nord-Kivu · Sud-Kivu · Ituri" loading="lazy">
+              <span class="v5-pin" style="left:46.86%;top:60.43%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:43.48%;top:71.77%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:56.52%;top:16.21%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:46.11%;top:83.79%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span>
+              <span class="v5-epingle__cap"><b>Nord-Kivu · Sud-Kivu · Ituri</b><span>Extrait de carte</span></span>
+            </a>
+            <a class="v5-couche" data-couche="3" href="/madagascar/" aria-label="Ouvrir le théâtre Madagascar" tabindex="-1">
+              <img src="/theatres/assets/carte-madagascar.png?v=20260910b" alt="Extrait de carte du théâtre Madagascar : Grand Sud · SAVA · Analamanga · canal du Mozambique" loading="lazy">
+              <span class="v5-pin" style="left:52.8%;top:44.58%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:37.07%;top:73.06%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:62.93%;top:16.0%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:50.63%;top:84.0%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span>
+              <span class="v5-epingle__cap"><b>Grand Sud · SAVA · Analamanga · canal du Mozambique</b><span>Extrait de carte</span></span>
+            </a>
+            <a class="v5-couche" data-couche="4" href="/afrique/" aria-label="Ouvrir le théâtre Afrique maritime" tabindex="-1">
+              <img src="/theatres/assets/carte-afrique-maritime.png?v=20260910b" alt="Extrait de carte du théâtre Afrique maritime : Suez · Bab-el-Mandeb · Ormuz · golfe de Guinée" loading="lazy">
+              <span class="v5-pin" style="left:54.21%;top:20.14%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:69.78%;top:59.53%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:88.46%;top:28.25%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:11.54%;top:79.86%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span>
+              <span class="v5-epingle__cap"><b>Suez · Bab-el-Mandeb · Ormuz · golfe de Guinée</b><span>Extrait de carte</span></span>
+            </a>
+            <a class="v5-couche" data-couche="5" href="/asie-sud/" aria-label="Ouvrir le théâtre Asie du Sud" tabindex="-1">
+              <img src="/theatres/assets/carte-asie-sud.png?v=20260910b" alt="Extrait de carte du théâtre Asie du Sud : Inde · Pakistan · Afghanistan · Cachemire · Baloutchistan" loading="lazy">
+              <span class="v5-pin" style="left:34.32%;top:16.04%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:69.85%;top:29.42%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:14.65%;top:83.96%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span><span class="v5-pin" style="left:85.35%;top:23.22%"><svg viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1 6.3 1 12.8 1 21.6 13 33 13 33S25 21.6 25 12.8C25 6.3 19.6 1 13 1z" fill="#1C1D21" stroke="#fff" stroke-width="1.6"/><circle cx="13" cy="12.8" r="4.2" fill="#fff"/></svg></span>
+              <span class="v5-epingle__cap"><b>Inde · Pakistan · Afghanistan · Cachemire · Baloutchistan</b><span>Extrait de carte</span></span>
+            </a>
+            <dl class="v5-instr" aria-hidden="true">
+        <div><dt>Lat</dt><dd data-i="lat">33,000 N</dd></div>
+        <div><dt>Lon</dt><dd data-i="lon">044,000 E</dd></div>
+        <div><dt>Période</dt><dd data-i="per">2005 → 2026</dd></div>
+        <div><dt>Calques</dt><dd data-i="cal">03</dd></div>
+        <div><dt>Théâtre</dt><dd data-i="n">01 / 06</dd></div>
+      </dl>
+          </div>
         </div>
       </div>
-      <div class="page-hero__visual">
-        <div class="media-frame media-frame--planisphere">
-          <canvas class="planisphere-canvas" role="img" aria-label="Planisphère interactif : six théâtres OSINT"></canvas>
-        </div>
-      </div>
+      <ol class="v5-etapes">
+        <li class="v5-etape is-on" data-etape="0" data-lat="33.0" data-lon="44.0" data-per="2005 → 2026" data-cal="03" data-n="01">
+          <p class="v5-etape__k">Théâtre 01 / 06</p>
+          <h3>Moyen-Orient</h3>
+          <p>Le théâtre des recompositions de l'après-2011 : fronts confessionnels, influence iranienne, reconstruction syrienne, guerre du Yémen et tensions au Liban-Sud. L'historique couvre dix périodes, de 2005 à aujourd'hui.</p>
+          <p class="v5-etape__c">Calques : événements, zones de contrôle, Daesh.</p>
+          <a class="btn-link" href="/moyen-orient/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+        </li>
+        <li class="v5-etape" data-etape="1" data-lat="16.0" data-lon="0.0" data-per="12.2025 → 05.2026" data-cal="08" data-n="02">
+          <p class="v5-etape__k">Théâtre 02 / 06</p>
+          <h3>Sahel</h3>
+          <p>La zone de plus forte expansion djihadiste : groupes affiliés à al-Qaïda et à l'État islamique, retrait des forces internationales, juntes militaires et corridors de trafic. Le théâtre le plus dense en calques : forces, mines, infrastructures, flux.</p>
+          <p class="v5-etape__c">Calques : forces, population, mines, infrastructures, événements, HUMINT, flux.</p>
+          <a class="btn-link" href="/sahel/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+        </li>
+        <li class="v5-etape" data-etape="2" data-lat="-2.0" data-lon="29.0" data-per="01.2026 → 04.2026" data-cal="03" data-n="03">
+          <p class="v5-etape__k">Théâtre 03 / 06</p>
+          <h3>RDC, Grands Lacs</h3>
+          <p>L'Est congolais sous pression : offensive du M23, multiplication des groupes armés, implications régionales et économie minière de guerre. Suivi des mouvements M23, Wazalendo et FARDC, période par période.</p>
+          <p class="v5-etape__c">Calques : événements, HUMINT, zones de contrôle.</p>
+          <a class="btn-link" href="/rdc/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+        </li>
+        <li class="v5-etape" data-etape="3" data-lat="-19.0" data-lon="47.0" data-per="01.2026 → 04.2026" data-cal="09" data-n="04">
+          <p class="v5-etape__k">Théâtre 04 / 06</p>
+          <h3>Madagascar</h3>
+          <p>Une grande île sous tension discrète : insécurité rurale dans le Grand Sud, trafics d'or, de bois précieux et de ressources halieutiques, et enjeux stratégiques du canal du Mozambique.</p>
+          <p class="v5-etape__c">Calques : forces, population, mines, infrastructures, événements, flux, parcs, zones maritimes.</p>
+          <a class="btn-link" href="/madagascar/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+        </li>
+        <li class="v5-etape" data-etape="4" data-lat="12.0" data-lon="43.0" data-per="Temps réel (AIS)" data-cal="27" data-n="05">
+          <p class="v5-etape__k">Théâtre 05 / 06</p>
+          <h3>Afrique maritime</h3>
+          <p>Les routes et les détroits : piraterie dans le golfe de Guinée, attaques en mer Rouge, sûreté des grands passages stratégiques et présence navale concurrente.</p>
+          <p class="v5-etape__c">Calques : flux, ports, piraterie, hubs, présences navales, AIS temps réel.</p>
+          <a class="btn-link" href="/afrique/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+        </li>
+        <li class="v5-etape" data-etape="5" data-lat="30.0" data-lon="74.0" data-per="01.2026 → 04.2026" data-cal="08" data-n="06">
+          <p class="v5-etape__k">Théâtre 06 / 06</p>
+          <h3>Asie du Sud</h3>
+          <p>L'arc de crise afghano-pakistanais : insurrection au Baloutchistan, mouvements djihadistes au Pakistan, situation afghane sous les Taliban et tensions indo-pakistanaises persistantes au Cachemire.</p>
+          <p class="v5-etape__c">Calques : forces, population, mines, infrastructures, événements, flux, frontières.</p>
+          <a class="btn-link" href="/asie-sud/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+        </li>
+      </ol>
     </div>
   </section>
 
-  <!-- ─────────────────────────────────────── Intro -->
-  <section class="home-sec">
-    <div class="home-sec__wrap">
-      <div class="home-sec__head">
-        <span class="eyebrow">Couverture</span>
-        <h2 class="home-sec__title">Six théâtres, sur <em>trois continents</em></h2>
-        <p class="home-sec__intro">
-          Ces six zones concentrent une part majeure des conflits armés actuels. Ce sont aussi des terrains où l'information ouverte est abondante, mais difficile à recouper sans méthode.
-        </p>
-      </div>
-      <div class="facts" aria-label="Couverture des théâtres">
-        <div class="facts__row"><div class="facts__k">Théâtres suivis</div><div class="facts__v"><b>6</b>, sur trois continents : Afrique, Proche et Moyen-Orient, Asie du Sud.</div></div>
-        <div class="facts__row"><div class="facts__k">Dernière note de veille</div><div class="facts__v"><b data-veille-latest>…</b> <span class="mono" data-veille-count></span></div></div>
-        <div class="facts__row"><div class="facts__k">Historique le plus ancien</div><div class="facts__v">Moyen-Orient, <b>dix périodes</b> depuis 2005.</div></div>
-        <div class="facts__row"><div class="facts__k">Pas de temps</div><div class="facts__v">Chronologie par quinzaine sur le Sahel en 2026, rejouable sur la carte.</div></div>
-        <div class="facts__row"><div class="facts__k">Calques</div><div class="facts__v">Forces en présence, ethnies, mines, infrastructures, flux et zones d'influence selon le théâtre.</div></div>
-      </div>
+  <section class="v5-sec v5-sec--band" data-nav="light" aria-labelledby="faq-t">
+    <div class="sec-head">
+      <h2 id="faq-t">Vos questions sur les théâtres</h2>
+    </div>
+    <div class="v5-faq">
+      <details><summary>Pourquoi ces six théâtres ?</summary><div class="v5-faq__a"><p>Ils concentrent une part majeure des conflits armés et des risques sécuritaires actuels, sur trois continents. Ce sont aussi des zones où l'information ouverte est abondante, qu'une carte permet de croiser période par période.</p></div></details>
+      <details><summary>D'autres théâtres sont-ils prévus ?</summary><div class="v5-faq__a"><p>La couverture évolue. De nouveaux théâtres peuvent être ajoutés selon l'actualité et les besoins exprimés. N'hésitez pas à nous faire part de vos zones d'intérêt.</p></div></details>
+      <details><summary>Jusqu'où remonte l'historique ?</summary><div class="v5-faq__a"><p>Selon les théâtres, l'historique va de plusieurs périodes récentes jusqu'à 2005 pour le Moyen-Orient. De quoi replacer une situation dans la durée et en mesurer l'évolution.</p></div></details>
+      <details><summary>Les six théâtres sont-ils au même niveau de détail ?</summary><div class="v5-faq__a"><p>Chaque théâtre dispose de sa carte, de ses calques et de sa chronologie. La profondeur de l'historique varie selon l'ancienneté du suivi et la disponibilité des sources sur la zone.</p></div></details>
     </div>
   </section>
 
-  <!-- ─────────────────────────────────────── Les 6 théâtres -->
-  <section class="home-sec home-sec--alt">
-    <div class="home-sec__wrap">
-      <div class="home-sec__head">
-        <span class="eyebrow">Les théâtres</span>
-        <h2 class="home-sec__title">Chaque zone, <em>en détail</em></h2>
-      </div>
-      <div class="feature-rows">
-
-        <article class="feature-row">
-          <div class="feature-row__copy">
-            <div class="feature-row__tag">Théâtre 01</div>
-            <h3 class="feature-row__title">Moyen-Orient</h3>
-            <p class="feature-row__text">Le théâtre des recompositions de l'après-2011 : fronts confessionnels, influence iranienne, reconstruction syrienne, guerre du Yémen et tensions au Liban-Sud. L'historique couvre dix périodes, de 2005 à aujourd'hui.</p>
-            <ul class="feature-row__list">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Iraq · Syrie · Liban · Yémen</li>
-            </ul>
-          </div>
-          <div class="feature-row__visual">
-            <div class="media-frame"><img src="./assets/moyen-orient.jpg" alt="Théâtre Moyen-Orient : puits de pétrole en feu, désert irakien" loading="lazy" /></div></div>
-          </div>
-        </article>
-
-        <article class="feature-row">
-          <div class="feature-row__copy">
-            <div class="feature-row__tag">Théâtre 02</div>
-            <h3 class="feature-row__title">Sahel</h3>
-            <p class="feature-row__text">La zone de plus forte expansion djihadiste : groupes affiliés à al-Qaïda et à l'État islamique, retrait des forces internationales, juntes militaires et corridors de trafic. Le théâtre le plus dense en calques : ethnies, forces, mines, infrastructures, flux.</p>
-            <ul class="feature-row__list">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Mali · Burkina Faso · Niger · Tchad · Mauritanie</li>
-            </ul>
-          </div>
-          <div class="feature-row__visual">
-            <div class="media-frame"><img src="./assets/sahel.png" alt="Théâtre Sahel : combattants armés dans le désert malien" loading="lazy" /></div></div>
-          </div>
-        </article>
-
-        <article class="feature-row">
-          <div class="feature-row__copy">
-            <div class="feature-row__tag">Théâtre 03</div>
-            <h3 class="feature-row__title">RDC, Grands Lacs</h3>
-            <p class="feature-row__text">L'Est congolais sous pression : offensive du M23, multiplication des groupes armés, implications régionales et économie minière de guerre. Suivi des mouvements M23, Wazalendo et FARDC, période par période.</p>
-            <ul class="feature-row__list">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Nord-Kivu · Sud-Kivu · Ituri</li>
-            </ul>
-          </div>
-          <div class="feature-row__visual">
-            <div class="media-frame"><img src="./assets/rdc.avif" alt="Théâtre RDC : Oicha, Nord-Kivu" loading="lazy" /></div></div>
-          </div>
-        </article>
-
-        <article class="feature-row">
-          <div class="feature-row__copy">
-            <div class="feature-row__tag">Théâtre 04</div>
-            <h3 class="feature-row__title">Madagascar</h3>
-            <p class="feature-row__text">Une grande île sous tension discrète : insécurité rurale dans le Grand Sud, trafics d'or, de bois précieux et de ressources halieutiques, et enjeux stratégiques du Canal du Mozambique.</p>
-            <ul class="feature-row__list">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Grand Sud · SAVA · Analamanga · Canal du Mozambique</li>
-            </ul>
-          </div>
-          <div class="feature-row__visual">
-            <div class="media-frame"><img src="./assets/madagascar.webp" alt="Théâtre Madagascar : manifestation à Antananarivo" loading="lazy" /></div></div>
-          </div>
-        </article>
-
-        <article class="feature-row">
-          <div class="feature-row__copy">
-            <div class="feature-row__tag">Théâtre 05</div>
-            <h3 class="feature-row__title">Afrique Maritime</h3>
-            <p class="feature-row__text">Les routes et les détroits : piraterie dans le Golfe de Guinée, attaques en mer Rouge, sûreté des grands passages stratégiques et présence navale concurrente. Un théâtre maritime, suivi au plus près des flux.</p>
-            <ul class="feature-row__list">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Suez · Bab-el-Mandeb · Ormuz · Golfe de Guinée</li>
-            </ul>
-          </div>
-          <div class="feature-row__visual">
-            <div class="media-frame"><img src="./assets/afrique-maritime.avif" alt="Théâtre Afrique Maritime : détroits stratégiques" loading="lazy" /></div></div>
-          </div>
-        </article>
-
-        <article class="feature-row">
-          <div class="feature-row__copy">
-            <div class="feature-row__tag">Théâtre 06</div>
-            <h3 class="feature-row__title">Asie du Sud</h3>
-            <p class="feature-row__text">L'arc de crise afghano-pakistanais : insurrection au Baloutchistan, mouvements djihadistes au Pakistan, situation afghane sous les Taliban et tensions indo-pakistanaises persistantes au Cachemire.</p>
-            <ul class="feature-row__list">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Inde · Pakistan · Afghanistan · Cachemire · Baloutchistan</li>
-            </ul>
-          </div>
-          <div class="feature-row__visual">
-            <div class="media-frame"><img src="./assets/asie-sud.jpg" alt="Théâtre Asie du Sud : combattants armés afghans" loading="lazy" /></div></div>
-          </div>
-        </article>
-
-      </div>
+  <section class="v5-sec" data-nav="light" aria-labelledby="fin-t">
+    <div class="sec-head">
+      <h2 id="fin-t">Le théâtre qui vous concerne est sans doute déjà couvert</h2>
+      <p>Accédez aux six théâtres sous un même abonnement, ou demandez-nous une analyse sur mesure.</p>
     </div>
   </section>
-
-  <!-- ─────────────────────────────────────── FAQ -->
-  <section class="home-sec">
-    <div class="home-sec__wrap">
-      <div class="home-sec__head">
-        <span class="eyebrow">Questions fréquentes</span>
-        <h2 class="home-sec__title">Vos questions sur <em>les théâtres</em></h2>
-      </div>
-      <div class="faq">
-        <div class="faq-item">
-          <div class="faq-item__q">Pourquoi ces six théâtres ?</div>
-          <div class="faq-item__a">Ils concentrent une part majeure des conflits armés et des risques sécuritaires actuels, sur trois continents. Ce sont aussi des zones où l'information ouverte est abondante, un terrain idéal pour une lecture cartographiée et croisée.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-item__q">D'autres théâtres sont-ils prévus ?</div>
-          <div class="faq-item__a">La couverture évolue. De nouveaux théâtres peuvent être ajoutés selon l'actualité et les besoins exprimés. N'hésitez pas à nous faire part de vos zones d'intérêt.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-item__q">Jusqu'où remonte l'historique ?</div>
-          <div class="faq-item__a">Selon les théâtres, l'historique va de plusieurs périodes récentes jusqu'à 2005 pour le Moyen-Orient. De quoi replacer une situation dans la durée et en mesurer l'évolution.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-item__q">Les six théâtres sont-ils au même niveau de détail ?</div>
-          <div class="faq-item__a">Chaque théâtre dispose de sa carte, de ses calques et de sa chronologie. La profondeur de l'historique varie selon l'ancienneté du suivi et la disponibilité des sources sur la zone.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─────────────────────────────────────── CTA -->
-  <section class="cta-band">
-    <div class="cta-band__wrap">
-      <h2 class="cta-band__title">Le théâtre qui vous concerne est sans doute déjà couvert</h2>
-      <p class="cta-band__text">Accédez aux six théâtres sous un même abonnement, ou demandez-nous une analyse sur mesure.</p>
-      <div class="cta-band__row">
-        <a class="btn btn--lg btn--on-violet" href="/offres/">Voir les offres</a>
-        <a class="btn btn--lg btn--ghost-violet" href="/contact/">Nous contacter</a>
-      </div>
-    </div>
-  </section>
-
+<!-- v5:appels -->
+<section class="appels" data-nav="light" aria-label="Accès">
+  <div class="appels__grid">
+    <a class="appel appel--clair" href="/offres/"><span>Demander un accès</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M3 12h18M14 5l7 7-7 7"/></svg></a>
+    <a class="appel appel--nuit" href="/contact/"><span>Nous écrire</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M3 12h18M14 5l7 7-7 7"/></svg></a>
+  </div>
+</section>
+<!-- /v5:appels -->
 </main>
 
-<!-- ─────────────────────────────────────── Footer -->
-<footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__brand">
-      <div class="site-footer__brand-name"><span></span>ALGOR INT</div>
-      <p class="site-footer__blurb">
-        Algor Access : plateforme de cartographie OSINT. Six théâtres géopolitiques suivis en continu, chaque événement sourcé, daté et auditable.
-      </p>
-    </div>
-    <div class="site-footer__col">
-      <h4>Le site</h4>
-      <a href="/">Plateforme</a>
-      <a href="/debunkage/">Débunkage</a>
-      <a href="/methodologie/">Méthodologie</a>
-      <a href="/offres/">Offres</a>
-      <a href="/theatres/">Théâtres</a>
-      <a href="/a-propos/">À propos</a>
-      <a href="/contact/">Contact</a>
-    </div>
-    <div class="site-footer__col">
-      <h4>Théâtres</h4>
-      <a href="/moyen-orient/">Moyen-Orient</a>
-      <a href="/sahel/">Sahel</a>
-      <a href="/rdc/">RDC</a>
-      <a href="/madagascar/">Madagascar</a>
-      <a href="/afrique/">Afrique Maritime</a>
-      <a href="/asie-sud/">Asie du Sud</a>
-    </div>
-    <div class="site-footer__col">
-      <h4>Accès</h4>
-      <a href="#" data-algor-login>Connexion</a>
-      <a href="/offres/">Voir les offres</a>
-      <a href="/contact/">Nous contacter</a>
+<!-- v5:foot -->
+<footer class="foot" data-nav="light">
+  <div class="foot__id">
+    <p>© 2026 Algor Access</p>
+    <p>Solution souveraine française, données hébergées en Europe.</p>
+    <hr>
+    <div class="foot__pills">
+      <button class="pill site-login" type="button">Connexion</button>
+      <a class="pill" href="/offres/">Les offres</a>
+      <a class="pill" href="/demo/">La démo</a>
     </div>
   </div>
-  <div class="site-footer__bottom">
-    <div class="site-footer__bottom-inner">
-      <span>© 2026 Algor Int · Cartographie OSINT des théâtres à risque</span>
-      <span>Diffusion restreinte · usage professionnel · <a href="/mentions-legales/">Mentions légales</a> · <a href="/confidentialite/">Confidentialité</a></span>
-    </div>
-  </div>
+  <div class="foot__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+  <div class="foot__col"><h3>Plateforme</h3><a href="/">Plateforme</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+  <div class="foot__col"><h3>Société</h3><a href="/a-propos/">À propos</a><a href="/offres/">Offres</a><a href="/contact/">Contact</a></div>
+  <div class="foot__col"><h3>Informations</h3><a href="/mentions-legales/">Mentions légales</a><a href="/confidentialite/">Confidentialité</a></div>
 </footer>
+<!-- /v5:foot -->
 
+<script>
+  window.PLANISPHERE_PALETTE = {
+    ocean: 'rgba(0,0,0,0)', land: '#1F2025', border: 'rgba(255,255,255,0.09)', grat: 'rgba(255,255,255,0)', rim: 'rgba(255,255,255,0)',
+    fluxLand: '242,242,244', fluxSea: '168,169,173', label: '#C9CACE', labelOn: '#FFFFFF', halo: 'rgba(15,16,19,0.95)',
+    font: '"Host Grotesk", "Helvetica Neue", Arial, sans-serif', detoure: true
+  };
+  window.PLANISPHERE_DETAIL = true;
+</script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="./planisphere.js?v=20260915i"></script>
+<script src="./planisphere.js?v=20260922a"></script>
+<script src="/shared/v5/carte-ouverture.js?v=20260922h" defer></script>
+<script type="module" src="/shared/site-auth.js?v=20260922a"></script>
+<script src="/shared/v5/chrome.js?v=20260922e"></script>
 <script>
-  // Dernière note de veille : lue dans le flux public (même source que l'accueil).
-  (function(){ var el=document.querySelector('[data-veille-latest]'), n=document.querySelector('[data-veille-count]'); if(!el) return;
-    fetch('https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){
-      var a=Array.isArray(d)?d:(d&&d.items)||[]; if(!a.length) return;
-      var latest=a.reduce(function(m,i){return i.date>m?i.date:m},''); var srcs={}; a.forEach(function(i){ if(i.source) srcs[i.source]=1; });
-      el.textContent=new Date(latest).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
-      if(n) n.textContent='· '+a.length+' notes · '+Object.keys(srcs).length+' sources citées';
-    }).catch(function(){});
+/* Champ d'ouverture. Visiteur : démo sur n'importe quelle zone (/demo/). Abonné connecté : l'outil pays du site en ligne,
+   en quatre étapes (pays suivi, période, typologie, acteur), qui ouvre /carte/ déjà filtrée. ?apercu=1 force la vue abonné. */
+(function () {
+  var f = document.getElementById('outil'); if (!f) return;
+  var inp = document.getElementById('tq'), lbl = document.getElementById('tq-lbl'), jet = document.getElementById('tq-jetons'), choix = document.getElementById('tq-choix');
+  var t = function (x) { return window.AlgorI18n ? window.AlgorI18n.t(x) : x; };
+  var esc = function (x) { return String(x == null ? '' : x).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var norm = function (x) { return String(x || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim(); };
+  var ETAPES = ['pays', 'date', 'event', 'actor'];
+  var LBL = { pays: 'Ouvrez la carte de renseignement d\'un pays suivi', date: 'Choisissez une période', event: 'Choisissez une typologie d\'événement', actor: 'Choisissez un acteur' };
+  var PH = { pays: 'Mali', date: 'Janvier 2026', event: 'Attaque', actor: 'GSIM' };
+  var TOUS = { date: 'Toutes les dates', event: 'Toutes les typologies', actor: 'Tous les acteurs' };
+  var abonne = false, pays = [], etape = 0, sel = {};
+
+  function options() {
+    var e = sel.entree, k = ETAPES[etape];
+    if (k === 'pays') return pays.map(function (c) { return { v: c.name, l: c.name, n: c.count }; });
+    if (!e) return [];
+    if (k === 'date') return (e.months || []).map(function (m) { return { v: m.key, l: m.label }; });
+    return (k === 'event' ? e.events : e.actors || []).map(function (x) { return { v: x, l: x }; });
+  }
+  function ouvrir() {
+    var q = new URLSearchParams(); q.set('pays', sel.entree.name);
+    if (sel.date) { q.set('from', sel.date + '-01'); q.set('to', sel.date + '-31'); }
+    if (sel.event) q.set('event', sel.event);
+    if (sel.actor) q.set('actor', sel.actor);
+    location.href = '/carte/?' + q.toString();
+  }
+  function choisir(v) {
+    var k = ETAPES[etape];
+    if (k === 'pays') { sel = { entree: pays.find(function (c) { return c.name === v; }) }; if (!sel.entree) return; }
+    else if (v !== '__tous') sel[k] = v;
+    inp.value = '';
+    if (etape === ETAPES.length - 1) return ouvrir();
+    etape++; rendre(); inp.focus();
+  }
+  function retirer(i) { var s2 = { entree: i > 0 ? sel.entree : null }; for (var n = 1; n < i; n++) s2[ETAPES[n]] = sel[ETAPES[n]]; sel = s2; etape = i; rendre(); inp.focus(); }
+  function rendre() {
+    var k = ETAPES[etape];
+    lbl.textContent = t(LBL[k]); inp.placeholder = t(PH[k]); inp.required = k === 'pays';
+    var lib = { date: function (v) { var m = (sel.entree.months || []).find(function (x) { return x.key === v; }); return m ? m.label : v; } };
+    jet.innerHTML = ETAPES.map(function (x, i) {
+      if (i >= etape) return '';
+      var v = i === 0 ? sel.entree.name : sel[x]; if (!v) return '';
+      return '<button type="button" class="outil__jeton" data-i="' + i + '" aria-label="' + esc(t('Retirer')) + ' ' + esc(v) + '">' + esc(lib[x] ? lib[x](v) : v) + '<span aria-hidden="true">×</span></button>';
+    }).join('');
+    var q = norm(inp.value), l = options().filter(function (o) { return !q || norm(o.l).indexOf(q) !== -1; }).slice(0, k === 'pays' ? 12 : 8), h = '';
+    if (k !== 'pays') h += '<button type="button" class="outil__opt outil__opt--passer" data-v="__tous">' + esc(t(TOUS[k])) + '</button>';
+    h += l.map(function (o) { return '<button type="button" class="outil__opt" data-v="' + esc(o.v) + '">' + esc(o.l) + (o.n ? ' <b>' + o.n + '</b>' : '') + '</button>'; }).join('');
+    if (etape > 0) h += '<button type="button" class="outil__opt outil__opt--suite" data-ouvrir>' + esc(t('Ouvrir la carte')) + '</button>';
+    choix.innerHTML = h; choix.hidden = false;
+  }
+  jet.addEventListener('click', function (e) { var b = e.target.closest('[data-i]'); if (b) retirer(+b.dataset.i); });
+  choix.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; if (b.hasAttribute('data-ouvrir')) return ouvrir(); choisir(b.dataset.v); });
+  inp.addEventListener('input', function () { if (abonne) rendre(); });
+  inp.addEventListener('keydown', function (e) { if (abonne && e.key === 'Backspace' && !inp.value && etape > 0) retirer(etape - 1); });
+  f.addEventListener('submit', function (e) {
+    if (!abonne) return;
+    e.preventDefault();
+    var q = norm(inp.value), o = options();
+    if (!q) { if (etape > 0) choisir('__tous'); return; }
+    var m = o.find(function (x) { return norm(x.l) === q; }) || o.find(function (x) { return norm(x.l).indexOf(q) !== -1; });
+    if (m) choisir(m.v);
+  });
+  function passerAbonne() {
+    if (abonne) return; abonne = true;
+    f.querySelector('button[type=submit]').setAttribute('aria-label', t('Valider'));
+    fetch('/carte/countries.json?v=20260922').then(function (r) { return r.json(); }).then(function (d) { pays = d.countries || []; rendre(); }).catch(function () {});
+    rendre();
+  }
+  function sync() {
+    var connecte = /[?&]apercu=1/.test(location.search) || !!(window.algorAuthState && window.algorAuthState.loggedIn);
+    if (connecte) passerAbonne();
+    if (connecte || window.algorAuthState) f.removeAttribute('data-etat');
+  }
+  sync();
+  addEventListener('algorAuthReady', sync); addEventListener('algorAuthStateChanged', sync);
+  setTimeout(function () { f.removeAttribute('data-etat'); }, 1500);
+})();
+</script>
+<script>
+  /* Dernière note de veille, lue dans le flux public (via le bandeau commun) */
+  (function () {
+    var el = document.querySelector('[data-veille-latest]'), n = document.querySelector('[data-veille-count]');
+    function poser(a) {
+      if (!a || !a.length) { el.textContent = 'indisponible pour le moment'; return; }
+      var latest = a.reduce(function (m, i) { return i.date > m ? i.date : m; }, ''), srcs = {};
+      a.forEach(function (i) { if (i.source) srcs[i.source] = 1; });
+      el.textContent = new Date(latest).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+      n.textContent = a.length + ' notes · ' + Object.keys(srcs).length + ' sources citées';
+    }
+    if (window.V5 && window.V5.veille) poser(window.V5.veille);
+    else document.addEventListener('v5:veille', function (e) { poser(e.detail); });
   })();
 </script>
-<script src="../shared/home/skyfield.js?v=20260915q"></script>
-<script src="../shared/home/sitenav.js?v=20260622a"></script>
-<script type="module" src="../shared/site-auth.js?v=20260707a"></script>
+<script>
+  /* Instrument : latitude et longitude glissent d'un théâtre à l'autre au défilement ; période, calques et
+     numéro basculent à mi-chemin. Les lignes apparaissent en entrant à l'écran. */
+  (function () {
+    var rows = [].slice.call(document.querySelectorAll('.v5-etape')), ins = document.querySelector('.v5-instr');
+    if (!rows.length || !ins) return;
+    var v = {}; ['lat', 'lon', 'per', 'cal', 'n'].forEach(function (k) { v[k] = ins.querySelector('[data-i="' + k + '"]'); });
+    var M = rows.map(function (r) { return { lat: +r.dataset.lat, lon: +r.dataset.lon, per: r.dataset.per, cal: r.dataset.cal, n: r.dataset.n }; });
+    var fl = function (x, pad, pos, neg) { var a = Math.abs(x).toFixed(3).replace('.', ','); while (a.split(',')[0].length < pad) a = '0' + a; return a + ' ' + (x < 0 ? neg : pos); };
+    var dernier = null, attente = false;
+    function poser(k, val) { if (v[k].textContent === val) return; v[k].classList.add('is-swap'); setTimeout(function () { v[k].textContent = val; v[k].classList.remove('is-swap'); }, 140); }
+    function maj() {
+      attente = false;
+      /* Même règle que la section épinglée : l'étape active est la dernière passée sous 55 % de l'écran */
+      var h = innerHeight, ligne = h * 0.55, i = 0;
+      rows.forEach(function (r, k) { if (r.getBoundingClientRect().top < ligne) i = k; });
+      var a = M[i], b = M[Math.min(i + 1, M.length - 1)], p = 0;
+      if (i + 1 < rows.length) { var t = rows[i + 1].getBoundingClientRect().top; p = Math.min(1, Math.max(0, (h * 0.95 - t) / (h * 0.95 - ligne))); }
+      v.lat.textContent = fl(a.lat + (b.lat - a.lat) * p, 2, 'N', 'S');
+      v.lon.textContent = fl(a.lon + (b.lon - a.lon) * p, 3, 'E', 'O');
+      if (dernier !== a) { poser('per', a.per); poser('cal', a.cal); poser('n', a.n + ' / 06'); dernier = a; }
+    }
+    addEventListener('scroll', function () { if (!attente) { attente = true; requestAnimationFrame(maj); } }, { passive: true });
+    addEventListener('resize', maj); maj();
+  })();
+</script>
 </body>
 </html>

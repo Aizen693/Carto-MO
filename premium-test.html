@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test premium 3D</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#eef0f4}
+  #map{position:absolute;inset:0}
+  #map::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;box-shadow:inset 0 0 180px 40px rgba(31,20,55,.14)}
+  #bar{position:absolute;top:12px;left:12px;z-index:5;display:flex;gap:8px}
+  #bar button{font:700 10px/1 'Plus Jakarta Sans';letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0;background:#fff;
+    border:1px solid rgba(123,90,189,.2);border-radius:10px;padding:9px 13px;cursor:pointer;box-shadow:0 8px 20px -8px rgba(46,24,87,.3);transition:transform .12s}
+  #bar button:hover{transform:translateY(-1px)}
+  #bar button.on{background:linear-gradient(95deg,#6B3FA0,#5650C6 55%,#2E84D4);color:#fff;border:none}
+  #tag{position:absolute;top:12px;right:12px;z-index:5;font:800 11px/1 'Plus Jakarta Sans';color:#1F1437;background:#fff;padding:9px 12px;border-radius:10px;box-shadow:0 8px 20px -8px rgba(46,24,87,.3)}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="bar">
+  <button id="btn-premium" class="on">Premium ON</button>
+  <button id="btn-site">Site suivant</button>
+</div>
+<div id="tag">chargement…</div>
+
+<script src="/shared/sites3d-premium.js?v=1"></script>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+var DMG = { detruit:'#B22828', endommage:'#C45A3C', intact:'#E7E1D5' };
+var SITES = [], idx = 0, premium = true;
+
+var map = new mapboxgl.Map({
+  container:'map', style:'mapbox://styles/mapbox/light-v11',
+  center:[2.17,13.48], zoom:15.4, pitch:60, bearing:-18, antialias:true, maxPitch:85
+});
+map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-right');
+
+map.on('style.load', function(){
+  map.addSource('sat',{type:'raster',tiles:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],tileSize:256,maxzoom:16});
+  map.addLayer({id:'sat',type:'raster',source:'sat'}, firstSymbol());
+  map.addSource('structures',{type:'geojson',data:fc([])});
+  map.addLayer({
+    id:'structures-3d', type:'fill-extrusion', source:'structures',
+    paint:{
+      'fill-extrusion-color':['match',['get','damage'],'detruit',DMG.detruit,'endommage',DMG.endommage,DMG.intact],
+      'fill-extrusion-height':['get','h'], 'fill-extrusion-base':0, 'fill-extrusion-opacity':1
+    }
+  });
+});
+
+function firstSymbol(){var ls=map.getStyle().layers;for(var i=0;i<ls.length;i++)if(ls[i].type==='symbol')return ls[i].id;}
+function fc(f){return {type:'FeatureCollection',features:f};}
+
+Promise.all([
+  fetch('/carte/zones-3d.enriched.json').then(function(r){return r.json();}),
+  new Promise(function(res){map.on('load',res);})
+]).then(function(r){
+  SITES = (r[0].zones||[]).filter(function(s){return (s.structures||[]).length>5;});
+  loadSite(SITES.findIndex(function(s){return /Niamey/.test(s.name);}) || 0);
+});
+
+function loadSite(i){
+  idx = (i+SITES.length)%SITES.length;
+  var s = SITES[idx];
+  var feats = (s.structures||[]).map(function(b,k){
+    return {type:'Feature',id:k,geometry:{type:'Polygon',coordinates:b.footprint},
+      properties:{damage:b.damage||'intact', h:b.height||6}};
+  });
+  map.getSource('structures').setData(fc(feats));
+  document.getElementById('tag').textContent = s.name.replace(/\s*[—-]\s*/g,' · ');
+  var cam = {center:s.center, zoom:s.zoom||15.6, pitch:s.pitch||60, bearing:s.bearing||-18};
+  if (premium && window.Sites3DPremium){ Sites3DPremium.flyTo(map, cam); Sites3DPremium.focus(map, s.center); }
+  else map.easeTo(Object.assign({duration:1800},cam));
+}
+
+document.getElementById('btn-site').onclick = function(){ loadSite(idx+1); };
+document.getElementById('btn-premium').onclick = function(){
+  premium = !premium;
+  this.classList.toggle('on', premium);
+  this.textContent = premium ? 'Premium ON' : 'Premium OFF';
+  if (premium){ Sites3DPremium.enhance(map); loadSite(idx); }
+  else { location.reload(); }
+};
+
+map.on('idle', function once(){
+  map.off('idle', once);
+  if (window.Sites3DPremium) Sites3DPremium.enhance(map);
+});
+</script>
+</body>
+</html>

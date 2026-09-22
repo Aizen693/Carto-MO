@@ -96,6 +96,24 @@
   }
   function monthKey(iso) { return iso ? iso.slice(0, 7) : null; }
 
+  /* Couleurs du panneau d'analyse : une famille par typologie, et une intensité pour les régions */
+  function typeColor(t) {
+    var a = String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (/frappe|drone|aerien|bombard/.test(a)) return '#c2185b';            // frappes et drones
+    if (/ied|explos|mine|kamikaze|attentat/.test(a)) return '#ef6c00';      // engins explosifs
+    if (/enlev|otage|rapt/.test(a)) return '#7b1fa2';                        // enlèvements
+    if (/attaque|embuscade|combat|affront|assassin|massacre|execut|tuer|meurtre/.test(a)) return '#d32f2f'; // violence armée
+    if (/arrest|interpel|operation|ratissage|securis|controle/.test(a)) return '#1565c0'; // opérations de sécurité
+    if (/deplace|refugi|humanit|blocus|famine/.test(a)) return '#f9a825';   // populations
+    if (/destruct|incendi|pillage|sabotage|vol\b/.test(a)) return '#795548'; // destructions
+    if (/manif|protest|politi|coup|gouvern/.test(a)) return '#00897b';      // politique
+    return '#78909c';                                                        // information, présence, autres
+  }
+  function heatColor(r) { // r entre 0 et 1 : orange clair vers rouge profond
+    var a = [253, 187, 132], b = [179, 24, 43], k = Math.max(0, Math.min(1, r));
+    return 'rgb(' + a.map(function (v, i) { return Math.round(v + (b[i] - v) * k); }).join(',') + ')';
+  }
+
   function actorColor(actor) {
     if (!actor) return '#ff9800';
     var a = actor.toUpperCase();
@@ -190,6 +208,17 @@
 
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+  // Icônes v5 : traits fins 1,5 px, couleur héritée (plus aucun glyphe unicode).
+  function ico(d) { return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + d + '</svg>'; }
+  var ICO = {
+    chev: ico('<path d="M6 9l6 6 6-6"/>'),
+    right: ico('<path d="M9 6l6 6-6 6"/>'),
+    left: ico('<path d="M15 6l-6 6 6 6"/>'),
+    arrowR: ico('<path d="M5 12h14M13 6l6 6-6 6"/>'),
+    arrowL: ico('<path d="M19 12H5M11 6l-6 6 6 6"/>'),
+    play: ico('<path d="M8 5.5v13l10.5-6.5z"/>'),
+    pause: ico('<path d="M9 5.5v13M15 5.5v13"/>'),
+  };
 
   /* ─────────── Boot ─────────── */
   // La requête est construite sur l'accueil et passée en paramètres :
@@ -240,6 +269,7 @@
     map = new mapboxgl.Map({
       container: 'map', style: 'mapbox://styles/mapbox/standard',
       center: c, zoom: z, projection: 'mercator', attributionControl: false, language: 'fr',
+      config: { basemap: { theme: 'monochrome' } },
     });
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
     whenStyleLoaded(function () {
@@ -270,8 +300,8 @@
       map.addLayer({ id: 'humint-dots', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 1.8, 8, 3, 12, 4.5], 'circle-color': ['get', '_color'], 'circle-stroke-color': '#0d1117', 'circle-stroke-width': 0.5 } });
       // Surlignage de région (clic sur une ligne du panneau d'analyse) — sous les points.
       map.addSource('region-hl', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-      map.addLayer({ id: 'region-hl-fill', type: 'fill', source: 'region-hl', paint: { 'fill-color': '#6B3FA0', 'fill-opacity': 0.07 } }, 'humint-glow');
-      map.addLayer({ id: 'region-hl-line', type: 'line', source: 'region-hl', paint: { 'line-color': '#6B3FA0', 'line-width': 1.8, 'line-opacity': 0.55 } }, 'humint-glow');
+      map.addLayer({ id: 'region-hl-fill', type: 'fill', source: 'region-hl', paint: { 'fill-color': '#1C1D21', 'fill-opacity': 0.06 } }, 'humint-glow');
+      map.addLayer({ id: 'region-hl-line', type: 'line', source: 'region-hl', paint: { 'line-color': '#1C1D21', 'line-width': 1.5, 'line-opacity': 0.7 } }, 'humint-glow');
       setupPopups();
       state.mapReady = true;
       tryRender();
@@ -348,7 +378,7 @@
     var head = '<div class="news-head">' +
       (pts.length ? '<span class="news-badge">' + pts.length + '</span>' : '') +
       '<span class="news-title">' + esc(titre) + '</span>' +
-      '<span class="news-caret">▾</span></div>';
+      '<span class="news-caret">' + ICO.chev + '</span></div>';
     // Bandeau cliquable : déplie / replie la liste (état mémorisé dans state.newsOpen).
     function wireToggle() {
       var h = box.querySelector('.news-head');
@@ -364,7 +394,7 @@
     // pas être confondue avec le fil d'actualité.
     var hint = '<div class="news-tool">' +
       '<div class="news-tool-hd">' +
-        '<span class="news-tool-tag">◎ Analyse nouveauté</span>' +
+        '<span class="news-tool-tag">Analyse nouveauté</span>' +
         '<button class="news-switch" type="button" role="switch" aria-checked="false" title="Cocher ou décocher toutes les nouveautés d’un coup">' +
           '<span class="news-switch-lbl">Tout cocher</span>' +
           '<span class="news-switch-track"><span class="news-switch-dot"></span></span>' +
@@ -383,7 +413,7 @@
             '<span class="news-when">' + esc(relTime(f.iso)) + '</span></span>' +
             '<span class="news-actor" title="' + esc(actorFull(f.acteur)) + '">' + esc(f.acteur) + '</span>' +
           '</span>' +
-          '<span class="news-go">→</span>' +
+          '<span class="news-go">' + ICO.arrowR + '</span>' +
         '</button>' +
         '<span class="news-check' + (picked ? ' news-check-on' : '') + '" data-i="' + i + '" role="checkbox" tabindex="0"' +
           ' aria-checked="' + (picked ? 'true' : 'false') + '" title="N’afficher que ce point sur la carte"></span>' +
@@ -517,7 +547,7 @@
         '<span class="ana-row-l"' + (labelTitleFn ? ' title="' + esc(labelTitleFn(r.k)) + '"' : '') + '>' + esc(r.k) + '</span>' +
         '<span class="ana-row-track"><span class="ana-row-fill" style="width:' + w + '%;background:' + colorFn(r.k) + '"></span></span>' +
         '<span class="ana-row-v">' + p + '%</span>' +
-        (clic ? '<span class="ana-row-go">→</span>' : '') + '</div>';
+        (clic ? '<span class="ana-row-go">' + ICO.arrowR + '</span>' : '') + '</div>';
     }).join('') || '<div class="ana-empty">Aucune donnée</div>';
     var more = rows.length > 8 ? '<div class="ana-more">+ ' + (rows.length - 8) + ' autres ' + (moreNoun || 'entrées') + '</div>' : '';
     return '<div class="ana-sec"><div class="ana-sec-h"><span class="ana-sec-t">' + esc(title) +
@@ -548,7 +578,7 @@
       types: statsTally(feats, 'type'), acteurs: statsTally(feats, 'acteur'),
     };
     var head = '<div class="ana-head"><span class="ana-badge">' + state._anaStats.total + '</span>' +
-      '<span class="ana-title">Analyse · ' + esc(state.country) + '</span><span class="ana-caret">▾</span></div>';
+      '<span class="ana-title">Analyse · ' + esc(state.country) + '</span><span class="ana-caret">' + ICO.chev + '</span></div>';
     box.innerHTML = head + '<div class="ana-body"></div>';
     box.style.display = 'flex';
     box.classList.toggle('ana-open', !!state.anaOpen);
@@ -559,13 +589,13 @@
 
   function anaChartsHTML(stats, ready) {
     var geo = ready
-      ? anaSection('Régions touchées', stats.regions, stats.total, function () { return 'linear-gradient(90deg,#6B3FA0,#5650C6)'; }, 'régions', true)
+      ? anaSection('Régions touchées', stats.regions, stats.total, function (k) { var m = stats.regions[0] ? stats.regions[0].n : 1, r = stats.regions.find(function (x) { return x.k === k; }); return heatColor(r ? 0.25 + 0.75 * r.n / m : 0.25); }, 'régions', true)
       : '<div class="ana-sec"><div class="ana-sec-h"><span class="ana-sec-t">Régions touchées</span></div>' +
         '<div class="ana-bars"><div class="ana-empty">Calcul des régions…</div></div></div>';
     return geo +
-      anaSection("Typologie d'événement", stats.types, stats.total, function () { return 'linear-gradient(90deg,#5650C6,#2E84D4)'; }, "typologies") +
+      anaSection("Typologie d'événement", stats.types, stats.total, function (k) { return typeColor(k); }, "typologies") +
       anaSection('Acteurs', stats.acteurs, stats.total, function (k) { return actorColor(k); }, 'acteurs', false, actorFull) +
-      '<div class="ana-ia"><button class="ana-ia-btn" type="button">✶ Générer la synthèse par Mistral AI</button><div class="ana-ia-out"></div></div>';
+      '<div class="ana-ia"><button class="ana-ia-btn" type="button">Générer la synthèse par Mistral AI</button><div class="ana-ia-out"></div></div>';
   }
 
   // Liste auditable des événements d'une région (clic sur une ligne « région »).
@@ -584,7 +614,7 @@
         '<span class="ana-ev-sub">' + esc(f.acteur || '—') + (f.ville ? ' · ' + esc(f.ville) : '') + '</span>' +
         '</span></button>';
     }).join('') || '<div class="ana-empty">Aucun événement</div>';
-    return '<div class="ana-drill-head"><button class="ana-back" type="button">← Régions</button>' +
+    return '<div class="ana-drill-head"><button class="ana-back" type="button">' + ICO.arrowL + 'Régions</button>' +
       '<span class="ana-drill-t" title="' + esc(name) + '">' + esc(name) + '</span>' +
       '<span class="ana-drill-n">' + fs.length + '</span></div>' +
       '<div class="ana-ev-list">' + rows + '</div>';
@@ -678,14 +708,14 @@
     btn.disabled = true; btn.textContent = 'Analyse en cours…';
     out.innerHTML = '<div class="ana-ia-load">Mistral analyse ' + esc(state.country) + ' sur nos ' + stats.total + ' événements…</div>';
     var done = function (html, label) {
-      state._anaBusy = false; btn.disabled = false; btn.textContent = label || '↻ Regénérer la synthèse';
+      state._anaBusy = false; btn.disabled = false; btn.textContent = label || 'Regénérer la synthèse';
       out.innerHTML = html;
     };
     var sa = window.algorAuth && window.algorAuth.supabase;
-    if (!sa) { done('<div class="ana-ia-err">Session indisponible. Recharge la page.</div>', '✶ Générer la synthèse par Mistral AI'); return; }
+    if (!sa) { done('<div class="ana-ia-err">Session indisponible. Recharge la page.</div>', 'Générer la synthèse par Mistral AI'); return; }
     sa.auth.getSession().then(function (res) {
       var token = res && res.data && res.data.session && res.data.session.access_token;
-      if (!token) { done('<div class="ana-ia-err">Session expirée. Recharge la page.</div>', '✶ Générer la synthèse par Mistral AI'); return; }
+      if (!token) { done('<div class="ana-ia-err">Session expirée. Recharge la page.</div>', 'Générer la synthèse par Mistral AI'); return; }
       var periode = (state.sel.from && state.sel.to) ? (frDate(state.sel.from) + ' – ' + frDate(state.sel.to)) : 'toutes dates';
       return fetch(SUPABASE_URL + '/functions/v1/brief-securite-mistral', {
         method: 'POST',
@@ -776,7 +806,7 @@
     if (!state.tl.buckets.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
     box.style.display = 'flex';
     var n = state.tl.buckets.length;
-    box.innerHTML = '<button id="tl-play" class="tl-btn" title="Lecture">▶</button>' +
+    box.innerHTML = '<button id="tl-play" class="tl-btn" type="button" title="Lecture" aria-label="Lecture">' + ICO.play + '</button>' +
       '<input type="range" id="tl-slider" min="0" max="' + n + '" step="1" value="' + state.tl.idx + '">' +
       '<span id="tl-label">' + esc(tlLabel()) + '</span>';
     $('tl-slider').oninput = function () { stopPlay(); state.tl.idx = +this.value; updateTl(); applyFacets(); };
@@ -787,7 +817,7 @@
     if (!state.tl.buckets.length) return;
     if (state.tl.idx >= state.tl.buckets.length) state.tl.idx = 0;
     state.tl.playing = true;
-    var btn = $('tl-play'); if (btn) btn.textContent = '❚❚';
+    var btn = $('tl-play'); if (btn) btn.innerHTML = ICO.pause;
     state.tl.timer = setInterval(function () {
       state.tl.idx++;
       if (state.tl.idx > state.tl.buckets.length) { stopPlay(); state.tl.idx = 0; updateTl(); applyFacets(); return; }
@@ -798,7 +828,7 @@
     if (!state.tl) return;
     state.tl.playing = false;
     if (state.tl.timer) { clearInterval(state.tl.timer); state.tl.timer = null; }
-    var btn = $('tl-play'); if (btn) btn.textContent = '▶';
+    var btn = $('tl-play'); if (btn) btn.innerHTML = ICO.play;
   }
 
   function normFeature(f) {
@@ -879,7 +909,7 @@
     closePop();
     bar.innerHTML = '';
     if (!state.country) {
-      bar.innerHTML = '<a class="builder-reset" href="/">← Choisir un pays</a>';
+      bar.innerHTML = '<a class="builder-reset" href="/">' + ICO.arrowL + 'Choisir un pays</a>';
     } else {
       bar.appendChild(facetChip('pays', 'Pays', state.country, true));
       bar.appendChild(facetChip('date', 'Période', (state.sel.from && state.sel.to) ? (frDate(state.sel.from) + ' – ' + frDate(state.sel.to)) : 'Toute période', !!(state.sel.from && state.sel.to)));
@@ -895,7 +925,7 @@
     var el = document.createElement('button');
     el.type = 'button';
     el.className = 'chip chip-edit' + (key === 'pays' ? ' chip-pays' : '') + (active ? ' chip-on' : '');
-    el.innerHTML = '<span class="chip-key">' + esc(label) + '</span><span class="chip-val">' + esc(value) + '</span><span class="chip-caret">▾</span>';
+    el.innerHTML = '<span class="chip-key">' + esc(label) + '</span><span class="chip-val">' + esc(value) + '</span><span class="chip-caret">' + ICO.chev + '</span>';
     el.onclick = function (e) { e.stopPropagation(); if (popAnchor === el) { closePop(); return; } openEditor(key, el); };
     return el;
   }
@@ -956,7 +986,7 @@
     if (allLabel) rows += '<button class="fp-opt' + (!current ? ' on' : '') + '" data-v="__all"><span class="fp-l">' + esc(allLabel) + '</span></button>';
     rows += items.map(function (o) {
       var dot = isActor ? '<span class="fp-dot" style="background:' + actorColor(o.v) + '"></span>' : '';
-      var caret = (withLayers && (NEIGHBORS[o.v] || []).length) ? '<span class="fp-more">›</span>' : '';
+      var caret = (withLayers && (NEIGHBORS[o.v] || []).length) ? '<span class="fp-more">' + ICO.right + '</span>' : '';
       var lt = isActor ? ' title="' + esc(actorFull(o.v)) + '"' : '';
       return '<button class="fp-opt' + (o.v === current ? ' on' : '') + '" data-v="' + esc(o.v) + '"' + lt + '>' + dot + '<span class="fp-l">' + esc(o.v) + '</span><span class="fp-n">' + o.n + '</span>' + caret + '</button>';
     }).join('') || '<div class="fp-empty">Aucune valeur</div>';
@@ -1071,7 +1101,7 @@
       var nm = vm === 12 ? 1 : vm + 1, ny = vm === 12 ? vy + 1 : vy, nd = 1, tot = lead + dim;
       while (tot % 7 !== 0) { cells += cell(ny + '-' + pad(nm) + '-' + pad(nd), nd); nd++; tot++; }
       var lab = (from && to) ? (frDate(from) + ' – ' + frDate(to)) : (from ? (frDate(from) + ' – …') : 'Sélectionnez deux dates');
-      return '<div class="cal-head"><button class="cal-nav" data-nav="-1"' + (view <= minKey ? ' disabled' : '') + '>‹</button><span class="cal-title">' + MOIS[vm - 1] + ' ' + vy + '</span><button class="cal-nav" data-nav="1"' + (view >= maxKey ? ' disabled' : '') + '>›</button></div>'
+      return '<div class="cal-head"><button class="cal-nav" data-nav="-1" aria-label="Mois précédent"' + (view <= minKey ? ' disabled' : '') + '>' + ICO.left + '</button><span class="cal-title">' + MOIS[vm - 1] + ' ' + vy + '</span><button class="cal-nav" data-nav="1" aria-label="Mois suivant"' + (view >= maxKey ? ' disabled' : '') + '>' + ICO.right + '</button></div>'
         + '<div class="cal-grid cal-dow">' + JOURS.map(function (j) { return '<span class="cdow">' + j + '</span>'; }).join('') + '</div>'
         + '<div class="cal-grid cal-days">' + cells + '</div>'
         + '<div class="cal-foot"><span class="cal-range">' + esc(lab) + '</span><div class="cal-actions"><button class="cal-btn cal-ghost" data-act="cancel">Annuler</button><button class="cal-btn cal-go" data-act="ok"' + (!(from && to) ? ' disabled' : '') + '>Valider</button></div></div>';
@@ -1127,7 +1157,7 @@
     var sLabel = corr ? 'Corroboré' : 'Non corroboré';
     rows += '<div class="popup-row"><span class="popup-key">Statut</span><span class="popup-val"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + sColor + ';margin-right:6px;vertical-align:middle"></span>' + sLabel + '</span></div>';
     if (p.type) rows += '<div class="popup-row"><span class="popup-key">Typologie d\'événement</span><span class="popup-val">' + esc(p.type) + '</span></div>';
-    if (p.iso) rows += '<div class="popup-row"><span class="popup-key">Date</span><span class="popup-val">' + esc(p.iso) + '</span></div>';
+    if (p.iso) rows += '<div class="popup-row"><span class="popup-key">Date</span><span class="popup-val popup-mono">' + esc(p.iso) + '</span></div>';
     if (p.description) rows += '<div class="popup-row popup-desc"><span class="popup-val">' + esc(p.description) + '</span></div>';
     // Carte vue client : aucune source ni origine affichee (HUMINT / OSINT jamais montres).
     return head + '<div class="popup-body">' + rows + '</div>';

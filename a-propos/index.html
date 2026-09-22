@@ -1,257 +1,190 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light" data-accent="violet">
+<html lang="fr">
 <head>
 <meta charset="UTF-8" />
 <script src="/shared/i18n.js?v=20260916a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>A propos : Algor Access</title>
-
-<link rel="icon" type="image/jpeg" href="../favicon.jpg" />
-
+<title>À propos : Algor Access</title>
 <meta name="description" content="Algor Int, structure indépendante d'analyse géopolitique, et Algor Access, sa plateforme publique de cartographie OSINT. Notre raison d'être, nos valeurs, notre équipe." />
-<meta property="og:title" content="A propos : Algor Access" />
+<meta property="og:title" content="À propos : Algor Access" />
 <meta property="og:description" content="Algor Int, structure indépendante d'analyse géopolitique. Notre raison d'être, nos valeurs, notre équipe." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://algoracces.fr/a-propos/" />
-<meta name="theme-color" content="#FFFFFF" />
-
-
-
-<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<meta name="theme-color" content="#0F1013" />
+<link rel="icon" type="image/jpeg" href="/favicon.jpg" />
 <link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
-
-<link rel="stylesheet" href="../shared/home/styles.css?v=20260915q" />
+<link rel="stylesheet" href="/shared/v5/v5.css?v=20260922l" />
+<style>
+  .ap-prose strong { font-weight: 500; color: var(--ink); }
+  .ap-t { margin: 0; font-weight: 400; font-size: clamp(26px, 2.4vw, 34px); line-height: 1.15; letter-spacing: -0.02em; }
+  .ap-sub { margin: 8px 0 26px; font-size: 16px; color: var(--muted); }
+  .ap-list { list-style: none; margin: 28px 0 0; padding: 0; font-size: 17px; }
+  .ap-list li { padding: 13px 0; border-top: 1px solid var(--line); color: var(--ink-2); }
+  .ap-list li:last-child { border-bottom: 1px solid var(--line); }
+  .ap-fin .sec-head { margin-bottom: 36px; }
+</style>
 </head>
-<body style="background-color:#FFFFFF">
+<body data-rubrique="a-propos">
 
-<!-- ─────────────────────────────────────── Header -->
-<header class="site-header">
-  <div class="site-header__inner">
-    <a class="site-brand" href="/">
-      <span class="site-brand__mark"></span>
-      <span class="site-brand__name">Algor Access</span>
-    </a>
-    <nav class="site-nav" aria-label="Rubriques">
-      <a href="/">Plateforme</a>
-      <a href="/veille/">Veille</a>
-      <a href="/debunkage/">Débunkage</a>
-      <a href="/methodologie/">Méthodologie</a>
-      <a href="/offres/">Offres</a>
-      <a href="/theatres/">Théâtres</a>
-      <a href="/a-propos/" class="is-active" aria-current="page">À propos</a>
-      <a href="/contact/">Contact</a>
-    </nav>
-    <div class="site-header__right">
+<!-- v5:nav -->
+<div class="annonce" id="annonce" hidden>
+  <div class="annonce__in">
+    <p>Dernière note de veille : <a id="annonce-lien" href="/veille/"></a></p>
+    <button class="annonce__x" id="annonce-x" aria-label="Fermer le bandeau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+</div>
+<header class="nav" id="nav">
+  <div class="nav__bar">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <nav class="nav__links" aria-label="Rubriques"><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a><a href="/offres/">Offres</a><a href="/a-propos/" aria-current="page">À propos</a><a href="/contact/">Contact</a></nav>
+    <div class="nav__right">
       <span class="lang-slot"></span>
-      <a class="site-login" href="/">Connexion</a>
-      <a class="site-cta" href="/offres/">Voir les offres</a>
+      <button class="btn-login site-login" type="button">Connexion</button>
+      <a class="btn-rect" href="/offres/">Demander un accès</a>
+      <div class="sq">
+        <button type="button" id="ouvrir-recherche" aria-label="Rechercher une zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
+        <button type="button" id="ouvrir-menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+      </div>
     </div>
   </div>
 </header>
 
+<div class="veil" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <nav class="veil__body">
+    <div class="veil__main"><a href="/">Plateforme</a><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+    <div class="veil__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+    <div class="veil__col"><h3>Algor Access</h3><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+  </nav>
+</div>
+
+<div class="veil veil--search" id="recherche" role="dialog" aria-modal="true" aria-label="Recherche">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <div class="veil__body">
+    <form class="search-form" action="/demo/">
+      <label for="q">Essayez la démo sur n'importe quelle zone du monde</label>
+      <input id="q" name="q" type="search" placeholder="Bogotá" autocomplete="off" required>
+      <p>Indiquez une ville, une région ou un pays : vous verrez le rendu de nos cartes sur des données fictives.</p>
+    </form>
+  </div>
+</div>
+<!-- /v5:nav -->
+
 <main>
+  <section class="v5-phero v5-phero--plein" data-nav="dark" data-v5-trame data-trame-anim="balayage" data-hachures="5,0;6,1">
+    <h1>Le renseignement géopolitique, <span>sans filtre ni allégeance</span></h1>
+    <p class="v5-phero__lede">Algor Int est une structure indépendante d'analyse géopolitique. Algor Access en est le prolongement public : rendre une lecture rigoureuse des théâtres à risque accessible au-delà du cercle des spécialistes.</p>
+    <div class="v5-actions">
+      <a class="btn-rect" href="/offres/">Voir les offres</a>
+      <a class="btn-outline" href="/contact/">Nous contacter</a>
+    </div>
+    <a class="v5-defiler" href="#suite" aria-label="Défiler vers la suite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 4v16M6 14l6 6 6-6"/></svg></a>
+  </section>
 
-  <!-- ─────────────────────────────────────── Hero -->
-  <section class="page-hero">
-    <div class="page-hero__wrap">
-      <div class="page-hero__copy">
-        <span class="page-hero__eyebrow">A propos</span>
-        <h1 class="page-hero__title">Le renseignement géopolitique, <em>sans filtre ni allégeance</em></h1>
-        <p class="page-hero__lede">
-          Algor Int est une structure indépendante d'analyse géopolitique. Algor Access en est le prolongement public : rendre une lecture rigoureuse des théâtres à risque accessible au-delà du cercle des spécialistes.
-        </p>
-        <div class="page-hero__cta">
-          <a class="btn btn--primary btn--lg" href="/offres/">Voir les offres</a>
-          <a class="btn btn--ghost btn--lg" href="/contact/">Nous contacter</a>
-        </div>
-      </div>
-      <div class="page-hero__visual">
-        <div class="media-frame media-frame--map"><div class="map-extract">
-          <img src="/shared/home/assets/get-carte.jpg?v=20260630a" alt="Capture réelle de la carte Algor Access : Bénin, 46 événements analysés par région, typologie et acteur" />
-          <div class="map-extract__cap"><span>Carte Algor Access · Bénin · capture réelle</span><span>algoracces.fr/carte</span></div>
-        </div></div>
+  <section class="v5-sec" data-nav="light" aria-labelledby="raison-t">
+    <div class="sec-head">
+      <h2 id="raison-t">Combler l'espace entre la dépêche et la note classifiée</h2>
+    </div>
+    <div class="v5-split">
+      <figure class="v5-split__media">
+        <img src="/shared/home/assets/v5/carte-benin.jpg?v=20260922b" alt="Carte Algor Access du Bénin, analysée par région, typologie et acteur (interface réelle, données fictives)">
+        <figcaption><span>Carte Algor Access · Bénin · interface réelle, données fictives</span> · <span>algoracces.fr/carte</span></figcaption>
+      </figure>
+      <div class="v5-prose ap-prose">
+        <p>L'analyse géopolitique sérieuse reste largement réservée aux États, aux grandes entreprises et à un cercle restreint de spécialistes. Algor Int est née de ce constat.</p>
+        <p>Entre la dépêche d'agence, rapide mais sans recul, et la note classifiée, rigoureuse mais inaccessible, il manquait un espace. <strong>Algor Access occupe cet espace.</strong></p>
+        <p>Nous appliquons les méthodes du renseignement à des sources entièrement ouvertes, et nous en restituons le résultat sous une forme lisible : une carte, une chronologie, un brief.</p>
+        <p>Bien traité, le renseignement ouvert est <strong>un outil de décision à part entière</strong>. Il devrait être accessible à tous ceux que le risque concerne.</p>
       </div>
     </div>
   </section>
 
-  <!-- ─────────────────────────────────────── Raison d'être -->
-  <section class="home-sec">
-    <div class="home-sec__wrap">
-      <div class="home-sec__head">
-        <span class="eyebrow">Notre raison d'être</span>
-        <h2 class="home-sec__title">Combler l'espace entre la dépêche <em>et la note classifiée</em></h2>
-      </div>
-      <div class="prose-2col">
-        <div>
-          <p>Algor Int est née d'un constat simple : l'analyse géopolitique sérieuse reste largement réservée aux États, aux grandes entreprises et à un cercle restreint de spécialistes.</p>
-          <p>Entre la dépêche d'agence, rapide mais sans recul, et la note classifiée, rigoureuse mais inaccessible, il manquait un espace. <strong>Algor Access occupe cet espace.</strong></p>
+  <section class="v5-sec v5-sec--band" data-nav="light" aria-labelledby="valeurs-t">
+    <div class="sec-head">
+      <h2 id="valeurs-t">Quatre principes</h2>
+    </div>
+    <div class="v5-rows v5-rows--m">
+      <div class="v5-row"><span class="v5-row__name">Indépendance</span><span class="v5-row__d">Aucun lien d'allégeance avec un État, un acteur armé ou un intérêt privé. Nous n'analysons pour le compte d'aucun camp.</span></div>
+      <div class="v5-row"><span class="v5-row__name">Rigueur</span><span class="v5-row__d">Les méthodes du renseignement, appliquées sans raccourci. Ce qui n'est pas vérifié n'est pas affirmé.</span></div>
+      <div class="v5-row"><span class="v5-row__name">Clarté</span><span class="v5-row__d">Une analyse n'a de valeur que si elle est comprise. Nous écrivons pour ceux qui doivent décider.</span></div>
+      <div class="v5-row"><span class="v5-row__name">Accessibilité</span><span class="v5-row__d">Le renseignement géopolitique ne devrait pas être un privilège. Nous le rendons consultable, sans jargon ni barrière.</span></div>
+    </div>
+  </section>
+
+  <section class="v5-sec" data-nav="light" aria-labelledby="equipe-t">
+    <div class="sec-head">
+      <h2 id="equipe-t">Une structure resserrée</h2>
+    </div>
+    <div class="v5-split v5-split--rev">
+      <figure class="v5-split__media">
+        <img src="/shared/home/assets/v5/analyse-mali.jpg?v=20260922b" alt="Carte Algor Access du Mali et son panneau d'analyse (interface réelle, données fictives)" loading="lazy">
+        <figcaption><span>Carte Algor Access · Mali · interface réelle, données fictives</span> · <span>algoracces.fr/carte</span></figcaption>
+      </figure>
+      <div>
+        <h3 class="ap-t">Le terrain suivi par ceux qui l'analysent</h3>
+        <p class="ap-sub">Les analystes</p>
+        <div class="v5-prose">
+          <p>Algor Access est porté par une équipe resserrée d'analystes, chacun attentif aux théâtres qu'il suit au quotidien. La cartographie, le sourçage et la rédaction sont menés en interne. C'est cette continuité qui assure la cohérence d'un théâtre à l'autre, et d'une période à la suivante.</p>
         </div>
-        <div>
-          <p>Nous appliquons les méthodes du renseignement à des sources entièrement ouvertes, et nous en restituons le résultat sous une forme lisible : une carte, une chronologie, un brief.</p>
-          <p>Notre conviction : bien traité, le renseignement ouvert est <strong>un outil de décision à part entière</strong>. Il devrait être accessible à tous ceux que le risque concerne.</p>
-        </div>
+        <ul class="ap-list">
+          <li>Un suivi continu des théâtres</li>
+          <li>Travail mené entièrement en interne</li>
+          <li>Une lecture cohérente sur tous les théâtres</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- ─────────────────────────────────────── Valeurs -->
-  <section class="home-sec home-sec--alt">
-    <div class="home-sec__wrap">
-      <div class="home-sec__head">
-        <span class="eyebrow">Ce qui nous guide</span>
-        <h2 class="home-sec__title">Quatre principes, <em>non négociables</em></h2>
-      </div>
-      <div class="princ-grid">
-        <article class="princ-card">
-          <div class="princ-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 8h18M5 8c0 0 2 5 7 5s7-5 7-5"/></svg>
-          </div>
-          <h3 class="princ-card__title">Indépendance</h3>
-          <p class="princ-card__text">Aucun lien d'allégeance avec un État, un acteur armé ou un intérêt privé. Nous n'analysons pour le compte d'aucun camp.</p>
-        </article>
-        <article class="princ-card">
-          <div class="princ-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h12"/></svg>
-          </div>
-          <h3 class="princ-card__title">Rigueur</h3>
-          <p class="princ-card__text">Les méthodes du renseignement, appliquées sans raccourci. Ce qui n'est pas vérifié n'est pas affirmé.</p>
-        </article>
-        <article class="princ-card">
-          <div class="princ-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
-          </div>
-          <h3 class="princ-card__title">Clarté</h3>
-          <p class="princ-card__text">Une analyse n'a de valeur que si elle est comprise. Nous écrivons pour la décision, pas pour l'entre-soi.</p>
-        </article>
-        <article class="princ-card">
-          <div class="princ-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/></svg>
-          </div>
-          <h3 class="princ-card__title">Accessibilité</h3>
-          <p class="princ-card__text">Le renseignement géopolitique ne devrait pas être un privilège. Nous le rendons consultable, sans jargon ni barrière.</p>
-        </article>
-      </div>
+  <section class="v5-sec v5-sec--band" data-nav="light" aria-labelledby="faq-t">
+    <div class="sec-head">
+      <h2 id="faq-t">Vos questions sur Algor Int</h2>
+    </div>
+    <div class="v5-faq">
+      <details><summary>Algor Int travaille-t-il pour des gouvernements ?</summary><div class="v5-faq__a"><p>Non. Algor Int est une structure indépendante. Nos analyses ne sont ni commandées ni orientées par un État ou un acteur politique.</p></div></details>
+      <details><summary>Quelle est la différence entre Algor Int et Algor Access ?</summary><div class="v5-faq__a"><p>Algor Int est la structure d'analyse. Algor Access est la plateforme par laquelle nous rendons ce travail accessible : c'est le produit que vous utilisez.</p></div></details>
+      <details><summary>Vos données sont-elles sécurisées ?</summary><div class="v5-faq__a"><p>Oui. Nos analyses reposent sur des sources publiques, les données sont hébergées en Europe et l'accès à la plateforme est strictement contrôlé.</p></div></details>
+      <details><summary>Peut-on vous confier une analyse spécifique ?</summary><div class="v5-faq__a"><p>Oui. Au-delà des six théâtres, nous réalisons des analyses sur mesure selon votre demande. Parlez-nous de votre besoin via la page Contact.</p></div></details>
     </div>
   </section>
 
-  <!-- ─────────────────────────────────────── Equipe -->
-  <section class="home-sec">
-    <div class="home-sec__wrap">
-      <div class="home-sec__head">
-        <span class="eyebrow">L'équipe</span>
-        <h2 class="home-sec__title">Une structure <em>resserrée</em></h2>
-      </div>
-      <div class="feature-rows">
-        <article class="feature-row">
-          <div class="feature-row__copy">
-            <div class="feature-row__tag">Les analystes</div>
-            <h3 class="feature-row__title">Le terrain suivi par ceux qui l'analysent</h3>
-            <p class="feature-row__text">Algor Access est porté par une équipe resserrée d'analystes, chacun attentif aux théâtres qu'il suit au quotidien. La cartographie, le sourçage et la rédaction sont menés en interne. C'est cette continuité qui assure la cohérence d'un théâtre à l'autre, et d'une période à la suivante.</p>
-            <ul class="feature-row__list">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Un suivi continu, pas ponctuel</li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Travail mené entièrement en interne</li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13.5 4.5 6.5 11.5 3 8"/></svg>Une lecture cohérente sur tous les théâtres</li>
-            </ul>
-          </div>
-          <div class="feature-row__visual">
-            <div class="media-frame media-frame--map"><div class="map-extract">
-              <img src="/shared/home/assets/get-analyse.jpg?v=20260630a" alt="Capture réelle de la carte Algor Access : Mali, 168 événements analysés" loading="lazy" />
-              <div class="map-extract__cap"><span>Carte Algor Access · Mali · capture réelle</span><span>algoracces.fr/carte</span></div>
-            </div></div>
-          </div>
-        </article>
-      </div>
+  <section class="v5-sec ap-fin" data-nav="light" aria-labelledby="fin-t">
+    <div class="sec-head">
+      <h2 id="fin-t">Une question, un besoin précis ?</h2>
+      <p>Parlons de votre zone d'intérêt, ou découvrez nos formules d'accès.</p>
+    </div>
+    <div class="v5-actions">
+      <a class="btn-rect btn-rect--ink" href="/contact/">Nous contacter</a>
+      <a class="btn-outline" href="/offres/">Voir les offres</a>
     </div>
   </section>
-
-  <!-- ─────────────────────────────────────── FAQ -->
-  <section class="home-sec home-sec--alt">
-    <div class="home-sec__wrap">
-      <div class="home-sec__head">
-        <span class="eyebrow">Questions fréquentes</span>
-        <h2 class="home-sec__title">Vos questions sur <em>Algor Int</em></h2>
-      </div>
-      <div class="faq">
-        <div class="faq-item">
-          <div class="faq-item__q">Algor Int travaille-t-il pour des gouvernements ?</div>
-          <div class="faq-item__a">Non. Algor Int est une structure indépendante. Nos analyses ne sont ni commandées ni orientées par un État ou un acteur politique.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-item__q">Quelle est la différence entre Algor Int et Algor Access ?</div>
-          <div class="faq-item__a">Algor Int est la structure d'analyse. Algor Access est la plateforme par laquelle nous rendons ce travail accessible : c'est le produit que vous utilisez.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-item__q">Vos données sont-elles sécurisées ?</div>
-          <div class="faq-item__a">Oui. Nos analyses reposent sur des sources publiques, les données sont hébergées de façon sécurisée et l'accès à la plateforme est strictement contrôlé.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-item__q">Peut-on vous confier une analyse spécifique ?</div>
-          <div class="faq-item__a">Oui. Au-delà des six théâtres, nous réalisons des analyses sur mesure selon votre demande. Parlez-nous de votre besoin via la page Contact.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─────────────────────────────────────── CTA -->
-  <section class="cta-band">
-    <div class="cta-band__wrap">
-      <h2 class="cta-band__title">Une question, un besoin précis ?</h2>
-      <p class="cta-band__text">Parlons de votre zone d'intérêt, ou découvrez nos formules d'accès.</p>
-      <div class="cta-band__row">
-        <a class="btn btn--lg btn--on-violet" href="/contact/">Nous contacter</a>
-        <a class="btn btn--lg btn--ghost-violet" href="/offres/">Voir les offres</a>
-      </div>
-    </div>
-  </section>
-
 </main>
 
-<!-- ─────────────────────────────────────── Footer -->
-<footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__brand">
-      <div class="site-footer__brand-name"><span></span>ALGOR INT</div>
-      <p class="site-footer__blurb">
-        Algor Access : plateforme de cartographie OSINT. Six théâtres géopolitiques suivis en continu, chaque événement sourcé, daté et auditable.
-      </p>
-    </div>
-    <div class="site-footer__col">
-      <h4>Le site</h4>
-      <a href="/">Plateforme</a>
-      <a href="/debunkage/">Débunkage</a>
-      <a href="/methodologie/">Méthodologie</a>
-      <a href="/offres/">Offres</a>
-      <a href="/theatres/">Théâtres</a>
-      <a href="/a-propos/">À propos</a>
-      <a href="/contact/">Contact</a>
-    </div>
-    <div class="site-footer__col">
-      <h4>Théâtres</h4>
-      <a href="/moyen-orient/">Moyen-Orient</a>
-      <a href="/sahel/">Sahel</a>
-      <a href="/rdc/">RDC</a>
-      <a href="/madagascar/">Madagascar</a>
-      <a href="/afrique/">Afrique Maritime</a>
-      <a href="/asie-sud/">Asie du Sud</a>
-    </div>
-    <div class="site-footer__col">
-      <h4>Accès</h4>
-      <a href="#" data-algor-login>Connexion</a>
-      <a href="/offres/">Voir les offres</a>
-      <a href="/contact/">Nous contacter</a>
+<!-- v5:foot -->
+<footer class="foot" data-nav="light">
+  <div class="foot__id">
+    <p>© 2026 Algor Access</p>
+    <p>Solution souveraine française, données hébergées en Europe.</p>
+    <hr>
+    <div class="foot__pills">
+      <button class="pill site-login" type="button">Connexion</button>
+      <a class="pill" href="/offres/">Les offres</a>
+      <a class="pill" href="/demo/">La démo</a>
     </div>
   </div>
-  <div class="site-footer__bottom">
-    <div class="site-footer__bottom-inner">
-      <span>© 2026 Algor Int · Cartographie OSINT des théâtres à risque</span>
-      <span>Diffusion restreinte · usage professionnel · <a href="/mentions-legales/">Mentions légales</a> · <a href="/confidentialite/">Confidentialité</a></span>
-    </div>
-  </div>
+  <div class="foot__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+  <div class="foot__col"><h3>Plateforme</h3><a href="/">Plateforme</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+  <div class="foot__col"><h3>Société</h3><a href="/a-propos/">À propos</a><a href="/offres/">Offres</a><a href="/contact/">Contact</a></div>
+  <div class="foot__col"><h3>Informations</h3><a href="/mentions-legales/">Mentions légales</a><a href="/confidentialite/">Confidentialité</a></div>
 </footer>
+<!-- /v5:foot -->
 
-<script src="../shared/home/skyfield.js?v=20260915q"></script>
-<script src="../shared/home/sitenav.js?v=20260622a"></script>
-
-<script type="module" src="../shared/site-auth.js?v=20260707a"></script>
+<script type="module" src="/shared/site-auth.js?v=20260922a"></script>
+<script src="/shared/v5/chrome.js?v=20260922e"></script>
 </body>
 </html>

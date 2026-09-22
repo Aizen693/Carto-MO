@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vantor Precision3D · maillages satellite · Algor Access</title>
+<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css">
+<script src="https://js.arcgis.com/4.30/"></script>
+<style>
+  :root{
+    --violet:#6B3FA0; --violet-mid:#5650C6; --blue:#2E84D4;
+    --grad:linear-gradient(95deg,#6B3FA0,#5650C6 55%,#2E84D4);
+    --ink:#1F1437; --tx:#4A4460; --muted:#9089AA;
+    --panel:#fff; --ln:rgba(123,90,189,0.18); --ln-soft:rgba(123,90,189,0.10);
+    --shadow:0 8px 26px -8px rgba(46,24,87,0.20);
+    --jakarta:'Plus Jakarta Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#F4F2F8;color:var(--tx);font-family:var(--jakarta);overflow:hidden}
+  #view{position:absolute;inset:0}
+  .esri-ui-top-left,.esri-attribution{font-family:var(--jakarta)}
+  .esri-view .esri-view-surface--touch-none:focus::after{outline:none}
+  #header{position:absolute;top:0;left:0;right:0;height:60px;z-index:8;display:flex;align-items:center;gap:14px;padding:0 18px;pointer-events:none}
+  #header .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex:none;pointer-events:auto}
+  #header .brand img{height:30px;border-radius:7px}
+  #page-title{margin:0;font:800 18px/1 var(--jakarta);letter-spacing:-.01em;color:var(--ink)}
+  #header .sub{font:600 8px/1 var(--jakarta);letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-top:5px}
+  #header .spacer{flex:1}
+  .hbtn{pointer-events:auto;background:#fff;border:1px solid var(--ln);color:var(--violet);cursor:pointer;text-decoration:none;
+    font:700 9.5px/1 var(--jakarta);letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;border-radius:11px;box-shadow:var(--shadow)}
+  .hbtn:hover{background:rgba(107,63,160,.07)}
+  #panel{position:absolute;top:70px;left:18px;width:310px;z-index:7;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+  .card{background:var(--panel);border:1px solid var(--ln);border-radius:15px;box-shadow:var(--shadow);pointer-events:auto}
+  .card h3{margin:0;padding:13px 15px 10px;font:700 9px/1 var(--jakarta);letter-spacing:.15em;text-transform:uppercase;color:var(--violet);border-bottom:1px solid var(--ln-soft)}
+  .card .body{padding:12px 15px 13px;font:500 11px/1.55 var(--jakarta);color:var(--tx)}
+  .card .body b{color:var(--ink)}
+  #cities{padding:8px}
+  .city{display:block;width:100%;text-align:left;background:none;border:1px solid transparent;cursor:pointer;padding:10px 12px;border-radius:12px;font-family:var(--jakarta);margin-bottom:4px;transition:background .13s}
+  .city:hover{background:rgba(107,63,160,.06)}
+  .city.on{background:rgba(107,63,160,.09);border-color:var(--ln)}
+  .city-name{font:700 12.5px/1.3 var(--jakarta);color:var(--ink);display:flex;align-items:center;gap:8px}
+  .city-name .tag{font:800 7.5px/1 var(--jakarta);letter-spacing:.11em;text-transform:uppercase;padding:4px 6px;border-radius:5px;background:rgba(46,132,212,.12);color:#1B5486}
+  .city-desc{font:500 10.5px/1.5 var(--jakarta);color:var(--muted);margin-top:3px}
+  #views{position:absolute;right:18px;top:70px;z-index:7;display:flex;gap:4px;padding:5px;background:#fff;border:1px solid var(--ln);border-radius:12px;box-shadow:var(--shadow)}
+  .tbtn{border:none;background:none;cursor:pointer;padding:7px 10px;border-radius:8px;font:700 9.5px/1 var(--jakarta);letter-spacing:.08em;text-transform:uppercase;color:var(--violet)}
+  .tbtn:hover{background:rgba(107,63,160,.07)}
+  .tbtn.on{background:var(--grad);color:#fff}
+  #legend{position:absolute;right:18px;bottom:36px;z-index:7;padding:12px 14px 13px;width:240px}
+  #legend h4{margin:0 0 6px;font:700 8.5px/1 var(--jakarta);letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+  #legend p{margin:0;font:500 9px/1.5 var(--jakarta);color:var(--muted)}
+  #loader{position:absolute;inset:0;z-index:12;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;background:#F4F2F8;transition:opacity .6s}
+  #loader.off{opacity:0;pointer-events:none}
+  #loader .ring{width:38px;height:38px;border-radius:50%;border:3px solid rgba(107,63,160,.15);border-top-color:var(--violet);animation:spin .9s linear infinite}
+  #loader span{font:700 10px/1 var(--jakarta);letter-spacing:.18em;text-transform:uppercase;color:var(--violet)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="view"></div>
+<div id="loader"><div class="ring"></div><span id="loader-txt">Chargement du maillage Vantor</span></div>
+
+<header id="header">
+  <a class="brand" href="/" title="Retour à l'accueil">
+    <img src="/sahel/algor_int_logo.jpg" alt="Algor Int" onerror="this.style.display='none'">
+    <div>
+      <h1 id="page-title">Vantor Precision3D</h1>
+      <div class="sub">Maillages 3D photoréalistes produits par satellite stéréo</div>
+    </div>
+  </a>
+  <div class="spacer"></div>
+  <a class="hbtn" href="../ville/">Gao texturé</a>
+</header>
+
+<aside id="panel">
+  <div class="card">
+    <h3>Échantillons publics Vantor (ex-Maxar)</h3>
+    <div id="cities"></div>
+  </div>
+  <div class="card">
+    <h3>Lecture</h3>
+    <div class="body">
+      <b>Ce que c'est.</b> Des maillages texturés à 50 cm produits par Vantor à partir de plusieurs prises satellite de la même zone (stéréo). Aucune façade inventée : tout est mesuré. C'est le niveau de rendu visé pour les théâtres.
+      <br><br><b>Sur nos théâtres.</b> Couverture Precision3D confirmée sur Niamey, Ouagadougou, Goma, Kinshasa et Dakar. Gao et Bamako non référencés. Accès sur licence, diffusion en I3S ou 3D Tiles, donc directement dans cette page ou dans le PoC Cesium.
+    </div>
+  </div>
+</aside>
+
+<div id="views">
+  <button class="tbtn on" data-v="oblique">Oblique</button>
+  <button class="tbtn" data-v="rue">Niveau rue</button>
+  <button class="tbtn" data-v="orbit">Orbite</button>
+</div>
+
+<div class="card" id="legend">
+  <h4>Source</h4>
+  <p id="legend-txt">Maillage : Vantor Precision3D (échantillon public ArcGIS Online) · Fond : Esri World Imagery · Relief : Esri Terrain3D</p>
+</div>
+
+<script>
+require(['esri/Map', 'esri/views/SceneView', 'esri/layers/IntegratedMeshLayer', 'esri/config'], function (Map, SceneView, IntegratedMeshLayer, esriConfig) {
+  var CITIES = [
+    { id: 'san_diego', name: 'San Diego', tag: 'Vantor 2025', desc: 'Satellite Reality Mesh, centre-ville et port. Le produit actuel sous marque Vantor.',
+      url: 'https://tiles.arcgis.com/tiles/uujCiiEZAflDbdxE/arcgis/rest/services/San_Diego_Vantor_Satellite_Reality_Mesh/SceneServer',
+      cam: { pos: [-117.1685, 32.7040, 520], heading: 20, tilt: 66 } },
+    { id: 'boulder', name: 'Boulder', tag: 'Precision3D 2022', desc: 'Tissu périurbain et naturel, publié par le compte Maxar. Proche d\'un bâti bas type Sahel.',
+      url: 'https://tiles.arcgis.com/tiles/hjlmj6DTJ3YhmS5m/arcgis/rest/services/221018_Precision3D_Boulder/SceneServer',
+      cam: { pos: [-105.2790, 39.9905, 480], heading: 340, tilt: 66 } },
+    { id: 'santiago', name: 'Santiago du Chili', tag: 'Vricon', desc: 'Échantillon historique Vricon, centre dense et tours.',
+      url: 'https://tiles.arcgis.com/tiles/hjlmj6DTJ3YhmS5m/arcgis/rest/services/santiago_vricon_i3s/SceneServer',
+      cam: { pos: [-70.6320, -33.4255, 560], heading: 30, tilt: 66 } }
+  ];
+  var map = new Map({ basemap: 'satellite', ground: 'world-elevation' });
+  var view = new SceneView({
+    container: 'view', map: map, qualityProfile: 'high',
+    environment: { lighting: { directShadowsEnabled: true, date: new Date('2026-09-09T15:30:00Z') }, atmosphere: { quality: 'high' } },
+    ui: { components: ['attribution', 'navigation-toggle', 'compass', 'zoom'] }
+  });
+  window.__view = view;
+  var layer = null, current = null, orbit = null;
+
+  function renderList() {
+    var el = document.getElementById('cities'); el.innerHTML = '';
+    CITIES.forEach(function (c) {
+      var b = document.createElement('button'); b.className = 'city' + (current === c.id ? ' on' : '');
+      b.innerHTML = '<div class="city-name">' + c.name + ' <span class="tag">' + c.tag + '</span></div><div class="city-desc">' + c.desc + '</div>';
+      b.addEventListener('click', function () { select(c.id); });
+      el.appendChild(b);
+    });
+  }
+  function select(id) {
+    current = id; renderList(); stopOrbit();
+    var c = CITIES.filter(function (x) { return x.id === id; })[0];
+    document.getElementById('loader').classList.remove('off');
+    if (layer) map.remove(layer);
+    layer = new IntegratedMeshLayer({ url: c.url, title: c.name });
+    map.add(layer);
+    layer.when(function () {
+      goTo(c, 'oblique').then(function () { document.getElementById('loader').classList.add('off'); });
+    }, function (e) { document.getElementById('loader-txt').textContent = 'Maillage inaccessible'; });
+  }
+  function goTo(c, v) {
+    var p = c.cam;
+    if (v === 'rue') return view.goTo({ position: { longitude: p.pos[0], latitude: p.pos[1], z: 40 }, heading: p.heading, tilt: 84 }, { duration: 1400 });
+    return view.goTo({ position: { longitude: p.pos[0], latitude: p.pos[1], z: p.pos[2] }, heading: p.heading, tilt: p.tilt }, { duration: 1400 });
+  }
+  function stopOrbit() { if (orbit) { clearInterval(orbit); orbit = null; } }
+  document.querySelectorAll('#views .tbtn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#views .tbtn').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on');
+      var c = CITIES.filter(function (x) { return x.id === current; })[0]; if (!c) return;
+      stopOrbit();
+      if (b.dataset.v === 'orbit') {
+        var h = view.camera.heading;
+        orbit = setInterval(function () { h = (h + 0.25) % 360; var cam = view.camera.clone(); cam.heading = h; view.camera = cam; }, 40);
+      } else goTo(c, b.dataset.v);
+    });
+  });
+  view.on('drag', stopOrbit);
+  view.when(function () { select('san_diego'); }, function (e) { document.getElementById('loader-txt').textContent = 'Vue 3D indisponible'; console.error(e); });
+});
+</script>
+</body>
+</html>

@@ -5,42 +5,101 @@
 <script src="/shared/i18n.js?v=20260916a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Page introuvable · Algor Access</title>
-<link rel="icon" type="image/jpeg" href="/favicon.jpg" />
 <meta name="robots" content="noindex" />
-<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<meta name="theme-color" content="#0F1013" />
+<link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+<link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
+<link rel="stylesheet" href="/shared/v5/v5.css?v=20260922l" />
 <style>
-  :root { --violet: #6B3FA0; --encre: #181428; --gris: #5A5470; --fond: #F4F2F8; }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    background: var(--fond); color: var(--encre);
-    min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    padding: 24px;
-  }
-  .np { text-align: center; max-width: 460px; }
-  .np__code {
-    font-size: 96px; font-weight: 800; letter-spacing: -0.04em; line-height: 1;
-    background: linear-gradient(100deg, var(--violet), #4B6BD6);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .np__titre { font-size: 22px; font-weight: 700; margin-top: 18px; letter-spacing: -0.01em; }
-  .np__texte { font-size: 15px; line-height: 1.6; color: var(--gris); margin-top: 10px; }
-  .np__btn {
-    display: inline-block; margin-top: 28px; padding: 13px 26px;
-    background: linear-gradient(100deg, var(--violet), #4B6BD6); color: #fff;
-    border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none;
-    transition: opacity .18s ease, transform .18s ease;
-  }
-  .np__btn:hover { opacity: .92; transform: translateY(-1px); }
-  .np__btn:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; }
+  .np { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
+  .np__code { margin: 0 0 18px; font-size: 17px; color: var(--on-night-2); }
 </style>
 </head>
-<body>
-  <main class="np">
-    <div class="np__code">404</div>
-    <h1 class="np__titre">Cette page n'existe pas</h1>
-    <p class="np__texte">L'adresse demandée a peut-être changé lors d'une mise à jour de la plateforme. Les théâtres suivis restent accessibles depuis l'accueil.</p>
-    <a class="np__btn" href="/">Retour à l'accueil</a>
-  </main>
+<body data-rubrique="404">
+
+<!-- v5:nav -->
+<div class="annonce" id="annonce" hidden>
+  <div class="annonce__in">
+    <p>Dernière note de veille : <a id="annonce-lien" href="/veille/"></a></p>
+    <button class="annonce__x" id="annonce-x" aria-label="Fermer le bandeau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+</div>
+<header class="nav" id="nav">
+  <div class="nav__bar">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <nav class="nav__links" aria-label="Rubriques"><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a></nav>
+    <div class="nav__right">
+      <span class="lang-slot"></span>
+      <button class="btn-login site-login" type="button">Connexion</button>
+      <a class="btn-rect" href="/offres/">Demander un accès</a>
+      <div class="sq">
+        <button type="button" id="ouvrir-recherche" aria-label="Rechercher une zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
+        <button type="button" id="ouvrir-menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="veil" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <nav class="veil__body">
+    <div class="veil__main"><a href="/">Plateforme</a><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+    <div class="veil__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+    <div class="veil__col"><h3>Algor Access</h3><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+  </nav>
+</div>
+
+<div class="veil veil--search" id="recherche" role="dialog" aria-modal="true" aria-label="Recherche">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <div class="veil__body">
+    <form class="search-form" action="/demo/">
+      <label for="q">Essayez la démo sur n'importe quelle zone du monde</label>
+      <input id="q" name="q" type="search" placeholder="Bogotá" autocomplete="off" required>
+      <p>Indiquez une ville, une région ou un pays : vous verrez le rendu de nos cartes sur des données fictives.</p>
+    </form>
+  </div>
+</div>
+<!-- /v5:nav -->
+
+<main>
+  <section class="v5-phero np" data-nav="dark" data-v5-trame data-hachures="5,0;6,1">
+    <p class="np__code">404</p>
+    <h1>Cette page <span>n'existe pas</span></h1>
+    <p class="v5-phero__lede">L'adresse demandée a peut-être changé lors d'une mise à jour de la plateforme. Les théâtres suivis restent accessibles depuis l'accueil.</p>
+    <div class="v5-actions">
+      <a class="btn-rect" href="/">Retour à l'accueil</a>
+      <a class="btn-outline" href="/theatres/">Les théâtres</a>
+      <a class="btn-outline" href="/veille/">La veille</a>
+    </div>
+  </section>
+</main>
+
+<!-- v5:foot -->
+<footer class="foot" data-nav="light">
+  <div class="foot__id">
+    <p>© 2026 Algor Access</p>
+    <p>Solution souveraine française, données hébergées en Europe.</p>
+    <hr>
+    <div class="foot__pills">
+      <button class="pill site-login" type="button">Connexion</button>
+      <a class="pill" href="/offres/">Les offres</a>
+      <a class="pill" href="/demo/">La démo</a>
+    </div>
+  </div>
+  <div class="foot__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+  <div class="foot__col"><h3>Plateforme</h3><a href="/">Plateforme</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+  <div class="foot__col"><h3>Société</h3><a href="/a-propos/">À propos</a><a href="/offres/">Offres</a><a href="/contact/">Contact</a></div>
+  <div class="foot__col"><h3>Informations</h3><a href="/mentions-legales/">Mentions légales</a><a href="/confidentialite/">Confidentialité</a></div>
+</footer>
+<!-- /v5:foot -->
+
+<script type="module" src="/shared/site-auth.js?v=20260922a"></script>
+<script src="/shared/v5/chrome.js?v=20260922e"></script>
 </body>
 </html>

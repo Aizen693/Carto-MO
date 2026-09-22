@@ -22,6 +22,7 @@
       .translate([280, 224])
       .scale(120);
     const path = d3.geoPath(proj, ctx);
+    canvas.__proj = proj; // v5 : lecture des coordonnées sous le curseur (proj.invert)
 
     // — sizing with DPR
     let W = 560, H = 448;
@@ -49,19 +50,20 @@
 
     // — world topology (async)
     let land = null, borders = null;
-    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+    // 110m d'abord (léger, affiché tout de suite), puis 50m pour des côtes nettes en grand écran.
+    const charger = (res) => fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-' + res + '.json')
       .then(r => r.json())
       .then(topo => {
         land    = topojson.feature(topo, topo.objects.countries);
         borders = topojson.mesh(topo, topo.objects.countries, (a, b) => a !== b);
-      })
-      .catch(() => {});
+      });
+    charger('110m').then(() => { if (window.PLANISPHERE_DETAIL) return charger('50m'); }).catch(() => {});
     const graticule = d3.geoGraticule10();
 
     // — anchors (theaters) — identiques au globe
     const anchors = [
-      { id: 'MO-01',    lon:  44,   lat:  33,   label: 'Moyen-Orient' },
-      { id: 'SAHEL-02', lon:   0,   lat:  16,   label: 'Sahel' },
+      { id: 'MO-01',    lon:  44,   lat:  33,   label: 'Moyen-Orient', pos: 'haut' },
+      { id: 'SAHEL-02', lon:   0,   lat:  16,   label: 'Sahel', pos: 'haut' },
       { id: 'LACS-03',  lon:  29,   lat:  -2,   label: 'Grands Lacs' },
       { id: 'MDG-04',   lon:  47,   lat: -19,   label: 'Madagascar' },
       { id: 'AFR-05',   lon:  43,   lat:  12,   label: 'Afrique Maritime' },
@@ -167,15 +169,19 @@
     });
 
     // — palette identique au globe
-    const C = {
+    const C = Object.assign({
       ocean:    '#AEC9D7',
       land:     '#D9C9A3',
       border:   'rgba(92,74,42,0.30)',
       grat:     'rgba(255,255,255,0.45)',
       rim:      'rgba(70,90,105,0.55)',
       fluxLand: '246,162,84',
-      fluxSea:  '39,174,192'
-    };
+      fluxSea:  '39,174,192',
+      label:    '#4a4660',
+      labelOn:  '#2c2840',
+      halo:     'rgba(255,255,255,0.95)',
+      font:     '"JetBrains Mono", ui-monospace, Menlo, monospace'
+    }, window.PLANISPHERE_PALETTE || {}); // palette surchargeable par la page (v5 : monochrome nuit)
 
     let hoverAnchor = null;
 
@@ -198,125 +204,82 @@
         ctx.strokeStyle = C.border; ctx.lineWidth = 0.45; ctx.stroke();
       }
 
-      // arcs (trace fin)
+      // Flux en arcs courbes, comme les arcs d'attaque de la veille cyber : ligne de base très
+      // discrète, comète à tête lumineuse et queue effilée, impulsion à l'arrivée.
+      const courbe = (arc) => {
+        const pa = proj(arc.a), pb = proj(arc.b); if (!pa || !pb) return null;
+        const dx = pb[0] - pa[0], dy = pb[1] - pa[1], len = Math.hypot(dx, dy) || 1;
+        const lift = Math.min(46, len * 0.28);
+        const c = [(pa[0] + pb[0]) / 2 + (dy / len) * lift, (pa[1] + pb[1]) / 2 - (dx / len) * lift];
+        return { pa, pb, c, at: (u) => { const v = 1 - u; return [v * v * pa[0] + 2 * v * u * c[0] + u * u * pb[0], v * v * pa[1] + 2 * v * u * c[1] + u * u * pb[1]]; } };
+      };
       arcs.forEach(arc => {
-        const isSea = arc.kind === 'sea';
-        ctx.beginPath();
-        path({ type: 'LineString', coordinates: [arc.a, arc.b] });
-        ctx.setLineDash(isSea ? [1.4, 2.6] : []);
-        ctx.strokeStyle = isSea
-          ? `rgba(${C.fluxSea},0.38)`
-          : `rgba(${C.fluxLand},0.55)`;
-        ctx.lineWidth = isSea ? 0.55 : 1.0;
-        ctx.stroke();
-        ctx.setLineDash([]);
-      });
-
-      // pins endpoints
-      arcs.forEach(arc => {
-        const isSea = arc.kind === 'sea';
-        [arc.a, arc.b].forEach(pt => {
-          const xy = proj(pt); if (!xy) return;
-          ctx.beginPath();
-          ctx.arc(xy[0], xy[1], isSea ? 0.9 : 1.6, 0, Math.PI * 2);
-          ctx.fillStyle = isSea
-            ? `rgba(${C.fluxSea},0.62)`
-            : `rgba(${C.fluxLand},0.82)`;
-          ctx.fill();
-        });
-      });
-
-      // particules holographiques sur les arcs
-      arcs.forEach(arc => {
-        const isSea = arc.kind === 'sea';
-        const palette = isSea ? C.fluxSea : C.fluxLand;
-        const heads = isSea ? 2 : 1;
-        for (let h = 0; h < heads; h++) {
-          const headPhase = (((t + arc.offset + h * arc.dur / heads) % arc.dur) + arc.dur) % arc.dur / arc.dur;
-          for (let i = 0; i < arc.np; i++) {
-            let phase = headPhase - i * arc.trail;
-            if (phase < 0) continue;
-            if (phase > 1) continue;
-            const p = arc.interp(phase);
-            const xy = proj(p); if (!xy) continue;
-
-            const fade = Math.sin(phase * Math.PI);
-            const decay = Math.pow(1 - i / arc.np, 1.7);
-            const baseOp = (isSea ? 0.70 : 1.0) * fade * decay;
-            const baseR  = (isSea ? 0.85 : 2.2) * (i === 0 ? 1 : (1 - i * 0.14));
-            const isHead = i === 0;
-
-            const glowR = baseR * (isHead ? (isSea ? 5.5 : 10.5) : 4.0);
-            const g = ctx.createRadialGradient(xy[0], xy[1], 0, xy[0], xy[1], glowR);
-            g.addColorStop(0,   `rgba(${palette},${(baseOp * 0.55).toFixed(3)})`);
-            g.addColorStop(0.4, `rgba(${palette},${(baseOp * 0.24).toFixed(3)})`);
-            g.addColorStop(1,   `rgba(${palette},0)`);
-            ctx.fillStyle = g;
-            ctx.beginPath();
-            ctx.arc(xy[0], xy[1], glowR, 0, Math.PI * 2);
-            ctx.fill();
-
-            if (isHead) {
-              ctx.lineWidth = 0.7;
-              ctx.strokeStyle = `rgba(${palette},${(baseOp * 0.60).toFixed(3)})`;
-              ctx.beginPath();
-              ctx.arc(xy[0], xy[1], baseR * 2.6, 0, Math.PI * 2);
-              ctx.stroke();
-              ctx.strokeStyle = `rgba(${palette},${(baseOp * 0.30).toFixed(3)})`;
-              ctx.beginPath();
-              ctx.arc(xy[0], xy[1], baseR * 4.2, 0, Math.PI * 2);
-              ctx.stroke();
+        const isSea = arc.kind === 'sea', pal = isSea ? C.fluxSea : C.fluxLand, q = courbe(arc); if (!q) return;
+        // ligne de base
+        ctx.beginPath(); ctx.moveTo(q.pa[0], q.pa[1]); ctx.quadraticCurveTo(q.c[0], q.c[1], q.pb[0], q.pb[1]);
+        ctx.setLineDash(isSea ? [2, 4] : []);
+        ctx.strokeStyle = `rgba(${pal},${isSea ? 0.16 : 0.24})`; ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
+        // extrémités
+        [q.pa, q.pb].forEach(xy => { ctx.beginPath(); ctx.arc(xy[0], xy[1], isSea ? 1 : 1.4, 0, Math.PI * 2); ctx.fillStyle = `rgba(${pal},0.5)`; ctx.fill(); });
+        // comète : la tête parcourt l'arc, la queue la suit sur 22 % de sa longueur
+        const cycle = arc.dur * 1.25, ph = ((t + arc.offset) % cycle) / cycle, voyage = 0.8;
+        const tete = ph / voyage, queue = isSea ? 0.16 : 0.22, N = 16;
+        if (tete <= 1 + queue) {
+          const h = Math.min(1, tete), t0 = Math.max(0, tete - queue);
+          if (h > t0) {
+            let prev = q.at(t0);
+            for (let k = 1; k <= N; k++) {
+              const u = t0 + (h - t0) * (k / N), pt = q.at(u), f = k / N;
+              ctx.beginPath(); ctx.moveTo(prev[0], prev[1]); ctx.lineTo(pt[0], pt[1]);
+              ctx.strokeStyle = `rgba(${pal},${(Math.pow(f, 1.6) * (isSea ? 0.7 : 0.95)).toFixed(3)})`;
+              ctx.lineWidth = (isSea ? 0.5 : 0.7) + f * (isSea ? 0.9 : 1.5); ctx.lineCap = 'round'; ctx.stroke();
+              prev = pt;
             }
-
-            ctx.beginPath();
-            ctx.arc(xy[0], xy[1], Math.max(0.7, baseR * 1.7), 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${palette},${(baseOp * 0.80).toFixed(3)})`;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(xy[0], xy[1], Math.max(0.4, baseR * 0.74), 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${Math.min(1, baseOp * 0.95).toFixed(3)})`;
-            ctx.fill();
+            if (tete <= 1) {
+              const hp = q.at(h);
+              ctx.beginPath(); ctx.arc(hp[0], hp[1], isSea ? 1.3 : 2, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.98)'; ctx.fill();
+            }
           }
+        }
+        // impulsion à l'arrivée : un anneau qui s'ouvre et s'efface
+        if (ph >= voyage) {
+          const k = (ph - voyage) / (1 - voyage);
+          ctx.beginPath(); ctx.arc(q.pb[0], q.pb[1], 2 + k * (isSea ? 7 : 10), 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${pal},${(0.55 * (1 - k)).toFixed(3)})`; ctx.lineWidth = 1; ctx.stroke();
         }
       });
 
-      // ancres (theatres)
+      // ancres (théâtres) : point net, anneau qui pulse, anneau fixe au survol
       anchors.forEach((a, i) => {
         const xy = proj([a.lon, a.lat]); if (!xy) return;
         const hovered = hoverAnchor && hoverAnchor.id === a.id;
-        const pulse = (Math.sin(t / 1100 + i * 1.7) + 1) / 2;
-        const k = hovered ? 1.5 : 1;
-
-        const glowR = (10 + pulse * 4) * k;
-        const g = ctx.createRadialGradient(xy[0], xy[1], 0, xy[0], xy[1], glowR);
-        g.addColorStop(0,    `rgba(${C.fluxLand},${(0.42 + pulse * 0.16).toFixed(3)})`);
-        g.addColorStop(0.45, `rgba(${C.fluxLand},${(0.14 + pulse * 0.06).toFixed(3)})`);
-        g.addColorStop(1,    `rgba(${C.fluxLand},0)`);
-        ctx.fillStyle = g;
-        ctx.beginPath(); ctx.arc(xy[0], xy[1], glowR, 0, Math.PI * 2); ctx.fill();
-
-        ctx.beginPath(); ctx.arc(xy[0], xy[1], 3.4 * k, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${C.fluxLand},0.82)`;
-        ctx.fill();
-
-        ctx.beginPath(); ctx.arc(xy[0], xy[1], 1.7 * k, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.98)';
-        ctx.fill();
+        const ph = ((t + i * 640) % 2400) / 2400;
+        ctx.beginPath(); ctx.arc(xy[0], xy[1], 5 + ph * 18, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(${C.fluxLand},${(0.45 * (1 - ph)).toFixed(3)})`; ctx.lineWidth = 1; ctx.stroke();
+        if (hovered) { ctx.beginPath(); ctx.arc(xy[0], xy[1], 10, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.stroke(); }
+        ctx.beginPath(); ctx.arc(xy[0], xy[1], hovered ? 4.2 : 3.4, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.98)'; ctx.fill();
+        ctx.beginPath(); ctx.arc(xy[0], xy[1], 1.4, 0, Math.PI * 2); ctx.fillStyle = C.ocean === 'rgba(0,0,0,0)' ? '#0F1013' : C.ocean; ctx.fill();
 
         ctx.save();
-        ctx.font = (hovered ? '500 ' : '400 ') +
-          '11px "JetBrains Mono", ui-monospace, Menlo, monospace';
+        ctx.font = (hovered ? '500 ' : '400 ') + '12px ' + C.font;
         ctx.textBaseline = 'middle';
         const lbl = window.AlgorI18n ? window.AlgorI18n.t(a.label) : a.label; // étiquette traduite en anglais (i18n.js)
-        const tx = xy[0] + 12, ty = xy[1] + 0.5;
-        ctx.fillStyle = hovered ? '#2c2840' : '#4a4660';
-        ctx.shadowColor = 'rgba(255,255,255,0.95)';
-        ctx.shadowBlur = 5;
-        ctx.fillText(lbl, tx, ty);
-        ctx.fillText(lbl, tx, ty);
-        ctx.shadowBlur = 0;
-        ctx.fillText(lbl, tx, ty);
+        const haut = a.pos === 'haut';
+        ctx.textAlign = haut ? 'center' : 'left';
+        const tx = haut ? xy[0] : xy[0] + 12, ty = haut ? xy[1] - 15 : xy[1] + 0.5;
+        if (C.detoure) {
+          // détourage net dans la couleur du fond : l'étiquette reste lisible quand un flux la croise
+          ctx.lineJoin = 'round'; ctx.lineWidth = 4; ctx.strokeStyle = C.halo; ctx.strokeText(lbl, tx, ty);
+          ctx.fillStyle = hovered ? C.labelOn : C.label; ctx.fillText(lbl, tx, ty);
+        } else {
+          ctx.fillStyle = hovered ? C.labelOn : C.label;
+          ctx.shadowColor = C.halo;
+          ctx.shadowBlur = 5;
+          ctx.fillText(lbl, tx, ty);
+          ctx.fillText(lbl, tx, ty);
+          ctx.shadowBlur = 0;
+          ctx.fillText(lbl, tx, ty);
+        }
         ctx.restore();
       });
     }

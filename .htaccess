@@ -1,0 +1,29 @@
+# En-tetes de securite pour hebergement Apache (OVHcloud).
+# Equivalent du fichier _headers (qui n'est lu QUE par Cloudflare Pages, ignore par OVH).
+# Avec ce .htaccess, la CSP / HSTS sont enfin reellement appliquees.
+
+<IfModule mod_headers.c>
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://esm.sh https://api.mapbox.com https://cdn.sheetjs.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://api.mapbox.com https://unpkg.com; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://esm.sh https://lwgrjdpuagnvvzmdbyzb.supabase.co wss://lwgrjdpuagnvvzmdbyzb.supabase.co https://atfxuffrekgqxtcymnka.supabase.co wss://atfxuffrekgqxtcymnka.supabase.co https://api.mapbox.com https://events.mapbox.com https://*.tiles.mapbox.com wss://stream.aisstream.io https://api.github.com https://cdn.jsdelivr.net https://*.basemaps.cartocdn.com https://*.openmaptiles.org https://server.arcgisonline.com https://api.microlink.io https://*.streamlit.app wss://*.streamlit.app; worker-src 'self' blob:; child-src blob: https://www.youtube.com https://www.youtube-nocookie.com https://*.streamlit.app; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://*.streamlit.app; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+</IfModule>
+
+# Force HTTPS
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Type correct pour les polices woff2 self-hostees
+AddType font/woff2 .woff2
+
+# Cache long pour les assets statiques (polices, images)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 month"
+</IfModule>

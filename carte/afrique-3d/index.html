@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afrique 3D · HUMINT et OSINT · Algor Access</title>
+<!-- Gate premium : overlay bloquant tant que session + plan premium absents. -->
+<script>window.addEventListener('algorAuthReady', function () { window.__algorAuthGranted = true; });</script>
+<script type="module" src="../../shared/site-auth.js?v=20260702a"></script>
+
+<link rel="stylesheet" href="/shared/home/fonts.css?v=20260625a" />
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
+<style>
+  :root{
+    --violet:#6B3FA0; --violet-mid:#5650C6; --blue:#2E84D4;
+    --grad:linear-gradient(95deg,#6B3FA0,#5650C6 55%,#2E84D4);
+    --ink:#1F1437; --tx:#4A4460; --muted:#9089AA;
+    --panel:#fff; --ln:rgba(123,90,189,0.18); --ln-soft:rgba(123,90,189,0.10);
+    --shadow:0 8px 26px -8px rgba(46,24,87,0.20);
+    --jakarta:'Plus Jakarta Sans',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#eef0f4;color:var(--tx);font-family:var(--jakarta);overflow:hidden}
+  #map{position:absolute;inset:0}
+
+  /* ── Header ── */
+  #header{position:absolute;top:0;left:0;right:0;height:60px;z-index:8;display:flex;align-items:center;gap:14px;
+    padding:0 18px;pointer-events:none}
+  #header .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex:none;pointer-events:auto}
+  #header .brand img{height:30px;border-radius:7px}
+  #page-title{margin:0;font:800 18px/1 var(--jakarta);letter-spacing:-.01em;color:var(--ink)}
+  #header .sub{font:600 8px/1 var(--jakarta);letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-top:5px}
+  #header .spacer{flex:1}
+  .hbtn{pointer-events:auto;background:#fff;border:1px solid var(--ln);color:var(--violet);cursor:pointer;
+    font:700 9.5px/1 var(--jakarta);letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;border-radius:11px;box-shadow:var(--shadow);
+    transition:background .15s,color .15s}
+  .hbtn:hover{background:rgba(107,63,160,.07)}
+  .hbtn.on{background:var(--grad);border:none;color:#fff;box-shadow:0 8px 22px -7px rgba(86,80,198,.6)}
+
+  /* ── Panneau gauche ── */
+  #panel{position:absolute;top:70px;left:18px;bottom:96px;width:296px;z-index:7;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+  .card{background:var(--panel);border:1px solid var(--ln);border-radius:15px;box-shadow:var(--shadow);pointer-events:auto}
+  #kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .kpi{padding:12px 6px 11px;text-align:center}
+  .kpi b{display:block;font:800 21px/1 var(--jakarta);color:var(--ink);letter-spacing:-.02em}
+  .kpi span{display:block;margin-top:5px;font:700 7.5px/1.35 var(--jakarta);letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+  .kpi.k-osint b{color:var(--blue)}
+
+  #modes{display:flex;padding:5px;gap:4px}
+  .mode{flex:1;border:none;background:none;cursor:pointer;padding:9px 4px;border-radius:10px;
+    font:700 9px/1.3 var(--jakarta);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);transition:all .15s}
+  .mode:hover{color:var(--violet)}
+  .mode.on{background:var(--grad);color:#fff;box-shadow:0 6px 16px -6px rgba(86,80,198,.55)}
+
+  #countries{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+  #countries h3{margin:0;padding:13px 15px 9px;font:700 9px/1 var(--jakarta);letter-spacing:.15em;text-transform:uppercase;color:var(--violet);
+    border-bottom:1px solid var(--ln-soft)}
+  #country-list{flex:1;overflow-y:auto;padding:6px;scrollbar-width:thin}
+  .co{display:block;width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:9px 10px 10px;border-radius:11px;transition:background .13s}
+  .co:hover{background:rgba(107,63,160,.07)}
+  .co.on{background:rgba(107,63,160,.10)}
+  .co-top{display:flex;align-items:baseline;gap:8px}
+  .co-name{flex:1;font:700 13px/1 var(--jakarta);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .co-n{font:800 12.5px/1 var(--jakarta);color:var(--violet)}
+  .co-pct{font:700 9px/1 var(--jakarta);color:var(--blue)}
+  .co-bar{height:4px;margin-top:7px;border-radius:3px;background:rgba(123,90,189,.12);overflow:hidden}
+  .co-bar i{display:block;height:100%;border-radius:3px;background:var(--grad);transition:width .6s cubic-bezier(.22,.9,.3,1)}
+
+  /* ── Timeline bas ── */
+  #timebar{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:7;display:flex;align-items:center;gap:7px;
+    background:#fff;border:1px solid var(--ln);border-radius:15px;box-shadow:var(--shadow);padding:7px}
+  #play{width:36px;height:36px;border-radius:11px;border:none;cursor:pointer;background:var(--grad);color:#fff;
+    font-size:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px -6px rgba(86,80,198,.55)}
+  .tchip{border:none;background:none;cursor:pointer;padding:9px 12px;border-radius:10px;
+    font:700 10.5px/1 var(--jakarta);letter-spacing:.03em;color:var(--muted);transition:all .15s;white-space:nowrap}
+  .tchip:hover{color:var(--violet)}
+  .tchip.on{background:var(--grad);color:#fff;box-shadow:0 6px 16px -6px rgba(86,80,198,.55)}
+
+  /* ── Légende ── */
+  #legend{position:absolute;right:18px;bottom:20px;z-index:7;width:212px;padding:13px 15px 14px}
+  #legend h4{margin:0 0 9px;font:700 8.5px/1 var(--jakarta);letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+  #lgrad{height:9px;border-radius:5px;background:linear-gradient(90deg,#6B3FA0,#5650C6 40%,#2E84D4)}
+  #legend .lg-lab{display:flex;justify-content:space-between;margin-top:5px;font:600 8.5px/1.3 var(--jakarta);color:var(--muted)}
+  #legend p{margin:9px 0 0;font:500 10px/1.5 var(--jakarta);color:var(--tx)}
+  #legend p b{color:var(--ink)}
+
+  /* ── Loader ── */
+  #loader{position:absolute;inset:0;z-index:12;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;
+    background:#F4F2F8;transition:opacity .6s}
+  #loader.off{opacity:0;pointer-events:none}
+  #loader .ring{width:38px;height:38px;border-radius:50%;border:3px solid rgba(107,63,160,.15);border-top-color:var(--violet);animation:spin .9s linear infinite}
+  #loader span{font:700 10px/1 var(--jakarta);letter-spacing:.18em;text-transform:uppercase;color:var(--violet)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ── Popup Mapbox ── */
+  .mapboxgl-popup-content{font-family:var(--jakarta);border-radius:14px;box-shadow:0 16px 40px -10px rgba(46,24,87,.34);
+    border:1px solid var(--ln);padding:0;overflow:hidden;min-width:238px;max-width:300px}
+  .mapboxgl-popup-close-button{font-size:16px;color:var(--muted);right:6px;top:4px}
+  .pp{padding:13px 15px 14px;border-left:4px solid var(--violet)}
+  .pp.pp-osint{border-left-color:var(--blue)}
+  .pp-badge{display:inline-block;font:700 7.5px/1 var(--jakarta);letter-spacing:.13em;text-transform:uppercase;
+    color:var(--violet);background:rgba(107,63,160,.09);padding:5px 8px;border-radius:6px}
+  .pp-osint .pp-badge{color:var(--blue);background:rgba(46,132,212,.10)}
+  .pp h4{margin:9px 0 2px;font:800 14px/1.25 var(--jakarta);color:var(--ink)}
+  .pp .pp-meta{font:600 10px/1.5 var(--jakarta);color:var(--muted)}
+  .pp p{margin:8px 0 0;font:500 11px/1.55 var(--jakarta);color:var(--tx);max-height:150px;overflow-y:auto}
+  .pp .pp-row{display:flex;justify-content:space-between;gap:10px;margin-top:7px;font:600 11px/1.4 var(--jakarta)}
+  .pp .pp-row b{color:var(--ink)}
+
+  @media (max-width:840px){
+    #panel{width:236px;bottom:150px}
+    #legend{display:none}
+    #timebar{max-width:calc(100vw - 24px);overflow-x:auto}
+    #page-title{font-size:15px}
+  }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="loader"><div class="ring"></div><span>Chargement du théâtre</span></div>
+
+<header id="header">
+  <a class="brand" href="/" title="Retour à l'accueil">
+    <img src="/sahel/algor_int_logo.jpg" alt="Algor Int" onerror="this.style.display='none'">
+    <div>
+      <h1 id="page-title">Afrique · relief 3D</h1>
+      <div class="sub">HUMINT recoupé OSINT · volumes par zone</div>
+    </div>
+  </a>
+  <div class="spacer"></div>
+  <button class="hbtn" id="btn-orbit" title="Rotation lente autour du théâtre">Orbite</button>
+  <button class="hbtn on" id="btn-3d" title="Basculer la perspective">Vue 3D</button>
+  <button class="hbtn" id="btn-reset" title="Revenir à la vue d'ensemble">Vue générale</button>
+</header>
+
+<aside id="panel">
+  <div id="kpis">
+    <div class="card kpi"><b id="k-total">0</b><span>Signalements</span></div>
+    <div class="card kpi k-osint"><b id="k-osint">0</b><span>Corroborés OSINT</span></div>
+    <div class="card kpi"><b id="k-pays">0</b><span>Pays couverts</span></div>
+  </div>
+  <div class="card" id="modes">
+    <button class="mode on" data-mode="all">Tout</button>
+    <button class="mode" data-mode="humint">HUMINT seul</button>
+    <button class="mode" data-mode="osint">Recoupé OSINT</button>
+  </div>
+  <div class="card" id="countries">
+    <h3>Pays · classement</h3>
+    <div id="country-list"></div>
+  </div>
+</aside>
+
+<div id="timebar">
+  <button id="play" title="Lecture de la période">&#9654;</button>
+  <div id="tchips" style="display:flex;gap:2px"></div>
+</div>
+
+<div class="card" id="legend">
+  <h4>Lecture de la carte</h4>
+  <div id="lgrad"></div>
+  <div class="lg-lab"><span>HUMINT non recoupé</span><span>Corroboré OSINT</span></div>
+  <p><b>Hauteur</b> : volume de signalements dans la zone.<br><b>Couleur</b> : part confirmée par source ouverte.<br>Zoomer pour voir chaque signalement.</p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+
+  /* ─────────── Normalisation des données ─────────── */
+  var MOIS = { '2025-12':'Déc. 2025','2026-01':'Janv. 2026','2026-02':'Févr. 2026','2026-03':'Mars 2026','2026-04':'Avr. 2026' };
+  function frMonth(key) {
+    if (MOIS[key]) return MOIS[key];
+    var ms = ['Janv.','Févr.','Mars','Avr.','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'];
+    var p = key.split('-'); return ms[parseInt(p[1],10)-1] + ' ' + p[0];
+  }
+  function parseDesc(desc) {
+    var out = {};
+    if (!desc) return out;
+    String(desc).split(/\n/).forEach(function (line) {
+      var m = line.match(/^\s*([^:]+?)\s*:\s*(.+)$/);
+      if (!m) return;
+      var k = m[1].toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+      var v = m[2].trim();
+      if (k.indexOf('date') === 0) out.date = v;
+      else if (k.indexOf('pays') === 0) out.pays = v;
+      else if (k.indexOf('even') === 0) out.type = v;
+      else if (k.indexOf('detail') === 0 || k.indexOf('descri') === 0) out.detail = v;
+    });
+    return out;
+  }
+  function toISO(raw) {
+    if (!raw) return null;
+    var s = String(raw).trim(), m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return m[1] + '-' + m[2] + '-' + m[3];
+    m = s.match(/(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})/);
+    if (m) return m[3] + '-' + String(m[2]).padStart(2, '0') + '-' + String(m[1]).padStart(2, '0');
+    return null;
+  }
+  function canonCountry(raw) {
+    if (!raw) return 'Autre';
+    var s = String(raw).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    if (/nigeria/.test(s)) return 'Nigeria';
+    if (/b[u]?[rk]{2}ina|bukrina/.test(s)) return 'Burkina Faso';
+    if (/niger/.test(s)) return 'Niger';
+    if (/mali/.test(s)) return 'Mali';
+    if (/rdc|congo/.test(s)) return 'RDC';
+    if (/benin|segbana|kerou/.test(s)) return 'Bénin';
+    if (/togo/.test(s)) return 'Togo';
+    return 'Autre';
+  }
+  function normalize(features) {
+    var out = [];
+    features.forEach(function (f) {
+      if (!f.geometry || f.geometry.type !== 'Point') return;
+      var c = f.geometry.coordinates, p = f.properties || {};
+      var parsed = parseDesc(p.description);
+      var pays = p.pays || parsed.pays || '';
+      var iso = toISO(p.date || parsed.date);
+      out.push({
+        lon: +c[0], lat: +c[1],
+        acteur: p.name || '?',
+        type: p.type || parsed.type || 'Divers',
+        iso: iso, month: iso ? iso.slice(0, 7) : null,
+        pays: pays,
+        country: canonCountry(pays.split(/\s*-\s*|-/)[0] || pays),
+        detail: parsed.detail || (p.type ? p.description : '') || '',
+        corr: p.corrobore === true
+      });
+    });
+    return out;
+  }
+
+  /* ─────────── Hexbin (pointy-top, coordonnées degrés) ─────────── */
+  var HEXR = 0.30; // rayon en degrés, ~33 km
+  function hexOf(lon, lat) {
+    var q = (Math.sqrt(3) / 3 * lon - lat / 3) / HEXR;
+    var r = (2 / 3 * lat) / HEXR;
+    var x = q, z = r, y = -x - z;
+    var rx = Math.round(x), ry = Math.round(y), rz = Math.round(z);
+    var dx = Math.abs(rx - x), dy = Math.abs(ry - y), dz = Math.abs(rz - z);
+    if (dx > dy && dx > dz) rx = -ry - rz;
+    else if (dy > dz) ry = -rx - rz;
+    else rz = -rx - ry;
+    return rx + '|' + rz;
+  }
+  function hexPolygon(key) {
+    var p = key.split('|'), q = +p[0], r = +p[1];
+    var cx = HEXR * Math.sqrt(3) * (q + r / 2), cy = HEXR * 1.5 * r;
+    var ring = [];
+    for (var i = 0; i < 6; i++) {
+      var a = Math.PI / 180 * (60 * i - 30);
+      ring.push([cx + HEXR * Math.cos(a), cy + HEXR * Math.sin(a)]);
+    }
+    ring.push(ring[0]);
+    return ring;
+  }
+
+  /* ─────────── État ─────────── */
+  var DATA = [];          // signalements normalisés
+  var MONTHS = [];        // clés de mois triées
+  var state = { key: 'all', mode: 'all', country: null, playing: null, orbiting: false };
+  var map, K = 9000, MAXN = 1;
+
+  function count(list, key, mode) {
+    var n = 0;
+    list.forEach(function (d) {
+      if (key !== 'all' && d.month !== key) return;
+      if (mode === 'osint' && !d.corr) return;
+      if (mode === 'humint' && d.corr) return;
+      n++;
+    });
+    return n;
+  }
+
+  /* ─────────── Construction des sources ─────────── */
+  function buildHexes() {
+    var bins = {};
+    DATA.forEach(function (d) {
+      var k = hexOf(d.lon, d.lat);
+      var b = bins[k] || (bins[k] = { types: {}, acteurs: {}, props: { m_all: 0, c_all: 0 } });
+      b.props.m_all++;
+      if (d.corr) b.props.c_all++;
+      if (d.month) {
+        b.props['m_' + d.month] = (b.props['m_' + d.month] || 0) + 1;
+        if (d.corr) b.props['c_' + d.month] = (b.props['c_' + d.month] || 0) + 1;
+      }
+      b.types[d.type] = (b.types[d.type] || 0) + 1;
+      b.acteurs[d.acteur] = (b.acteurs[d.acteur] || 0) + 1;
+    });
+    var feats = [];
+    Object.keys(bins).forEach(function (k) {
+      var b = bins[k];
+      MAXN = Math.max(MAXN, b.props.m_all);
+      var top = function (o) {
+        return Object.keys(o).sort(function (a, c) { return o[c] - o[a]; }).slice(0, 3)
+          .map(function (t) { return t + ' ' + o[t]; }).join(' · ');
+      };
+      b.props.topTypes = top(b.types);
+      b.props.topActeurs = top(b.acteurs);
+      feats.push({ type: 'Feature', properties: b.props, geometry: { type: 'Polygon', coordinates: [hexPolygon(k)] } });
+    });
+    K = 62000 / Math.sqrt(MAXN); // colonne max ≈ 62 km
+    return { type: 'FeatureCollection', features: feats };
+  }
+  function buildPoints() {
+    return {
+      type: 'FeatureCollection',
+      features: DATA.map(function (d, i) {
+        return { type: 'Feature', id: i, geometry: { type: 'Point', coordinates: [d.lon, d.lat] },
+          properties: { i: i, month: d.month || '', corr: d.corr ? 1 : 0 } };
+      })
+    };
+  }
+
+  /* ─────────── Expressions Mapbox ─────────── */
+  function mExpr(key) { return ['coalesce', ['get', 'm_' + key], 0]; }
+  function cExpr(key) { return ['coalesce', ['get', 'c_' + key], 0]; }
+  function nExpr() {
+    var m = mExpr(state.key), c = cExpr(state.key);
+    if (state.mode === 'osint') return c;
+    if (state.mode === 'humint') return ['-', m, c];
+    return m;
+  }
+  function heightExpr() { return ['*', K, ['sqrt', ['max', 0, nExpr()]]]; }
+  function colorExpr() {
+    if (state.mode === 'humint') return '#6B3FA0';
+    if (state.mode === 'osint') return '#2E84D4';
+    return ['interpolate', ['linear'],
+      ['/', cExpr(state.key), ['max', 1, mExpr(state.key)]],
+      0, '#6B3FA0', 0.25, '#5650C6', 0.6, '#2E84D4'];
+  }
+  function applyHexPaint() {
+    map.setPaintProperty('hex3d', 'fill-extrusion-height', heightExpr());
+    map.setPaintProperty('hex3d', 'fill-extrusion-color', colorExpr());
+    map.setFilter('hex3d', ['>', nExpr(), 0]);
+    map.setFilter('hexbase', ['>', nExpr(), 0]);
+    var pf = ['all'];
+    if (state.key !== 'all') pf.push(['==', ['get', 'month'], state.key]);
+    if (state.mode === 'osint') pf.push(['==', ['get', 'corr'], 1]);
+    if (state.mode === 'humint') pf.push(['==', ['get', 'corr'], 0]);
+    map.setFilter('pts', pf);
+  }
+
+  /* ─────────── Interface ─────────── */
+  function animateNumber(el, target) {
+    var from = parseInt(el.textContent.replace(/\D/g, ''), 10) || 0;
+    var t0 = performance.now(), dur = 550;
+    function step(t) {
+      var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = Math.round(from + (target - from) * e).toLocaleString('fr-FR');
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function refreshKPIs() {
+    var list = state.country ? DATA.filter(function (d) { return d.country === state.country; }) : DATA;
+    var tot = count(list, state.key, 'all');
+    var osint = count(list, state.key, 'osint');
+    animateNumber(document.getElementById('k-total'), state.mode === 'all' ? tot : count(list, state.key, state.mode));
+    animateNumber(document.getElementById('k-osint'), osint);
+    var pays = {};
+    list.forEach(function (d) { if (state.key === 'all' || d.month === state.key) pays[d.country] = 1; });
+    animateNumber(document.getElementById('k-pays'), Object.keys(pays).length);
+  }
+  function refreshCountries() {
+    var agg = {};
+    DATA.forEach(function (d) {
+      if (state.key !== 'all' && d.month !== state.key) return;
+      if (state.mode === 'osint' && !d.corr) return;
+      if (state.mode === 'humint' && d.corr) return;
+      var a = agg[d.country] || (agg[d.country] = { n: 0, c: 0, lons: [], lats: [] });
+      a.n++; if (d.corr) a.c++;
+      a.lons.push(d.lon); a.lats.push(d.lat);
+    });
+    var names = Object.keys(agg).sort(function (a, b) { return agg[b].n - agg[a].n; });
+    var max = names.length ? agg[names[0]].n : 1;
+    var host = document.getElementById('country-list');
+    host.innerHTML = '';
+    names.forEach(function (name) {
+      var a = agg[name];
+      var btn = document.createElement('button');
+      btn.className = 'co' + (state.country === name ? ' on' : '');
+      btn.innerHTML =
+        '<div class="co-top"><span class="co-name">' + name + '</span>' +
+        '<span class="co-pct">' + (a.n ? Math.round(a.c / a.n * 100) : 0) + '% OSINT</span>' +
+        '<span class="co-n">' + a.n + '</span></div>' +
+        '<div class="co-bar"><i style="width:' + Math.round(a.n / max * 100) + '%"></i></div>';
+      btn.addEventListener('click', function () {
+        stopOrbit();
+        if (state.country === name) { state.country = null; resetView(); }
+        else {
+          state.country = name;
+          var lons = a.lons.slice().sort(function (x, y) { return x - y; });
+          var lats = a.lats.slice().sort(function (x, y) { return x - y; });
+          var lo = function (arr) { return arr[Math.floor(arr.length * 0.03)]; };
+          var hi = function (arr) { return arr[Math.ceil(arr.length * 0.97) - 1]; };
+          map.fitBounds([[lo(lons), lo(lats)], [hi(lons), hi(lats)]],
+            { padding: { top: 110, bottom: 130, left: 340, right: 80 }, pitch: 54, bearing: -16, maxZoom: 6.6, duration: 2400, essential: true });
+        }
+        refreshAll();
+      });
+      host.appendChild(btn);
+    });
+  }
+  function refreshAll() { applyHexPaint(); refreshKPIs(); refreshCountries(); }
+
+  function buildTimebar() {
+    var host = document.getElementById('tchips');
+    var keys = ['all'].concat(MONTHS);
+    keys.forEach(function (k) {
+      var b = document.createElement('button');
+      b.className = 'tchip' + (k === state.key ? ' on' : '');
+      b.dataset.key = k;
+      b.textContent = k === 'all' ? 'Toute la période' : frMonth(k);
+      b.addEventListener('click', function () { stopPlay(); setKey(k); });
+      host.appendChild(b);
+    });
+  }
+  function setKey(k) {
+    state.key = k;
+    document.querySelectorAll('.tchip').forEach(function (b) { b.classList.toggle('on', b.dataset.key === k); });
+    refreshAll();
+  }
+
+  /* ─────────── Lecture / orbite / caméra ─────────── */
+  function stopPlay() {
+    if (state.playing) { clearInterval(state.playing); state.playing = null; document.getElementById('play').innerHTML = '&#9654;'; }
+  }
+  document.getElementById('play').addEventListener('click', function () {
+    if (state.playing) { stopPlay(); return; }
+    this.innerHTML = '&#10074;&#10074;';
+    var idx = Math.max(0, MONTHS.indexOf(state.key));
+    if (state.key === 'all') idx = -1;
+    state.playing = setInterval(function () {
+      idx = (idx + 1) % (MONTHS.length + 1);
+      setKey(idx === MONTHS.length ? 'all' : MONTHS[idx]);
+    }, 1600);
+    idx = idx - 1;
+    setKey(idx < 0 ? MONTHS[0] : MONTHS[idx + 1]);
+    idx = MONTHS.indexOf(state.key);
+  });
+
+  function stopOrbit() {
+    state.orbiting = false;
+    document.getElementById('btn-orbit').classList.remove('on');
+  }
+  function orbitFrame() {
+    if (!state.orbiting) return;
+    map.setBearing(map.getBearing() + 0.06);
+    requestAnimationFrame(orbitFrame);
+  }
+  document.getElementById('btn-orbit').addEventListener('click', function () {
+    state.orbiting = !state.orbiting;
+    this.classList.toggle('on', state.orbiting);
+    if (state.orbiting) { if (map.getPitch() < 30) map.easeTo({ pitch: 54, duration: 900 }); requestAnimationFrame(orbitFrame); }
+  });
+
+  var HOME = { center: [8.5, 8.8], zoom: 4.05, pitch: 52, bearing: -14 };
+  function resetView() { map.flyTo(Object.assign({ duration: 2200, essential: true }, HOME)); }
+  document.getElementById('btn-reset').addEventListener('click', function () {
+    stopOrbit(); state.country = null; resetView(); refreshAll();
+  });
+  document.getElementById('btn-3d').addEventListener('click', function () {
+    var to3d = map.getPitch() < 25;
+    this.classList.toggle('on', to3d);
+    this.textContent = to3d ? 'Vue 3D' : 'Vue 2D';
+    map.easeTo({ pitch: to3d ? 52 : 0, bearing: to3d ? -14 : 0, duration: 1100 });
+  });
+  document.querySelectorAll('.mode').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.mode').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      state.mode = b.dataset.mode;
+      refreshAll();
+    });
+  });
+
+  /* ─────────── Carte ─────────── */
+  map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/light-v11',
+    projection: 'globe',
+    center: [12, 3], zoom: 1.7, pitch: 0, bearing: 0,
+    antialias: true, attributionControl: false
+  });
+  map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
+  map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
+  map.on('dragstart', stopOrbit);
+
+  map.on('style.load', function () {
+    map.setFog({
+      color: 'rgb(244,242,248)',
+      'high-color': 'rgb(210,200,235)',
+      'horizon-blend': 0.06,
+      'space-color': 'rgb(233,230,242)',
+      'star-intensity': 0
+    });
+    map.addSource('dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
+    map.setTerrain({ source: 'dem', exaggeration: 1.7 });
+  });
+
+  Promise.all([
+    fetch('/sahel/humint.geojson').then(function (r) { return r.json(); }),
+    fetch('/rdc/humint.geojson').then(function (r) { return r.json(); }),
+    new Promise(function (res) { map.on('load', res); })
+  ]).then(function (rs) {
+    DATA = normalize(rs[0].features.concat(rs[1].features));
+    var mset = {};
+    DATA.forEach(function (d) { if (d.month) mset[d.month] = 1; });
+    MONTHS = Object.keys(mset).sort();
+
+    map.addSource('hexes', { type: 'geojson', data: buildHexes() });
+    map.addSource('points', { type: 'geojson', data: buildPoints() });
+
+    map.addLayer({
+      id: 'hexbase', type: 'fill', source: 'hexes',
+      paint: { 'fill-color': '#6B3FA0', 'fill-opacity': 0.10 }
+    });
+    map.addLayer({
+      id: 'hex3d', type: 'fill-extrusion', source: 'hexes',
+      paint: {
+        'fill-extrusion-height': heightExpr(),
+        'fill-extrusion-base': 0,
+        'fill-extrusion-color': colorExpr(),
+        'fill-extrusion-opacity': 0.86,
+        'fill-extrusion-vertical-gradient': true,
+        'fill-extrusion-height-transition': { duration: 750, delay: 0 },
+        'fill-extrusion-color-transition': { duration: 750, delay: 0 }
+      }
+    });
+    map.addLayer({
+      id: 'pts', type: 'circle', source: 'points', minzoom: 6.4,
+      paint: {
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 6.4, 3.5, 10, 6.5],
+        'circle-color': ['case', ['==', ['get', 'corr'], 1], '#2E84D4', '#6B3FA0'],
+        'circle-stroke-width': 1.6, 'circle-stroke-color': '#ffffff',
+        'circle-opacity': 0.92
+      }
+    });
+    applyHexPaint();
+
+    /* Popups */
+    map.on('click', 'pts', function (e) {
+      var d = DATA[e.features[0].properties.i];
+      if (!d) return;
+      var cls = d.corr ? 'pp pp-osint' : 'pp';
+      var badge = d.corr ? 'Corroboré source ouverte' : 'HUMINT non recoupé';
+      new mapboxgl.Popup({ offset: 10 }).setLngLat(e.lngLat).setHTML(
+        '<div class="' + cls + '"><span class="pp-badge">' + badge + '</span>' +
+        '<h4>' + esc(d.type) + '</h4>' +
+        '<div class="pp-meta">' + esc(d.pays || '') + (d.iso ? ' · ' + frDate(d.iso) : '') + ' · acteur ' + esc(d.acteur) + '</div>' +
+        (d.detail ? '<p>' + esc(d.detail) + '</p>' : '') +
+        '</div>'
+      ).addTo(map);
+    });
+    map.on('click', 'hex3d', function (e) {
+      if (map.getZoom() >= 6.4) return; // au zoom point, priorité aux signalements
+      var p = e.features[0].properties;
+      var m = state.key === 'all' ? (p.m_all || 0) : (p['m_' + state.key] || 0);
+      var c = state.key === 'all' ? (p.c_all || 0) : (p['c_' + state.key] || 0);
+      new mapboxgl.Popup({ offset: 10 }).setLngLat(e.lngLat).setHTML(
+        '<div class="pp"><span class="pp-badge">Zone · ' + (state.key === 'all' ? 'toute la période' : frMonth(state.key)) + '</span>' +
+        '<div class="pp-row"><span>Signalements</span><b>' + m + '</b></div>' +
+        '<div class="pp-row"><span>Corroborés OSINT</span><b>' + c + ' (' + (m ? Math.round(c / m * 100) : 0) + '%)</b></div>' +
+        (p.topTypes ? '<div class="pp-row"><span>Typologies</span></div><p style="margin-top:2px">' + esc(p.topTypes) + '</p>' : '') +
+        (p.topActeurs ? '<div class="pp-row"><span>Acteurs</span></div><p style="margin-top:2px">' + esc(p.topActeurs) + '</p>' : '') +
+        '</div>'
+      ).addTo(map);
+    });
+    ['pts', 'hex3d'].forEach(function (l) {
+      map.on('mouseenter', l, function () { map.getCanvas().style.cursor = 'pointer'; });
+      map.on('mouseleave', l, function () { map.getCanvas().style.cursor = ''; });
+    });
+
+    buildTimebar();
+    refreshKPIs();
+    refreshCountries();
+    document.getElementById('loader').classList.add('off');
+
+    /* Intro cinématique : le globe puis plongée sur le théâtre */
+    setTimeout(function () {
+      map.flyTo(Object.assign({ duration: 4200, curve: 1.5, essential: true }, HOME));
+    }, 450);
+  }).catch(function (err) {
+    document.querySelector('#loader span').textContent = 'Données indisponibles';
+    console.error(err);
+  });
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function frDate(iso) {
+    var ms = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+    var p = iso.split('-'); return parseInt(p[2], 10) + ' ' + ms[parseInt(p[1], 10) - 1] + ' ' + p[0];
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<script src="/shared/i18n.js?v=20260916a"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mes alertes · Algor Access</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#0F1013" />
+<!-- Alertes abonnés (17/09/2026) : réglages de l'envoi par mail des notes de veille
+     géopolitique. Table alertes_abonnements (RLS : chacun sa ligne), envoi par la
+     fonction alerter-abonnes. Page non gatée : elle décide elle-même quoi montrer. -->
+<link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+<link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
+<link rel="stylesheet" href="/shared/v5/v5.css?v=20260922l" />
+<style>
+  [hidden] { display: none !important; }
+  .al { max-width: 1240px; }
+
+  /* États : vérification, connexion, compte gratuit, désabonnement */
+  .verif { margin: 0; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 17px; color: var(--muted); }
+  .al-etat { max-width: 640px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .al-etat h2 { margin: 0; font-weight: 400; font-size: clamp(30px, 3vw, 42px); line-height: 1.1; letter-spacing: -0.025em; text-wrap: balance; }
+  .al-etat > p { margin: 16px 0 0; font-size: 18px; line-height: 1.55; color: var(--ink-2); }
+  .al-etat .v5-actions { margin-top: 30px; }
+  .al-pts { list-style: none; margin: 26px 0 0; padding: 0; font-size: 17px; color: var(--ink-2); }
+  .al-pts li { padding: 11px 0; border-top: 1px solid var(--line); }
+  .al-pts li:last-child { border-bottom: 1px solid var(--line); }
+
+  /* Réglages et aperçu */
+  .al-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+  .al-dl > div { align-items: start; }
+  .al-dl dt { padding-top: 3px; }
+
+  /* Interrupteur : encre allumé, pierre éteint */
+  .switch { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+  .switch__txt { font-size: 17px; color: var(--ink-2); min-width: 0; }
+  .switch__txt code { font: 400 15px var(--mono); color: var(--ink); word-break: break-all; }
+  .tgl { position: relative; width: 46px; height: 26px; flex: none; border-radius: 99px; background: var(--stone); transition: background .2s ease; }
+  .tgl::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--paper); box-shadow: 0 1px 2px rgba(0,0,0,.18); transition: transform .25s var(--ease); }
+  .tgl[aria-checked="true"] { background: var(--ink); }
+  .tgl[aria-checked="true"]::after { transform: translateX(20px); }
+  .tgl:hover { background: #C6C6C6; }
+  .tgl[aria-checked="true"]:hover { background: var(--ink-2); }
+  .tgl:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  /* Théâtres : cases à cocher en liste */
+  .chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); column-gap: 24px; border-top: 1px solid var(--line); }
+  .chip { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 13px 2px; border-bottom: 1px solid var(--line); text-align: left; color: var(--ink-2); transition: color .2s ease; }
+  .chip:hover { color: var(--ink); }
+  .chip__n { display: flex; align-items: center; gap: 12px; font-size: 17px; }
+  .chip__box { width: 18px; height: 18px; flex: none; display: grid; place-items: center; border: 1px solid var(--stone); border-radius: 2px; background: var(--paper); transition: background .2s ease, border-color .2s ease; }
+  .chip:hover .chip__box { border-color: var(--muted); }
+  .chip__box svg { width: 12px; height: 12px; opacity: 0; }
+  .chip[aria-checked="true"] { color: var(--ink); }
+  .chip[aria-checked="true"] .chip__box { background: var(--ink); border-color: var(--ink); }
+  .chip[aria-checked="true"] .chip__box svg { opacity: 1; }
+  .chip small { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .chip:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* Gravité : sélecteur segmenté */
+  .seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--stone); border-radius: 2px; }
+  .seg button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 12px 8px; font-size: 15px; line-height: 1.25; text-align: center; color: var(--ink-2); transition: background .2s ease, color .2s ease; }
+  .seg button + button { border-left: 1px solid var(--stone); }
+  .seg button:hover { background: var(--band); color: var(--ink); }
+  .seg button[aria-checked="true"] { background: var(--ink); color: var(--paper); }
+  .seg button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; position: relative; z-index: 1; }
+  .dots { display: flex; gap: 4px; }
+  .dots i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* Actions et message d'état */
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
+  .actions .btn-rect--ink:disabled { background: transparent; color: var(--muted); border-color: var(--stone); cursor: default; }
+  .actions .btn-outline:disabled { color: var(--faint); cursor: default; }
+  .actions .btn-outline:disabled:hover { background: transparent; border-color: currentColor; }
+  .statut { margin: 16px 0 0; min-height: 24px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+  .statut.is-ok { color: #2F6B4F; }
+  .statut.is-err { color: #A23B3B; }
+
+  /* Aperçu */
+  .apercu { position: sticky; top: 100px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .apercu h2 { margin: 0; font-weight: 400; font-size: clamp(24px, 2vw, 30px); line-height: 1.15; letter-spacing: -0.02em; }
+  .apercu__hint { margin: 8px 0 0; font-size: 15px; color: var(--muted); }
+  .kpi { display: flex; align-items: baseline; gap: 10px; margin: 26px 0 6px; }
+  .kpi b { font-weight: 400; font-size: clamp(48px, 5vw, 68px); line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+  .kpi span { font-size: 17px; color: var(--ink-2); }
+  .rythme { margin: 0 0 22px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+  .notes { border-top: 1px solid var(--line); }
+  .notes:empty { border-top: 0; }
+  .note { display: block; padding: 13px 0 14px; border-bottom: 1px solid var(--line); }
+  .note__m { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 5px; font-size: 13px; color: var(--muted); }
+  .note__m time { font-variant-numeric: tabular-nums; }
+  .sev { font-size: 12px; line-height: 1; padding: 4px 7px; border: 1px solid var(--stone); border-radius: 2px; color: var(--muted); }
+  .sev--alerte { border-color: var(--ink-2); color: var(--ink); }
+  .sev--critique { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .note__t { font-size: 16px; line-height: 1.4; color: var(--ink); }
+  .note:hover .note__t { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .vide { margin: 0; padding: 12px 0 0; font-size: 15px; color: var(--muted); }
+
+  @media (max-width: 1100px) { .al-grid { grid-template-columns: 1fr; } .apercu { position: static; } }
+  @media (max-width: 520px) { .seg button { font-size: 14px; padding: 11px 4px; } .switch { align-items: flex-start; } }
+</style>
+</head>
+<body data-rubrique="veille">
+
+<!-- v5:nav -->
+<div class="annonce" id="annonce" hidden>
+  <div class="annonce__in">
+    <p>Dernière note de veille : <a id="annonce-lien" href="/veille/"></a></p>
+    <button class="annonce__x" id="annonce-x" aria-label="Fermer le bandeau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+</div>
+<header class="nav" id="nav">
+  <div class="nav__bar">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <nav class="nav__links" aria-label="Rubriques"><a href="/theatres/">Théâtres</a><a href="/veille/" aria-current="page">Veille</a><a href="/methodologie/">Méthodologie</a><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a></nav>
+    <div class="nav__right">
+      <span class="lang-slot"></span>
+      <button class="btn-login site-login" type="button">Connexion</button>
+      <a class="btn-rect" href="/offres/">Demander un accès</a>
+      <div class="sq">
+        <button type="button" id="ouvrir-recherche" aria-label="Rechercher une zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
+        <button type="button" id="ouvrir-menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="veil" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <nav class="veil__body">
+    <div class="veil__main"><a href="/">Plateforme</a><a href="/theatres/">Théâtres</a><a href="/veille/" aria-current="page">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+    <div class="veil__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+    <div class="veil__col"><h3>Algor Access</h3><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+  </nav>
+</div>
+
+<div class="veil veil--search" id="recherche" role="dialog" aria-modal="true" aria-label="Recherche">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <div class="veil__body">
+    <form class="search-form" action="/demo/">
+      <label for="q">Essayez la démo sur n'importe quelle zone du monde</label>
+      <input id="q" name="q" type="search" placeholder="Bogotá" autocomplete="off" required>
+      <p>Indiquez une ville, une région ou un pays : vous verrez le rendu de nos cartes sur des données fictives.</p>
+    </form>
+  </div>
+</div>
+<!-- /v5:nav -->
+
+<main>
+  <section class="v5-phero" data-nav="dark" data-v5-trame data-hachures="7,0">
+    <h1>Mes alertes</h1>
+    <p class="v5-phero__lede">Chaque matin, les nouvelles notes de veille de vos théâtres arrivent dans votre boîte mail, avec l’analyse, les implications et les recommandations.</p>
+    <div class="v5-actions">
+      <a class="btn-outline" href="/veille/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6"/></svg>Veilles</a>
+    </div>
+  </section>
+
+  <section class="v5-sec" data-nav="light" aria-label="Réglages des alertes">
+    <div class="al">
+      <p class="verif" id="verif" role="status" aria-live="polite">Vérification de votre accès…</p>
+
+      <!-- Désabonnement depuis le lien du mail : confirmation explicite -->
+      <div class="al-etat" id="v-desabo" hidden>
+        <h2 id="desabo-titre">Suspendre vos alertes ?</h2>
+        <p id="desabo-txt" role="status" aria-live="polite">Vous ne recevrez plus les notes de veille par mail. Vous pourrez les réactiver à tout moment depuis cette page.</p>
+        <div class="v5-actions" id="desabo-actions">
+          <button class="btn-rect btn-rect--ink" type="button" id="desabo-ok">Me désabonner</button>
+          <a class="btn-outline" href="/compte/alertes/">Annuler</a>
+        </div>
+      </div>
+
+      <!-- Visiteur non connecté -->
+      <div class="al-etat" id="v-login" hidden>
+        <h2>Connectez-vous pour gérer vos alertes</h2>
+        <p>Les alertes sont liées à votre compte abonné et partent vers l’adresse mail de ce compte.</p>
+        <div class="v5-actions">
+          <a class="btn-rect btn-rect--ink" href="#" data-algor-login>Se connecter</a>
+          <a class="btn-outline" href="/offres/">Voir les offres</a>
+        </div>
+      </div>
+
+      <!-- Compte gratuit -->
+      <div class="al-etat" id="v-free" hidden>
+        <h2>Alertes réservées aux abonnés</h2>
+        <p>Avec l’offre premium, chaque note publiée sur les théâtres que vous suivez vous parvient par mail le matin même, analyse complète comprise.</p>
+        <ul class="al-pts">
+          <li>Six théâtres au choix</li>
+          <li>Seuil de gravité réglable</li>
+          <li>Analyse et recommandations</li>
+          <li>Désabonnement en un clic</li>
+        </ul>
+        <div class="v5-actions">
+          <a class="btn-rect btn-rect--ink" href="/offres/">Voir les offres</a>
+          <a class="btn-outline" href="/contact/">Nous contacter</a>
+        </div>
+      </div>
+
+      <!-- Abonné premium -->
+      <div class="al-grid" id="v-form" hidden>
+        <div>
+          <dl class="v5-dl al-dl">
+            <div>
+              <dt id="actif-lbl">Recevoir les alertes par mail</dt>
+              <dd>
+                <div class="switch">
+                  <span class="switch__txt">Envoi à <code id="email" data-i18n-skip>…</code></span>
+                  <button class="tgl" type="button" id="actif" role="switch" aria-checked="true" aria-label="Recevoir les alertes par mail"></button>
+                </div>
+              </dd>
+            </div>
+            <div>
+              <dt>Théâtres suivis</dt>
+              <dd><div class="chips" id="theatres" role="group" aria-label="Théâtres suivis"></div></dd>
+            </div>
+            <div>
+              <dt>Gravité minimale</dt>
+              <dd>
+                <div class="seg" id="seuil" role="radiogroup" aria-label="Gravité minimale">
+                  <button type="button" role="radio" data-v="info" aria-checked="false"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>Toutes les notes</button>
+                  <button type="button" role="radio" data-v="alerte" aria-checked="true"><span class="dots" aria-hidden="true"><i></i><i></i></span>Alertes et critiques</button>
+                  <button type="button" role="radio" data-v="critique" aria-checked="false"><span class="dots" aria-hidden="true"><i></i></span>Critiques seulement</button>
+                </div>
+              </dd>
+            </div>
+          </dl>
+
+          <div class="actions">
+            <button class="btn-rect btn-rect--ink" type="button" id="enregistrer">Enregistrer</button>
+            <button class="btn-outline" type="button" id="exemple">M’envoyer un exemple</button>
+          </div>
+          <p class="statut" id="statut" role="status" aria-live="polite"></p>
+        </div>
+
+        <aside class="apercu" aria-labelledby="apercu-t">
+          <h2 id="apercu-t">Avec ces réglages</h2>
+          <p class="apercu__hint">Ce que vous auriez reçu sur les 7 derniers jours.</p>
+          <div class="kpi"><b id="ap-n">0</b><span id="ap-lbl">note</span></div>
+          <p class="rythme" id="ap-rythme"></p>
+          <div class="notes" id="ap-notes"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- v5:foot -->
+<footer class="foot" data-nav="light">
+  <div class="foot__id">
+    <p>© 2026 Algor Access</p>
+    <p>Solution souveraine française, données hébergées en Europe.</p>
+    <hr>
+    <div class="foot__pills">
+      <button class="pill site-login" type="button">Connexion</button>
+      <a class="pill" href="/offres/">Les offres</a>
+      <a class="pill" href="/demo/">La démo</a>
+    </div>
+  </div>
+  <div class="foot__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+  <div class="foot__col"><h3>Plateforme</h3><a href="/">Plateforme</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+  <div class="foot__col"><h3>Société</h3><a href="/a-propos/">À propos</a><a href="/offres/">Offres</a><a href="/contact/">Contact</a></div>
+  <div class="foot__col"><h3>Informations</h3><a href="/mentions-legales/">Mentions légales</a><a href="/confidentialite/">Confidentialité</a></div>
+</footer>
+<!-- /v5:foot -->
+
+<script type="module" src="/shared/site-auth.js?v=20260922a"></script>
+<script src="/shared/v5/chrome.js?v=20260922e"></script>
+<script type="module">
+  const FONCTION = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/alerter-abonnes';
+  const FIL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
+  const ZONES = { 'sahel': 'Sahel', 'moyen-orient': 'Moyen-Orient', 'rdc': 'RDC', 'madagascar': 'Madagascar', 'afrique': 'Afrique Maritime', 'asie-sud': 'Asie du Sud' };
+  const SEV = { info: { lbl: 'Signal' }, alerte: { lbl: 'Alerte' }, critique: { lbl: 'Critique' } };
+  const RANG = { info: 0, alerte: 1, critique: 2 };
+  const COCHE = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmtD = (iso) => iso ? new Date(iso + 'T00:00:00Z').toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }) : '';
+  const jourIso = (decalage) => new Date(Date.now() - decalage * 864e5).toISOString().slice(0, 10);
+  const estPremium = (p) => !!p && (p.role === 'admin' || p.role === 'editor' || p.plan === 'premium');
+  const params = new URLSearchParams(location.search);
+
+  function montrer(vue) {
+    $('verif').hidden = true;
+    for (const v of ['v-desabo', 'v-login', 'v-free', 'v-form']) $(v).hidden = v !== vue;
+  }
+
+  async function client() {
+    for (let i = 0; i < 40; i++) {
+      const c = window.algorAuth && window.algorAuth.supabase;   // site-auth charge Supabase en différé
+      if (c) return c;
+      await new Promise((ok) => setTimeout(ok, 250));
+    }
+    return null;
+  }
+
+  /* ── Désabonnement depuis le mail ── */
+  async function desabonnement(jeton) {
+    const r = await fetch(`${FONCTION}?desabonner=${encodeURIComponent(jeton)}`).then((x) => x.json()).catch(() => null);
+    montrer('v-desabo');
+    const fin = (titre, txt) => {
+      $('desabo-titre').textContent = titre; $('desabo-txt').textContent = txt;
+      $('desabo-actions').innerHTML = '<a class="btn-rect btn-rect--ink" href="/compte/alertes/">Gérer mes alertes</a>';
+    };
+    if (!r || r.etat === 'invalide') return fin('Lien invalide', 'Ce lien de désabonnement n’est pas reconnu. Connectez-vous pour gérer vos alertes.');
+    if (r.etat === 'suspendu') return fin('Alertes déjà suspendues', 'Vous ne recevez plus les notes de veille par mail. Vous pouvez les réactiver depuis cette page une fois connecté.');
+    $('desabo-ok').addEventListener('click', async () => {
+      $('desabo-ok').disabled = true;
+      const x = await fetch(`${FONCTION}?desabonner=${encodeURIComponent(jeton)}`, { method: 'POST' }).then((y) => y.json()).catch(() => null);
+      if (x && x.ok) fin('Alertes suspendues', 'Vous ne recevrez plus les notes de veille par mail. Vous pouvez les réactiver depuis cette page une fois connecté.');
+      else { $('desabo-ok').disabled = false; $('desabo-txt').textContent = 'Le désabonnement n’a pas abouti. Réessayez dans un instant.'; }
+    });
+  }
+
+  /* ── Réglages ── */
+  const etat = { actif: true, theatres: [], seuil: 'alerte', enregistre: '' };
+  let notes = [], c = null, uid = null;
+  const signature = () => JSON.stringify([etat.actif, [...etat.theatres].sort(), etat.seuil]);
+
+  function statut(txt, genre = '') {
+    const s = $('statut'); s.textContent = txt; s.className = 'statut' + (genre ? ' is-' + genre : '');
+  }
+  function majBoutons() {
+    const modifie = signature() !== etat.enregistre;
+    $('enregistrer').disabled = !modifie;
+    $('enregistrer').textContent = modifie ? 'Enregistrer' : 'Enregistré';
+  }
+
+  function rendreTheatres() {
+    const depuis = jourIso(30);
+    $('theatres').innerHTML = Object.entries(ZONES).map(([z, nom]) => {
+      const n = notes.filter((x) => x.theatre === z && x.date >= depuis).length;
+      const on = etat.theatres.includes(z);
+      return `<button class="chip" role="checkbox" aria-checked="${on}" data-z="${z}">
+        <span class="chip__n"><span class="chip__box">${COCHE}</span>${nom}</span>
+        <small>${n} note${n > 1 ? 's' : ''} / 30 j</small>
+      </button>`;
+    }).join('');
+    $('theatres').querySelectorAll('.chip').forEach((b) => b.addEventListener('click', () => {
+      const z = b.dataset.z;
+      etat.theatres = etat.theatres.includes(z) ? etat.theatres.filter((x) => x !== z) : [...etat.theatres, z];
+      b.setAttribute('aria-checked', etat.theatres.includes(z));
+      statut(''); majBoutons(); rendreApercu();
+    }));
+  }
+
+  function rendreSeuil() {
+    $('seuil').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', b.dataset.v === etat.seuil));
+  }
+
+  function rendreApercu() {
+    const depuis = jourIso(7);
+    const liste = notes.filter((x) => x.date >= depuis && etat.theatres.includes(x.theatre) && (RANG[x.severite] ?? 0) >= RANG[etat.seuil])
+      .sort((a, b) => String(b.date).localeCompare(String(a.date)) || (RANG[b.severite] ?? 0) - (RANG[a.severite] ?? 0));
+    const jours = new Set(liste.map((x) => x.date)).size;
+    $('ap-n').textContent = liste.length;
+    $('ap-lbl').textContent = liste.length > 1 ? 'notes' : 'note';
+    $('ap-rythme').textContent = !etat.theatres.length ? 'Choisissez au moins un théâtre.'
+      : !etat.actif ? 'Alertes désactivées : rien ne vous sera envoyé.'
+      : liste.length ? `Soit ${jours} mail${jours > 1 ? 's' : ''} en 7 jours, un par matin de publication.` : 'Aucun mail sur cette période.';
+    $('ap-notes').innerHTML = etat.theatres.length && liste.length
+      ? liste.slice(0, 8).map((x) => {
+          const k = SEV[x.severite] ? x.severite : 'info', s = SEV[k];
+          return `<a class="note" href="/veille/?onglet=geo&note=${encodeURIComponent(x.id)}">
+            <span class="note__m"><span class="sev sev--${k}">${s.lbl}</span>${esc(ZONES[x.theatre] || x.theatre)} · <time>${esc(fmtD(x.date))}</time></span>
+            <span class="note__t" data-i18n-skip>${esc(x.titre)}</span>
+          </a>`;
+        }).join('') + (liste.length > 8 ? `<p class="vide">et ${liste.length - 8} autre${liste.length - 8 > 1 ? 's' : ''}.</p>` : '')
+      : '';
+  }
+
+  async function enregistrer() {
+    if (etat.actif && !etat.theatres.length) { statut('Choisissez au moins un théâtre.', 'err'); return false; }
+    $('enregistrer').disabled = true;
+    const { error } = await c.from('alertes_abonnements').upsert({
+      user_id: uid, theatres: etat.theatres, severite_min: etat.seuil, actif: etat.actif,
+    }, { onConflict: 'user_id' });
+    if (error) { statut('L’enregistrement a échoué. Réessayez dans un instant.', 'err'); majBoutons(); return false; }
+    etat.enregistre = signature();
+    majBoutons();
+    statut(etat.actif ? 'Réglages enregistrés. Prochain envoi demain matin s’il y a de nouvelles notes.' : 'Alertes désactivées.', 'ok');
+    return true;
+  }
+
+  async function exemple() {
+    if (!etat.theatres.length) { statut('Choisissez au moins un théâtre.', 'err'); return; }
+    if (signature() !== etat.enregistre && !(await enregistrer())) return;
+    $('exemple').disabled = true;
+    statut('Envoi de l’exemple…');
+    const { data: s } = await c.auth.getSession();
+    const r = await fetch(FONCTION, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${s?.session?.access_token || ''}` },
+      body: JSON.stringify({ mode: 'test' }),
+    }).then((x) => x.json()).catch(() => null);
+    $('exemple').disabled = false;
+    if (r && r.ok) return statut(`Exemple envoyé à ${r.email} avec ${r.notes} note${r.notes > 1 ? 's' : ''}. Pensez à vérifier les indésirables.`, 'ok');
+    const e = String((r && r.erreur) || '');
+    if (/testing emails|verify a domain|domain is not verified/i.test(e)) return statut('L’envoi vers votre adresse n’est pas encore ouvert : l’adresse d’expédition est en cours de validation.', 'err');
+    statut(e ? e.charAt(0).toUpperCase() + e.slice(1) + '.' : 'L’envoi a échoué. Réessayez dans un instant.', 'err');
+  }
+
+  async function reglages(session) {
+    uid = session.user.id;
+    const [{ data: p }, { data: ab }, fil] = await Promise.all([
+      c.from('profiles').select('email, role, plan').eq('id', uid).single(),
+      c.from('alertes_abonnements').select('theatres, severite_min, actif').eq('user_id', uid).maybeSingle(),
+      fetch(FIL, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+    ]);
+    if (!estPremium(p)) return montrer('v-free');
+    notes = ((fil && (Array.isArray(fil) ? fil : fil.items)) || []).filter((x) => x && x.id && x.theatre);
+    if (ab) { etat.actif = ab.actif; etat.theatres = ab.theatres || []; etat.seuil = ab.severite_min; }
+    // Pré-sélection d'un théâtre depuis /veille/ (?theatre=sahel)
+    const t = params.get('theatre');
+    if (t && ZONES[t] && !etat.theatres.includes(t)) etat.theatres = [...etat.theatres, t];
+    etat.enregistre = ab ? JSON.stringify([ab.actif, [...(ab.theatres || [])].sort(), ab.severite_min]) : '';
+
+    $('email').textContent = p.email || session.user.email || '';
+    $('actif').setAttribute('aria-checked', etat.actif);
+    rendreTheatres(); rendreSeuil(); rendreApercu(); majBoutons();
+    montrer('v-form');
+  }
+
+  $('actif').addEventListener('click', () => {
+    etat.actif = !etat.actif; $('actif').setAttribute('aria-checked', etat.actif); statut(''); majBoutons(); rendreApercu();
+  });
+  $('seuil').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+    etat.seuil = b.dataset.v; rendreSeuil(); statut(''); majBoutons(); rendreApercu();
+  }));
+  $('enregistrer').addEventListener('click', enregistrer);
+  $('exemple').addEventListener('click', exemple);
+
+  async function demarrer() {
+    const jeton = params.get('desabonner');
+    if (jeton) return desabonnement(jeton);
+    c = await client();
+    if (!c) { $('verif').textContent = 'Service de compte indisponible. Rechargez la page.'; return; }
+    const { data } = await c.auth.getSession();
+    if (!data?.session) return montrer('v-login');
+    reglages(data.session);
+  }
+
+  // Connexion depuis cette page : on recharge la vue
+  window.addEventListener('algorAuthStateChanged', (e) => {
+    if (params.get('desabonner') || !c) return;
+    if (e.detail && e.detail.loggedIn && !$('v-login').hidden) c.auth.getSession().then(({ data }) => data?.session && reglages(data.session));
+    if (e.detail && !e.detail.loggedIn && !$('v-form').hidden) montrer('v-login');
+  });
+
+  demarrer();
+</script>
+</body>
+</html>

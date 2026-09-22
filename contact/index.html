@@ -1,111 +1,111 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light" data-accent="violet">
+<html lang="fr">
 <head>
 <meta charset="UTF-8" />
 <script src="/shared/i18n.js?v=20260916a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Contact : Algor Access</title>
-
-<link rel="icon" type="image/jpeg" href="../favicon.jpg" />
-
 <meta name="description" content="Contactez Algor Access : demande d'accès, devis, analyse sur mesure. Nous répondons sous 1 à 2 jours ouvrés." />
 <meta property="og:title" content="Contact : Algor Access" />
-<meta property="og:description" content="Une question, une demande d'accès, un projet d'analyse ? Ecrivez-nous." />
+<meta property="og:description" content="Une question, une demande d'accès, un projet d'analyse ? Écrivez-nous." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://algoracces.fr/contact/" />
-<meta name="theme-color" content="#FFFFFF" />
-
-
-
-<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<meta name="theme-color" content="#0F1013" />
+<link rel="icon" type="image/jpeg" href="/favicon.jpg" />
 <link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
-
-<link rel="stylesheet" href="../shared/home/styles.css?v=20260915q" />
+<link rel="stylesheet" href="/shared/v5/v5.css?v=20260922l" />
+<style>
+  .ct-split { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(40px, 6vw, 110px); }
+  .ct-split .v5-dl > div { grid-template-columns: 1fr; gap: 6px; }
+  .ct-split .v5-dl dd { font-size: clamp(19px, 1.6vw, 22px); line-height: 1.35; letter-spacing: -0.01em; }
+  .ct-split .v5-dl dd a { overflow-wrap: anywhere; }
+  .ct-form { align-self: start; }
+  @media (min-width: 901px) and (max-width: 1180px) { .ct-form { grid-template-columns: 1fr; } }
+</style>
 </head>
-<body style="background-color:#FFFFFF">
+<body data-rubrique="contact">
 
-<!-- ─────────────────────────────────────── Header -->
-<header class="site-header">
-  <div class="site-header__inner">
-    <a class="site-brand" href="/">
-      <span class="site-brand__mark"></span>
-      <span class="site-brand__name">Algor Access</span>
-    </a>
-    <nav class="site-nav" aria-label="Rubriques">
-      <a href="/">Plateforme</a>
-      <a href="/veille/">Veille</a>
-      <a href="/debunkage/">Débunkage</a>
-      <a href="/methodologie/">Méthodologie</a>
-      <a href="/offres/">Offres</a>
-      <a href="/theatres/">Théâtres</a>
-      <a href="/a-propos/">À propos</a>
-      <a href="/contact/" class="is-active" aria-current="page">Contact</a>
-    </nav>
-    <div class="site-header__right">
+<!-- v5:nav -->
+<div class="annonce" id="annonce" hidden>
+  <div class="annonce__in">
+    <p>Dernière note de veille : <a id="annonce-lien" href="/veille/"></a></p>
+    <button class="annonce__x" id="annonce-x" aria-label="Fermer le bandeau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+</div>
+<header class="nav" id="nav">
+  <div class="nav__bar">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <nav class="nav__links" aria-label="Rubriques"><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/" aria-current="page">Contact</a></nav>
+    <div class="nav__right">
       <span class="lang-slot"></span>
-      <a class="site-login" href="/">Connexion</a>
-      <a class="site-cta" href="/offres/">Voir les offres</a>
+      <button class="btn-login site-login" type="button">Connexion</button>
+      <a class="btn-rect" href="/offres/">Demander un accès</a>
+      <div class="sq">
+        <button type="button" id="ouvrir-recherche" aria-label="Rechercher une zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
+        <button type="button" id="ouvrir-menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+      </div>
     </div>
   </div>
 </header>
 
-<main>
+<div class="veil" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <nav class="veil__body">
+    <div class="veil__main"><a href="/">Plateforme</a><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+    <div class="veil__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+    <div class="veil__col"><h3>Algor Access</h3><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+  </nav>
+</div>
 
-  <!-- ─────────────────────────────────────── Hero -->
-  <section class="page-hero">
-    <div class="page-hero__wrap">
-      <div class="page-hero__copy">
-        <span class="page-hero__eyebrow">Contact</span>
-        <h1 class="page-hero__title">Parlons de <em>votre besoin</em></h1>
-        <p class="page-hero__lede">
-          Une question sur la plateforme, une demande d'accès, un projet d'analyse sur mesure ? Ecrivez-nous, nous répondons rapidement et sans engagement.
-        </p>
-      </div>
-      <div class="page-hero__visual">
-        <div class="contact-card">
-          <div class="contact-card__row">
-            <div class="contact-card__label">Email</div>
-            <div class="contact-card__value"><a href="mailto:contact@algoracces.fr">contact@algoracces.fr</a></div>
-          </div>
-          <div class="contact-card__row">
-            <div class="contact-card__label">Delai de reponse</div>
-            <div class="contact-card__value">1 à 2 jours ouvrés</div>
-            <div class="contact-card__sub">Chaque demande reçoit une réponse personnalisée.</div>
-          </div>
-          <div class="contact-card__row">
-            <div class="contact-card__label">Vos demandes</div>
-            <div class="contact-card__value">Accès, devis, sur-mesure</div>
-            <div class="contact-card__sub">De la simple question au projet d'analyse complet.</div>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="veil veil--search" id="recherche" role="dialog" aria-modal="true" aria-label="Recherche">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <div class="veil__body">
+    <form class="search-form" action="/demo/">
+      <label for="q">Essayez la démo sur n'importe quelle zone du monde</label>
+      <input id="q" name="q" type="search" placeholder="Bogotá" autocomplete="off" required>
+      <p>Indiquez une ville, une région ou un pays : vous verrez le rendu de nos cartes sur des données fictives.</p>
+    </form>
+  </div>
+</div>
+<!-- /v5:nav -->
+
+<main>
+  <section class="v5-phero" data-nav="dark" data-v5-trame data-trame-anim="signal" data-hachures="6,0;2,1">
+    <h1>Parlons de <span>votre besoin</span></h1>
+    <p class="v5-phero__lede">Une question sur la plateforme, une demande d'accès, un projet d'analyse sur mesure ? Écrivez-nous, nous répondons sous 1 à 2 jours ouvrés, sans engagement.</p>
   </section>
 
-  <!-- ─────────────────────────────────────── Formulaire -->
-  <section class="home-sec">
-    <div class="home-sec__wrap">
-      <div class="home-sec__head">
-        <span class="eyebrow">Ecrivez-nous</span>
-        <h2 class="home-sec__title">Décrivez votre demande <em>en quelques mots</em></h2>
-        <p class="home-sec__intro">
-          Plus votre message est précis, plus notre réponse le sera. Indiquez votre besoin, votre zone d'intérêt et le cadre de votre usage.
-        </p>
-      </div>
-      <form class="contact-form" id="contact-form">
-        <div class="field">
+  <section class="v5-sec" data-nav="light" aria-labelledby="form-t">
+    <div class="sec-head">
+      <h2 id="form-t">Décrivez votre demande <span>en quelques mots</span></h2>
+      <p>Plus votre message est précis, plus notre réponse le sera. Indiquez votre besoin, votre zone d'intérêt et le cadre de votre usage.</p>
+    </div>
+    <div class="v5-split ct-split">
+      <dl class="v5-dl" aria-label="Coordonnées">
+        <div><dt>Email</dt><dd><a href="mailto:contact@algoracces.fr">contact@algoracces.fr</a></dd></div>
+        <div><dt>Délai de réponse</dt><dd>1 à 2 jours ouvrés<small>Chaque demande reçoit une réponse personnalisée.</small></dd></div>
+        <div><dt>Vos demandes</dt><dd>Accès, devis, sur-mesure<small>De la simple question au projet d'analyse complet.</small></dd></div>
+      </dl>
+      <form class="v5-form ct-form" id="contact-form">
+        <div class="v5-field">
           <label for="cf-nom">Nom</label>
-          <input type="text" id="cf-nom" name="nom" required />
+          <input type="text" id="cf-nom" name="nom" autocomplete="name" required />
         </div>
-        <div class="field">
+        <div class="v5-field">
           <label for="cf-email">Email</label>
-          <input type="email" id="cf-email" name="email" required />
+          <input type="email" id="cf-email" name="email" autocomplete="email" required />
         </div>
-        <div class="field">
-          <label for="cf-org">Organisation <span style="text-transform:none;letter-spacing:0">(optionnel)</span></label>
-          <input type="text" id="cf-org" name="organisation" />
+        <div class="v5-field">
+          <label for="cf-org">Organisation <small>(optionnel)</small></label>
+          <input type="text" id="cf-org" name="organisation" autocomplete="organization" />
         </div>
-        <div class="field">
+        <div class="v5-field">
           <label for="cf-type">Type de demande</label>
           <select id="cf-type" name="type">
             <option>Accès à la plateforme</option>
@@ -114,63 +114,40 @@
             <option>Autre question</option>
           </select>
         </div>
-        <div class="field field--full">
+        <div class="v5-field v5-field--full">
           <label for="cf-msg">Message</label>
           <textarea id="cf-msg" name="message" required></textarea>
         </div>
-        <div class="contact-form__actions">
-          <button type="submit" class="btn btn--primary btn--lg">Envoyer le message</button>
-          <span class="contact-form__note">L'envoi ouvre votre messagerie pour finaliser le message.</span>
+        <div class="v5-form__foot">
+          <button type="submit" class="btn-rect btn-rect--ink">Envoyer le message</button>
+          <p>L'envoi ouvre votre messagerie pour finaliser le message.</p>
         </div>
       </form>
     </div>
   </section>
-
 </main>
 
-<!-- ─────────────────────────────────────── Footer -->
-<footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__brand">
-      <div class="site-footer__brand-name"><span></span>ALGOR INT</div>
-      <p class="site-footer__blurb">
-        Algor Access : plateforme de cartographie OSINT. Six théâtres géopolitiques suivis en continu, chaque événement sourcé, daté et auditable.
-      </p>
-    </div>
-    <div class="site-footer__col">
-      <h4>Le site</h4>
-      <a href="/">Plateforme</a>
-      <a href="/debunkage/">Débunkage</a>
-      <a href="/methodologie/">Méthodologie</a>
-      <a href="/offres/">Offres</a>
-      <a href="/theatres/">Théâtres</a>
-      <a href="/a-propos/">À propos</a>
-      <a href="/contact/">Contact</a>
-    </div>
-    <div class="site-footer__col">
-      <h4>Théâtres</h4>
-      <a href="/moyen-orient/">Moyen-Orient</a>
-      <a href="/sahel/">Sahel</a>
-      <a href="/rdc/">RDC</a>
-      <a href="/madagascar/">Madagascar</a>
-      <a href="/afrique/">Afrique Maritime</a>
-      <a href="/asie-sud/">Asie du Sud</a>
-    </div>
-    <div class="site-footer__col">
-      <h4>Accès</h4>
-      <a href="#" data-algor-login>Connexion</a>
-      <a href="/offres/">Voir les offres</a>
-      <a href="/contact/">Nous contacter</a>
+<!-- v5:foot -->
+<footer class="foot" data-nav="light">
+  <div class="foot__id">
+    <p>© 2026 Algor Access</p>
+    <p>Solution souveraine française, données hébergées en Europe.</p>
+    <hr>
+    <div class="foot__pills">
+      <button class="pill site-login" type="button">Connexion</button>
+      <a class="pill" href="/offres/">Les offres</a>
+      <a class="pill" href="/demo/">La démo</a>
     </div>
   </div>
-  <div class="site-footer__bottom">
-    <div class="site-footer__bottom-inner">
-      <span>© 2026 Algor Int · Cartographie OSINT des théâtres à risque</span>
-      <span>Diffusion restreinte · usage professionnel · <a href="/mentions-legales/">Mentions légales</a> · <a href="/confidentialite/">Confidentialité</a></span>
-    </div>
-  </div>
+  <div class="foot__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+  <div class="foot__col"><h3>Plateforme</h3><a href="/">Plateforme</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+  <div class="foot__col"><h3>Société</h3><a href="/a-propos/">À propos</a><a href="/offres/">Offres</a><a href="/contact/">Contact</a></div>
+  <div class="foot__col"><h3>Informations</h3><a href="/mentions-legales/">Mentions légales</a><a href="/confidentialite/">Confidentialité</a></div>
 </footer>
+<!-- /v5:foot -->
 
+<script type="module" src="/shared/site-auth.js?v=20260922a"></script>
+<script src="/shared/v5/chrome.js?v=20260922e"></script>
 <script>
   document.getElementById('contact-form').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -188,9 +165,5 @@
       '&body=' + encodeURIComponent(corps);
   });
 </script>
-
-<script src="../shared/home/skyfield.js?v=20260915q"></script>
-<script src="../shared/home/sitenav.js?v=20260622a"></script>
-<script type="module" src="../shared/site-auth.js?v=20260707a"></script>
 </body>
 </html>

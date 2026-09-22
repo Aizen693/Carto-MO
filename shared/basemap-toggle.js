@@ -22,6 +22,8 @@
   var LABEL_LYR = 'basemap-sat-label';
   var SAT_LAYERS = [SAT_LYR, ADMIN_LYR, LABEL_LYR];
 
+  // Icône v5 (calques superposés, trait 1,5 px) à la place de l'ancien glyphe demi-disque.
+  var ICON = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8.5 4.5L12 13 3.5 8.5z"/><path d="M3.5 12.5L12 17l8.5-4.5"/><path d="M3.5 16.5L12 21l8.5-4.5"/></svg>';
   var on = false;
   var map = null;
   var chip = null;
@@ -76,7 +78,7 @@
   /* ─────────── Jeton dans la barre ─────────── */
   function render() {
     chip.className = 'chip chip-edit chip-basemap' + (on ? ' chip-pays' : '');
-    chip.innerHTML = '<span class="chip-key">Fond</span><span class="chip-val">' + (on ? 'Satellite' : 'Carte') + '</span><span class="chip-caret">◑</span>';
+    chip.innerHTML = '<span class="chip-key">Fond</span><span class="chip-val">' + (on ? 'Satellite' : 'Carte') + '</span><span class="chip-caret">' + ICON + '</span>';
     chip.title = on ? 'Revenir au fond carte' : 'Basculer vers le satellite';
     chip.setAttribute('aria-pressed', on ? 'true' : 'false');
   }

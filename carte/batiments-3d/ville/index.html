@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gao · ville 3D texturée · Algor Access</title>
+<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<style>
+  :root{
+    --violet:#6B3FA0; --violet-mid:#5650C6; --blue:#2E84D4;
+    --grad:linear-gradient(95deg,#6B3FA0,#5650C6 55%,#2E84D4);
+    --ink:#1F1437; --tx:#4A4460; --muted:#9089AA;
+    --panel:#fff; --ln:rgba(123,90,189,0.18); --ln-soft:rgba(123,90,189,0.10);
+    --shadow:0 8px 26px -8px rgba(46,24,87,0.20);
+    --jakarta:'Plus Jakarta Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#F4F2F8;color:var(--tx);font-family:var(--jakarta);overflow:hidden}
+  #stage{position:absolute;inset:0;background:linear-gradient(180deg,#DCE6F2 0%,#EEF0F5 55%,#F4F2F8 100%)}
+  #stage canvas{display:block}
+  #header{position:absolute;top:0;left:0;right:0;height:60px;z-index:8;display:flex;align-items:center;gap:14px;padding:0 18px;pointer-events:none}
+  #header .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex:none;pointer-events:auto}
+  #header .brand img{height:30px;border-radius:7px}
+  #page-title{margin:0;font:800 18px/1 var(--jakarta);letter-spacing:-.01em;color:var(--ink)}
+  #header .sub{font:600 8px/1 var(--jakarta);letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-top:5px}
+  #header .spacer{flex:1}
+  .hbtn{pointer-events:auto;background:#fff;border:1px solid var(--ln);color:var(--violet);cursor:pointer;text-decoration:none;
+    font:700 9.5px/1 var(--jakarta);letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;border-radius:11px;box-shadow:var(--shadow)}
+  .hbtn:hover{background:rgba(107,63,160,.07)}
+  #panel{position:absolute;top:70px;left:18px;width:300px;z-index:7;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+  .card{background:var(--panel);border:1px solid var(--ln);border-radius:15px;box-shadow:var(--shadow);pointer-events:auto}
+  .card h3{margin:0;padding:13px 15px 10px;font:700 9px/1 var(--jakarta);letter-spacing:.15em;text-transform:uppercase;color:var(--violet);border-bottom:1px solid var(--ln-soft)}
+  .card .body{padding:12px 15px 13px;font:500 11px/1.55 var(--jakarta);color:var(--tx)}
+  .card .body b{color:var(--ink)}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+  .st{background:#F4F2F8;border-radius:8px;padding:7px 4px;text-align:center}
+  .st b{display:block;font:800 13px/1.1 var(--jakarta);color:var(--ink)}
+  .st span{display:block;font:600 7.5px/1.4 var(--jakarta);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  .ev{border-left:3px solid var(--violet);padding:2px 0 2px 10px;margin:10px 0 2px;cursor:pointer}
+  .ev:hover .ev-top{color:var(--violet)}
+  .ev-top{font:700 11.5px/1.3 var(--jakarta);color:var(--ink)}
+  .ev-meta{font:600 9.5px/1.4 var(--jakarta);color:var(--muted);margin-top:2px}
+  #tools{position:absolute;right:18px;top:70px;z-index:7;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  .tool{display:flex;gap:4px;padding:5px;background:#fff;border:1px solid var(--ln);border-radius:12px;box-shadow:var(--shadow)}
+  .tool .lbl{font:700 8px/1 var(--jakarta);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);align-self:center;padding:0 6px 0 8px}
+  .tbtn{border:none;background:none;cursor:pointer;padding:7px 10px;border-radius:8px;font:700 9.5px/1 var(--jakarta);letter-spacing:.08em;text-transform:uppercase;color:var(--violet)}
+  .tbtn:hover{background:rgba(107,63,160,.07)}
+  .tbtn.on{background:var(--grad);color:#fff}
+  #gestures{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:7;background:#fff;border:1px solid var(--ln);border-radius:11px;box-shadow:var(--shadow);padding:9px 15px;font:600 10.5px/1 var(--jakarta);color:var(--tx);opacity:0;transition:opacity .5s;pointer-events:none}
+  #gestures.show{opacity:1}
+  #legend{position:absolute;right:18px;bottom:18px;z-index:7;padding:12px 14px 13px;width:230px}
+  #legend h4{margin:0 0 6px;font:700 8.5px/1 var(--jakarta);letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+  #legend p{margin:0;font:500 9px/1.5 var(--jakarta);color:var(--muted)}
+  #loader{position:absolute;inset:0;z-index:12;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;background:#F4F2F8;transition:opacity .6s}
+  #loader.off{opacity:0;pointer-events:none}
+  #loader .ring{width:38px;height:38px;border-radius:50%;border:3px solid rgba(107,63,160,.15);border-top-color:var(--violet);animation:spin .9s linear infinite}
+  #loader span{font:700 10px/1 var(--jakarta);letter-spacing:.18em;text-transform:uppercase;color:var(--violet)}
+  #loader .bar{width:220px;height:4px;border-radius:2px;background:rgba(107,63,160,.12);overflow:hidden}
+  #loader .bar i{display:block;height:100%;width:0;background:var(--grad);transition:width .2s}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #pin-card{position:absolute;z-index:9;display:none;background:#fff;border:1px solid var(--ln);border-radius:13px;box-shadow:0 16px 40px -10px rgba(46,24,87,.34);padding:11px 14px 12px;min-width:190px;max-width:250px;pointer-events:none}
+  .bp-name{font:800 12.5px/1.3 var(--jakarta);color:var(--ink)}
+  .bp-meta{font:600 10px/1.5 var(--jakarta);color:var(--muted);margin-top:2px}
+  .bp-tag{display:inline-block;margin-top:6px;font:700 8px/1 var(--jakarta);letter-spacing:.1em;text-transform:uppercase;padding:4px 7px;border-radius:5px;color:#4A2C6E;background:rgba(107,63,160,.10)}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="loader"><div class="ring"></div><span id="loader-txt">Chargement de l'imagerie</span><div class="bar"><i id="loader-bar"></i></div></div>
+
+<header id="header">
+  <a class="brand" href="/" title="Retour à l'accueil">
+    <img src="/sahel/algor_int_logo.jpg" alt="Algor Int" onerror="this.style.display='none'">
+    <div>
+      <h1 id="page-title">Gao · ville 3D texturée</h1>
+      <div class="sub">Toits satellite réels · hauteurs par bâtiment · incidents HUMINT</div>
+    </div>
+  </a>
+  <div class="spacer"></div>
+  <a class="hbtn" href="../">Hauteurs par source</a>
+</header>
+
+<aside id="panel">
+  <div class="card">
+    <h3>Emprise · centre de Gao</h3>
+    <div class="body">
+      <div class="stats">
+        <div class="st"><b id="st-n">…</b><span>bâtiments</span></div>
+        <div class="st"><b id="st-km">…</b><span>km²</span></div>
+        <div class="st"><b id="st-px">…</b><span>m / pixel</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Incidents HUMINT sur l'emprise</h3>
+    <div class="body" id="events"></div>
+  </div>
+</aside>
+
+<div id="tools">
+  <div class="tool" id="views">
+    <span class="lbl">Vue</span>
+    <button class="tbtn on" data-v="survol">Survol</button>
+    <button class="tbtn" data-v="oblique">Oblique</button>
+    <button class="tbtn" data-v="rue">Rue</button>
+    <button class="tbtn" data-v="stop">Libre</button>
+  </div>
+  <div class="tool" id="light">
+    <span class="lbl">Lumière</span>
+    <button class="tbtn" data-l="matin">Matin</button>
+    <button class="tbtn on" data-l="midi">Midi</button>
+    <button class="tbtn" data-l="soir">Soir</button>
+  </div>
+</div>
+<div id="gestures">Glisser : pivoter &nbsp;·&nbsp; Molette : zoomer &nbsp;·&nbsp; Clic droit : déplacer &nbsp;·&nbsp; Clic sur un repère : détail</div>
+<div id="pin-card"></div>
+
+<div class="card" id="legend">
+  <h4>Ce que vous voyez</h4>
+  <p>Sol et toits : imagerie satellite Mapbox (Maxar). Volumes : emprises OSM et Microsoft, hauteurs Google Open Buildings 2.5D. Façades : teinte du toit, ombres calculées. Repères violets : incidents HUMINT Algor Int.</p>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { MapControls } from 'three/addons/controls/MapControls.js';
+
+const TOKEN = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+const Z = 18;
+const BBOX = { w: -0.0495, s: 16.2605, e: -0.0265, n: 16.2835 };
+const HUMINT = [
+  { name: 'EIGS', date: '2026-01-14', type: 'Enlèvement', lon: -0.0427, lat: 16.2835, desc: 'Enlèvement attribué à l\'EIGS, nord de la ville.' },
+  { name: 'FLA', date: '2026-03-11', type: 'Attaque drone', lon: -0.0412, lat: 16.2788, desc: 'Frappe de drone attribuée au FLA, quartier central.' },
+  { name: 'FDS', date: '2026-04-06', type: 'Vol et braquage', lon: -0.0261, lat: 16.2613, desc: 'Braquage signalé à proximité d\'un poste des FDS, sud-est.' }
+];
+
+/* ---------- géométrie de tuiles ---------- */
+const n = 2 ** Z;
+const lon2x = lon => (lon + 180) / 360 * n;
+const lat2y = lat => (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * n;
+const x2lon = x => x / n * 360 - 180;
+const y2lat = y => Math.atan(Math.sinh(Math.PI * (1 - 2 * y / n))) * 180 / Math.PI;
+const tx0 = Math.floor(lon2x(BBOX.w)), tx1 = Math.floor(lon2x(BBOX.e));
+const ty0 = Math.floor(lat2y(BBOX.n)), ty1 = Math.floor(lat2y(BBOX.s));
+const M = { w: x2lon(tx0), e: x2lon(tx1 + 1), n: y2lat(ty0), s: y2lat(ty1 + 1) };
+const lat0 = (M.n + M.s) / 2, lon0 = (M.w + M.e) / 2;
+const KX = 111320 * Math.cos(lat0 * Math.PI / 180), KY = 110574;
+const toX = lon => (lon - lon0) * KX, toY = lat => (lat - lat0) * KY;
+const W = (M.e - M.w) * KX, H = (M.n - M.s) * KY;
+const TILE = 256, CW = (tx1 - tx0 + 1) * TILE, CH = (ty1 - ty0 + 1) * TILE;
+document.getElementById('st-km').textContent = (W * H / 1e6).toFixed(1).replace('.', ',');
+document.getElementById('st-px').textContent = (W / CW).toFixed(2).replace('.', ',');
+
+/* ---------- mosaïque satellite ---------- */
+const canvas = document.createElement('canvas'); canvas.width = CW; canvas.height = CH;
+const ctx = canvas.getContext('2d');
+let done = 0; const total = (tx1 - tx0 + 1) * (ty1 - ty0 + 1);
+function loadTile(x, y) {
+  return new Promise(res => {
+    const img = new Image(); img.crossOrigin = 'anonymous';
+    img.onload = () => { ctx.drawImage(img, (x - tx0) * TILE, (y - ty0) * TILE, TILE, TILE); done++; progress(done / total * 0.7); res(true); };
+    img.onerror = () => { done++; progress(done / total * 0.7); res(false); };
+    img.src = `https://api.mapbox.com/v4/mapbox.satellite/${Z}/${x}/${y}.jpg90?access_token=${TOKEN}`;
+  });
+}
+function progress(p, txt) { document.getElementById('loader-bar').style.width = Math.round(p * 100) + '%'; if (txt) document.getElementById('loader-txt').textContent = txt; }
+
+/* ---------- scène ---------- */
+const stage = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(stage.clientWidth, stage.clientHeight);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+stage.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0xE3E7F0, 1500, 4200);
+const camera = new THREE.PerspectiveCamera(46, stage.clientWidth / stage.clientHeight, 1, 20000);
+const controls = new MapControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.07;
+controls.maxPolarAngle = Math.PI / 2 - 0.03; controls.minDistance = 25; controls.maxDistance = 6000;
+controls.screenSpacePanning = false;
+
+/* Sol lointain couleur sable, pour que la mosaïque ne semble pas coupée */
+const far = new THREE.Mesh(new THREE.PlaneGeometry(40000, 40000), new THREE.MeshStandardMaterial({ color: 0xC9B58F, roughness: 1 }));
+far.rotation.x = -Math.PI / 2; far.position.y = -0.3; far.receiveShadow = true; scene.add(far);
+const hemi = new THREE.HemisphereLight(0xdfe8ff, 0xb9a98d, 0.75); scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff1dc, 2.2); sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096);
+const SC = Math.max(W, H) * 0.62;
+sun.shadow.camera.left = -SC; sun.shadow.camera.right = SC; sun.shadow.camera.top = SC; sun.shadow.camera.bottom = -SC;
+sun.shadow.camera.near = 200; sun.shadow.camera.far = 7000; sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.15;
+scene.add(sun); scene.add(sun.target);
+const LIGHTS = {
+  matin: { az: 100, el: 22, col: 0xffd9b0, int: 2.0, exp: 1.0 },
+  midi:  { az: 180, el: 68, col: 0xfff3e2, int: 2.3, exp: 1.05 },
+  soir:  { az: 262, el: 16, col: 0xffc38f, int: 1.8, exp: 0.98 }
+};
+const sunDir = new THREE.Vector3(0, 1, 0);
+function setLight(k) {
+  const L = LIGHTS[k], az = L.az * Math.PI / 180, el = L.el * Math.PI / 180;
+  sunDir.set(Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el));
+  sun.color.set(L.col); sun.intensity = L.int; renderer.toneMappingExposure = L.exp;
+  updateShadow();
+}
+/* La caméra d'ombre suit la cible : résolution fine là où l'on regarde */
+function updateShadow() {
+  const box = mode === 'survol' ? 1700 : (mode === 'rue' ? 350 : 700);
+  const c = sun.shadow.camera;
+  c.left = -box; c.right = box; c.top = box; c.bottom = -box; c.updateProjectionMatrix();
+  sun.target.position.copy(controls.target).setY(0);
+  sun.position.copy(sun.target.position).addScaledVector(sunDir, 3000);
+}
+
+/* ---------- construction des bâtiments ---------- */
+function buildCity(fc, tex) {
+  const small = document.createElement('canvas'); small.width = CW >> 2; small.height = CH >> 2;
+  small.getContext('2d').drawImage(canvas, 0, 0, small.width, small.height);
+  const px = small.getContext('2d').getImageData(0, 0, small.width, small.height).data;
+  const roofPos = [], roofUv = [], roofIdx = [];
+  const sidePos = [], sideNor = [], sideCol = [], sideIdx = [];
+  const c = new THREE.Color();
+  let count = 0;
+  for (const f of fc.features) {
+    const ring = f.geometry.coordinates[0];
+    if (!ring || ring.length < 4) continue;
+    const p0 = ring[0];
+    if (p0[0] < M.w || p0[0] > M.e || p0[1] < M.s || p0[1] > M.n) continue;
+    let h = f.properties.height; if (typeof h !== 'number' || h < 2) h = (typeof h === 'number') ? 2.2 : 2.6;
+    h = Math.min(h, 22);
+    const pts = []; let cx = 0, cy = 0;
+    for (let i = 0; i < ring.length - 1; i++) { const x = toX(ring[i][0]), y = toY(ring[i][1]); pts.push(new THREE.Vector2(x, y)); cx += x; cy += y; }
+    if (pts.length < 3) continue;
+    cx /= pts.length; cy /= pts.length;
+    if (THREE.ShapeUtils.isClockWise(pts)) pts.reverse();
+    let tris; try { tris = THREE.ShapeUtils.triangulateShape(pts, []); } catch (e) { continue; }
+    if (!tris.length) continue;
+    /* couleur de façade : teinte du toit, assombrie */
+    const sx = Math.min(small.width - 1, Math.max(0, Math.floor((cx + W / 2) / W * small.width)));
+    const sy = Math.min(small.height - 1, Math.max(0, Math.floor((H / 2 - cy) / H * small.height)));
+    const k = (sy * small.width + sx) * 4;
+    c.setRGB(px[k] / 255, px[k + 1] / 255, px[k + 2] / 255).convertSRGBToLinear();
+    const lum = 0.3 * c.r + 0.59 * c.g + 0.11 * c.b;
+    const wall = new THREE.Color().setRGB(c.r * 0.55 + lum * 0.35, c.g * 0.55 + lum * 0.33, c.b * 0.55 + lum * 0.30);
+    /* toit */
+    const base = roofPos.length / 3;
+    for (const p of pts) { roofPos.push(p.x, h, -p.y); roofUv.push((p.x + W / 2) / W, (p.y + H / 2) / H); }
+    for (const t of tris) roofIdx.push(base + t[0], base + t[1], base + t[2]);
+    /* façades */
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i], b = pts[(i + 1) % pts.length];
+      const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1;
+      const nx = dy / len, nz = dx / len;   /* normale sortante (anneau CCW, y vers le nord = -z) */
+      const s = sidePos.length / 3;
+      sidePos.push(a.x, 0, -a.y, b.x, 0, -b.y, b.x, h, -b.y, a.x, h, -a.y);
+      for (let q = 0; q < 4; q++) { sideNor.push(nx, 0, nz); sideCol.push(wall.r, wall.g, wall.b); }
+      sideIdx.push(s, s + 1, s + 2, s, s + 2, s + 3);
+    }
+    count++;
+  }
+  const roofG = new THREE.BufferGeometry();
+  roofG.setAttribute('position', new THREE.Float32BufferAttribute(roofPos, 3));
+  roofG.setAttribute('uv', new THREE.Float32BufferAttribute(roofUv, 2));
+  roofG.setIndex(roofIdx); roofG.computeVertexNormals();
+  const roof = new THREE.Mesh(roofG, new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95, metalness: 0 }));
+  roof.castShadow = true; roof.receiveShadow = true; scene.add(roof);
+  const sideG = new THREE.BufferGeometry();
+  sideG.setAttribute('position', new THREE.Float32BufferAttribute(sidePos, 3));
+  sideG.setAttribute('normal', new THREE.Float32BufferAttribute(sideNor, 3));
+  sideG.setAttribute('color', new THREE.Float32BufferAttribute(sideCol, 3));
+  sideG.setIndex(sideIdx);
+  const side = new THREE.Mesh(sideG, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.92, metalness: 0 }));
+  side.castShadow = true; side.receiveShadow = true; scene.add(side);
+  document.getElementById('st-n').textContent = count.toLocaleString('fr-FR');
+  return count;
+}
+
+/* ---------- repères HUMINT ---------- */
+const pins = [];
+function buildPins() {
+  const ev = document.getElementById('events');
+  HUMINT.forEach((e, i) => {
+    const x = toX(e.lon), z = -toY(e.lat);
+    const g = new THREE.Group();
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 34, 10), new THREE.MeshStandardMaterial({ color: 0x6B3FA0, roughness: 0.5 }));
+    post.position.y = 17; g.add(post);
+    const head = new THREE.Mesh(new THREE.SphereGeometry(6.5, 24, 18), new THREE.MeshStandardMaterial({ color: 0x6B3FA0, emissive: 0x3d2160, emissiveIntensity: 0.35, roughness: 0.4 }));
+    head.position.y = 38; head.userData = e; g.add(head);
+    const ringM = new THREE.Mesh(new THREE.RingGeometry(14, 18, 48), new THREE.MeshBasicMaterial({ color: 0x6B3FA0, transparent: true, opacity: 0.55, side: THREE.DoubleSide }));
+    ringM.rotation.x = -Math.PI / 2; ringM.position.y = 0.4; g.add(ringM);
+    g.position.set(x, 0, z); scene.add(g); pins.push({ mesh: head, data: e, group: g, ring: ringM });
+    const d = document.createElement('div'); d.className = 'ev';
+    d.innerHTML = `<div class="ev-top">${e.type} · ${e.name}</div><div class="ev-meta">${e.date}</div>`;
+    d.addEventListener('click', () => flyTo(x, z)); ev.appendChild(d);
+  });
+}
+const ray = new THREE.Raycaster(); const mouse = new THREE.Vector2(); const card = document.getElementById('pin-card');
+renderer.domElement.addEventListener('click', ev => {
+  const r = renderer.domElement.getBoundingClientRect();
+  mouse.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(mouse, camera);
+  const hit = ray.intersectObjects(pins.map(p => p.mesh))[0];
+  if (!hit) { card.style.display = 'none'; return; }
+  const e = hit.object.userData;
+  card.innerHTML = `<div class="bp-name">${e.type} · ${e.name}</div><div class="bp-meta">${e.date} · ${e.lat.toFixed(4)}, ${e.lon.toFixed(4)}</div><div style="font:500 10.5px/1.5 var(--jakarta);color:var(--tx);margin-top:5px">${e.desc}</div><span class="bp-tag">HUMINT</span>`;
+  card.style.display = 'block'; card.style.left = (ev.clientX + 14) + 'px'; card.style.top = (ev.clientY - 10) + 'px';
+});
+
+/* ---------- caméra ---------- */
+let mode = 'survol', t = 0.6, target = new THREE.Vector3(0, 0, 0);
+setLight('midi');
+const VIEWS = { survol: { r: 1500, h: 900 }, oblique: { r: 520, h: 260 }, rue: { r: 110, h: 9 } };
+function place() {
+  const v = VIEWS[mode]; if (!v) return;
+  camera.position.set(target.x + Math.cos(t) * v.r, v.h, target.z + Math.sin(t) * v.r);
+  controls.target.copy(target).setY(mode === 'rue' ? 6 : 0);
+}
+function flyTo(x, z) { target.set(x, 0, z); if (mode === 'stop') { mode = 'oblique'; setViewBtn('oblique'); } place(); }
+function setViewBtn(v) { document.querySelectorAll('#views .tbtn').forEach(b => b.classList.toggle('on', b.dataset.v === v)); }
+document.querySelectorAll('#views .tbtn').forEach(b => b.addEventListener('click', () => { setViewBtn(b.dataset.v); mode = b.dataset.v; place(); }));
+document.querySelectorAll('#light .tbtn').forEach(b => b.addEventListener('click', () => { document.querySelectorAll('#light .tbtn').forEach(x => x.classList.remove('on')); b.classList.add('on'); setLight(b.dataset.l); }));
+controls.addEventListener('start', () => { if (mode !== 'stop') { mode = 'stop'; setViewBtn('stop'); } });
+window.addEventListener('resize', () => { camera.aspect = stage.clientWidth / stage.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(stage.clientWidth, stage.clientHeight); });
+
+/* ---------- chargement ---------- */
+(async () => {
+  const jobs = [];
+  for (let y = ty0; y <= ty1; y++) for (let x = tx0; x <= tx1; x++) jobs.push([x, y]);
+  let ok = 0;
+  for (let i = 0; i < jobs.length; i += 12) { const r = await Promise.all(jobs.slice(i, i + 12).map(j => loadTile(j[0], j[1]))); ok += r.filter(Boolean).length; }
+  progress(0.72, 'Construction des bâtiments');
+  const tex = new THREE.CanvasTexture(canvas); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  tex.minFilter = THREE.LinearMipmapLinearFilter; tex.generateMipmaps = true;
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(W, H), new THREE.MeshStandardMaterial({ map: tex, roughness: 1, metalness: 0 }));
+  ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+  const fc = await fetch('../google-gao.geojson?v=' + Date.now()).then(r => r.json());
+  progress(0.85);
+  buildCity(fc, tex); buildPins();
+  progress(1);
+  window.__city = { tilesOk: ok, tiles: total, scene, camera };
+  place();
+  document.getElementById('loader').classList.add('off');
+  const g = document.getElementById('gestures'); g.classList.add('show'); setTimeout(() => g.classList.remove('show'), 7000);
+})();
+(function loop() {
+  requestAnimationFrame(loop);
+  if (mode !== 'stop') { t += mode === 'rue' ? 0.0009 : 0.0016; place(); }
+  for (const p of pins) p.ring.scale.setScalar(1 + 0.15 * Math.sin(performance.now() / 400));
+  controls.update(); updateShadow(); renderer.render(scene, camera);
+})();
+</script>
+</body>
+</html>

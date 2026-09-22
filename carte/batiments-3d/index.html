@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bâtiments 3D · Gao · maquette hauteurs · Algor Access</title>
+<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
+<style>
+  :root{
+    --violet:#6B3FA0; --violet-mid:#5650C6; --blue:#2E84D4;
+    --grad:linear-gradient(95deg,#6B3FA0,#5650C6 55%,#2E84D4);
+    --ink:#1F1437; --tx:#4A4460; --muted:#9089AA;
+    --panel:#fff; --ln:rgba(123,90,189,0.18); --ln-soft:rgba(123,90,189,0.10);
+    --shadow:0 8px 26px -8px rgba(46,24,87,0.20);
+    --jakarta:'Plus Jakarta Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#F4F2F8;color:var(--tx);font-family:var(--jakarta);overflow:hidden}
+  #map{position:absolute;inset:0}
+
+  #header{position:absolute;top:0;left:0;right:0;height:60px;z-index:8;display:flex;align-items:center;gap:14px;padding:0 18px;pointer-events:none}
+  #header .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex:none;pointer-events:auto}
+  #header .brand img{height:30px;border-radius:7px}
+  #page-title{margin:0;font:800 18px/1 var(--jakarta);letter-spacing:-.01em;color:var(--ink)}
+  #header .sub{font:600 8px/1 var(--jakarta);letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-top:5px}
+  #header .spacer{flex:1}
+  .hbtn{pointer-events:auto;background:#fff;border:1px solid var(--ln);color:var(--violet);cursor:pointer;
+    font:700 9.5px/1 var(--jakarta);letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;border-radius:11px;box-shadow:var(--shadow);transition:background .15s,color .15s}
+  .hbtn:hover{background:rgba(107,63,160,.07)}
+  .hbtn.on{background:var(--grad);border:none;color:#fff;box-shadow:0 8px 22px -7px rgba(86,80,198,.6)}
+
+  #panel{position:absolute;top:70px;left:18px;bottom:18px;width:330px;z-index:7;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+  .card{background:var(--panel);border:1px solid var(--ln);border-radius:15px;box-shadow:var(--shadow);pointer-events:auto}
+  .card h3{margin:0;padding:13px 15px 10px;font:700 9px/1 var(--jakarta);letter-spacing:.15em;text-transform:uppercase;color:var(--violet);border-bottom:1px solid var(--ln-soft)}
+  #sources{display:flex;flex-direction:column;overflow:hidden;min-height:0}
+  #src-list{padding:8px;overflow-y:auto;scrollbar-width:thin}
+  .src{display:block;width:100%;text-align:left;background:none;border:1px solid transparent;cursor:pointer;padding:11px 12px;border-radius:12px;transition:background .13s;font-family:var(--jakarta);margin-bottom:4px}
+  .src:hover{background:rgba(107,63,160,.06)}
+  .src.on{background:rgba(107,63,160,.09);border-color:var(--ln)}
+  .src.off{opacity:.45;cursor:default}
+  .src-name{font:700 12.5px/1.3 var(--jakarta);color:var(--ink);display:flex;align-items:center;gap:8px}
+  .src-name .tag{font:800 7.5px/1 var(--jakarta);letter-spacing:.11em;text-transform:uppercase;padding:4px 6px;border-radius:5px;background:#F4F2F8;color:var(--muted)}
+  .tag.ok{background:rgba(46,132,212,.12);color:#1B5486}
+  .tag.nc{background:rgba(196,90,60,.12);color:#8A3A22}
+  .src-desc{font:500 10.5px/1.5 var(--jakarta);color:var(--muted);margin-top:3px}
+  .src-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
+  .st{background:#F4F2F8;border-radius:8px;padding:6px 4px;text-align:center}
+  .st b{display:block;font:800 12px/1.1 var(--jakarta);color:var(--ink)}
+  .st span{display:block;font:600 7.5px/1.4 var(--jakarta);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  .src.on .st{background:#fff}
+
+  #verdict{padding:12px 15px 13px;font:500 11px/1.55 var(--jakarta);color:var(--tx)}
+  #verdict b{color:var(--ink)}
+
+  #tools{position:absolute;right:18px;top:70px;z-index:7;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  .tool{display:flex;gap:4px;padding:5px;background:#fff;border:1px solid var(--ln);border-radius:12px;box-shadow:var(--shadow)}
+  .tool .lbl{font:700 8px/1 var(--jakarta);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);align-self:center;padding:0 6px 0 8px}
+  .tbtn{border:none;background:none;cursor:pointer;padding:7px 10px;border-radius:8px;font:700 9.5px/1 var(--jakarta);letter-spacing:.08em;text-transform:uppercase;color:var(--violet)}
+  .tbtn:hover{background:rgba(107,63,160,.07)}
+  .tbtn.on{background:var(--grad);color:#fff}
+
+  #legend{position:absolute;right:18px;bottom:18px;z-index:7;padding:12px 14px 13px;width:210px}
+  #legend h4{margin:0 0 8px;font:700 8.5px/1 var(--jakarta);letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+  #legend .ramp{height:10px;border-radius:5px;background:linear-gradient(90deg,#E7E1D5,#C9B8E3 35%,#6B3FA0 70%,#2E84D4)}
+  #legend .ticks{display:flex;justify-content:space-between;font:600 9px/1 var(--jakarta);color:var(--muted);margin-top:5px}
+  #legend p{margin:8px 0 0;font:500 9px/1.5 var(--jakarta);color:var(--muted)}
+
+  #gestures{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:7;
+    background:#fff;border:1px solid var(--ln);border-radius:11px;box-shadow:var(--shadow);
+    padding:9px 15px;font:600 10.5px/1 var(--jakarta);color:var(--tx);opacity:0;pointer-events:none;transition:opacity .5s}
+  #gestures.show{opacity:1}
+
+  #loader{position:absolute;inset:0;z-index:12;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;background:#F4F2F8;transition:opacity .6s}
+  #loader.off{opacity:0;pointer-events:none}
+  #loader .ring{width:38px;height:38px;border-radius:50%;border:3px solid rgba(107,63,160,.15);border-top-color:var(--violet);animation:spin .9s linear infinite}
+  #loader span{font:700 10px/1 var(--jakarta);letter-spacing:.18em;text-transform:uppercase;color:var(--violet)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .mapboxgl-popup-content{font-family:var(--jakarta);border-radius:13px;box-shadow:0 16px 40px -10px rgba(46,24,87,.34);border:1px solid var(--ln);padding:11px 14px 12px;min-width:170px}
+  .mapboxgl-popup-close-button{font-size:15px;color:var(--muted);right:5px;top:3px}
+  .bp-name{font:800 12.5px/1.3 var(--jakarta);color:var(--ink)}
+  .bp-meta{font:600 10px/1.5 var(--jakarta);color:var(--muted);margin-top:2px}
+  .bp-h{margin-top:6px;font:800 20px/1 var(--jakarta);color:var(--violet)}
+  .bp-h small{font:600 10px/1 var(--jakarta);color:var(--muted);margin-left:3px}
+
+  @media (max-width:840px){ #panel{width:260px} #legend{display:none} #page-title{font-size:15px} }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+<div id="loader"><div class="ring"></div><span>Chargement des emprises</span></div>
+
+<header id="header">
+  <a class="brand" href="/" title="Retour à l'accueil">
+    <img src="/sahel/algor_int_logo.jpg" alt="Algor Int" onerror="this.style.display='none'">
+    <div>
+      <h1 id="page-title">Bâtiments 3D · Gao</h1>
+      <div class="sub">Maquette · hauteurs réelles par source</div>
+    </div>
+  </a>
+  <div class="spacer"></div>
+</header>
+
+<aside id="panel">
+  <div class="card" id="sources">
+    <h3>Sources de hauteur · bâtiment par bâtiment</h3>
+    <div id="src-list"></div>
+  </div>
+  <div class="card" id="verdict"></div>
+</aside>
+
+<div id="tools">
+  <div class="tool" id="basemap">
+    <span class="lbl">Fond</span>
+    <button class="tbtn on" data-b="light">Carte</button>
+    <button class="tbtn" data-b="sat">Satellite</button>
+  </div>
+  <div class="tool" id="exag">
+    <span class="lbl">Exagération</span>
+    <button class="tbtn on" data-x="1">×1</button>
+    <button class="tbtn" data-x="3">×3</button>
+    <button class="tbtn" data-x="10">×10</button>
+  </div>
+</div>
+
+<div id="gestures">Glisser : déplacer &nbsp;·&nbsp; Molette : zoomer &nbsp;·&nbsp; Ctrl + glisser : incliner et pivoter</div>
+
+<div class="card" id="legend">
+  <h4>Hauteur estimée</h4>
+  <div class="ramp"></div>
+  <div class="ticks"><span>0 m</span><span>3</span><span>6</span><span>12 m+</span></div>
+  <p id="legend-src"></p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYXo2OTMiLCJhIjoiY21uMGlhY2ZyMGx6bDJycjAxYWZjbWt5eiJ9.SQqOLLgLwWKnUGMztrSArg';
+
+  /* Trois sources candidates, toutes sur la même ville, hauteur par bâtiment.
+     Chaque fichier est un GeoJSON WGS84 ; `prop` = nom de la propriété hauteur (m). */
+  var SOURCES = [
+    { id: 'globfp', name: '3D-GloBFP', prop: 'h', file: 'globfp-gao.geojson',
+      licence: 'CC BY 4.0', lic: 'ok',
+      desc: 'Emprises + hauteurs, Che et al. 2024 (Sentinel-1/2 + emprises Microsoft). Extraction de juillet.',
+      credit: '3D-GloBFP (CC BY 4.0)' },
+    { id: 'gba', name: 'GlobalBuildingAtlas', prop: 'height', file: 'gba-gao.geojson',
+      licence: 'CC BY-NC 4.0', lic: 'nc',
+      desc: 'TUM 2025, LoD1 mondial à 3 m (PlanetScope). Tuile w005_n20_e000_n15, jointure source+id+région.',
+      credit: 'GlobalBuildingAtlas, TUM (CC BY-NC 4.0)' },
+    { id: 'google', name: 'Google Open Buildings 2.5D', prop: 'height', file: 'google-gao.geojson',
+      licence: 'CC BY 4.0', lic: 'ok',
+      desc: 'Raster hauteur 2023 (Sentinel-2, 4 m effectif) échantillonné sur les emprises GBA/OSM.',
+      credit: 'Google Open Buildings 2.5D Temporal (CC BY 4.0)' }
+  ];
+
+  var STYLES = { light: 'mapbox://styles/mapbox/light-v11', sat: 'mapbox://styles/mapbox/satellite-streets-v12' };
+  var data = {}, stats = {}, current = null, exag = 1;
+
+  var map = new mapboxgl.Map({
+    container: 'map', style: STYLES.light,
+    center: [-0.045, 16.27], zoom: 14.2, pitch: 58, bearing: -18,
+    antialias: true, attributionControl: true
+  });
+  window.__map = map;
+  map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'bottom-right');
+  map.addControl(new mapboxgl.ScaleControl({ maxWidth: 110, unit: 'metric' }), 'bottom-left');
+
+  function median(a) { if (!a.length) return 0; var s = a.slice().sort(function (x, y) { return x - y; }); var m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+
+  function computeStats(src, fc) {
+    var hs = [];
+    fc.features.forEach(function (f) { var v = f.properties[src.prop]; if (typeof v === 'number' && v >= 0) hs.push(v); });
+    var ge2 = hs.filter(function (h) { return h >= 2; }).length;
+    return { n: fc.features.length, valid: hs.length, med: median(hs), max: hs.length ? Math.max.apply(null, hs) : 0, pct2: hs.length ? Math.round(100 * ge2 / hs.length) : 0 };
+  }
+
+  function fmt(v) { return (Math.round(v * 10) / 10).toString().replace('.', ','); }
+
+  function renderList() {
+    var el = document.getElementById('src-list'); el.innerHTML = '';
+    SOURCES.forEach(function (s) {
+      var st = stats[s.id], b = document.createElement('button');
+      b.className = 'src' + (st ? '' : ' off') + (current === s.id ? ' on' : '');
+      b.innerHTML = '<div class="src-name">' + s.name + ' <span class="tag ' + s.lic + '">' + s.licence + '</span></div>' +
+        '<div class="src-desc">' + s.desc + '</div>' +
+        (st ? '<div class="src-stats">' +
+          '<div class="st"><b>' + st.n.toLocaleString('fr-FR') + '</b><span>bâtiments</span></div>' +
+          '<div class="st"><b>' + fmt(st.med) + ' m</b><span>médiane</span></div>' +
+          '<div class="st"><b>' + fmt(st.max) + ' m</b><span>max</span></div>' +
+          '<div class="st"><b>' + st.pct2 + ' %</b><span>≥ 2 m</span></div></div>'
+          : '<div class="src-stats"><div class="st" style="grid-column:1/-1"><b>indisponible</b><span>fichier absent</span></div></div>');
+      if (st) b.addEventListener('click', function () { select(s.id); });
+      el.appendChild(b);
+    });
+  }
+
+  function renderVerdict() {
+    var g = stats.globfp, t = stats.gba, o = stats.google, h = '';
+    h += '<b>Lecture.</b> Un bâtiment d\'un niveau à Gao mesure 3 à 4 m. ';
+    if (g) h += '3D-GloBFP donne une médiane de <b>' + fmt(g.med) + ' m</b> (' + g.pct2 + ' % des bâtiments ≥ 2 m), cohérent avec le terrain. ';
+    if (t) h += 'GlobalBuildingAtlas tombe à <b>' + fmt(t.med) + ' m</b> de médiane (' + t.pct2 + ' % ≥ 2 m) : le modèle TUM, calibré sur des villes denses, écrase le bâti bas sahélien. ';
+    if (o) h += 'Google 2.5D donne <b>' + fmt(o.med) + ' m</b> (' + o.pct2 + ' % ≥ 2 m), libre commercialement. ';
+    h += 'Passer l\'exagération à ×3 ou ×10 pour lire les faibles hauteurs.';
+    document.getElementById('verdict').innerHTML = h;
+  }
+
+  function colorExpr(prop) {
+    return ['interpolate', ['linear'], ['*', ['coalesce', ['get', prop], 0], 1],
+      0, '#E7E1D5', 3, '#C9B8E3', 6, '#6B3FA0', 12, '#2E84D4'];
+  }
+  function heightExpr(prop) { return ['*', ['coalesce', ['get', prop], 0], exag]; }
+
+  /* Les trois sources sont chargées une seule fois dans Mapbox ; le choix
+     ne fait que basculer la visibilité (évite 5 s de re-parsing à chaque clic). */
+  function addLayers() {
+    var before = map.getStyle().layers.filter(function (l) { return l.type === 'symbol'; })[0];
+    SOURCES.forEach(function (s) {
+      if (!data[s.id]) return;
+      var sid = 'bati-' + s.id;
+      if (map.getLayer(sid)) map.removeLayer(sid);
+      if (map.getSource(sid)) map.removeSource(sid);
+      map.addSource(sid, { type: 'geojson', data: data[s.id] });
+      map.addLayer({
+        id: sid, type: 'fill-extrusion', source: sid,
+        layout: { visibility: current === s.id ? 'visible' : 'none' },
+        paint: {
+          'fill-extrusion-color': colorExpr(s.prop),
+          'fill-extrusion-height': heightExpr(s.prop),
+          'fill-extrusion-base': 0,
+          'fill-extrusion-opacity': 0.92,
+          'fill-extrusion-vertical-gradient': true
+        }
+      }, before ? before.id : undefined);
+    });
+    updateLegend();
+  }
+  function updateLegend() {
+    var s = SOURCES.filter(function (x) { return x.id === current; })[0];
+    if (s) document.getElementById('legend-src').textContent = 'Source : ' + s.credit + ' · Fond : Mapbox';
+  }
+  function select(id) {
+    current = id; renderList();
+    SOURCES.forEach(function (s) {
+      if (map.getLayer('bati-' + s.id)) map.setLayoutProperty('bati-' + s.id, 'visibility', s.id === id ? 'visible' : 'none');
+    });
+    updateLegend();
+  }
+  function curLayer() { return current ? 'bati-' + current : null; }
+
+  var popup = new mapboxgl.Popup({ closeButton: true, maxWidth: '240px' });
+  SOURCES.forEach(function (S) { map.on('click', 'bati-' + S.id, function (e) {
+    var f = e.features[0], s = SOURCES.filter(function (x) { return x.id === current; })[0];
+    var h = f.properties[s.prop], v = f.properties.var, src = f.properties.source;
+    popup.setLngLat(e.lngLat).setHTML(
+      '<div class="bp-name">Bâtiment</div>' +
+      '<div class="bp-meta">' + s.name + (src ? ' · emprise ' + src : '') + (f.properties.id ? ' · ' + f.properties.id : '') + '</div>' +
+      '<div class="bp-h">' + (typeof h === 'number' ? fmt(h) : '?') + '<small>m' + (typeof v === 'number' ? ' · σ² ' + fmt(v) : '') + '</small></div>'
+    ).addTo(map);
+  });
+  map.on('mouseenter', 'bati-' + S.id, function () { map.getCanvas().style.cursor = 'pointer'; });
+  map.on('mouseleave', 'bati-' + S.id, function () { map.getCanvas().style.cursor = ''; }); });
+
+  document.querySelectorAll('#exag .tbtn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#exag .tbtn').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on');
+      exag = +b.dataset.x;
+      SOURCES.forEach(function (s) { if (map.getLayer('bati-' + s.id)) map.setPaintProperty('bati-' + s.id, 'fill-extrusion-height', heightExpr(s.prop)); });
+    });
+  });
+  document.querySelectorAll('#basemap .tbtn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (b.classList.contains('on')) return;
+      document.querySelectorAll('#basemap .tbtn').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on');
+      map.setStyle(STYLES[b.dataset.b]);
+      map.once('style.load', addLayers);
+    });
+  });
+
+  function load(s) {
+    return fetch(s.file + '?v=' + Date.now()).then(function (r) { if (!r.ok) throw new Error(s.file); return r.json(); })
+      .then(function (fc) { data[s.id] = fc; stats[s.id] = computeStats(s, fc); })
+      .catch(function () { /* source absente : carte grisée dans la liste */ });
+  }
+
+  map.on('load', function () {
+    Promise.all(SOURCES.map(load)).then(function () {
+      current = SOURCES.map(function (s) { return s.id; }).filter(function (id) { return data[id]; })[0] || null;
+      renderList(); renderVerdict(); addLayers();
+      document.getElementById('loader').classList.add('off');
+      var g = document.getElementById('gestures'); g.classList.add('show');
+      setTimeout(function () { g.classList.remove('show'); }, 6000);
+    });
+  });
+})();
+</script>
+</body>
+</html>
