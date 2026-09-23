@@ -379,6 +379,7 @@
   }
   function renderNew() {
     var box = $('news'); if (!box) return;
+    if (state.entry && state.entry.statut === 'reference') { box.style.display = 'none'; return; }
     var lot = state.all.reduce(function (m, f) { return f.publie && f.publie > m ? f.publie : m; }, '');
     var pts = (lot
       ? state.all.filter(function (f) { return f.publie === lot; })
@@ -440,7 +441,7 @@
           try { map.flyTo({ center: f.coords, zoom: 9, duration: 700 }); } catch (e) { /* */ }
           new mapboxgl.Popup({ closeButton: true, maxWidth: '320px', className: 'humint-popup' })
             .setLngLat(f.coords)
-            .setHTML(makePopup({ acteur: f.acteur, type: f.type, iso: f.iso, description: f.description, sources: f.sources, corrobore: f.corrobore, _color: actorColor(f.acteur) }))
+            .setHTML(makePopup({ acteur: f.acteur, type: f.type, iso: f.iso, description: f.description, sources: f.sources, corrobore: f.corrobore, reference: f.reference, _color: actorColor(f.acteur) }))
             .addTo(map);
         }
       };
@@ -533,7 +534,7 @@
   }
   function ensureRegions() {
     if (state.regionsReady || state._regionsP) return state._regionsP;
-    state._regionsP = fetch('/carte/regions.geojson?v=20260619c').then(function (r) { return r.json(); }).then(function (gj) {
+    state._regionsP = fetch('/carte/regions.geojson?v=20260923a').then(function (r) { return r.json(); }).then(function (gj) {
       state.regions = (gj.features || []).map(function (f) {
         return { name: f.properties.name, pays: f.properties.pays, geom: f.geometry, bb: bboxOf(f.geometry.coordinates) };
       });
@@ -650,7 +651,7 @@
             try { map.flyTo({ center: f.coords, zoom: 9, duration: 700 }); } catch (e) { /* */ }
             new mapboxgl.Popup({ closeButton: true, maxWidth: '320px', className: 'humint-popup' })
               .setLngLat(f.coords)
-              .setHTML(makePopup({ acteur: f.acteur, type: f.type, iso: f.iso, description: f.description, sources: f.sources, corrobore: f.corrobore, _color: actorColor(f.acteur) }))
+              .setHTML(makePopup({ acteur: f.acteur, type: f.type, iso: f.iso, description: f.description, sources: f.sources, corrobore: f.corrobore, reference: f.reference, _color: actorColor(f.acteur) }))
               .addTo(map);
           }
         };
@@ -864,6 +865,8 @@
       corrobore: !!(p.corrobore === true || /corrobor|recoup/i.test(String(p.statut || ''))),
       added: p.added ? String(p.added).slice(0, 10) : null,
       publie: p.publie ? String(p.publie).slice(0, 10) : null,
+      // Donnée référencée (théâtres hors Sahel) : ni corroborée ni non corroborée.
+      reference: p.statut === 'reference',
     };
   }
 
@@ -899,7 +902,7 @@
       type: 'FeatureCollection',
       features: shown.map(function (f) {
         return { type: 'Feature', geometry: { type: 'Point', coordinates: f.coords },
-          properties: { acteur: f.acteur, type: f.type, iso: f.iso || '', description: f.description, sources: f.sources, corrobore: f.corrobore ? 1 : 0, _color: actorColor(f.acteur) } };
+          properties: { acteur: f.acteur, type: f.type, iso: f.iso || '', description: f.description, sources: f.sources, corrobore: f.corrobore ? 1 : 0, reference: f.reference ? 1 : 0, _color: actorColor(f.acteur) } };
       }),
     });
     updateLegend(shown);
@@ -925,6 +928,7 @@
       bar.innerHTML = '<a class="builder-reset" href="/">' + ICO.arrowL + 'Choisir un pays</a>';
     } else {
       bar.appendChild(facetChip('pays', 'Pays', state.country, true));
+      bar.appendChild(statutChip(state.entry));
       bar.appendChild(facetChip('date', 'Période', (state.sel.from && state.sel.to) ? (frDate(state.sel.from) + ' – ' + frDate(state.sel.to)) : 'Toute période', !!(state.sel.from && state.sel.to)));
       bar.appendChild(facetChip('actor', 'Acteur', state.sel.actor || 'Tous', !!state.sel.actor));
       bar.appendChild(facetChip('event', "Typologie d'événement", state.sel.event || 'Toutes', !!state.sel.event));
@@ -932,6 +936,25 @@
     var title = $('country-title');
     if (title) title.textContent = state.country || 'Choisir un pays';
     document.title = (state.country || 'Carte') + ' · Algor Access';
+  }
+
+  // Repère non cliquable : Sahel actualisé chaque semaine, autres théâtres = données référencées.
+  function periodeDe(e) {
+    var m = (e && e.months) || [];
+    if (!m.length) return '';
+    var a = m[0].label.toLowerCase(), b = m[m.length - 1].label.toLowerCase();
+    if (a === b) return a;
+    var ya = a.split(' ').pop(), yb = b.split(' ').pop();
+    return (ya === yb ? a.replace(' ' + ya, '') : a) + ' à ' + b;
+  }
+  function statutChip(e) {
+    var el = document.createElement('span');
+    var ref = e && e.statut === 'reference';
+    el.className = 'chip chip-statut' + (ref ? ' chip-statut-ref' : '');
+    el.innerHTML = '<span class="chip-statut-dot" aria-hidden="true"></span><span class="chip-val">' +
+      (ref ? 'Données référencées · ' + esc(periodeDe(e)) : 'Actualisé chaque semaine') + '</span>';
+    el.title = ref ? 'Événements référencés sur ce théâtre en 2026, sans mise à jour hebdomadaire.' : 'Alimenté chaque semaine par les remontées terrain.';
+    return el;
   }
 
   function facetChip(key, label, value, active) {
@@ -988,7 +1011,15 @@
 
   /* ── Éditeurs ── */
   function openEditor(key, anchor) {
-    if (key === 'pays') return openList(anchor, 'Pays', null, (state.manifest.countries || []).map(function (c) { return { v: c.name, n: c.count }; }), state.country, false, function (val) { switchCountry(val); }, true);
+    if (key === 'pays') {
+      var cs = (state.manifest.countries || []).slice().sort(function (a, b) {
+        var ra = a.statut === 'reference' ? 1 : 0, rb = b.statut === 'reference' ? 1 : 0;
+        return ra - rb || String(a.theatre || '').localeCompare(String(b.theatre || ''), 'fr') || b.count - a.count;
+      });
+      return openList(anchor, 'Pays', null, cs.map(function (c) {
+        return { v: c.name, n: c.count, g: c.statut === 'reference' ? (c.theatre || 'Autres') + ' · données référencées 2026' : (c.theatre || 'Sahel') + ' · actualisé chaque semaine' };
+      }), state.country, false, function (val) { switchCountry(val); }, true);
+    }
     if (key === 'event') return openList(anchor, "Typologie d'événement", 'Toutes les typologies', distinctCount(rowsFor(false), 'type'), state.sel.event, true, function (val) { state.sel.event = val; applyFacets(); renderSummary(); fitToFiltered(); });
     if (key === 'actor') return openList(anchor, 'Acteur', 'Tous les acteurs', distinctCount(rowsFor(true), 'acteur'), state.sel.actor, true, function (val) { state.sel.actor = val; applyFacets(); renderSummary(); fitToFiltered(); });
     if (key === 'date') return openCalendar(anchor);
@@ -997,11 +1028,14 @@
   function openList(anchor, title, allLabel, items, current, isActor, onPick, withLayers) {
     var rows = '';
     if (allLabel) rows += '<button class="fp-opt' + (!current ? ' on' : '') + '" data-v="__all"><span class="fp-l">' + esc(allLabel) + '</span></button>';
+    var groupe = null;
     rows += items.map(function (o) {
+      var gh = '';
+      if (o.g && o.g !== groupe) { groupe = o.g; gh = '<div class="fp-group">' + esc(o.g) + '</div>'; }
       var dot = isActor ? '<span class="fp-dot" style="background:' + actorColor(o.v) + '"></span>' : '';
       var caret = (withLayers && (NEIGHBORS[o.v] || []).length) ? '<span class="fp-more">' + ICO.right + '</span>' : '';
       var lt = isActor ? ' title="' + esc(actorFull(o.v)) + '"' : '';
-      return '<button class="fp-opt' + (o.v === current ? ' on' : '') + '" data-v="' + esc(o.v) + '"' + lt + '>' + dot + '<span class="fp-l">' + esc(o.v) + '</span><span class="fp-n">' + o.n + '</span>' + caret + '</button>';
+      return gh + '<button class="fp-opt' + (o.v === current ? ' on' : '') + '" data-v="' + esc(o.v) + '"' + lt + '>' + dot + '<span class="fp-l">' + esc(o.v) + '</span><span class="fp-n">' + o.n + '</span>' + caret + '</button>';
     }).join('') || '<div class="fp-empty">Aucune valeur</div>';
     openPop(anchor, '<div class="fp-head">' + esc(title) + '</div><div class="fp-body">' + rows + '</div>', function (p) {
       p.querySelectorAll('.fp-opt').forEach(function (b) {
@@ -1168,6 +1202,7 @@
     var corr = !!p.corrobore;
     var sColor = corr ? '#2e9e5b' : '#9aa0a6';
     var sLabel = corr ? 'Corroboré' : 'Non corroboré';
+    if (p.reference && !corr) { sColor = '#6b6c72'; sLabel = 'Donnée référencée'; }
     rows += '<div class="popup-row"><span class="popup-key">Statut</span><span class="popup-val"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + sColor + ';margin-right:6px;vertical-align:middle"></span>' + sLabel + '</span></div>';
     if (p.type) rows += '<div class="popup-row"><span class="popup-key">Typologie d\'événement</span><span class="popup-val">' + esc(p.type) + '</span></div>';
     if (p.iso) rows += '<div class="popup-row"><span class="popup-key">Date</span><span class="popup-val popup-mono">' + esc(p.iso) + '</span></div>';

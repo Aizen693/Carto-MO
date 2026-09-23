@@ -47,6 +47,14 @@
   .outil__opt--suite { border-color: var(--on-night); background: var(--on-night); color: var(--ink); }
   .outil__opt--suite:hover { background: transparent; color: var(--on-night); }
   .outil__opt--passer { border-style: dashed; }
+  .outil__groupe { flex-basis: 100%; margin: 10px 0 0; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #8B8C92; display: flex; align-items: center; gap: 8px; }
+  .outil__groupe:first-child { margin-top: 0; }
+  .outil__groupe::before, .statut-dot { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #2e9e5b; box-shadow: 0 0 0 3px rgba(46,158,91,.18); }
+  .outil__groupe--ref::before, .statut-dot--ref { background: #9aa0a6; box-shadow: none; }
+  .v5-phero__statut { font-size: 16px; }
+  .statut-dot { margin: 0 8px 2px 0; vertical-align: middle; }
+  .statut-l { display: block; }
+  .statut-l + .statut-l { margin-top: 4px; }
   .phero-demo { position: relative; width: min(460px, 100%); margin: clamp(32px, 5vh, 52px) 0 0; }
   .phero-demo label { display: block; margin-bottom: 10px; font-size: 14px; color: #8C8D93; }
   .phero-demo__champ { display: flex; align-items: center; border-bottom: 1px solid #3A3B42; transition: border-color .25s ease; }
@@ -117,7 +125,8 @@
     <canvas class="planisphere-canvas v5-carte-fond" role="img" aria-label="Carte des six théâtres suivis et des flux qui les relient. Cliquez un théâtre pour l'ouvrir."></canvas>
     <p class="v5-lecture" aria-hidden="true"><span>Curseur</span> <b id="lecture-lat">16,00 N</b> <b id="lecture-lon">000,00 E</b></p>
     <h1 class="hors-ecran">Les six théâtres suivis par Algor Access</h1>
-    <p class="v5-phero__lede">Du Sahel à l'Asie du Sud, Algor Access couvre six théâtres choisis pour leur intensité et leur complexité. Chacun dispose de sa carte, de ses calques et de sa chronologie.</p>
+    <p class="v5-phero__lede">Du Sahel à l'Asie du Sud, Algor Access couvre six théâtres choisis pour leur intensité et leur complexité. Chacun s'ouvre sur la même carte, filtrable par pays, période, typologie d'événement et acteur.</p>
+    <p class="v5-phero__lede v5-phero__statut"><span class="statut-l"><span class="statut-dot" aria-hidden="true"></span>Le Sahel est actualisé chaque semaine à partir de nos remontées terrain.</span><span class="statut-l"><span class="statut-dot statut-dot--ref" aria-hidden="true"></span>Les autres théâtres présentent les événements référencés en 2026.</span></p>
     <form class="phero-demo" id="outil" action="/demo/" data-etat="attente">
       <label for="tq" id="tq-lbl">Essayez la démo sur n'importe quelle zone du monde</label>
       <div class="phero-demo__champ"><span class="outil__jetons" id="tq-jetons"></span><input id="tq" name="q" type="search" placeholder="Bogotá" autocomplete="off" required><button type="submit" aria-label="Lancer la démo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></button></div>
@@ -183,54 +192,54 @@
         <div><dt>Lat</dt><dd data-i="lat">33,000 N</dd></div>
         <div><dt>Lon</dt><dd data-i="lon">044,000 E</dd></div>
         <div><dt>Période</dt><dd data-i="per">2005 → 2026</dd></div>
-        <div><dt>Calques</dt><dd data-i="cal">03</dd></div>
+        <div><dt>Filtres</dt><dd data-i="cal">04</dd></div>
         <div><dt>Théâtre</dt><dd data-i="n">01 / 06</dd></div>
       </dl>
           </div>
         </div>
       </div>
       <ol class="v5-etapes">
-        <li class="v5-etape is-on" data-etape="0" data-lat="33.0" data-lon="44.0" data-per="2005 → 2026" data-cal="03" data-n="01">
+        <li class="v5-etape is-on" data-etape="0" data-lat="33.0" data-lon="44.0" data-per="01.2026 → 04.2026" data-cal="04" data-n="01">
           <p class="v5-etape__k">Théâtre 01 / 06</p>
           <h3>Moyen-Orient</h3>
-          <p>Le théâtre des recompositions de l'après-2011 : fronts confessionnels, influence iranienne, reconstruction syrienne, guerre du Yémen et tensions au Liban-Sud. L'historique couvre dix périodes, de 2005 à aujourd'hui.</p>
-          <p class="v5-etape__c">Calques : événements, zones de contrôle, Daesh.</p>
-          <a class="btn-link" href="/moyen-orient/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+          <p>Le théâtre des recompositions de l'après-2011 : fronts confessionnels, influence iranienne, reconstruction syrienne, guerre du Yémen et tensions au Liban-Sud. Événements référencés de janvier à avril 2026.</p>
+          <p class="v5-etape__c">Données référencées 2026 · pays, période, typologie, acteur.</p>
+          <a class="btn-link" href="/carte/?pays=Isra%C3%ABl">Ouvrir la carte<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
         </li>
-        <li class="v5-etape" data-etape="1" data-lat="16.0" data-lon="0.0" data-per="12.2025 → 05.2026" data-cal="08" data-n="02">
+        <li class="v5-etape" data-etape="1" data-lat="16.0" data-lon="0.0" data-per="Hebdomadaire" data-cal="04" data-n="02">
           <p class="v5-etape__k">Théâtre 02 / 06</p>
           <h3>Sahel</h3>
-          <p>La zone de plus forte expansion djihadiste : groupes affiliés à al-Qaïda et à l'État islamique, retrait des forces internationales, juntes militaires et corridors de trafic. Le théâtre le plus dense en calques : forces, mines, infrastructures, flux.</p>
-          <p class="v5-etape__c">Calques : forces, population, mines, infrastructures, événements, HUMINT, flux.</p>
-          <a class="btn-link" href="/sahel/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+          <p>La zone de plus forte expansion djihadiste : groupes affiliés à al-Qaïda et à l'État islamique, retrait des forces internationales, juntes militaires et corridors de trafic. Le seul théâtre actualisé chaque semaine, à partir de nos bulletins terrain.</p>
+          <p class="v5-etape__c">Actualisé chaque semaine · pays, période, typologie, acteur.</p>
+          <a class="btn-link" href="/carte/?pays=Burkina%20Faso">Ouvrir la carte<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
         </li>
-        <li class="v5-etape" data-etape="2" data-lat="-2.0" data-lon="29.0" data-per="01.2026 → 04.2026" data-cal="03" data-n="03">
+        <li class="v5-etape" data-etape="2" data-lat="-2.0" data-lon="29.0" data-per="12.2025 → 04.2026" data-cal="04" data-n="03">
           <p class="v5-etape__k">Théâtre 03 / 06</p>
           <h3>RDC, Grands Lacs</h3>
-          <p>L'Est congolais sous pression : offensive du M23, multiplication des groupes armés, implications régionales et économie minière de guerre. Suivi des mouvements M23, Wazalendo et FARDC, période par période.</p>
-          <p class="v5-etape__c">Calques : événements, HUMINT, zones de contrôle.</p>
-          <a class="btn-link" href="/rdc/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+          <p>L'Est congolais sous pression : offensive du M23, multiplication des groupes armés, implications régionales et économie minière de guerre. Suivi des mouvements M23, Wazalendo et FARDC.</p>
+          <p class="v5-etape__c">Données référencées 2026 · pays, période, typologie, acteur.</p>
+          <a class="btn-link" href="/carte/?pays=RDC">Ouvrir la carte<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
         </li>
-        <li class="v5-etape" data-etape="3" data-lat="-19.0" data-lon="47.0" data-per="01.2026 → 04.2026" data-cal="09" data-n="04">
+        <li class="v5-etape" data-etape="3" data-lat="-19.0" data-lon="47.0" data-per="01.2026 → 04.2026" data-cal="04" data-n="04">
           <p class="v5-etape__k">Théâtre 04 / 06</p>
           <h3>Madagascar</h3>
           <p>Une grande île sous tension discrète : insécurité rurale dans le Grand Sud, trafics d'or, de bois précieux et de ressources halieutiques, et enjeux stratégiques du canal du Mozambique.</p>
-          <p class="v5-etape__c">Calques : forces, population, mines, infrastructures, événements, flux, parcs, zones maritimes.</p>
-          <a class="btn-link" href="/madagascar/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+          <p class="v5-etape__c">Données référencées 2026 · pays, période, typologie, acteur.</p>
+          <a class="btn-link" href="/carte/?pays=Madagascar">Ouvrir la carte<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
         </li>
-        <li class="v5-etape" data-etape="4" data-lat="12.0" data-lon="43.0" data-per="Temps réel (AIS)" data-cal="27" data-n="05">
+        <li class="v5-etape" data-etape="4" data-lat="12.0" data-lon="43.0" data-per="Temps réel (AIS)" data-cal="06" data-n="05">
           <p class="v5-etape__k">Théâtre 05 / 06</p>
           <h3>Afrique maritime</h3>
           <p>Les routes et les détroits : piraterie dans le golfe de Guinée, attaques en mer Rouge, sûreté des grands passages stratégiques et présence navale concurrente.</p>
           <p class="v5-etape__c">Calques : flux, ports, piraterie, hubs, présences navales, AIS temps réel.</p>
           <a class="btn-link" href="/afrique/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
         </li>
-        <li class="v5-etape" data-etape="5" data-lat="30.0" data-lon="74.0" data-per="01.2026 → 04.2026" data-cal="08" data-n="06">
+        <li class="v5-etape" data-etape="5" data-lat="30.0" data-lon="74.0" data-per="01.2026 → 04.2026" data-cal="04" data-n="06">
           <p class="v5-etape__k">Théâtre 06 / 06</p>
           <h3>Asie du Sud</h3>
           <p>L'arc de crise afghano-pakistanais : insurrection au Baloutchistan, mouvements djihadistes au Pakistan, situation afghane sous les Taliban et tensions indo-pakistanaises persistantes au Cachemire.</p>
-          <p class="v5-etape__c">Calques : forces, population, mines, infrastructures, événements, flux, frontières.</p>
-          <a class="btn-link" href="/asie-sud/">Ouvrir le théâtre<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+          <p class="v5-etape__c">Données référencées 2026 · pays, période, typologie, acteur.</p>
+          <a class="btn-link" href="/carte/?pays=Pakistan">Ouvrir la carte<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
         </li>
       </ol>
     </div>
@@ -314,7 +323,9 @@
 
   function options() {
     var e = sel.entree, k = ETAPES[etape];
-    if (k === 'pays') return pays.map(function (c) { return { v: c.name, l: c.name, n: c.count }; });
+    if (k === 'pays') return pays.map(function (c) {
+      return { v: c.name, l: c.name, n: c.count, g: c.statut === 'reference' ? 'Données référencées 2026 · ' + (c.theatre || '') : 'Sahel · actualisé chaque semaine', ref: c.statut === 'reference' };
+    }).sort(function (a, b) { return (a.ref - b.ref) || a.g.localeCompare(b.g, 'fr') || b.n - a.n; });
     if (!e) return [];
     if (k === 'date') return (e.months || []).map(function (m) { return { v: m.key, l: m.label }; });
     return (k === 'event' ? e.events : e.actors || []).map(function (x) { return { v: x, l: x }; });
@@ -344,9 +355,14 @@
       var v = i === 0 ? sel.entree.name : sel[x]; if (!v) return '';
       return '<button type="button" class="outil__jeton" data-i="' + i + '" aria-label="' + esc(t('Retirer')) + ' ' + esc(v) + '">' + esc(lib[x] ? lib[x](v) : v) + '<span aria-hidden="true">×</span></button>';
     }).join('');
-    var q = norm(inp.value), l = options().filter(function (o) { return !q || norm(o.l).indexOf(q) !== -1; }).slice(0, k === 'pays' ? 12 : 8), h = '';
+    // Pays : tout le Sahel, puis les autres théâtres groupés (sans saisie, on masque les pays à un seul point).
+    var q = norm(inp.value), l = options().filter(function (o) { return !q || norm(o.l).indexOf(q) !== -1; }).filter(function (o) { return k !== 'pays' || q || !o.ref || o.n > 1; }).slice(0, k === 'pays' ? 40 : 8), h = '', grp = null;
     if (k !== 'pays') h += '<button type="button" class="outil__opt outil__opt--passer" data-v="__tous">' + esc(t(TOUS[k])) + '</button>';
-    h += l.map(function (o) { return '<button type="button" class="outil__opt" data-v="' + esc(o.v) + '">' + esc(o.l) + (o.n ? ' <b>' + o.n + '</b>' : '') + '</button>'; }).join('');
+    h += l.map(function (o) {
+      var gh = '';
+      if (o.g && o.g !== grp) { grp = o.g; gh = '<p class="outil__groupe' + (o.ref ? ' outil__groupe--ref' : '') + '">' + esc(t(o.g)) + '</p>'; }
+      return gh + '<button type="button" class="outil__opt" data-v="' + esc(o.v) + '">' + esc(o.l) + (o.n ? ' <b>' + o.n + '</b>' : '') + '</button>';
+    }).join('');
     if (etape > 0) h += '<button type="button" class="outil__opt outil__opt--suite" data-ouvrir>' + esc(t('Ouvrir la carte')) + '</button>';
     choix.innerHTML = h; choix.hidden = false;
   }
@@ -365,7 +381,9 @@
   function passerAbonne() {
     if (abonne) return; abonne = true;
     f.querySelector('button[type=submit]').setAttribute('aria-label', t('Valider'));
-    fetch('/carte/countries.json?v=20260922').then(function (r) { return r.json(); }).then(function (d) { pays = d.countries || []; rendre(); }).catch(function () {});
+    var statique = function () { return fetch('/carte/countries.json?v=20260923').then(function (r) { return r.json(); }); };
+    var charge = (window.algorAuth && window.algorAuth.loadZoneFile) ? window.algorAuth.loadZoneFile('carte/countries.json').catch(statique) : statique();
+    charge.then(function (d) { pays = d.countries || []; rendre(); }).catch(function () {});
     rendre();
   }
   function sync() {
