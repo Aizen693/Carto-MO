@@ -324,11 +324,18 @@
   function options() {
     var e = sel.entree, k = ETAPES[etape];
     if (k === 'pays') return pays.map(function (c) {
-      return { v: c.name, l: c.name, n: c.count, g: c.statut === 'reference' ? 'Données référencées 2026 · ' + (c.theatre || '') : 'Sahel · actualisé chaque semaine', ref: c.statut === 'reference' };
+      return { v: c.name, l: c.name, n: c.count, th: c.theatre || 'Sahel', g: c.statut === 'reference' ? 'Données référencées 2026 · ' + (c.theatre || '') : 'Sahel · actualisé chaque semaine', ref: c.statut === 'reference' };
     }).sort(function (a, b) { return (a.ref - b.ref) || a.g.localeCompare(b.g, 'fr') || b.n - a.n; });
     if (!e) return [];
     if (k === 'date') return (e.months || []).map(function (m) { return { v: m.key, l: m.label }; });
     return (k === 'event' ? e.events : e.actors || []).map(function (x) { return { v: x, l: x }; });
+  }
+  // Correspondance tolérante : casse, accents, tirets ; sur le pays ou son théâtre.
+  function cle(x) { return norm(x).replace(/[^a-z0-9]+/g, ' ').trim(); }
+  function trouve(o, q) {
+    if (!q) return true;
+    var k = cle(q);
+    return cle(o.l).indexOf(k) !== -1 || (o.th && cle(o.th).indexOf(k) !== -1);
   }
   function ouvrir() {
     var q = new URLSearchParams(); q.set('pays', sel.entree.name);
@@ -356,7 +363,7 @@
       return '<button type="button" class="outil__jeton" data-i="' + i + '" aria-label="' + esc(t('Retirer')) + ' ' + esc(v) + '">' + esc(lib[x] ? lib[x](v) : v) + '<span aria-hidden="true">×</span></button>';
     }).join('');
     // Pays : tout le Sahel, puis les autres théâtres groupés (sans saisie, on masque les pays à un seul point).
-    var q = norm(inp.value), l = options().filter(function (o) { return !q || norm(o.l).indexOf(q) !== -1; }).filter(function (o) { return k !== 'pays' || q || !o.ref || o.n > 1; }).slice(0, k === 'pays' ? 40 : 8), h = '', grp = null;
+    var q = norm(inp.value), l = options().filter(function (o) { return trouve(o, q); }).filter(function (o) { return k !== 'pays' || q || !o.ref || o.n > 1; }).slice(0, k === 'pays' ? 40 : 8), h = '', grp = null;
     if (k !== 'pays') h += '<button type="button" class="outil__opt outil__opt--passer" data-v="__tous">' + esc(t(TOUS[k])) + '</button>';
     h += l.map(function (o) {
       var gh = '';
@@ -375,7 +382,8 @@
     e.preventDefault();
     var q = norm(inp.value), o = options();
     if (!q) { if (etape > 0) choisir('__tous'); return; }
-    var m = o.find(function (x) { return norm(x.l) === q; }) || o.find(function (x) { return norm(x.l).indexOf(q) !== -1; });
+    // Pays exact, puis pays partiel, puis théâtre (on ouvre son pays le plus fourni, la liste est triée).
+    var m = o.find(function (x) { return cle(x.l) === cle(q); }) || o.find(function (x) { return cle(x.l).indexOf(cle(q)) !== -1; }) || o.find(function (x) { return trouve(x, q); });
     if (m) choisir(m.v);
   });
   function passerAbonne() {
