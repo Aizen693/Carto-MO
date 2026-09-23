@@ -104,6 +104,8 @@ img, video, canvas { display: block; max-width: 100%; }
 .cloche__vide { padding: 18px; color: var(--muted); font-size: 14px; }
 .cloche__pied { display: flex; justify-content: space-between; padding: 14px 18px; border-top: 1px solid var(--line); color: var(--ink); text-decoration: none; font-size: 15px; }
 .cloche__pied:hover { background: var(--band); }
+.cloche__perso { display: block; padding: 11px 18px 13px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 4px; }
+.cloche__perso:hover { color: var(--ink); text-decoration-color: currentColor; }
 @media (max-width: 520px) { .cloche { top: 76px; right: 16px; } }
 .sq button.sq__compte.is-logged { background: var(--ink); color: var(--paper); }
 .nav.is-light .sq button.sq__compte.is-logged { background: var(--ink); color: var(--paper); }

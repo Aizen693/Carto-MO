@@ -276,8 +276,69 @@
      + panneau des dernières notes. Titres publics uniquement, jamais l'analyse. */
   var FEED = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
   var SEV = { info: ['Signal', '#8C8D93'], alerte: ['Alerte', '#C28A2E'], critique: ['Critique', '#B4323F'] };
-  var TH = { sahel: 'Sahel', 'moyen-orient': 'Moyen-Orient', rdc: 'RDC', 'afrique-maritime': 'Afrique Maritime', madagascar: 'Madagascar', 'asie-sud': 'Asie du Sud' };
+  var TH = { sahel: 'Sahel', 'moyen-orient': 'Moyen-Orient', rdc: 'RDC', afrique: 'Afrique Maritime', 'afrique-maritime': 'Afrique Maritime', madagascar: 'Madagascar', 'asie-sud': 'Asie du Sud' };
   var MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+  /* Veille personnalisée (23/09/2026) : critères du compte (table veille_preferences,
+     RLS chacun sa ligne) appliqués au fil de la cloche. Logique pure, réutilisée par
+     /compte/veille/ pour l'aperçu. Théâtres = périmètre ; mots-clés, s'il y en a,
+     doivent apparaître dans le titre, le résumé ou le lieu ; gravité minimale. */
+  var RANG = { info: 0, alerte: 1, critique: 2 };
+  var sansAccent = function (s) { return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); };
+  var MaVeille = {
+    correspond: function (it, p) {
+      if (!p) return true;
+      if (p.theatres && p.theatres.length && p.theatres.indexOf(it.theatre) < 0) return false;
+      if ((RANG[it.severite] || 0) < (RANG[p.severite_min] || 0)) return false;
+      if (p.mots && p.mots.length) {
+        var txt = ' ' + sansAccent([it.titre, it.resume, it.lieu].join(' ')).replace(/[^a-z0-9]+/g, ' ') + ' ';
+        return p.mots.some(function (m) { var k = sansAccent(m).replace(/[^a-z0-9]+/g, ' ').trim(); return k && txt.indexOf(' ' + k) >= 0; });
+      }
+      return true;
+    },
+    resume: function (p) {
+      if (!p) return 'OSINT · six théâtres';
+      var t = (p.theatres || []).map(function (x) { return TH[x] || x; });
+      var bouts = [t.length ? t.join(', ') : 'six théâtres'];
+      if (p.mots && p.mots.length) bouts.push(p.mots.length + ' mot' + (p.mots.length > 1 ? 's' : '') + '-clé' + (p.mots.length > 1 ? 's' : ''));
+      return bouts.join(' · ');
+    },
+    /* Points de la synthèse Radio Sahel (bucket privé, premium) en éléments de cloche :
+       gravité « alerte » si un fait de sécurité les fonde, sinon « info ». */
+    radio: function (d) {
+      var sy = d && d.synthese, cat = {};
+      ((d && d.bulletins) || []).forEach(function (b) { (b.faits || []).forEach(function (f) { cat[f.id] = f.categorie; }); });
+      return ((sy && sy.points) || []).map(function (pt) {
+        return { id: 'radio-' + (pt.faits || []).join('-'), theatre: 'sahel', date: String(sy.date || ''), titre: pt.texte, resume: '', lieu: '',
+          severite: (pt.faits || []).some(function (id) { return cat[id] === 'securite'; }) ? 'alerte' : 'info', source: 'radio' };
+      });
+    }
+  };
+  window.V5.maVeille = MaVeille;
+
+  /* Session, préférences et plan du compte, si site-auth.js est présent sur la page. */
+  function compteVeille() {
+    return new Promise(function (ok) {
+      var essais = 0;
+      (function attendre() {
+        var c = window.algorAuth && window.algorAuth.supabase;
+        if (!c) { if (++essais < 32) return setTimeout(attendre, 250); return ok(null); }
+        c.auth.getSession().then(function (r) {
+          var u = r && r.data && r.data.session && r.data.session.user;
+          if (!u) return ok(null);
+          Promise.all([
+            c.from('veille_preferences').select('theatres, mots, severite_min, sources').eq('user_id', u.id).maybeSingle(),
+            c.from('profiles').select('role, plan').eq('id', u.id).maybeSingle()
+          ]).then(function (res) {
+            var pr = res[1] && res[1].data;
+            ok({ client: c, session: r.data.session, prefs: (res[0] && res[0].data) || null,
+              premium: !!pr && (pr.plan === 'premium' || pr.role === 'admin' || pr.role === 'editor') });
+          }, function () { ok(null); });
+        }, function () { ok(null); });
+      })();
+    });
+  }
+  window.V5.compteVeille = compteVeille;
+
   function cloche() {
     var sq = d.querySelector('.nav .sq');
     if (!sq || sq.querySelector('.sq__cloche')) return;
@@ -301,11 +362,12 @@
     var date = function (s) { var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || ''); return m ? (+m[3]) + ' ' + MOIS[+m[2] - 1] : ''; };
     var remplir = function () {
       var vu = lire(), ol = pan.querySelector('.cloche__liste');
-      if (!items.length) { ol.innerHTML = '<li class="cloche__vide">Aucune note pour le moment.</li>'; return; }
+      if (!items.length) { ol.innerHTML = '<li class="cloche__vide">' + (prefs ? 'Aucune note ne correspond à votre veille pour le moment.' : 'Aucune note pour le moment.') + '</li>'; return; }
       ol.innerHTML = items.slice(0, 12).map(function (it) {
         var sv = SEV[it.severite] || SEV.info, neuf = String(it.date || '') > vu;
-        return '<li><a href="/veille/?onglet=geo"' + (neuf ? ' class="is-neuf"' : '') + '><span class="cloche__meta"><i style="background:' + sv[1] + '" title="' + sv[0] + '"></i>' +
-          esc(TH[it.theatre] || it.theatre || '') + ' · ' + esc(date(it.date)) + (neuf ? '<b>Nouveau</b>' : '') + '</span><span class="cloche__t">' + esc(fr(it.titre)) + '</span></a></li>';
+        var lien = it.source === 'radio' ? '/veille/?onglet=radio' : '/veille/?onglet=geo';
+        return '<li><a href="' + lien + '"' + (neuf ? ' class="is-neuf"' : '') + '><span class="cloche__meta"><i style="background:' + sv[1] + '" title="' + sv[0] + '"></i>' +
+          esc(TH[it.theatre] || it.theatre || '') + (it.source === 'radio' ? ' · Radio' : '') + ' · ' + esc(date(it.date)) + (neuf ? '<b>Nouveau</b>' : '') + '</span><span class="cloche__t">' + esc(fr(it.titre)) + '</span></a></li>';
       }).join('');
     };
     var ouvert = false;
@@ -321,11 +383,31 @@
     btn.addEventListener('click', function (e) { e.stopPropagation(); basculer(!ouvert); });
     d.addEventListener('click', function (e) { if (ouvert && !pan.contains(e.target)) basculer(false); });
     d.addEventListener('keydown', function (e) { if (ouvert && e.key === 'Escape') { basculer(false); btn.focus(); } });
-    var charger = function (liste) {
-      items = (liste || []).filter(function (it) { return it && it.titre; })
+    var brut = [], radio = [], prefs = null, connecte = false;
+    var appliquer = function () {
+      items = brut.concat(radio).filter(function (it) { return it && it.titre && MaVeille.correspond(it, prefs); })
         .sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
+      pan.querySelector('.cloche__tete span').textContent = prefs ? 'Ma veille' : 'Fil de veille';
+      pan.querySelector('.cloche__s').textContent = MaVeille.resume(prefs);
+      var perso = pan.querySelector('.cloche__perso');
+      if (connecte && !perso) {
+        perso = d.createElement('a'); perso.className = 'cloche__perso'; perso.href = '/compte/veille/';
+        pan.appendChild(perso);
+      }
+      if (perso) perso.textContent = prefs ? 'Modifier ma veille' : 'Personnaliser ma veille';
       compter(); if (ouvert) remplir();
     };
+    var charger = function (liste) { brut = liste || []; appliquer(); };
+    compteVeille().then(function (cpt) {
+      if (!cpt) return;
+      connecte = true; prefs = cpt.prefs; appliquer();
+      if (!cpt.premium || !prefs || (prefs.sources || []).indexOf('radio') < 0) return;
+      // Radio Sahel : bucket privé lu avec la session du compte (la RLS refuse sans premium).
+      cpt.client.storage.from('zones').download('sahel/radio.json')
+        .then(function (r) { if (r.error || !r.data) throw r.error; return r.data.text(); })
+        .then(function (t) { radio = MaVeille.radio(JSON.parse(t)); appliquer(); })
+        .catch(function () {});
+    });
     if (window.V5.veille) charger(window.V5.veille);
     else if (d.getElementById('annonce')) d.addEventListener('v5:veille', function (e) { charger(e.detail); });
     else fetch(FEED, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })

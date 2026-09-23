@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<script src="/shared/i18n.js?v=20260916a"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ma veille · Algor Access</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#0F1013" />
+<!-- Veille personnalisée (23/09/2026) : critères de la cloche de veille pour chaque
+     compte (table veille_preferences, RLS : chacun sa ligne). Aucun mail : les alertes
+     par mail restent réglées sur /compte/alertes/. Page non gatée. -->
+<link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+<link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
+<link rel="stylesheet" href="/shared/v5/v5.css?v=20260923c" />
+<style>
+  [hidden] { display: none !important; }
+  .al { max-width: 1240px; }
+
+  /* États : vérification, connexion, compte gratuit, désabonnement */
+  .verif { margin: 0; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 17px; color: var(--muted); }
+  .al-etat { max-width: 640px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .al-etat h2 { margin: 0; font-weight: 400; font-size: clamp(30px, 3vw, 42px); line-height: 1.1; letter-spacing: -0.025em; text-wrap: balance; }
+  .al-etat > p { margin: 16px 0 0; font-size: 18px; line-height: 1.55; color: var(--ink-2); }
+  .al-etat .v5-actions { margin-top: 30px; }
+  .al-pts { list-style: none; margin: 26px 0 0; padding: 0; font-size: 17px; color: var(--ink-2); }
+  .al-pts li { padding: 11px 0; border-top: 1px solid var(--line); }
+  .al-pts li:last-child { border-bottom: 1px solid var(--line); }
+
+  /* Réglages et aperçu */
+  .al-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+  .al-dl > div { align-items: start; }
+  .al-dl dt { padding-top: 3px; }
+
+  /* Interrupteur : encre allumé, pierre éteint */
+  .switch { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+  .switch__txt { font-size: 17px; color: var(--ink-2); min-width: 0; }
+  .switch__txt code { font: 400 15px var(--mono); color: var(--ink); word-break: break-all; }
+  .tgl { position: relative; width: 46px; height: 26px; flex: none; border-radius: 99px; background: var(--stone); transition: background .2s ease; }
+  .tgl::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--paper); box-shadow: 0 1px 2px rgba(0,0,0,.18); transition: transform .25s var(--ease); }
+  .tgl[aria-checked="true"] { background: var(--ink); }
+  .tgl[aria-checked="true"]::after { transform: translateX(20px); }
+  .tgl:hover { background: #C6C6C6; }
+  .tgl[aria-checked="true"]:hover { background: var(--ink-2); }
+  .tgl:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  /* Théâtres : cases à cocher en liste */
+  .chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); column-gap: 24px; border-top: 1px solid var(--line); }
+  .chip { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 13px 2px; border-bottom: 1px solid var(--line); text-align: left; color: var(--ink-2); transition: color .2s ease; }
+  .chip:hover { color: var(--ink); }
+  .chip__n { display: flex; align-items: center; gap: 12px; font-size: 17px; }
+  .chip__box { width: 18px; height: 18px; flex: none; display: grid; place-items: center; border: 1px solid var(--stone); border-radius: 2px; background: var(--paper); transition: background .2s ease, border-color .2s ease; }
+  .chip:hover .chip__box { border-color: var(--muted); }
+  .chip__box svg { width: 12px; height: 12px; opacity: 0; }
+  .chip[aria-checked="true"] { color: var(--ink); }
+  .chip[aria-checked="true"] .chip__box { background: var(--ink); border-color: var(--ink); }
+  .chip[aria-checked="true"] .chip__box svg { opacity: 1; }
+  .chip small { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .chip:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* Gravité : sélecteur segmenté */
+  .seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--stone); border-radius: 2px; }
+  .seg button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 12px 8px; font-size: 15px; line-height: 1.25; text-align: center; color: var(--ink-2); transition: background .2s ease, color .2s ease; }
+  .seg button + button { border-left: 1px solid var(--stone); }
+  .seg button:hover { background: var(--band); color: var(--ink); }
+  .seg button[aria-checked="true"] { background: var(--ink); color: var(--paper); }
+  .seg button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; position: relative; z-index: 1; }
+  .dots { display: flex; gap: 4px; }
+  .dots i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* Actions et message d'état */
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
+  .actions .btn-rect--ink:disabled { background: transparent; color: var(--muted); border-color: var(--stone); cursor: default; }
+  .actions .btn-outline:disabled { color: var(--faint); cursor: default; }
+  .actions .btn-outline:disabled:hover { background: transparent; border-color: currentColor; }
+  .statut { margin: 16px 0 0; min-height: 24px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+  .statut.is-ok { color: #2F6B4F; }
+  .statut.is-err { color: #A23B3B; }
+
+  /* Aperçu */
+  .apercu { position: sticky; top: 100px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .apercu h2 { margin: 0; font-weight: 400; font-size: clamp(24px, 2vw, 30px); line-height: 1.15; letter-spacing: -0.02em; }
+  .apercu__hint { margin: 8px 0 0; font-size: 15px; color: var(--muted); }
+  .kpi { display: flex; align-items: baseline; gap: 10px; margin: 26px 0 6px; }
+  .kpi b { font-weight: 400; font-size: clamp(48px, 5vw, 68px); line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+  .kpi span { font-size: 17px; color: var(--ink-2); }
+  .rythme { margin: 0 0 22px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+  .notes { border-top: 1px solid var(--line); }
+  .notes:empty { border-top: 0; }
+  .note { display: block; padding: 13px 0 14px; border-bottom: 1px solid var(--line); }
+  .note__m { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 5px; font-size: 13px; color: var(--muted); }
+  .note__m time { font-variant-numeric: tabular-nums; }
+  .sev { font-size: 12px; line-height: 1; padding: 4px 7px; border: 1px solid var(--stone); border-radius: 2px; color: var(--muted); }
+  .sev--alerte { border-color: var(--ink-2); color: var(--ink); }
+  .sev--critique { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .note__t { font-size: 16px; line-height: 1.4; color: var(--ink); }
+  .note:hover .note__t { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .vide { margin: 0; padding: 12px 0 0; font-size: 15px; color: var(--muted); }
+
+  /* Mots-clés : champ + étiquettes retirables */
+  .mots { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .mots:empty { display: none; }
+  .mot { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 6px 0 12px; border: 1px solid var(--ink); border-radius: 2px; font-size: 15px; color: var(--ink); }
+  .mot button { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 2px; color: var(--muted); }
+  .mot button:hover { background: var(--band); color: var(--ink); }
+  .mot-saisie { display: flex; gap: 10px; }
+  .mot-saisie input { flex: 1; min-width: 0; height: 40px; padding: 0 2px; border: 0; border-bottom: 1px solid var(--stone); background: transparent; font: 400 16px var(--sans); color: var(--ink); outline: none; }
+  .mot-saisie input:focus { border-bottom-color: var(--ink); }
+  .aide { margin: 10px 0 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
+  .chip[aria-disabled="true"] { color: var(--faint); cursor: not-allowed; }
+  .chip[aria-disabled="true"] .chip__box { background: var(--band); }
+
+  @media (max-width: 1100px) { .al-grid { grid-template-columns: 1fr; } .apercu { position: static; } }
+  @media (max-width: 520px) { .seg button { font-size: 14px; padding: 11px 4px; } .switch { align-items: flex-start; } }
+</style>
+</head>
+<body data-rubrique="veille">
+
+<!-- v5:nav -->
+<div class="annonce" id="annonce" hidden>
+  <div class="annonce__in">
+    <p>Dernière note de veille : <a id="annonce-lien" href="/veille/"></a></p>
+    <button class="annonce__x" id="annonce-x" aria-label="Fermer le bandeau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+</div>
+<header class="nav" id="nav">
+  <div class="nav__bar">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <nav class="nav__links" aria-label="Rubriques"><a href="/theatres/">Théâtres</a><a href="/veille/" aria-current="page">Veille</a><a href="/methodologie/">Méthodologie</a><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a></nav>
+    <div class="nav__right">
+      <span class="lang-slot"></span>
+      <button class="btn-login site-login" type="button">Connexion</button>
+      <a class="btn-rect" href="/offres/">Demander un accès</a>
+      <div class="sq">
+        <button type="button" class="sq__compte site-login" data-auth-icone aria-label="Connexion"><svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c1.2-3.8 4-5.6 7.5-5.6s6.3 1.8 7.5 5.6"/></svg><svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="8.5" r="3.8" fill="currentColor"/><path d="M3 20.5c1.2-3.8 3.8-5.6 7-5.6 1.3 0 2.5.3 3.5.9" fill="none"/><path d="M15.5 18l2.2 2.2 4-4.4"/></svg></button>
+        <button type="button" id="ouvrir-recherche" aria-label="Rechercher une zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
+        <button type="button" id="ouvrir-menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="veil" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <nav class="veil__body">
+    <div class="veil__main"><a href="/">Plateforme</a><a href="/theatres/">Théâtres</a><a href="/veille/" aria-current="page">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+    <div class="veil__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+    <div class="veil__col"><h3>Algor Access</h3><button class="veil__compte site-login" type="button">Connexion</button><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+  </nav>
+</div>
+
+<div class="veil veil--search" id="recherche" role="dialog" aria-modal="true" aria-label="Recherche">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <div class="veil__body">
+    <form class="search-form" action="/demo/">
+      <label for="q">Essayez la démo sur n'importe quelle zone du monde</label>
+      <input id="q" name="q" type="search" placeholder="Bogotá" autocomplete="off" required>
+      <p>Indiquez une ville, une région ou un pays : vous verrez le rendu de nos cartes sur des données fictives.</p>
+    </form>
+  </div>
+</div>
+<!-- /v5:nav -->
+
+<main>
+  <section class="v5-phero" data-nav="dark" data-v5-trame data-hachures="7,0">
+    <h1>Ma veille</h1>
+    <p class="v5-phero__lede">Choisissez ce que la cloche vous signale : vos théâtres, les acteurs et les lieux que vous suivez, votre seuil de gravité. Le reste du fil reste accessible sur la page Veilles.</p>
+    <div class="v5-actions">
+      <a class="btn-outline" href="/veille/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6"/></svg>Veilles</a>
+    </div>
+  </section>
+
+  <section class="v5-sec" data-nav="light" aria-label="Réglages de ma veille">
+    <div class="al">
+      <p class="verif" id="verif" role="status" aria-live="polite">Vérification de votre accès…</p>
+
+      <!-- Visiteur non connecté -->
+      <div class="al-etat" id="v-login" hidden>
+        <h2>Connectez-vous pour personnaliser votre veille</h2>
+        <p>Vos réglages sont liés à votre compte : vous les retrouvez sur tous vos appareils.</p>
+        <div class="v5-actions">
+          <a class="btn-rect btn-rect--ink" href="#" data-algor-login>Se connecter</a>
+          <a class="btn-outline" href="/offres/">Voir les offres</a>
+        </div>
+      </div>
+
+      <!-- Compte connecté -->
+      <div class="al-grid" id="v-form" hidden>
+        <div>
+          <dl class="v5-dl al-dl">
+            <div>
+              <dt>Théâtres</dt>
+              <dd>
+                <div class="chips" id="theatres" role="group" aria-label="Théâtres suivis"></div>
+                <p class="aide">Aucun théâtre coché : les six.</p>
+              </dd>
+            </div>
+            <div>
+              <dt>Mots-clés</dt>
+              <dd>
+                <form class="mot-saisie" id="mot-form" autocomplete="off">
+                  <input id="mot" type="text" maxlength="60" placeholder="JNIM, Dioura, Kidal, M23…" aria-label="Ajouter un mot-clé">
+                  <button class="btn-outline" type="submit">Ajouter</button>
+                </form>
+                <div class="mots" id="mots" aria-live="polite"></div>
+                <p class="aide">Acteurs, localités, sujets. Une note est retenue si elle contient au moins un de vos mots, dans son titre, son résumé ou son lieu. Aucun mot-clé : tout le théâtre.</p>
+              </dd>
+            </div>
+            <div>
+              <dt>Gravité minimale</dt>
+              <dd>
+                <div class="seg" id="seuil" role="radiogroup" aria-label="Gravité minimale">
+                  <button type="button" role="radio" data-v="info" aria-checked="true"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>Toutes les notes</button>
+                  <button type="button" role="radio" data-v="alerte" aria-checked="false"><span class="dots" aria-hidden="true"><i></i><i></i></span>Alertes et critiques</button>
+                  <button type="button" role="radio" data-v="critique" aria-checked="false"><span class="dots" aria-hidden="true"><i></i></span>Critiques seulement</button>
+                </div>
+              </dd>
+            </div>
+            <div>
+              <dt>Sources</dt>
+              <dd>
+                <div class="chips" id="sources" role="group" aria-label="Sources"></div>
+                <p class="aide" id="sources-aide"></p>
+              </dd>
+            </div>
+          </dl>
+
+          <div class="actions">
+            <button class="btn-rect btn-rect--ink" type="button" id="enregistrer">Enregistrer</button>
+            <button class="btn-outline" type="button" id="reinit">Revenir au fil complet</button>
+          </div>
+          <p class="statut" id="statut" role="status" aria-live="polite"></p>
+        </div>
+
+        <aside class="apercu" aria-labelledby="apercu-t">
+          <h2 id="apercu-t">Avec ces réglages</h2>
+          <p class="apercu__hint">Notes de veille des 7 derniers jours que la cloche vous aurait signalées.</p>
+          <div class="kpi"><b id="ap-n">0</b><span id="ap-lbl">note</span></div>
+          <p class="rythme" id="ap-rythme"></p>
+          <div class="notes" id="ap-notes"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- v5:foot -->
+<footer class="foot" data-nav="light">
+  <div class="foot__id">
+    <p>© 2026 Algor Access</p>
+    <p>Solution souveraine française, données hébergées en Europe.</p>
+    <hr>
+    <div class="foot__pills">
+      <button class="pill site-login" type="button">Connexion</button>
+      <a class="pill" href="/offres/">Les offres</a>
+      <a class="pill" href="/demo/">La démo</a>
+    </div>
+  </div>
+  <div class="foot__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+  <div class="foot__col"><h3>Plateforme</h3><a href="/">Plateforme</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+  <div class="foot__col"><h3>Société</h3><a href="/a-propos/">À propos</a><a href="/offres/">Offres</a><a href="/contact/">Contact</a></div>
+  <div class="foot__col"><h3>Informations</h3><a href="/mentions-legales/">Mentions légales</a><a href="/confidentialite/">Confidentialité</a></div>
+</footer>
+<!-- /v5:foot -->
+
+<script type="module" src="/shared/site-auth.js?v=20260923b"></script>
+<script src="/shared/v5/chrome.js?v=20260923c"></script>
+<script type="module">
+  const FIL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
+  const ZONES = { 'sahel': 'Sahel', 'moyen-orient': 'Moyen-Orient', 'rdc': 'RDC', 'afrique': 'Afrique Maritime', 'madagascar': 'Madagascar', 'asie-sud': 'Asie du Sud' };
+  const SOURCES = { geo: 'Veille géopolitique', radio: 'Radio Sahel' };
+  const SEV = { info: 'Signal', alerte: 'Alerte', critique: 'Critique' };
+  const COCHE = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmtD = (iso) => iso ? new Date(iso + 'T00:00:00Z').toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }) : '';
+  const jourIso = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
+
+  let c = null, uid = null, premium = false, notes = [];
+  let etat = { theatres: [], mots: [], severite_min: 'info', sources: ['geo'] };
+  const correspond = (it) => (window.V5 && window.V5.maVeille ? window.V5.maVeille.correspond(it, etat) : true);
+
+  function montrer(vue) { $('verif').hidden = true; for (const v of ['v-login', 'v-form']) $(v).hidden = v !== vue; }
+
+  function puces(hote, entrees, actifs, desactives = []) {
+    hote.innerHTML = entrees.map(([k, lib, n]) => `<button type="button" class="chip" role="checkbox" data-k="${esc(k)}" aria-checked="${actifs.includes(k)}"${desactives.includes(k) ? ' aria-disabled="true"' : ''}><span class="chip__n"><span class="chip__box">${COCHE}</span>${esc(lib)}</span>${n != null ? `<small>${n}</small>` : ''}</button>`).join('');
+  }
+
+  function rendre() {
+    const depuis = jourIso(7), par = {};
+    for (const it of notes) if (String(it.date) >= depuis) par[it.theatre] = (par[it.theatre] || 0) + 1;
+    puces($('theatres'), Object.entries(ZONES).map(([k, l]) => [k, l, par[k] ? `${par[k]} / 7 j` : '']), etat.theatres);
+    puces($('sources'), Object.entries(SOURCES).map(([k, l]) => [k, l]), etat.sources, premium ? [] : ['radio']);
+    $('sources-aide').textContent = premium
+      ? 'Radio Sahel ajoute à la cloche les points de la synthèse radio du jour (Mali, Niger, Burkina Faso).'
+      : 'Radio Sahel est réservée aux abonnés premium.';
+    $('mots').innerHTML = etat.mots.map((m, i) => `<span class="mot"><span data-i18n-skip>${esc(m)}</span><button type="button" data-i="${i}" aria-label="Retirer ${esc(m)}">×</button></span>`).join('');
+    for (const b of $('seuil').querySelectorAll('button')) b.setAttribute('aria-checked', String(b.dataset.v === etat.severite_min));
+    apercu();
+  }
+
+  function apercu() {
+    const depuis = jourIso(7);
+    const vus = notes.filter((it) => String(it.date) >= depuis && correspond(it)).sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    $('ap-n').textContent = String(vus.length);
+    $('ap-lbl').textContent = vus.length > 1 ? 'notes' : 'note';
+    $('ap-rythme').textContent = vus.length ? `Environ ${Math.max(1, Math.round(vus.length / 7))} par jour.` : 'Aucune note ne correspond : élargissez vos théâtres ou vos mots-clés.';
+    $('ap-notes').innerHTML = vus.slice(0, 8).map((it) => `<a class="note" href="/veille/?onglet=geo"><span class="note__m"><span class="sev sev--${esc(it.severite)}">${esc(SEV[it.severite] || 'Signal')}</span><span>${esc(ZONES[it.theatre] || it.theatre)}</span><time>${esc(fmtD(it.date))}</time></span><span class="note__t" data-i18n-skip>${esc(it.titre)}</span></a>`).join('');
+  }
+
+  function statut(txt, cls) { const s = $('statut'); s.textContent = txt; s.className = 'statut' + (cls ? ' ' + cls : ''); }
+
+  $('theatres').addEventListener('click', (e) => {
+    const b = e.target.closest('.chip'); if (!b) return;
+    const k = b.dataset.k; etat.theatres = etat.theatres.includes(k) ? etat.theatres.filter((x) => x !== k) : [...etat.theatres, k];
+    statut(''); rendre();
+  });
+  $('sources').addEventListener('click', (e) => {
+    const b = e.target.closest('.chip'); if (!b || b.getAttribute('aria-disabled') === 'true') return;
+    const k = b.dataset.k; const n = etat.sources.includes(k) ? etat.sources.filter((x) => x !== k) : [...etat.sources, k];
+    if (!n.length) return statut('Gardez au moins une source.', 'is-err');
+    etat.sources = n; statut(''); rendre();
+  });
+  $('seuil').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; etat.severite_min = b.dataset.v; statut(''); rendre(); });
+  $('mot-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const bruts = $('mot').value.split(/[,;]/).map((x) => x.trim()).filter((x) => x.length >= 2 && x.length <= 60);
+    for (const m of bruts) if (!etat.mots.some((x) => x.toLowerCase() === m.toLowerCase()) && etat.mots.length < 40) etat.mots.push(m);
+    $('mot').value = ''; statut(''); rendre();
+  });
+  $('mots').addEventListener('click', (e) => { const b = e.target.closest('button[data-i]'); if (!b) return; etat.mots.splice(Number(b.dataset.i), 1); statut(''); rendre(); });
+
+  $('enregistrer').addEventListener('click', async () => {
+    $('enregistrer').disabled = true; statut('Enregistrement…');
+    const sources = premium ? etat.sources : etat.sources.filter((s) => s !== 'radio');
+    const { error } = await c.from('veille_preferences').upsert({ user_id: uid, theatres: etat.theatres, mots: etat.mots, severite_min: etat.severite_min, sources: sources.length ? sources : ['geo'] });
+    $('enregistrer').disabled = false;
+    if (error) return statut('L’enregistrement a échoué. Réessayez dans un instant.', 'is-err');
+    try { localStorage.removeItem('algor-veille-seen'); } catch (e) {}
+    statut('Enregistré. La cloche suit désormais votre veille.', 'is-ok');
+  });
+  $('reinit').addEventListener('click', async () => {
+    $('reinit').disabled = true;
+    const { error } = await c.from('veille_preferences').delete().eq('user_id', uid);
+    $('reinit').disabled = false;
+    if (error) return statut('La réinitialisation a échoué. Réessayez dans un instant.', 'is-err');
+    etat = { theatres: [], mots: [], severite_min: 'info', sources: ['geo'] };
+    rendre(); statut('La cloche affiche de nouveau le fil complet.', 'is-ok');
+  });
+
+  async function client() {
+    for (let i = 0; i < 40; i++) { const x = window.algorAuth && window.algorAuth.supabase; if (x) return x; await new Promise((ok) => setTimeout(ok, 250)); }
+    return null;
+  }
+
+  async function reglages(session) {
+    uid = session.user.id;
+    const [pref, prof, fil] = await Promise.all([
+      c.from('veille_preferences').select('theatres, mots, severite_min, sources').eq('user_id', uid).maybeSingle(),
+      c.from('profiles').select('role, plan').eq('id', uid).maybeSingle(),
+      fetch(FIL, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : [])).catch(() => [])
+    ]);
+    const p = prof && prof.data;
+    premium = !!p && (p.plan === 'premium' || p.role === 'admin' || p.role === 'editor');
+    if (pref && pref.data) etat = { theatres: pref.data.theatres || [], mots: pref.data.mots || [], severite_min: pref.data.severite_min || 'info', sources: pref.data.sources || ['geo'] };
+    notes = (Array.isArray(fil) ? fil : fil.items || []).filter((it) => it && it.titre);
+    montrer('v-form'); rendre();
+  }
+
+  async function demarrer() {
+    c = await client();
+    if (!c) { $('verif').textContent = 'Service de compte indisponible. Rechargez la page.'; return; }
+    const { data } = await c.auth.getSession();
+    if (!data?.session) return montrer('v-login');
+    reglages(data.session);
+  }
+
+  window.addEventListener('algorAuthStateChanged', (e) => {
+    if (!c) return;
+    if (e.detail && e.detail.loggedIn && !$('v-login').hidden) c.auth.getSession().then(({ data }) => data?.session && reglages(data.session));
+    if (e.detail && !e.detail.loggedIn && !$('v-form').hidden) montrer('v-login');
+  });
+
+  demarrer();
+</script>
+</body>
+</html>
