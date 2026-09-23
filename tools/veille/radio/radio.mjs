@@ -198,6 +198,61 @@ export async function extractFacts(transcript, meta, gaz) {
   return { resume: String(out.resume || '').slice(0, 600), facts, rejected };
 }
 
+/* ---------- 3 bis. Recoupement ---------- */
+
+/* Un fait radio est « recoupé » quand une AUTRE source signale un événement
+   au même endroit (30 km) à ±3 jours : un autre studio ou une note OSINT de la
+   veille géopolitique (fil public : lieu, date, titre, lien). Même zone et
+   même période ne prouvent pas le même événement (mesuré le 23/09 : des
+   attaques contre les FAMa à Sévaré rapprochées de frappes FAMa près de
+   Mopti) ; l'affichage dit donc « même zone, même période », jamais
+   « confirmé ». On ne compare que des localités, jamais des pays. Pure. */
+const kmEntre = (a, b) => {
+  const r = Math.PI / 180, x = (b.lon - a.lon) * r * Math.cos(((a.lat + b.lat) / 2) * r), y = (b.lat - a.lat) * r;
+  return Math.sqrt(x * x + y * y) * 6371;
+};
+export function recouper(bulletins, notes = [], { rayonKm = 30, jours = 3 } = {}) {
+  const fenetre = jours * 86400e3;
+  const tous = bulletins.flatMap(b => (b.faits || []).filter(f => f.geo).map(f => ({ f, b, t: Date.parse(f.date_evenement || b.date) })));
+  for (const { f, b, t } of tous) {
+    const rec = [];
+    for (const o of tous) {
+      if (o.b.studio === b.studio || o.f.id === f.id) continue;
+      if (Math.abs(o.t - t) > fenetre || kmEntre(f.geo, o.f.geo) > rayonKm) continue;
+      if (rec.some(r => r.source === o.b.studio)) continue;
+      rec.push({ type: 'radio', source: o.b.studio, titre: o.f.titre, date: o.b.date.slice(0, 10) });
+    }
+    for (const n of notes) {
+      const lat = Number(n.lat), lon = Number(n.lon);
+      if (!isFinite(lat) || !isFinite(lon) || (!lat && !lon)) continue;
+      const tn = Date.parse(String(n.date).length === 10 ? `${n.date}T12:00:00Z` : n.date);
+      if (Math.abs(tn - t) > fenetre || kmEntre(f.geo, { lat, lon }) > rayonKm) continue;
+      if (rec.filter(r => r.type === 'osint').length >= 3) break;
+      rec.push({ type: 'osint', source: n.source || 'Veille OSINT', titre: String(n.titre || '').slice(0, 140), date: String(n.date).slice(0, 10), url: /^https?:\/\//.test(n.source_url || '') ? n.source_url : null });
+    }
+    f.recoupements = rec;
+    f.recoupe = rec.length > 0;
+  }
+  return bulletins;
+}
+
+const FIL_VEILLE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
+/* Le fil public ne porte plus de coordonnées (lat/lon null depuis la v2 du
+   23/09) : on géolocalise le champ « lieu » avec le gazetteer, au niveau
+   localité seulement (« Mali » ou « Burkina Faso » ne recoupent rien). */
+async function notesOsint(gaz) {
+  try {
+    const r = await fetch(FIL_VEILLE, { signal: AbortSignal.timeout(30000) });
+    if (!r.ok) return [];
+    const d = await r.json();
+    return (Array.isArray(d) ? d : d.items || []).filter(n => n.theatre === 'sahel').map(n => {
+      if (isFinite(Number(n.lat)) && n.lat !== null && n.lon !== null) return n;
+      const g = geocode(String(n.lieu || ''), 'sahel', gaz);
+      return g && g.precision !== 'region' ? { ...n, lat: g.lat, lon: g.lon } : n;
+    });
+  } catch { return []; }
+}
+
 /* ---------- 4. Synthese du jour ---------- */
 
 const DIGEST_PROMPT = `Tu rediges la synthese radio du jour pour un analyste Sahel, a partir de faits deja extraits et verifies de journaux de radios locales. Chaque fait a un identifiant.
@@ -205,6 +260,7 @@ const DIGEST_PROMPT = `Tu rediges la synthese radio du jour pour un analyste Sah
 Regles :
 - N'ajoute AUCUNE information absente des faits fournis.
 - Regroupe les faits qui parlent du meme evenement (plusieurs studios = meme fait confirme).
+- Un fait avec un champ "recoupe" non vide : une autre source (autre radio ou note OSINT) signale un evenement AU MEME ENDROIT a quelques jours pres. Ce n'est PAS forcement le meme evenement : n'ecris jamais "confirme". A importance egale, place-le en tete.
 - 3 a 7 points cles maximum, du plus important (securite, humanitaire) au moins important.
 - Ton neutre et factuel, sans speculation, sans tiret de ponctuation.
 - Chaque point cite les identifiants des faits qui le fondent.
@@ -214,7 +270,7 @@ Reponds en JSON : {"titre": "titre factuel de la journee", "points": [{"texte": 
 async function digest(bulletins) {
   const since = Date.now() - 36 * 3600 * 1000;
   const recent = bulletins.filter(b => Date.parse(b.date) >= since);
-  const facts = recent.flatMap(b => b.faits.filter(f => f.categorie !== 'societe').map(f => ({ id: f.id, studio: b.studio, categorie: f.categorie, lieu: f.lieu, pays: f.pays, fait: f.fait })));
+  const facts = recent.flatMap(b => b.faits.filter(f => f.categorie !== 'societe').map(f => ({ id: f.id, studio: b.studio, categorie: f.categorie, lieu: f.lieu, pays: f.pays, fait: f.fait, recoupe: (f.recoupements || []).map(r => r.source) })));
   if (facts.length === 0) return null;
   const ids = new Set(facts.map(f => f.id));
   const out = await mistral([{ role: 'system', content: DIGEST_PROMPT }, { role: 'user', content: JSON.stringify(facts) }], { temperature: 0.2 });
@@ -287,6 +343,7 @@ async function main() {
 
   const cutoff = Date.now() - KEEP_DAYS * 86400000;
   const bulletins = [...known.values()].filter(b => Date.parse(b.date) >= cutoff).sort((a, b) => b.date.localeCompare(a.date));
+  recouper(bulletins, await notesOsint(gaz));
   let synth = prev.synthese || null;
   if (!NO_AI) {
     try { synth = await digest(bulletins.filter(b => b.faits)) || synth; }

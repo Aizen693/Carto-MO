@@ -12,7 +12,7 @@ import { classify, extractToll, normalize } from '../lib/classify.mjs';
 import { geocode, fromGeotag, loadGazetteer } from '../lib/geocode.mjs';
 import { parseOutput as parseIg } from '../lib/instagram.mjs';
 import { jugerSegment, fenetresAOuvrir, heureLocale, proposerFenetres } from '../radio/live.mjs';
-import { extractIsGrounded, frenchAudio } from '../radio/radio.mjs';
+import { extractIsGrounded, frenchAudio, recouper } from '../radio/radio.mjs';
 import { aDeclencher } from '../radio/declencheur.mjs';
 import { buildFeature, mergeCollection, makeRef } from '../lib/geojson.mjs';
 import { parseSearch, mapVideo, toIso, hasKey } from '../lib/tiktok.mjs';
@@ -167,6 +167,15 @@ const dec = aDeclencher(notesD, { notes: {}, pays: {} }, { now: maintenant, gaz:
 eq(dec.length, 1, 'une seule capture par pays malgré deux notes critiques');
 eq(dec[0] && dec[0].pays, 'Mali', 'pays déduit des coordonnées de la note');
 eq(aDeclencher(notesD, { notes: { a: '2026-09-23T10:00:00Z' }, pays: { Mali: '2026-09-23T09:00:00Z' } }, { now: maintenant, gaz: gazD }).length, 0, 'pays déjà capté il y a moins de 6 h : rien');
+
+console.log('\n# Radio : recoupement');
+const bRec = recouper([
+  { studio: 'Studio Tamani', date: '2026-09-21T18:00:00Z', faits: [{ id: 'f1', titre: 'Attaques FAMa', geo: { name: 'Sevare', lat: 14.53, lon: -4.1 } }, { id: 'f2', titre: 'Prix du gombo', geo: { name: 'Sikasso', lat: 11.32, lon: -5.67 } }] },
+  { studio: 'Studio Kalangou', date: '2026-09-22T18:00:00Z', faits: [{ id: 'f3', titre: 'Attaque près de Mopti', geo: { name: 'Mopti', lat: 14.49, lon: -4.2 } }] }
+], [{ lat: 14.83, lon: -5.25, date: '2026-09-22', titre: 'Attaque majeure à Dioura', source: 'RFI', source_url: 'https://www.rfi.fr/x' }, { lat: 14.52, lon: -4.12, date: '2026-09-15', titre: 'Trop ancienne', source: 'X' }]);
+eq(bRec[0].faits[0].recoupe, true, 'fait recoupé par un autre studio à moins de 30 km');
+eq(bRec[0].faits[0].recoupements.map(r => r.source).join(','), 'Studio Kalangou', 'autre studio cité, note OSINT trop loin ou trop ancienne écartée');
+eq(bRec[0].faits[1].recoupe, false, 'fait isolé non recoupé');
 
 console.log('\n# Radio : studios');
 eq(extractIsGrounded('Les forces armées maliennes ont été la cible de plusieurs attaques ce week-end', journal), true, 'extrait présent dans la transcription');
