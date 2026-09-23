@@ -346,7 +346,13 @@ async function main() {
   recouper(bulletins, await notesOsint(gaz));
   let synth = prev.synthese || null;
   if (!NO_AI) {
-    try { synth = await digest(bulletins.filter(b => b.faits)) || synth; }
+    // Synthèse refaite seulement si les faits des 36 h ou leurs recoupements ont
+    // changé : sinon Mistral la réécrit à chaque passage (4 ou 5 points selon
+    // le tirage, mesuré le 23/09) et l'abonné voit un texte qui bouge sans raison.
+    const recents = bulletins.filter(b => b.faits && Date.now() - Date.parse(b.date) < 36 * 3600e3);
+    const empreinte = createHash('sha1').update(JSON.stringify(recents.flatMap(b => b.faits.map(f => [f.id, (f.recoupements || []).map(r => r.source + r.date)])))).digest('hex').slice(0, 12);
+    if (synth && synth.empreinte === empreinte && !DIGEST_ONLY) console.log('[radio] faits inchangés : synthèse conservée');
+    else try { const nv = await digest(bulletins.filter(b => b.faits)); if (nv) synth = { ...nv, empreinte }; }
     catch (e) { console.warn(`[!] synthese du jour : ${e.message}`); }
   }
   const body = JSON.stringify({ generated: new Date().toISOString(), synthese: synth, bulletins }, null, 1) + '\n';
