@@ -586,7 +586,7 @@
   let geoItems = [], geoState = { zone: 'all', sev: 'all', q: '', limit: 24 };
 
   // Photo de la note ; à défaut (ou si elle ne charge pas), la photo de terrain du théâtre, assombrie, avec le lieu inscrit dessus
-  const PHOTO_THEATRE = { 'sahel': '/theatres/assets/sahel.png', 'rdc': '/theatres/assets/rdc.avif', 'moyen-orient': '/theatres/assets/moyen-orient.jpg', 'madagascar': '/theatres/assets/madagascar.webp', 'afrique': '/theatres/assets/afrique-maritime.avif', 'asie-sud': '/theatres/assets/asie-sud.jpg' };
+  const PHOTO_THEATRE = { 'sahel': '/theatres/assets/photos/sahel.jpg?v=20260923a', 'rdc': '/theatres/assets/photos/rdc.jpg?v=20260923a', 'moyen-orient': '/theatres/assets/photos/moyen-orient.jpg?v=20260923a', 'madagascar': '/theatres/assets/photos/madagascar.jpg?v=20260923a', 'afrique': '/theatres/assets/photos/afrique-maritime.jpg?v=20260923a', 'asie-sud': '/theatres/assets/photos/asie-sud.jpg?v=20260923a' };
   function vcardImg(it) {
     const repli = PHOTO_THEATRE[it.theatre] || '';
     if (it.image) return `<img class="vcard__img" src="${esc(it.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" data-repli="${esc(repli)}" onerror="var r=this.dataset.repli;if(r&&this.src.indexOf(r)<0){var c=this.closest('.vcard');if(c)c.classList.add('vcard--repli');this.src=r}else this.remove()">`;

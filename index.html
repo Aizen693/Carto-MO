@@ -59,6 +59,8 @@
   .slide__cap, .slide__pays { transition: opacity .5s ease .45s, transform .8s var(--ease) .4s, background .2s ease; }
   .slide.is-enter .slide__cap, .slide.is-enter .slide__pays { opacity: 0; transform: translateY(10px); transition: none; }
   .slide.is-prev .slide__cap, .slide.is-prev .slide__pays { opacity: 0; transition: opacity .15s ease; }
+  .slide__credit { position: absolute; right: 16px; top: 14px; max-width: 46%; text-align: right; font-size: 11px; line-height: 1.35; color: rgba(255,255,255,.72); text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+  .slide.is-prev .slide__credit, .slide.is-enter .slide__credit { opacity: 0; }
   .stage__next { position: absolute; z-index: 3; right: 22px; bottom: 22px; width: 56px; height: 40px; display: grid; place-items: center; background: rgba(120, 121, 126, 0.55); color: #FFF; border-radius: 2px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .2s ease; }
   .stage__next:hover { background: rgba(120, 121, 126, 0.85); }
   .stage__next svg { width: 20px; height: 20px; }
@@ -115,6 +117,7 @@
     .stage { aspect-ratio: 4 / 5; }
     .slide__cap { left: 12px; top: 12px; max-width: calc(100% - 24px); padding: 16px 18px 18px; }
     .slide__pays { left: 14px; right: 84px; bottom: 18px; }
+    .slide__credit { display: none; }
     .stage__next { right: 12px; bottom: 12px; }
     .stage__count { display: none; }
     .note a { grid-template-columns: minmax(0, 1fr) 20px; gap: 6px 16px; }
@@ -370,12 +373,12 @@
 (function () {
   var V = window.V5, esc = V.esc, fr = V.fr, reduit = V.reduit;
   var THEATRES = [
-    { id: 'sahel', nom: 'Sahel', href: '/sahel/', img: '/theatres/assets/sahel.png', t: 'Groupes jihadistes, juntes militaires et corridors de trafic', pays: 'Mali · Burkina Faso · Niger · Tchad · Mauritanie' },
-    { id: 'rdc', nom: 'RDC, Grands Lacs', href: '/rdc/', img: '/theatres/assets/rdc.avif', t: "L'Est congolais sous la pression du M23", pays: 'Nord-Kivu · Sud-Kivu · Ituri' },
-    { id: 'moyen-orient', nom: 'Moyen-Orient', href: '/moyen-orient/', img: '/theatres/assets/moyen-orient.jpg', t: 'Fronts confessionnels et influence iranienne, de 2005 à aujourd’hui', pays: 'Iraq · Syrie · Liban · Yémen' },
-    { id: 'madagascar', nom: 'Madagascar', href: '/madagascar/', img: '/theatres/assets/madagascar.webp', t: 'Insécurité rurale et trafics du Grand Sud', pays: 'Grand Sud · SAVA · Analamanga · canal du Mozambique' },
-    { id: 'afrique', nom: 'Afrique maritime', href: '/afrique/', img: '/theatres/assets/afrique-maritime.avif', t: 'Piraterie, détroits et suivi AIS en temps réel', pays: 'Suez · Bab-el-Mandeb · Ormuz · golfe de Guinée' },
-    { id: 'asie-sud', nom: 'Asie du Sud', href: '/asie-sud/', img: '/theatres/assets/asie-sud.jpg', t: 'Baloutchistan, Taliban et tensions au Cachemire', pays: 'Kaboul · Islamabad · Quetta · Cachemire' }
+    { id: 'sahel', nom: 'Sahel', href: '/sahel/', img: '/theatres/assets/photos/sahel.jpg?v=20260923a', legende: 'Blindé en patrouille au Mali, mission de l’ONU', credit: 'Ministère néerlandais de la Défense, CC BY-SA 4.0', t: 'Groupes jihadistes, juntes militaires et corridors de trafic', pays: 'Mali · Burkina Faso · Niger · Tchad · Mauritanie' },
+    { id: 'rdc', nom: 'RDC, Grands Lacs', href: '/rdc/', img: '/theatres/assets/photos/rdc.jpg?v=20260923a', legende: 'Habitants de Mutaho fuyant vers Goma pendant les combats, mai 2013', credit: 'MONUSCO, CC BY-SA 2.0', t: "L'Est congolais sous la pression du M23", pays: 'Nord-Kivu · Sud-Kivu · Ituri' },
+    { id: 'moyen-orient', nom: 'Moyen-Orient', href: '/moyen-orient/', img: '/theatres/assets/photos/moyen-orient.jpg?v=20260923a', legende: 'Obusier en appui pendant la bataille de Mossoul, Irak', credit: 'U.S. Army, Christopher Brecht, domaine public', t: 'Fronts confessionnels et influence iranienne, de 2005 à aujourd’hui', pays: 'Iraq · Syrie · Liban · Yémen' },
+    { id: 'madagascar', nom: 'Madagascar', href: '/madagascar/', img: '/theatres/assets/photos/madagascar.jpg?v=20260923a', legende: 'Barricade à Antananarivo pendant les manifestations de 2025', credit: 'Raveloaritiana Mamisoa, CC BY-SA 4.0', t: 'Insécurité rurale et trafics du Grand Sud', pays: 'Grand Sud · SAVA · Analamanga · canal du Mozambique' },
+    { id: 'afrique', nom: 'Afrique maritime', href: '/afrique/', img: '/theatres/assets/photos/afrique-maritime.jpg?v=20260923a', legende: 'Abordage d’un bateau suspecté de piraterie au large de la Somalie', credit: 'Royal Navy, Dave Jenkins, Open Government Licence', t: 'Piraterie, détroits et suivi AIS en temps réel', pays: 'Suez · Bab-el-Mandeb · Ormuz · golfe de Guinée' },
+    { id: 'asie-sud', nom: 'Asie du Sud', href: '/asie-sud/', img: '/theatres/assets/photos/asie-sud.jpg?v=20260923a', legende: 'Soldats sous le feu en Afghanistan', credit: 'British Army, Dan Bardsley, Open Government Licence', t: 'Baloutchistan, Taliban et tensions au Cachemire', pays: 'Kaboul · Islamabad · Quetta · Cachemire' }
   ];
   var NOMS = { sahel: 'Sahel', rdc: 'RDC, Grands Lacs', 'moyen-orient': 'Moyen-Orient', madagascar: 'Madagascar', afrique: 'Afrique maritime', 'asie-sud': 'Asie du Sud' };
   var FLECHE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg>';
@@ -393,9 +396,10 @@
     tabs.appendChild(b);
     var sl = document.createElement('div');
     sl.className = 'slide'; sl.id = 'slide-' + th.id; sl.setAttribute('role', 'tabpanel'); sl.setAttribute('aria-labelledby', 'tab-' + th.id);
-    sl.innerHTML = '<img src="' + th.img + '" alt="Terrain, théâtre ' + esc(th.nom) + '"' + (i ? ' loading="lazy"' : '') + ' draggable="false">' +
+    sl.innerHTML = '<img src="' + th.img + '" alt="' + esc(th.legende) + '"' + (i ? ' loading="lazy"' : '') + ' draggable="false">' +
       '<a class="slide__cap" href="' + th.href + '"><span class="slide__k">' + esc(th.nom) + '</span><span class="slide__t">' + esc(th.t) + FLECHE + '</span></a>' +
-      '<span class="slide__pays">' + esc(th.pays) + '</span>';
+      '<span class="slide__pays">' + esc(th.pays) + '</span>' +
+      '<span class="slide__credit">' + esc(th.legende) + ' · photo ' + esc(th.credit) + '</span>';
     stage.insertBefore(sl, stage.firstChild);
   });
   function el(k) { return document.getElementById('slide-' + THEATRES[k].id); }
