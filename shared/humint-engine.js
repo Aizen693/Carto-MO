@@ -202,7 +202,41 @@
     'Bénin': ['Niger', 'Burkina Faso', 'Nigeria', 'Togo'],
     'Togo': ['Burkina Faso', 'Bénin'],
     'RDC': [],
+    // Moyen-Orient : voisins et théâtres d'interaction directe (frappes croisées, détroits).
+    'Israël': ['Territoires palestiniens', 'Liban', 'Syrie', 'Jordanie', 'Iran'],
+    'Territoires palestiniens': ['Israël', 'Jordanie'],
+    'Liban': ['Israël', 'Syrie', 'Chypre'],
+    'Syrie': ['Israël', 'Liban', 'Jordanie', 'Irak', 'Turquie'],
+    'Jordanie': ['Israël', 'Territoires palestiniens', 'Syrie', 'Irak', 'Arabie saoudite'],
+    'Irak': ['Iran', 'Syrie', 'Jordanie', 'Koweït', 'Arabie saoudite', 'Turquie'],
+    'Iran': ['Irak', 'Israël', 'Détroit d\'Ormuz', 'Émirats arabes unis', 'Bahreïn', 'Koweït', 'Turquie'],
+    'Turquie': ['Syrie', 'Irak', 'Iran', 'Chypre'],
+    'Chypre': ['Turquie', 'Liban', 'Israël'],
+    'Arabie saoudite': ['Jordanie', 'Irak', 'Koweït', 'Bahreïn', 'Qatar', 'Émirats arabes unis', 'Oman', 'Mer Rouge'],
+    'Koweït': ['Irak', 'Arabie saoudite', 'Iran'],
+    'Bahreïn': ['Arabie saoudite', 'Qatar', 'Iran'],
+    'Qatar': ['Arabie saoudite', 'Bahreïn', 'Émirats arabes unis'],
+    'Émirats arabes unis': ['Oman', 'Arabie saoudite', 'Qatar', 'Détroit d\'Ormuz', 'Iran'],
+    'Oman': ['Émirats arabes unis', 'Arabie saoudite', 'Détroit d\'Ormuz'],
+    'Détroit d\'Ormuz': ['Iran', 'Oman', 'Émirats arabes unis'],
+    'Mer Rouge': ['Arabie saoudite', 'Israël', 'Jordanie'],
+    // Asie du Sud
+    'Pakistan': ['Afghanistan', 'Inde', 'Chine'],
+    'Inde': ['Pakistan', 'Chine'],
+    'Afghanistan': ['Pakistan'],
+    'Chine': ['Pakistan', 'Inde'],
   };
+  // Calques d'un pays : seulement les voisins du MÊME théâtre (même fichier de données),
+  // pour ne jamais mélanger Sahel et Moyen-Orient dans une vue.
+  function neighborsOf(name) {
+    var cs = (state.manifest && state.manifest.countries) || [];
+    var me = cs.find(function (c) { return c.name === name; });
+    if (!me) return [];
+    return (NEIGHBORS[name] || []).filter(function (n) {
+      var e = cs.find(function (c) { return c.name === n; });
+      return e && e.file === me.file;
+    });
+  }
   // Une feature est affichée si elle appartient au pays courant OU à un calque actif.
   function inScope(f) { return f.pays === state.country || (state.layers && state.layers.has(f.pays)); }
 
@@ -1012,13 +1046,28 @@
   /* ── Éditeurs ── */
   function openEditor(key, anchor) {
     if (key === 'pays') {
-      var cs = (state.manifest.countries || []).slice().sort(function (a, b) {
+      var all = state.manifest.countries || [];
+      function grp(c) { return c.statut === 'reference' ? (c.theatre || 'Autres') + ' · données référencées 2026' : (c.theatre || 'Sahel') + ' · actualisé chaque semaine'; }
+      // Liste verrouillée sur le théâtre courant : pays, calques, acteurs et typologies
+      // restent ceux du théâtre. Les autres théâtres ne sont proposés qu'en bascule explicite.
+      var cur = state.entry && state.entry.file;
+      var mine = all.filter(function (c) { return !cur || c.file === cur; }).sort(function (a, b) {
         var ra = a.statut === 'reference' ? 1 : 0, rb = b.statut === 'reference' ? 1 : 0;
         return ra - rb || String(a.theatre || '').localeCompare(String(b.theatre || ''), 'fr') || b.count - a.count;
       });
-      return openList(anchor, 'Pays', null, cs.map(function (c) {
-        return { v: c.name, n: c.count, g: c.statut === 'reference' ? (c.theatre || 'Autres') + ' · données référencées 2026' : (c.theatre || 'Sahel') + ' · actualisé chaque semaine' };
-      }), state.country, false, function (val) { switchCountry(val); }, true);
+      var items = mine.map(function (c) { return { v: c.name, n: c.count, g: grp(c) }; });
+      if (cur) {
+        var autres = {};
+        all.forEach(function (c) {
+          if (c.file === cur) return;
+          var t = autres[c.file] || (autres[c.file] = { n: 0, top: c, theatre: c.theatre || 'Autres' });
+          t.n += c.count; if (c.count > t.top.count) t.top = c;
+        });
+        Object.keys(autres).map(function (k) { return autres[k]; })
+          .sort(function (a, b) { return b.n - a.n; })
+          .forEach(function (t) { items.push({ v: t.top.name, label: t.theatre, n: t.n, g: 'Changer de théâtre', noLayers: true }); });
+      }
+      return openList(anchor, 'Pays', null, items, state.country, false, function (val) { switchCountry(val); }, true);
     }
     if (key === 'event') return openList(anchor, "Typologie d'événement", 'Toutes les typologies', distinctCount(rowsFor(false), 'type'), state.sel.event, true, function (val) { state.sel.event = val; applyFacets(); renderSummary(); fitToFiltered(); });
     if (key === 'actor') return openList(anchor, 'Acteur', 'Tous les acteurs', distinctCount(rowsFor(true), 'acteur'), state.sel.actor, true, function (val) { state.sel.actor = val; applyFacets(); renderSummary(); fitToFiltered(); });
@@ -1033,15 +1082,16 @@
       var gh = '';
       if (o.g && o.g !== groupe) { groupe = o.g; gh = '<div class="fp-group">' + esc(o.g) + '</div>'; }
       var dot = isActor ? '<span class="fp-dot" style="background:' + actorColor(o.v) + '"></span>' : '';
-      var caret = (withLayers && (NEIGHBORS[o.v] || []).length) ? '<span class="fp-more">' + ICO.right + '</span>' : '';
+      var caret = (withLayers && !o.noLayers && neighborsOf(o.v).length) ? '<span class="fp-more">' + ICO.right + '</span>' : '';
       var lt = isActor ? ' title="' + esc(actorFull(o.v)) + '"' : '';
-      return gh + '<button class="fp-opt' + (o.v === current ? ' on' : '') + '" data-v="' + esc(o.v) + '"' + lt + '>' + dot + '<span class="fp-l">' + esc(o.v) + '</span><span class="fp-n">' + o.n + '</span>' + caret + '</button>';
+      return gh + '<button class="fp-opt' + (o.v === current && !o.noLayers ? ' on' : '') + '" data-v="' + esc(o.v) + '"' + (o.noLayers ? ' data-nolay="1"' : '') + lt + '>' + dot + '<span class="fp-l">' + esc(o.label || o.v) + '</span><span class="fp-n">' + o.n + '</span>' + caret + '</button>';
     }).join('') || '<div class="fp-empty">Aucune valeur</div>';
     openPop(anchor, '<div class="fp-head">' + esc(title) + '</div><div class="fp-body">' + rows + '</div>', function (p) {
       p.querySelectorAll('.fp-opt').forEach(function (b) {
         b.onclick = function () { var v = b.getAttribute('data-v'); closePop(); onPick(v === '__all' ? null : v); };
         if (withLayers) {
           var name = b.getAttribute('data-v');
+          if (b.getAttribute('data-nolay')) { b.addEventListener('mouseenter', closeNeighborMenu); return; }
           b.addEventListener('mouseenter', function () { cancelHideNeighbor(); openNeighborMenu(b, name); });
           b.addEventListener('mouseleave', scheduleHideNeighbor);
         }
@@ -1056,7 +1106,7 @@
   function closeNeighborMenu() { var m = $('fp-sub'); if (m) m.remove(); }
   function openNeighborMenu(rowEl, country) {
     closeNeighborMenu();
-    var nb = NEIGHBORS[country] || [];
+    var nb = neighborsOf(country);
     if (!nb.length) return;
     var counts = {}; (state.manifest.countries || []).forEach(function (c) { counts[c.name] = c.count; });
     var m = document.createElement('div');
