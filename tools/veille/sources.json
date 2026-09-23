@@ -1,0 +1,227 @@
+{
+  "_doc": [
+    "Sources de collecte sans API ni cle. Deux types :",
+    "  telegram : nom de canal PUBLIC, lu via l'apercu web https://t.me/s/<canal>",
+    "  rss      : flux RSS/Atom (presse, ReliefWeb, instance RSSHub auto-hebergee, pont Nitter)",
+    "  tiktok   : requetes de recherche via l'API TikNeuron — NECESSITE TIKNEURON_MCP_API_KEY (service payant)",
+    "  instagram : comptes publics / hashtags via Instaloader, NECESSITE une session (IG_SESSION_USER, compte de veille dedie) ; local ou VPS seulement",
+    "Verifier l'etat des sources avec : node tools/veille/collect.mjs --zone <zone> --check",
+    "Telegram et Instagram verifies le 21/09/2026 (actifs, texte exploitable). Comptes Instagram releves sur les sites officiels des medias.",
+    "Orientation a garder en tete (croiser, ne jamais prendre seul) : AESinfos = communication des juntes AES ; idfofficial = armee israelienne ; almayadeenenglish = proche du Hezbollah ; Kurdistan24 = proche PDK ; TelevisionSyria = ex-opposition syrienne ; ajanews = Al Jazeera (Qatar).",
+    "Ecartes : AuroraIntel (muet depuis 06/2025), iranintltv (persan, non lu par le classifieur), comptes d'influenceurs.",
+    "Relais gratuits de pages Facebook (21/09/2026) : RSS de site ou chaine YouTube des memes emetteurs. Agences officielles AIB, ANP, Presidence du Mali = communication des juntes, a croiser."
+  ],
+  "zones": {
+    "sahel": {
+      "label": "Sahel",
+      "telegram": [
+        "veillesah",
+        "africaintel",
+        "AESinfos",
+        "lefaso_net"
+      ],
+      "rss": [
+        {
+          "url": "https://www.rfi.fr/fr/afrique/rss",
+          "label": "RFI Afrique"
+        },
+        {
+          "url": "https://www.france24.com/fr/afrique/rss",
+          "label": "France 24 Afrique"
+        },
+        {
+          "url": "https://www.lemonde.fr/afrique/rss_full.xml",
+          "label": "Le Monde Afrique"
+        },
+        {
+          "url": "https://reliefweb.int/updates/rss.xml?view=headlines",
+          "label": "ReliefWeb"
+        },
+        {
+          "url": "https://www.studiotamani.org/feed/",
+          "label": "Studio Tamani (Mali)"
+        },
+        {
+          "url": "https://malijet.com/rss",
+          "label": "Malijet (Mali)"
+        },
+        {
+          "url": "https://koulouba.ml/feed/",
+          "label": "Presidence du Mali"
+        },
+        {
+          "url": "https://www.aib.media/feed/",
+          "label": "AIB (agence officielle Burkina)"
+        },
+        {
+          "url": "https://burkina24.com/feed/",
+          "label": "Burkina24"
+        },
+        {
+          "url": "https://www.sidwaya.info/feed/",
+          "label": "Sidwaya (Burkina)"
+        },
+        {
+          "url": "https://www.wakatsera.com/feed/",
+          "label": "Wakat Sera (Burkina)"
+        },
+        {
+          "url": "https://anp.ne/feed/",
+          "label": "ANP (agence officielle Niger)"
+        },
+        {
+          "url": "https://www.lesahel.org/feed/",
+          "label": "Le Sahel (Niger)"
+        },
+        {
+          "url": "https://sahelien.com/feed/",
+          "label": "Sahelien"
+        },
+        {
+          "url": "https://www.alwihdainfo.com/rss/",
+          "label": "Alwihda (Tchad)"
+        },
+        {
+          "url": "https://tchadinfos.com/feed/",
+          "label": "Tchadinfos"
+        },
+        {
+          "url": "https://www.bbc.com/afrique/index.xml",
+          "label": "BBC Afrique"
+        }
+      ],
+      "tiktok": {
+        "queries": [
+          "attaque Mali armee",
+          "Burkina Faso attaque Djibo",
+          "Niger Tillaberi attaque",
+          "JNIM Sahel"
+        ],
+        "pages": 2
+      },
+      "instagram": {
+        "profiles": [
+          "lefasonet",
+          "burkina24",
+          "aiburkina",
+          "crisisgroup"
+        ],
+        "hashtags": [],
+        "per_source": 12
+      }
+    },
+    "moyen-orient": {
+      "label": "Moyen-Orient",
+      "telegram": [
+        "Enabbaladi_en",
+        "TelevisionSyria",
+        "rudawdigital",
+        "Kurdistan24news",
+        "LBCI_News",
+        "ajanews",
+        "ynetnewslatest",
+        "The_Jerusalem_Post",
+        "idfofficial",
+        "almayadeenenglish"
+      ],
+      "rss": [
+        {
+          "url": "https://www.aljazeera.com/xml/rss/all.xml",
+          "label": "Al Jazeera"
+        },
+        {
+          "url": "https://www.middleeasteye.net/rss",
+          "label": "Middle East Eye"
+        },
+        {
+          "url": "https://www.france24.com/fr/moyen-orient/rss",
+          "label": "France 24 Moyen-Orient"
+        },
+        {
+          "url": "https://reliefweb.int/updates/rss.xml?view=headlines",
+          "label": "ReliefWeb"
+        }
+      ],
+      "tiktok": {
+        "queries": [
+          "frappe Syrie",
+          "attaque Irak",
+          "Deir ez-Zor bombardement"
+        ],
+        "pages": 2
+      },
+      "instagram": {
+        "profiles": [
+          "enabbaladi",
+          "syr_television",
+          "rudaw",
+          "kurdistan24tv.official",
+          "lorientlejour_olj",
+          "middleeasteye",
+          "aljazeeraenglish",
+          "ynetglobal",
+          "thejerusalem_post",
+          "anadoluagency",
+          "thestudyofwar"
+        ],
+        "hashtags": [],
+        "per_source": 12
+      }
+    },
+    "rdc": {
+      "label": "RDC",
+      "telegram": [
+        "africaintel"
+      ],
+      "rss": [
+        {
+          "url": "https://www.radiookapi.net/feed/",
+          "label": "Radio Okapi"
+        },
+        {
+          "url": "https://actualite.cd/feed",
+          "label": "Actualite.cd"
+        },
+        {
+          "url": "https://www.rfi.fr/fr/afrique/rss",
+          "label": "RFI Afrique"
+        },
+        {
+          "url": "https://reliefweb.int/updates/rss.xml?view=headlines",
+          "label": "ReliefWeb"
+        },
+        {
+          "url": "https://kivumorningpost.com/feed/",
+          "label": "Kivu Morning Post (Goma)"
+        },
+        {
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCqYLowgloaK5BjaWwe7nk3Q",
+          "label": "Kivu Morning Post (YouTube)"
+        },
+        {
+          "url": "https://www.politico.cd/feed/",
+          "label": "Politico.cd"
+        },
+        {
+          "url": "https://www.bbc.com/afrique/index.xml",
+          "label": "BBC Afrique"
+        }
+      ],
+      "tiktok": {
+        "queries": [
+          "M23 Nord-Kivu",
+          "attaque ADF Beni",
+          "Goma affrontements"
+        ],
+        "pages": 2
+      },
+      "instagram": {
+        "profiles": [
+          "kivumorningpostofficial"
+        ],
+        "hashtags": [],
+        "per_source": 12
+      }
+    }
+  }
+}

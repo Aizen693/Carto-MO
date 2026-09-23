@@ -1,0 +1,10 @@
+{"meta":{"version":2,"note":"fixture de test"},"places":[
+{"zone":"sahel","country":"Mali","name":"Mopti","lat":14.49,"lon":-4.2,"alias":[],"precision":"ville","tier":1,"src":"geonames"},
+{"zone":"sahel","country":"Mali","name":"Sevare","lat":14.53,"lon":-4.1,"alias":[],"precision":"ville","tier":1,"src":"geonames"},
+{"zone":"sahel","country":"Mali","name":"Bamako","lat":12.65,"lon":-8,"alias":[],"precision":"ville","tier":1,"src":"seed"},
+{"zone":"sahel","country":"Mali","name":"Dioura","lat":14.83,"lon":-5.25,"alias":[],"precision":"localite","tier":2,"src":"geonames","amb":[[14.8252,-5.2547,"Mali"],[14.3,-9.85,"Mali"]]},
+{"zone":"sahel","country":"Mali","name":"Hombori","lat":15.28,"lon":-1.7,"alias":[],"precision":"localite","tier":2,"src":"geonames"},
+{"zone":"sahel","country":"Mali","name":"Kenya","lat":12.7,"lon":-7.75,"alias":[],"precision":"localite","tier":2,"src":"geonames"},
+{"zone":"rdc","country":"RDC","name":"Kwilu","lat":-5,"lon":18.5,"alias":[],"precision":"region","tier":1,"src":"geonames"},
+{"zone":"rdc","country":"RDC","name":"Bulungu","lat":-4.55,"lon":18.6,"alias":[],"precision":"ville","tier":1,"src":"geonames"}
+]}

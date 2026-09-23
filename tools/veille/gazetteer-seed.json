@@ -1,0 +1,1929 @@
+{
+ "meta": {
+  "version": 1,
+  "generated": "2026-09-21",
+  "source": "seed manuel (coordonnees arrondies au centieme, ~1 km)",
+  "note": "Regenerer avec `node tools/veille/build-gazetteer.mjs` pour des coordonnees GeoNames exactes et une couverture complete.",
+  "count": 178
+ },
+ "places": [
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Bamako",
+   "lat": 12.65,
+   "lon": -8.0,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Gao",
+   "lat": 16.27,
+   "lon": -0.04,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Tombouctou",
+   "lat": 16.77,
+   "lon": -3.01,
+   "alias": [
+    "Timbuktu"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Kidal",
+   "lat": 18.44,
+   "lon": 1.41,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Menaka",
+   "lat": 15.92,
+   "lon": 2.4,
+   "alias": [
+    "Ménaka"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Mopti",
+   "lat": 14.49,
+   "lon": -4.18,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Sevare",
+   "lat": 14.53,
+   "lon": -4.1,
+   "alias": [
+    "Sévaré"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Segou",
+   "lat": 13.44,
+   "lon": -6.26,
+   "alias": [
+    "Ségou"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Sikasso",
+   "lat": 11.32,
+   "lon": -5.67,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Douentza",
+   "lat": 15.0,
+   "lon": -2.95,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Bandiagara",
+   "lat": 14.35,
+   "lon": -3.61,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Niono",
+   "lat": 14.25,
+   "lon": -5.99,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Nampala",
+   "lat": 15.29,
+   "lon": -5.47,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Tessalit",
+   "lat": 20.2,
+   "lon": 1.01,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Aguelhok",
+   "lat": 19.47,
+   "lon": 0.86,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Lere",
+   "lat": 15.72,
+   "lon": -4.94,
+   "alias": [
+    "Léré"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Nara",
+   "lat": 15.17,
+   "lon": -7.29,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Kayes",
+   "lat": 14.45,
+   "lon": -11.44,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Koulikoro",
+   "lat": 12.86,
+   "lon": -7.56,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "San",
+   "lat": 13.3,
+   "lon": -4.9,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Koutiala",
+   "lat": 12.39,
+   "lon": -5.46,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Bougouni",
+   "lat": 11.42,
+   "lon": -7.48,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Kolokani",
+   "lat": 13.57,
+   "lon": -8.03,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Ansongo",
+   "lat": 15.66,
+   "lon": 0.5,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Bourem",
+   "lat": 16.97,
+   "lon": -0.35,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Diabaly",
+   "lat": 14.78,
+   "lon": -6.16,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Tenenkou",
+   "lat": 14.46,
+   "lon": -4.92,
+   "alias": [
+    "Ténenkou"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mali",
+   "name": "Youwarou",
+   "lat": 15.39,
+   "lon": -4.29,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Ouagadougou",
+   "lat": 12.37,
+   "lon": -1.52,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Bobo-Dioulasso",
+   "lat": 11.18,
+   "lon": -4.3,
+   "alias": [
+    "Bobo Dioulasso"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Djibo",
+   "lat": 14.1,
+   "lon": -1.63,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Dori",
+   "lat": 14.03,
+   "lon": -0.03,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Kaya",
+   "lat": 13.09,
+   "lon": -1.08,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Ouahigouya",
+   "lat": 13.58,
+   "lon": -2.42,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Fada N Gourma",
+   "lat": 12.06,
+   "lon": 0.36,
+   "alias": [
+    "Fada N'Gourma",
+    "Fada Ngourma"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Gorom-Gorom",
+   "lat": 14.44,
+   "lon": -0.23,
+   "alias": [
+    "Gorom Gorom"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Sebba",
+   "lat": 13.44,
+   "lon": 0.53,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Solhan",
+   "lat": 13.85,
+   "lon": 0.55,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Arbinda",
+   "lat": 14.22,
+   "lon": -0.87,
+   "alias": [
+    "Aribinda"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Titao",
+   "lat": 13.77,
+   "lon": -2.07,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Nouna",
+   "lat": 12.73,
+   "lon": -3.86,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Dedougou",
+   "lat": 12.46,
+   "lon": -3.46,
+   "alias": [
+    "Dédougou"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Tougan",
+   "lat": 13.07,
+   "lon": -3.07,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Barsalogho",
+   "lat": 13.41,
+   "lon": -1.06,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Kongoussi",
+   "lat": 13.32,
+   "lon": -1.53,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Seytenga",
+   "lat": 14.03,
+   "lon": 0.15,
+   "alias": [
+    "Séytenga"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Diapaga",
+   "lat": 12.07,
+   "lon": 1.79,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Pama",
+   "lat": 11.25,
+   "lon": 0.71,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Banfora",
+   "lat": 10.63,
+   "lon": -4.76,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Gaoua",
+   "lat": 10.33,
+   "lon": -3.18,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Tenkodogo",
+   "lat": 11.78,
+   "lon": -0.37,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Koudougou",
+   "lat": 12.25,
+   "lon": -2.36,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Ziniare",
+   "lat": 12.58,
+   "lon": -1.3,
+   "alias": [
+    "Ziniaré"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Markoye",
+   "lat": 14.64,
+   "lon": 0.05,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Burkina Faso",
+   "name": "Falagountou",
+   "lat": 14.05,
+   "lon": 0.31,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Niamey",
+   "lat": 13.51,
+   "lon": 2.11,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Tillaberi",
+   "lat": 14.21,
+   "lon": 1.45,
+   "alias": [
+    "Tillabéri",
+    "Tillabery"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Ouallam",
+   "lat": 14.32,
+   "lon": 2.09,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Tera",
+   "lat": 14.01,
+   "lon": 0.75,
+   "alias": [
+    "Téra"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Ayorou",
+   "lat": 14.73,
+   "lon": 0.92,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Banibangou",
+   "lat": 14.6,
+   "lon": 2.47,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Torodi",
+   "lat": 13.12,
+   "lon": 1.79,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Makalondi",
+   "lat": 12.9,
+   "lon": 1.57,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Diffa",
+   "lat": 13.32,
+   "lon": 12.61,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Nguigmi",
+   "lat": 14.25,
+   "lon": 13.11,
+   "alias": [
+    "N'Guigmi"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Maradi",
+   "lat": 13.5,
+   "lon": 7.1,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Zinder",
+   "lat": 13.8,
+   "lon": 8.99,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Tahoua",
+   "lat": 14.89,
+   "lon": 5.27,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Agadez",
+   "lat": 16.97,
+   "lon": 7.99,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Arlit",
+   "lat": 18.74,
+   "lon": 7.39,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Dosso",
+   "lat": 13.05,
+   "lon": 3.19,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Tchintabaraden",
+   "lat": 15.9,
+   "lon": 5.8,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Bosso",
+   "lat": 13.68,
+   "lon": 13.3,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Inates",
+   "lat": 14.62,
+   "lon": 1.02,
+   "alias": [
+    "Inatès"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Niger",
+   "name": "Chinagodrar",
+   "lat": 14.83,
+   "lon": 1.13,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "N Djamena",
+   "lat": 12.11,
+   "lon": 15.05,
+   "alias": [
+    "N'Djamena",
+    "Ndjamena"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Abeche",
+   "lat": 13.83,
+   "lon": 20.83,
+   "alias": [
+    "Abéché"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Moundou",
+   "lat": 8.57,
+   "lon": 16.08,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Sarh",
+   "lat": 9.14,
+   "lon": 18.39,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Faya-Largeau",
+   "lat": 17.92,
+   "lon": 19.1,
+   "alias": [
+    "Faya Largeau"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Bol",
+   "lat": 13.46,
+   "lon": 14.71,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Mao",
+   "lat": 14.12,
+   "lon": 15.31,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Am Timan",
+   "lat": 11.03,
+   "lon": 20.28,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Bongor",
+   "lat": 10.28,
+   "lon": 15.37,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Zouar",
+   "lat": 20.45,
+   "lon": 16.52,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Adre",
+   "lat": 13.47,
+   "lon": 22.2,
+   "alias": [
+    "Adré"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Goz Beida",
+   "lat": 12.22,
+   "lon": 21.41,
+   "alias": [
+    "Goz Beïda"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Ati",
+   "lat": 13.21,
+   "lon": 18.34,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Tchad",
+   "name": "Biltine",
+   "lat": 14.53,
+   "lon": 20.92,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mauritanie",
+   "name": "Nouakchott",
+   "lat": 18.08,
+   "lon": -15.98,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mauritanie",
+   "name": "Nouadhibou",
+   "lat": 20.93,
+   "lon": -17.03,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mauritanie",
+   "name": "Nema",
+   "lat": 16.62,
+   "lon": -7.25,
+   "alias": [
+    "Néma"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mauritanie",
+   "name": "Bassikounou",
+   "lat": 15.83,
+   "lon": -5.98,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mauritanie",
+   "name": "Kiffa",
+   "lat": 16.62,
+   "lon": -11.4,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mauritanie",
+   "name": "Ayoun el Atrous",
+   "lat": 16.66,
+   "lon": -9.61,
+   "alias": [
+    "Aioun"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mauritanie",
+   "name": "Zouerat",
+   "lat": 22.73,
+   "lon": -12.47,
+   "alias": [
+    "Zouérat"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mauritanie",
+   "name": "Rosso",
+   "lat": 16.51,
+   "lon": -15.8,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mauritanie",
+   "name": "Selibaby",
+   "lat": 15.16,
+   "lon": -12.18,
+   "alias": [
+    "Sélibaby"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "sahel",
+   "country": "Mauritanie",
+   "name": "Atar",
+   "lat": 20.52,
+   "lon": -13.05,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Damas",
+   "lat": 33.51,
+   "lon": 36.29,
+   "alias": [
+    "Damascus",
+    "Damas"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Alep",
+   "lat": 36.2,
+   "lon": 37.13,
+   "alias": [
+    "Aleppo",
+    "Halab"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Homs",
+   "lat": 34.73,
+   "lon": 36.71,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Hama",
+   "lat": 35.13,
+   "lon": 36.75,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Lattaquie",
+   "lat": 35.53,
+   "lon": 35.79,
+   "alias": [
+    "Latakia",
+    "Lattaquié"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Deir ez-Zor",
+   "lat": 35.33,
+   "lon": 40.14,
+   "alias": [
+    "Deir Ezzor",
+    "Deir al-Zor",
+    "Deir ez Zor"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Raqqa",
+   "lat": 35.95,
+   "lon": 39.01,
+   "alias": [
+    "Raqqah",
+    "Rakka"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Idleb",
+   "lat": 35.93,
+   "lon": 36.63,
+   "alias": [
+    "Idlib"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Hassake",
+   "lat": 36.5,
+   "lon": 40.75,
+   "alias": [
+    "Hassaké",
+    "Hasakah"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Qamichli",
+   "lat": 37.05,
+   "lon": 41.22,
+   "alias": [
+    "Qamishli"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Soueida",
+   "lat": 32.71,
+   "lon": 36.57,
+   "alias": [
+    "Soueïda",
+    "Sweida"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Deraa",
+   "lat": 32.62,
+   "lon": 36.1,
+   "alias": [
+    "Daraa"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Palmyre",
+   "lat": 34.55,
+   "lon": 38.28,
+   "alias": [
+    "Tadmor",
+    "Palmyra"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Manbij",
+   "lat": 36.53,
+   "lon": 37.95,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Afrine",
+   "lat": 36.51,
+   "lon": 36.87,
+   "alias": [
+    "Afrin"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Kobane",
+   "lat": 36.89,
+   "lon": 38.35,
+   "alias": [
+    "Kobané",
+    "Ain al-Arab"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Tartous",
+   "lat": 34.89,
+   "lon": 35.89,
+   "alias": [
+    "Tartus"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Syrie",
+   "name": "Boukamal",
+   "lat": 34.45,
+   "lon": 40.92,
+   "alias": [
+    "Albu Kamal"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Bagdad",
+   "lat": 33.32,
+   "lon": 44.36,
+   "alias": [
+    "Baghdad"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Bassora",
+   "lat": 30.51,
+   "lon": 47.78,
+   "alias": [
+    "Basra",
+    "Basrah"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Mossoul",
+   "lat": 36.34,
+   "lon": 43.13,
+   "alias": [
+    "Mosul",
+    "Mossoul"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Erbil",
+   "lat": 36.19,
+   "lon": 44.01,
+   "alias": [
+    "Arbil",
+    "Hewler"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Kirkouk",
+   "lat": 35.47,
+   "lon": 44.39,
+   "alias": [
+    "Kirkuk"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Najaf",
+   "lat": 32.0,
+   "lon": 44.33,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Kerbala",
+   "lat": 32.62,
+   "lon": 44.03,
+   "alias": [
+    "Karbala"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Fallouja",
+   "lat": 33.35,
+   "lon": 43.78,
+   "alias": [
+    "Falloujah",
+    "Fallujah"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Ramadi",
+   "lat": 33.42,
+   "lon": 43.3,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Tikrit",
+   "lat": 34.61,
+   "lon": 43.68,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Samarra",
+   "lat": 34.2,
+   "lon": 43.87,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Souleimaniye",
+   "lat": 35.56,
+   "lon": 45.44,
+   "alias": [
+    "Sulaymaniyah",
+    "Souleimaniyeh"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Sinjar",
+   "lat": 36.32,
+   "lon": 41.86,
+   "alias": [
+    "Shingal"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Tal Afar",
+   "lat": 36.38,
+   "lon": 42.45,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Diyala",
+   "lat": 33.77,
+   "lon": 45.14,
+   "alias": [],
+   "precision": "province",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Irak",
+   "name": "Anbar",
+   "lat": 33.42,
+   "lon": 43.3,
+   "alias": [],
+   "precision": "province",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Liban",
+   "name": "Beyrouth",
+   "lat": 33.89,
+   "lon": 35.5,
+   "alias": [
+    "Beirut"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Iran",
+   "name": "Teheran",
+   "lat": 35.69,
+   "lon": 51.39,
+   "alias": [
+    "Téhéran",
+    "Tehran"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Yemen",
+   "name": "Sanaa",
+   "lat": 15.35,
+   "lon": 44.21,
+   "alias": [
+    "Sanaʽa",
+    "Sana'a"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Yemen",
+   "name": "Aden",
+   "lat": 12.79,
+   "lon": 45.03,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Yemen",
+   "name": "Hodeida",
+   "lat": 14.8,
+   "lon": 42.95,
+   "alias": [
+    "Hodeidah"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Territoires palestiniens",
+   "name": "Gaza",
+   "lat": 31.5,
+   "lon": 34.47,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Israel",
+   "name": "Jerusalem",
+   "lat": 31.78,
+   "lon": 35.22,
+   "alias": [
+    "Jérusalem"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Israel",
+   "name": "Tel Aviv",
+   "lat": 32.08,
+   "lon": 34.78,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Jordanie",
+   "name": "Amman",
+   "lat": 31.95,
+   "lon": 35.93,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "moyen-orient",
+   "country": "Arabie saoudite",
+   "name": "Riyad",
+   "lat": 24.71,
+   "lon": 46.68,
+   "alias": [
+    "Riyadh"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Kinshasa",
+   "lat": -4.32,
+   "lon": 15.31,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Goma",
+   "lat": -1.68,
+   "lon": 29.23,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Bukavu",
+   "lat": -2.51,
+   "lon": 28.86,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Beni",
+   "lat": 0.49,
+   "lon": 29.47,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Butembo",
+   "lat": 0.14,
+   "lon": 29.29,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Bunia",
+   "lat": 1.56,
+   "lon": 30.25,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Uvira",
+   "lat": -3.4,
+   "lon": 29.14,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Kisangani",
+   "lat": 0.52,
+   "lon": 25.2,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Lubumbashi",
+   "lat": -11.66,
+   "lon": 27.48,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Kananga",
+   "lat": -5.9,
+   "lon": 22.42,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Mbuji-Mayi",
+   "lat": -6.14,
+   "lon": 23.6,
+   "alias": [
+    "Mbuji Mayi"
+   ],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Kalemie",
+   "lat": -5.94,
+   "lon": 29.19,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Rutshuru",
+   "lat": -1.19,
+   "lon": 29.45,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Masisi",
+   "lat": -1.4,
+   "lon": 28.81,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Sake",
+   "lat": -1.57,
+   "lon": 29.05,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Djugu",
+   "lat": 1.92,
+   "lon": 30.5,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Mahagi",
+   "lat": 2.28,
+   "lon": 30.98,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Irumu",
+   "lat": 1.46,
+   "lon": 29.87,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Komanda",
+   "lat": 1.37,
+   "lon": 29.77,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Oicha",
+   "lat": 0.7,
+   "lon": 29.51,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Mambasa",
+   "lat": 1.36,
+   "lon": 29.03,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Baraka",
+   "lat": -4.1,
+   "lon": 29.09,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Fizi",
+   "lat": -4.3,
+   "lon": 28.94,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Pweto",
+   "lat": -8.47,
+   "lon": 28.9,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Kamituga",
+   "lat": -3.06,
+   "lon": 28.18,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Shabunda",
+   "lat": -2.7,
+   "lon": 27.34,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Walikale",
+   "lat": -1.42,
+   "lon": 28.05,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Lubero",
+   "lat": -0.15,
+   "lon": 29.24,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Kitshanga",
+   "lat": -1.13,
+   "lon": 29.02,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Bunagana",
+   "lat": -1.33,
+   "lon": 29.64,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Kiwanja",
+   "lat": -1.18,
+   "lon": 29.45,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Minembwe",
+   "lat": -4.02,
+   "lon": 28.79,
+   "alias": [],
+   "precision": "ville",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Ituri",
+   "lat": 1.7,
+   "lon": 30.0,
+   "alias": [],
+   "precision": "province",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Nord-Kivu",
+   "lat": -0.7,
+   "lon": 29.0,
+   "alias": [
+    "Nord Kivu"
+   ],
+   "precision": "province",
+   "src": "seed"
+  },
+  {
+   "zone": "rdc",
+   "country": "RDC",
+   "name": "Sud-Kivu",
+   "lat": -3.0,
+   "lon": 28.5,
+   "alias": [
+    "Sud Kivu"
+   ],
+   "precision": "province",
+   "src": "seed"
+  }
+ ]
+}
