@@ -267,23 +267,26 @@
     var c = state.entry ? state.entry.center : [2, 14];
     var z = state.entry ? state.entry.zoom : 3.4;
     map = new mapboxgl.Map({
-      container: 'map', style: 'mapbox://styles/mapbox/standard',
+      // Fond « dessin » = Mapbox Streets : le plus détaillé mesuré sur nos localités
+      // (villages nommés, pistes), cf. banc d'essai /carte/fonds/ (23/09/2026).
+      container: 'map', style: 'mapbox://styles/mapbox/streets-v12',
       center: c, zoom: z, projection: 'mercator', attributionControl: false, language: 'fr',
-      config: { basemap: { theme: 'monochrome' } },
     });
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
     whenStyleLoaded(function () {
       map.resize();
       // On MASQUE la frontière native fine (sinon double trait décalé au dézoom) :
       // seul le trait épais ci-dessous (mapbox-streets-v8 admin) doit s'afficher.
-      try { map.setConfigProperty('basemap', 'colorAdminBoundaries', 'rgba(0,0,0,0)'); } catch (e) { /* config indispo */ }
+      (map.getStyle().layers || []).forEach(function (l) {
+        if (/^admin-0-boundary/.test(l.id)) { try { map.setLayoutProperty(l.id, 'visibility', 'none'); } catch (e) { /* */ } }
+      });
       // Frontières pays ÉPAISSES et PRÉCISES : tracées depuis la source Mapbox Streets
       // elle-même (couche `admin`, niveau 0) → MÊME géométrie que le fond, alignement
       // parfait (zéro frontière fausse). Niveau 0 = pays uniquement, hors maritime.
       try {
         if (!map.getSource('mb-admin')) map.addSource('mb-admin', { type: 'vector', url: 'mapbox://mapbox.mapbox-streets-v8' });
         if (!map.getLayer('admin0-thick')) map.addLayer({
-          id: 'admin0-thick', type: 'line', slot: 'middle',
+          id: 'admin0-thick', type: 'line',
           source: 'mb-admin', 'source-layer': 'admin',
           filter: ['all', ['==', ['get', 'admin_level'], 0], ['==', ['get', 'maritime'], 'false']],
           layout: { 'line-join': 'round', 'line-cap': 'round' },
@@ -293,6 +296,9 @@
             'line-opacity': 0.92,
           },
         });
+        // Sous les noms du fond, pour que les villages frontaliers restent lisibles.
+        var firstSym = (map.getStyle().layers || []).filter(function (l) { return l.type === 'symbol'; })[0];
+        if (firstSym) map.moveLayer('admin0-thick', firstSym.id);
       } catch (e) { /* tileset indispo : la frontière native fine reste en place */ }
       map.addSource(SRC, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({ id: 'humint-glow', type: 'circle', source: SRC, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 6, 8, 11, 12, 16], 'circle-color': ['get', '_color'], 'circle-opacity': 0.06, 'circle-blur': 1.2 } });

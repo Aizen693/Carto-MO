@@ -19,8 +19,7 @@
   var STREETS_SRC = 'basemap-streets-src';
   var SAT_LYR = 'basemap-sat-layer';
   var ADMIN_LYR = 'basemap-sat-admin';
-  var LABEL_LYR = 'basemap-sat-label';
-  var SAT_LAYERS = [SAT_LYR, ADMIN_LYR, LABEL_LYR];
+  var SAT_LAYERS = [SAT_LYR, ADMIN_LYR];
 
   // Icône v5 (calques superposés, trait 1,5 px) à la place de l'ancien glyphe demi-disque.
   var ICON = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8.5 4.5L12 13 3.5 8.5z"/><path d="M3.5 12.5L12 17l8.5-4.5"/><path d="M3.5 16.5L12 21l8.5-4.5"/></svg>';
@@ -28,20 +27,28 @@
   var map = null;
   var chip = null;
 
-  /* ─────────── Calques satellite (imagerie + frontières + noms pays) ─────────── */
+  /* ─────────── Calques satellite ───────────
+   * Fond = Mapbox Streets. L'imagerie est glissée JUSTE AU-DESSUS du sol et de l'eau,
+   * SOUS les routes, pistes et noms du fond : même rendu que Satellite Streets
+   * (le plus précis mesuré sur nos localités, banc d'essai /carte/fonds/ 23/09/2026).
+   * En satellite, les textes du fond passent en blanc cerné de noir. */
+  var textSaved = {};
+  function firstOverlayLayer() {
+    var ls = map.getStyle().layers || [];
+    for (var i = 0; i < ls.length; i++) {
+      var id = ls[i].id;
+      if (ls[i].type === 'symbol' || /^(tunnel|road|bridge|aeroway|building|admin)/.test(id) || id === 'admin0-thick') return id;
+    }
+    return undefined;
+  }
   function addSatLayers() {
     if (!map || map.getSource(SAT_SRC)) return;
-    // Insère SOUS le surlignage de région (region-hl-fill) pour que le cadrillage
-    // de région et les points restent visibles par-dessus l'imagerie satellite.
-    var beforeId = map.getLayer('region-hl-fill') ? 'region-hl-fill'
-      : (map.getLayer('humint-glow') ? 'humint-glow' : undefined);
     try {
-      // Imagerie satellite.
       map.addSource(SAT_SRC, { type: 'raster', url: 'mapbox://mapbox.satellite', tileSize: 256 });
-      map.addLayer({ id: SAT_LYR, type: 'raster', source: SAT_SRC, layout: { visibility: 'none' }, paint: { 'raster-opacity': 1 } }, beforeId);
-
-      // Frontières + noms de pays (depuis Mapbox Streets), visibles seulement en satellite.
+      map.addLayer({ id: SAT_LYR, type: 'raster', source: SAT_SRC, layout: { visibility: 'none' }, paint: { 'raster-opacity': 1 } }, firstOverlayLayer());
+      // Frontières blanches par-dessus l'imagerie (le trait noir seul se perd sur le sol sombre).
       if (!map.getSource(STREETS_SRC)) map.addSource(STREETS_SRC, { type: 'vector', url: 'mapbox://mapbox.mapbox-streets-v8' });
+      var beforeId = map.getLayer('region-hl-fill') ? 'region-hl-fill' : (map.getLayer('humint-glow') ? 'humint-glow' : undefined);
       map.addLayer({
         id: ADMIN_LYR, type: 'line', source: STREETS_SRC, 'source-layer': 'admin',
         filter: ['all', ['==', ['get', 'admin_level'], 0], ['==', ['get', 'maritime'], 'false']],
@@ -52,27 +59,38 @@
           'line-width': ['interpolate', ['linear'], ['zoom'], 3, 0.8, 6, 1.7, 9, 2.6, 12, 3.4],
         },
       }, beforeId);
-      map.addLayer({
-        id: LABEL_LYR, type: 'symbol', source: STREETS_SRC, 'source-layer': 'place_label',
-        filter: ['==', ['get', 'class'], 'country'],
-        layout: {
-          visibility: 'none',
-          'text-field': ['coalesce', ['get', 'name_fr'], ['get', 'name_en'], ['get', 'name']],
-          'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
-          'text-size': ['interpolate', ['linear'], ['zoom'], 3, 11, 6, 15, 9, 18],
-          'text-transform': 'uppercase',
-          'text-letter-spacing': 0.08,
-          'text-max-width': 7,
-        },
-        paint: { 'text-color': '#ffffff', 'text-halo-color': 'rgba(0,0,0,0.7)', 'text-halo-width': 1.5 },
-      }, beforeId);
     } catch (e) { console.warn('[basemap] satellite indisponible', e && e.message); }
+  }
+
+  function baseSymbols() {
+    return (map.getStyle().layers || []).filter(function (l) {
+      return l.type === 'symbol' && l.layout && l.layout['text-field'] && !/^humint|^region/.test(l.id);
+    });
+  }
+  function recolorText() {
+    baseSymbols().forEach(function (l) {
+      try {
+        if (on) {
+          if (!textSaved[l.id]) textSaved[l.id] = {
+            c: map.getPaintProperty(l.id, 'text-color'), h: map.getPaintProperty(l.id, 'text-halo-color'), w: map.getPaintProperty(l.id, 'text-halo-width'),
+          };
+          map.setPaintProperty(l.id, 'text-color', '#ffffff');
+          map.setPaintProperty(l.id, 'text-halo-color', 'rgba(0,0,0,0.75)');
+          map.setPaintProperty(l.id, 'text-halo-width', 1.4);
+        } else if (textSaved[l.id]) {
+          map.setPaintProperty(l.id, 'text-color', textSaved[l.id].c);
+          map.setPaintProperty(l.id, 'text-halo-color', textSaved[l.id].h);
+          map.setPaintProperty(l.id, 'text-halo-width', textSaved[l.id].w);
+        }
+      } catch (e) { /* */ }
+    });
   }
 
   function applyVisibility() {
     SAT_LAYERS.forEach(function (id) {
       if (map.getLayer(id)) { try { map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none'); } catch (e) { /* */ } }
     });
+    recolorText();
   }
 
   /* ─────────── Jeton dans la barre ─────────── */
