@@ -344,8 +344,15 @@ async function main() {
   if (flag('proposer')) return proposer(flag('ecrire'));
   if (flag('declencher')) {
     const pays = opt('pays', null);
-    const cibles = toutes.filter(s => (!pays || s.pays === pays) && (s.fenetres || []).length);
-    if (!cibles.length) { console.log(`[declencher] aucune station à journal connu pour ${pays || 'le Sahel'} (lancer la sonde et remplir les fenêtres)`); return; }
+    // Stations qui font de l'information : fenêtres connues, ou sonde ayant
+    // déjà entendu un journal ou un débat en langue attendue.
+    const infos = new Set();
+    if (existsSync(SONDE_OUT)) for (const l of readFileSync(SONDE_OUT, 'utf8').trim().split('\n')) {
+      try { const m = JSON.parse(l); if (m.ok && ['journal', 'debat'].includes(m.genre)) infos.add(m.station); } catch { /* ligne tronquée */ }
+    }
+    const cibles = toutes.filter(s => (!pays || s.pays === pays) && ((s.fenetres || []).length || infos.has(s.id)));
+    if (!cibles.length) { console.log(`[declencher] aucune station d'information connue pour ${pays || 'le Sahel'} : laisser la sonde tourner`); return; }
+    console.log(`[declencher] ${cibles.length} station(s) : ${cibles.map(s => s.station).join(', ')}`);
     return Promise.all(cibles.map(st => capter(st, Number(opt('minutes', 20)), opt('motif', 'Déclenchement sur événement'))));
   }
   const id = opt('station', null);
