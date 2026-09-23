@@ -271,9 +271,73 @@
   }
   window.V5.trame = trame;
 
+  /* Cloche de veille (reprise du système de l'accueil React, retiré par la refonte v5 du 22/09) :
+     case du header + pastille des notes non lues (propre au navigateur, clé algor-veille-seen)
+     + panneau des dernières notes. Titres publics uniquement, jamais l'analyse. */
+  var FEED = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
+  var SEV = { info: ['Signal', '#8C8D93'], alerte: ['Alerte', '#C28A2E'], critique: ['Critique', '#B4323F'] };
+  var TH = { sahel: 'Sahel', 'moyen-orient': 'Moyen-Orient', rdc: 'RDC', 'afrique-maritime': 'Afrique Maritime', madagascar: 'Madagascar', 'asie-sud': 'Asie du Sud' };
+  var MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+  function cloche() {
+    var sq = d.querySelector('.nav .sq');
+    if (!sq || sq.querySelector('.sq__cloche')) return;
+    var lire = function () { try { return localStorage.getItem('algor-veille-seen') || ''; } catch (e) { return ''; } };
+    var btn = d.createElement('button');
+    btn.type = 'button'; btn.className = 'sq__cloche'; btn.setAttribute('aria-label', 'Fil de veille');
+    btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', 'cloche-panneau');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="sq__pastille" hidden></span>';
+    var rech = d.getElementById('ouvrir-recherche');
+    sq.insertBefore(btn, rech && rech.parentNode === sq ? rech : null);
+    var pan = d.createElement('aside');
+    pan.id = 'cloche-panneau'; pan.className = 'cloche'; pan.setAttribute('aria-label', 'Fil de veille'); pan.hidden = true;
+    pan.innerHTML = '<div class="cloche__tete"><span>Fil de veille</span><span class="cloche__s">OSINT · six théâtres</span></div><ol class="cloche__liste" data-lenis-prevent><li class="cloche__vide">Chargement…</li></ol><a class="cloche__pied" href="/veille/?onglet=geo">Toute la veille <span aria-hidden="true">→</span></a>';
+    d.body.appendChild(pan);
+    var items = [], pastille = btn.querySelector('.sq__pastille');
+    var compter = function () {
+      var vu = lire(), n = items.filter(function (it) { return String(it.date || '') > vu; }).length;
+      pastille.hidden = !n; pastille.textContent = n > 9 ? '9+' : String(n);
+      btn.setAttribute('aria-label', n ? 'Fil de veille, ' + n + ' note' + (n > 1 ? 's' : '') + ' non lue' + (n > 1 ? 's' : '') : 'Fil de veille');
+    };
+    var date = function (s) { var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || ''); return m ? (+m[3]) + ' ' + MOIS[+m[2] - 1] : ''; };
+    var remplir = function () {
+      var vu = lire(), ol = pan.querySelector('.cloche__liste');
+      if (!items.length) { ol.innerHTML = '<li class="cloche__vide">Aucune note pour le moment.</li>'; return; }
+      ol.innerHTML = items.slice(0, 12).map(function (it) {
+        var sv = SEV[it.severite] || SEV.info, neuf = String(it.date || '') > vu;
+        return '<li><a href="/veille/?onglet=geo"' + (neuf ? ' class="is-neuf"' : '') + '><span class="cloche__meta"><i style="background:' + sv[1] + '" title="' + sv[0] + '"></i>' +
+          esc(TH[it.theatre] || it.theatre || '') + ' · ' + esc(date(it.date)) + (neuf ? '<b>Nouveau</b>' : '') + '</span><span class="cloche__t">' + esc(fr(it.titre)) + '</span></a></li>';
+      }).join('');
+    };
+    var ouvert = false;
+    var basculer = function (o) {
+      ouvert = o; pan.hidden = !o; btn.setAttribute('aria-expanded', String(o)); btn.classList.toggle('is-on', o);
+      if (o) {
+        remplir();
+        var latest = items.reduce(function (m, it) { return String(it.date || '') > m ? String(it.date) : m; }, '');
+        if (latest) { try { localStorage.setItem('algor-veille-seen', latest); } catch (e) {} }
+        pastille.hidden = true;
+      } else compter();
+    };
+    btn.addEventListener('click', function (e) { e.stopPropagation(); basculer(!ouvert); });
+    d.addEventListener('click', function (e) { if (ouvert && !pan.contains(e.target)) basculer(false); });
+    d.addEventListener('keydown', function (e) { if (ouvert && e.key === 'Escape') { basculer(false); btn.focus(); } });
+    var charger = function (liste) {
+      items = (liste || []).filter(function (it) { return it && it.titre; })
+        .sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
+      compter(); if (ouvert) remplir();
+    };
+    if (window.V5.veille) charger(window.V5.veille);
+    else if (d.getElementById('annonce')) d.addEventListener('v5:veille', function (e) { charger(e.detail); });
+    else fetch(FEED, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (data) { charger(Array.isArray(data) ? data : data.items); })
+      .catch(function () { charger([]); });
+  }
+
   function init() {
     typo(d.body);
     [].forEach.call(d.querySelectorAll('[data-v5-trame]'), trame);
+
+    cloche();
 
     /* Navigation : claire au-dessus du papier, s'efface quand on lit, revient quand on remonte */
     var nav = d.getElementById('nav');
