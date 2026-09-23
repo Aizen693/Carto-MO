@@ -228,7 +228,15 @@ async function capter(st, minutes, motif) {
   const debut = new Date();
   console.log(`[capture] ${st.station} (${st.pays}) ${minutes} min, motif : ${motif}`);
   const segments = await enregistrer(st, minutes * 60);
-  const langues = st.langues?.length ? st.langues : ['fr'];
+  // FRANÇAIS SEULEMENT, volontairement. Mesuré le 23/09 sur « La Semaine sur
+  // Kalangou » du 19/09, publiée en français ET en haoussa : Whisper rend le
+  // haoussa en boucle (197 mots pour 12 min) ; KhayaAI/w2v-bert-hau le transcrit
+  // correctement (1 824 mots), mais Mistral en tire des faits ABSENTS du journal
+  // (poste frontalier, Tillabéri) au lieu du remaniement et du passeport AES de
+  // l'édition française, et le contrôle d'extrait ne les rejette pas : l'extrait
+  // haoussa existe bien, c'est son sens qui est inventé. Ne pas ajouter d'autre
+  // langue sans une traduction fiable vers le français et une comparaison du même type.
+  const langues = ['fr'];
   const retenus = [];
   let rejets = 0;
   for (const wav of segments) {

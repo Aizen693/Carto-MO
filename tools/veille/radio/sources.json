@@ -5,7 +5,8 @@
     "Seules les editions en francais sont transcrites (Whisper ne gere ni le bambara, ni le moore, ni le peul).",
     "lang_pattern : expression reguliere appliquee au NOM DU FICHIER mp3 pour reconnaitre l'edition francaise.",
     "skip_title : expression reguliere sur le TITRE de l'episode pour ecarter les magazines hors actualite (sante, sport, portraits).",
-    "only_title : expression reguliere sur le TITRE ; si presente, seuls les episodes qui la verifient sont traites (emissions panafricaines filtrees sur le Sahel)."
+    "only_title : expression reguliere sur le TITRE ; si presente, seuls les episodes qui la verifient sont traites (emissions panafricaines filtrees sur le Sahel).",
+    "Langues nationales : NON exploitees (test du 23/09 sur Kalangou haoussa vs francais du meme journal : faits inventes par Mistral a partir d'un haoussa bien transcrit, non detectes par le controle d'extrait). Voir live.mjs."
   ],
   "studios": [
     {
