@@ -114,6 +114,37 @@
   .more-btn { display: inline-flex; align-items: center; height: 40px; padding: 0 18px; border: 1px solid var(--ink); border-radius: 2px; font-size: 15px; color: var(--ink); transition: background .2s ease, color .2s ease; }
   .more-btn:hover { background: var(--ink); color: var(--paper); }
 
+  /* ── Radio Sahel ── */
+  .rs-pts { list-style: none; margin: 0; padding: 0; }
+  .rs-pt { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 0 14px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .rs-pt:last-child { border-bottom: 0; }
+  .rs-pt__n { font: 400 13px var(--mono); font-variant-numeric: tabular-nums; color: var(--faint); padding-top: 4px; }
+  .rs-pt__txt { font-size: 17px; line-height: 1.55; color: var(--ink); }
+  .rs-pt__src { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 13.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .rs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: clamp(24px, 3vw, 44px); margin-top: clamp(30px, 3.4vw, 46px); }
+  .rs-b { min-width: 0; padding-top: 14px; border-top: 1px solid var(--ink); }
+  .rs-b__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 10px; font-size: 13.5px; color: var(--muted); }
+  .rs-b__meta b { font: 400 13.5px var(--sans); color: var(--ink); }
+  .rs-b__meta .rs-b__num { font: 400 13px var(--mono); font-variant-numeric: tabular-nums; }
+  .rs-b__title { margin: 0 0 8px; font-weight: 400; font-size: 20px; line-height: 1.25; letter-spacing: -0.015em; color: var(--ink); }
+  .rs-b__res { margin: 0 0 4px; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+  .rs-f { padding: 14px 0 2px; border-top: 1px solid var(--line); margin-top: 14px; }
+  .rs-f__head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 8px; font-size: 13.5px; color: var(--muted); }
+  .rs-cat { display: inline-flex; align-items: center; gap: 7px; color: var(--ink); }
+  .rs-cat::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--c, var(--faint)); flex: none; }
+  .rs-cat--securite { --c: var(--alert); }
+  .rs-cat--humanitaire { --c: var(--warn); }
+  .rs-cat--politique { --c: var(--ink); }
+  .rs-cat--economie { --c: var(--live); }
+  .rs-f__txt { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink); }
+  .rs-f details { margin-top: 8px; }
+  .rs-f summary { font-size: 14px; color: var(--ink); cursor: pointer; text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .rs-f summary:hover { text-decoration-color: currentColor; }
+  .rs-f blockquote { margin: 10px 0 0; padding-left: 14px; border-left: 1px solid var(--stone); font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+  .rs-b__link { display: inline-block; margin-top: 16px; font-size: 14px; color: var(--ink); text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .rs-b__link:hover { text-decoration-color: currentColor; }
+  .rs-note { margin: clamp(30px, 3.4vw, 46px) 0 0; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 88ch; }
+
   /* Modales (note, rapport) */
   .vmodal-scrim { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(15, 16, 19, 0.62); animation: fade .2s ease; }
   @keyframes fade { from { opacity: 0; } }
@@ -492,8 +523,8 @@
 <main>
   <section class="v5-phero vhero" data-nav="dark" data-v5-trame data-trame-veille data-hachures="6,0;7,1">
     <p class="eyebrow"><span class="dot" id="dot"></span> Veilles · accès abonné</p>
-    <h1>Nos deux <span>veilles</span></h1>
-    <p class="v5-phero__lede" id="lede">Géopolitique : notes d'analyse sourcées sur nos six théâtres. Cyber : menaces tirées des flux publics AlienVault OTX, abuse.ch, NVD et MITRE, mises à jour toutes les heures. Les deux en intégralité.</p>
+    <h1>Nos <span>veilles</span></h1>
+    <p class="v5-phero__lede" id="lede">Géopolitique : notes d'analyse sourcées sur nos six théâtres. Cyber : menaces tirées des flux publics AlienVault OTX, abuse.ch, NVD et MITRE, mises à jour toutes les heures. Radio Sahel : les journaux des radios d'information du Mali, du Niger et du Burkina Faso, synthétisés chaque jour.</p>
     <div class="v5-phero__meta vhero__meta">
       <div class="maj" id="maj"></div>
       <a class="alertes-lien" id="lien-alertes" href="/compte/alertes/" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Mes alertes</a>
@@ -511,12 +542,17 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
         Cyber <b id="n-cyber">…</b>
       </button>
+      <button class="tab" role="tab" data-tab="radio" id="tab-radio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
+        Radio Sahel <b id="n-radio">…</b>
+      </button>
     </div>
 
     <section class="pane" id="pane-geo" role="tabpanel" hidden><div class="empty">Chargement du fil géopolitique…</div></section>
     <section class="pane" id="pane-cyber" role="tabpanel" hidden><div class="empty">Chargement de l'instantané cyber…</div></section>
+    <section class="pane" id="pane-radio" role="tabpanel" hidden><div class="empty">Chargement de la veille radio…</div></section>
 
-    <p class="vfoot" id="foot" hidden>Veille géopolitique : flux OSINT sélectionné, sourcé et daté par nos analystes. Veille cyber : flux publics (AlienVault OTX, ThreatFox d'abuse.ch, NVD et catalogue KEV de la CISA, MITRE ATT&amp;CK) agrégés automatiquement toutes les heures, sans vérification par Algor Int ; les indicateurs bruts restent dans la plateforme.</p>
+    <p class="vfoot" id="foot" hidden>Veille géopolitique : flux OSINT sélectionné, sourcé et daté par nos analystes. Veille cyber : flux publics (AlienVault OTX, ThreatFox d'abuse.ch, NVD et catalogue KEV de la CISA, MITRE ATT&amp;CK) agrégés automatiquement toutes les heures, sans vérification par Algor Int ; les indicateurs bruts restent dans la plateforme. Radio Sahel : journaux publiés par les studios, transcrits et synthétisés automatiquement, chaque fait adossé à un extrait vérifié.
   </section>
 </main>
 
@@ -555,12 +591,14 @@
     for (const t of document.querySelectorAll('.tab')) t.classList.toggle('is-active', t.dataset.tab === name);
     document.getElementById('pane-geo').hidden = name !== 'geo';
     document.getElementById('pane-cyber').hidden = name !== 'cyber';
+    document.getElementById('pane-radio').hidden = name !== 'radio';
     // Le fil géopolitique se lit en liste sur fond nuit, comme sur l'accueil ; le tableau cyber reste clair
     const vb = document.getElementById('vbody'); vb.classList.toggle('is-nuit', name === 'geo'); vb.dataset.nav = name === 'geo' ? 'dark' : 'light';
     if (window.V5 && window.V5.teinte) window.V5.teinte();
     const u = new URL(location.href); u.searchParams.set('onglet', name); history.replaceState(null, '', u);
   }
   for (const t of document.querySelectorAll('.tab')) t.addEventListener('click', () => showTab(t.dataset.tab));
+  const ONGLET_DEMANDE = () => (['cyber', 'radio'].includes(params.get('onglet')) ? params.get('onglet') : 'geo');
 
   /* ══════════ Géopolitique ══════════ */
   const VEILLE_REMOTE = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/functions/v1/veille-feed/notifications.json';
@@ -1323,6 +1361,65 @@
     }
   }
 
+  /* ══════════ Radio Sahel ══════════
+     sahel/radio.json (bucket privé, RLS premium) écrit par le VPS toutes les 30 min :
+     journaux en français de Studio Tamani, Kalangou et Yafa, transcrits par Whisper
+     puis synthétisés. Chaque fait porte un extrait vérifié mot pour mot dans la
+     transcription ; un fait dont l'extrait est introuvable n'est jamais publié. */
+  const RS_CAT = { securite: 'Sécurité', humanitaire: 'Humanitaire', politique: 'Politique', economie: 'Économie', societe: 'Société' };
+  const fmtDH = (iso) => iso ? new Date(iso).toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+
+  function renderRadio(d) {
+    const bulletins = (d && d.bulletins) || [];
+    const byId = new Map();
+    for (const b of bulletins) for (const f of (b.faits || [])) byId.set(f.id, b);
+    const sy = d && d.synthese;
+    const pts = (sy && sy.points) || [];
+    const synthese = pts.length ? `<section class="card">
+        <div class="card__head"><h2 class="card__title" data-i18n-skip>${esc(sy.titre || 'Synthèse radio du jour')}</h2>
+          <span class="card__hint">${esc(fmtDH(sy.date))} · ${fmtN(sy.nb_faits)} faits · ${esc((sy.sources || []).join(', '))}</span></div>
+        <ol class="rs-pts">${pts.map((p, i) => {
+          const src = [...new Set(p.faits.map((id) => byId.get(id)).filter(Boolean))];
+          return `<li class="rs-pt"><span class="rs-pt__n">${String(i + 1).padStart(2, '0')}</span>
+            <div><p class="rs-pt__txt" data-i18n-skip>${esc(p.texte)}</p>
+              <div class="rs-pt__src">${src.map((b) => `<span>${esc(b.studio)} · ${esc(fmtD(b.date.slice(0, 10)))}</span>`).join('')}</div></div></li>`;
+        }).join('')}</ol>
+      </section>` : '<div class="empty">Pas encore de synthèse : les journaux du jour sont en cours de traitement.</div>';
+
+    const utiles = (b) => (b.faits || []).filter((f) => f.categorie !== 'societe');
+    const cartes = bulletins.filter((b) => utiles(b).length).map((b) => {
+      const page = safeUrl(b.page);
+      return `<article class="rs-b">
+        <div class="rs-b__meta"><b data-i18n-skip>${esc(b.studio)}</b><span>${esc(b.pays)}</span><span class="rs-b__num">${esc(fmtDH(b.date))}</span>${b.duree_s ? `<span class="rs-b__num">${Math.round(b.duree_s / 60)} min</span>` : ''}</div>
+        <h3 class="rs-b__title" data-i18n-skip>${esc(b.titre)}</h3>
+        ${b.resume ? `<p class="rs-b__res" data-i18n-skip>${esc(b.resume)}</p>` : ''}
+        ${utiles(b).map((f) => `<div class="rs-f">
+          <div class="rs-f__head"><span class="rs-cat rs-cat--${esc(f.categorie)}">${esc(RS_CAT[f.categorie] || f.categorie)}</span>${f.lieu ? `<span data-i18n-skip>${esc(f.lieu)}</span>` : ''}</div>
+          <p class="rs-f__txt" data-i18n-skip>${esc(f.fait)}</p>
+          <details><summary>Extrait vérifié</summary><blockquote data-i18n-skip>« ${esc(f.extrait)} »</blockquote></details>
+        </div>`).join('')}
+        ${page ? `<a class="rs-b__link" href="${esc(page)}" target="_blank" rel="noopener">Écouter le journal sur le site du studio</a>` : ''}
+      </article>`;
+    }).join('');
+
+    document.getElementById('pane-radio').innerHTML = synthese
+      + (cartes ? `<div class="rs-grid">${cartes}</div>` : '')
+      + `<p class="rs-note">Journaux en français de Studio Tamani (Mali), Studio Kalangou (Niger) et Studio Yafa (Burkina Faso), rédactions d'information de la Fondation Hirondelle. Transcription automatique puis synthèse assistée par IA : chaque fait est adossé à un extrait vérifié mot pour mot, mais la transcription peut déformer les noms propres. Les magazines, le sport et la culture sont écartés.</p>`;
+    document.getElementById('n-radio').textContent = fmtN(pts.length);
+    const der = bulletins[0] && new Date(bulletins[0].date);
+    const maj = document.getElementById('maj');
+    if (der) maj.textContent = (maj.textContent ? maj.textContent + ' · ' : '') + 'Radio : journal du ' + der.toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+
+  async function loadRadio() {
+    try { renderRadio(await window.algorAuth.loadZoneFile('sahel/radio.json')); }
+    catch (e) {
+      console.warn('[veille] radio', e);
+      document.getElementById('pane-radio').innerHTML = '<div class="err">La veille radio n’est pas disponible pour le moment. Réessayez dans quelques minutes.</div>';
+      document.getElementById('n-radio').textContent = '0';
+    }
+  }
+
   /* ══════════ Accès : abonné → les deux veilles en entier, visiteur → présentation publique ══════════ */
   const TEASER_CYBER = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/teaser.json';
   const LIVE_PUBLIC = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co/storage/v1/object/public/veille-public/veille-cyber/live-public.json';
@@ -1413,9 +1510,9 @@
 
   async function apercuVisiteur() {
     document.querySelector('.eyebrow').lastChild.textContent = ' Veilles · aperçu public';
-    document.getElementById('lede').textContent = "Géopolitique : notes d'analyse sourcées sur nos six théâtres. Cyber : menaces tirées des flux publics, mises à jour toutes les heures. Voici un aperçu ; le fil complet est réservé aux abonnés.";
+    document.getElementById('lede').textContent = "Géopolitique : notes d'analyse sourcées sur nos six théâtres. Cyber : menaces tirées des flux publics, mises à jour toutes les heures. Radio Sahel : les journaux des radios locales, synthétisés chaque jour. Voici un aperçu ; le détail est réservé aux abonnés.";
     document.getElementById('onglets').hidden = false;
-    showTab(params.get('onglet') === 'cyber' ? 'cyber' : 'geo');
+    showTab(ONGLET_DEMANDE());
     const [geo, cyber] = await Promise.all([
       fetch(VEILLE_REMOTE, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
       fetch(TEASER_CYBER, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
@@ -1424,6 +1521,11 @@
     if (geo && geo.updated) document.getElementById('maj').textContent = 'Fil géopolitique du ' + fmtD(String(geo.updated).slice(0, 10), true);
     apercuGeo();
     apercuCyber(cyber);
+    // Radio : réservée aux abonnés, aucune donnée en aperçu
+    document.getElementById('pane-radio').innerHTML = bloc('La veille radio du Sahel',
+      "Chaque jour, les journaux des radios d'information du Mali, du Niger et du Burkina Faso, transcrits et synthétisés : l'essentiel sans le bruit, chaque fait adossé à un extrait vérifié.",
+      ['Synthèse du jour', 'Studio Tamani, Kalangou, Yafa', 'Extraits vérifiés', 'Mise à jour toutes les 30 min']);
+    document.getElementById('n-radio').textContent = '·';
     ouvrirNoteDemandee();
   }
 
@@ -1436,9 +1538,10 @@
     ACCES = 'abonne';
     if (ALERTES_ACTIVES) document.getElementById('lien-alertes').hidden = false;
     document.getElementById('foot').hidden = false;
-    showTab(params.get('onglet') === 'cyber' ? 'cyber' : 'geo');
+    showTab(ONGLET_DEMANDE());
     loadGeo();
     loadCyber();
+    loadRadio();
   });
 </script>
 <script src="/shared/v5/chrome.js?v=20260922e"></script>
