@@ -3,6 +3,8 @@
 #   crontab :
 #     6 * * * *     /opt/veille-radio/lancer-direct.sh sonde      # mesure horaire : qui diffuse un journal, à quelle heure
 #     */5 * * * *   /opt/veille-radio/lancer-direct.sh capturer   # enregistre les fenêtres de journal qui commencent
+#   sur événement (appelé par une autre veille, ou à la main) :
+#     /opt/veille-radio/lancer-direct.sh declencher Mali 20       # 20 min sur les stations d'information du pays
 # Les journaux captés sont écrits dans app/radio/state/live-bulletins.json ;
 # lancer.sh (studios, toutes les 30 min) les fusionne dans la synthèse et publie.
 DIR=/opt/veille-radio
@@ -30,6 +32,10 @@ export WHISPER_THREADS=2
 case "$MODE" in
   sonde)    ARGS="--sonde --secondes 45" ;;
   capturer) ARGS="--capturer" ;;
+  declencher)
+    [ -n "$2" ] || { echo "declencher : pays manquant" >> "$LOG"; exit 1; }
+    ARGS="--declencher --pays $2 --minutes ${3:-20}"
+    echo "=== $(date -u '+%Y-%m-%d %H:%M UTC') déclenchement $2" >> "$LOG" ;;
   *)        echo "mode inconnu : $MODE" >> "$LOG"; exit 1 ;;
 esac
 
