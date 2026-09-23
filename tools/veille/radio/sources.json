@@ -4,7 +4,8 @@
     "Studios de la Fondation Hirondelle : information de proximite, editions en francais + langues nationales.",
     "Seules les editions en francais sont transcrites (Whisper ne gere ni le bambara, ni le moore, ni le peul).",
     "lang_pattern : expression reguliere appliquee au NOM DU FICHIER mp3 pour reconnaitre l'edition francaise.",
-    "skip_title : expression reguliere sur le TITRE de l'episode pour ecarter les magazines hors actualite (sante, sport, portraits)."
+    "skip_title : expression reguliere sur le TITRE de l'episode pour ecarter les magazines hors actualite (sante, sport, portraits).",
+    "only_title : expression reguliere sur le TITRE ; si presente, seuls les episodes qui la verifient sont traites (emissions panafricaines filtrees sur le Sahel)."
   ],
   "studios": [
     {
@@ -31,6 +32,46 @@
       "feed": "https://www.studioyafa.org/feed/",
       "lang_pattern": "(fran[cç]ais|^frs?[-_])",
       "skip_title": "\\(magazine\\)|micro-trottoir|goûter|basket|football|lutte traditionnelle|faso yafa du"
+    },
+    {
+      "id": "rfi-reportage",
+      "label": "RFI Reportage Afrique",
+      "pays": "Sahel",
+      "feed": "https://www.rfi.fr/fr/podcasts/reportage-afrique/podcast",
+      "lang_pattern": ".",
+      "only_title": "mali|malien|bamako|niger\\b|nig[ée]rien|niamey|burkina|burkinab|ouagadougou|tchad|tchadien|n.?djamena|mauritanie|mauritanien|nouakchott|sahel|sah[ée]lien|\\baes\\b|alliance des [ée]tats du sahel|jnim|gsim|tombouctou|gao\\b|kidal|mopti|m[ée]naka|tillab[ée]ri|diffa|agadez|djibo|fada",
+      "skip_title": "football|basket|musique|concert|cin[ée]ma",
+      "note": "emission panafricaine RFI, filtree sur le Sahel par le titre"
+    },
+    {
+      "id": "rfi-invite",
+      "label": "RFI Invité Afrique",
+      "pays": "Sahel",
+      "feed": "https://www.rfi.fr/fr/podcasts/invit%C3%A9-afrique/podcast",
+      "lang_pattern": ".",
+      "only_title": "mali|malien|bamako|niger\\b|nig[ée]rien|niamey|burkina|burkinab|ouagadougou|tchad|tchadien|n.?djamena|mauritanie|mauritanien|nouakchott|sahel|sah[ée]lien|\\baes\\b|alliance des [ée]tats du sahel|jnim|gsim|tombouctou|gao\\b|kidal|mopti|m[ée]naka|tillab[ée]ri|diffa|agadez|djibo|fada",
+      "skip_title": "football|basket|musique|concert|cin[ée]ma",
+      "note": "emission panafricaine RFI, filtree sur le Sahel par le titre"
+    },
+    {
+      "id": "rfi-economie",
+      "label": "RFI Afrique Économie",
+      "pays": "Sahel",
+      "feed": "https://www.rfi.fr/fr/podcasts/afrique-%C3%A9conomie/podcast",
+      "lang_pattern": ".",
+      "only_title": "mali|malien|bamako|niger\\b|nig[ée]rien|niamey|burkina|burkinab|ouagadougou|tchad|tchadien|n.?djamena|mauritanie|mauritanien|nouakchott|sahel|sah[ée]lien|\\baes\\b|alliance des [ée]tats du sahel|jnim|gsim|tombouctou|gao\\b|kidal|mopti|m[ée]naka|tillab[ée]ri|diffa|agadez|djibo|fada",
+      "skip_title": "football|basket|musique|concert|cin[ée]ma",
+      "note": "emission panafricaine RFI, filtree sur le Sahel par le titre"
+    },
+    {
+      "id": "rfi-debat",
+      "label": "RFI Le Débat africain",
+      "pays": "Sahel",
+      "feed": "https://www.rfi.fr/fr/podcasts/d%C3%A9bat-africain/podcast",
+      "lang_pattern": ".",
+      "only_title": "mali|malien|bamako|niger\\b|nig[ée]rien|niamey|burkina|burkinab|ouagadougou|tchad|tchadien|n.?djamena|mauritanie|mauritanien|nouakchott|sahel|sah[ée]lien|\\baes\\b|alliance des [ée]tats du sahel|jnim|gsim|tombouctou|gao\\b|kidal|mopti|m[ée]naka|tillab[ée]ri|diffa|agadez|djibo|fada",
+      "skip_title": "football|basket|musique|concert|cin[ée]ma",
+      "note": "emission panafricaine RFI, filtree sur le Sahel par le titre"
     }
   ]
 }

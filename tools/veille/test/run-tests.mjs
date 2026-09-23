@@ -13,6 +13,7 @@ import { geocode, fromGeotag, loadGazetteer } from '../lib/geocode.mjs';
 import { parseOutput as parseIg } from '../lib/instagram.mjs';
 import { jugerSegment, fenetresAOuvrir, heureLocale, proposerFenetres } from '../radio/live.mjs';
 import { extractIsGrounded, frenchAudio } from '../radio/radio.mjs';
+import { aDeclencher } from '../radio/declencheur.mjs';
 import { buildFeature, mergeCollection, makeRef } from '../lib/geojson.mjs';
 import { parseSearch, mapVideo, toIso, hasKey } from '../lib/tiktok.mjs';
 import { decide, applyPrune, summarize } from '../lib/prune.mjs';
@@ -151,6 +152,21 @@ const sondes = [
 const prop = proposerFenetres(sondes, { min: 2 });
 eq(prop.kledu && prop.kledu.length, 1, 'seule l heure vue en journal deux jours différents est proposée');
 eq(prop.kledu && prop.kledu[0].debut, '07:00', 'fenêtre calée sur l heure pile');
+
+console.log('\n# Radio : déclenchement sur événement');
+const gazD = loadGazetteer(resolve(__dirname, 'fixtures', 'gazetteer-mini.json'));
+const maintenant = Date.parse('2026-09-23T12:00:00Z');
+const notesD = [
+  { id: 'a', theatre: 'sahel', severite: 'critique', date: '2026-09-23', lat: 14.5, lon: -4.15, lieu: 'Sevare', titre: 'Attaque majeure' },
+  { id: 'b', theatre: 'sahel', severite: 'critique', date: '2026-09-23', lat: 14.49, lon: -4.2, lieu: 'Mopti', titre: 'Autre attaque au Mali' },
+  { id: 'c', theatre: 'sahel', severite: 'alerte', date: '2026-09-23', lat: 14.49, lon: -4.2, lieu: 'Mopti', titre: 'Alerte' },
+  { id: 'd', theatre: 'sahel', severite: 'critique', date: '2026-09-18', lat: 14.49, lon: -4.2, lieu: 'Mopti', titre: 'Ancienne' },
+  { id: 'e', theatre: 'rdc', severite: 'critique', date: '2026-09-23', lat: -4.5, lon: 18.6, lieu: 'Bulungu', titre: 'Hors Sahel' }
+];
+const dec = aDeclencher(notesD, { notes: {}, pays: {} }, { now: maintenant, gaz: gazD });
+eq(dec.length, 1, 'une seule capture par pays malgré deux notes critiques');
+eq(dec[0] && dec[0].pays, 'Mali', 'pays déduit des coordonnées de la note');
+eq(aDeclencher(notesD, { notes: { a: '2026-09-23T10:00:00Z' }, pays: { Mali: '2026-09-23T09:00:00Z' } }, { now: maintenant, gaz: gazD }).length, 0, 'pays déjà capté il y a moins de 6 h : rien');
 
 console.log('\n# Radio : studios');
 eq(extractIsGrounded('Les forces armées maliennes ont été la cible de plusieurs attaques ce week-end', journal), true, 'extrait présent dans la transcription');

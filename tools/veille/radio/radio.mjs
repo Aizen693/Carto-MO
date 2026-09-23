@@ -249,9 +249,11 @@ async function main() {
 
       let done = 0;
       const skip = s.skip_title ? new RegExp(s.skip_title, 'i') : null;
+      const only = s.only_title ? new RegExp(s.only_title, 'i') : null;
       for (const it of items) {
         if (Date.parse(it.published_at) < since) continue;
         if (skip && skip.test(it.title)) continue;
+        if (only && !only.test(it.title)) continue;
         for (const a of frenchAudio(it.audio, s.lang_pattern)) {
           if (done >= MAX) break;
           if (known.has(a.url) && (NO_AI || known.get(a.url).faits)) continue;
