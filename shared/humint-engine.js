@@ -1049,24 +1049,13 @@
       var all = state.manifest.countries || [];
       function grp(c) { return c.statut === 'reference' ? (c.theatre || 'Autres') + ' · données référencées 2026' : (c.theatre || 'Sahel') + ' · actualisé chaque semaine'; }
       // Liste verrouillée sur le théâtre courant : pays, calques, acteurs et typologies
-      // restent ceux du théâtre. Les autres théâtres ne sont proposés qu'en bascule explicite.
+      // restent ceux du théâtre. Aucune bascule vers un autre théâtre depuis la carte.
       var cur = state.entry && state.entry.file;
       var mine = all.filter(function (c) { return !cur || c.file === cur; }).sort(function (a, b) {
         var ra = a.statut === 'reference' ? 1 : 0, rb = b.statut === 'reference' ? 1 : 0;
         return ra - rb || String(a.theatre || '').localeCompare(String(b.theatre || ''), 'fr') || b.count - a.count;
       });
       var items = mine.map(function (c) { return { v: c.name, n: c.count, g: grp(c) }; });
-      if (cur) {
-        var autres = {};
-        all.forEach(function (c) {
-          if (c.file === cur) return;
-          var t = autres[c.file] || (autres[c.file] = { n: 0, top: c, theatre: c.theatre || 'Autres' });
-          t.n += c.count; if (c.count > t.top.count) t.top = c;
-        });
-        Object.keys(autres).map(function (k) { return autres[k]; })
-          .sort(function (a, b) { return b.n - a.n; })
-          .forEach(function (t) { items.push({ v: t.top.name, label: t.theatre, n: t.n, g: 'Changer de théâtre', noLayers: true }); });
-      }
       return openList(anchor, 'Pays', null, items, state.country, false, function (val) { switchCountry(val); }, true);
     }
     if (key === 'event') return openList(anchor, "Typologie d'événement", 'Toutes les typologies', distinctCount(rowsFor(false), 'type'), state.sel.event, true, function (val) { state.sel.event = val; applyFacets(); renderSummary(); fitToFiltered(); });
