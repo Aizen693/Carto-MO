@@ -389,9 +389,9 @@
   function passerAbonne() {
     if (abonne) return; abonne = true;
     f.querySelector('button[type=submit]').setAttribute('aria-label', t('Valider'));
-    var statique = function () { return fetch('/carte/countries.json?v=20260923').then(function (r) { return r.json(); }); };
-    var charge = (window.algorAuth && window.algorAuth.loadZoneFile) ? window.algorAuth.loadZoneFile('carte/countries.json').catch(statique) : statique();
-    charge.then(function (d) { pays = d.countries || []; rendre(); }).catch(function () {});
+    // Manifeste public du site (pas le bucket : ici la page n'est pas réservée, l'accès
+    // premium n'est jamais confirmé et la lecture du bucket attendrait sans fin).
+    fetch('/carte/countries.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) { pays = d.countries || []; rendre(); }).catch(function () {});
     rendre();
   }
   function sync() {
