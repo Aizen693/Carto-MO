@@ -177,7 +177,11 @@ async function duree(wav) {
    dans le journal de whisper-cli, pour écarter les passages en langue nationale. */
 async function transcrire(wav, langueForcee, modele = WHISPER_MODEL) {
   const args = ['-m', modele, '-t', WHISPER_THREADS, '-nt', '-l', langueForcee || 'auto', '-f', wav];
-  const { stdout, stderr } = await run(WHISPER_BIN, args, { maxBuffer: 64 * 1024 * 1024 });
+  // Verrou CPU commun (WHISPER_LOCK) : le 23/09, capture + sonde + studios en
+  // parallèle ont porté la charge à 7 sur les 2 cœurs du VPS. Les enregistrements
+  // restent à l'heure ; seules les transcriptions passent l'une après l'autre.
+  const [bin, a] = process.env.WHISPER_LOCK ? ['flock', [process.env.WHISPER_LOCK, WHISPER_BIN, ...args]] : [WHISPER_BIN, args];
+  const { stdout, stderr } = await run(bin, a, { maxBuffer: 64 * 1024 * 1024 });
   const m = /auto-detected language: (\w+) \(p = ([\d.]+)\)/.exec(stderr);
   return { texte: stdout.replace(/\s+/g, ' ').trim(), langue: m ? m[1] : langueForcee || null, proba: m ? Number(m[2]) : null };
 }

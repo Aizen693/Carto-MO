@@ -114,7 +114,10 @@ async function transcribe(url, id) {
     const { stdout: dur } = await run('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', mp3]);
     await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', mp3, '-ac', '1', '-ar', '16000', wav]);
     const t0 = Date.now();
-    const { stdout } = await run(WHISPER_BIN, ['-m', WHISPER_MODEL, '-l', 'fr', '-t', WHISPER_THREADS, '-nt', '-f', wav], { maxBuffer: 64 * 1024 * 1024 });
+    const args = ['-m', WHISPER_MODEL, '-l', 'fr', '-t', WHISPER_THREADS, '-nt', '-f', wav];
+    // Verrou CPU commun avec la capture en direct (voir live.mjs).
+    const [bin, a] = process.env.WHISPER_LOCK ? ['flock', [process.env.WHISPER_LOCK, WHISPER_BIN, ...args]] : [WHISPER_BIN, args];
+    const { stdout } = await run(bin, a, { maxBuffer: 64 * 1024 * 1024 });
     const res = { text: stdout.replace(/\s+/g, ' ').trim(), duration_s: Math.round(Number(dur) || 0), transcribe_s: Math.round((Date.now() - t0) / 1000) };
     mkdirSync(TRANS_DIR, { recursive: true });
     writeFileSync(cached, JSON.stringify(res));

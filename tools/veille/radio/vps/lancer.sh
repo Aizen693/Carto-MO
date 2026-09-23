@@ -29,6 +29,8 @@ export MISTRAL_API_KEY SUPABASE_URL SUPABASE_SERVICE_ROLE
 export WHISPER_BIN="$DIR/whisper.cpp/build/bin/whisper-cli"
 export WHISPER_MODEL="$DIR/models/ggml-large-v3-turbo-q5_0.bin"
 export WHISPER_THREADS=2
+# Une seule transcription à la fois sur le VPS, tous scripts confondus.
+export WHISPER_LOCK=/tmp/veille-whisper.lock
 
 echo "=== $(date -u '+%Y-%m-%d %H:%M UTC')" >> "$LOG"
 nice -n 15 node "$DIR/app/radio/radio.mjs" --since 2 --max 4 --publier >> "$LOG" 2>&1 9>&-

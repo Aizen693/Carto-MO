@@ -28,6 +28,8 @@ export WHISPER_MODEL="$DIR/models/ggml-large-v3-turbo-q5_0.bin"
 # 53 s pour 90 s d'audio sur 2 cœurs (base transcrivait un journal en « ♪ ♪ ♪ »).
 export SONDE_WHISPER_MODEL="$DIR/models/ggml-small-q5_1.bin"
 export WHISPER_THREADS=2
+# Une seule transcription à la fois sur le VPS, tous scripts confondus.
+export WHISPER_LOCK=/tmp/veille-whisper.lock
 
 case "$MODE" in
   sonde)    ARGS="--sonde --secondes 45" ;;
