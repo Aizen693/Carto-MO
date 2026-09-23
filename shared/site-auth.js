@@ -804,6 +804,7 @@ async function notifyAuthState(session) {
     const loggedIn = !!session?.user;
     const email = session?.user?.email || null;
     window.algorAuthState = { loggedIn, email };
+    document.documentElement.classList.toggle('algor-connecte', loggedIn);
     document.querySelectorAll('.site-login, [data-algor-login]').forEach((el) => {
       if (el.closest('#root')) return; // géré par React via l'event
       if (el.hasAttribute('data-auth-icone')) {
