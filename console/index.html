@@ -1,63 +1,500 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light" data-accent="violet">
+<html lang="fr">
 <head>
 <meta charset="UTF-8" />
 <script src="/shared/i18n.js?v=20260916a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Console interne · Algor Access</title>
 <meta name="robots" content="noindex, nofollow" />
-
-<script>
-  /* Console interne (staff). Depuis la refonte v5, l'accueil n'embarque plus
-     l'application React : elle est servie ici et s'ouvre sur la vue Console
-     (#comptes et #rapports restent accessibles). */
-  if (!/^#(console|comptes|rapports)$/.test(location.hash)) history.replaceState(null, '', '#console');
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  try { window.scrollTo(0, 0); } catch (e) {}
-</script>
-
+<meta name="theme-color" content="#0F1013" />
+<!-- Console interne (équipe : rôle admin ou editor). Portée en v5 le 23/09/2026 depuis
+     l'accueil React (shared/home/home.jsx : ConsoleView, ComptesView, ArchivesView,
+     VeilleView, RapportsView). Vues par ancre : #console, #comptes, #archives, #veille, #rapports.
+     Le verrou ici cache l'interface ; la protection des données reste côté serveur
+     (RLS Supabase, trigger protect_profile_privileges, staff-gate de /admin/). -->
 <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
-
-<meta name="theme-color" content="#FFFFFF" />
-
-
-
-<link rel="stylesheet" href="/shared/home/fonts.css?v=20260707a" />
 <link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
+<link rel="stylesheet" href="/shared/v5/v5.css?v=20260922m" />
+<style>
+  [hidden] { display: none !important; }
+  .cs { max-width: 1240px; }
+  .verif { margin: 0; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 17px; color: var(--muted); }
+  .cs-etat { max-width: 640px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .cs-etat h2 { margin: 0; font-weight: 400; font-size: clamp(30px, 3vw, 42px); line-height: 1.1; letter-spacing: -0.025em; }
+  .cs-etat > p { margin: 16px 0 0; font-size: 18px; line-height: 1.55; color: var(--ink-2); }
+  .cs-etat .v5-actions { margin-top: 30px; }
 
-<link rel="stylesheet" href="/shared/home/styles.css?v=20260917a" />
+  /* Outils : liste à filets, comme les rubriques de l'accueil */
+  .outils .v5-row { cursor: pointer; }
+  .outils .v5-row__name { display: flex; align-items: center; gap: 18px; }
+  .outils .v5-row__name svg { width: clamp(26px, 2.4vw, 36px); height: clamp(26px, 2.4vw, 36px); flex: none; stroke-width: 1.3; }
+  .outils .v5-row:hover .v5-row__name { transform: translateX(10px); }
+  .outils .v5-row--bientot { cursor: default; color: var(--faint); }
+  .outils .v5-row--bientot:hover .v5-row__name { transform: none; }
+  .outils .v5-row--bientot .v5-row__d { color: var(--faint); }
+  .tag { display: inline-block; margin-left: 12px; padding: 5px 8px; font: 400 12px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase; border: 1px solid var(--stone); border-radius: 2px; color: var(--muted); vertical-align: middle; }
+  .tag--ink { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .tag--att { border-color: var(--ink-2); color: var(--ink); }
+
+  /* Recherche + compteur */
+  .barre { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+  .barre input { flex: 1 1 320px; min-width: 0; border: 0; background: none; font: 400 19px var(--sans); color: var(--ink); outline: none; }
+  .barre input::placeholder { color: var(--faint); }
+  .barre__n { font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .msg { margin: 0; padding: 18px 0; font-size: 17px; color: var(--muted); }
+  .msg--err { color: #A23B3B; }
+
+  /* Tableaux */
+  .tab-wrap { overflow-x: auto; }
+  .tab { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .tab th { padding: 10px 14px 10px 0; text-align: left; font-weight: 400; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--ink); white-space: nowrap; }
+  .tab td { padding: 13px 14px 13px 0; border-bottom: 1px solid var(--line); color: var(--ink-2); vertical-align: middle; }
+  .tab td:first-child { color: var(--ink); }
+  .tab .num { font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 13px; }
+  .tab tr.clic { cursor: pointer; }
+  .tab tr.clic:hover td, .tab tr.clic:focus-visible td { background: var(--band); }
+  .tab tr.clic:focus-visible { outline: none; }
+  .sel { font: 400 15px var(--sans); color: var(--ink); background: var(--paper); border: 1px solid var(--stone); border-radius: 2px; padding: 7px 10px; cursor: pointer; }
+  .sel:hover { border-color: var(--muted); }
+  .sel.is-premium { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .sel:disabled { opacity: .5; cursor: default; }
+  .zone { margin-top: clamp(40px, 5vw, 64px); }
+  .zone:first-of-type { margin-top: 0; }
+  .zone__h { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+  .zone__h h3 { margin: 0; font-weight: 400; font-size: clamp(26px, 2.4vw, 34px); letter-spacing: -0.02em; }
+  .zone__h span { font-size: 15px; color: var(--muted); }
+  .btn-s { font: 400 14px/1 var(--sans); padding: 9px 12px; border: 1px solid var(--ink); border-radius: 2px; color: var(--ink); background: none; cursor: pointer; white-space: nowrap; transition: background .2s ease, color .2s ease; }
+  .btn-s:hover { background: var(--ink); color: var(--paper); }
+  .btn-s:disabled { border-color: var(--stone); color: var(--faint); background: none; cursor: default; }
+  .pub-ok { font-size: 14px; color: #2F6B4F; }
+  .pub-err { display: block; margin-top: 6px; font-size: 13px; color: #A23B3B; }
+
+  /* Fenêtres (détail d'un point, rapport) */
+  .fen { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px; background: rgba(15, 16, 19, .62); }
+  .fen__box { position: relative; width: min(640px, 100%); max-height: calc(100vh - 48px); overflow: auto; background: var(--paper); border-radius: 4px; padding: clamp(24px, 3vw, 36px); box-shadow: 0 30px 80px -30px rgba(0,0,0,.5); }
+  .fen__x { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 2px; color: var(--ink); }
+  .fen__x:hover { background: var(--band); }
+  .fen__x svg { width: 18px; height: 18px; }
+  .fen h3 { margin: 0 40px 0 0; font-weight: 400; font-size: clamp(26px, 2.4vw, 32px); line-height: 1.15; letter-spacing: -0.02em; }
+  .fen__per { display: block; margin-top: 8px; font-size: 15px; color: var(--muted); }
+  .fen dl { margin: 22px 0 0; }
+  .fen dl div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 16px; padding: 11px 0; border-top: 1px solid var(--line); }
+  .fen dt { font-size: 14px; color: var(--muted); }
+  .fen dd { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink); overflow-wrap: anywhere; }
+  .fen--rapport .fen__box { width: min(900px, 100%); padding: 0; display: flex; flex-direction: column; overflow: hidden; }
+  .fen__barre { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .fen__barre b { font-weight: 400; font-size: 17px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fen__barre div { display: flex; gap: 8px; flex: none; }
+  .fen__scroll { overflow: auto; background: var(--band); padding: 24px; }
+  .page-a4 { background: #fff; max-width: 794px; margin: 0 auto; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+
+  /* Outil de veille : plein écran */
+  .veille-fs { position: fixed; inset: 0; z-index: 95; background: var(--night); }
+  .veille-fs iframe { width: 100%; height: 100%; border: 0; }
+  .veille-fs__barre { position: fixed; top: 14px; left: 14px; z-index: 96; }
+
+  @media (max-width: 720px) { .fen dl div { grid-template-columns: 1fr; gap: 4px; } }
+</style>
 </head>
-<body>
-<div id="root"></div>
+<body data-rubrique="console">
+<!-- v5:nav -->
+<div class="annonce" id="annonce" hidden>
+  <div class="annonce__in">
+    <p>Dernière note de veille : <a id="annonce-lien" href="/veille/"></a></p>
+    <button class="annonce__x" id="annonce-x" aria-label="Fermer le bandeau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+</div>
+<header class="nav" id="nav">
+  <div class="nav__bar">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <nav class="nav__links" aria-label="Rubriques"><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a></nav>
+    <div class="nav__right">
+      <span class="lang-slot"></span>
+      <button class="btn-login site-login" type="button">Connexion</button>
+      <a class="btn-rect" href="/offres/">Demander un accès</a>
+      <div class="sq">
+        <button type="button" class="sq__compte site-login" data-auth-icone aria-label="Connexion"><svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c1.2-3.8 4-5.6 7.5-5.6s6.3 1.8 7.5 5.6"/></svg><svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="8.5" r="3.8" fill="currentColor"/><path d="M3 20.5c1.2-3.8 3.8-5.6 7-5.6 1.3 0 2.5.3 3.5.9" fill="none"/><path d="M15.5 18l2.2 2.2 4-4.4"/></svg></button>
+        <button type="button" id="ouvrir-recherche" aria-label="Rechercher une zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
+        <button type="button" id="ouvrir-menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+      </div>
+    </div>
+  </div>
+</header>
 
-<!-- Ciel étoilé clair, commun au site (canvas fixe derrière le contenu) -->
-<script src="/shared/home/skyfield.js?v=20260915q"></script>
+<div class="veil" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <nav class="veil__body">
+    <div class="veil__main"><a href="/">Plateforme</a><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+    <div class="veil__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+    <div class="veil__col"><h3>Algor Access</h3><button class="veil__compte site-login" type="button">Connexion</button><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+  </nav>
+</div>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<div class="veil veil--search" id="recherche" role="dialog" aria-modal="true" aria-label="Recherche">
+  <div class="veil__top">
+    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <button class="veil__x" data-fermer aria-label="Fermer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <div class="veil__body">
+    <form class="search-form" action="/demo/">
+      <label for="q">Essayez la démo sur n'importe quelle zone du monde</label>
+      <input id="q" name="q" type="search" placeholder="Bogotá" autocomplete="off" required>
+      <p>Indiquez une ville, une région ou un pays : vous verrez le rendu de nos cartes sur des données fictives.</p>
+    </form>
+  </div>
+</div>
+<!-- /v5:nav -->
 
-<!-- Globe interactif : D3 + topojson (geometrie reelle des pays) -->
-<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<main>
+  <section class="v5-phero" data-nav="dark" data-v5-trame data-hachures="7,0">
+    <h1 id="titre">Console interne</h1>
+    <p class="v5-phero__lede" id="lede">L'outil de travail de l'équipe Algor Int : cartographie, comptes clients, archives, veille et rapports.</p>
+    <div class="v5-actions" id="retour" hidden>
+      <a class="btn-outline" href="#console"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6"/></svg>Console</a>
+    </div>
+  </section>
 
-<!-- Mouvement de l'accueil : GSAP ScrollTrigger + Lenis (versions epinglees) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" crossorigin="anonymous"></script>
+  <section class="v5-sec" data-nav="light" aria-label="Console">
+    <div class="cs">
+      <p class="verif" id="verif" role="status" aria-live="polite">Vérification de l'accès…</p>
 
-<!-- JS precompile depuis shared/home/*.jsx (sources). Recompiler apres edition. -->
-<script src="/shared/home/data.js?v=20260528c"></script>
-<script src="/shared/home/earth.js?v=20260914c"></script>
-<script src="/shared/home/globe.js?v=20260915i"></script>
-<script src="/shared/home/home.js?v=20260922a"></script>
-<script src="/shared/home/sections.js?v=20260914d"></script>
-<script src="/shared/home/panel.js?v=20260629d"></script>
-<script src="/shared/home/platform.js?v=20260629d"></script>
-<script src="/shared/home/motion.js?v=20260915i"></script>
-<script src="/shared/home/app.js?v=20260916a"></script>
-<script src="/shared/home/sitenav.js?v=20260622a"></script>
+      <div class="cs-etat" id="v-login" hidden>
+        <h2>Connectez-vous avec votre compte interne</h2>
+        <p>Cet espace est réservé à l'équipe Algor Int.</p>
+        <div class="v5-actions"><a class="btn-rect btn-rect--ink" href="#" data-algor-login>Se connecter</a></div>
+      </div>
 
-<!-- Bouton « Connexion » du header : ouvre l'overlay Supabase -->
+      <div class="cs-etat" id="v-refus" hidden>
+        <h2>Accès réservé à l'équipe</h2>
+        <p>Votre compte n'a pas le rôle nécessaire pour ouvrir la console. Demandez à un administrateur de vous passer en éditeur.</p>
+        <div class="v5-actions"><a class="btn-outline" href="/">Retour au site</a></div>
+      </div>
+
+      <!-- Accueil de la console -->
+      <ul class="v5-rows v5-rows--m outils" id="v-console" hidden></ul>
+
+      <!-- Comptes clients -->
+      <div id="v-comptes" hidden>
+        <div class="barre"><input id="q-comptes" type="search" placeholder="Rechercher un compte par email ou nom" aria-label="Rechercher un compte" /><span class="barre__n" id="n-comptes"></span></div>
+        <p class="msg" id="m-comptes">Chargement des comptes…</p>
+        <div class="tab-wrap"><table class="tab" id="t-comptes" hidden><thead><tr><th>Email</th><th>Inscrit le</th><th>Plan</th><th>Rôle</th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <!-- Archives des points -->
+      <div id="v-archives" hidden>
+        <div class="barre"><input id="q-archives" type="search" placeholder="Rechercher un point : nom, description, période, théâtre" aria-label="Rechercher un point" /><span class="barre__n" id="n-archives"></span></div>
+        <p class="msg" id="m-archives">Chargement des points…</p>
+        <div id="z-archives"></div>
+      </div>
+
+      <!-- Rapports de veille -->
+      <div id="v-rapports" hidden>
+        <div class="barre"><input id="q-rapports" type="search" placeholder="Rechercher un rapport : titre, date, théâtre" aria-label="Rechercher un rapport" /><span class="barre__n" id="n-rapports"></span></div>
+        <p class="msg" id="m-rapports">Chargement des rapports…</p>
+        <div class="tab-wrap"><table class="tab" id="t-rapports" hidden><thead><tr><th>Titre</th><th>Théâtre</th><th>Date</th><th>HUMINT</th><th>OSINT</th><th>Carte</th><th></th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="fen" id="fen" hidden role="dialog" aria-modal="true"></div>
+<div class="veille-fs" id="veille-fs" hidden>
+  <div class="veille-fs__barre"><a class="btn-rect btn-rect--ink" href="#console">Retour à la console</a></div>
+</div>
+
+<!-- v5:foot -->
+<footer class="foot" data-nav="light">
+  <div class="foot__id">
+    <p>© 2026 Algor Access</p>
+    <p>Solution souveraine française, données hébergées en Europe.</p>
+    <hr>
+    <div class="foot__pills">
+      <button class="pill site-login" type="button">Connexion</button>
+      <a class="pill" href="/offres/">Les offres</a>
+      <a class="pill" href="/demo/">La démo</a>
+    </div>
+  </div>
+  <div class="foot__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
+  <div class="foot__col"><h3>Plateforme</h3><a href="/">Plateforme</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
+  <div class="foot__col"><h3>Société</h3><a href="/a-propos/">À propos</a><a href="/offres/">Offres</a><a href="/contact/">Contact</a></div>
+  <div class="foot__col"><h3>Informations</h3><a href="/mentions-legales/">Mentions légales</a><a href="/confidentialite/">Confidentialité</a></div>
+</footer>
+<!-- /v5:foot -->
+
 <script type="module" src="/shared/site-auth.js?v=20260923a"></script>
+<script src="/shared/v5/chrome.js?v=20260922e"></script>
+<script type="module">
+  const SB_URL = 'https://lwgrjdpuagnvvzmdbyzb.supabase.co';
+  const SB_KEY = 'sb_publishable_xxnL12zd9o5N30y1-Oi-0Q_YGYKMjh2';
+  const VEILLE_URL = 'https://carto-mo-d95ewgm9x6zzfugtcpdst8.streamlit.app/?embed=true';
+  const ZONES = { 'moyen-orient': 'Moyen-Orient', 'sahel': 'Sahel', 'rdc': 'RDC', 'madagascar': 'Madagascar', 'afrique': 'Afrique Maritime', 'asie-sud': 'Asie du Sud', 'cyber': 'Cyber' };
+  const X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>';
+  const ico = (d) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+
+  const OUTILS = [
+    { nom: 'Carto', href: '/admin/', d: 'Édition des points, acteurs et calques des théâtres. Ouvre la console d’administration cartographique.', i: '<path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/>' },
+    { nom: 'Comptes', href: '#comptes', d: 'Validation des inscriptions : passer un compte en Premium lui ouvre les théâtres. Réservé aux administrateurs.', i: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>' },
+    { nom: 'Archives', href: '#archives', d: 'Tous les points cartographiés des théâtres, conservés en base, en tableau par théâtre.', i: '<path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/>' },
+    { nom: 'Outil de veille', href: '#veille', d: 'Agrégateur d’articles OSINT : chargement, filtres, scoring et exports.', i: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>' },
+    { nom: 'Veilles abonnés', href: '/veille/', d: 'Les deux veilles en intégralité, géopolitique et cyber, telles que les voient les abonnés premium.', i: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>' },
+    { nom: 'Rapports', href: '#rapports', d: 'Bulletins de veille sécurité par théâtre : lecture du rapport complet, export PDF et publication sur la carte.', i: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/><path d="M9 13h6M9 17h6"/>' },
+    { nom: 'Cloud', href: '/cloud/', d: 'Plateforme collaborative de l’équipe : sources, documents, suivi client, comptes rendus et synthèses.', i: '<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>' },
+    { nom: 'Dossiers', bientot: true, d: 'Dossiers d’analyse internes. Accès sécurisé en cours de refonte.', i: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>' },
+    { nom: 'Graph', bientot: true, d: 'Visualisation des réseaux et des relations en graphes.', i: '<circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M8.2 7.3l7.6 3.4M8.2 16.7l7.6-3.4"/>' },
+  ];
+  const VUES = {
+    console: { t: 'Console interne', l: 'L’outil de travail de l’équipe Algor Int : cartographie, comptes clients, archives, veille et rapports.' },
+    comptes: { t: 'Comptes clients', l: 'Validez les inscriptions : passer un compte en Premium lui ouvre les théâtres. Un nouveau compte arrive en Gratuit, verrouillé, jusqu’à validation.' },
+    archives: { t: 'Archives des points', l: 'Tous les points cartographiés, regroupés par théâtre. Conservés en base même après leur retrait des cartes.' },
+    rapports: { t: 'Rapports de veille', l: 'Bulletins de veille sécurité par théâtre, corroborés et datés. Lecture du rapport complet et export PDF.' },
+    veille: { t: 'Outil de veille', l: '' },
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const dateFR = (v, long) => { if (!v) return '·'; const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(v) ? v + 'T00:00:00' : v); return isNaN(d) ? v : d.toLocaleDateString('fr-FR', long ? { day: '2-digit', month: 'long', year: 'numeric' } : undefined); };
+
+  async function client() {
+    for (let i = 0; i < 40; i++) { const c = window.algorAuth && window.algorAuth.supabase; if (c) return c; await new Promise((ok) => setTimeout(ok, 250)); }
+    return null;
+  }
+
+  /* ── Accès : équipe = rôle admin ou editor ── */
+  let c = null, role = null, verifie = false;
+  async function verifierAcces() {
+    c = await client();
+    role = null;
+    if (c) {
+      try {
+        const { data: s } = await c.auth.getSession();
+        const uid = s && s.session && s.session.user && s.session.user.id;
+        if (uid) { const r = await c.from('profiles').select('role').eq('id', uid).single(); role = (r.data && r.data.role) || 'viewer'; }
+      } catch (e) { role = role || 'viewer'; }
+    }
+    verifie = true;
+    router();
+  }
+  const equipe = () => role === 'admin' || role === 'editor';
+
+  /* ── Routage par ancre ── */
+  const charge = {};
+  function router() {
+    let v = (location.hash || '#console').slice(1);
+    if (!VUES[v]) v = 'console';
+    const info = VUES[v];
+    $('titre').textContent = info.t; $('lede').textContent = info.l; $('lede').hidden = !info.l;
+    document.title = info.t + ' · Algor Access';
+    $('retour').hidden = v === 'console';
+    $('veille-fs').hidden = true;
+    for (const id of ['v-login', 'v-refus', 'v-console', 'v-comptes', 'v-archives', 'v-rapports']) $(id).hidden = true;
+    if (!verifie) { $('verif').hidden = false; return; }
+    $('verif').hidden = true;
+    if (!role) { $('v-login').hidden = false; return; }
+    if (!equipe()) { $('v-refus').hidden = false; return; }
+    if (v === 'veille') { ouvrirVeille(); v = 'console'; $('retour').hidden = true; }
+    $('v-' + v).hidden = false;
+    if (!charge[v]) { charge[v] = true; ({ console: rendreOutils, comptes: chargerComptes, archives: chargerArchives, rapports: chargerRapports })[v](); }
+    window.scrollTo(0, 0);
+  }
+  addEventListener('hashchange', router);
+
+  /* ── Accueil ── */
+  function rendreOutils() {
+    $('v-console').innerHTML = OUTILS.map((o) => {
+      const tete = '<span class="v5-row__name">' + ico(o.i) + esc(o.nom) + (o.bientot ? '<span class="tag">Bientôt</span>' : '') + '</span><span class="v5-row__d">' + esc(o.d) + '</span>';
+      return o.bientot ? '<li class="v5-row v5-row--bientot" aria-disabled="true">' + tete + '</li>' : '<li><a class="v5-row" href="' + o.href + '">' + tete + '</a></li>';
+    }).join('');
+  }
+
+  /* ── Outil de veille (Streamlit) plein écran ── */
+  function ouvrirVeille() {
+    const fs = $('veille-fs');
+    if (!fs.querySelector('iframe')) { const f = document.createElement('iframe'); f.src = VEILLE_URL; f.title = 'Outil de veille OSINT Algor Int'; fs.prepend(f); }
+    fs.hidden = false;
+  }
+
+  /* ── Comptes ── */
+  let comptes = [];
+  const aAcces = (u) => u.role === 'admin' || u.role === 'editor' || (u.plan || 'free') === 'premium';
+  async function chargerComptes() {
+    if (role !== 'admin') { $('m-comptes').textContent = 'Accès réservé aux administrateurs.'; $('m-comptes').className = 'msg msg--err'; return; }
+    const { data, error } = await c.from('profiles').select('id,email,display_name,role,plan,created_at,last_login').order('created_at', { ascending: false });
+    if (error) { $('m-comptes').textContent = 'Erreur : ' + error.message; $('m-comptes').className = 'msg msg--err'; return; }
+    comptes = data || []; rendreComptes();
+  }
+  function rendreComptes() {
+    const q = $('q-comptes').value.toLowerCase().trim();
+    const vis = comptes.filter((u) => !q || (u.email || '').toLowerCase().includes(q) || (u.display_name || '').toLowerCase().includes(q));
+    const att = comptes.filter((u) => !aAcces(u)).length;
+    $('n-comptes').textContent = comptes.length + ' compte' + (comptes.length > 1 ? 's' : '') + (att ? ' · ' + att + ' en attente' : '');
+    $('m-comptes').textContent = vis.length ? '' : 'Aucun compte ne correspond.'; $('m-comptes').className = 'msg'; $('m-comptes').hidden = !!vis.length;
+    $('t-comptes').hidden = !vis.length;
+    $('t-comptes').tBodies[0].innerHTML = vis.map((u) => {
+      const prem = (u.plan || 'free') === 'premium';
+      return '<tr data-id="' + esc(u.id) + '"><td>' + esc(u.email) + (aAcces(u) ? '' : '<span class="tag tag--att">En attente</span>') + '</td><td class="num">' + esc(dateFR(u.created_at)) + '</td>'
+        + '<td><select class="sel' + (prem ? ' is-premium' : '') + '" data-f="plan" aria-label="Plan"><option value="free"' + (prem ? '' : ' selected') + '>Gratuit</option><option value="premium"' + (prem ? ' selected' : '') + '>Premium</option></select></td>'
+        + '<td><select class="sel" data-f="role" aria-label="Rôle">' + ['viewer', 'editor', 'admin'].map((r) => '<option value="' + r + '"' + ((u.role || 'viewer') === r ? ' selected' : '') + '>' + r.charAt(0).toUpperCase() + r.slice(1) + '</option>').join('') + '</select></td></tr>';
+    }).join('');
+  }
+  $('q-comptes').addEventListener('input', rendreComptes);
+  $('t-comptes').addEventListener('change', async (e) => {
+    const s = e.target.closest('select'); if (!s) return;
+    const u = comptes.find((x) => x.id === s.closest('tr').dataset.id); if (!u) return;
+    const f = s.dataset.f, val = s.value, avant = u[f];
+    if (avant === val) return;
+    s.disabled = true; u[f] = val;
+    const { error } = await c.from('profiles').update({ [f]: val }).eq('id', u.id);
+    if (error) { u[f] = avant; alert('Échec de la mise à jour : ' + (error.message || 'réessayez')); rendreComptes(); return; }
+    // Accorder Premium confirme aussi l'email : sinon un compte non confirmé reste bloqué à la connexion.
+    if (f === 'plan' && val === 'premium') {
+      try {
+        const { data: s2 } = await c.auth.getSession();
+        const r = await fetch(SB_URL + '/functions/v1/admin-confirm-email', { method: 'POST', headers: { Authorization: 'Bearer ' + s2.session.access_token, 'Content-Type': 'application/json' }, body: JSON.stringify({ targetId: u.id }) });
+        if (!r.ok) { const d = await r.json().catch(() => ({})); alert('Premium accordé, mais la confirmation d’email a échoué : ' + (d.error || r.status) + '. La personne devra confirmer via le lien reçu par mail.'); }
+      } catch (e2) { alert('Premium accordé, mais la confirmation d’email n’a pas pu être envoyée. La personne devra confirmer via le lien reçu par mail.'); }
+    }
+    rendreComptes();
+  });
+
+  /* ── Archives ── */
+  let points = [];
+  async function chargerArchives() {
+    try {
+      const { data: s } = await c.auth.getSession();
+      const h = { apikey: SB_KEY }; if (s && s.session) h.Authorization = 'Bearer ' + s.session.access_token;
+      for (let off = 0; ; off += 1000) {
+        const url = SB_URL + '/rest/v1/points?select=id,zone,name,description,period,coordinates,color,casualties,deleted,created_at&order=zone.asc,created_at.desc&offset=' + off + '&limit=1000';
+        let r = await fetch(url, { headers: h });
+        if (r.status === 401 && h.Authorization) { delete h.Authorization; r = await fetch(url, { headers: h }); }   // jeton refusé : lecture publique comme avant
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const lot = await r.json(); points.push(...lot); if (lot.length < 1000) break;
+      }
+      rendreArchives();
+    } catch (e) { $('m-archives').textContent = 'Erreur : ' + e.message; $('m-archives').className = 'msg msg--err'; }
+  }
+  function rendreArchives() {
+    const q = $('q-archives').value.toLowerCase().trim();
+    const vis = points.filter((p) => !q || [p.name, p.description, p.period, ZONES[p.zone] || p.zone].some((f) => String(f || '').toLowerCase().includes(q)));
+    $('n-archives').textContent = vis.length + ' point' + (vis.length > 1 ? 's' : '');
+    $('m-archives').hidden = !!vis.length; $('m-archives').className = 'msg';
+    $('m-archives').textContent = points.length ? 'Aucun résultat pour « ' + $('q-archives').value + ' ».' : 'Aucun point en base.';
+    const g = {}; vis.forEach((p) => (g[p.zone] = g[p.zone] || []).push(p));
+    $('z-archives').innerHTML = Object.keys(g).sort().map((z) => '<div class="zone"><div class="zone__h"><h3>' + esc(ZONES[z] || z) + '</h3><span>' + g[z].length + ' points</span></div>'
+      + '<div class="tab-wrap"><table class="tab"><thead><tr><th>Nom</th><th>Période</th><th>Latitude</th><th>Longitude</th><th>Victimes</th><th>Statut</th></tr></thead><tbody>'
+      + g[z].map((p) => { const co = Array.isArray(p.coordinates) ? p.coordinates : []; return '<tr class="clic" tabindex="0" data-id="' + esc(p.id) + '"><td>' + esc(p.name || '·') + '</td><td>' + esc(p.period || '·') + '</td><td class="num">' + (co[1] != null ? Number(co[1]).toFixed(4) : '·') + '</td><td class="num">' + (co[0] != null ? Number(co[0]).toFixed(4) : '·') + '</td><td class="num">' + (p.casualties || 0) + '</td><td>' + (p.deleted ? '<span class="tag">Archivé</span>' : '<span class="tag tag--ink">Actif</span>') + '</td></tr>'; }).join('')
+      + '</tbody></table></div></div>').join('');
+  }
+  $('q-archives').addEventListener('input', rendreArchives);
+  const ouvrirPoint = (tr) => { const p = points.find((x) => String(x.id) === tr.dataset.id); if (p) detailPoint(p); };
+  $('z-archives').addEventListener('click', (e) => { const tr = e.target.closest('tr.clic'); if (tr) ouvrirPoint(tr); });
+  $('z-archives').addEventListener('keydown', (e) => { const tr = e.target.closest('tr.clic'); if (tr && e.key === 'Enter') ouvrirPoint(tr); });
+
+  function champsDesc(raw) {
+    if (!raw || raw === 'null') return null;
+    const r = {};
+    raw.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').split('\n').forEach((l) => {
+      const m = l.match(/^([^:]+):\s*(.+)$/); if (!m) return;
+      const k = m[1].trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''), v = m[2].trim();
+      if (k === 'date') r.Date = v; else if (k === 'pays') r.Pays = v; else if (k === 'evenement') r['Événement'] = v; else if (k === 'detail') r['Détail'] = v;
+    });
+    return Object.keys(r).length ? r : null;
+  }
+  function detailPoint(p) {
+    const co = Array.isArray(p.coordinates) ? p.coordinates : [];
+    const d = champsDesc(p.description);
+    const lignes = (d ? Object.entries(d) : (p.description && p.description !== 'null' ? [['Description', p.description]] : []))
+      .concat([['Théâtre', ZONES[p.zone] || p.zone], ['Coordonnées', (co[1] != null ? Number(co[1]).toFixed(5) : '·') + ', ' + (co[0] != null ? Number(co[0]).toFixed(5) : '·')], ['Victimes', String(p.casualties || 0)], ['Statut', p.deleted ? 'Archivé (retiré des cartes)' : 'Actif'], ['Ajouté le', dateFR(p.created_at, true)]]);
+    fenetre('<div class="fen__box"><button class="fen__x" type="button" data-fermer aria-label="Fermer">' + X + '</button><h3>' + esc(p.name || 'Point sans nom') + '</h3>' + (p.period ? '<span class="fen__per">' + esc(p.period) + '</span>' : '')
+      + '<dl>' + lignes.map(([k, v]) => '<div><dt>' + esc(k) + '</dt><dd>' + esc(v) + '</dd></div>').join('') + '</dl></div>');
+  }
+
+  /* ── Fenêtre commune ── */
+  function fenetre(html, classe) {
+    const f = $('fen'); f.className = 'fen' + (classe ? ' ' + classe : ''); f.innerHTML = html; f.hidden = false;
+    const x = f.querySelector('[data-fermer]'); if (x) x.focus();
+  }
+  function fermer() { $('fen').hidden = true; $('fen').innerHTML = ''; }
+  $('fen').addEventListener('click', (e) => { if (e.target === $('fen') || e.target.closest('[data-fermer]')) fermer(); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('fen').hidden) fermer(); });
+
+  /* ── Rapports ── */
+  let rapports = []; const pub = {};
+  async function telecharger(chemin) {
+    await c.auth.getSession();
+    const res = await Promise.race([c.storage.from('zones').download(chemin), new Promise((_, no) => setTimeout(() => no(new Error('Délai dépassé, réessayez')), 15000))]);
+    if (res.error) throw res.error;
+    return res.data.text();
+  }
+  async function chargerRapports() {
+    try { const d = JSON.parse(await telecharger('rapports/index.json')); rapports = Array.isArray(d) ? d : []; rendreRapports(); }
+    catch (e) { $('m-rapports').textContent = 'Erreur : ' + (e.message || e); $('m-rapports').className = 'msg msg--err'; }
+  }
+  function rendreRapports() {
+    const q = $('q-rapports').value.toLowerCase().trim();
+    const vis = rapports.filter((r) => !q || [r.titre, r.date, ZONES[r.zone] || r.zone].some((f) => String(f || '').toLowerCase().includes(q)));
+    $('n-rapports').textContent = vis.length + ' rapport' + (vis.length > 1 ? 's' : '');
+    $('m-rapports').hidden = !!vis.length; $('m-rapports').className = 'msg';
+    $('m-rapports').textContent = rapports.length ? 'Aucun résultat pour « ' + $('q-rapports').value + ' ».' : 'Aucun rapport disponible.';
+    $('t-rapports').hidden = !vis.length;
+    $('t-rapports').tBodies[0].innerHTML = vis.map((r) => {
+      const st = pub[r.fichier] || {};
+      const carte = st.state === 'done' ? '<span class="pub-ok" title="' + esc(st.msg) + '">Publié</span>'
+        : '<button class="btn-s" type="button" data-pub="' + esc(r.fichier) + '"' + (st.state === 'busy' ? ' disabled' : '') + '>' + (st.state === 'busy' ? 'Publication…' : st.state === 'error' ? 'Réessayer' : 'Publier') + '</button>' + (st.state === 'error' ? '<span class="pub-err">' + esc(st.msg) + '</span>' : '');
+      return '<tr><td>' + esc(r.titre || '·') + '</td><td>' + esc(ZONES[r.zone] || r.zone || '·') + '</td><td class="num">' + esc(dateFR(r.date, true)) + '</td><td class="num">' + (r.nb_humint ?? 0) + '</td><td class="num">' + (r.nb_osint ?? 0) + '</td><td>' + carte + '</td><td><button class="btn-s" type="button" data-voir="' + esc(r.fichier) + '">Voir</button></td></tr>';
+    }).join('');
+  }
+  $('q-rapports').addEventListener('input', rendreRapports);
+  $('t-rapports').addEventListener('click', async (e) => {
+    const bv = e.target.closest('[data-voir]'), bp = e.target.closest('[data-pub]');
+    if (bv) voirRapport(rapports.find((r) => r.fichier === bv.dataset.voir));
+    if (bp) publier(rapports.find((r) => r.fichier === bp.dataset.pub));
+  });
+  function barreRapport(r, pdf) {
+    return '<div class="fen__barre"><b>' + esc(r.titre || 'Rapport') + '</b><div>' + (pdf ? '<button class="btn-s" type="button" id="pdf">Télécharger PDF</button>' : '') + '<button class="btn-s" type="button" data-fermer>Fermer</button></div></div>';
+  }
+  async function voirRapport(r) {
+    if (!r) return;
+    fenetre('<div class="fen__box">' + barreRapport(r) + '<div class="fen__scroll"><p class="msg">Chargement du rapport…</p></div></div>', 'fen--rapport');
+    try {
+      const html = await telecharger(r.fichier);
+      fenetre('<div class="fen__box">' + barreRapport(r, true) + '<div class="fen__scroll"><div class="page-a4" id="page-a4"></div></div></div>', 'fen--rapport');
+      $('page-a4').innerHTML = html;   // rapport HTML autonome produit par notre chaîne n8n (bucket privé)
+      $('pdf').addEventListener('click', () => exporterPdf(r));
+    } catch (e) {
+      fenetre('<div class="fen__box">' + barreRapport(r) + '<div class="fen__scroll"><p class="msg msg--err">' + esc(e.message || 'Rapport indisponible') + '</p></div></div>', 'fen--rapport');
+    }
+  }
+  function html2pdf() {
+    if (window.html2pdf) return Promise.resolve(window.html2pdf);
+    return window.__h2p || (window.__h2p = new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js'; s.onload = () => ok(window.html2pdf); s.onerror = () => no(new Error('Chargement html2pdf impossible')); document.head.appendChild(s); }));
+  }
+  async function exporterPdf(r) {
+    const b = $('pdf'); b.disabled = true; b.textContent = 'Génération…';
+    try { const lib = await html2pdf(); await lib().set({ margin: 8, filename: (r.fichier || 'rapport.html').split('/').pop().replace('.html', '.pdf'), html2canvas: { scale: 2 }, jsPDF: { format: 'a4' } }).from($('page-a4')).save(); }
+    catch (e) { alert('Échec de la génération du PDF : ' + (e.message || 'réessayez')); }
+    finally { if ($('pdf')) { $('pdf').disabled = false; $('pdf').textContent = 'Télécharger PDF'; } }
+  }
+  // Publie sur la carte les points en attente d'un rapport (fonction publier-carte, côté serveur).
+  async function publier(r) {
+    if (!r) return;
+    pub[r.fichier] = { state: 'busy' }; rendreRapports();
+    try {
+      await c.auth.getSession();
+      const { data, error } = await c.functions.invoke('publier-carte', { body: { zone: r.zone, date: r.date } });
+      if (error) { let m = error.message; try { const x = await error.context.json(); if (x && x.error) m = x.error; } catch (e2) {} throw new Error(m); }
+      if (data && data.error) throw new Error(data.error);
+      pub[r.fichier] = { state: 'done', msg: ((data && data.ajoutes) ?? 0) + ' point(s) publié(s)' };
+    } catch (e) { pub[r.fichier] = { state: 'error', msg: e.message || 'Échec de publication' }; }
+    rendreRapports();
+  }
+
+  router();
+  verifierAcces();
+  addEventListener('algorAuthStateChanged', verifierAcces);
+  addEventListener('algorAuthReady', verifierAcces);
+</script>
 </body>
 </html>
