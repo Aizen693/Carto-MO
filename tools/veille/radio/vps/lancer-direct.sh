@@ -16,7 +16,9 @@ cd "$DIR" || exit 1
 exec 9>"/tmp/veille-radio-$MODE.lock"
 flock -n 9 || exit 0
 
-[ -f "$LOG" ] && tail -n 3000 "$LOG" > "$LOG.tmp" && mv "$LOG.tmp" "$LOG"
+# Raccourci SUR PLACE (cat >, pas mv) : un mv remplace le fichier, et une capture
+# longue encore en cours écrirait dans l'ancien, invisible (journal perdu le 23/09).
+[ -f "$LOG" ] && tail -n 3000 "$LOG" > "$LOG.tmp" && cat "$LOG.tmp" > "$LOG" && rm -f "$LOG.tmp"
 
 lire() { grep "^$1=" "$2" 2>/dev/null | cut -d= -f2- | tr -d '"'"'"' \r'; }
 MISTRAL_API_KEY=$(lire MISTRAL_API_KEY /docker/hermes-agent/data/veille/.env)

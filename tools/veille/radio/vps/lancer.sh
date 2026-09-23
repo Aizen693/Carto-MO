@@ -14,7 +14,9 @@ cd "$DIR" || exit 1
 exec 9>/tmp/veille-radio.lock
 flock -n 9 || exit 0
 
-[ -f "$LOG" ] && tail -n 2000 "$LOG" > "$LOG.tmp" && mv "$LOG.tmp" "$LOG"
+# Raccourci SUR PLACE (cat >, pas mv) : un mv remplace le fichier, et une capture
+# longue encore en cours écrirait dans l'ancien, invisible (journal perdu le 23/09).
+[ -f "$LOG" ] && tail -n 2000 "$LOG" > "$LOG.tmp" && cat "$LOG.tmp" > "$LOG" && rm -f "$LOG.tmp"
 
 # Cle Mistral relue a chaque passage dans le fichier de la veille Hermes (mis a
 # jour par rotate-mistral-key.sh), jamais copiee. Identifiants Supabase lus dans
