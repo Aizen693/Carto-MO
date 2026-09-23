@@ -11,6 +11,8 @@ import { parseFeed } from '../lib/rss.mjs';
 import { classify, extractToll, normalize } from '../lib/classify.mjs';
 import { geocode, fromGeotag, loadGazetteer } from '../lib/geocode.mjs';
 import { parseOutput as parseIg } from '../lib/instagram.mjs';
+import { jugerSegment, fenetresAOuvrir, heureLocale, proposerFenetres } from '../radio/live.mjs';
+import { extractIsGrounded, frenchAudio } from '../radio/radio.mjs';
 import { buildFeature, mergeCollection, makeRef } from '../lib/geojson.mjs';
 import { parseSearch, mapVideo, toIso, hasKey } from '../lib/tiktok.mjs';
 import { decide, applyPrune, summarize } from '../lib/prune.mjs';
@@ -116,6 +118,44 @@ eq(fromGeotag(igItems[1].geotag, 'sahel', mini), null, 'geotag hors zone (Paris)
 const igF = buildFeature(igItems[0], classify(igItems[0]), igGeo, { zone: 'sahel' });
 eq(igF.properties.Canal, 'Instagram @veille_test', 'canal Instagram');
 eq(igF.geometry.coordinates[1], 15.29, 'point place au geotag');
+
+console.log('\n# Radio : garde-fous des segments');
+const journal = "Bonsoir et bienvenue dans ce journal. Les forces armées maliennes ont été la cible de plusieurs attaques ce week-end à Dioura et Sévaré. Le gouvernement a tenu une réunion de crise ce lundi à Bamako. Dans la région de Mopti, les déplacés affluent vers les sites d'accueil déjà saturés, selon les autorités locales qui appellent à une aide d'urgence. Le ministre de la Défense a annoncé des renforts dans le centre du pays, tandis que les organisations humanitaires signalent des difficultés d'accès aux zones touchées par les combats depuis plusieurs semaines.";
+eq(jugerSegment(journal, { duree_s: 60, langue: 'fr', proba: 0.98 }).ok, true, 'journal en français retenu');
+eq(jugerSegment('Terima kasih kerana menonton! Terima kasih kerana menonton!', { duree_s: 60, langue: 'ms', proba: 0.36 }).ok, false, 'hallucination malaise sur musique rejetée');
+eq(jugerSegment('Oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh oh', { duree_s: 60, langue: 'fr', proba: 0.9 }).raison, 'boucle répétitive', 'boucle « oh oh oh » rejetée');
+eq(jugerSegment('*music* *music*', { duree_s: 60, langue: 'fr', proba: 0.9 }).raison, 'peu de parole (musique ou silence)', 'musique rejetée');
+eq(jugerSegment(journal, { duree_s: 60, langue: 'sw', proba: 0.7 }).raison, 'langue sw', 'langue nationale lue comme swahili rejetée');
+eq(jugerSegment(journal, { duree_s: 60, langue: 'fr', proba: 0.4 }).ok, false, 'détection de langue incertaine rejetée');
+const avecGen = jugerSegment(journal + ' Merci d\'avoir regardé cette vidéo.', { duree_s: 60, langue: 'fr', proba: 0.95 });
+eq(avecGen.ok, true, 'une phrase de générique n invalide pas un journal');
+eq(/regardé cette vidéo/.test(avecGen.texte), false, 'la phrase de générique est retirée du texte');
+eq(jugerSegment('Terima kasih kerana menonton. Sous-titres réalisés par la communauté. Bonjour.', { duree_s: 10, langue: 'fr', proba: 0.9 }).raison, 'générique halluciné', 'segment fait surtout de génériques rejeté');
+eq(/www/.test(jugerSegment(journal + ' Retrouvez-nous sur www.kledu.com.', { duree_s: 60, langue: 'fr', proba: 0.95 }).texte), true, 'l adresse web de la station est gardée');
+
+console.log('\n# Radio : fenêtres de capture');
+const stTest = { tz: 'Africa/Niamey', fenetres: [{ debut: '13:00', minutes: 20 }, { debut: '20:00', minutes: 15 }] };
+// 12:02 UTC = 13:02 à Niamey (UTC+1)
+eq(heureLocale(new Date('2026-09-23T12:02:00Z'), 'Africa/Niamey'), '13:02', 'heure locale Niamey');
+eq(fenetresAOuvrir(stTest, new Date('2026-09-23T12:02:00Z')).length, 1, 'fenêtre de 13 h ouverte à 13 h 02');
+eq(fenetresAOuvrir(stTest, new Date('2026-09-23T12:06:00Z')).length, 0, 'fenêtre non relancée à 13 h 06');
+eq(fenetresAOuvrir(stTest, new Date('2026-09-23T11:58:00Z')).length, 0, 'pas avant l heure');
+
+const sondes = [
+  { ok: true, genre: 'journal', station: 'kledu', heure_locale: '07:04', date: '2026-09-23T07:04Z' },
+  { ok: true, genre: 'journal', station: 'kledu', heure_locale: '07:05', date: '2026-09-24T07:05Z' },
+  { ok: true, genre: 'journal', station: 'kledu', heure_locale: '13:04', date: '2026-09-23T13:04Z' },
+  { ok: true, genre: 'musique', station: 'kledu', heure_locale: '09:04', date: '2026-09-23T09:04Z' },
+  { ok: true, genre: 'musique', station: 'kledu', heure_locale: '09:04', date: '2026-09-24T09:04Z' }
+];
+const prop = proposerFenetres(sondes, { min: 2 });
+eq(prop.kledu && prop.kledu.length, 1, 'seule l heure vue en journal deux jours différents est proposée');
+eq(prop.kledu && prop.kledu[0].debut, '07:00', 'fenêtre calée sur l heure pile');
+
+console.log('\n# Radio : studios');
+eq(extractIsGrounded('Les forces armées maliennes ont été la cible de plusieurs attaques ce week-end', journal), true, 'extrait présent dans la transcription');
+eq(extractIsGrounded('Les rebelles ont pris le contrôle total de la ville de Gao hier soir', journal), false, 'extrait inventé rejeté');
+eq(frenchAudio(['https://x/Yafa-soir-21-09-26-Francais.mp3', 'https://x/Yafa-soir-21-09-26-Dioula.mp3'], '(fran[cç]ais|^frs?[-_])').length, 1, 'seule l édition française retenue');
 
 console.log('\n# Purge des sources mortes');
 const probes = [

@@ -143,7 +143,7 @@ Regles strictes :
 Reponds en JSON : {"resume": "2 phrases maximum sur l'essentiel du journal", "faits": [{"titre": "titre factuel court", "fait": "1 a 2 phrases neutres", "categorie": "securite|humanitaire|politique|economie|societe", "lieu": "", "pays": "", "date_evenement": "", "extrait": ""}]}
 Si rien d'utile : {"resume": "", "faits": []}.`;
 
-async function mistral(messages, { model = MISTRAL_MODEL, temperature = 0.1 } = {}) {
+export async function mistral(messages, { model = MISTRAL_MODEL, temperature = 0.1 } = {}) {
   const key = process.env.MISTRAL_API_KEY;
   if (!key) throw new Error('MISTRAL_API_KEY absente');
   for (let attempt = 0; attempt < 4; attempt++) {
@@ -174,7 +174,7 @@ export function extractIsGrounded(extract, transcript, run = 6) {
   return false;
 }
 
-async function extractFacts(transcript, meta, gaz) {
+export async function extractFacts(transcript, meta, gaz) {
   const prompt = EXTRACT_PROMPT.replace('{studio}', meta.studio).replace('{pays}', meta.pays).replace('{date}', meta.date.slice(0, 10));
   const out = await mistral([{ role: 'system', content: prompt }, { role: 'user', content: transcript.slice(0, 60000) }]);
   const facts = [];
@@ -273,6 +273,14 @@ async function main() {
         }
       }
     }
+  }
+
+  // Journaux captés en direct sur les radios (live.mjs) : fusionnés ici pour
+  // entrer dans la même synthèse et le même dépôt.
+  const LIVE = resolve(STATE_DIR, 'live-bulletins.json');
+  if (existsSync(LIVE)) {
+    try { for (const b of JSON.parse(readFileSync(LIVE, 'utf8'))) known.set(b.audio, b); }
+    catch (e) { console.warn(`[!] live-bulletins.json illisible : ${e.message}`); }
   }
 
   const cutoff = Date.now() - KEEP_DAYS * 86400000;

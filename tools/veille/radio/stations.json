@@ -1,0 +1,455 @@
+{
+ "meta": {
+  "genere": "2026-09-23",
+  "source": "radio.garden (API non documentée)",
+  "count": 26
+ },
+ "stations": [
+  {
+   "id": "twWc1Ir1",
+   "station": "Pulsar FM 94.8 Ouaga",
+   "pays": "Burkina Faso",
+   "ville": "Ouagadougou",
+   "tz": "Africa/Ouagadougou",
+   "geo": [
+    -1.5196604,
+    12.371428
+   ],
+   "page": "https://radio.garden/listen/twWc1Ir1",
+   "stream": "https://pulsarouagadougou.ice.infomaniak.ch/pulsarouagadougou-128.mp3",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "Lg5p5bwl",
+   "station": "Radio Iqra 96.1 FM",
+   "pays": "Burkina Faso",
+   "ville": "Ouagadougou",
+   "tz": "Africa/Ouagadougou",
+   "geo": [
+    -1.5196604,
+    12.371428
+   ],
+   "page": "https://radio.garden/listen/Lg5p5bwl",
+   "stream": "https://stream.zeno.fm/ghjewb6oraitv",
+   "fenetres": [],
+   "langues": [],
+   "note": "radio confessionnelle",
+   "flux_ok": true,
+   "exclure_sonde": true
+  },
+  {
+   "id": "HOnmtS9Z",
+   "station": "RED Radio Evangile Développement",
+   "pays": "Burkina Faso",
+   "ville": "Ouagadougou",
+   "tz": "Africa/Ouagadougou",
+   "geo": [
+    -1.5196604,
+    12.371428
+   ],
+   "page": "https://radio.garden/listen/HOnmtS9Z",
+   "stream": "https://listen.radioking.com/radio/469811/stream/525878",
+   "fenetres": [],
+   "langues": [],
+   "note": "radio confessionnelle",
+   "flux_ok": true,
+   "exclure_sonde": true
+  },
+  {
+   "id": "ZV-HKVqX",
+   "station": "Savane FM 103.4",
+   "pays": "Burkina Faso",
+   "ville": "Ouagadougou",
+   "tz": "Africa/Ouagadougou",
+   "geo": [
+    -1.5196604,
+    12.371428
+   ],
+   "page": "https://radio.garden/listen/ZV-HKVqX",
+   "stream": "https://stream.zeno.fm/zf9ga7y9grquv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "PsSgK0iP",
+   "station": "Bambara Muslim Radio",
+   "pays": "Mali",
+   "ville": "Bamako",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -8.00289,
+    12.639232
+   ],
+   "page": "https://radio.garden/listen/PsSgK0iP",
+   "stream": "https://stream.zeno.fm/wdhd6q60xy5tv",
+   "fenetres": [],
+   "langues": [],
+   "note": "radio confessionnelle",
+   "flux_ok": true,
+   "exclure_sonde": true
+  },
+  {
+   "id": "QnC8v37q",
+   "station": "Joliba FM 105.0",
+   "pays": "Mali",
+   "ville": "Bamako",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -8.00289,
+    12.639232
+   ],
+   "page": "https://radio.garden/listen/QnC8v37q",
+   "stream": "https://stream.zeno.fm/bux0vqx79zquv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "mxJ6ZHev",
+   "station": "Radio HD FM 96.0",
+   "pays": "Mali",
+   "ville": "Bamako",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -8.00289,
+    12.639232
+   ],
+   "page": "https://radio.garden/listen/mxJ6ZHev",
+   "stream": "https://hdfm-mali.org/api/live/stream",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "NYia-_ZU",
+   "station": "Radio Kledu",
+   "pays": "Mali",
+   "ville": "Bamako",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -8.00289,
+    12.639232
+   ],
+   "page": "https://radio.garden/listen/NYia-_ZU",
+   "stream": "https://stream.zeno.fm/yerp85sughwtv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "ZJECjJWV",
+   "station": "RTN Voix du Sahel",
+   "pays": "Niger",
+   "ville": "Niamey",
+   "tz": "Africa/Niamey",
+   "geo": [
+    2.125278,
+    13.511667
+   ],
+   "page": "https://radio.garden/listen/ZJECjJWV",
+   "stream": "https://mediaserver1.castpin.com/rtn.aac",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "hRSMsRPF",
+   "station": "Wadata Radio FM 107.4",
+   "pays": "Niger",
+   "ville": "Niamey",
+   "tz": "Africa/Niamey",
+   "geo": [
+    2.125278,
+    13.511667
+   ],
+   "page": "https://radio.garden/listen/hRSMsRPF",
+   "stream": "https://stream.zeno.fm/1y2c3qbgbchvv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "b1wp5wB7",
+   "station": "Radiodiffusion Nationale Tchadienne",
+   "pays": "Tchad",
+   "ville": "N'Djamena",
+   "tz": "Africa/Ndjamena",
+   "geo": [
+    15.055741,
+    12.134846
+   ],
+   "page": "https://radio.garden/listen/b1wp5wB7",
+   "stream": "https://strhls.streamakaci.tv/str_tchad_radio/str_tchad_radio/icecast.audio",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "eA2KCtuO",
+   "station": "Radio Ndarason Int FM 107.1",
+   "pays": "Tchad",
+   "ville": "N'Djamena",
+   "tz": "Africa/Ndjamena",
+   "geo": [
+    15.055741,
+    12.134846
+   ],
+   "page": "https://radio.garden/listen/eA2KCtuO",
+   "stream": "https://c26.radioboss.fm:8679/stream",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "VBFrybip",
+   "station": "Neneba FM De Markala",
+   "pays": "Mali",
+   "ville": "Markala",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -5.357785,
+    13.816793
+   ],
+   "page": "https://radio.garden/listen/VBFrybip",
+   "stream": "https://stream.zeno.fm/qwbgp1ah22quv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "s6TcHNUu",
+   "station": "Radio Dambe Kersignané",
+   "pays": "Mali",
+   "ville": "Kersignané",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -10.984184,
+    14.9955015
+   ],
+   "page": "https://radio.garden/listen/s6TcHNUu",
+   "stream": "https://stream.zeno.fm/89fkq77gb4duv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "j1jbZVHS",
+   "station": "Radio Kassara Barikama",
+   "pays": "Mali",
+   "ville": "Kirane",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -10.223914,
+    15.407724
+   ],
+   "page": "https://radio.garden/listen/j1jbZVHS",
+   "stream": "https://stream.zeno.fm/u5u4gvaxh4duv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "F7uoc-67",
+   "station": "Radio Paysan San",
+   "pays": "Mali",
+   "ville": "San",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -4.898752,
+    13.294401
+   ],
+   "page": "https://radio.garden/listen/F7uoc-67",
+   "stream": "https://www.radioking.com/play/radio-paysan-fm-san/652837",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "uJFpMCSX",
+   "station": "Radio Rurale de Kayes FM 102.2",
+   "pays": "Mali",
+   "ville": "Kayes",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -11.4452715,
+    14.436788
+   ],
+   "page": "https://radio.garden/listen/uJFpMCSX",
+   "stream": "https://stream.zeno.fm/75vt812629duv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "rhMk5BDu",
+   "station": "Radio Madjoura FM 94.0",
+   "pays": "Mali",
+   "ville": "Touba",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -4.538499,
+    12.85569
+   ],
+   "page": "https://radio.garden/listen/rhMk5BDu",
+   "stream": "https://stream.zeno.fm/445tct5avewtv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "jQ9Gv7Ut",
+   "station": "Radio Mauritanie",
+   "pays": "Mauritanie",
+   "ville": "Nouakchott",
+   "tz": "Africa/Nouakchott",
+   "geo": [
+    -15.958238,
+    18.07353
+   ],
+   "page": "https://radio.garden/listen/jQ9Gv7Ut",
+   "stream": "https://ec6.yesstreaming.net:2760/stream",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "oPAj8BH1",
+   "station": "Radio la Voix des Balé 103.6 FM",
+   "pays": "Burkina Faso",
+   "ville": "Boromo",
+   "tz": "Africa/Ouagadougou",
+   "geo": [
+    -2.930081,
+    11.745981
+   ],
+   "page": "https://radio.garden/listen/oPAj8BH1",
+   "stream": "https://stream.zeno.fm/26vzqf9manruv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "GHRO-rWf",
+   "station": "Zekoula FM 88.0",
+   "pays": "Burkina Faso",
+   "ville": "Bittou",
+   "tz": "Africa/Ouagadougou",
+   "geo": [
+    -0.3042778,
+    11.257893
+   ],
+   "page": "https://radio.garden/listen/GHRO-rWf",
+   "stream": "https://stream.zeno.fm/u3z3e6c9yy8uv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "ulf18PDe",
+   "station": "Pognere FM 100.2",
+   "pays": "Burkina Faso",
+   "ville": "Pouytenga",
+   "tz": "Africa/Ouagadougou",
+   "geo": [
+    -0.4266584,
+    12.24874
+   ],
+   "page": "https://radio.garden/listen/ulf18PDe",
+   "stream": "https://stream.zeno.fm/74514wb9yy8uv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "pxwWSpTT",
+   "station": "Radio Tampani 88.2 FM",
+   "pays": "Burkina Faso",
+   "ville": "Leo",
+   "tz": "Africa/Ouagadougou",
+   "geo": [
+    -2.095943,
+    11.097881
+   ],
+   "page": "https://radio.garden/listen/pxwWSpTT",
+   "stream": "https://hosting.studioradiomedia.fr:2395/stream",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "9XUgBiPw",
+   "station": "Radio Maria",
+   "pays": "Burkina Faso",
+   "ville": "Koupela",
+   "tz": "Africa/Ouagadougou",
+   "geo": [
+    -0.3513021,
+    12.180204
+   ],
+   "page": "https://radio.garden/listen/9XUgBiPw",
+   "stream": "http://dreamsiteradiocp2.com:8050/;stream.nsv",
+   "fenetres": [],
+   "langues": [],
+   "note": "radio confessionnelle",
+   "flux_ok": true,
+   "exclure_sonde": true
+  },
+  {
+   "id": "Z96yFdw5",
+   "station": "Radio Dallol 92.8 FM",
+   "pays": "Niger",
+   "ville": "Dogondoutchi",
+   "tz": "Africa/Niamey",
+   "geo": [
+    4.0337844,
+    13.644183
+   ],
+   "page": "https://radio.garden/listen/Z96yFdw5",
+   "stream": "https://stream.zeno.fm/kvxeteg0cf9uv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": true
+  },
+  {
+   "id": "Rne-8Mor",
+   "station": "Radio Diongaga FM 97",
+   "pays": "Mali",
+   "ville": "Diongaga",
+   "tz": "Africa/Bamako",
+   "geo": [
+    -10.879251,
+    15.075383
+   ],
+   "page": "https://radio.garden/listen/Rne-8Mor",
+   "stream": "https://stream.zeno.fm/9rsaxbq4v7zuv",
+   "fenetres": [],
+   "langues": [],
+   "note": "",
+   "flux_ok": false
+  }
+ ]
+}
