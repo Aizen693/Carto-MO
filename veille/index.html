@@ -143,6 +143,11 @@
   .rs-f blockquote { margin: 10px 0 0; padding-left: 14px; border-left: 1px solid var(--stone); font-size: 15px; line-height: 1.55; color: var(--ink-2); }
   .rs-b__link { display: inline-block; margin-top: 16px; font-size: 14px; color: var(--ink); text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 4px; text-decoration-thickness: 1px; }
   .rs-b__link:hover { text-decoration-color: currentColor; }
+  .rs-map { margin-top: clamp(30px, 3.4vw, 46px); }
+  .rs-map .cmap { height: min(520px, 62vh); min-height: 360px; }
+  .rs-rec { margin-top: 8px; font-size: 13.5px; line-height: 1.45; color: var(--muted); }
+  .rs-rec b { font-weight: 400; color: var(--ink); }
+  .rs-rec a { color: inherit; text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 3px; }
   .rs-note { margin: clamp(30px, 3.4vw, 46px) 0 0; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 88ch; }
 
   /* Modales (note, rapport) */
@@ -1377,7 +1382,7 @@
     const pts = (sy && sy.points) || [];
     const synthese = pts.length ? `<section class="card">
         <div class="card__head"><h2 class="card__title" data-i18n-skip>${esc(sy.titre || 'Synthèse radio du jour')}</h2>
-          <span class="card__hint">${esc(fmtDH(sy.date))} · ${fmtN(sy.nb_faits)} faits · ${esc((sy.sources || []).join(', '))}</span></div>
+          <span class="card__hint"><span data-i18n-skip>${esc(fmtDH(sy.date))}</span> · ${fmtN(sy.nb_faits)} <span>faits</span> · <span data-i18n-skip>${esc((sy.sources || []).join(', '))}</span></span></div>
         <ol class="rs-pts">${pts.map((p, i) => {
           const src = [...new Set(p.faits.map((id) => byId.get(id)).filter(Boolean))];
           return `<li class="rs-pt"><span class="rs-pt__n">${String(i + 1).padStart(2, '0')}</span>
@@ -1396,13 +1401,22 @@
         ${utiles(b).map((f) => `<div class="rs-f">
           <div class="rs-f__head"><span class="rs-cat rs-cat--${esc(f.categorie)}">${esc(RS_CAT[f.categorie] || f.categorie)}</span>${f.lieu ? `<span data-i18n-skip>${esc(f.lieu)}</span>` : ''}</div>
           <p class="rs-f__txt" data-i18n-skip>${esc(f.fait)}</p>
+          ${(f.recoupements || []).length ? `<p class="rs-rec"><b>Même zone, même période</b> : ${f.recoupements.map((r) => { const u = safeUrl(r.url); const t = `${esc(r.titre)} (${esc(r.source)}, ${esc(fmtD(r.date))})`; return u ? `<a href="${esc(u)}" target="_blank" rel="noopener" data-i18n-skip>${t}</a>` : `<span data-i18n-skip>${t}</span>`; }).join(' ; ')}</p>` : ''}
           <details><summary>Extrait vérifié</summary><blockquote data-i18n-skip>« ${esc(f.extrait)} »</blockquote></details>
         </div>`).join('')}
         ${page ? `<a class="rs-b__link" href="${esc(page)}" target="_blank" rel="noopener">Écouter le journal sur le site du studio</a>` : ''}
       </article>`;
     }).join('');
 
-    document.getElementById('pane-radio').innerHTML = synthese
+    radioPoints = bulletins.filter((b) => Date.now() - Date.parse(b.date) < 7 * 864e5).flatMap((b) => (b.faits || [])
+      .filter((f) => f.geo && f.categorie !== 'societe')
+      .map((f) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [f.geo.lon, f.geo.lat] },
+        properties: { cat: f.categorie, lib: RS_CAT[f.categorie] || f.categorie, lieu: f.geo.name, fait: f.fait, studio: b.studio, date: b.date.slice(0, 10), rec: (f.recoupements || []).length } })));
+    const carte = radioPoints.length ? `<section class="card rs-map">
+        <div class="card__head"><h2 class="card__title">Carte des faits radio</h2><span class="card__hint">7 derniers jours · ${fmtN(radioPoints.length)} faits localisés · halo : même zone, même période qu'une autre source</span></div>
+        <div class="cmap" id="rmap"></div>
+      </section>` : '';
+    document.getElementById('pane-radio').innerHTML = synthese + carte
       + (cartes ? `<div class="rs-grid">${cartes}</div>` : '')
       + `<p class="rs-note">Journaux en français de Studio Tamani (Mali), Studio Kalangou (Niger) et Studio Yafa (Burkina Faso), rédactions d'information de la Fondation Hirondelle. Transcription automatique puis synthèse assistée par IA : chaque fait est adossé à un extrait vérifié mot pour mot, mais la transcription peut déformer les noms propres. Les magazines, le sport et la culture sont écartés.</p>`;
     document.getElementById('n-radio').textContent = fmtN(pts.length);
@@ -1411,8 +1425,35 @@
     if (der) maj.textContent = (maj.textContent ? maj.textContent + ' · ' : '') + 'Radio : journal du ' + der.toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
   }
 
+  /* Carte des faits radio : instanciée à la première ouverture de l'onglet
+     (Mapbox a besoin d'un conteneur visible), mêmes réglages que la carte cyber. */
+  let radioPoints = [], rmap = null;
+  const RS_COUL = { securite: '#B4323F', humanitaire: '#B7791F', politique: '#E8E6E1', economie: '#2F9E6E' };
+  function rmapInit() {
+    const host = document.getElementById('rmap');
+    if (!host || rmap || !radioPoints.length || document.getElementById('pane-radio').hidden) return;
+    if (!window.mapboxgl) { host.innerHTML = '<div class="cmap__loading">La carte n’a pas pu se charger (Mapbox indisponible).</div>'; return; }
+    mapboxgl.accessToken = MAPBOX_TOKEN;
+    const lons = radioPoints.map((f) => f.geometry.coordinates[0]), lats = radioPoints.map((f) => f.geometry.coordinates[1]);
+    rmap = new mapboxgl.Map({ container: host, style: 'mapbox://styles/mapbox/dark-v11', bounds: [[Math.min(...lons) - 2, Math.min(...lats) - 2], [Math.max(...lons) + 2, Math.max(...lats) + 2]],
+      fitBoundsOptions: { padding: 30, maxZoom: 7 }, maxZoom: 10, projection: 'mercator', cooperativeGestures: true,
+      locale: { 'ScrollZoomBlocker.CtrlMessage': 'Ctrl + molette pour zoomer la carte', 'ScrollZoomBlocker.CmdMessage': '⌘ + molette pour zoomer la carte', 'TouchPanBlocker.Message': 'Deux doigts pour déplacer la carte' } });
+    rmap.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+    rmap.on('load', () => {
+      rmap.addSource('radio', { type: 'geojson', data: { type: 'FeatureCollection', features: radioPoints } });
+      const coul = ['match', ['get', 'cat'], ...Object.entries(RS_COUL).flat(), '#8F8C85'];
+      rmap.addLayer({ id: 'radio-halo', type: 'circle', source: 'radio', filter: ['>', ['get', 'rec'], 0], paint: { 'circle-color': coul, 'circle-opacity': 0.18, 'circle-radius': 18, 'circle-blur': 0.4 } });
+      rmap.addLayer({ id: 'radio-pts', type: 'circle', source: 'radio', paint: { 'circle-color': coul, 'circle-opacity': 0.85, 'circle-radius': 6, 'circle-stroke-color': '#0F1013', 'circle-stroke-width': 1.2 } });
+      const pop = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: 12, className: 'cpop', maxWidth: '320px' });
+      rmap.on('mousemove', 'radio-pts', (e) => { rmap.getCanvas().style.cursor = 'pointer'; const f = e.features[0].properties;
+        pop.setLngLat(e.features[0].geometry.coordinates).setHTML(`<div class="cpop__t">${esc(f.lieu)}<b>${esc(f.lib)}</b></div><div class="cpop__l" data-i18n-skip>${esc(f.fait)}</div><div class="cpop__l cpop__date">${esc(f.studio)} · ${esc(fmtD(f.date))}${Number(f.rec) ? ' · même zone qu’une autre source' : ''}</div>`).addTo(rmap); });
+      rmap.on('mouseleave', 'radio-pts', () => { rmap.getCanvas().style.cursor = ''; pop.remove(); });
+    });
+  }
+  for (const t of document.querySelectorAll('.tab')) t.addEventListener('click', () => { if (t.dataset.tab === 'radio') { rmapInit(); rmap?.resize(); } });
+
   async function loadRadio() {
-    try { renderRadio(await window.algorAuth.loadZoneFile('sahel/radio.json')); }
+    try { renderRadio(await window.algorAuth.loadZoneFile('sahel/radio.json')); rmapInit(); }
     catch (e) {
       console.warn('[veille] radio', e);
       document.getElementById('pane-radio').innerHTML = '<div class="err">La veille radio n’est pas disponible pour le moment. Réessayez dans quelques minutes.</div>';

@@ -18,7 +18,7 @@
 (function () {
   'use strict';
   var CLE_STOCKAGE = 'algor-lang';
-  var VERSION_DICO = '20260922v5g';
+  var VERSION_DICO = '20260923radio';
   var root = document.documentElement;
 
   var lang = null;
