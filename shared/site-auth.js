@@ -101,7 +101,15 @@ window.algorAuth.loadZoneRaw = async function (path) {
   let lastErr = '';
   for (let i = 0; i < 5; i++) {
     try {
-      await supabase.auth.getSession();
+      const { data: sess } = await supabase.auth.getSession();
+      const token = sess && sess.session && sess.session.access_token;
+      // Lecture SANS cache (navigateur ni CDN) : Storage autorise 1 h de cache,
+      // on relisait parfois l'ancienne version du fichier après une publication.
+      if (token) {
+        const r = await fetch(SUPABASE_URL + '/storage/v1/object/authenticated/zones/' + clean.split('/').map(encodeURIComponent).join('/') + '?cb=' + Date.now(),
+          { headers: { Authorization: 'Bearer ' + token, apikey: SUPABASE_KEY }, cache: 'no-store' });
+        if (r.ok) return r.text();
+      }
       const { data, error } = await supabase.storage.from('zones').download(clean);
       if (data && !error) return data.text();
       lastErr = (error && error.message) || 'inconnue';

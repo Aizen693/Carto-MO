@@ -359,8 +359,10 @@
     renderNew();
   }
 
-  /* ─────────── Panneau « Nouveau cette semaine » (abonnés) ─────────── */
-  // Basé sur la date d'INGESTION (champ `added` posé par n8n à l'arrivée).
+  /* ─────────── Panneau « Nouveautés » (abonnés) ───────────
+   * = le DERNIER LOT PUBLIÉ pour ce pays (champ `publie`, jour de mise en ligne posé
+   * par publish-backlog.mjs). Stable d'une visite à l'autre jusqu'à la publication
+   * suivante. Repli pour les points sans `publie` : événements des 7 derniers jours. */
   function daysSince(iso) {
     if (!iso) return Infinity;
     var now = new Date(); now.setHours(0, 0, 0, 0);
@@ -377,10 +379,14 @@
   }
   function renderNew() {
     var box = $('news'); if (!box) return;
-    var pts = state.all.filter(function (f) { return f.added && daysSince(f.added) >= 0 && daysSince(f.added) <= 7; })
-      .sort(function (a, b) { return (b.added || '').localeCompare(a.added || '') || (b.iso || '').localeCompare(a.iso || ''); });
+    var lot = state.all.reduce(function (m, f) { return f.publie && f.publie > m ? f.publie : m; }, '');
+    var pts = (lot
+      ? state.all.filter(function (f) { return f.publie === lot; })
+      : state.all.filter(function (f) { return f.added && daysSince(f.added) >= 0 && daysSince(f.added) <= 7; }))
+      .sort(function (a, b) { return (b.iso || '').localeCompare(a.iso || '') || (b.added || '').localeCompare(a.added || ''); });
     var art = /^(RDC|RCA)$/i.test(state.country || '') ? 'la ' : 'le ';
-    var titre = 'Nouveauté cette semaine' + (state.country ? ' sur ' + art + state.country : '');
+    var titre = 'Nouveautés' + (state.country ? ' sur ' + art + state.country : '') +
+      (lot ? ' · publiées le ' + lot.slice(8, 10) + '/' + lot.slice(5, 7) : '');
     var head = '<div class="news-head">' +
       (pts.length ? '<span class="news-badge">' + pts.length + '</span>' : '') +
       '<span class="news-title">' + esc(titre) + '</span>' +
@@ -392,7 +398,7 @@
       box.classList.toggle('news-open', !!state.newsOpen);
     }
     if (!pts.length) {
-      box.innerHTML = head + '<div class="news-list"><div class="news-empty">Aucune nouvelle donnée cette semaine pour ' + esc(state.country || 'ce pays') + '.</div></div>';
+      box.innerHTML = head + '<div class="news-list"><div class="news-empty">Aucune nouvelle donnée récente pour ' + esc(state.country || 'ce pays') + '.</div></div>';
       box.style.display = 'flex'; wireToggle(); return;
     }
     // Outil distinct de la simple liste « Nouveauté » : cocher une case ISOLE la
@@ -857,6 +863,7 @@
       // Statut client : info recoupee (renseignement + OSINT) ou non. Defaut = non corrobore.
       corrobore: !!(p.corrobore === true || /corrobor|recoup/i.test(String(p.statut || ''))),
       added: p.added ? String(p.added).slice(0, 10) : null,
+      publie: p.publie ? String(p.publie).slice(0, 10) : null,
     };
   }
 
