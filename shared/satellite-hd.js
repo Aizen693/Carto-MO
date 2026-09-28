@@ -11,7 +11,7 @@
  * En mode HD :
  *  - fond : Google Maps 2D Satellite (Cesium ion, actif 3830182) ;
  *  - noms de lieux : Google Maps 2D Labels Only (actif 3830185), transparents ;
- *  - frontières : Natural Earth 1:10 M (/shared/v5/frontieres-3d.json), lignes blanches ;
+ *  - frontières : celles du moteur (admin0-thick), passées en blanc ;
  *  - les couches du fond Mapbox sont masquées (pas de mélange de deux cartes, exigence
  *    des conditions Google) ; les incidents et régions restent au-dessus.
  *  - mention obligatoire : logo Google + copyright de la zone vue (Map Tiles API, viewport).
@@ -28,7 +28,7 @@
   var FRONTIERES_URL = '/shared/v5/frontieres-3d.json?v=20260928b';
   var IDS = { sat: 'shd-sat', noms: 'shd-noms', front: 'shd-front' };
   var SRC = { sat: 'shd-sat-src', noms: 'shd-noms-src', front: 'shd-front-src' };
-  var NOTRE = /^(shd-|humint|region|th-)/;
+  var NOTRE = /^(shd-|humint|region|th-|admin0-thick)/;
   // Écrans Retina : tuiles déclarées en 128 px pour que Mapbox demande le niveau de zoom
   // supérieur (une image deux fois plus fine à taille égale à l'écran).
   var TAILLE = (window.devicePixelRatio || 1) >= 1.5 ? 128 : 256;
@@ -101,8 +101,9 @@
       }, b);
     }
     if (!map.getSource(SRC.noms)) {
-      // Noms toujours en tuiles de 256 px : en 128 px ils s'afficheraient à moitié taille.
-      map.addSource(SRC.noms, { type: 'raster', tiles: tuiles(sessions.noms), tileSize: 256, maxzoom: 19, attribution: '' });
+      // Noms à ~70 % de leur taille Google (tuiles déclarées en 180 px) : en 256 px ils
+      // paraissaient trop gros et flous, en 128 px illisibles.
+      map.addSource(SRC.noms, { type: 'raster', tiles: tuiles(sessions.noms), tileSize: 180, maxzoom: 19, attribution: '' });
       map.addLayer({ id: IDS.noms, type: 'raster', source: SRC.noms, paint: { 'raster-fade-duration': 150 } }, b);
     }
   }
@@ -125,40 +126,94 @@
     masques = [];
   }
 
-  /* ─────────── Mention obligatoire (logo Google + copyright de la zone vue) ─────────── */
+  /* ─────────── Mention obligatoire (logo Google + copyright de la zone vue) ───────────
+   * Posée juste au-dessus de la frise (#timeline), sur sa largeur : jamais recouverte par
+   * la frise, le panneau d'analyse ou le logo Mapbox, et lisible sur mobile (retour à la ligne). */
   function afficherCredit(v) {
     if (!credit) {
       credit = document.createElement('div');
       credit.id = 'shd-credit';
-      credit.style.cssText = 'position:absolute;left:100px;bottom:6px;z-index:5;display:flex;align-items:center;gap:8px;max-width:calc(100% - 520px);' +
-        'padding:2px 6px;border-radius:2px;background:rgba(15,16,19,.66);color:#e6e6e8;font:400 11px/1.4 "IBM Plex Mono",monospace;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
-      credit.innerHTML = '<img alt="Google" src="https://assets.ion.cesium.com/google-credit.png" style="height:13px;flex:none"><span data-c></span><span style="opacity:.7">via Cesium ion</span>';
-      (map.getContainer() || document.body).appendChild(credit);
+      credit.style.cssText = 'position:fixed;z-index:6;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px;' +
+        'padding:3px 8px;border-radius:2px;background:rgba(15,16,19,.72);color:#e6e6e8;font:400 11px/1.35 "IBM Plex Mono",monospace;pointer-events:none;text-align:center';
+      credit.innerHTML = '<img alt="Google" src="https://assets.ion.cesium.com/google-credit.png" style="height:13px;flex:none"><span data-c style="min-width:0"></span><span style="opacity:.7">via Cesium ion</span>';
+      document.body.appendChild(credit);
+      window.addEventListener('resize', placerCredit);
     }
     credit.style.display = v ? 'flex' : 'none';
+    if (v) placerCredit();
+  }
+  function placerCredit() {
+    if (!credit || credit.style.display === 'none') return;
+    var tl = document.getElementById('timeline'), r = tl && tl.offsetParent ? tl.getBoundingClientRect() : null;
+    if (r && r.width) {
+      // Laisse libres les boutons +/− quand ils descendent au niveau de la mention (mobile).
+      var zc = document.querySelector('.mapboxgl-ctrl-bottom-right'), zr = zc && zc.getBoundingClientRect();
+      var larg = r.width;
+      if (zr && zr.height && zr.left < r.right && zr.top < r.top) larg = Math.max(120, zr.left - r.left - 6);
+      credit.style.left = Math.round(r.left) + 'px'; credit.style.width = Math.round(larg) + 'px';
+      credit.style.right = 'auto'; credit.style.bottom = Math.round(innerHeight - r.top + 6) + 'px';
+    } else {
+      credit.style.left = '6px'; credit.style.right = '6px'; credit.style.width = 'auto'; credit.style.bottom = '32px';
+    }
   }
   var creditT = null, creditJeton = 0;
   function majCredit() {
     if (!on || !sessions) return;
+    placerCredit();
     clearTimeout(creditT);
     creditT = setTimeout(function () {
-      var b = map.getBounds(), z = Math.max(0, Math.min(19, Math.round(map.getZoom()))), j = ++creditJeton, s = sessions.sat;
+      // Niveau des tuiles réellement demandées (déclarées en TAILLE px, Mapbox raisonne en 512).
+      var b = map.getBounds(), z = Math.max(0, Math.min(19, Math.round(map.getZoom() + Math.log2(512 / TAILLE)))), j = ++creditJeton, s = sessions.sat;
       var u = s.base + '/tile/v1/viewport?' + s.q + '&zoom=' + z + '&north=' + b.getNorth().toFixed(5) + '&south=' + b.getSouth().toFixed(5) +
         '&east=' + b.getEast().toFixed(5) + '&west=' + b.getWest().toFixed(5);
       fetch(u).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
         if (j !== creditJeton || !credit) return;
         credit.querySelector('[data-c]').textContent = (d && d.copyright) || 'Imagery ©Google';
+        placerCredit();
       }).catch(function () { /* */ });
     }, 500);
   }
 
   /* ─────────── Bascule ─────────── */
-  function activer() {
-    return Promise.all([ouvrirSessions(), chargerFrontieres().catch(function () { return null; })]).then(function () {
-      erreurs = 0; relance = false;
+  // Au-delà du détail natif des photos (niveau 19), l'image n'est plus qu'agrandie
+  // (pixels visibles) : zoom plafonné en mode HD, rétabli à la sortie.
+  var zoomMaxAvant = null;
+  function plafonnerZoom(v) {
+    var max = TAILLE === 128 ? 18.6 : 19.6;
+    if (v) { zoomMaxAvant = map.getMaxZoom(); map.setMaxZoom(max); }
+    else if (zoomMaxAvant != null) { map.setMaxZoom(zoomMaxAvant); zoomMaxAvant = null; }
+  }
+  // Frontières : on garde celle du moteur (admin0-thick, précise, suit les fleuves) passée
+  // en blanc sur l'imagerie, au lieu du trait noir ; pas de second tracé approximatif.
+  var FRONT = 'admin0-thick', frontAvant = null;
+  function frontiereBlanche(v) {
+    if (!map.getLayer(FRONT)) return;
+    try {
+      if (v) {
+        frontAvant = { c: map.getPaintProperty(FRONT, 'line-color'), o: map.getPaintProperty(FRONT, 'line-opacity'), w: map.getPaintProperty(FRONT, 'line-width') };
+        map.setPaintProperty(FRONT, 'line-color', '#ffffff');
+        map.setPaintProperty(FRONT, 'line-opacity', 0.8);
+        map.setPaintProperty(FRONT, 'line-width', ['interpolate', ['linear'], ['zoom'], 3, 0.9, 6, 1.6, 9, 2.2, 12, 2.8]);
+      } else if (frontAvant) {
+        map.setPaintProperty(FRONT, 'line-color', frontAvant.c);
+        map.setPaintProperty(FRONT, 'line-opacity', frontAvant.o);
+        map.setPaintProperty(FRONT, 'line-width', frontAvant.w);
+        frontAvant = null;
+      }
+    } catch (e) { /* */ }
+  }
+  // gen : numéro du dernier clic. Une activation dont le clic a été suivi d'un autre
+  // (double clic, clic pendant le chargement) est abandonnée au lieu d'installer la HD.
+  var gen = 0;
+  function activer(g) {
+    return (sessions ? Promise.resolve(sessions) : ouvrirSessions()).then(function () {
+      if (g !== gen || !on) return;
+      erreurs = 0; relance = false; enRelance = false; t0Erreurs = 0;
       masquerFond();
       ajouterCouches();
       afficherCredit(true);
+      plafonnerZoom(true);
+      frontiereBlanche(true);
       majCredit();
     });
   }
@@ -166,20 +221,29 @@
     retirerCouches();
     reveilFond();
     afficherCredit(false);
+    plafonnerZoom(false);
+    frontiereBlanche(false);
   }
-  // Session Google expirée ou refusée : on en rouvre une fois, puis on abandonne proprement.
+  // Session Google expirée ou refusée : 8 échecs en 30 s déclenchent une nouvelle session
+  // (les échecs de l'ancienne session arrivés pendant la relance sont ignorés) ; si ça
+  // recommence ensuite, on abandonne proprement. Écouter 'error' coupe l'affichage par défaut
+  // de Mapbox : les erreurs qui ne sont pas les nôtres sont donc renvoyées à la console.
+  var enRelance = false, t0Erreurs = 0;
   function surErreur(e) {
-    if (!on || !e || (e.sourceId !== SRC.sat && e.sourceId !== SRC.noms)) return;
+    if (!e || (e.sourceId !== SRC.sat && e.sourceId !== SRC.noms)) { console.error((e && e.error) || e); return; }
+    if (!on || enRelance) return;
+    var now = Date.now();
+    if (now - t0Erreurs > 30000) { erreurs = 0; t0Erreurs = now; }
     if (++erreurs < 8) return;
     if (!relance) {
-      relance = true; erreurs = 0;
+      relance = true; enRelance = true;
       ouvrirSessions().then(function () {
         [['sat', SRC.sat], ['noms', SRC.noms]].forEach(function (p) { var s = map.getSource(p[1]); if (s && s.setTiles) s.setTiles(tuiles(sessions[p[0]])); });
-      }).catch(function () { /* */ });
+      }).catch(function () { /* */ }).then(function () { enRelance = false; erreurs = 0; t0Erreurs = Date.now(); });
       return;
     }
-    on = false; desactiver(); render('indisponible');
-    setTimeout(function () { render(); }, 3000);
+    gen++; on = false; desactiver(); render('indisponible');
+    var g2 = gen; setTimeout(function () { if (g2 === gen && !on) render(); }, 3000);
   }
 
   function render(etat) {
@@ -196,11 +260,13 @@
     chip.onclick = function (e) {
       e.stopPropagation();
       on = !on;
+      var g = ++gen;
       if (!on) { desactiver(); render(); return; }
       render('chargement…');
-      activer().then(function () { render(); }, function (err) {
-        console.warn('[satellite-hd]', err && err.message); on = false; desactiver(); render('indisponible');
-        setTimeout(function () { render(); }, 2500);
+      activer(g).then(function () { if (g === gen) render(); }, function (err) {
+        if (g !== gen) return;
+        console.warn('[satellite-hd]', err && err.message); on = false; sessions = null; desactiver(); render('indisponible');
+        setTimeout(function () { if (g === gen && !on) render(); }, 2500);
       });
     };
   }
@@ -232,13 +298,14 @@
     });
   }
 
+  function prete() { var H = window.HumintMap; return !!(H && H.getMap && H.getMap() && (!H.isReady || H.isReady())); }
   function boot() {
-    if (window.HumintMap && window.HumintMap.getMap && window.HumintMap.getMap()) { build(); return; }
+    if (prete()) { build(); return; }
     window.addEventListener('algorMapReady', build, { once: true });
     var n = 0, t = setInterval(function () {
       n++;
-      if (window.HumintMap && window.HumintMap.getMap && window.HumintMap.getMap()) { clearInterval(t); build(); }
-      else if (n > 60) clearInterval(t);
+      if (prete()) { clearInterval(t); build(); }
+      else if (n > 240) clearInterval(t);
     }, 250);
   }
 
