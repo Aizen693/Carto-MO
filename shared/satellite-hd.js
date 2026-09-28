@@ -137,7 +137,7 @@
       credit.id = 'shd-credit';
       credit.style.cssText = 'position:fixed;z-index:6;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px;' +
         'padding:3px 8px;border-radius:2px;background:rgba(15,16,19,.72);color:#e6e6e8;font:400 11px/1.35 "IBM Plex Mono",monospace;pointer-events:none;text-align:center';
-      credit.innerHTML = '<img alt="Google" src="https://assets.ion.cesium.com/google-credit.png" style="height:13px;flex:none"><span data-c style="min-width:0"></span><span style="opacity:.7">via Cesium ion</span>';
+      credit.innerHTML = '<img alt="Google" src="https://assets.ion.cesium.com/google-credit.png" style="height:13px;flex:none"><span data-c style="min-width:0"></span><span style="opacity:.7">via Cesium ion</span><span data-d style="flex-basis:100%;display:none;color:#fff"></span>';
       document.body.appendChild(credit);
       window.addEventListener('resize', placerCredit);
     }
@@ -158,6 +158,33 @@
       credit.style.left = '6px'; credit.style.right = '6px'; credit.style.width = 'auto'; credit.style.bottom = '32px';
     }
   }
+  /* ─────────── Date de prise de vue estimée au centre de la vue ───────────
+   * Google ne publie pas la date de ses images. On donne celle de la prise de vue haute
+   * définition la plus fine répertoriée au centre (métadonnées World Imagery), à partir de
+   * l'échelle de la ville : un ordre de grandeur, d'où le mot « estimée ». */
+  var MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+  var META = 'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/identify';
+  var dateJeton = 0;
+  function dateFr(d) { return d.getUTCDate() + ' ' + MOIS[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+  function majDate() {
+    var el = credit && credit.querySelector('[data-d]'); if (!el) return;
+    if (map.getZoom() < 11) { el.style.display = 'none'; return; }
+    var c = map.getCenter(), lng = c.lng.toFixed(5), lat = c.lat.toFixed(5), j = ++dateJeton;
+    var u = META + '?geometry=' + lng + ',' + lat + '&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=0&mapExtent=' +
+      lng + ',' + lat + ',' + lng + ',' + lat + '&imageDisplay=1,1,96&returnGeometry=false&f=json';
+    fetch(u).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (j !== dateJeton || !on) return;
+      var best = null;
+      ((d && d.results) || []).forEach(function (r) {
+        var a = r.attributes || {}, m = String(a.SRC_DATE2 || a.SRC_DATE || '').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/), res = parseFloat(a.SRC_RES);
+        if (!m || !(res > 0) || res > 5) return;
+        if (!best || res < best.res) best = { date: new Date(Date.UTC(+m[3], +m[1] - 1, +m[2])), res: res };
+      });
+      el.textContent = best ? 'Prise de vue estimée au centre : ' + dateFr(best.date) : '';
+      el.style.display = best ? 'block' : 'none';
+      placerCredit();
+    }).catch(function () { el.style.display = 'none'; });
+  }
   var creditT = null, creditJeton = 0;
   function majCredit() {
     if (!on || !sessions) return;
@@ -173,6 +200,7 @@
         credit.querySelector('[data-c]').textContent = (d && d.copyright) || 'Imagery ©Google';
         placerCredit();
       }).catch(function () { /* */ });
+      majDate();
     }, 500);
   }
 
