@@ -91,7 +91,9 @@
     var b = avant();
     if (!map.getSource(SRC.sat)) {
       map.addSource(SRC.sat, { type: 'raster', tiles: tuiles(sessions.sat), tileSize: TAILLE, maxzoom: 19, attribution: '' });
-      map.addLayer({ id: IDS.sat, type: 'raster', source: SRC.sat, paint: { 'raster-fade-duration': 150 } }, b);
+      // Sous la frontière du moteur (admin0-thick, rangée sous les noms du fond) : sinon
+      // l'imagerie opaque la recouvre et elle n'apparaît que là où une tuile manque encore.
+      map.addLayer({ id: IDS.sat, type: 'raster', source: SRC.sat, paint: { 'raster-fade-duration': 150 } }, map.getLayer('admin0-thick') ? 'admin0-thick' : b);
     }
     if (frontieres && !map.getSource(SRC.front)) {
       map.addSource(SRC.front, { type: 'geojson', data: frontieres });
