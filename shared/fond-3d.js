@@ -32,9 +32,9 @@
   var LIB = { standard: 'Standard', maillage: '3D photoréaliste' };
   var DEG = Math.PI / 180;
   // Safari tolère beaucoup moins de mémoire par onglet que Chrome (il recharge la page) :
-  // profil économe (réserve de tuiles, détail, résolution, sans post-traitements).
+  // réserve de tuiles et téléchargements simultanés réduits, sans toucher à la netteté.
   var SAFARI = /^((?!chrome|android|crios|fxios|edg).)*safari/i.test(navigator.userAgent);
-  var SSE_REPOS = SAFARI ? 24 : 16, SSE_MOUVEMENT = SAFARI ? 48 : 40;
+  var SSE_REPOS = 16, SSE_MOUVEMENT = 32; // même netteté partout (Safari compris)
   var FOVY_MAPBOX = 0.6435011087932844; // champ vertical de Mapbox GL (≈ 36,87°)
 
   var map = null, chip = null, mode = 'standard', demarre = false;
@@ -102,7 +102,6 @@
     C.RequestScheduler.maximumRequestsPerServer = 6;
     C.RequestScheduler.maximumRequests = SAFARI ? 12 : 24;
     viewer.scene.screenSpaceCameraController.minimumZoomDistance = 250;
-    if (SAFARI) viewer.resolutionScale = 0.85;
     var sc = viewer.scene;
     // God's Eye View (atmosphereCompat.js) : l'atmosphère par sommet des modèles ne se lie pas sous Metal.
     if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) sc.fog.renderable = false;
@@ -116,7 +115,7 @@
     sc.light = lum;
     sc.preRender.addEventListener(function () { C.Cartesian3.clone(viewer.camera.directionWC, lum.direction); placerPopup(); horizon(); });
     var st = sc.postProcessStages.add(new C.PostProcessStage({ fragmentShader: NETTETE, uniforms: { amount: 1.08 } }));
-    st.enabled = !SAFARI;
+    st.enabled = true;
     points = sc.primitives.add(new C.PointPrimitiveCollection());
 
     viewer.camera.percentageChanged = 0.05;
@@ -142,8 +141,8 @@
     cacheBytes: (SAFARI ? 64 : 128) * 1024 * 1024, maximumCacheOverflowBytes: (SAFARI ? 16 : 32) * 1024 * 1024,
     asynchronouslyLoadImagery: true,
     enableCollision: true, // la caméra bute sur le maillage au lieu de passer sous le sol
-    skipLevelOfDetail: true, baseScreenSpaceError: 1024, skipScreenSpaceErrorFactor: 16, skipLevels: 1,
-    immediatelyLoadDesiredLevelOfDetail: false, loadSiblings: false,
+    // Pas de saut de niveaux de détail : il mélangeait des tuiles de résolutions différentes
+    // (échelle qui change d'une tuile à l'autre, ville floue).
     cullRequestsWhileMoving: true, cullRequestsWhileMovingMultiplier: 60, preloadWhenHidden: false, preloadFlightDestinations: false,
   };
   function chargerFonds() {
