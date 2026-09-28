@@ -31,11 +31,15 @@
   var MODES = ['standard', 'maillage'];
   var LIB = { standard: 'Standard', maillage: '3D photoréaliste' };
   var DEG = Math.PI / 180;
+  // Safari tolère beaucoup moins de mémoire par onglet que Chrome (il recharge la page) :
+  // profil économe (réserve de tuiles, détail, résolution, sans post-traitements).
+  var SAFARI = /^((?!chrome|android|crios|fxios|edg).)*safari/i.test(navigator.userAgent);
+  var SSE_REPOS = SAFARI ? 24 : 16, SSE_MOUVEMENT = SAFARI ? 48 : 40;
   var FOVY_MAPBOX = 0.6435011087932844; // champ vertical de Mapbox GL (≈ 36,87°)
 
   var map = null, chip = null, mode = 'standard', demarre = false;
   var C = null, viewer = null, vue = null, tileset = null, imagerie = null, pret = null;
-  var points = null, items = [], cacheH = {}, popup = null, popupItem = null;
+  var points = null, items = [], cacheH = {}, popup = null, popupItem = null, gestionnaire = null;
   var depuisCesium = false, depuisMapbox = false;
 
   function cfg() { return window.ALGOR_3D || {}; }
@@ -91,7 +95,8 @@
       // lissage FXAA au lieu du MSAA 4x (bien plus coûteux).
       requestRenderMode: true, maximumRenderTimeChange: Infinity, msaaSamples: 1,
     });
-    viewer.scene.postProcessStages.fxaa.enabled = true;
+    viewer.scene.postProcessStages.fxaa.enabled = !SAFARI;
+    if (SAFARI) viewer.resolutionScale = 0.85;
     var sc = viewer.scene;
     // God's Eye View (atmosphereCompat.js) : l'atmosphère par sommet des modèles ne se lie pas sous Metal.
     if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) sc.fog.renderable = false;
@@ -105,14 +110,14 @@
     sc.light = lum;
     sc.preRender.addEventListener(function () { C.Cartesian3.clone(viewer.camera.directionWC, lum.direction); placerPopup(); horizon(); });
     var st = sc.postProcessStages.add(new C.PostProcessStage({ fragmentShader: NETTETE, uniforms: { amount: 1.08 } }));
-    st.enabled = true;
+    st.enabled = !SAFARI;
     points = sc.primitives.add(new C.PointPrimitiveCollection());
 
     viewer.camera.percentageChanged = 0.05;
     viewer.camera.changed.addEventListener(tailles);
     viewer.camera.moveEnd.addEventListener(function () { if (!depuisMapbox) versMapbox(); depuisMapbox = false; });
 
-    var h = new C.ScreenSpaceEventHandler(sc.canvas);
+    var h = gestionnaire = new C.ScreenSpaceEventHandler(sc.canvas);
     h.setInputAction(function (e) {
       var pk = sc.pick(e.position), id = pk && pk.primitive && pk.primitive.id;
       if (id && id.fond3d != null) ouvrirPopup(items[id.fond3d]); else fermerPopup();
@@ -124,8 +129,8 @@
   }
 
   // Mémoire : God's Eye View réserve jusqu'à 2,5 Go de tuiles (poste de bureau), ce qui fait
-  // recharger la page par Safari. Plafond à 200 Mo, les tuiles hors vue sont libérées.
-  var TUILES = { cacheBytes: 200 * 1024 * 1024, maximumCacheOverflowBytes: 64 * 1024 * 1024, asynchronouslyLoadImagery: true };
+  // recharger la page par Safari. Plafond à 128 Mo (64 Mo sous Safari), tuiles hors vue libérées.
+  var TUILES = { cacheBytes: (SAFARI ? 64 : 128) * 1024 * 1024, maximumCacheOverflowBytes: (SAFARI ? 16 : 32) * 1024 * 1024, asynchronouslyLoadImagery: true };
   function chargerFonds() {
     var c = cfg(), v = viewer, sc = viewer.scene, attente = [];
     attente.push(C.ArcGisMapServerImageryProvider.fromUrl(
@@ -144,10 +149,10 @@
       tileset = t; sc.primitives.add(t);
       // Précision adaptée au mouvement : tuiles plus grossières pendant un déplacement,
       // pleine précision dès que la vue s'arrête.
-      t.maximumScreenSpaceError = 16;
+      t.maximumScreenSpaceError = SSE_REPOS;
       t.preloadWhenHidden = false;
-      viewer.camera.moveStart.addEventListener(function () { t.maximumScreenSpaceError = 40; });
-      viewer.camera.moveEnd.addEventListener(function () { t.maximumScreenSpaceError = 16; sc.requestRender(); });
+      viewer.camera.moveStart.addEventListener(function () { t.maximumScreenSpaceError = SSE_MOUVEMENT; });
+      viewer.camera.moveEnd.addEventListener(function () { t.maximumScreenSpaceError = SSE_REPOS; sc.requestRender(); });
     }).catch(function (e) { console.warn('[fond-3d] maillage Google indisponible', e); }));
     return Promise.all(attente);
   }
@@ -470,9 +475,18 @@
   // puis recréée au prochain passage en 3D ; fond Mapbox rétabli.
   function sortir() {
     fermerPopup();
-    try { if (viewer && !viewer.isDestroyed()) viewer.destroy(); } catch (e) { /* */ }
+    try {
+      if (viewer && !viewer.isDestroyed()) {
+        // Rend la mémoire graphique tout de suite (Safari la garde sinon jusqu'au ramasse-miettes).
+        if (gestionnaire && !gestionnaire.isDestroyed()) gestionnaire.destroy();
+        var gl = viewer.scene.context._gl, perte = gl && gl.getExtension('WEBGL_lose_context');
+        viewer.destroy();
+        if (perte) perte.loseContext();
+      }
+    } catch (e) { /* */ }
     if (vue) vue.remove();
-    viewer = vue = tileset = imagerie = points = etiquettes = reperes = occ = dernierePos = null;
+    viewer = vue = tileset = imagerie = points = etiquettes = reperes = occ = dernierePos = gestionnaire = null;
+    brutLieux = [];
     items = []; affiches = {}; paquetsFrontieres = []; zoomPts = -1; pret = null;
     reveilMapbox();
   }
