@@ -166,20 +166,27 @@
   var META = 'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/identify';
   var dateJeton = 0;
   function dateFr(d) { return d.getUTCDate() + ' ' + MOIS[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
-  function majDate() {
-    var el = credit && credit.querySelector('[data-d]'); if (!el) return;
-    if (map.getZoom() < 11) { el.style.display = 'none'; return; }
-    var c = map.getCenter(), lng = c.lng.toFixed(5), lat = c.lat.toFixed(5), j = ++dateJeton;
+  // Date de la prise de vue HD la plus fine répertoriée en un point (ou null).
+  function dateImage(lng, lat) {
+    lng = (+lng).toFixed(5); lat = (+lat).toFixed(5);
     var u = META + '?geometry=' + lng + ',' + lat + '&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=0&mapExtent=' +
       lng + ',' + lat + ',' + lng + ',' + lat + '&imageDisplay=1,1,96&returnGeometry=false&f=json';
-    fetch(u).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
-      if (j !== dateJeton || !on) return;
+    return fetch(u).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
       var best = null;
       ((d && d.results) || []).forEach(function (r) {
         var a = r.attributes || {}, m = String(a.SRC_DATE2 || a.SRC_DATE || '').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/), res = parseFloat(a.SRC_RES);
         if (!m || !(res > 0) || res > 5) return;
         if (!best || res < best.res) best = { date: new Date(Date.UTC(+m[3], +m[1] - 1, +m[2])), res: res };
       });
+      return best;
+    });
+  }
+  function majDate() {
+    var el = credit && credit.querySelector('[data-d]'); if (!el) return;
+    if (map.getZoom() < 11) { el.style.display = 'none'; return; }
+    var c = map.getCenter(), j = ++dateJeton;
+    dateImage(c.lng, c.lat).then(function (best) {
+      if (j !== dateJeton || !on) return;
       el.textContent = best ? 'Prise de vue estimée au centre : ' + dateFr(best.date) : '';
       el.style.display = best ? 'block' : 'none';
       placerCredit();
@@ -287,18 +294,86 @@
     chip.type = 'button';
     chip.id = 'chip-satellite-hd';
     render();
-    chip.onclick = function (e) {
+    chip.onclick = function (e) { e.stopPropagation(); basculer(!on); };
+  }
+  // Passe en HD (v = true) ou en standard ; renvoie une promesse résolue quand c'est fait.
+  function basculer(v) {
+    if (v === on) return Promise.resolve(on);
+    on = v;
+    var g = ++gen;
+    if (!on) { desactiver(); render(); return Promise.resolve(false); }
+    render('chargement…');
+    return activer(g).then(function () { if (g === gen) render(); return on; }, function (err) {
+      if (g !== gen) return on;
+      console.warn('[satellite-hd]', err && err.message); on = false; sessions = null; desactiver(); render('indisponible');
+      setTimeout(function () { if (g === gen && !on) render(); }, 2500);
+      return false;
+    });
+  }
+
+  /* ─────────── Bouton « Voir en HD » dans la fiche d'un incident ───────────
+   * Les fiches sont des mapboxgl.Popup de classe humint-popup, ouvertes par humint-engine.js
+   * (clic sur un point, liste des nouveautés, analyse). On complète leur addTo() pour y
+   * glisser le bouton, sans modifier le moteur. */
+  var ZOOM_HD = 17.2;
+  function ajouterBoutonFiche(popup) {
+    var el = popup.getElement && popup.getElement(), ll = popup.getLngLat && popup.getLngLat();
+    if (!el || !ll || !/humint-popup/.test(el.className) || el.querySelector('.shd-voir')) return;
+    var corps = el.querySelector('.popup-body') || el.querySelector('.mapboxgl-popup-content');
+    if (!corps) return;
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'shd-voir';
+    b.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:36px;margin-top:10px;padding:0 12px;' +
+      'border:1px solid var(--ink,#1C1D21);border-radius:2px;background:var(--ink,#1C1D21);color:#fff;font:400 14px/1 var(--sans,system-ui);cursor:pointer';
+    b.innerHTML = ICON.replace('class="ico"', 'class="ico" style="width:16px;height:16px"') + '<span>Voir en HD</span>';
+    b.onclick = function (e) {
       e.stopPropagation();
-      on = !on;
-      var g = ++gen;
-      if (!on) { desactiver(); render(); return; }
-      render('chargement…');
-      activer(g).then(function () { if (g === gen) render(); }, function (err) {
-        if (g !== gen) return;
-        console.warn('[satellite-hd]', err && err.message); on = false; sessions = null; desactiver(); render('indisponible');
-        setTimeout(function () { if (g === gen && !on) render(); }, 2500);
+      b.disabled = true; b.querySelector('span').textContent = 'Chargement…';
+      basculer(true).then(function (ok) {
+        b.disabled = false; b.querySelector('span').textContent = ok ? 'Voir en HD' : 'Imagerie HD indisponible';
+        if (!ok) return;
+        comparerDates(el, ll);
+        // Zoom sur l'incident ; la fiche reste ouverte, décalée pour ne pas cacher le point.
+        map.flyTo({ center: ll, zoom: Math.max(map.getZoom(), ZOOM_HD), pitch: 0, speed: 1.4, curve: 1.3, essential: true, offset: [0, 120] });
       });
     };
+    corps.appendChild(b);
+  }
+  // Situe l'image par rapport à la date de l'incident (ligne « Date » de la fiche, AAAA-MM-JJ) :
+  // une image antérieure montre le terrain AVANT les faits, pas leur résultat.
+  function comparerDates(el, ll) {
+    var ligne = el.querySelector('.shd-avant'), iso = null;
+    el.querySelectorAll('.popup-row').forEach(function (r) {
+      var k = r.querySelector('.popup-key'), v = r.querySelector('.popup-val');
+      if (k && v && /^date$/i.test(k.textContent.trim())) { var m = v.textContent.match(/(\d{4})-(\d{2})-(\d{2})/); if (m) iso = m; }
+    });
+    if (!iso) return;
+    if (!ligne) {
+      ligne = document.createElement('div'); ligne.className = 'shd-avant';
+      ligne.style.cssText = 'margin-top:8px;font:400 12.5px/1.45 var(--sans,system-ui);color:var(--muted,#6E6F74)';
+      var bt = el.querySelector('.shd-voir'); bt.parentNode.insertBefore(ligne, bt.nextSibling);
+    }
+    ligne.textContent = 'Date de l\'image en cours de vérification…';
+    var inc = new Date(Date.UTC(+iso[1], +iso[2] - 1, +iso[3]));
+    dateImage(ll.lng, ll.lat).then(function (best) {
+      if (!best) { ligne.textContent = 'Date de l\'image inconnue à cet endroit.'; return; }
+      var mois = Math.round((inc - best.date) / (30.44 * 86400000)), n = Math.abs(mois);
+      var duree = n >= 12 ? (Math.round(n / 12 * 10) / 10 + ' an' + (n >= 24 ? 's' : '')).replace('.', ',') : n + ' mois';
+      ligne.textContent = n === 0 ? 'Image estimée du même mois que l\'incident (' + dateFr(best.date) + ').'
+        : mois > 0 ? 'Image antérieure à l\'incident de ' + duree + ' (prise de vue estimée ' + dateFr(best.date) + ') : elle montre le terrain avant les faits.'
+          : 'Image postérieure à l\'incident de ' + duree + ' (prise de vue estimée ' + dateFr(best.date) + ').';
+    }).catch(function () { ligne.textContent = 'Date de l\'image indisponible.'; });
+  }
+  function brancherFiches() {
+    var P = window.mapboxgl && window.mapboxgl.Popup;
+    if (!P || P.prototype.__shdFiche) return;
+    var addTo = P.prototype.addTo;
+    P.prototype.addTo = function () {
+      var r = addTo.apply(this, arguments);
+      try { ajouterBoutonFiche(this); } catch (e) { /* la fiche reste utilisable sans le bouton */ }
+      return r;
+    };
+    P.prototype.__shdFiche = true;
   }
   function ensureInBar() {
     var bar = document.getElementById('chipbar');
@@ -319,6 +394,7 @@
       if (!cfg().ionToken) return;
       makeChip();
       ensureInBar();
+      brancherFiches();
       var bar = document.getElementById('chipbar');
       if (bar) new MutationObserver(ensureInBar).observe(bar, { childList: true });
       map.on('moveend', majCredit);
