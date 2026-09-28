@@ -11,10 +11,11 @@
  *    humint-engine.js l.338-340) et posés au niveau du sol. Clic = même fiche.
  *  - Caméra : synchronisée dans les deux sens. Un changement de pays ou les boutons
  *    +/− déplacent la vue 3D ; revenir en Standard garde l'endroit regardé.
- *  - Fond UNIQUE (27/09) : la vue 3D s'ouvre d'office, sans jeton de barre. Les couches
- *    du fond Mapbox sont masquées pour qu'il ne télécharge plus aucune tuile ; Mapbox ne
- *    sert plus qu'au moteur (filtres, analyse, frise). Maillage 3D Google, et imagerie
- *    Esri sur relief en secours si le maillage est indisponible.
+ *  - Filtre (28/09) : jeton « Rendu » dans la barre, Standard par défaut. En 3D, le fond
+ *    Mapbox est mis au repos (plus aucune tuile téléchargée) ; hors 3D, Cesium est en pause.
+ *    Maillage 3D Google, imagerie Esri sur relief en secours s'il est indisponible.
+ *  - Fluidité : rendu à la demande, FXAA, précision réduite pendant les déplacements,
+ *    noms de lieux limités à la zone regardée.
  *
  * Jeton d'accès : window.ALGOR_3D = { googleKey } (Map Tiles API, usage commercial) ou
  * { ionToken } (Cesium ion, usage personnel), lu dans /shared/v5/config-3d.js (en local,
@@ -27,12 +28,12 @@
   var DEV = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
   var SRC = 'humint-src';
   var ICON = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>';
-  var MODES = ['standard', 'maillage', 'imagerie'];
-  var LIB = { standard: 'Standard', maillage: '3D maillage', imagerie: '3D imagerie HD' };
+  var MODES = ['standard', 'maillage'];
+  var LIB = { standard: 'Standard', maillage: '3D photoréaliste' };
   var DEG = Math.PI / 180;
   var FOVY_MAPBOX = 0.6435011087932844; // champ vertical de Mapbox GL (≈ 36,87°)
 
-  var map = null, chip = null, mode = 'maillage', demarre = false;
+  var map = null, chip = null, mode = 'standard', demarre = false;
   var C = null, viewer = null, vue = null, tileset = null, imagerie = null, pret = null;
   var points = null, items = [], cacheH = {}, popup = null, popupItem = null;
   var depuisCesium = false, depuisMapbox = false;
@@ -76,7 +77,8 @@
     credits.id = 'fond-3d-credits';
     credits.style.cssText = 'position:absolute;left:372px;bottom:8px;z-index:2;font:400 11px/1.4 "IBM Plex Mono",monospace;color:#e6e6e8;text-shadow:0 1px 2px rgba(0,0,0,.8)';
     vue.appendChild(credits);
-    var css = document.createElement('style');
+    var css = document.getElementById('fond-3d-css') || document.createElement('style');
+    css.id = 'fond-3d-css';
     css.textContent = '#fond-3d-credits *{display:inline!important;white-space:nowrap}#fond-3d-credits img{height:13px;vertical-align:middle}#fond-3d-credits a{color:#e6e6e8}';
     document.head.appendChild(css);
 
@@ -84,8 +86,12 @@
     viewer = new C.Viewer(vue, {
       timeline: false, animation: false, baseLayerPicker: false, geocoder: false, homeButton: false,
       sceneModePicker: false, navigationHelpButton: false, fullscreenButton: false, vrButton: false,
-      selectionIndicator: false, infoBox: false, baseLayer: false, creditContainer: credits, msaaSamples: 4,
+      selectionIndicator: false, infoBox: false, baseLayer: false, creditContainer: credits,
+      // Fluidité : rendu seulement quand quelque chose change (caméra, tuiles, points),
+      // lissage FXAA au lieu du MSAA 4x (bien plus coûteux).
+      requestRenderMode: true, maximumRenderTimeChange: Infinity, msaaSamples: 1,
     });
+    viewer.scene.postProcessStages.fxaa.enabled = true;
     var sc = viewer.scene;
     // God's Eye View (atmosphereCompat.js) : l'atmosphère par sommet des modèles ne se lie pas sous Metal.
     if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) sc.fog.renderable = false;
@@ -117,43 +123,70 @@
     }, C.ScreenSpaceEventType.MOUSE_MOVE);
   }
 
+  // Mémoire : God's Eye View réserve jusqu'à 2,5 Go de tuiles (poste de bureau), ce qui fait
+  // recharger la page par Safari. Plafond à 200 Mo, les tuiles hors vue sont libérées.
+  var TUILES = { cacheBytes: 200 * 1024 * 1024, maximumCacheOverflowBytes: 64 * 1024 * 1024, asynchronouslyLoadImagery: true };
   function chargerFonds() {
-    var c = cfg(), sc = viewer.scene, attente = [];
+    var c = cfg(), v = viewer, sc = viewer.scene, attente = [];
     attente.push(C.ArcGisMapServerImageryProvider.fromUrl(
       'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer', { enablePickFeatures: false })
-      .then(function (p) { imagerie = sc.imageryLayers.addImageryProvider(p); }).catch(function () { /* */ }));
-    attente.push((c.ionToken ? C.CesiumTerrainProvider.fromIonAssetId(1, { requestVertexNormals: true })
+      .then(function (p) { if (viewer === v) imagerie = sc.imageryLayers.addImageryProvider(p); }).catch(function () { /* */ }));
+    attente.push((c.ionToken ? C.CesiumTerrainProvider.fromIonAssetId(1, { requestVertexNormals: false })
       : C.CesiumTerrainProvider.fromUrl('https://terrain.reearth.land/cesium-mesh/ellipsoid'))
-      .then(function (t) { sc.terrainProvider = t; }).catch(function () { /* ellipsoïde */ }));
+      .then(function (t) { if (viewer === v) sc.terrainProvider = t; }).catch(function () { /* ellipsoïde */ }));
     var g = c.googleKey
-      ? C.createGooglePhotorealistic3DTileset({ key: c.googleKey, onlyUsingWithGoogleGeocoder: true }, { asynchronouslyLoadImagery: true })
+      ? C.createGooglePhotorealistic3DTileset({ key: c.googleKey, onlyUsingWithGoogleGeocoder: true }, TUILES)
       : C.IonResource.fromAssetId(2275207, { accessToken: c.ionToken }).then(function (r) {
-        return C.Cesium3DTileset.fromUrl(r, { cacheBytes: 1536 * 1024 * 1024, maximumCacheOverflowBytes: 1024 * 1024 * 1024, enableCollision: true });
+        return C.Cesium3DTileset.fromUrl(r, TUILES);
       });
-    attente.push(g.then(function (t) { tileset = t; sc.primitives.add(t); }).catch(function (e) { console.warn('[fond-3d] maillage Google indisponible', e); }));
+    attente.push(g.then(function (t) {
+      if (viewer !== v) { t.destroy(); return; }
+      tileset = t; sc.primitives.add(t);
+      // Précision adaptée au mouvement : tuiles plus grossières pendant un déplacement,
+      // pleine précision dès que la vue s'arrête.
+      t.maximumScreenSpaceError = 16;
+      t.preloadWhenHidden = false;
+      viewer.camera.moveStart.addEventListener(function () { t.maximumScreenSpaceError = 40; });
+      viewer.camera.moveEnd.addEventListener(function () { t.maximumScreenSpaceError = 16; sc.requestRender(); });
+    }).catch(function (e) { console.warn('[fond-3d] maillage Google indisponible', e); }));
     return Promise.all(attente);
   }
 
 
   /* ─────────── Frontières et noms de lieux (dans la vue 3D, sans fond Mapbox) ───────────
    * Frontières : Natural Earth 1:10 M, frontières terrestres seules (/shared/v5/frontieres-3d.json,
-   * domaine public), plaquées sur le maillage.
+   * domaine public, simplifiées à ~400 m), en lignes simples visibles à travers le relief.
    * Noms : villes et bourgs OpenStreetMap des pays des théâtres (/shared/v5/lieux-3d.json,
    * © OpenStreetMap contributors, ODbL). Les villes restent lisibles de loin, les bourgs
    * n'apparaissent qu'en s'approchant (pas d'empilement d'étiquettes). */
-  var FRONTIERES_URL = '/shared/v5/frontieres-3d.json?v=20260928a';
+  var FRONTIERES_URL = '/shared/v5/frontieres-3d.json?v=20260928b';
   var LIEUX_URL = '/shared/v5/lieux-3d.json?v=20260928a';
-  var etiquettes = null, reperes = null, lieux = [];
+  var etiquettes = null, reperes = null;
 
+  // Frontières en lignes simples (vues même à travers le relief grâce à depthFailAppearance),
+  // regroupées par cases de 10° et masquées derrière l'horizon. Les lignes plaquées au sol
+  // (GroundPolylinePrimitive) coûtaient ~900 Mo sur le maillage 3D et faisaient recharger Safari.
+  var paquetsFrontieres = [];
   function chargerFrontieres() {
+    var v = viewer;
     return fetch(FRONTIERES_URL).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function (d) {
-      var inst = (d.lignes || []).map(function (l) {
-        return new C.GeometryInstance({ geometry: new C.GroundPolylineGeometry({ positions: C.Cartesian3.fromDegreesArray(l), width: 2 }) });
+      if (viewer !== v) return;
+      var cases = {};
+      (d.lignes || []).forEach(function (l) {
+        var k = Math.floor(l[0] / 10) + ',' + Math.floor(l[1] / 10);
+        (cases[k] = cases[k] || []).push(l);
       });
-      viewer.scene.groundPrimitives.add(new C.GroundPolylinePrimitive({
-        geometryInstances: inst, classificationType: C.ClassificationType.BOTH,
-        appearance: new C.PolylineMaterialAppearance({ material: C.Material.fromType('Color', { color: C.Color.WHITE.withAlpha(0.8) }) }),
-      }));
+      var coul = C.Color.WHITE.withAlpha(0.8);
+      var app = function () { return new C.PolylineMaterialAppearance({ material: C.Material.fromType('Color', { color: coul }) }); };
+      paquetsFrontieres = Object.keys(cases).map(function (k) {
+        var pts = [], inst = cases[k].map(function (l) {
+          var pos = C.Cartesian3.fromDegreesArray(l); pts.push.apply(pts, pos);
+          return new C.GeometryInstance({ geometry: new C.PolylineGeometry({ positions: pos, width: 2, vertexFormat: C.PolylineMaterialAppearance.VERTEX_FORMAT }) });
+        });
+        var prim = viewer.scene.primitives.add(new C.Primitive({ geometryInstances: inst, appearance: app(), depthFailAppearance: app(), asynchronous: true }));
+        return { prim: prim, sphere: C.BoundingSphere.fromPoints(pts) };
+      });
+      dernierePos = null; viewer.scene.requestRender();
     }).catch(function (e) { console.warn('[fond-3d] frontières indisponibles', e); });
   }
 
@@ -164,45 +197,73 @@
     if (rang === 1) return pop > 1e6 ? 5e6 : pop > 2e5 ? 2.5e6 : 1.2e6;
     return pop > 50000 ? 6e5 : pop > 10000 ? 3e5 : 1.5e5;
   }
+  var brutLieux = [], hauteursLieux = {}, MAX_LIEUX = 500;
   function chargerLieux() {
     return fetch(LIEUX_URL).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function (d) {
+      if (!viewer) return;
       etiquettes = viewer.scene.primitives.add(new C.LabelCollection({ scene: viewer.scene }));
       reperes = viewer.scene.primitives.add(new C.PointPrimitiveCollection());
-      var halo = C.Color.fromCssColorString('rgba(0,0,0,0.75)');
-      (d.lieux || []).forEach(function (l) {
-        var ville = l[3] === 1, loin = portee(l);
-        var pos = C.Cartesian3.fromDegrees(l[0], l[1], 0);
-        var cond = new C.DistanceDisplayCondition(0, loin);
-        var lab = etiquettes.add({
-          position: pos, text: l[2], font: (ville ? '500 15px' : '400 12.5px') + ' "Host Grotesk", system-ui, sans-serif',
-          fillColor: C.Color.WHITE, outlineColor: halo, outlineWidth: ville ? 3 : 2.5, style: C.LabelStyle.FILL_AND_OUTLINE,
-          pixelOffset: new C.Cartesian2(7, -1), horizontalOrigin: C.HorizontalOrigin.LEFT, verticalOrigin: C.VerticalOrigin.CENTER,
-          disableDepthTestDistance: Number.POSITIVE_INFINITY, distanceDisplayCondition: cond,
-        });
-        var pt = reperes.add({ position: pos, pixelSize: ville ? 5 : 3.5, color: C.Color.WHITE, outlineColor: halo, outlineWidth: 1,
-          disableDepthTestDistance: Number.POSITIVE_INFINITY, distanceDisplayCondition: cond });
-        lieux.push({ lon: l[0], lat: l[1], loin: loin, lab: lab, pt: pt, cale: false });
-      });
-      viewer.camera.moveEnd.addEventListener(calerLieux);
-      calerLieux();
+      brutLieux = (d.lieux || []).map(function (l, i) { return { id: i, lon: l[0], lat: l[1], nom: l[2], ville: l[3] === 1, pop: l[4] || 0, loin: portee(l) }; });
+      viewer.camera.moveEnd.addEventListener(majLieux);
+      majLieux();
     }).catch(function (e) { console.warn('[fond-3d] noms de lieux indisponibles', e); });
   }
-  // Pose au sol les étiquettes visibles (hauteur du relief), pour qu'elles ne glissent pas en vue inclinée.
-  function calerLieux() {
-    if (!lieux.length || !(viewer.scene.terrainProvider instanceof C.CesiumTerrainProvider)) return;
-    var r = viewer.camera.computeViewRectangle(); if (!r) return;
-    var cam = viewer.camera.positionWC, a = [];
-    lieux.forEach(function (l) {
-      if (l.cale) return;
-      var lo = l.lon * DEG, la = l.lat * DEG;
-      if (la < r.south || la > r.north || (r.west <= r.east ? (lo < r.west || lo > r.east) : (lo < r.west && lo > r.east))) return;
-      if (C.Cartesian3.distance(cam, l.lab.position) > l.loin * 1.2) return;
-      a.push(l);
+  // Ne garde en mémoire graphique que les noms de la zone regardée (au plus MAX_LIEUX,
+  // les plus importants d'abord) au lieu des 12 700 en permanence.
+  var affiches = {};
+  var HALO_LIEU = null;
+  function majLieux() {
+    if (!brutLieux.length || mode === 'standard') return;
+    var r = viewer.camera.computeViewRectangle();
+    var carto = viewer.camera.positionCartographic, h = carto.height;
+    var cands = [];
+    for (var i = 0; i < brutLieux.length; i++) {
+      var l = brutLieux[i], lo = l.lon * DEG, la = l.lat * DEG;
+      if (r && (la < r.south || la > r.north || (r.west <= r.east ? (lo < r.west || lo > r.east) : (lo < r.west && lo > r.east)))) continue;
+      var dSol = 6371000 * Math.acos(Math.min(1, Math.sin(la) * Math.sin(carto.latitude) + Math.cos(la) * Math.cos(carto.latitude) * Math.cos(lo - carto.longitude)));
+      if (Math.sqrt(dSol * dSol + h * h) > l.loin) continue;
+      cands.push(l);
+    }
+    cands.sort(function (a, b) { return (b.ville - a.ville) || (b.pop - a.pop); });
+    cands = cands.slice(0, MAX_LIEUX);
+    var garder = {};
+    cands.forEach(function (l) { garder[l.id] = 1; });
+    Object.keys(affiches).forEach(function (id) {
+      if (garder[id]) return;
+      etiquettes.remove(affiches[id].lab); reperes.remove(affiches[id].pt); delete affiches[id];
     });
-    a = a.slice(0, 600); if (!a.length) return;
-    C.sampleTerrainMostDetailed(viewer.scene.terrainProvider, a.map(function (l) { return C.Cartographic.fromDegrees(l.lon, l.lat); }))
+    HALO_LIEU = HALO_LIEU || C.Color.fromCssColorString('rgba(0,0,0,0.75)');
+    var aCaler = [];
+    cands.forEach(function (l) {
+      if (affiches[l.id]) return;
+      var pos = C.Cartesian3.fromDegrees(l.lon, l.lat, hauteursLieux[l.id] != null ? hauteursLieux[l.id] + 3 : 0);
+      var cond = new C.DistanceDisplayCondition(0, l.loin);
+      affiches[l.id] = {
+        l: l,
+        lab: etiquettes.add({
+          position: pos, text: l.nom, font: (l.ville ? '500 15px' : '400 12.5px') + ' "Host Grotesk", system-ui, sans-serif',
+          fillColor: C.Color.WHITE, outlineColor: HALO_LIEU, outlineWidth: l.ville ? 3 : 2.5, style: C.LabelStyle.FILL_AND_OUTLINE,
+          pixelOffset: new C.Cartesian2(7, -1), horizontalOrigin: C.HorizontalOrigin.LEFT, verticalOrigin: C.VerticalOrigin.CENTER,
+          disableDepthTestDistance: Number.POSITIVE_INFINITY, distanceDisplayCondition: cond,
+        }),
+        pt: reperes.add({ position: pos, pixelSize: l.ville ? 5 : 3.5, color: C.Color.WHITE, outlineColor: HALO_LIEU, outlineWidth: 1,
+          disableDepthTestDistance: Number.POSITIVE_INFINITY, distanceDisplayCondition: cond }),
+      };
+      if (hauteursLieux[l.id] == null) aCaler.push(affiches[l.id]);
+    });
+    dernierePos = null; // force le test d'horizon sur les nouveaux noms
+    viewer.scene.requestRender();
+    // Pose au sol (relief) des noms ajoutés, pour qu'ils ne glissent pas en vue inclinée.
+    if (!aCaler.length || !(viewer.scene.terrainProvider instanceof C.CesiumTerrainProvider)) return;
+    C.sampleTerrainMostDetailed(viewer.scene.terrainProvider, aCaler.map(function (a) { return C.Cartographic.fromDegrees(a.l.lon, a.l.lat); }))
       .then(function (res) {
-        res.forEach(function (c, i) { var l = a[i], p = C.Cartesian3.fromDegrees(l.lon, l.lat, (c.height || 0) + 3); l.lab.position = p; l.pt.position = p; l.cale = true; });
+        if (!viewer) return;
+        res.forEach(function (c, i) {
+          var a = aCaler[i]; hauteursLieux[a.l.id] = c.height || 0;
+          if (!affiches[a.l.id]) return;
+          var p = C.Cartesian3.fromDegrees(a.l.lon, a.l.lat, hauteursLieux[a.l.id] + 3); a.lab.position = p; a.pt.position = p;
+        });
+        dernierePos = null; viewer.scene.requestRender();
       }).catch(function () { /* */ });
   }
 
@@ -264,7 +325,11 @@
     if (dernierePos && C.Cartesian3.equalsEpsilon(cam, dernierePos, 0, 1)) return;
     dernierHorizon = now; dernierePos = C.Cartesian3.clone(cam, dernierePos);
     if (!occ) occ = new C.EllipsoidalOccluder(C.Ellipsoid.WGS84, cam); else occ.cameraPosition = cam;
-    for (var i = 0; i < lieux.length; i++) { var l = lieux[i], v = occ.isPointVisible(l.lab.position); l.lab.show = v; l.pt.show = v; }
+    Object.keys(affiches).forEach(function (id) { var a = affiches[id], v = occ.isPointVisible(a.lab.position); a.lab.show = v; a.pt.show = v; });
+    if (paquetsFrontieres.length) {
+      var terre = new C.Occluder(new C.BoundingSphere(C.Cartesian3.ZERO, 6356000), cam);
+      for (var f = 0; f < paquetsFrontieres.length; f++) { var q = paquetsFrontieres[f]; q.prim.show = terre.isBoundingSphereVisible(q.sphere); }
+    }
     for (var j = 0; j < items.length; j++) { var it = items[j], w = occ.isPointVisible(it.pt.position); it.pt.show = w; it.halo.show = w; it.anneau.show = w; }
   }
 
@@ -305,6 +370,7 @@
     });
     tailles(true);
     calerAuSol();
+    dernierePos = null; viewer.scene.requestRender();
   }
   // Hauteurs du sol (relief ion) pour que les points ne glissent pas quand on incline la vue.
   var calage = 0;
@@ -314,12 +380,14 @@
     if (!manquants.length || !(viewer.scene.terrainProvider instanceof C.CesiumTerrainProvider)) return;
     var carts = manquants.map(function (it) { return C.Cartographic.fromDegrees(it.xy[0], it.xy[1]); });
     C.sampleTerrainMostDetailed(viewer.scene.terrainProvider, carts).then(function (res) {
+        if (!viewer) return;
       res.forEach(function (c, i) { var it = manquants[i]; cacheH[it.xy[0].toFixed(4) + ',' + it.xy[1].toFixed(4)] = c.height || 0; });
       if (jeton !== calage) return;
       items.forEach(function (it) {
         var pos = C.Cartesian3.fromDegrees(it.xy[0], it.xy[1], hauteurSol(it.xy[0], it.xy[1]) + 2);
         it.halo.position = pos; it.anneau.position = pos; it.pt.position = pos;
       });
+      dernierePos = null; viewer.scene.requestRender();
     }).catch(function () { /* relief indisponible : points à l'altitude 0 */ });
   }
 
@@ -389,21 +457,31 @@
     return preparer().then(function () {
       appliquerMode();
       vue.style.display = 'block';
+      viewer.useDefaultRenderLoop = true;
       viewer.resize();
       depuisMapboxVersCesium(false);
       poserPoints();
+      majLieux();
+      reposMapbox();
+      viewer.scene.requestRender();
     });
   }
+  // Hors 3D : la vue Cesium est DÉTRUITE (toute sa mémoire graphique rendue au navigateur),
+  // puis recréée au prochain passage en 3D ; fond Mapbox rétabli.
   function sortir() {
     fermerPopup();
-    if (vue) vue.style.display = 'none';
+    try { if (viewer && !viewer.isDestroyed()) viewer.destroy(); } catch (e) { /* */ }
+    if (vue) vue.remove();
+    viewer = vue = tileset = imagerie = points = etiquettes = reperes = occ = dernierePos = null;
+    items = []; affiches = {}; paquetsFrontieres = []; zoomPts = -1; pret = null;
+    reveilMapbox();
   }
 
   function render(etat) {
     var on = mode !== 'standard';
     chip.className = 'chip chip-edit chip-fond3d' + (on ? ' chip-pays' : '');
     chip.innerHTML = '<span class="chip-key">Rendu</span><span class="chip-val">' + esc(etat || LIB[mode]) + '</span><span class="chip-caret">' + ICON + '</span>';
-    chip.title = 'Changer de rendu : Standard, 3D maillage Google (villes), 3D imagerie HD sur relief (zones rurales). Clic droit et glisser pour incliner.';
+    chip.title = on ? 'Revenir à la carte standard' : 'Afficher la vue 3D photoréaliste (clic droit et glisser pour incliner)';
     chip.setAttribute('aria-pressed', on ? 'true' : 'false');
   }
   function makeChip() {
@@ -413,11 +491,10 @@
     render();
     chip.onclick = function (e) {
       e.stopPropagation();
-      var avant = mode;
       mode = MODES[(MODES.indexOf(mode) + 1) % MODES.length];
       if (mode === 'standard') { sortir(); render(); return; }
       render('chargement…');
-      (avant === 'standard' ? entrer() : Promise.resolve(appliquerMode())).then(function () { render(); }, function (err) {
+      entrer().then(function () { render(); }, function (err) {
         console.warn('[fond-3d]', err && err.message); mode = 'standard'; sortir(); render('indisponible');
         setTimeout(function () { render(); }, 2500);
       });
@@ -442,9 +519,12 @@
     demarre = true;
     chargerConfigLocale().then(function () {
       var c = cfg();
-      if (!c.googleKey && !c.ionToken) return; // pas de jeton : la carte Mapbox reste telle quelle
-      entrer().then(function () { reposMapbox(); map.on('style.load', reposMapbox); })
-        .catch(function (e) { console.warn('[fond-3d] vue 3D indisponible', e); sortir(); reveilMapbox(); });
+      if (!c.googleKey && !c.ionToken) return; // pas de jeton : pas de jeton de barre
+      makeChip();
+      ensureInBar();
+      var bar = document.getElementById('chipbar');
+      if (bar) new MutationObserver(ensureInBar).observe(bar, { childList: true });
+      map.on('style.load', function () { if (mode !== 'standard') { masques = []; reposMapbox(); } });
       // Filtres changés : humint-engine.js réécrit la source → on redessine les points.
       var t = null;
       map.on('sourcedata', function (e) {
@@ -468,6 +548,9 @@
       else if (n > 60) clearInterval(t);
     }, 250);
   }
+
+  // Accès de diagnostic (console) : AlgorFond3D.vue().scene…
+  window.AlgorFond3D = { vue: function () { return viewer; }, tuiles: function () { return tileset; } };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
