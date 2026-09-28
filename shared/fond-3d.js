@@ -96,6 +96,12 @@
       requestRenderMode: true, maximumRenderTimeChange: Infinity, msaaSamples: 1,
     });
     viewer.scene.postProcessStages.fxaa.enabled = !SAFARI;
+    // Moins de téléchargements simultanés : moins de tuiles décodées en même temps pendant un
+    // zoom. Descente arrêtée à 250 m du maillage : plus bas, l'image ne gagne plus rien (la
+    // caméra finit dans le maillage, écran noir) ; à 250 m, maisons, voitures, avions sont encore nets.
+    C.RequestScheduler.maximumRequestsPerServer = 6;
+    C.RequestScheduler.maximumRequests = SAFARI ? 12 : 24;
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 250;
     if (SAFARI) viewer.resolutionScale = 0.85;
     var sc = viewer.scene;
     // God's Eye View (atmosphereCompat.js) : l'atmosphère par sommet des modèles ne se lie pas sous Metal.
@@ -130,7 +136,16 @@
 
   // Mémoire : God's Eye View réserve jusqu'à 2,5 Go de tuiles (poste de bureau), ce qui fait
   // recharger la page par Safari. Plafond à 128 Mo (64 Mo sous Safari), tuiles hors vue libérées.
-  var TUILES = { cacheBytes: (SAFARI ? 64 : 128) * 1024 * 1024, maximumCacheOverflowBytes: (SAFARI ? 16 : 32) * 1024 * 1024, asynchronouslyLoadImagery: true };
+  // Zoom : sans ces réglages, un zoom rapide charge tous les niveaux intermédiaires de centaines
+  // de tuiles à la fois ; le pic de décodage dépasse la limite mémoire de Safari (page rechargée).
+  var TUILES = {
+    cacheBytes: (SAFARI ? 64 : 128) * 1024 * 1024, maximumCacheOverflowBytes: (SAFARI ? 16 : 32) * 1024 * 1024,
+    asynchronouslyLoadImagery: true,
+    enableCollision: true, // la caméra bute sur le maillage au lieu de passer sous le sol
+    skipLevelOfDetail: true, baseScreenSpaceError: 1024, skipScreenSpaceErrorFactor: 16, skipLevels: 1,
+    immediatelyLoadDesiredLevelOfDetail: false, loadSiblings: false,
+    cullRequestsWhileMoving: true, cullRequestsWhileMovingMultiplier: 60, preloadWhenHidden: false, preloadFlightDestinations: false,
+  };
   function chargerFonds() {
     var c = cfg(), v = viewer, sc = viewer.scene, attente = [];
     attente.push(C.ArcGisMapServerImageryProvider.fromUrl(
