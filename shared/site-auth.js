@@ -853,7 +853,8 @@ function removeOverlay(opts) {
 
 // Ouvre l'overlay à la demande (bouton « Connexion » sur pages publiques).
 // Choisit automatiquement la vue selon l'état de session.
-async function openLogin() {
+// vue = 'signup' : ouvre directement l'onglet « Créer un compte » si non connecté.
+async function openLogin(vue) {
   if (overlayEl) return; // déjà ouvert
   buildOverlay({ dismissible: true });
   try {
@@ -876,22 +877,22 @@ async function openLogin() {
       return;
     }
   } catch (_) { /* fall through to login */ }
-  switchView('login');
+  switchView(vue === 'signup' ? 'signup' : 'login');
 }
 window.algorAuth.openLogin = openLogin;
 
 // Auto-câblage : tout élément avec [data-algor-login] ou class .site-login
-// ouvre l'overlay au clic. On délègue depuis document pour ne PAS toucher
+// ouvre l'overlay au clic ; [data-algor-signup] l'ouvre sur l'inscription. On délègue depuis document pour ne PAS toucher
 // au DOM React (qui crash si on lui mute des attributs sous les pieds).
 function startWireObserver() {
   window.__algorWireAttached = true;
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-algor-login], .site-login');
+    const t = e.target.closest('[data-algor-login], .site-login, [data-algor-signup]');
     if (!t) return;
     e.preventDefault();
     e.stopPropagation();
     window.__algorWireFired = (window.__algorWireFired || 0) + 1;
-    openLogin();
+    openLogin(t.hasAttribute('data-algor-signup') ? 'signup' : 'login');
   }, true);
 }
 
