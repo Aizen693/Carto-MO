@@ -708,6 +708,35 @@ function buildOverlay(opts) {
     const btn = signupForm.querySelector('.sa-submit');
     btn.disabled = true; btn.classList.add('is-loading');
     try {
+      // Inscription via la fonction « inscription » : compte créé déjà confirmé,
+      // sans mail (le mail intégré Supabase bloquait au 3e inscrit de l'heure).
+      let res = null;
+      try {
+        res = await fetch(SUPABASE_URL + '/functions/v1/inscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY },
+          body: JSON.stringify({ email, password }),
+        });
+      } catch { res = null; }
+      if (res && res.status !== 404 && res.status < 500) {
+        const out = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          const MSG = {
+            existe: 'Un compte existe déjà avec cet email.',
+            email: 'Adresse email invalide.',
+            mot_de_passe: `Le mot de passe doit faire au moins ${MIN_PASSWORD} caractères.`,
+            trop: 'Trop d\'inscriptions depuis ce réseau en ce moment. Réessayez dans une heure.',
+          };
+          setError(signupErr, MSG[out.error] || 'Échec de l\'inscription · réessayez plus tard', null);
+          return;
+        }
+        const { data: sess, error: inErr } = await supabase.auth.signInWithPassword({ email, password });
+        if (inErr) throw inErr;
+        await proceedAfterAuth(sess.user.id);
+        showWelcomeToast(sess.user?.email);
+        return;
+      }
+      // Fonction injoignable : repli sur l'inscription Supabase classique.
       const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
       if (data.session && data.user) {
