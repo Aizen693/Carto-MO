@@ -195,6 +195,11 @@ const OVERLAY_HTML = `
           <p class="sa-sub" id="sa-sub">Connectez-vous pour accéder aux théâtres Algor Acces.</p>
         </div>
 
+        <div class="sa-tabs" id="sa-tabs" role="tablist">
+          <button type="button" class="sa-tab is-on" data-sa-tab="login" role="tab">Se connecter</button>
+          <button type="button" class="sa-tab" data-sa-tab="signup" role="tab">Créer un compte</button>
+        </div>
+
         <!-- ── Vue : connexion ── -->
         <div class="sa-view sa-view-active" id="sa-view-login">
           <form id="site-auth-form" autocomplete="on">
@@ -232,6 +237,18 @@ const OVERLAY_HTML = `
             <a href="#" id="sa-go-login" class="sa-link sa-link-strong">Se connecter</a>
           </p>
           <p class="sa-note">Le compte créé est gratuit. L'accès aux théâtres nécessite un passage premium.</p>
+        </div>
+
+        <!-- ── Vue : inscription réussie, lien de confirmation envoyé ── -->
+        <div class="sa-view" id="sa-view-sent">
+          <div class="sa-sent">
+            <div class="sa-sent-icon">${ICON_MAIL}</div>
+            <p class="sa-sent-txt">Un lien de confirmation vient d'être envoyé à <b id="sa-sent-email"></b>.</p>
+            <p class="sa-sent-sub">Ouvrez cet email et cliquez sur le lien pour activer votre compte : vous serez connecté automatiquement. Pensez à regarder dans vos courriers indésirables.</p>
+            <div class="sa-error" id="sa-sent-msg" role="status" aria-live="polite"></div>
+            <button type="button" class="sa-resend" id="sa-resend">Renvoyer le lien</button>
+            <p class="sa-signup"><a href="#" id="sa-sent-back" class="sa-link sa-link-strong">Retour à la connexion</a></p>
+          </div>
         </div>
 
         <!-- ── Vue : compte connecté (premium / admin / editor) ── -->
@@ -321,6 +338,20 @@ const OVERLAY_CSS = `
 .sa-title { font-size: 30px; font-weight: 400; line-height: 1.1; letter-spacing: -0.03em; margin: 0 0 8px; color: var(--sa-ink); }
 .sa-sub { font-size: 15px; line-height: 1.5; color: var(--sa-muted); margin: 0; }
 
+.sa-tabs { display: grid; grid-template-columns: 1fr 1fr; margin: -6px 0 24px; border: 1px solid var(--sa-ink); border-radius: 2px; overflow: hidden; }
+.sa-tab { height: 44px; border: 0; background: transparent; color: var(--sa-ink); font: inherit; font-size: 15px; cursor: pointer; transition: background .2s ease, color .2s ease; }
+.sa-tab + .sa-tab { border-left: 1px solid var(--sa-ink); }
+.sa-tab.is-on { background: var(--sa-ink); color: #FFF; }
+.sa-tab:not(.is-on):hover { background: rgba(28, 29, 33, .06); }
+.sa-sent { text-align: center; padding: 4px 0 2px; }
+.sa-sent-icon { width: 56px; height: 56px; margin: 0 auto 18px; display: grid; place-items: center; border: 1px solid var(--sa-ink); border-radius: 50%; color: var(--sa-ink); }
+.sa-sent-icon svg { width: 24px; height: 24px; }
+.sa-sent-txt { font-size: 17px; line-height: 1.45; color: var(--sa-ink); margin: 0 0 10px; }
+.sa-sent-txt b { font-weight: 500; word-break: break-all; }
+.sa-sent-sub { font-size: 14px; line-height: 1.5; color: var(--sa-muted); margin: 0 0 18px; }
+.sa-resend { width: 100%; height: 46px; margin-top: 8px; border: 1px solid var(--sa-ink); border-radius: 2px; background: #FFF; color: var(--sa-ink); font: inherit; font-size: 15px; cursor: pointer; transition: background .2s ease, color .2s ease; }
+.sa-resend:hover:not(:disabled) { background: var(--sa-ink); color: #FFF; }
+.sa-resend:disabled { opacity: .45; cursor: default; }
 .sa-view { display: none; }
 .sa-view.sa-view-active { display: block; }
 
@@ -427,6 +458,11 @@ const VIEWS = {
     sub: 'Inscrivez-vous pour rejoindre Algor Acces.',
     focus: '#sa-signup-email',
   },
+  sent: {
+    title: 'Vérifiez vos emails',
+    sub: 'Dernière étape pour activer votre compte.',
+    focus: null,
+  },
   upgrade: {
     title: 'Passez premium',
     sub: "Débloquez l'accès complet aux théâtres d'analyse.",
@@ -471,6 +507,14 @@ function switchView(name) {
   const meta = VIEWS[name];
   overlayEl.querySelector('#sa-title').textContent = meta.title;
   overlayEl.querySelector('#sa-sub').textContent = meta.sub;
+  const tabs = overlayEl.querySelector('#sa-tabs');
+  if (tabs) {
+    tabs.style.display = (name === 'login' || name === 'signup') ? '' : 'none';
+    tabs.querySelectorAll('[data-sa-tab]').forEach((b) => {
+      const on = b.dataset.saTab === name;
+      b.classList.toggle('is-on', on); b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+  }
   if (meta.focus) overlayEl.querySelector(meta.focus)?.focus();
 }
 
@@ -620,6 +664,32 @@ function buildOverlay(opts) {
     switchView('login');
   });
 
+  overlayEl.querySelectorAll('[data-sa-tab]').forEach((b) => b.addEventListener('click', () => {
+    clearError(loginErr); clearError(signupErr);
+    switchView(b.dataset.saTab);
+  }));
+  overlayEl.querySelector('#sa-sent-back').addEventListener('click', (e) => {
+    e.preventDefault();
+    switchView('login');
+  });
+  const resendBtn = overlayEl.querySelector('#sa-resend');
+  const sentMsg = overlayEl.querySelector('#sa-sent-msg');
+  resendBtn.addEventListener('click', async () => {
+    const email = overlayEl.querySelector('#sa-sent-email').textContent;
+    if (!email) return;
+    resendBtn.disabled = true;
+    try {
+      const { error } = await supabase.auth.resend({ type: 'signup', email });
+      if (error) throw error;
+      setError(sentMsg, 'Nouveau lien envoyé. Il peut mettre une à deux minutes à arriver.', 'sa-ok');
+    } catch (err) {
+      setError(sentMsg, /rate|seconds|security/i.test((err && err.message) || '')
+        ? 'Patientez une minute avant de redemander un lien.'
+        : "Envoi impossible pour l'instant, réessayez plus tard.", null);
+    }
+    setTimeout(() => { resendBtn.disabled = false; }, 60000);
+  });
+
   // Mot de passe oublié — réinitialisation par email Supabase
   overlayEl.querySelector('#site-auth-forgot').addEventListener('click', async (e) => {
     e.preventDefault();
@@ -746,8 +816,15 @@ function buildOverlay(opts) {
       } else {
         // Confirmation email requise → au clic sur le lien, l'utilisateur
         // revient sur le site déjà connecté (detectSessionInUrl + toast).
-        setError(signupErr, 'Compte créé. Cliquez sur le lien reçu par email : vous serez connecté automatiquement.', 'sa-ok');
+        // Adresse déjà inscrite : Supabase répond sans erreur mais sans identité.
+        if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+          setError(signupErr, 'Un compte existe déjà avec cet email. Connectez-vous, ou utilisez « Mot de passe oublié ».', null);
+          return;
+        }
+        overlayEl.querySelector('#sa-sent-email').textContent = email;
+        clearError(overlayEl.querySelector('#sa-sent-msg'));
         signupForm.reset();
+        switchView('sent');
       }
     } catch (err) {
       const msg = (err && err.message) || '';
