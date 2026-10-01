@@ -470,6 +470,11 @@
     .cve__date { grid-column: 2; }
   }
   @media (prefers-reduced-motion: reduce) { .bar__fill { animation: none; } .vcard:hover .vcard__img { transform: none; } }
+  /* Cote OTAN des notes géo (fiabilité A à F, crédibilité 1 à 6) */
+  .vcote { font: 400 11.5px var(--mono); padding: 1px 5px; border: 1px solid var(--line); border-radius: 2px; color: var(--ink); letter-spacing: .02em; }
+  .vcard .vcote { color: #F2F2F4; border-color: rgba(255,255,255,.3); }
+  .vcote-det { margin: 14px 0 0; padding: 12px 0 0; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.5; color: var(--muted); }
+  .vcote-det b { font-weight: 500; color: var(--ink); }
 </style>
 </head>
 <body data-rubrique="veille">
@@ -624,6 +629,11 @@
     if (/acled|isw|bellingcat|kivu|reuters|afp|crisis|hrw|amnesty|\bonu\b|\bun\b|imb|janes/.test(s)) return 'Élevée';
     if (/rfi|guardian|\bbbc\b|france 24|le monde|trt|jazeera|figaro|ap\b/.test(s)) return 'Établie';
     return 'À recouper'; };
+  // Cote réelle (cotations.json fusionné par veille-feed). Pas de cote : on l'écrit, on n'en invente pas.
+  const coteChip = (it) => it.cote ? `<span class="vcote" title="Fiabilité ${esc(it.cote_fiabilite || '')} · crédibilité ${esc(it.cote_credibilite || '')}">${esc(it.cote)}</span>` : '';
+  const coteDetail = (it) => it.cote
+    ? `<p class="vcote-det"><b>Cote ${esc(it.cote)}</b> · fiabilité de la source ${esc(it.cote_fiabilite || '')} · crédibilité de l'information ${esc(it.cote_credibilite || '')}<br>${esc(it.cote_motif || '')} · ${it.cote_revue ? 'cote revue par un analyste' : 'cote calculée, en attente de revue'}</p>`
+    : `<p class="vcote-det">Note pas encore cotée.</p>`;
   const asList = (v) => { if (Array.isArray(v)) return v; if (typeof v === 'string') { try { const p = JSON.parse(v); if (Array.isArray(p)) return p; } catch {} return v.trim() && v.trim() !== '[]' ? [v] : []; } return []; };
 
   let geoItems = [], geoState = { zone: 'all', sev: 'all', q: '', limit: 24 };
@@ -646,7 +656,7 @@
         <span class="vcard__sev" style="--c:${sev.c}">${sev.lbl}</span>
       </span>
       <span class="vcard__body">
-        <span class="vcard__meta"><span class="vcard__zone">${esc(ZONES[it.theatre] || it.theatre || '')}</span><span class="vcard__date">${esc(fmtD(it.date))}</span>${it.source ? `<span data-i18n-skip>· ${esc(it.source)}</span>` : ''}</span>
+        <span class="vcard__meta"><span class="vcard__zone">${esc(ZONES[it.theatre] || it.theatre || '')}</span><span class="vcard__date">${esc(fmtD(it.date))}</span>${it.source ? `<span data-i18n-skip>· ${esc(it.source)}</span>` : ''}${coteChip(it)}</span>
         <span class="vcard__title" data-i18n-skip>${esc(it.titre)}</span>
         <span class="vcard__resume" data-i18n-skip>${esc(it.resume || '')}</span>
         <span class="vcard__more">Lire la note →</span>
@@ -696,6 +706,7 @@
         <div class="vcard__meta"><span class="vcard__zone">${esc(ZONES[it.theatre] || it.theatre || '')}</span><span class="vcard__date">${esc(fmtD(it.date, true))}</span>${it.lieu ? `<span data-i18n-skip>· ${esc(it.lieu)}</span>` : ''}<span class="vcard__sev" style="position:static;--c:${sev.c}">${sev.lbl}</span></div>
         <h3 class="vmodal__title" data-i18n-skip>${esc(it.titre)}</h3>
         <p class="vmodal__resume" data-i18n-skip>${esc(it.resume || '')}</p>
+        ${coteDetail(it)}
         ${ACCES === 'abonne' ? `<div class="vreport">
           <div class="vreport__class">Note d'analyse · Accès abonné</div>
           <div class="vreport__sec"><div class="vreport__lbl">Analyse</div><p data-i18n-skip>${esc(it.detail || it.resume || '')}</p></div>
@@ -704,7 +715,7 @@
             ${reco.length ? `<ul class="vreport__ul">${reco.map((x) => `<li data-i18n-skip>${esc(x)}</li>`).join('')}</ul>` : `<p class="vreport__muted">À partir de ce signal, nos analystes produisent sur demande une note d'impact dédiée à votre organisation : exposition, scénarios probables et mesures à prendre.</p>`}
           </div>
           <div class="vreport__sec"><div class="vreport__lbl">Sources et fiabilité</div>
-            <div class="vreport__srcrow">${src ? `<a href="${esc(src)}" target="_blank" rel="noopener noreferrer">${esc(it.source || 'Source')} ↗</a>` : `<span>${esc(it.source || '')}</span>`}<span class="vreport__rel">Fiabilité · ${reliability(it.source)}</span></div>
+            <div class="vreport__srcrow">${src ? `<a href="${esc(src)}" target="_blank" rel="noopener noreferrer">${esc(it.source || 'Source')} ↗</a>` : `<span>${esc(it.source || '')}</span>`}<span class="vreport__rel">${it.cote ? `Cote ${esc(it.cote)}` : 'Pas encore cotée'}</span></div>
           </div>
           <div class="vreport__actions">
             <a class="vreport__cta" href="/contact/">Demander un brief approfondi sur ce sujet</a>
