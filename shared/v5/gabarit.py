@@ -16,7 +16,7 @@ import re, sys, pathlib
 X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>'
 FL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M3 12h18M14 5l7 7-7 7"/></svg>'
 # Marque « recoupement » (logo/recoupement-blanc.svg), en currentColor : blanche sur la nuit, encre sur le papier
-BRAND = '<a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>'
+BRAND = '<a class="brand" href="/" aria-label="Algor Acces, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Acces</span></a>'
 
 # Débunkage : page désactivée depuis le pivot de juin 2026 (redirige vers l'accueil). Pour la réactiver,
 # retirer le bloc PIVOT de debunkage/index.html puis rajouter ('debunkage', '/debunkage/', 'Débunkage') ici.
@@ -66,7 +66,7 @@ def nav(rub, annonce=True):
   <nav class="veil__body">
     <div class="veil__main">{menu_main}</div>
     <div class="veil__col"><h3>Théâtres</h3>{th}</div>
-    <div class="veil__col"><h3>Algor Access</h3><button class="veil__compte site-login" type="button">Connexion</button><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+    <div class="veil__col"><h3>Algor Acces</h3><button class="veil__compte site-login" type="button">Connexion</button><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
   </nav>
 </div>
 
@@ -98,7 +98,7 @@ def foot():
     th = ''.join(f'<a href="{h}">{t}</a>' for h, t in THEATRES)
     return f'''<footer class="foot" data-nav="light">
   <div class="foot__id">
-    <p>© 2026 Algor Access</p>
+    <p>© 2026 Algor Acces</p>
     <p>Solution souveraine française, données hébergées en Europe.</p>
     <hr>
     <div class="foot__pills">

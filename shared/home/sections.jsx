@@ -175,7 +175,7 @@ const SERVICES = [
   { id: 'veille', t: 'Veille continue', span: 'wide',
     d: "Un flux OSINT consolidé sur les six théâtres, sélectionné, daté et sourcé. Chaque note est reliée à sa source et géolocalisée sur la carte de veille.",
     img: '/shared/home/assets/services-veille.jpg?v=20260914a',
-    alt: 'Fil de veille Algor Access : notes datées, sourcées et localisées' },
+    alt: 'Fil de veille Algor Acces : notes datées, sourcées et localisées' },
   { id: 'analyse', t: 'Analyse par pays', span: 'narrow',
     d: "Pour chaque pays, la répartition des incidents par région, par typologie et par acteur, calculée sur les données collectées.",
     img: '/shared/home/assets/get-analyse.jpg?v=20260630a', vid: '/shared/home/assets/get-analyse.mp4?v=20260630a',
@@ -183,11 +183,11 @@ const SERVICES = [
   { id: 'brief', t: 'Brief IA', span: 'narrow',
     d: "Une appréciation de situation générée à la demande sur les faits de la période : tendance dominante, acteurs, implications. Relue avant diffusion.",
     img: '/shared/home/assets/get-decision.jpg?v=20260630a', vid: '/shared/home/assets/get-decision.mp4?v=20260630a',
-    alt: 'Appréciation de situation Algor Access : tendances, acteurs et implications, ici le Mali' },
+    alt: 'Appréciation de situation Algor Acces : tendances, acteurs et implications, ici le Mali' },
   { id: 'carte', t: 'Carte de situation et export', span: 'wide',
     d: "Chaque événement est corroboré et relié à ses sources sur la carte, avec son statut. Le brief et la fiche s'exportent en HTML autonome, lisibles hors ligne et transmissibles.",
     img: '/shared/home/assets/get-carte.jpg?v=20260630a', vid: '/shared/home/assets/get-carte.mp4?v=20260630a',
-    alt: 'Carte de situation Algor Access : événement corroboré et ses sources, ici le Bénin' },
+    alt: 'Carte de situation Algor Acces : événement corroboré et ses sources, ici le Bénin' },
 ];
 
 function MethodeSection() {
@@ -248,11 +248,11 @@ function AboutSection() {
     <section className="ab-sec" id="a-propos">
       <div className="ab-sec__wrap">
         <div className="ab-sec__col">
-          <h2 className="v4-title v4-title--sm" data-split>Algor Access</h2>
+          <h2 className="v4-title v4-title--sm" data-split>Algor Acces</h2>
         </div>
         <div className="ab-sec__col">
           <p className="ab-sec__text" data-reveal="up">
-            Algor Access est la plateforme de cartographie d'Algor Int, structure indépendante d'analyse
+            Algor Acces est la plateforme de cartographie d'Algor Int, structure indépendante d'analyse
             géopolitique. Elle applique les méthodes du renseignement à des sources ouvertes et en restitue
             le résultat sous une forme lisible : une carte, une chronologie, un brief. Les théâtres sont suivis
             dans la durée par des analystes qui en connaissent le contexte et les acteurs.

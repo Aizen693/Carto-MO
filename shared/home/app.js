@@ -351,7 +351,7 @@ function App() {
     className: "brand__body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "brand__name"
-  }, "Algor ", /*#__PURE__*/React.createElement("span", null, "Access")), /*#__PURE__*/React.createElement("div", {
+  }, "Algor ", /*#__PURE__*/React.createElement("span", null, "Acces")), /*#__PURE__*/React.createElement("div", {
     className: "brand__tag"
   }, "La plateforme de cartographie d'Algor Int"))), premium && /*#__PURE__*/React.createElement("span", {
     className: "premium-chip",
@@ -414,7 +414,7 @@ function App() {
     type: "button",
     className: "logo-reset",
     onClick: resetLogo,
-    title: "R\xE9tablir le logo Algor Access"
+    title: "R\xE9tablir le logo Algor Acces"
   }, "R\xE9tablir")), premium ? /*#__PURE__*/React.createElement("a", {
     className: "premium-badge",
     href: "#",

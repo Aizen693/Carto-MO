@@ -1,4 +1,4 @@
-/* Algor Access · comportement commun v5 : navigation, menu, recherche, bandeau de veille,
+/* Algor Acces · comportement commun v5 : navigation, menu, recherche, bandeau de veille,
    typographie française. Aucune dépendance. */
 (function () {
   'use strict';

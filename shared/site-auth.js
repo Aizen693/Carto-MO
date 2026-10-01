@@ -189,10 +189,10 @@ const OVERLAY_HTML = `
 
         <div class="sa-head">
           <div class="sa-logo">
-            <svg viewBox="0 0 100 100" role="img" aria-label="Algor Access"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg>
+            <svg viewBox="0 0 100 100" role="img" aria-label="Algor Acces"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg>
           </div>
           <h1 class="sa-title" id="sa-title">Authentification</h1>
-          <p class="sa-sub" id="sa-sub">Connectez-vous pour accéder aux théâtres Algor Access.</p>
+          <p class="sa-sub" id="sa-sub">Connectez-vous pour accéder aux théâtres Algor Acces.</p>
         </div>
 
         <!-- ── Vue : connexion ── -->
@@ -419,12 +419,12 @@ const TOAST_CSS = `
 const VIEWS = {
   login: {
     title: 'Authentification',
-    sub: 'Connectez-vous pour accéder aux théâtres Algor Access.',
+    sub: 'Connectez-vous pour accéder aux théâtres Algor Acces.',
     focus: '#site-auth-email',
   },
   signup: {
     title: 'Créer un compte',
-    sub: 'Inscrivez-vous pour rejoindre Algor Access.',
+    sub: 'Inscrivez-vous pour rejoindre Algor Acces.',
     focus: '#sa-signup-email',
   },
   upgrade: {
@@ -434,7 +434,7 @@ const VIEWS = {
   },
   account: {
     title: 'Votre compte',
-    sub: 'Vous êtes déjà connecté à Algor Access.',
+    sub: 'Vous êtes déjà connecté à Algor Acces.',
     focus: null,
   },
 };

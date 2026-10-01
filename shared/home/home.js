@@ -1,7 +1,7 @@
 (function () {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 /* global React, ReactDOM */
-// Page 1 — Accueil client Algor Access (plateforme OSINT)
+// Page 1 — Accueil client Algor Acces (plateforme OSINT)
 
 const {
   useState,
@@ -1018,7 +1018,7 @@ function SiteFooter() {
     className: "site-footer__brand"
   }, /*#__PURE__*/React.createElement("div", {
     className: "brand__name"
-  }, "Algor Access"), /*#__PURE__*/React.createElement("p", {
+  }, "Algor Acces"), /*#__PURE__*/React.createElement("p", {
     className: "site-footer__tag"
   }, "Renseignement g\xE9opolitique. Six th\xE9\xE2tres \xE0 risque suivis en continu, chaque \xE9v\xE9nement sourc\xE9, dat\xE9 et auditable.")), /*#__PURE__*/React.createElement("nav", {
     className: "site-footer__cols",
@@ -1199,7 +1199,7 @@ const HOME_GET = [{
   vid: "/shared/home/assets/get-carte.mp4?v=20260630a",
   gif: "/shared/home/assets/get-carte.gif?v=20260622e",
   auto: false,
-  alt: "Carte de situation Algor Access : incidents géolocalisés et statut de corroboration, ici le Bénin"
+  alt: "Carte de situation Algor Acces : incidents géolocalisés et statut de corroboration, ici le Bénin"
 }, {
   tag: "L'analyse",
   t: "Une lecture analytique immédiate",
@@ -1217,7 +1217,7 @@ const HOME_GET = [{
   vid: "/shared/home/assets/get-decision.mp4?v=20260630a",
   gif: "/shared/home/assets/get-decision.gif?v=20260630a",
   auto: false,
-  alt: "Appréciation de situation Algor Access : tendances, acteurs et implications, ici le Mali"
+  alt: "Appréciation de situation Algor Acces : tendances, acteurs et implications, ici le Mali"
 }];
 function GetSection() {
   // Les vidéos en lecture auto (data-auto) jouent quand elles entrent dans la vue
@@ -1583,7 +1583,7 @@ function AudienceSection() {
     className: "home-sec__wrap"
   }, /*#__PURE__*/React.createElement(SectionHead, {
     title: "\xC0 qui s'adresse",
-    em: "Algor Access",
+    em: "Algor Acces",
     intro: "Des profils diff\xE9rents, un m\xEAme besoin : une lecture fiable et dat\xE9e des th\xE9\xE2tres \xE0 risque."
   }), /*#__PURE__*/React.createElement("div", {
     className: "aud-grid"
@@ -1622,7 +1622,7 @@ function CompareSection() {
     className: "cmp-table__cell"
   }, "Fil d'actualit\xE9 & presse"), /*#__PURE__*/React.createElement("div", {
     className: "cmp-table__cell cmp-table__cell--pos"
-  }, "Algor Access")), COMPARE_ROWS.map(([c, neg, pos], i) => /*#__PURE__*/React.createElement("div", {
+  }, "Algor Acces")), COMPARE_ROWS.map(([c, neg, pos], i) => /*#__PURE__*/React.createElement("div", {
     className: "cmp-table__row",
     key: i
   }, /*#__PURE__*/React.createElement("div", {

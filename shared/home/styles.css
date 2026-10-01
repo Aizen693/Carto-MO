@@ -244,7 +244,7 @@ img, svg { display: block; max-width: 100%; }
 }
 .brand__name span { color: inherit; }
 /* Le sous-titre se cale sous le wordmark : a 10px/0.16em il debordait de ~100px
-   a droite d'« Algor Access » et elargissait le bloc marque d'autant, ce qui
+   a droite d'« Algor Acces » et elargissait le bloc marque d'autant, ce qui
    poussait la nav et les boutons hors de l'axe du header. */
 .brand__tag {
   font-family: var(--mono);

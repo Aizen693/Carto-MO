@@ -1,4 +1,4 @@
-/* i18n.js : bascule FR / EN de tout le site Algor Access (15/09/2026).
+/* i18n.js : bascule FR / EN de tout le site Algor Acces (15/09/2026).
  *
  * Principe : le site est écrit en français. En anglais, ce script remplace à la volée
  * chaque texte visible (nœuds texte + placeholder, title, aria-label, alt, data-tip)
@@ -7,7 +7,7 @@
  * modèles : « 45 rapports » est cherché sous la clé « {0} rapports ».
  *
  * À charger tôt dans <head>, en script classique :
- *   <script src="/shared/i18n.js?v=20260915a"></script>
+ *   <script src="/shared/i18n.js?v=20261001a"></script>
  * Le sélecteur FR | EN se monte dans tout élément .lang-slot (vide), sinon en pastille flottante.
  * Choix mémorisé dans localStorage « algor-lang » ; ?lang=en ou ?lang=fr dans l'URL le force.
  * Contenus non traduits volontairement : tout ce qui est sous [data-i18n-skip]
@@ -18,7 +18,7 @@
 (function () {
   'use strict';
   var CLE_STOCKAGE = 'algor-lang';
-  var VERSION_DICO = '20260923veille';
+  var VERSION_DICO = '20261001a';
   var root = document.documentElement;
 
   var lang = null;

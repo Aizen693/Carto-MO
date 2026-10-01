@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <script>/* Anciennes adresses de la console interne (#console, #comptes, #rapports) : elle vit désormais sur /console/. */if(/^#(console|comptes|rapports)$/.test(location.hash))location.replace('/console/'+location.hash);</script>
-<script src="/shared/i18n.js?v=20260916a"></script>
+<script src="/shared/i18n.js?v=20261001a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Algor Access : Cartographie OSINT des théâtres à risque</title>
-<meta name="description" content="Algor Access : plateforme de cartographie OSINT. Six théâtres géopolitiques (Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud) suivis en continu, chaque événement sourcé, daté et auditable." />
-<meta property="og:title" content="Algor Access : Cartographie OSINT des théâtres à risque" />
+<title>Algor Acces : Cartographie OSINT des théâtres à risque</title>
+<meta name="description" content="Algor Acces : plateforme de cartographie OSINT. Six théâtres géopolitiques (Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud) suivis en continu, chaque événement sourcé, daté et auditable." />
+<meta property="og:title" content="Algor Acces : Cartographie OSINT des théâtres à risque" />
 <meta property="og:description" content="Plateforme de cartographie OSINT. Six théâtres géopolitiques suivis en continu, chaque événement sourcé, daté et auditable." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://algoracces.fr/" />
@@ -19,7 +19,7 @@
 <meta name="theme-color" content="#0F1013" />
 <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
 <link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
-<link rel="stylesheet" href="/shared/v5/v5.css?v=20260923c" />
+<link rel="stylesheet" href="/shared/v5/v5.css?v=20261001a" />
 <style>
   /* Ouverture : recule sous la bande des théâtres */
   .hero { background: var(--night); color: var(--on-night); height: calc(100svh - var(--annonce-h, 0px)); min-height: 620px; margin-top: -78px; display: flex; flex-direction: column; justify-content: flex-end; position: sticky; top: 0; z-index: 0; padding: 120px var(--gutter) clamp(96px, 13vh, 150px); overflow: hidden; }
@@ -141,7 +141,7 @@
 </div>
 <header class="nav" id="nav">
   <div class="nav__bar">
-    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <a class="brand" href="/" aria-label="Algor Acces, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Acces</span></a>
     <nav class="nav__links" aria-label="Rubriques"><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a></nav>
     <div class="nav__right">
       <span class="lang-slot"></span>
@@ -158,19 +158,19 @@
 
 <div class="veil" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
   <div class="veil__top">
-    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <a class="brand" href="/" aria-label="Algor Acces, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Acces</span></a>
     <button class="veil__x" data-fermer aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
   </div>
   <nav class="veil__body">
     <div class="veil__main"><a href="/" aria-current="page">Plateforme</a><a href="/theatres/">Théâtres</a><a href="/veille/">Veille</a><a href="/methodologie/">Méthodologie</a></div>
     <div class="veil__col"><h3>Théâtres</h3><a href="/moyen-orient/">Moyen-Orient</a><a href="/sahel/">Sahel</a><a href="/rdc/">RDC, Grands Lacs</a><a href="/madagascar/">Madagascar</a><a href="/afrique/">Afrique maritime</a><a href="/asie-sud/">Asie du Sud</a></div>
-    <div class="veil__col"><h3>Algor Access</h3><button class="veil__compte site-login" type="button">Connexion</button><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
+    <div class="veil__col"><h3>Algor Acces</h3><button class="veil__compte site-login" type="button">Connexion</button><a href="/offres/">Offres</a><a href="/a-propos/">À propos</a><a href="/contact/">Contact</a><a href="/demo/">Démo sur une zone</a></div>
   </nav>
 </div>
 
 <div class="veil veil--search" id="recherche" role="dialog" aria-modal="true" aria-label="Recherche">
   <div class="veil__top">
-    <a class="brand" href="/" aria-label="Algor Access, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Access</span></a>
+    <a class="brand" href="/" aria-label="Algor Acces, accueil"><svg class="marque" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 90 L28 90 L46.4 40 L34.4 40 Z M74 90 L86 90 L75 62 L63 62 Z M50 5 L59 14 L50 23 L41 14 Z"/></svg><span>Algor Acces</span></a>
     <button class="veil__x" data-fermer aria-label="Fermer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
   </div>
   <div class="veil__body">
@@ -204,7 +204,7 @@
   </section>
 
   <section class="v5-statement" data-nav="light">
-    <p>Algor Access suit six théâtres à risque en continu pour les directions sûreté, les cabinets d'analyse et les rédactions spécialisées. <span>Chaque événement est sourcé, daté et auditable,</span> et vos données restent hébergées en Europe.</p>
+    <p>Algor Acces suit six théâtres à risque en continu pour les directions sûreté, les cabinets d'analyse et les rédactions spécialisées. <span>Chaque événement est sourcé, daté et auditable,</span> et vos données restent hébergées en Europe.</p>
   </section>
 
   <section class="v5-sec" data-nav="light" aria-label="Capacités">
@@ -225,7 +225,7 @@
       <div>
         <div class="v5-epingle__sticky">
           <div class="v5-epingle__cadre">
-            <span class="v5-couche v5-couche--base"><img src="/shared/home/assets/v5/chaine-0.jpg?v=20260922b" alt="Carte Algor Access du Mali : 287 événements, analyse par région, typologie et acteur (données fictives)" loading="lazy"></span>
+            <span class="v5-couche v5-couche--base"><img src="/shared/home/assets/v5/chaine-0.jpg?v=20260922b" alt="Carte Algor Acces du Mali : 287 événements, analyse par région, typologie et acteur (données fictives)" loading="lazy"></span>
             <span class="v5-couche" data-couche="1"><img src="/shared/home/assets/v5/chaine-1.jpg?v=20260922b" alt="Carte du Mali filtrée du 1er avril au 31 juillet 2026 : 206 événements (données fictives)" loading="lazy"></span>
             <span class="v5-couche" data-couche="2"><img src="/shared/home/assets/v5/chaine-2.jpg?v=20260922b" alt="Carte du Mali filtrée sur les attaques : 41 événements (données fictives)" loading="lazy"></span>
             <span class="v5-couche" data-couche="3"><img src="/shared/home/assets/v5/chaine-3.jpg?v=20260922b" alt="Carte du Mali filtrée sur les attaques du GSIM : 12 événements (données fictives)" loading="lazy"></span>
@@ -273,7 +273,7 @@
     <div class="veille-volets">
       <div class="v5-split v5-split--rev">
         <figure class="v5-split__media" data-trame-libre>
-          <img src="/shared/home/assets/v5/veille-fictif.jpg?v=20260922b" alt="Veille géopolitique d'Algor Access : notes classées par théâtre et par gravité (interface réelle, données fictives)" loading="lazy">
+          <img src="/shared/home/assets/v5/veille-fictif.jpg?v=20260922b" alt="Veille géopolitique d'Algor Acces : notes classées par théâtre et par gravité (interface réelle, données fictives)" loading="lazy">
           <figcaption>Veille géopolitique · interface réelle, données fictives</figcaption>
         </figure>
         <div>
@@ -286,7 +286,7 @@
       </div>
       <div class="v5-split v5-split--rev">
         <figure class="v5-split__media" data-trame-libre>
-          <img src="/shared/home/assets/v5/veille-cyber.jpg?v=20260922b" alt="Veille cyber d'Algor Access : carte des attaques en cours, pays par pays (interface réelle, données fictives)" loading="lazy">
+          <img src="/shared/home/assets/v5/veille-cyber.jpg?v=20260922b" alt="Veille cyber d'Algor Acces : carte des attaques en cours, pays par pays (interface réelle, données fictives)" loading="lazy">
           <figcaption>Veille cyber · interface réelle, données fictives</figcaption>
         </figure>
         <div>
@@ -304,7 +304,7 @@
   <section class="v5-sec v5-sec--band" data-nav="light">
     <div class="v5-duo">
       <figure class="v5-duo__media">
-        <video src="/shared/home/assets/v5/carte-mali.mp4?v=20260922b" poster="/shared/home/assets/v5/carte-mali.jpg?v=20260922b" muted loop playsinline preload="none" data-v5-play aria-label="Carte Algor Access du Mali lue mois par mois (interface réelle, données fictives)"></video>
+        <video src="/shared/home/assets/v5/carte-mali.mp4?v=20260922b" poster="/shared/home/assets/v5/carte-mali.jpg?v=20260922b" muted loop playsinline preload="none" data-v5-play aria-label="Carte Algor Acces du Mali lue mois par mois (interface réelle, données fictives)"></video>
       </figure>
       <div class="v5-duo__card">
         <h2>La rigueur du renseignement, appliquée aux sources ouvertes</h2>
@@ -352,7 +352,7 @@
 <!-- v5:foot -->
 <footer class="foot" data-nav="light">
   <div class="foot__id">
-    <p>© 2026 Algor Access</p>
+    <p>© 2026 Algor Acces</p>
     <p>Solution souveraine française, données hébergées en Europe.</p>
     <hr>
     <div class="foot__pills">
@@ -368,11 +368,11 @@
 </footer>
 <!-- /v5:foot -->
 
-<script type="module" src="/shared/site-auth.js?v=20260923b"></script>
+<script type="module" src="/shared/site-auth.js?v=20261001a"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/shared/v5/accueil-reseau.js?v=20260922e" defer></script>
-<script src="/shared/v5/chrome.js?v=20260923c"></script>
+<script src="/shared/v5/chrome.js?v=20261001a"></script>
 <script>
 (function () {
   var V = window.V5, esc = V.esc, fr = V.fr, reduit = V.reduit;

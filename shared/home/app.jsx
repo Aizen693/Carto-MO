@@ -227,7 +227,7 @@ function App() {
               : <div className="brand__mark" />}
             {!clientLogo && (
               <div className="brand__body">
-                <div className="brand__name">Algor <span>Access</span></div>
+                <div className="brand__name">Algor <span>Acces</span></div>
                 <div className="brand__tag">La plateforme de cartographie d'Algor Int</div>
               </div>
             )}
@@ -262,7 +262,7 @@ function App() {
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="M17 8l-5-5-5 5" /><path d="M12 3v12" /></svg>
                 </button>
                 {clientLogo && (
-                  <button type="button" className="logo-reset" onClick={resetLogo} title="Rétablir le logo Algor Access">Rétablir</button>
+                  <button type="button" className="logo-reset" onClick={resetLogo} title="Rétablir le logo Algor Acces">Rétablir</button>
                 )}
               </span>
             )}

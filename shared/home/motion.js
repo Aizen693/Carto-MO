@@ -1,4 +1,4 @@
-/* Accueil Algor Access, mouvement (DA 09-2026 v4).
+/* Accueil Algor Acces, mouvement (DA 09-2026 v4).
    Defilement inertiel Lenis branche sur GSAP ScrollTrigger, revelations par
    masque, titres composes ligne par ligne, parallaxe des captures, empilement
    des calques, instrument de metadonnees, inclinaison du globe au defilement,

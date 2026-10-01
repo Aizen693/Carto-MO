@@ -1,5 +1,5 @@
 /* global React, ReactDOM */
-// Page 1 — Accueil client Algor Access (plateforme OSINT)
+// Page 1 — Accueil client Algor Acces (plateforme OSINT)
 
 const { useState, useEffect, useRef } = React;
 
@@ -504,7 +504,7 @@ function SiteFooter() {
     <footer className="site-footer">
       <div className="site-footer__wrap">
         <div className="site-footer__brand">
-          <div className="brand__name">Algor Access</div>
+          <div className="brand__name">Algor Acces</div>
           <p className="site-footer__tag">
             Renseignement géopolitique. Six théâtres à risque suivis en continu, chaque événement sourcé, daté et auditable.
           </p>
@@ -630,7 +630,7 @@ const HOME_GET = [
     vid: "/shared/home/assets/get-carte.mp4?v=20260630a",
     gif: "/shared/home/assets/get-carte.gif?v=20260622e",
     auto: false,
-    alt: "Carte de situation Algor Access : incidents géolocalisés et statut de corroboration, ici le Bénin" },
+    alt: "Carte de situation Algor Acces : incidents géolocalisés et statut de corroboration, ici le Bénin" },
   { tag: "L'analyse",
     t: "Une lecture analytique immédiate",
     d: "Pour chaque pays, la répartition des incidents par région, par type et par acteur, calculée automatiquement à partir des données collectées.",
@@ -646,7 +646,7 @@ const HOME_GET = [
     vid: "/shared/home/assets/get-decision.mp4?v=20260630a",
     gif: "/shared/home/assets/get-decision.gif?v=20260630a",
     auto: false,
-    alt: "Appréciation de situation Algor Access : tendances, acteurs et implications, ici le Mali" },
+    alt: "Appréciation de situation Algor Acces : tendances, acteurs et implications, ici le Mali" },
 ];
 
 function GetSection() {
@@ -840,7 +840,7 @@ function AudienceSection() {
       <div className="home-sec__wrap">
         <SectionHead
           title="À qui s'adresse"
-          em="Algor Access"
+          em="Algor Acces"
           intro="Des profils différents, un même besoin : une lecture fiable et datée des théâtres à risque." />
         <div className="aud-grid">
           {HOME_AUD.map((a, i) => (
@@ -879,7 +879,7 @@ function CompareSection() {
           <div className="cmp-table__row cmp-table__row--head">
             <div className="cmp-table__cell">Critère</div>
             <div className="cmp-table__cell">Fil d'actualité & presse</div>
-            <div className="cmp-table__cell cmp-table__cell--pos">Algor Access</div>
+            <div className="cmp-table__cell cmp-table__cell--pos">Algor Acces</div>
           </div>
           {COMPARE_ROWS.map(([c, neg, pos], i) => (
             <div className="cmp-table__row" key={i}>

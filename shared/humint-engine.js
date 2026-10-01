@@ -969,7 +969,7 @@
     }
     var title = $('country-title');
     if (title) title.textContent = state.country || 'Choisir un pays';
-    document.title = (state.country || 'Carte') + ' · Algor Access';
+    document.title = (state.country || 'Carte') + ' · Algor Acces';
   }
 
   // Repère non cliquable : Sahel actualisé chaque semaine, autres théâtres = données référencées.
