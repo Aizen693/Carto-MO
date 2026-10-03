@@ -1,0 +1,131 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.041239,
+          16.278813
+        ]
+      },
+      "properties": {
+        "name": "FAMa",
+        "type": "Geopolitique",
+        "Acteur": "FAMa",
+        "Date": "2026-06-11",
+        "Pays + Lieu": "Mali - Gao",
+        "Type d'évènement": "Passation de commandement PCIAT-Est",
+        "bilan": "Le Colonel-major Karim TRAORÉ a pris le commandement du Poste de Commandement Interarmées du Théâtre-Est de l'opération Dougoukoloko, succédant au Général de brigade Mamadou Massaoulé SAMAKÉ. La cérémonie s'est tenue sur la place d'armes du camp 1 Firhoun Ag Alincar à Gao.",
+        "image": "http://bamada.net/wp-content/uploads/2026/06/Dougoukoloko-karim-traire-succede-masaoule.jpg",
+        "sources": "Bamada.net|https://bamada.net/pciat-est-de-loperation-dougoukoloko-le-colonel-major-karim-traore-prend-le-temoin-du-general-de-brigade-mamadou-massaoule-samake"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.835296,
+          9.831104
+        ]
+      },
+      "properties": {
+        "name": "CIVIL INT",
+        "type": "Incident",
+        "Acteur": "CIVIL INT",
+        "Date": "2026-06-13",
+        "Pays + Lieu": "Tchad - Tchad",
+        "Type d'évènement": "Enquête MSF révèle exploitation du personnel",
+        "bilan": "Médecins Sans Frontières a révélé une enquête interne faisant état d'exploitation de personnel au Tchad. L'organisation emploie des milliers de travailleurs locaux et étrangers dans plusieurs pays pour répondre aux crises.",
+        "image": "https://www.aljazeera.com/wp-content/uploads/2026/06/AP25179547255393-1781337796.jpg?resize=1920%2C1440",
+        "sources": "Al Jazeera English|https://www.aljazeera.com/news/2026/6/13/doctors-without-borders-investigation-finds-exploitation-by-staff-in-chad?traffic_source=rss"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.000337,
+          12.649319
+        ]
+      },
+      "properties": {
+        "name": "CIVIL INT",
+        "type": "Geopolitique",
+        "Acteur": "CIVIL INT",
+        "Date": "2026-06-13",
+        "Pays + Lieu": "Mali - Bamako",
+        "Type d'évènement": "Nomination d'Oumar Diarra au ministère de la Défense",
+        "bilan": "Le Brief de Jeune Afrique évoque la nomination d'Oumar Diarra au sein du ministère malien de la Défense, dans un contexte de rivalités pour la succession de Paul Biya au Cameroun et d'incertitudes au Sahara occidental.",
+        "image": "https://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=720,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2026/05/21/jad20260521-match-franck-chantal-biya.jpg",
+        "sources": "JeuneAfrique.comGabon - JeuneAfrique.com|https://www.jeuneafrique.com/1803505/societe/la-guerre-des-biya-le-sahara-occidental-a-lheure-des-incertitudes-lespoir-fragile-duvira-les-5-infos-quil-ne-fallait-pas-manquer/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.40754,
+          18.440836
+        ]
+      },
+      "properties": {
+        "name": "FAMa",
+        "type": "Attaque",
+        "Acteur": "FAMa",
+        "Date": "2023",
+        "Pays + Lieu": "Mali - Kidal",
+        "Type d'évènement": "Combats lors de la reconquête de Kidal",
+        "bilan": "Lors de la reconquête de Kidal en 2023, alors que le lieutenant-colonel Tanass Ag Ahmed était préfet, plusieurs de ses proches ont été signalés dans les combats contre les FAMa à Bourem, Anefif, Kidal et lors de l'attaque du camp militaire de Ber.",
+        "image": "http://bamada.net/wp-content/uploads/2025/01/soutien-armee-malienne-fama-soldat-militaire-logo.jpg",
+        "sources": "Bamada.net|https://bamada.net/lieutenant-colonel-tanass-ag-ahmed-sur-les-traces-dun-deserteur"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.547575,
+          9.618709
+        ]
+      },
+      "properties": {
+        "name": "CIVIL INT",
+        "type": "Geopolitique",
+        "Acteur": "CIVIL INT",
+        "Date": "2026-06-11",
+        "Pays + Lieu": "Niger - Niger",
+        "Type d'évènement": "Déchéance de nationalité de Mariama Djibrine",
+        "bilan": "Le Président du Niger, Général Abdourahamane Tiani, a signé un décret portant déchéance provisoire de nationalité à l'encontre de Mariama Djibrine, alias Mayra, sur la base de l'ordonnance n°2024-43 du 27 août 2024.",
+        "image": "https://www.maliweb.net/uploads/images/202606/image_870x580_6a2c437e27749.jpg",
+        "sources": "L&apos;actualité au Mali en direct et en continu - Derniers messages|https://www.maliweb.net/international/niger-mariama-djibrine-alias-mayra-provisoirement-dechue-de-sa-nationalite-par-decret-presidentiel-3117516.html"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.013778,
+          16.787409
+        ]
+      },
+      "properties": {
+        "name": "CIVIL INT",
+        "type": "Geopolitique",
+        "Acteur": "CIVIL INT",
+        "Date": "2026-06-13",
+        "Pays + Lieu": "Mali - Tombouctou",
+        "Type d'évènement": "CPI ordonne réparations pour crimes d'Al Hassan",
+        "bilan": "La Chambre de première instance de la CPI estime à 65 202 victimes admissibles à réparations pour les crimes d'Al Hassan à Tombouctou, avec un montant d'environ 4,755 milliards FCFA. Les réparations sont principalement collectives.",
+        "image": "https://www.maliweb.net/uploads/images/202606/image_870x580_6a2c4485b18fa.jpg",
+        "sources": "L&apos;actualité au Mali en direct et en continu - Derniers messages|https://www.maliweb.net/societe/justice/mali-cpi-47-mrds-fcfa-en-reparations-des-crimes-dal-hassan-3117517.html"
+      }
+    }
+  ]
+}
