@@ -275,7 +275,7 @@ const OVERLAY_HTML = `
             <div class="sa-upgrade-badge">${ICON_STAR}</div>
             <p class="sa-upgrade-lead">
               Cette page est réservée aux abonnés premium. Votre compte gratuit ouvre déjà les cartes
-              <a class="sa-link sa-link-strong" href="/carte/?pays=Isra%C3%ABl">Moyen-Orient</a>,
+              <a class="sa-link sa-link-strong" href="/carte/?pays=Liban">Moyen-Orient</a>,
               <a class="sa-link sa-link-strong" href="/carte/?pays=Pakistan">Asie du Sud</a> et
               <a class="sa-link sa-link-strong" href="/carte/?pays=Madagascar">Madagascar</a>.
             </p>

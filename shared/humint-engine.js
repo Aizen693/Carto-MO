@@ -293,7 +293,7 @@
     el.id = 'carte-verrou'; el.setAttribute('role', 'status');
     el.innerHTML = '<b>' + esc((state.entry && state.entry.theatre) || state.country || 'Cette carte') + ' : réservé aux abonnés premium</b>' +
       '<p>Cette carte repose sur nos remontées terrain, recoupées et actualisées. Votre compte gratuit ouvre les cartes OSINT :</p>' +
-      '<div class="cv-liens"><a href="/carte/?pays=Isra%C3%ABl">Moyen-Orient</a><a href="/carte/?pays=Pakistan">Asie du Sud</a><a href="/carte/?pays=Madagascar">Madagascar</a></div>' +
+      '<div class="cv-liens"><a href="/carte/?pays=Liban">Moyen-Orient</a><a href="/carte/?pays=Pakistan">Asie du Sud</a><a href="/carte/?pays=Madagascar">Madagascar</a></div>' +
       '<a class="cv-offres" href="/offres/">Voir les offres</a>';
     document.body.appendChild(el);
   }
