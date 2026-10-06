@@ -7,7 +7,7 @@
 <title>Carte de renseignement · Algor Acces</title>
 <!-- Gate premium : overlay bloquant tant que session + plan premium absents. -->
 <script>window.addEventListener('algorAuthReady', function () { window.__algorAuthGranted = true; });</script>
-<script type="module" src="../shared/site-auth.js?v=20261001d"></script>
+<script type="module" src="../shared/site-auth.js?v=20261006a"></script>
 
 
 <link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
@@ -372,6 +372,17 @@
     #timeline{bottom:12px;max-width:calc(100% - 20px);padding:6px 12px 6px 6px;gap:10px}
     .humint-popup{max-width:calc(100vw - 24px) !important}
   }
+
+  /* Compte gratuit sur une carte premium (Sahel, RDC) */
+  #carte-verrou{position:absolute;z-index:12;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,calc(100vw - 32px));
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px 24px;
+    font:400 15px/1.5 var(--sans);color:var(--ink)}
+  #carte-verrou b{display:block;font-weight:500;font-size:17px;margin-bottom:6px}
+  #carte-verrou p{margin:0 0 12px;color:var(--muted)}
+  #carte-verrou .cv-liens{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+  #carte-verrou .cv-liens a{display:inline-flex;align-items:center;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:2px;color:var(--ink);text-decoration:none;font-size:14px}
+  #carte-verrou .cv-liens a:hover{background:var(--hover)}
+  #carte-verrou .cv-offres{display:inline-flex;align-items:center;height:40px;padding:0 16px;border-radius:2px;background:var(--ink);color:var(--paper);text-decoration:none}
 </style>
 </head>
 <body>
@@ -392,7 +403,7 @@
 <div id="news"></div>
 <div id="analysis"></div>
 
-<script src="../shared/humint-engine.js?v=20261001a"></script>
+<script src="../shared/humint-engine.js?v=20261006a"></script>
 <!-- Jeton « Fond : Carte/Satellite » retiré (28/09, jugé inutile) ; réactiver en décommentant :
 <script src="../shared/basemap-toggle.js?v=20260923a"></script>
 -->

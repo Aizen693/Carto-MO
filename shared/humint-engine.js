@@ -270,9 +270,32 @@
           state.sel = { from: q.get('from') || null, to: q.get('to') || null, event: q.get('event') || null, actor: q.get('actor') || null };
         }
         renderSummary();
-        whenAuthorized(function () { ensureRegions(); if (state.entry) startLoad(); initMap(); });
+        whenAuthorized(function () {
+          ensureRegions();
+          if (state.entry && verrouillee(state.entry)) afficherVerrou();
+          else if (state.entry) startLoad();
+          initMap();
+        });
       })
       .catch(function (er) { showError('Manifeste pays introuvable.'); console.error(er); });
+  }
+
+  /* ── Compte gratuit (06/10/2026) : seules les cartes OSINT sont ouvertes ──
+   * window.algorPlan est posé par site-auth.js ('premium' ou 'gratuit'). Sahel et RDC
+   * (remontées terrain) restent premium : la RLS du bucket refuse de toute façon leur
+   * lecture à un compte gratuit, ce verrou évite seulement un chargement qui échouerait. */
+  var CARTES_GRATUITES = ['/moyen-orient/reference-2026.geojson', '/asie-sud/reference-2026.geojson', '/madagascar/reference-2026.geojson'];
+  function compteGratuit() { return window.algorPlan === 'gratuit'; }
+  function verrouillee(e) { return compteGratuit() && !!e && CARTES_GRATUITES.indexOf(e.file) < 0; }
+  function afficherVerrou() {
+    if ($('carte-verrou')) return;
+    var el = document.createElement('div');
+    el.id = 'carte-verrou'; el.setAttribute('role', 'status');
+    el.innerHTML = '<b>' + esc((state.entry && state.entry.theatre) || state.country || 'Cette carte') + ' : réservé aux abonnés premium</b>' +
+      '<p>Cette carte repose sur nos remontées terrain, recoupées et actualisées. Votre compte gratuit ouvre les cartes OSINT :</p>' +
+      '<div class="cv-liens"><a href="/carte/?pays=Isra%C3%ABl">Moyen-Orient</a><a href="/carte/?pays=Pakistan">Asie du Sud</a><a href="/carte/?pays=Madagascar">Madagascar</a></div>' +
+      '<a class="cv-offres" href="/offres/">Voir les offres</a>';
+    document.body.appendChild(el);
   }
 
   function whenAuthorized(cb) {
@@ -694,7 +717,13 @@
     }
     body.innerHTML = anaChartsHTML(state._anaStats, state.regionsReady);
     var btn = body.querySelector('.ana-ia-btn'), out = body.querySelector('.ana-ia-out');
-    if (btn) btn.onclick = function () { runAnalysisIA(btn, out, state._anaStats); };
+    if (btn) btn.onclick = function () {
+      if (compteGratuit()) {
+        out.innerHTML = '<div class="ana-ia-txt"><p>La synthèse par Mistral AI est réservée aux abonnés premium.</p></div><div class="ana-ia-src"><a href="/offres/">Voir les offres</a></div>';
+        return;
+      }
+      runAnalysisIA(btn, out, state._anaStats);
+    };
     body.querySelectorAll('.ana-row-clic').forEach(function (el) {
       el.onclick = function () { openRegionDrill(el.getAttribute('data-v')); };
     });

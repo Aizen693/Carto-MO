@@ -220,7 +220,7 @@ const OVERLAY_HTML = `
             Pas encore de compte&nbsp;?
             <a href="#" id="sa-go-signup" class="sa-link sa-link-strong">Créer un compte</a>
           </p>
-          <p class="sa-premium-line">${ICON_STAR}<span>Les 6 théâtres d'analyse sont réservés aux abonnés premium</span></p>
+          <p class="sa-premium-line">${ICON_STAR}<span>Moyen-Orient, Asie du Sud et Madagascar s'ouvrent avec un compte gratuit. Sahel et RDC sont réservés aux abonnés premium.</span></p>
         </div>
 
         <!-- ── Vue : inscription ── -->
@@ -236,7 +236,7 @@ const OVERLAY_HTML = `
             Déjà un compte&nbsp;?
             <a href="#" id="sa-go-login" class="sa-link sa-link-strong">Se connecter</a>
           </p>
-          <p class="sa-note">Le compte créé est gratuit. L'accès aux théâtres nécessite un passage premium.</p>
+          <p class="sa-note">Le compte créé est gratuit et ouvre les cartes Moyen-Orient, Asie du Sud et Madagascar.</p>
         </div>
 
         <!-- ── Vue : inscription réussie, lien de confirmation envoyé ── -->
@@ -274,7 +274,10 @@ const OVERLAY_HTML = `
           <div class="sa-upgrade">
             <div class="sa-upgrade-badge">${ICON_STAR}</div>
             <p class="sa-upgrade-lead">
-              L'accès aux 6 théâtres d'analyse est réservé aux abonnés premium.
+              Cette page est réservée aux abonnés premium. Votre compte gratuit ouvre déjà les cartes
+              <a class="sa-link sa-link-strong" href="/carte/?pays=Isra%C3%ABl">Moyen-Orient</a>,
+              <a class="sa-link sa-link-strong" href="/carte/?pays=Pakistan">Asie du Sud</a> et
+              <a class="sa-link sa-link-strong" href="/carte/?pays=Madagascar">Madagascar</a>.
             </p>
             <ul class="sa-perks">
               <li>${ICON_CHECK}<span>6 théâtres OSINT suivis en temps réel</span></li>
@@ -483,6 +486,13 @@ const VIEWS = {
 const GATED_PREFIXES = ['/carte/', '/veille-carte/', '/veille-cyber/', '/sahel/', '/moyen-orient/', '/rdc/', '/afrique/', '/madagascar/', '/asie-sud/', '/archive/'];
 const IS_GATED_PAGE = GATED_PREFIXES.some((p) => location.pathname.startsWith(p))
                    || /-v2\.html$/.test(location.pathname);
+// Carte de renseignement ouverte aux comptes GRATUITS (06/10/2026) : la page /carte/ elle-même,
+// pas ses sous-pages (axe, globe, relief… restent premium). Un compte gratuit n'y lit que les
+// cartes OSINT (Moyen-Orient, Asie du Sud, Madagascar) : Sahel et RDC restent fermés par la RLS
+// du bucket (politique zones_osint_compte_read limitée à ces trois fichiers) et par le moteur.
+const IS_FREE_OK_PAGE = location.pathname === '/carte/' || location.pathname === '/carte/index.html';
+// Plan lu par le moteur de carte : 'premium' (abonné ou équipe) ou 'gratuit'.
+window.algorPlan = null;
 
 // Marque la page comme « zone privée » : les modules partagés (engine.js,
 // calque-timeline.js) routent alors leurs chargements de données vers le
@@ -547,8 +557,13 @@ function hasZoneAccess(profile) {
 async function proceedAfterAuth(userId) {
   const profile = await fetchProfile(userId);
   if (hasZoneAccess(profile)) {
+    window.algorPlan = 'premium';
     removeOverlay();
     // Débloque le chargement des données de zone (Storage privé).
+    window.dispatchEvent(new CustomEvent('algorAuthReady'));
+  } else if (IS_FREE_OK_PAGE) {
+    window.algorPlan = 'gratuit';
+    removeOverlay();
     window.dispatchEvent(new CustomEvent('algorAuthReady'));
   } else {
     switchView('upgrade');
@@ -950,6 +965,12 @@ async function gateSite() {
     if (data?.session?.user) {
       const profile = await fetchProfile(data.session.user.id);
       if (hasZoneAccess(profile)) {
+        window.algorPlan = 'premium';
+        window.dispatchEvent(new CustomEvent('algorAuthReady'));
+        return;
+      }
+      if (IS_FREE_OK_PAGE) {
+        window.algorPlan = 'gratuit';
         window.dispatchEvent(new CustomEvent('algorAuthReady'));
         return;
       }
