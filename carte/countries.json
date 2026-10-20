@@ -450,42 +450,6 @@
    "theatre": "Sahel"
   },
   {
-   "name": "Israël",
-   "zone": "moyen-orient",
-   "file": "/moyen-orient/reference-2026.geojson",
-   "center": [
-    35.14644545454549,
-    32.42677045454544
-   ],
-   "zoom": 5.5,
-   "count": 88,
-   "events": [
-    "Frappe / Drône"
-   ],
-   "actors": [
-    "Harakat Kataib Hezbollah",
-    "Hezbollah",
-    "Houthis",
-    "IRGC-Qods Force"
-   ],
-   "months": [
-    {
-     "key": "2026-02",
-     "label": "Février 2026"
-    },
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    },
-    {
-     "key": "2026-04",
-     "label": "Avril 2026"
-    }
-   ],
-   "statut": "reference",
-   "theatre": "Moyen-Orient"
-  },
-  {
    "name": "RDC",
    "zone": "rdc",
    "file": "/rdc/humint.geojson",
@@ -547,6 +511,87 @@
    "theatre": "RDC, Grands Lacs"
   },
   {
+   "name": "Pakistan",
+   "zone": "asie-sud",
+   "file": "/asie-sud/reference-2026.geojson",
+   "center": [
+    69.34950392156863,
+    31.671421568627448
+   ],
+   "zoom": 5.5,
+   "count": 51,
+   "events": [
+    "Arrestation",
+    "Assassinat",
+    "Attaque",
+    "Combat / Affrontement",
+    "Embuscade",
+    "IED / Explosif",
+    "Information / Divers",
+    "Opération (forces)"
+   ],
+   "actors": [
+    "Afghan Taliban",
+    "Auteur non identifié",
+    "Auteur non identifié (TTP soupçonné)",
+    "BLA",
+    "BRAS",
+    "BSF",
+    "Inconnu",
+    "ISKP",
+    "Ittehad-ul-Mujahideen Pakistan",
+    "Jamaat-ul-Ahrar",
+    "Ministère pakistanais des Affaires étrangères",
+    "Pakistan Army",
+    "Police (CTD)",
+    "TTP"
+   ],
+   "months": [
+    {
+     "key": "2026-01",
+     "label": "Janvier 2026"
+    },
+    {
+     "key": "2026-02",
+     "label": "Février 2026"
+    },
+    {
+     "key": "2026-03",
+     "label": "Mars 2026"
+    },
+    {
+     "key": "2026-04",
+     "label": "Avril 2026"
+    },
+    {
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
+    },
+    {
+     "key": "2026-10",
+     "label": "Octobre 2026"
+    }
+   ],
+   "statut": "osint",
+   "theatre": "Asie du Sud"
+  },
+  {
    "name": "Bénin",
    "zone": "sahel",
    "file": "/sahel/humint.geojson",
@@ -603,84 +648,61 @@
    "theatre": "Sahel"
   },
   {
-   "name": "Iran",
+   "name": "Territoires palestiniens",
    "zone": "moyen-orient",
    "file": "/moyen-orient/reference-2026.geojson",
    "center": [
-    51.441810204081634,
-    32.98778775510205
+    34.79838095238095,
+    31.75026190476191
    ],
    "zoom": 5.5,
-   "count": 49,
+   "count": 42,
    "events": [
     "Assassinat",
-    "Attaque",
-    "Frappe / Drône",
-    "Information / Divers"
-   ],
-   "actors": [
-    "Basij",
-    "Israel/IDF",
-    "USA"
-   ],
-   "months": [
-    {
-     "key": "2026-01",
-     "label": "Janvier 2026"
-    },
-    {
-     "key": "2026-02",
-     "label": "Février 2026"
-    },
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    },
-    {
-     "key": "2026-04",
-     "label": "Avril 2026"
-    }
-   ],
-   "statut": "reference",
-   "theatre": "Moyen-Orient"
-  },
-  {
-   "name": "Liban",
-   "zone": "moyen-orient",
-   "file": "/moyen-orient/reference-2026.geojson",
-   "center": [
-    35.45886326530613,
-    33.43694081632651
-   ],
-   "zoom": 5.5,
-   "count": 49,
-   "events": [
     "Attaque",
     "Combat / Affrontement",
     "Destruction",
     "Frappe / Drône",
-    "Information / Divers",
     "Opération (forces)"
    ],
    "actors": [
-    "Hezbollah",
-    "Israel/IDF"
+    "Assaillant palestinien",
+    "Colon armé (avant-poste Eretz HaTzvi)",
+    "Colons israéliens",
+    "Israel/IDF",
+    "Tireur palestinien"
    ],
    "months": [
     {
-     "key": "2026-02",
-     "label": "Février 2026"
-    },
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    },
-    {
      "key": "2026-04",
      "label": "Avril 2026"
+    },
+    {
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
+    },
+    {
+     "key": "2026-10",
+     "label": "Octobre 2026"
     }
    ],
-   "statut": "reference",
+   "statut": "osint",
    "theatre": "Moyen-Orient"
   },
   {
@@ -688,138 +710,174 @@
    "zone": "madagascar",
    "file": "/madagascar/reference-2026.geojson",
    "center": [
-    47.17645161290322,
-    -19.983870967741936
+    46.28685,
+    -20.012850000000004
+   ],
+   "zoom": 5.5,
+   "count": 40,
+   "events": [
+    "Arrestation",
+    "Assassinat",
+    "Attaque",
+    "Combat / Affrontement",
+    "Embuscade",
+    "Enlèvement / Prise d'otage",
+    "Menaces / Alerte",
+    "Opération (forces)",
+    "Présence / Mouvement",
+    "Vol / Pillage / Extorsion"
+   ],
+   "actors": [
+    "Ancien malfaiteur",
+    "Bandits armés",
+    "Dahalo",
+    "Forces de l'ordre",
+    "Foule (vindicte populaire)",
+    "Gen Z Madagascar",
+    "Gendarmerie nationale",
+    "Manifestants",
+    "Navire LSS SUCESS",
+    "Présidence de la Refondation",
+    "Ravisseurs"
+   ],
+   "months": [
+    {
+     "key": "2026-04",
+     "label": "Avril 2026"
+    },
+    {
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
+    }
+   ],
+   "statut": "osint",
+   "theatre": "Madagascar"
+  },
+  {
+   "name": "Liban",
+   "zone": "moyen-orient",
+   "file": "/moyen-orient/reference-2026.geojson",
+   "center": [
+    35.447548387096774,
+    33.376290322580644
    ],
    "zoom": 5.5,
    "count": 31,
    "events": [
-    "Attaque",
-    "Déplacement / Réfugiés",
-    "Information / Divers"
-   ],
-   "actors": [
-    "AU/UA",
-    "Commandos marins",
-    "Crise Grand Sud",
-    "Cyclone",
-    "Dahalo",
-    "Gen Z Madagascar",
-    "Mouvement Hery Vaovao",
-    "Orpailleurs illegaux",
-    "Peche INN flottes etrangeres",
-    "Piraterie canal Mozambique",
-    "Reseaux bois de rose (SAVA/Masoala)",
-    "Reseaux saphir (Ilakaka)",
-    "Reseaux tortues/lemuriens",
-    "Reseaux vanille (SAVA)",
-    "Transition Randrianirina"
-   ],
-   "months": [
-    {
-     "key": "2026-01",
-     "label": "Janvier 2026"
-    },
-    {
-     "key": "2026-02",
-     "label": "Février 2026"
-    },
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    },
-    {
-     "key": "2026-04",
-     "label": "Avril 2026"
-    }
-   ],
-   "statut": "reference",
-   "theatre": "Madagascar"
-  },
-  {
-   "name": "Pakistan",
-   "zone": "asie-sud",
-   "file": "/asie-sud/reference-2026.geojson",
-   "center": [
-    69.4609607142857,
-    31.995257142857138
-   ],
-   "zoom": 5.5,
-   "count": 28,
-   "events": [
-    "Arrestation",
-    "Attaque",
+    "Assassinat",
     "Combat / Affrontement",
-    "Embuscade",
+    "Destruction",
     "Frappe / Drône",
     "IED / Explosif",
-    "Information / Divers",
     "Opération (forces)"
    ],
    "actors": [
-    "Afghan Taliban",
-    "BLA",
-    "ISI",
-    "ISKP",
-    "Pakistan Army",
-    "TTP"
+    "Hezbollah",
+    "Hezbollah (présumé)",
+    "Israel/IDF"
    ],
    "months": [
-    {
-     "key": "2026-01",
-     "label": "Janvier 2026"
-    },
-    {
-     "key": "2026-02",
-     "label": "Février 2026"
-    },
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    },
     {
      "key": "2026-04",
      "label": "Avril 2026"
+    },
+    {
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
     }
    ],
-   "statut": "reference",
-   "theatre": "Asie du Sud"
+   "statut": "osint",
+   "theatre": "Moyen-Orient"
   },
   {
-   "name": "Irak",
+   "name": "Iran",
    "zone": "moyen-orient",
    "file": "/moyen-orient/reference-2026.geojson",
    "center": [
-    43.92891764705882,
-    34.58646470588236
+    57.36052380952382,
+    27.33666666666667
    ],
    "zoom": 5.5,
-   "count": 17,
+   "count": 21,
    "events": [
+    "Assassinat",
+    "Attaque",
+    "Combat / Affrontement",
+    "Destruction",
+    "Enlèvement / Prise d'otage",
     "Frappe / Drône",
-    "Information / Divers"
+    "IED / Explosif",
+    "Opération (forces)"
    ],
    "actors": [
-    "Asaib Ahl al-Haq",
-    "Harakat Hezbollah al-Nujaba",
-    "Harakat Kataib Hezbollah",
-    "Houthis",
+    "Forces de sécurité iraniennes",
+    "Forces iraniennes",
+    "Inconnu",
+    "Inconnus (hommes armés)",
+    "IRGC",
     "IRGC-Qods Force",
-    "PMF/Hashd al-Shaabi",
-    "USA, Force Delta",
-    "Zainebiyoun Brigade"
+    "Israel/IDF",
+    "USA"
    ],
    "months": [
     {
-     "key": "2026-02",
-     "label": "Février 2026"
+     "key": "2026-04",
+     "label": "Avril 2026"
     },
     {
-     "key": "2026-03",
-     "label": "Mars 2026"
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
     }
    ],
-   "statut": "reference",
+   "statut": "osint",
    "theatre": "Moyen-Orient"
   },
   {
@@ -827,36 +885,53 @@
    "zone": "moyen-orient",
    "file": "/moyen-orient/reference-2026.geojson",
    "center": [
-    37.72263333333333,
-    34.426658333333336
+    36.805,
+    33.94199999999999
    ],
    "zoom": 5.5,
-   "count": 12,
+   "count": 19,
    "events": [
+    "Attaque",
     "Combat / Affrontement",
+    "Embuscade",
     "Frappe / Drône",
-    "Information / Divers"
+    "IED / Explosif",
+    "Opération (forces)",
+    "Présence / Mouvement"
    ],
    "actors": [
-    "Fatemiyoun Brigade",
-    "Harakat Hezbollah al-Nujaba",
-    "Harakat Kataib Hezbollah",
-    "Hezbollah",
-    "Israel/IDF",
-    "Kataib Hezbollah",
-    "USA"
+    "Auteur non identifié",
+    "État islamique",
+    "État islamique (présumé)",
+    "Forces de sécurité syriennes",
+    "Forces gouvernementales syriennes (selon une source druze)",
+    "Inconnu",
+    "IRGC",
+    "Israel/IDF"
    ],
    "months": [
     {
-     "key": "2026-02",
-     "label": "Février 2026"
+     "key": "2026-05",
+     "label": "Mai 2026"
     },
     {
-     "key": "2026-03",
-     "label": "Mars 2026"
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
     }
    ],
-   "statut": "reference",
+   "statut": "osint",
    "theatre": "Moyen-Orient"
   },
   {
@@ -864,31 +939,86 @@
    "zone": "asie-sud",
    "file": "/asie-sud/reference-2026.geojson",
    "center": [
-    75.13077000000001,
-    32.936080000000004
+    76.74985625,
+    31.347050000000003
    ],
    "zoom": 5.5,
-   "count": 10,
+   "count": 16,
    "events": [
+    "Arrestation",
+    "Assassinat",
     "Attaque",
     "Combat / Affrontement",
-    "Frappe / Drône",
-    "Menaces / Alerte",
-    "Opération (forces)"
+    "Opération (forces)",
+    "Présence / Mouvement"
    ],
    "actors": [
+    "Auteur non identifié",
     "BSF",
-    "Delhi Police Special Cell",
+    "Inconnu",
     "Indian Army",
     "ISI (proxies)",
     "J&K Police",
-    "Pakistan Army"
+    "Jharkhand Police",
+    "Module de Shahzad Bhatti",
+    "Pakistan Army",
+    "UP ATS"
    ],
    "months": [
     {
      "key": "2026-01",
      "label": "Janvier 2026"
     },
+    {
+     "key": "2026-04",
+     "label": "Avril 2026"
+    },
+    {
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
+    }
+   ],
+   "statut": "osint",
+   "theatre": "Asie du Sud"
+  },
+  {
+   "name": "Afghanistan",
+   "zone": "asie-sud",
+   "file": "/asie-sud/reference-2026.geojson",
+   "center": [
+    68.91540624999999,
+    33.78533125
+   ],
+   "zoom": 5.5,
+   "count": 16,
+   "events": [
+    "Combat / Affrontement",
+    "Frappe / Drône",
+    "IED / Explosif"
+   ],
+   "actors": [
+    "AFF (Afghanistan Freedom Front)",
+    "Inconnu",
+    "Pakistan Air Force",
+    "Pakistan Army"
+   ],
+   "months": [
     {
      "key": "2026-02",
      "label": "Février 2026"
@@ -900,70 +1030,175 @@
     {
      "key": "2026-04",
      "label": "Avril 2026"
+    },
+    {
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
+    },
+    {
+     "key": "2026-10",
+     "label": "Octobre 2026"
     }
    ],
-   "statut": "reference",
+   "statut": "osint",
    "theatre": "Asie du Sud"
   },
   {
-   "name": "Émirats arabes unis",
+   "name": "Irak",
    "zone": "moyen-orient",
    "file": "/moyen-orient/reference-2026.geojson",
    "center": [
-    54.68687142857143,
-    24.589242857142857
+    44.218583333333335,
+    36.22074999999999
    ],
    "zoom": 5.5,
-   "count": 7,
+   "count": 12,
    "events": [
     "Frappe / Drône"
    ],
    "actors": [
-    "IRGC-Qods Force"
+    "Auteur non identifié",
+    "Inconnu",
+    "Iran",
+    "IRGC",
+    "IRGC-Qods Force",
+    "Non revendiqué",
+    "USA/Arabie saoudite"
    ],
    "months": [
     {
-     "key": "2026-02",
-     "label": "Février 2026"
+     "key": "2026-04",
+     "label": "Avril 2026"
     },
     {
-     "key": "2026-03",
-     "label": "Mars 2026"
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
     }
    ],
-   "statut": "reference",
+   "statut": "osint",
    "theatre": "Moyen-Orient"
   },
   {
-   "name": "Afghanistan",
-   "zone": "asie-sud",
-   "file": "/asie-sud/reference-2026.geojson",
+   "name": "Arabie saoudite",
+   "zone": "moyen-orient",
+   "file": "/moyen-orient/reference-2026.geojson",
    "center": [
-    68.25585714285714,
-    33.582657142857144
+    42.18683333333333,
+    21.284750000000003
    ],
    "zoom": 5.5,
-   "count": 7,
+   "count": 12,
    "events": [
-    "Frappe / Drône",
-    "Opération (forces)"
+    "Attaque",
+    "Frappe / Drône"
    ],
    "actors": [
-    "Pakistan Air Force",
-    "TTP"
+    "Copilote omanais (vol flydubai FZ1073)",
+    "Houthis",
+    "Inconnu (drones lancés d'Irak)"
    ],
    "months": [
     {
-     "key": "2026-02",
-     "label": "Février 2026"
+     "key": "2026-07",
+     "label": "Juillet 2026"
     },
     {
-     "key": "2026-03",
-     "label": "Mars 2026"
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
+    },
+    {
+     "key": "2026-10",
+     "label": "Octobre 2026"
     }
    ],
-   "statut": "reference",
-   "theatre": "Asie du Sud"
+   "statut": "osint",
+   "theatre": "Moyen-Orient"
+  },
+  {
+   "name": "Yémen",
+   "zone": "moyen-orient",
+   "file": "/moyen-orient/reference-2026.geojson",
+   "center": [
+    44.24972727272728,
+    14.352454545454544
+   ],
+   "zoom": 5.5,
+   "count": 11,
+   "events": [
+    "Embuscade",
+    "Frappe / Drône",
+    "Information / Divers",
+    "Opération (forces)"
+   ],
+   "actors": [
+    "Arabie saoudite",
+    "Coalition saoudienne",
+    "Forces gouvernementales yéménites",
+    "Gouvernement yéménite (coalition saoudienne)",
+    "Houthis",
+    "Inconnu",
+    "Indéterminé"
+   ],
+   "months": [
+    {
+     "key": "2026-04",
+     "label": "Avril 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
+    }
+   ],
+   "statut": "osint",
+   "theatre": "Moyen-Orient"
   },
   {
    "name": "Togo",
@@ -1008,167 +1243,43 @@
    "theatre": "Sahel"
   },
   {
-   "name": "Bahreïn",
-   "zone": "moyen-orient",
-   "file": "/moyen-orient/reference-2026.geojson",
-   "center": [
-    50.613400000000006,
-    26.224075000000003
-   ],
-   "zoom": 5.5,
-   "count": 4,
-   "events": [
-    "Frappe / Drône"
-   ],
-   "actors": [
-    "IRGC-Qods Force"
-   ],
-   "months": [
-    {
-     "key": "2026-02",
-     "label": "Février 2026"
-    },
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    }
-   ],
-   "statut": "reference",
-   "theatre": "Moyen-Orient"
-  },
-  {
-   "name": "Territoires palestiniens",
-   "zone": "moyen-orient",
-   "file": "/moyen-orient/reference-2026.geojson",
-   "center": [
-    35.171475,
-    31.704625000000004
-   ],
-   "zoom": 5.5,
-   "count": 4,
-   "events": [
-    "Frappe / Drône"
-   ],
-   "actors": [
-    "Houthis",
-    "IRGC-Qods Force"
-   ],
-   "months": [
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    }
-   ],
-   "statut": "reference",
-   "theatre": "Moyen-Orient"
-  },
-  {
-   "name": "Arabie saoudite",
-   "zone": "moyen-orient",
-   "file": "/moyen-orient/reference-2026.geojson",
-   "center": [
-    43.819633333333336,
-    24.49116666666667
-   ],
-   "zoom": 5.5,
-   "count": 3,
-   "events": [
-    "Frappe / Drône"
-   ],
-   "actors": [
-    "Houthis",
-    "IRGC-Qods Force"
-   ],
-   "months": [
-    {
-     "key": "2026-02",
-     "label": "Février 2026"
-    },
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    }
-   ],
-   "statut": "reference",
-   "theatre": "Moyen-Orient"
-  },
-  {
-   "name": "Turquie",
-   "zone": "moyen-orient",
-   "file": "/moyen-orient/reference-2026.geojson",
-   "center": [
-    36.341766666666665,
-    36.96706666666667
-   ],
-   "zoom": 5.5,
-   "count": 3,
-   "events": [
-    "Frappe / Drône"
-   ],
-   "actors": [
-    "IRGC-Qods Force"
-   ],
-   "months": [
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    }
-   ],
-   "statut": "reference",
-   "theatre": "Moyen-Orient"
-  },
-  {
-   "name": "Mer Rouge",
-   "zone": "moyen-orient",
-   "file": "/moyen-orient/reference-2026.geojson",
-   "center": [
-    43.4,
-    12.58
-   ],
-   "zoom": 5.5,
-   "count": 2,
-   "events": [
-    "Frappe / Drône"
-   ],
-   "actors": [
-    "Houthis"
-   ],
-   "months": [
-    {
-     "key": "2026-02",
-     "label": "Février 2026"
-    }
-   ],
-   "statut": "reference",
-   "theatre": "Moyen-Orient"
-  },
-  {
    "name": "Koweït",
    "zone": "moyen-orient",
    "file": "/moyen-orient/reference-2026.geojson",
    "center": [
-    47.977850000000004,
-    29.3728
+    47.7635,
+    29.452666666666662
    ],
    "zoom": 5.5,
-   "count": 2,
+   "count": 6,
    "events": [
+    "Attaque",
     "Frappe / Drône"
    ],
    "actors": [
+    "Iran",
+    "IRGC",
     "IRGC-Qods Force"
    ],
    "months": [
     {
-     "key": "2026-02",
-     "label": "Février 2026"
+     "key": "2026-05",
+     "label": "Mai 2026"
     },
     {
-     "key": "2026-03",
-     "label": "Mars 2026"
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
     }
    ],
-   "statut": "reference",
+   "statut": "osint",
    "theatre": "Moyen-Orient"
   },
   {
@@ -1176,29 +1287,70 @@
    "zone": "moyen-orient",
    "file": "/moyen-orient/reference-2026.geojson",
    "center": [
-    37.1142,
-    32.122699999999995
+    36.25699999999999,
+    31.479000000000003
    ],
    "zoom": 5.5,
-   "count": 2,
+   "count": 5,
    "events": [
     "Frappe / Drône"
    ],
    "actors": [
-    "IRGC-Qods Force",
-    "PMF/Hashd al-Shaabi"
+    "Inconnu",
+    "IRGC",
+    "IRGC-Qods Force"
    ],
    "months": [
     {
-     "key": "2026-02",
-     "label": "Février 2026"
+     "key": "2026-05",
+     "label": "Mai 2026"
     },
     {
-     "key": "2026-03",
-     "label": "Mars 2026"
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    },
+    {
+     "key": "2026-08",
+     "label": "Août 2026"
     }
    ],
-   "statut": "reference",
+   "statut": "osint",
+   "theatre": "Moyen-Orient"
+  },
+  {
+   "name": "Émirats arabes unis",
+   "zone": "moyen-orient",
+   "file": "/moyen-orient/reference-2026.geojson",
+   "center": [
+    55.21249999999999,
+    25.000749999999996
+   ],
+   "zoom": 5.5,
+   "count": 4,
+   "events": [
+    "Enlèvement / Prise d'otage",
+    "Frappe / Drône"
+   ],
+   "actors": [
+    "Inconnu",
+    "IRGC",
+    "IRGC-Qods Force"
+   ],
+   "months": [
+    {
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    }
+   ],
+   "statut": "osint",
    "theatre": "Moyen-Orient"
   },
   {
@@ -1206,49 +1358,64 @@
    "zone": "moyen-orient",
    "file": "/moyen-orient/reference-2026.geojson",
    "center": [
-    56.97485,
-    22.932850000000002
+    56.324000000000005,
+    25.652666666666665
    ],
    "zoom": 5.5,
-   "count": 2,
+   "count": 3,
    "events": [
+    "Attaque",
     "Frappe / Drône"
    ],
    "actors": [
-    "IRGC-Qods Force"
+    "Inconnu",
+    "USA"
    ],
    "months": [
     {
-     "key": "2026-03",
-     "label": "Mars 2026"
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    },
+    {
+     "key": "2026-09",
+     "label": "Septembre 2026"
     }
    ],
-   "statut": "reference",
+   "statut": "osint",
    "theatre": "Moyen-Orient"
   },
   {
-   "name": "Qatar",
+   "name": "Israël",
    "zone": "moyen-orient",
    "file": "/moyen-orient/reference-2026.geojson",
    "center": [
-    51.3153,
-    25.1175
+    35.111333333333334,
+    31.88233333333333
    ],
    "zoom": 5.5,
-   "count": 1,
+   "count": 3,
    "events": [
     "Frappe / Drône"
    ],
    "actors": [
-    "IRGC-Qods Force"
+    "Hezbollah",
+    "Houthis"
    ],
    "months": [
     {
-     "key": "2026-02",
-     "label": "Février 2026"
+     "key": "2026-05",
+     "label": "Mai 2026"
+    },
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
     }
    ],
-   "statut": "reference",
+   "statut": "osint",
    "theatre": "Moyen-Orient"
   },
   {
@@ -1257,73 +1424,99 @@
    "file": "/moyen-orient/reference-2026.geojson",
    "center": [
     56.25,
-    26.5667
+    26.567
+   ],
+   "zoom": 5.5,
+   "count": 2,
+   "events": [
+    "Attaque",
+    "Frappe / Drône"
+   ],
+   "actors": [
+    "IRGC"
+   ],
+   "months": [
+    {
+     "key": "2026-06",
+     "label": "Juin 2026"
+    }
+   ],
+   "statut": "osint",
+   "theatre": "Moyen-Orient"
+  },
+  {
+   "name": "Bahreïn",
+   "zone": "moyen-orient",
+   "file": "/moyen-orient/reference-2026.geojson",
+   "center": [
+    50.613,
+    26.208
    ],
    "zoom": 5.5,
    "count": 1,
    "events": [
     "Frappe / Drône"
+   ],
+   "actors": [
+    "IRGC"
+   ],
+   "months": [
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    }
+   ],
+   "statut": "osint",
+   "theatre": "Moyen-Orient"
+  },
+  {
+   "name": "Qatar",
+   "zone": "moyen-orient",
+   "file": "/moyen-orient/reference-2026.geojson",
+   "center": [
+    51.531,
+    25.286
+   ],
+   "zoom": 5.5,
+   "count": 1,
+   "events": [
+    "Frappe / Drône"
+   ],
+   "actors": [
+    "IRGC"
+   ],
+   "months": [
+    {
+     "key": "2026-07",
+     "label": "Juillet 2026"
+    }
+   ],
+   "statut": "osint",
+   "theatre": "Moyen-Orient"
+  },
+  {
+   "name": "Mer Rouge",
+   "zone": "moyen-orient",
+   "file": "/moyen-orient/reference-2026.geojson",
+   "center": [
+    43.333,
+    12.583
+   ],
+   "zoom": 5.5,
+   "count": 1,
+   "events": [
+    "Attaque"
    ],
    "actors": [
     "Houthis"
    ],
    "months": [
     {
-     "key": "2026-03",
-     "label": "Mars 2026"
+     "key": "2026-08",
+     "label": "Août 2026"
     }
    ],
-   "statut": "reference",
-   "theatre": "Moyen-Orient"
-  },
-  {
-   "name": "Océan Indien",
-   "zone": "moyen-orient",
-   "file": "/moyen-orient/reference-2026.geojson",
-   "center": [
-    80.217,
-    6.0367
-   ],
-   "zoom": 5.5,
-   "count": 1,
-   "events": [
-    "Frappe / Drône"
-   ],
-   "actors": [
-    "USA"
-   ],
-   "months": [
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    }
-   ],
-   "statut": "reference",
-   "theatre": "Moyen-Orient"
-  },
-  {
-   "name": "Chypre",
-   "zone": "moyen-orient",
-   "file": "/moyen-orient/reference-2026.geojson",
-   "center": [
-    33.4299,
-    35.1264
-   ],
-   "zoom": 5.5,
-   "count": 1,
-   "events": [
-    "Frappe / Drône"
-   ],
-   "actors": [
-    "IRGC-Qods Force"
-   ],
-   "months": [
-    {
-     "key": "2026-03",
-     "label": "Mars 2026"
-    }
-   ],
-   "statut": "reference",
+   "statut": "osint",
    "theatre": "Moyen-Orient"
   },
   {
@@ -1331,8 +1524,8 @@
    "zone": "asie-sud",
    "file": "/asie-sud/reference-2026.geojson",
    "center": [
-    116.3883,
-    39.9042
+    87.617,
+    43.825
    ],
    "zoom": 5.5,
    "count": 1,
@@ -1340,7 +1533,7 @@
     "Information / Divers"
    ],
    "actors": [
-    "ISI"
+    "Ministère pakistanais des Affaires étrangères"
    ],
    "months": [
     {
@@ -1348,7 +1541,7 @@
      "label": "Avril 2026"
     }
    ],
-   "statut": "reference",
+   "statut": "osint",
    "theatre": "Asie du Sud"
   }
  ]
