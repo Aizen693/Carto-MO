@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<script src="/shared/i18n.js?v=20261020a"></script>
+<script src="/shared/i18n.js?v=20261020b"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Théâtres : Algor Acces</title>
 <meta name="description" content="Les six théâtres couverts par Algor Acces : Moyen-Orient, Sahel, RDC, Madagascar, Afrique Maritime, Asie du Sud. Zones de conflit suivies en continu." />
@@ -55,6 +55,11 @@
   .statut-dot { margin: 0 8px 2px 0; vertical-align: middle; }
   .statut-l { display: block; }
   .statut-l + .statut-l { margin-top: 4px; }
+  .phero-libre { margin: clamp(22px, 3vh, 32px) 0 0; }
+  .phero-libre p { margin: 0 0 10px; font-size: 14px; color: #8C8D93; }
+  .phero-libre__liens { display: flex; flex-wrap: wrap; gap: 8px; }
+  .phero-libre__liens .outil__opt { height: 40px; padding: 0 16px; font-size: 15px; color: var(--on-night); text-decoration: none; }
+  .phero-libre .phero-libre__note { margin: 10px 0 0; font-size: 13px; }
   .phero-demo { position: relative; width: min(460px, 100%); margin: clamp(32px, 5vh, 52px) 0 0; }
   .phero-demo label { display: block; margin-bottom: 10px; font-size: 14px; color: #8C8D93; }
   .phero-demo__champ { display: flex; align-items: center; border-bottom: 1px solid #3A3B42; transition: border-color .25s ease; }
@@ -126,7 +131,12 @@
     <p class="v5-lecture" aria-hidden="true"><span>Curseur</span> <b id="lecture-lat">16,00 N</b> <b id="lecture-lon">000,00 E</b></p>
     <h1 class="hors-ecran">Les six théâtres suivis par Algor Acces</h1>
     <p class="v5-phero__lede">Du Sahel à l'Asie du Sud, Algor Acces couvre six théâtres choisis pour leur intensité et leur complexité. Chacun s'ouvre sur la même carte, filtrable par pays, période, typologie d'événement et acteur.</p>
-    <p class="v5-phero__lede v5-phero__statut"><span class="statut-l"><span class="statut-dot" aria-hidden="true"></span>Le Sahel est actualisé chaque semaine à partir de nos remontées terrain.</span><span class="statut-l"><span class="statut-dot statut-dot--ref" aria-hidden="true"></span>Les autres théâtres présentent les événements référencés en 2026.</span></p>
+    <p class="v5-phero__lede v5-phero__statut"><span class="statut-l"><span class="statut-dot" aria-hidden="true"></span>Moyen-Orient, Asie du Sud et Madagascar : sources ouvertes, actualisées chaque jour, ouvertes à tous.</span><span class="statut-l"><span class="statut-dot statut-dot--ref" aria-hidden="true"></span>Sahel, actualisé chaque semaine, et RDC : nos remontées terrain, réservées aux abonnés.</span></p>
+    <div class="phero-libre">
+      <p>Ouvrir une carte, sans compte</p>
+      <div class="phero-libre__liens"><a class="outil__opt" href="/carte/?pays=Liban">Moyen-Orient</a><a class="outil__opt" href="/carte/?pays=Pakistan">Asie du Sud</a><a class="outil__opt" href="/carte/?pays=Madagascar">Madagascar</a></div>
+      <p class="phero-libre__note">Aperçu d'un événement sur trois. La carte complète s'ouvre avec un compte gratuit.</p>
+    </div>
     <form class="phero-demo" id="outil" action="/demo/" data-etat="attente">
       <label for="tq" id="tq-lbl">Essayez la démo sur n'importe quelle zone du monde</label>
       <div class="phero-demo__champ"><span class="outil__jetons" id="tq-jetons"></span><input id="tq" name="q" type="search" placeholder="Bogotá" autocomplete="off" required><button type="submit" aria-label="Lancer la démo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></button></div>
