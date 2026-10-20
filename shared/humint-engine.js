@@ -271,6 +271,7 @@
         }
         renderSummary();
         whenAuthorized(function () {
+          if (visiteur()) renderSummary(); // ajoute le jeton « Aperçu » (plan connu seulement ici)
           ensureRegions();
           if (state.entry && verrouillee(state.entry)) afficherVerrou();
           else if (state.entry) startLoad();
@@ -286,15 +287,24 @@
    * lecture à un compte gratuit, ce verrou évite seulement un chargement qui échouerait. */
   var CARTES_GRATUITES = ['/moyen-orient/reference-2026.geojson', '/asie-sud/reference-2026.geojson', '/madagascar/reference-2026.geojson'];
   function compteGratuit() { return window.algorPlan === 'gratuit'; }
-  function verrouillee(e) { return compteGratuit() && !!e && CARTES_GRATUITES.indexOf(e.file) < 0; }
+  /* Visiteur sans compte (20/10/2026) : aperçu des seules cartes OSINT, un événement sur trois.
+   * Il lit les fichiers PUBLICS carte/apercu/<theatre>.geojson (scripts/build-apercu-osint.mjs),
+   * jamais le bucket : l'échantillon est fait à la source, pas filtré dans le navigateur. */
+  function visiteur() { return window.algorPlan === 'visiteur'; }
+  function fichierApercu(file) { return '/carte/apercu/' + String(file).split('/')[1] + '.geojson'; }
+  function verrouillee(e) { return (compteGratuit() || visiteur()) && !!e && CARTES_GRATUITES.indexOf(e.file) < 0; }
+  var LIENS_OSINT = '<div class="cv-liens"><a href="/carte/?pays=Liban">Moyen-Orient</a><a href="/carte/?pays=Pakistan">Asie du Sud</a><a href="/carte/?pays=Madagascar">Madagascar</a></div>';
   function afficherVerrou() {
     if ($('carte-verrou')) return;
     var el = document.createElement('div');
     el.id = 'carte-verrou'; el.setAttribute('role', 'status');
-    el.innerHTML = '<b>' + esc((state.entry && state.entry.theatre) || state.country || 'Cette carte') + ' : réservé aux abonnés premium</b>' +
-      '<p>Cette carte repose sur nos remontées terrain, recoupées et actualisées. Votre compte gratuit ouvre les cartes OSINT :</p>' +
-      '<div class="cv-liens"><a href="/carte/?pays=Liban">Moyen-Orient</a><a href="/carte/?pays=Pakistan">Asie du Sud</a><a href="/carte/?pays=Madagascar">Madagascar</a></div>' +
-      '<a class="cv-offres" href="/offres/">Voir les offres</a>';
+    var titre = '<b>' + esc((state.entry && state.entry.theatre) || state.country || 'Cette carte') + ' : réservé aux abonnés premium</b>';
+    el.innerHTML = visiteur()
+      ? titre + '<p>Cette carte repose sur nos remontées terrain, recoupées et actualisées. Sans compte, vous pouvez parcourir un aperçu des cartes en sources ouvertes :</p>' +
+        LIENS_OSINT +
+        '<div class="cv-actions"><a class="cv-offres" href="#" data-algor-signup>Créer un compte gratuit</a><a class="cv-sec" href="/demo/">Voir la démo</a><a class="cv-sec" href="/offres/">Offres</a></div>'
+      : titre + '<p>Cette carte repose sur nos remontées terrain, recoupées et actualisées. Votre compte gratuit ouvre les cartes OSINT :</p>' +
+        LIENS_OSINT + '<a class="cv-offres" href="/offres/">Voir les offres</a>';
     document.body.appendChild(el);
   }
 
@@ -377,6 +387,7 @@
   // Source = base HUMINT LIVE du bucket privé Supabase (premium, MAJ hebdo via
   // l'admin). Repli sur le fichier statique du repo pour le dev / hors session.
   function fetchZone(path) {
+    if (visiteur()) return fetch(fichierApercu(path) + '?v=' + Date.now()).then(function (r) { return r.json(); });
     if (window.algorAuth && window.algorAuth.loadZoneFile && window.ZONE_PRIVATE) {
       var live = Promise.race([
         window.algorAuth.loadZoneFile(path),
@@ -718,7 +729,7 @@
     body.innerHTML = anaChartsHTML(state._anaStats, state.regionsReady);
     var btn = body.querySelector('.ana-ia-btn'), out = body.querySelector('.ana-ia-out');
     if (btn) btn.onclick = function () {
-      if (compteGratuit()) {
+      if (compteGratuit() || visiteur()) {
         out.innerHTML = '<div class="ana-ia-txt"><p>La synthèse par Mistral AI est réservée aux abonnés premium.</p></div><div class="ana-ia-src"><a href="/offres/">Voir les offres</a></div>';
         return;
       }
@@ -991,6 +1002,7 @@
       bar.innerHTML = '<a class="builder-reset" href="/">' + ICO.arrowL + 'Choisir un pays</a>';
     } else {
       bar.appendChild(facetChip('pays', 'Pays', state.country, true));
+      if (visiteur() && !verrouillee(state.entry)) bar.appendChild(apercuChip());
       bar.appendChild(statutChip(state.entry));
       bar.appendChild(facetChip('date', 'Période', (state.sel.from && state.sel.to) ? (frDate(state.sel.from) + ' – ' + frDate(state.sel.to)) : 'Toute période', !!(state.sel.from && state.sel.to)));
       bar.appendChild(facetChip('actor', 'Acteur', state.sel.actor || 'Tous', !!state.sel.actor));
@@ -1010,6 +1022,17 @@
     var ya = a.split(' ').pop(), yb = b.split(' ').pop();
     return (ya === yb ? a.replace(' ' + ya, '') : a) + ' à ' + b;
   }
+  // Visiteur sans compte : rappelle que la carte n'est qu'un échantillon et ouvre l'inscription.
+  function apercuChip() {
+    var el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'chip chip-pays chip-edit chip-apercu';
+    el.setAttribute('data-algor-signup', '');
+    el.title = 'Sans compte, la carte montre environ un événement sur trois. Le compte gratuit ouvre la totalité des cartes en sources ouvertes.';
+    el.innerHTML = '<span class="chip-key">Aperçu · 1 événement sur 3</span><span class="chip-val">Tout voir avec un compte gratuit</span>';
+    return el;
+  }
+
   function statutChip(e) {
     var el = document.createElement('span');
     var ref = e && e.statut === 'reference';
@@ -1088,7 +1111,9 @@
         var rang = { reference: 2, osint: 1 }, ra = rang[a.statut] || 0, rb = rang[b.statut] || 0;
         return ra - rb || String(a.theatre || '').localeCompare(String(b.theatre || ''), 'fr') || b.count - a.count;
       });
-      var items = mine.map(function (c) { return { v: c.name, n: c.count, g: grp(c) }; });
+      // Visiteur : compte de l'aperçu chargé, pas celui de la base complète (chiffres == points visibles).
+      var nApercu = function (c) { return (state.allRaw || []).filter(function (f) { return f.pays === c.name; }).length; };
+      var items = mine.map(function (c) { return { v: c.name, n: visiteur() ? nApercu(c) : c.count, g: grp(c) }; });
       return openList(anchor, 'Pays', null, items, state.country, false, function (val) { switchCountry(val); }, true);
     }
     if (key === 'event') return openList(anchor, "Typologie d'événement", 'Toutes les typologies', distinctCount(rowsFor(false), 'type'), state.sel.event, true, function (val) { state.sel.event = val; applyFacets(); renderSummary(); fitToFiltered(); });

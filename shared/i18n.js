@@ -7,7 +7,7 @@
  * modèles : « 45 rapports » est cherché sous la clé « {0} rapports ».
  *
  * À charger tôt dans <head>, en script classique :
- *   <script src="/shared/i18n.js?v=20261006a"></script>
+ *   <script src="/shared/i18n.js?v=20261020a"></script>
  * Le sélecteur FR | EN se monte dans tout élément .lang-slot (vide), sinon en pastille flottante.
  * Choix mémorisé dans localStorage « algor-lang » ; ?lang=en ou ?lang=fr dans l'URL le force.
  * Contenus non traduits volontairement : tout ce qui est sous [data-i18n-skip]
@@ -18,7 +18,7 @@
 (function () {
   'use strict';
   var CLE_STOCKAGE = 'algor-lang';
-  var VERSION_DICO = '20261006a';
+  var VERSION_DICO = '20261020a';
   var root = document.documentElement;
 
   var lang = null;

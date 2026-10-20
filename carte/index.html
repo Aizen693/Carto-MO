@@ -2,12 +2,12 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<script src="/shared/i18n.js?v=20261006a"></script>
+<script src="/shared/i18n.js?v=20261020a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carte de renseignement · Algor Acces</title>
 <!-- Gate premium : overlay bloquant tant que session + plan premium absents. -->
 <script>window.addEventListener('algorAuthReady', function () { window.__algorAuthGranted = true; });</script>
-<script type="module" src="../shared/site-auth.js?v=20261006a"></script>
+<script type="module" src="../shared/site-auth.js?v=20261020a"></script>
 
 
 <link rel="stylesheet" href="/shared/home/fonts-display.css?v=20260914c" />
@@ -383,6 +383,11 @@
   #carte-verrou .cv-liens a{display:inline-flex;align-items:center;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:2px;color:var(--ink);text-decoration:none;font-size:14px}
   #carte-verrou .cv-liens a:hover{background:var(--hover)}
   #carte-verrou .cv-offres{display:inline-flex;align-items:center;height:40px;padding:0 16px;border-radius:2px;background:var(--ink);color:var(--paper);text-decoration:none}
+  #carte-verrou .cv-actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  #carte-verrou .cv-sec{display:inline-flex;align-items:center;height:40px;padding:0 14px;border-radius:2px;color:var(--ink);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+  /* Visiteur sans compte : jeton « Aperçu » qui ouvre l'inscription */
+  .chip-apercu{cursor:pointer;font-family:var(--sans)}
+  @media(max-width:680px){ .chip-apercu .chip-key{display:none} }
 </style>
 </head>
 <body>
@@ -403,7 +408,7 @@
 <div id="news"></div>
 <div id="analysis"></div>
 
-<script src="../shared/humint-engine.js?v=20261006a"></script>
+<script src="../shared/humint-engine.js?v=20261020a"></script>
 <!-- Jeton « Fond : Carte/Satellite » retiré (28/09, jugé inutile) ; réactiver en décommentant :
 <script src="../shared/basemap-toggle.js?v=20260923a"></script>
 -->

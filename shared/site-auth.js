@@ -491,7 +491,10 @@ const IS_GATED_PAGE = GATED_PREFIXES.some((p) => location.pathname.startsWith(p)
 // cartes OSINT (Moyen-Orient, Asie du Sud, Madagascar) : Sahel et RDC restent fermés par la RLS
 // du bucket (politique zones_osint_compte_read limitée à ces trois fichiers) et par le moteur.
 const IS_FREE_OK_PAGE = location.pathname === '/carte/' || location.pathname === '/carte/index.html';
-// Plan lu par le moteur de carte : 'premium' (abonné ou équipe) ou 'gratuit'.
+// Visiteur SANS compte (20/10/2026) : sur cette même page, il voit un APERÇU des cartes OSINT
+// (un événement sur trois, fichiers publics carte/apercu/, cf. scripts/build-apercu-osint.mjs).
+// Le bucket n'est jamais lu pour lui : la RLS refuse de toute façon l'anonyme.
+// Plan lu par le moteur de carte : 'premium' (abonné ou équipe), 'gratuit' ou 'visiteur'.
 window.algorPlan = null;
 
 // Marque la page comme « zone privée » : les modules partagés (engine.js,
@@ -555,6 +558,9 @@ function hasZoneAccess(profile) {
 // Après une authentification réussie : accès accordé → on ouvre la zone,
 // sinon → on bascule sur la vue upgrade.
 async function proceedAfterAuth(userId) {
+  // Visiteur de l'aperçu qui vient de se connecter : la carte a chargé l'échantillon public,
+  // on recharge pour qu'elle lise la donnée de son compte.
+  if (window.algorPlan === 'visiteur') { location.reload(); return; }
   const profile = await fetchProfile(userId);
   if (hasZoneAccess(profile)) {
     window.algorPlan = 'premium';
@@ -980,6 +986,15 @@ async function gateSite() {
     }
   } catch (e) {
     // proceed to show login
+  }
+  if (IS_FREE_OK_PAGE) {
+    // Pas de session : aperçu public de la carte, sans overlay ; le bouton « Connexion »
+    // de la page ouvre la fenêtre à la demande.
+    window.algorPlan = 'visiteur';
+    startWireObserver();
+    notifyAuthState();
+    window.dispatchEvent(new CustomEvent('algorAuthReady'));
+    return;
   }
   buildOverlay();
 }
